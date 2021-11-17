@@ -176,8 +176,6 @@ if (!String.prototype.format) {
   };
 }
 
-linkFleets();
-
 let ampm = function(h, m) {
 	if (m < 10)
 		m = "0" + m;
@@ -259,4 +257,18 @@ NeptunesPride.npui.map.drawText = function() {
 		drawOverlayString(map.context, s, x, y);
 		drawOverlayString(map.context, o, x, y + lineHeight);
 	}
+}
+
+let superOnServerResponse = NeptunesPride.np.onServerResponse;
+NeptunesPride.np.onServerResponse = function(response) {
+	superOnServerResponse(response);
+	if (response.event === "order:full_universe") {
+		console.log("Universe received. Hyperlink fleets.");
+		linkFleets();
+	}
+}
+
+if (NeptunesPride.universe.loading === false) {
+	console.log("Universe already loaded. Hyperlink fleets.");
+	linkFleets();
 }
