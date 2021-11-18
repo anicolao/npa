@@ -182,8 +182,10 @@ let ampm = function(h, m) {
 	if (h < 12) {
 		if (h == 0) h = 12;
 		return "{0}:{1} AM".format(h, m);
+	} else if (h > 12) {
+		return "{0}:{1} PM".format(h-12, m);
 	}
-	return "{0}:{1} PM".format(h-12, m);
+	return "{0}:{1} PM".format(h, m);
 }
 
 let msToTick = function (tick, wholeTime) {
