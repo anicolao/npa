@@ -168,6 +168,9 @@ if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) { 
+      if (typeof args[number] === 'number') {
+      	return Math.trunc(args[number]*1000)/1000;
+			}
       return typeof args[number] != 'undefined'
         ? args[number]
         : match
