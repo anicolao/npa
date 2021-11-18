@@ -229,46 +229,52 @@ let drawOverlayString = function(context, s, x, y) {
 		context.fillText(s, x, y);
 }
 
-let superDrawText = NeptunesPride.npui.map.drawText;
-NeptunesPride.npui.map.drawText = function() {
-	let universe = NeptunesPride.universe;
-	let map = NeptunesPride.npui.map;
-	superDrawText();
-	if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
-		console.log("Selected fleet is: ", universe.selectedFleet.n);
-		map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
-		map.context.fillStyle = "#FF0000";
-		map.context.textAlign = "left";
-		map.context.textBaseline = "middle";
-    let dy = universe.selectedFleet.y - universe.selectedFleet.ly;
-    let dx = universe.selectedFleet.x - universe.selectedFleet.lx;
-    dy = universe.selectedFleet.path[0].y - universe.selectedFleet.y;
-    dx = universe.selectedFleet.path[0].x - universe.selectedFleet.x;
-		let lineHeight = 16 * map.pixelRatio;
-    let radius = 2 * 0.028 * map.scale * map.pixelRatio;
-    let angle = Math.atan(dy/dx);
-    let offsetx = radius*Math.cos(angle);
-    let offsety = radius*Math.sin(angle);
-		combatOutcomes();
-		let s = fleetOutcomes[universe.selectedFleet.uid].eta;
-		let o = fleetOutcomes[universe.selectedFleet.uid].outcome;
-		let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
-		let y = map.worldToScreenY(universe.selectedFleet.y) + offsety;
-		drawOverlayString(map.context, s, x, y);
-		drawOverlayString(map.context, o, x, y + lineHeight);
+let loadHooks = function() {
+	let superDrawText = NeptunesPride.npui.map.drawText;
+	NeptunesPride.npui.map.drawText = function() {
+		let universe = NeptunesPride.universe;
+		let map = NeptunesPride.npui.map;
+		superDrawText();
+		if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
+			//console.log("Selected fleet is: ", universe.selectedFleet.n);
+			map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+			map.context.fillStyle = "#FF0000";
+			map.context.textAlign = "left";
+			map.context.textBaseline = "middle";
+			let dy = universe.selectedFleet.y - universe.selectedFleet.ly;
+			let dx = universe.selectedFleet.x - universe.selectedFleet.lx;
+			dy = universe.selectedFleet.path[0].y - universe.selectedFleet.y;
+			dx = universe.selectedFleet.path[0].x - universe.selectedFleet.x;
+			let lineHeight = 16 * map.pixelRatio;
+			let radius = 2 * 0.028 * map.scale * map.pixelRatio;
+			let angle = Math.atan(dy/dx);
+			let offsetx = radius*Math.cos(angle);
+			let offsety = radius*Math.sin(angle);
+			combatOutcomes();
+			let s = fleetOutcomes[universe.selectedFleet.uid].eta;
+			let o = fleetOutcomes[universe.selectedFleet.uid].outcome;
+			let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
+			let y = map.worldToScreenY(universe.selectedFleet.y) + offsety;
+			drawOverlayString(map.context, s, x, y);
+			drawOverlayString(map.context, o, x, y + lineHeight);
+		}
 	}
 }
 
-let superOnServerResponse = NeptunesPride.np.onServerResponse;
-NeptunesPride.np.onServerResponse = function(response) {
-	superOnServerResponse(response);
-	if (response.event === "order:full_universe") {
-		console.log("Universe received. Hyperlink fleets.");
-		linkFleets();
-	}
-}
-
-if (NeptunesPride.universe.loading === false) {
-	console.log("Universe already loaded. Hyperlink fleets.");
+if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+	console.log("Universe already loaded. Hyperlink fleets & load hooks.");
 	linkFleets();
+	loadHooks();
+} else {
+	let superOnServerResponse = NeptunesPride.np.onServerResponse;
+	NeptunesPride.np.onServerResponse = function(response) {
+		superOnServerResponse(response);
+		console.log("Server response ", response.event);
+		if (response.event === "order:player_achievements") {
+			console.log("Universe received. Hyperlink fleets.");
+			linkFleets();
+			loadHooks();
+		}
+	}
 }
+
