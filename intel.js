@@ -40,11 +40,9 @@ Mousetrap.bind("^", function() {
 		let fleet = fleets[f];
 		if (fleet.o && fleet.o.length > 0) {
 			let stop = fleet.o[0][1];
-			//console.log("stop ", stop);
 			let dx = stars[stop].x - fleet.x;
 			let dy = stars[stop].y - fleet.y;
 			let distance = Math.sqrt(dx*dx + dy*dy);
-			//console.log("fleet.x", fleet.x);
 			let ticks = 0;
 			let remaining = distance;
 			while (remaining > 0) {
@@ -68,7 +66,6 @@ Mousetrap.bind("^", function() {
 		}
 	}
 	flights = flights.sort(function(a, b) { return a[0] - b[0]; });
-	//console.log(flights);
 	navigator.clipboard.writeText(flights.map(x => x[1]).join("\n"));
 });
 
@@ -98,12 +95,22 @@ let combatOutcomes = function() {
 	let output = [];
 	for (const i in flights) {
 		let fleet = flights[i][2];
+		if (fleet.orbiting) {
+			let orbit = fleet.orbiting.uid;
+			if (!starstate[orbit]) {
+				starstate[orbit] = { last_updated: 0, ships: stars[orbit].totalDefenses, puid: stars[orbit].puid };
+			}
+			// This fleet is departing this tick; remove it from the origin star's totalDefenses
+			starstate[orbit].ships -= fleet.st;
+		}
+	}
+	for (const i in flights) {
+		let fleet = flights[i][2];
 		let star = fleet.o[0][1];
 		let tick = flights[i][0];
 		let etaString = flights[i][1];
 		output.push(flights[i][1]);
 		//output.push("Step {0} at tick {1} star [[{2}]] ({3})".format(i, flights[i][0], stars[star].n, star));
-		//console.log("Step ", i, " at tick ", flights[i][0], " star ", star);
 		if (!starstate[star]) {
 			starstate[star] = { last_updated: 0, ships: stars[star].totalDefenses, puid: stars[star].puid };
 		}
@@ -241,7 +248,6 @@ let loadHooks = function() {
 		let map = NeptunesPride.npui.map;
 		superDrawText();
 		if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
-			//console.log("Selected fleet is: ", universe.selectedFleet.n);
 			map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "left";
@@ -274,7 +280,6 @@ if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npu
 	let superOnServerResponse = NeptunesPride.np.onServerResponse;
 	NeptunesPride.np.onServerResponse = function(response) {
 		superOnServerResponse(response);
-		console.log("Server response ", response.event);
 		if (response.event === "order:player_achievements") {
 			console.log("Universe received. Hyperlink fleets.");
 			linkFleets();
