@@ -269,6 +269,18 @@ let loadHooks = function() {
 			drawOverlayString(map.context, s, x, y);
 			drawOverlayString(map.context, o, x, y + lineHeight);
 		}
+		if (universe.timeToTick(1).length < 3) {
+			let lineHeight = 16 * map.pixelRatio;
+			map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+			map.context.fillStyle = "#FF0000";
+			map.context.textAlign = "left";
+			map.context.textBaseline = "middle";
+			let s = "Tick < 10s away!";
+			if (universe.timeToTick(1) === '0s') {
+				s = "Tick passed. Click production countdown to refresh.";
+			}
+			drawOverlayString(map.context, s, 1000, lineHeight);
+		}
 	}
 }
 
