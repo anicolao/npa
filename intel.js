@@ -229,7 +229,7 @@ let tickToEtaString = function(tick) {
 	return ttt;
 }
 
-let drawOverlayString = function(context, s, x, y) {
+let drawOverlayString = function(context, s, x, y, fgColor) {
 		context.fillStyle = "#000000";
 	  for (let smear = 1; smear < 4; ++smear) {
 			context.fillText(s, x+smear, y+smear);
@@ -237,14 +237,31 @@ let drawOverlayString = function(context, s, x, y) {
 			context.fillText(s, x-smear, y-smear);
 			context.fillText(s, x+smear, y-smear);
 		}
-		context.fillStyle = "#00ff00";
+		context.fillStyle = fgColor || "#00ff00";
 		context.fillText(s, x, y);
+}
+
+let anyStarCanSee = function(owner, fleet) {
+	let stars = NeptunesPride.universe.galaxy.stars;
+	let universe = NeptunesPride.universe;
+	let scanRange = universe.galaxy.players[owner].tech.scanning.value;
+	for (const s in stars) {
+		let star = stars[s];
+		if (star.puid == owner) {
+			let distance = universe.distance(star.x, star.y, fleet.x, fleet.y);
+			if (distance <= scanRange) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 let loadHooks = function() {
 	let superDrawText = NeptunesPride.npui.map.drawText;
 	NeptunesPride.npui.map.drawText = function() {
 		let universe = NeptunesPride.universe;
+		let stars = NeptunesPride.universe.galaxy.stars;
 		let map = NeptunesPride.npui.map;
 		superDrawText();
 		if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
@@ -280,6 +297,74 @@ let loadHooks = function() {
 				s = "Tick passed. Click production countdown to refresh.";
 			}
 			drawOverlayString(map.context, s, 1000, lineHeight);
+		}
+		if (universe.selectedStar && universe.selectedStar.puid != universe.player.uid) {
+			// enemy star selected; show HUD for scanning visibility
+			map.context.textAlign = "left";
+			map.context.textBaseline = "middle";
+			let xOffset = 26 * map.pixelRatio;
+			//map.context.translate(xOffset, 0);
+			let fleets = NeptunesPride.universe.galaxy.fleets;
+			for (const f in fleets) {
+				let fleet = fleets[f];
+				if (fleet.puid === universe.player.uid) {
+					let dx = universe.selectedStar.x - fleet.x;
+					let dy = universe.selectedStar.y - fleet.y;
+					let distance = Math.sqrt(dx*dx + dy*dy);
+					let offsetx = xOffset;
+					let offsety = 0;
+					let x = map.worldToScreenX(fleet.x) + offsetx;
+					let y = map.worldToScreenY(fleet.y) + offsety;
+					if (distance > universe.galaxy.players[universe.selectedStar.puid].tech.scanning.value) {
+						if (fleet.path && fleet.path.length > 0) {
+							dx = fleet.path[0].x - universe.selectedStar.x;
+							dy = fleet.path[0].y - universe.selectedStar.y;
+							distance = Math.sqrt(dx*dx + dy*dy);
+							if (distance < universe.galaxy.players[universe.selectedStar.puid].tech.scanning.value) {
+								let stepRadius = NeptunesPride.universe.galaxy.fleet_speed;
+								if (fleet.warpSpeed) stepRadius *= 3;
+								dx = fleet.x - fleet.path[0].x;
+								dy = fleet.y - fleet.path[0].y;
+								let angle = Math.atan(dy/dx);
+								let stepx = stepRadius*Math.cos(angle);
+								let stepy = stepRadius*Math.sin(angle);
+								if (stepx > 0 && dx > 0) {
+									stepx *= -1;
+								}
+								if (stepy > 0 && dy > 0) {
+									stepy *= -1;
+								}
+								if (stepx < 0 && dx < 0) {
+									stepx *= -1;
+								}
+								if (stepy < 0 && dy < 0) {
+									stepy *= -1;
+								}
+								let ticks = 0;
+								do {
+									let x = ticks*stepx + Number(fleet.x);
+									let y = ticks*stepy + Number(fleet.y);
+									//let sx = map.worldToScreenX(x);
+									//let sy = map.worldToScreenY(y);
+									dx = x - universe.selectedStar.x;
+									dy = y - universe.selectedStar.y;
+									distance = Math.sqrt(dx*dx + dy*dy);
+									//console.log(distance, x, y);
+									//drawOverlayString(map.context, "o", sx, sy);
+									ticks += 1;
+								} while (distance > universe.galaxy.players[universe.selectedStar.puid].tech.scanning.value && ticks <= fleet.etaFirst + 1);
+								ticks -= 1;
+								let visColor = "#00ff00";
+								if (anyStarCanSee(universe.selectedStar.puid, fleet)) {
+									visColor = "#888888";
+								}
+								drawOverlayString(map.context, "Scan " + tickToEtaString(ticks), x, y, visColor);
+							}
+						}
+					}
+				}
+			}
+			//map.context.translate(-xOffset, 0);
 		}
 	}
 }
