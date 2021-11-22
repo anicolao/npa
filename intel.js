@@ -449,6 +449,33 @@ let loadHooks = function() {
 			//map.context.translate(-xOffset, 0);
 		}
 	}
+	Crux.format = function (s, templateData) {
+		if (!s) {
+				return "error";
+		}
+		var i, fp, sp, sub, pattern;
+
+		i = 0;
+		fp = 0;
+		sp = 0;
+		sub = "";
+		pattern = "";
+
+		// look for standard patterns
+		while (fp >= 0 && i < 1000) {
+				i = i + 1;
+				fp = s.search("\\[\\[");
+				sp = s.search("\\]\\]");
+				sub = s.slice(fp + 2, sp);
+				pattern = "[[" + sub + "]]";
+				if (templateData[sub] !== undefined) {
+						s = s.replace(pattern, templateData[sub]);
+				} else {
+						s = s.replace(pattern, "(" + sub + ")");
+				}
+		}
+		return s;
+	};
 }
 
 if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
