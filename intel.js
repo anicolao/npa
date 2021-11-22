@@ -91,8 +91,10 @@ let combatOutcomes = function() {
 		}
 	}
 	flights = flights.sort(function(a, b) { return a[0] - b[0]; });
+	arrivals = {};
 	let starstate = {};
 	let output = [];
+	let arrivalTimes = [];
 	for (const i in flights) {
 		let fleet = flights[i][2];
 		if (fleet.orbiting) {
@@ -103,68 +105,134 @@ let combatOutcomes = function() {
 			// This fleet is departing this tick; remove it from the origin star's totalDefenses
 			starstate[orbit].ships -= fleet.st;
 		}
-	}
-	for (const i in flights) {
-		let fleet = flights[i][2];
-		let star = fleet.o[0][1];
-		let tick = flights[i][0];
-		let etaString = flights[i][1];
-		output.push(flights[i][1]);
-		//output.push("Step {0} at tick {1} star [[{2}]] ({3})".format(i, flights[i][0], stars[star].n, star));
-		if (!starstate[star]) {
-			starstate[star] = { last_updated: 0, ships: stars[star].totalDefenses, puid: stars[star].puid };
+		if (arrivalTimes.length === 0 || arrivalTimes[arrivalTimes.length-1] !== flights[i][0]) {
+			arrivalTimes.push(flights[i][0]);
 		}
-		let tickDelta = tick - starstate[star].last_updated;
-		if (tickDelta > 1) {
-			let oldShips = starstate[star].ships;
-			starstate[star].last_updated = tick - 1;
-			if (stars[star].shipsPerTick) {
-				starstate[star].ships += stars[star].shipsPerTick * tickDelta;
-				output.push("  {0} + {2}/h = {1}".format(oldShips, starstate[star].ships, stars[star].shipsPerTick));
-			}
-		}
-		if (fleet.puid == starstate[star].puid || starstate[star].puid == -1) {
-			let oldShips = starstate[star].ships;
-			if (starstate[star].puid == -1) {
-				starstate[star].ships = fleet.st;
-			} else {
-				starstate[star].ships += fleet.st;
-			}
-			let landingString = "  {0} + {2} landing = {1}".format(oldShips, starstate[star].ships, fleet.st);
-			output.push(landingString);
-			landingString = landingString.substring(2);
-			let outcomeString = "{0} ships on {1}".format(Math.floor(starstate[star].ships), stars[star].n);
-			fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
+		let arrivalKey = [flights[i][0], fleet.o[0][1]];
+		if (arrivals[arrivalKey] !== undefined) {
+			arrivals[arrivalKey].push(fleet);
 		} else {
-			let defense = starstate[star].ships;
-			let offense = fleet.st;
-			let awt = players[fleet.puid].tech.weapons.level;
-			let dwt = players[starstate[star].puid].tech.weapons.level;
-			output.push("  Combat! [[{0}]] vs [[{1}]]".format(starstate[star].puid, fleet.puid));
+			arrivals[arrivalKey] = [fleet];
+		}
+	}
+	for (const k in arrivals) {
+		let arrival = arrivals[k];
+		let starId = arrival[0].o[0][1];
+		let tick = k[0];
+		if (!starstate[starId]) {
+			starstate[starId] = { last_updated: 0, ships: stars[starId].totalDefenses, puid: stars[starId].puid };
+		}
+		output.push("{0}: [[{1}]] [[{2}]] {3} ships".format(tickToEtaString(tick, "@"), starstate[starId].puid, stars[starId].n, starstate[starId].ships))
+		let tickDelta = tick - starstate[starId].last_updated;
+		if (tickDelta > 1) {
+			let oldShips = starstate[starId].ships;
+			starstate[starId].last_updated = tick - 1;
+			if (stars[starId].shipsPerTick) {
+				starstate[starId].ships += stars[starId].shipsPerTick * tickDelta;
+				output.push("  {0} + {2}/h = {1}".format(oldShips, starstate[starId].ships, stars[starId].shipsPerTick));
+			}
+		}
+		for (const i in arrival) {
+			let fleet = arrival[i];
+			if (fleet.puid == starstate[starId].puid || starstate[starId].puid == -1) {
+				let oldShips = starstate[starId].ships;
+				if (starstate[starId].puid == -1) {
+					starstate[starId].ships = fleet.st;
+				} else {
+					starstate[starId].ships += fleet.st;
+				}
+				let landingString = "  {0} + {2} on [[{3}]] = {1}".format(oldShips, starstate[starId].ships, fleet.st, fleet.n);
+				output.push(landingString);
+				landingString = landingString.substring(2);
+			}
+		}
+		for (const i in arrival) {
+			let fleet = arrival[i];
+			if (fleet.puid == starstate[starId].puid) {
+				let outcomeString = "{0} ships on {1}".format(Math.floor(starstate[starId].ships), stars[starId].n);
+				fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
+			}
+		}
+		let awt = 0;
+		let offense = 0;
+		let contribution = {};
+		for (const i in arrival) {
+			let fleet = arrival[i];
+			if (fleet.puid != starstate[starId].puid) {
+				let olda = offense;
+				offense += fleet.st;
+				output.push("  [[{4}]]! {0} + {2} on [[{3}]] = {1}".format(olda, offense, fleet.st, fleet.n, fleet.puid));
+				contribution[[fleet.puid,fleet.uid]] = fleet.st;
+				let wt = players[fleet.puid].tech.weapons.level;
+				if (wt > awt) {
+					awt = wt;
+				}
+			}
+		}
+		let attackersAggregate = offense;
+		while (offense > 0) {
+			let dwt = players[starstate[starId].puid].tech.weapons.level;
+			let defense = starstate[starId].ships;
+			output.push("  Combat! [[{0}]] defending".format(starstate[starId].puid));
 			output.push("    Defenders {0} ships, WS {1}".format(defense, dwt));
 			output.push("    Attackers {0} ships, WS {1}".format(offense, awt));
-			//output.push("  Combat {4} [[{0}]] WS {1} defends vs {5} [[{2}]] WS {3}".format(starstate[star].puid, dwt, fleet.puid, awt, 
-					//defense, offense));
 			dwt += 1;
+
 			while (defense > 0 && offense > 0) {
 				offense -= dwt;
 				if (offense <= 0) break;
 				defense -= awt;
 			}
+
 			let outcomeString = "ERROR";
-			if (defense > offense) {
-				starstate[star].ships = defense;
-				outcomeString = "Loses; {0} live".format(Math.trunc(defense));
-			} else {
-				starstate[star].puid = fleet.puid;
-				starstate[star].ships = offense;
+			let newAggregate = 0;
+			let playerContribution = {};
+			let biggestPlayer = -1;
+			let biggestPlayerId = starstate[starId].puid;
+			if (offense > 0) {
 				output.push("  Attackers win with {0} ships remaining".format(offense));
-				outcomeString = "Wins; {0} arrive!".format(offense);
+				for (const k in contribution) {
+					let ka = k.split(",");
+					let fleet = fleets[ka[1]];
+					let playerId = ka[0];
+					contribution[k] = offense * contribution[k] / attackersAggregate;
+					let olda = newAggregate;
+					newAggregate += contribution[k];
+					if (playerContribution[playerId]) {
+						playerContribution[playerId] += contribution[k];
+					} else {
+						playerContribution[playerId] = contribution[k];
+					}
+					if (playerContribution[playerId] > biggestPlayer) {
+						biggestPlayer = playerContribution[playerId];
+						biggestPlayerId = playerId;
+					}
+					output.push("    [[{0}]] has {1} on [[{2}]]".format(fleet.puid, contribution[k], fleet.n));
+					let outcomeString = "Wins! {0} land.".format(contribution[k]);
+					fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
+				}
+				offense = newAggregate - playerContribution[biggestPlayerId];
+				starstate[starId].puid = biggestPlayerId;
+				starstate[starId].ships = playerContribution[biggestPlayerId];
+			} else {
+				starstate[starId].ships = defense;
+				for (const i in arrival) {
+					let fleet = arrival[i];
+					if (fleet.puid == starstate[starId].puid) {
+						let outcomeString = "{0} ships on {1}".format(Math.floor(starstate[starId].ships), stars[starId].n);
+						fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
+					}
+				}
+				for (const k in contribution) {
+					let ka = k.split(",");
+					let fleet = fleets[ka[1]];
+					let outcomeString = "Loses! {0} live.".format(defense);
+					fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
+				}
 			}
-			let combatString = "  [[{0}]] wins ({1} ships)".format(starstate[star].puid, starstate[star].ships);
-			output.push(combatString);
-			fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
+			attackersAggregate = offense;
 		}
+		output.push("  [[{0}]] [[{1}]] {2} ships".format(starstate[starId].puid, stars[starId].n, starstate[starId].ships));
 	}
 	return output;
 }
@@ -219,13 +287,14 @@ let msToTick = function (tick, wholeTime) {
 					ms_since_data - ltc ;
 	return ms_remaining;
 }
-let tickToEtaString = function(tick) {
+let tickToEtaString = function(tick, prefix) {
 	let now = new Date();
 	let msplus = msToTick(tick);
 	let arrival = new Date(now.getTime() + msplus);
-	let ttt = "ETA " + ampm(arrival.getHours(), arrival.getMinutes());
+	let p = prefix || "ETA ";
+	let ttt = p + ampm(arrival.getHours(), arrival.getMinutes());
 	if (arrival.getDay() != now.getDay())
-		ttt = "ETA " + days[arrival.getDay()] + " @ " + ampm(arrival.getHours(), arrival.getMinutes());
+		ttt = p + days[arrival.getDay()] + " @ " + ampm(arrival.getHours(), arrival.getMinutes());
 	return ttt;
 }
 
@@ -265,6 +334,7 @@ let loadHooks = function() {
 		let map = NeptunesPride.npui.map;
 		superDrawText();
 		if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
+			//console.log("Selected fleet", universe.selectedFleet);
 			map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "left";
@@ -278,6 +348,18 @@ let loadHooks = function() {
 			let angle = Math.atan(dy/dx);
 			let offsetx = radius*Math.cos(angle);
 			let offsety = radius*Math.sin(angle);
+			if (offsetx > 0 && dx > 0) {
+				offsetx *= -1;
+			}
+			if (offsety > 0 && dy > 0) {
+				offsety *= -1;
+			}
+			if (offsetx < 0 && dx < 0) {
+				offsetx *= -1;
+			}
+			if (offsety < 0 && dy < 0) {
+				offsety *= -1;
+			}
 			combatOutcomes();
 			let s = fleetOutcomes[universe.selectedFleet.uid].eta;
 			let o = fleetOutcomes[universe.selectedFleet.uid].outcome;
