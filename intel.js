@@ -117,11 +117,25 @@ let combatOutcomes = function() {
 	}
 	for (const k in arrivals) {
 		let arrival = arrivals[k];
-		let starId = arrival[0].o[0][1];
 		let ka = k.split(",");
 		let tick = ka[0];
+		let starId = ka[1];
 		if (!starstate[starId]) {
 			starstate[starId] = { last_updated: 0, ships: stars[starId].totalDefenses, puid: stars[starId].puid };
+		}
+		if (starstate[starId].puid == -1) {
+			// assign ownership of the star to the player whose fleet has traveled the least distance
+			let minDistance = 10000;
+			let owner = -1;
+			for (const i in arrival) {
+				let fleet = arrival[i];
+				let d = universe.distance(fleet.x, fleet.y, fleet.lx, fleet.ly);
+				if (d < minDistance || owner == -1) {
+					owner = fleet.puid;
+					minDistance = d;
+				}
+			}
+			starstate[starId].puid = owner;
 		}
 		output.push("{0}: [[{1}]] [[{2}]] {3} ships".format(tickToEtaString(tick, "@"), starstate[starId].puid, stars[starId].n, starstate[starId].ships))
 		let tickDelta = tick - starstate[starId].last_updated;

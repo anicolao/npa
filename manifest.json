@@ -1,7 +1,7 @@
 {
   "name": "Neptune's Pride Agent",
   "description": "Enhance NP Triton UI with intel.",
-  "version": "0.9",
+  "version": "1.0",
   "manifest_version": 3,
   "permissions": [
     "activeTab",
