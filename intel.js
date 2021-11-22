@@ -118,7 +118,8 @@ let combatOutcomes = function() {
 	for (const k in arrivals) {
 		let arrival = arrivals[k];
 		let starId = arrival[0].o[0][1];
-		let tick = k[0];
+		let ka = k.split(",");
+		let tick = ka[0];
 		if (!starstate[starId]) {
 			starstate[starId] = { last_updated: 0, ships: stars[starId].totalDefenses, puid: stars[starId].puid };
 		}
