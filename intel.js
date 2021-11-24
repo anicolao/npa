@@ -129,7 +129,7 @@ let combatOutcomes = function() {
 			let owner = -1;
 			for (const i in arrival) {
 				let fleet = arrival[i];
-				let d = universe.distance(fleet.x, fleet.y, fleet.lx, fleet.ly);
+				let d = universe.distance(stars[starId].x, stars[starId].y, fleet.lx, fleet.ly);
 				if (d < minDistance || owner == -1) {
 					owner = fleet.puid;
 					minDistance = d;
@@ -395,7 +395,7 @@ let loadHooks = function() {
 			}
 			drawOverlayString(map.context, s, 1000, lineHeight);
 		}
-		if (universe.selectedStar && universe.selectedStar.puid != universe.player.uid) {
+		if (universe.selectedStar && universe.selectedStar.puid != universe.player.uid && universe.selectedStar.puid !== -1) {
 			// enemy star selected; show HUD for scanning visibility
 			map.context.textAlign = "left";
 			map.context.textBaseline = "middle";
@@ -462,6 +462,13 @@ let loadHooks = function() {
 				}
 			}
 			//map.context.translate(-xOffset, 0);
+		}
+		if (universe.ruler.stars.length == 2) {
+			let p1 = universe.ruler.stars[0].puid;
+			let p2 = universe.ruler.stars[1].puid;
+			if (p1 !== p2 && p1 !== -1 && p2 !== -1) {
+				//console.log("two star ruler");
+			}
 		}
 	}
 	Crux.format = function (s, templateData) {
