@@ -387,6 +387,9 @@ let loadHooks = function() {
 			let o = fleetOutcomes[universe.selectedFleet.uid].outcome;
 			let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
 			let y = map.worldToScreenY(universe.selectedFleet.y) + offsety;
+			if (offsetx < 0) {
+				map.context.textAlign = "right";
+			}
 			drawOverlayString(map.context, s, x, y);
 			drawOverlayString(map.context, o, x, y + lineHeight);
 		}
