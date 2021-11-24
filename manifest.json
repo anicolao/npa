@@ -1,20 +1,27 @@
 {
   "name": "Neptune's Pride Agent",
   "description": "Enhance NP Triton UI with intel.",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 3,
   "permissions": [
     "activeTab",
     "scripting"
-	],
-	"host_permissions": [
+  ],
+  "host_permissions": [
     "https://np.ironhelmet.com/*"
   ],
-  "action": {
-	},
-	"web_accessible_resources": [{
-		"resources": ["intel.js"],
-		"matches": ["<all_urls>"]
-	}],
-  "background": { "service_worker": "background.js" }
+  "action": {},
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "intel.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
 }
