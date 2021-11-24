@@ -92,16 +92,20 @@ let combatOutcomes = function() {
 		if (fleet.o && fleet.o.length > 0) {
 			let stop = fleet.o[0][1];
       let ticks = fleet.etaFirst;
+      let starname = stars[stop] && stars[stop].n;
+			if (!starname) {
+				continue;
+			}
       flights.push([ticks, "[[{0}]] [[{1}]] {2} → [[{3}]] {4}".format(
-      	fleet.puid, fleet.n, fleet.st, stars[stop]['n'], tickToEtaString(ticks)
+      	fleet.puid, fleet.n, fleet.st, starname, tickToEtaString(ticks)
 			), fleet]);
 		}
 	}
 	flights = flights.sort(function(a, b) { return a[0] - b[0]; });
 	arrivals = {};
-	let starstate = {};
 	let output = [];
 	let arrivalTimes = [];
+	let starstate = {};
 	for (const i in flights) {
 		let fleet = flights[i][2];
 		if (fleet.orbiting) {
@@ -200,6 +204,11 @@ let combatOutcomes = function() {
 			output.push("    Attackers {0} ships, WS {1}".format(offense, awt));
 			dwt += 1;
 
+			if (universe.galaxy.player_uid === starstate[starId].puid) {
+				// truncate defense if we're defending to give the most
+				// conservative estimate
+				defense = Math.trunc(defense);
+			}
 			while (defense > 0 && offense > 0) {
 				offense -= dwt;
 				if (offense <= 0) break;
