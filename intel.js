@@ -1,3 +1,10 @@
+// ==UserScript==
+// @name        Neptune's Pride Agent
+// @description This is your new file, start writing code
+// @match       https://np.ironhelmet.com/*
+// ==/UserScript==
+
+
 console.log("Intel script injected.");
 
 linkFleets = function() {
@@ -350,7 +357,7 @@ let loadHooks = function() {
 		superDrawText();
 		if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
 			//console.log("Selected fleet", universe.selectedFleet);
-			map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+			map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "left";
 			map.context.textBaseline = "middle";
