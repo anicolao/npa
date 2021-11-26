@@ -404,7 +404,7 @@ let loadHooks = function() {
 		}
 		if (universe.timeToTick(1).length < 3) {
 			let lineHeight = 16 * map.pixelRatio;
-			map.context.font = "bolder " + (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+			map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "left";
 			map.context.textBaseline = "middle";
