@@ -9,7 +9,7 @@ function intelDump() {
 		this.remove();
 	};
 	(document.head || document.documentElement).appendChild(s);
-	console.log(s.title);
+	console.log(s.title + " background page.");
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {

@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name        Neptune's Pride Agent
-// @description This is your new file, start writing code
+// @description HUD and reporting for Neptune's Pride.
 // @match       https://np.ironhelmet.com/*
 // ==/UserScript==
 
 
 
-let title = document.currentScript.title;
+let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.3d";
 let version = title.replace(/^.*v/, 'v');
 console.log(title)
 
@@ -24,7 +24,6 @@ let w = window;
 if (window.wrappedJSObject) {
 	w = window.wrappedJSObject;
 }
-console.log("bind *", w.Mousetrap);
 w.Mousetrap.bind("*", function() {
 	let output = [];
 	let players = w.NeptunesPride.universe.galaxy.players;
@@ -42,7 +41,6 @@ w.Mousetrap.bind("*", function() {
 	navigator.clipboard.writeText(output.join("\n"));
 });
 
-console.log("bind *");
 let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 w.Mousetrap.bind("^", function() {
 	let universe = w.NeptunesPride.universe;
