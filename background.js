@@ -1,17 +1,15 @@
 chrome.runtime.onInstalled.addListener(() => { console.log("Neptune's Pride Agent installed."); });
 
 function intelDump() {
-  console.log("Click.");
-
 	var s = document.createElement('script');
 	s.src = chrome.runtime.getURL('intel.js');
-	console.log("src", s.src);
+	s.id = "intel";
+	s.title = "Neptune's Pride Agent v" + chrome.runtime.getManifest().version;
 	s.onload = function() {
 		this.remove();
 	};
 	(document.head || document.documentElement).appendChild(s);
-
-  console.log("Clack.");
+	console.log(s.title);
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {

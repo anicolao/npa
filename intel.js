@@ -5,11 +5,14 @@
 // ==/UserScript==
 
 
-console.log("Intel script injected.");
+
+let title = document.currentScript.title;
+let version = title.replace(/^.*v/, 'v');
+console.log(title)
 
 linkFleets = function() {
-	let universe = NeptunesPride.universe;
-	let fleets = NeptunesPride.universe.galaxy.fleets;
+	let universe = w.NeptunesPride.universe;
+	let fleets = w.NeptunesPride.universe.galaxy.fleets;
 	for (const f in fleets) {
 		let fleet = fleets[f];
 		let fleetLink = "<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"" + fleet.uid + "\")'>" + fleet.n + "</a>";
@@ -17,10 +20,15 @@ linkFleets = function() {
 	}
 };
 
-Mousetrap.bind("*", function() {
+let w = window;
+if (window.wrappedJSObject) {
+	w = window.wrappedJSObject;
+}
+console.log("bind *", w.Mousetrap);
+w.Mousetrap.bind("*", function() {
 	let output = [];
-	let players = NeptunesPride.universe.galaxy.players;
-	let stars = NeptunesPride.universe.galaxy.stars;
+	let players = w.NeptunesPride.universe.galaxy.players;
+	let stars = w.NeptunesPride.universe.galaxy.stars;
 	for (const p in players) {
 		let player = players[p];
 		output.push("[[{0}]]".format(p));
@@ -34,11 +42,12 @@ Mousetrap.bind("*", function() {
 	navigator.clipboard.writeText(output.join("\n"));
 });
 
+console.log("bind *");
 let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-Mousetrap.bind("^", function() {
-	let universe = NeptunesPride.universe;
-	let fleets = NeptunesPride.universe.galaxy.fleets;
-	let stars = NeptunesPride.universe.galaxy.stars;
+w.Mousetrap.bind("^", function() {
+	let universe = w.NeptunesPride.universe;
+	let fleets = w.NeptunesPride.universe.galaxy.fleets;
+	let stars = w.NeptunesPride.universe.galaxy.stars;
 	let now = new Date();
 	let wday = now.getDay();
 	let hour = now.getHours();
@@ -53,7 +62,7 @@ Mousetrap.bind("^", function() {
 			let ticks = 0;
 			let remaining = distance;
 			while (remaining > 0) {
-				remaining -= NeptunesPride.universe.galaxy.fleet_speed;
+				remaining -= w.NeptunesPride.universe.galaxy.fleet_speed;
 				ticks += 1;
 			}
 			let day = wday;
@@ -78,10 +87,10 @@ Mousetrap.bind("^", function() {
 
 let fleetOutcomes = {};
 let combatOutcomes = function() {
-	let universe = NeptunesPride.universe;
-	let players = NeptunesPride.universe.galaxy.players;
-	let fleets = NeptunesPride.universe.galaxy.fleets;
-	let stars = NeptunesPride.universe.galaxy.stars;
+	let universe = w.NeptunesPride.universe;
+	let players = w.NeptunesPride.universe.galaxy.players;
+	let fleets = w.NeptunesPride.universe.galaxy.fleets;
+	let stars = w.NeptunesPride.universe.galaxy.stars;
 	let now = new Date();
 	let wday = now.getDay();
 	let hour = now.getHours();
@@ -268,7 +277,7 @@ let combatOutcomes = function() {
 	return output;
 }
 
-Mousetrap.bind("&", function() { navigator.clipboard.writeText(combatOutcomes().join("\n")); });
+w.Mousetrap.bind("&", function() { navigator.clipboard.writeText(combatOutcomes().join("\n")); });
 
 if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -298,7 +307,7 @@ let ampm = function(h, m) {
 }
 
 let msToTick = function (tick, wholeTime) {
-	let universe = NeptunesPride.universe;
+	let universe = w.NeptunesPride.universe;
 	var ms_since_data = 0;
 	var tf = universe.galaxy.tick_fragment;
 	var ltc = universe.locTimeCorrection;
@@ -342,8 +351,8 @@ let drawOverlayString = function(context, s, x, y, fgColor) {
 }
 
 let anyStarCanSee = function(owner, fleet) {
-	let stars = NeptunesPride.universe.galaxy.stars;
-	let universe = NeptunesPride.universe;
+	let stars = w.NeptunesPride.universe.galaxy.stars;
+	let universe = w.NeptunesPride.universe;
 	let scanRange = universe.galaxy.players[owner].tech.scanning.value;
 	for (const s in stars) {
 		let star = stars[s];
@@ -358,12 +367,19 @@ let anyStarCanSee = function(owner, fleet) {
 }
 
 let loadHooks = function() {
-	let superDrawText = NeptunesPride.npui.map.drawText;
-	NeptunesPride.npui.map.drawText = function() {
-		let universe = NeptunesPride.universe;
-		let stars = NeptunesPride.universe.galaxy.stars;
-		let map = NeptunesPride.npui.map;
+	let superDrawText = w.NeptunesPride.npui.map.drawText;
+	w.NeptunesPride.npui.map.drawText = function() {
+		let universe = w.NeptunesPride.universe;
+		let stars = w.NeptunesPride.universe.galaxy.stars;
+		let map = w.NeptunesPride.npui.map;
 		superDrawText();
+
+		map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+		map.context.fillStyle = "#FF0000";
+		map.context.textAlign = "left";
+		map.context.textBaseline = "middle";
+		drawOverlayString(map.context, version, map.viewportWidth - 100, 16 * map.pixelRatio);
+
 		if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
 			//console.log("Selected fleet", universe.selectedFleet);
 			map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
@@ -420,7 +436,7 @@ let loadHooks = function() {
 			map.context.textBaseline = "middle";
 			let xOffset = 26 * map.pixelRatio;
 			//map.context.translate(xOffset, 0);
-			let fleets = NeptunesPride.universe.galaxy.fleets;
+			let fleets = w.NeptunesPride.universe.galaxy.fleets;
 			for (const f in fleets) {
 				let fleet = fleets[f];
 				if (fleet.puid === universe.player.uid) {
@@ -437,7 +453,7 @@ let loadHooks = function() {
 							dy = fleet.path[0].y - universe.selectedStar.y;
 							distance = Math.sqrt(dx*dx + dy*dy);
 							if (distance < universe.galaxy.players[universe.selectedStar.puid].tech.scanning.value) {
-								let stepRadius = NeptunesPride.universe.galaxy.fleet_speed;
+								let stepRadius = w.NeptunesPride.universe.galaxy.fleet_speed;
 								if (fleet.warpSpeed) stepRadius *= 3;
 								dx = fleet.x - fleet.path[0].x;
 								dy = fleet.y - fleet.path[0].y;
@@ -519,13 +535,14 @@ let loadHooks = function() {
 	};
 }
 
-if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+if (w.NeptunesPride.universe && w.NeptunesPride.universe.galaxy && w.NeptunesPride.npui.map) {
 	console.log("Universe already loaded. Hyperlink fleets & load hooks.");
 	linkFleets();
 	loadHooks();
 } else {
-	let superOnServerResponse = NeptunesPride.np.onServerResponse;
-	NeptunesPride.np.onServerResponse = function(response) {
+	console.log("Universe not loaded. Hook onServerResponse.");
+	let superOnServerResponse = w.NeptunesPride.np.onServerResponse;
+	w.NeptunesPride.np.onServerResponse = function(response) {
 		superOnServerResponse(response);
 		if (response.event === "order:player_achievements") {
 			console.log("Universe received. Hyperlink fleets.");
@@ -535,3 +552,4 @@ if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npu
 	}
 }
 
+console.log("Intel injection fini.");
