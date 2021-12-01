@@ -1,0 +1,11 @@
+.no_overflow {
+	overflow: visible !important;
+}
+
+div.no_overflow:first-of-type>div:first-of-type {
+	position: sticky;
+	top: 0px;
+	background-color: #1a1d44;
+	z-index: 100;
+	border-bottom: 1px solid #2C3273;
+}
