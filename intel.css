@@ -9,3 +9,26 @@ div.no_overflow:first-of-type>div:first-of-type {
 	z-index: 100;
 	border-bottom: 1px solid #2C3273;
 }
+
+.screenshot {
+	max-width: 128px;
+	overflow: scroll;
+	transition: max-width 2s, top 2s, left 2s, width 2s, height 2s;
+}
+
+img.screenshot:hover {
+	z-index: 10000;
+	max-width: none;
+	background-color: #000000;
+}
+div.screenshot:hover {
+	max-width: none;
+	margin-right: 10%;
+	width: 90vw;
+	height: 100vh;
+	position:fixed;
+	top:0;
+	left:0;
+	border: 5px solid #00ff00;
+	z-index: 10000;
+}
