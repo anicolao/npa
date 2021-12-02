@@ -326,6 +326,13 @@ function NeptunesPrideAgent() {
 
 	Mousetrap.bind("^", briefFleetReport);
 
+	function screenshot() {
+		let map = NeptunesPride.npui.map;
+		navigator.clipboard.writeText(map.canvas[0].toDataURL('image/webp', 0.05));
+	}
+
+	Mousetrap.bind("#", screenshot);
+
 	let drawOverlayString = function(context, s, x, y, fgColor) {
 			context.fillStyle = "#000000";
 			for (let smear = 1; smear < 4; ++smear) {
@@ -515,6 +522,8 @@ function NeptunesPrideAgent() {
 					pattern = "[[" + sub + "]]";
 					if (templateData[sub] !== undefined) {
 							s = s.replace(pattern, templateData[sub]);
+					} else if (sub.startsWith("data:")) {
+						s = s.replace(pattern, '<div width="100%" class="screenshot"><img class="screenshot" src="' + sub + '"/></div>');
 					} else {
 							s = s.replace(pattern, "(" + sub + ")");
 					}
