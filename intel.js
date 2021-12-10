@@ -6,7 +6,7 @@
 
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.3d";
+	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.4u";
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title)
 
@@ -361,6 +361,7 @@ function NeptunesPrideAgent() {
 		return false;
 	}
 
+	let hooksLoaded = false;
 	let loadHooks = function() {
 		let superDrawText = NeptunesPride.npui.map.drawText;
 		NeptunesPride.npui.map.drawText = function() {
@@ -530,21 +531,40 @@ function NeptunesPrideAgent() {
 			}
 			return s;
 		};
+		hooksLoaded = true;
 	}
+
+	let init = function() {
+		if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+			linkFleets();
+			console.log("Fleet linking complete.");
+			if (!hooksLoaded) {
+				loadHooks();
+				console.log("HUD setup complete.");
+			} else {
+				console.log("HUD setup already done; skipping.");
+			}
+		} else {
+			console.log("Game not fully initialized yet; wait.", NeptunesPride.universe);
+		}
+	}
+	Mousetrap.bind("@", init);
 
 	if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
 		console.log("Universe already loaded. Hyperlink fleets & load hooks.");
-		linkFleets();
-		loadHooks();
+		init();
 	} else {
 		console.log("Universe not loaded. Hook onServerResponse.");
 		let superOnServerResponse = NeptunesPride.np.onServerResponse;
 		NeptunesPride.np.onServerResponse = function(response) {
 			superOnServerResponse(response);
 			if (response.event === "order:player_achievements") {
-				console.log("Universe received. Hyperlink fleets.");
-				linkFleets();
-				loadHooks();
+				console.log("Initial load complete. Reinstall.");
+				init();
+			}
+			if (response.event === "order:full_universe") {
+				console.log("Universe received. Reinstall.");
+				init();
 			}
 		}
 	}
