@@ -6,7 +6,7 @@
 
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.4u";
+	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.5u";
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title)
 
@@ -332,6 +332,17 @@ function NeptunesPrideAgent() {
 	}
 
 	Mousetrap.bind("#", screenshot);
+
+	let homePlanets = function() {
+		let p = NeptunesPride.universe.galaxy.players; 
+		let output = [];
+		for (i in p) { 
+			let home = p[i].home;
+			output.push("Player #{0} is [[{0}]] home planet [[{1}]]".format(home.puid, home.n)) 
+		}
+		navigator.clipboard.writeText(output.join("\n"));
+	}
+	Mousetrap.bind("!", homePlanets);
 
 	let drawOverlayString = function(context, s, x, y, fgColor) {
 			context.fillStyle = "#000000";
