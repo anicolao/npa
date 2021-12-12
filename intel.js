@@ -572,9 +572,11 @@ function NeptunesPrideAgent() {
 			if (response.event === "order:player_achievements") {
 				console.log("Initial load complete. Reinstall.");
 				init();
-			}
-			if (response.event === "order:full_universe") {
+			} else if (response.event === "order:full_universe") {
 				console.log("Universe received. Reinstall.");
+				init();
+			} else if (!hooksLoaded && NeptunesPride.npui.map) {
+				console.log("Hooks need loading and map is ready. Reinstall.");
 				init();
 			}
 		}
