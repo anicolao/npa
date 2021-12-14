@@ -6,7 +6,7 @@
 
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.5u";
+	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.6u";
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title)
 
@@ -23,6 +23,12 @@ function NeptunesPrideAgent() {
 				;
 			});
 		};
+	}
+
+	var lastClip = "Error";
+	let clip = function(text) {
+		lastClip = text;
+		navigator.clipboard.writeText(text);
 	}
 
 	linkFleets = function() {
@@ -51,7 +57,7 @@ function NeptunesPrideAgent() {
 				}
 			}
 		}
-		navigator.clipboard.writeText(output.join("\n"));
+		clip(output.join("\n"));
 	};
 	Mousetrap.bind("*", starReport);
 
@@ -293,7 +299,10 @@ function NeptunesPrideAgent() {
 		return output;
 	}
 
-	Mousetrap.bind("&", function() { navigator.clipboard.writeText(combatOutcomes().join("\n")); });
+	function longFleetReport() { 
+		clip(combatOutcomes().join("\n")); 
+	}
+	Mousetrap.bind("&", longFleetReport);
 
 	function briefFleetReport() {
 		let universe = NeptunesPride.universe;
@@ -321,14 +330,14 @@ function NeptunesPrideAgent() {
 			}
 		}
 		flights = flights.sort(function(a, b) { return a[0] - b[0]; });
-		navigator.clipboard.writeText(flights.map(x => x[1]).join("\n"));
+		clip(flights.map(x => x[1]).join("\n"));
 	};
 
 	Mousetrap.bind("^", briefFleetReport);
 
 	function screenshot() {
 		let map = NeptunesPride.npui.map;
-		navigator.clipboard.writeText(map.canvas[0].toDataURL('image/webp', 0.05));
+		clip(map.canvas[0].toDataURL('image/webp', 0.05));
 	}
 
 	Mousetrap.bind("#", screenshot);
@@ -340,7 +349,7 @@ function NeptunesPrideAgent() {
 			let home = p[i].home;
 			output.push("Player #{0} is [[{0}]] home planet [[{1}]]".format(home.puid, home.n)) 
 		}
-		navigator.clipboard.writeText(output.join("\n"));
+		clip(output.join("\n"));
 	}
 	Mousetrap.bind("!", homePlanets);
 
@@ -385,7 +394,7 @@ function NeptunesPrideAgent() {
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "left";
 			map.context.textBaseline = "middle";
-			drawOverlayString(map.context, version, map.viewportWidth - 100, 16 * map.pixelRatio);
+			drawOverlayString(map.context, version, map.viewportWidth - 100, map.viewportHeight - 16 * map.pixelRatio);
 
 			if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
 				//console.log("Selected fleet", universe.selectedFleet);
@@ -542,6 +551,79 @@ function NeptunesPrideAgent() {
 			}
 			return s;
 		};
+    let npui = NeptunesPride.npui;
+		NeptunesPride.templates["n_p_a"] = "NP Agent";
+		NeptunesPride.templates["npa_report_type"] = "Report Type:";
+		NeptunesPride.templates["npa_paste"] = "Intel";
+    let superNewMessageCommentBox = npui.NewMessageCommentBox;
+		let reportPasteHook = function(e, d) {
+			let inbox = NeptunesPride.inbox;
+			inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + lastClip;
+			inbox.trigger("show_screen", "diplomacy_detail");
+		}
+		NeptunesPride.np.on("paste_report", reportPasteHook);
+    npui.NewMessageCommentBox = function () {
+    	let widget = superNewMessageCommentBox();
+			let reportButton = Crux.Button("npa_paste", "paste_report", "intel")
+					.grid(10, 12, 10, 3)
+			reportButton.roost(widget);
+    	return widget;
+		}
+		npui.SelectPlayerScreen =  function () {
+        var reportScreen = npui.Screen("n_p_a");
+
+        Crux.Text("", "rel pad12 txt_center col_black  section_title")
+            .rawHTML(title)
+            .roost(reportScreen);
+
+        var report = Crux.Widget("rel  col_accent")
+            .size(480, 48);
+        var output = Crux.Widget("rel");
+
+        Crux.Text("npa_report_type", "pad12")
+            .roost(report);
+        var selections = {
+        	"planets": "Home Planets",
+        	"fleets": "Fleets (short)",
+        	"combats": "Fleets (long)",
+        	"stars": "Stars",
+        };
+        Crux.DropDown("", selections, "exec_report")
+            .grid(15,0,15,3)
+            .roost(report);
+
+        let text = Crux.Text("", "pad12 rel txt_selectable")
+            .size(432)
+            .pos(48)
+
+            .rawHTML("Choose a report from the dropdown.");
+				text.roost(output);
+
+				report.roost(reportScreen);
+				output.roost(reportScreen);
+
+				let reportHook = function(e, d) {
+					console.log("Execute report", e, d);
+					if (d === "planets") {
+						homePlanets();
+					} else if (d === "fleets") {
+						briefFleetReport();
+					} else if (d === "combats") {
+						longFleetReport();
+					} else if (d === "stars") {
+						starReport();
+					}
+					html = lastClip.replace(/\n/g, '<br>');
+					html = NeptunesPride.inbox.hyperlinkMessage(html);
+					text.rawHTML(html);
+				};
+			  reportHook(0, "planets");
+				NeptunesPride.np.on("exec_report", reportHook);
+
+        return reportScreen;
+    };
+		npui.SideMenuItem("icon-eye", "n_p_a", "show_screen", "select_player")
+            .roost(npui.sideMenu);
 		hooksLoaded = true;
 	}
 
@@ -582,6 +664,7 @@ function NeptunesPrideAgent() {
 		}
 	}
 
+	homePlanets();
 	console.log("Neptune's Pride Agent injection fini.");
 }
 
