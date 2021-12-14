@@ -637,6 +637,7 @@ function NeptunesPrideAgent() {
 			} else {
 				console.log("HUD setup already done; skipping.");
 			}
+			homePlanets();
 		} else {
 			console.log("Game not fully initialized yet; wait.", NeptunesPride.universe);
 		}
@@ -664,7 +665,6 @@ function NeptunesPrideAgent() {
 		}
 	}
 
-	homePlanets();
 	console.log("Neptune's Pride Agent injection fini.");
 }
 
