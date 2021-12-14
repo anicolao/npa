@@ -569,7 +569,12 @@ function NeptunesPrideAgent() {
 			reportButton.roost(widget);
     	return widget;
 		}
-		npui.SelectPlayerScreen =  function () {
+		npaReports = function (screenConfig) {
+        npui.onHideScreen(null, true);
+        npui.onHideSelectionMenu();
+
+        npui.trigger("hide_side_menu");
+        npui.trigger("reset_edit_mode");
         var reportScreen = npui.Screen("n_p_a");
 
         Crux.Text("", "rel pad12 txt_center col_black  section_title")
@@ -620,9 +625,12 @@ function NeptunesPrideAgent() {
 			  reportHook(0, "planets");
 				NeptunesPride.np.on("exec_report", reportHook);
 
-        return reportScreen;
+        npui.activeScreen = reportScreen;
+				reportScreen.roost(npui.screenContainer);
+				npui.layoutElement(reportScreen);
     };
-		npui.SideMenuItem("icon-eye", "n_p_a", "show_screen", "select_player")
+		NeptunesPride.np.on("trigger_npa", npaReports);
+		npui.SideMenuItem("icon-eye", "n_p_a", "trigger_npa")
             .roost(npui.sideMenu);
 		hooksLoaded = true;
 	}
