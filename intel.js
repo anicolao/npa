@@ -2,6 +2,8 @@
 // @name        Neptune's Pride Agent
 // @description HUD and reporting for Neptune's Pride.
 // @match       https://np.ironhelmet.com/*
+// @version     1.6
+// @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.js
 // ==/UserScript==
 
 
