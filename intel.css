@@ -1,3 +1,9 @@
+/* ==UserStyle==
+@name        Neptune's Pride Agent CSS
+@description CSS fixups for NP UI
+@match       https://np.ironhelmet.com/*
+==/UserStyle== */
+
 .no_overflow {
 	overflow: visible !important;
 }
