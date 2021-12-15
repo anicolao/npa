@@ -397,6 +397,13 @@ function NeptunesPrideAgent() {
 			map.context.textAlign = "left";
 			map.context.textBaseline = "middle";
 			drawOverlayString(map.context, version, map.viewportWidth - 100, map.viewportHeight - 16 * map.pixelRatio);
+			if (NeptunesPride.originalPlayer === undefined) {
+				NeptunesPride.originalPlayer = universe.player.uid;
+			}
+			if (NeptunesPride.originalPlayer !== universe.player.uid) {
+				let n = universe.galaxy.players[universe.player.uid].alias;
+				drawOverlayString(map.context, n, map.viewportWidth - 100, map.viewportHeight - 2 * 16 * map.pixelRatio);
+			}
 
 			if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
 				//console.log("Selected fleet", universe.selectedFleet);
@@ -545,6 +552,9 @@ function NeptunesPrideAgent() {
 					pattern = "[[" + sub + "]]";
 					if (templateData[sub] !== undefined) {
 							s = s.replace(pattern, templateData[sub]);
+					} else if (sub.startsWith("api:")) {
+						let apiLink = "<a onClick='Crux.crux.trigger(\"switch_user_api\", \"" + sub + "\")'> View as " + sub + "</a>";
+						s = s.replace(pattern, apiLink);
 					} else if (sub.startsWith("data:")) {
 						s = s.replace(pattern, '<div width="100%" class="screenshot"><img class="screenshot" src="' + sub + '"/></div>');
 					} else {
@@ -667,6 +677,7 @@ function NeptunesPrideAgent() {
 				init();
 			} else if (response.event === "order:full_universe") {
 				console.log("Universe received. Reinstall.");
+				NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
 				init();
 			} else if (!hooksLoaded && NeptunesPride.npui.map) {
 				console.log("Hooks need loading and map is ready. Reinstall.");
@@ -674,6 +685,26 @@ function NeptunesPrideAgent() {
 			}
 		}
 	}
+
+	var otherUserCode = undefined;
+	let game = NeptunesPride.gameNumber;
+	let switchUser = function(event, data) {
+		if (NeptunesPride.originalPlayer === undefined) {
+			NeptunesPride.originalPlayer = universe.player.uid;
+		}
+		let code = (data && data.split(":")[1]) || otherUserCode;
+		otherUserCode = code;
+		if (otherUserCode) {
+			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
+			let eggers = jQuery.ajax({ type: 'POST', url: "https://np.ironhelmet.com/api", async: false, data: params, dataType: "json"})
+			NeptunesPride.np.onFullUniverse(null, eggers.responseJSON.scanning_data);
+			NeptunesPride.npui.onHideScreen(null, true);
+			NeptunesPride.np.trigger("select_player", [NeptunesPride.universe.player.uid, true]);
+			init();
+		}
+	}
+	Mousetrap.bind(">", switchUser);
+	NeptunesPride.np.on("switch_user_api", switchUser);
 
 	console.log("Neptune's Pride Agent injection fini.");
 }
