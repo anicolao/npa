@@ -98,9 +98,8 @@ function NeptunesPrideAgent() {
 	}
 
 	let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	let tickToEtaString = function(tick, prefix) {
+	let msToEtaString = function(msplus, prefix) {
 		let now = new Date();
-		let msplus = msToTick(tick);
 		let arrival = new Date(now.getTime() + msplus);
 		let p = prefix !== undefined ? prefix : "ETA ";
 		let ttt = p + ampm(arrival.getHours(), arrival.getMinutes());
@@ -108,8 +107,13 @@ function NeptunesPrideAgent() {
 			ttt = p + days[arrival.getDay()] + " @ " + ampm(arrival.getHours(), arrival.getMinutes());
 		return ttt;
 	}
+	let tickToEtaString = function(tick, prefix) {
+		let msplus = msToTick(tick);
+		return msToEtaString(msplus, prefix);
+	}
 
 	let fleetOutcomes = {};
+	let combatHandicap = 0;
 	let combatOutcomes = function() {
 		let universe = NeptunesPride.universe;
 		let players = NeptunesPride.universe.galaxy.players;
@@ -144,7 +148,7 @@ function NeptunesPrideAgent() {
 			if (fleet.orbiting) {
 				let orbit = fleet.orbiting.uid;
 				if (!starstate[orbit]) {
-					starstate[orbit] = { last_updated: 0, ships: stars[orbit].totalDefenses, puid: stars[orbit].puid };
+					starstate[orbit] = { last_updated: 0, ships: stars[orbit].totalDefenses, puid: stars[orbit].puid, c: stars[orbit].c };
 				}
 				// This fleet is departing this tick; remove it from the origin star's totalDefenses
 				starstate[orbit].ships -= fleet.st;
@@ -165,7 +169,7 @@ function NeptunesPrideAgent() {
 			let tick = ka[0];
 			let starId = ka[1];
 			if (!starstate[starId]) {
-				starstate[starId] = { last_updated: 0, ships: stars[starId].totalDefenses, puid: stars[starId].puid };
+				starstate[starId] = { last_updated: 0, ships: stars[starId].totalDefenses, puid: stars[starId].puid, c: stars[starId].c };
 			}
 			if (starstate[starId].puid == -1) {
 				// assign ownership of the star to the player whose fleet has traveled the least distance
@@ -182,13 +186,16 @@ function NeptunesPrideAgent() {
 				starstate[starId].puid = owner;
 			}
 			output.push("{0}: [[{1}]] [[{2}]] {3} ships".format(tickToEtaString(tick, "@"), starstate[starId].puid, stars[starId].n, starstate[starId].ships))
-			let tickDelta = tick - starstate[starId].last_updated;
-			if (tickDelta > 1) {
+			let tickDelta = tick - starstate[starId].last_updated - 1;
+			if (tickDelta > 0) {
 				let oldShips = starstate[starId].ships;
 				starstate[starId].last_updated = tick - 1;
 				if (stars[starId].shipsPerTick) {
-					starstate[starId].ships += stars[starId].shipsPerTick * tickDelta;
-					output.push("  {0} + {2}/h = {1}".format(oldShips, starstate[starId].ships, stars[starId].shipsPerTick));
+					let oldc = starstate[starId].c;
+					starstate[starId].ships += stars[starId].shipsPerTick * tickDelta + oldc;
+					starstate[starId].c = starstate[starId].ships - Math.trunc(starstate[starId].ships);
+					starstate[starId].ships -= starstate[starId].c;
+					output.push("  {0}+{3} + {2}/h = {1}+{4}".format(oldShips, starstate[starId].ships, stars[starId].shipsPerTick, oldc, starstate[starId].c));
 				}
 			}
 			for (const i in arrival) {
@@ -236,6 +243,23 @@ function NeptunesPrideAgent() {
 				output.push("    Defenders {0} ships, WS {1}".format(defense, dwt));
 				output.push("    Attackers {0} ships, WS {1}".format(offense, awt));
 				dwt += 1;
+				if (starstate[starId].puid !== universe.galaxy.player_uid) {
+					if (combatHandicap > 0) {
+						dwt += combatHandicap;
+						output.push("    Defenders WS{0} = {1}".format(handicapString(""), dwt));
+					} else {
+						awt -= combatHandicap;
+						output.push("    Attackers WS{0} = {1}".format(handicapString(""), awt));
+					}
+				} else {
+					if (combatHandicap > 0) {
+						awt += combatHandicap;
+						output.push("    Attackers WS{0} = {1}".format(handicapString(""), awt));
+					} else {
+						dwt -= combatHandicap;
+						output.push("    Defenders WS{0} = {1}".format(handicapString(""), dwt));
+					}
+				}
 
 				if (universe.galaxy.player_uid === starstate[starId].puid) {
 					// truncate defense if we're defending to give the most
@@ -300,6 +324,15 @@ function NeptunesPrideAgent() {
 		}
 		return output;
 	}
+
+	function incCombatHandicap() {
+		combatHandicap += 1;
+	}
+	function decCombatHandicap() {
+		combatHandicap -= 1;
+	}
+	Mousetrap.bind(".", incCombatHandicap);
+	Mousetrap.bind(",", decCombatHandicap);
 
 	function longFleetReport() { 
 		clip(combatOutcomes().join("\n")); 
@@ -384,6 +417,10 @@ function NeptunesPrideAgent() {
 	}
 
 	let hooksLoaded = false;
+	let handicapString = function(prefix) {
+		let p = prefix !== undefined ? prefix : ((combatHandicap > 0) ? "Enemy WS" : "My WS");;
+		return p + (combatHandicap > 0 ? "+" : "") + combatHandicap 
+	}
 	let loadHooks = function() {
 		let superDrawText = NeptunesPride.npui.map.drawText;
 		NeptunesPride.npui.map.drawText = function() {
@@ -394,9 +431,13 @@ function NeptunesPrideAgent() {
 
 			map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
 			map.context.fillStyle = "#FF0000";
-			map.context.textAlign = "left";
+			map.context.textAlign = "right";
 			map.context.textBaseline = "middle";
-			drawOverlayString(map.context, version, map.viewportWidth - 100, map.viewportHeight - 16 * map.pixelRatio);
+			let v = version;
+			if (combatHandicap !== 0) {
+				v = handicapString() + " " + v;
+			}
+			drawOverlayString(map.context, v, map.viewportWidth - 10, map.viewportHeight - 16 * map.pixelRatio);
 			if (NeptunesPride.originalPlayer === undefined) {
 				NeptunesPride.originalPlayer = universe.player.uid;
 			}
@@ -644,6 +685,17 @@ function NeptunesPrideAgent() {
 		NeptunesPride.np.on("trigger_npa", npaReports);
 		npui.SideMenuItem("icon-eye", "n_p_a", "trigger_npa")
             .roost(npui.sideMenu);
+
+		let superFormatTime = Crux.formatTime;
+    let relativeTimes = true;
+    Crux.formatTime = function (ms, mins, secs) {
+    	if (relativeTimes) {
+    		return superFormatTime(ms, mins, secs);
+			} else {
+				return msToEtaString(ms, "");
+			}
+		}
+		Mousetrap.bind("%", function() { relativeTimes = !relativeTimes; })
 		hooksLoaded = true;
 	}
 
@@ -690,7 +742,7 @@ function NeptunesPrideAgent() {
 	let game = NeptunesPride.gameNumber;
 	let switchUser = function(event, data) {
 		if (NeptunesPride.originalPlayer === undefined) {
-			NeptunesPride.originalPlayer = universe.player.uid;
+			NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
 		}
 		let code = (data && data.split(":")[1]) || otherUserCode;
 		otherUserCode = code;
