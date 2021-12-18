@@ -2,13 +2,13 @@
 // @name        Neptune's Pride Agent
 // @description HUD and reporting for Neptune's Pride.
 // @match       https://np.ironhelmet.com/*
-// @version     1.9
+// @version     MAJOR_VERSION.MINOR_VERSION
 // @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.js
 // ==/UserScript==
 
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.9u";
+	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent vMAJOR_VERSION.MINOR_VERSIONu";
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title)
 
