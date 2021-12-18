@@ -2,7 +2,7 @@
 @name        Neptune's Pride Agent CSS
 @description CSS fixups for NP UI
 @match       https://np.ironhelmet.com/*
-@version     1.10
+@version     MAJOR_VERSION.MINOR_VERSION
 @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.css
 ==/UserStyle== */
 
