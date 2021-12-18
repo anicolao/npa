@@ -382,7 +382,11 @@ function NeptunesPrideAgent() {
 		let output = [];
 		for (i in p) { 
 			let home = p[i].home;
-			output.push("Player #{0} is [[{0}]] home planet [[{1}]]".format(home.puid, home.n)) 
+			if (home) {
+				output.push("Player #{0} is [[{0}]] home {2} [[{1}]]".format(i, home.n, i == home.puid ? "is" : "was")) 
+			} else {
+				output.push("Player #{0} is [[{0}]] home unknown".format(i)) 
+			}
 		}
 		clip(output.join("\n"));
 	}
