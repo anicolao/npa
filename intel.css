@@ -18,6 +18,10 @@ div.no_overflow:first-of-type>div:first-of-type {
 	border-bottom: 1px solid #2C3273;
 }
 
+.button {
+	z-index: 150;
+}
+
 .screenshot {
 	max-width: 128px;
 	overflow: scroll;
