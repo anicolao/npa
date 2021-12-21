@@ -599,6 +599,7 @@ function NeptunesPrideAgent() {
 							s = s.replace(pattern, templateData[sub]);
 					} else if (sub.startsWith("api:")) {
 						let apiLink = "<a onClick='Crux.crux.trigger(\"switch_user_api\", \"" + sub + "\")'> View as " + sub + "</a>";
+						apiLink += " or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"" + sub + "\")'> Merge " + sub + "</a>";
 						s = s.replace(pattern, apiLink);
 					} else if (sub.startsWith("data:")) {
 						s = s.replace(pattern, '<div width="100%" class="screenshot"><img class="screenshot" src="' + sub + '"/></div>');
@@ -759,8 +760,29 @@ function NeptunesPrideAgent() {
 			init();
 		}
 	}
+
+	let mergeUser = function(event, data) {
+		if (NeptunesPride.originalPlayer === undefined) {
+			NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
+		}
+		let code = (data && data.split(":")[1]) || otherUserCode;
+		otherUserCode = code;
+		if (otherUserCode) {
+			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
+			let eggers = jQuery.ajax({ type: 'POST', url: "https://np.ironhelmet.com/api", async: false, data: params, dataType: "json"})
+			let universe = NeptunesPride.universe;
+			let scan = eggers.responseJSON.scanning_data;
+			universe.galaxy.stars = {...universe.galaxy.stars, ...scan.stars};
+			universe.galaxy.fleets = {...universe.galaxy.fleets, ...scan.fleets};
+			NeptunesPride.np.onFullUniverse(null, universe.galaxy);
+			NeptunesPride.npui.onHideScreen(null, true);
+			init();
+		}
+	}
 	Mousetrap.bind(">", switchUser);
+	Mousetrap.bind("|", mergeUser);
 	NeptunesPride.np.on("switch_user_api", switchUser);
+	NeptunesPride.np.on("merge_user_api", mergeUser);
 
 	console.log("Neptune's Pride Agent injection fini.");
 }
