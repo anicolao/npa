@@ -10,7 +10,13 @@
 function NeptunesPrideAgent() {
 	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent vMAJOR_VERSION.MINOR_VERSIONu";
 	let version = title.replace(/^.*v/, 'v');
-	console.log(title)
+	console.log(title);
+
+	let hotkeys = [];
+	let hotkey = function(key, action) {
+		hotkeys.push([key, action]);
+		Mousetrap.bind(key, action);
+	}
 
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
@@ -61,7 +67,9 @@ function NeptunesPrideAgent() {
 		}
 		clip(output.join("\n"));
 	};
-	Mousetrap.bind("*", starReport);
+	hotkey("*", starReport);
+	starReport.help = "Generate a report on all stars in your scanning range, and copy it to the clipboard." +
+		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.";
 
 	let ampm = function(h, m) {
 		if (m < 10)
@@ -331,13 +339,25 @@ function NeptunesPrideAgent() {
 	function decCombatHandicap() {
 		combatHandicap -= 1;
 	}
-	Mousetrap.bind(".", incCombatHandicap);
-	Mousetrap.bind(",", decCombatHandicap);
+	hotkey(".", incCombatHandicap);
+	incCombatHandicap.help = "Change combat calculation to credit your enemies with +1 weapons. Useful " + 
+		"if you suspect they will have achieved the next level of tech before a battle you are investigating." +
+		"<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. If the " +
+		"indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " + 
+		"weapons to your opponent.";
+	hotkey(",", decCombatHandicap);
+	decCombatHandicap.help = "Change combat calculation to credit yourself with +1 weapons. Useful " + 
+		"when you will have achieved the next level of tech before a battle you are investigating." +
+		"<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. When " +
+		"indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " + 
+		"weapons to you.";
 
 	function longFleetReport() { 
 		clip(combatOutcomes().join("\n")); 
 	}
-	Mousetrap.bind("&", longFleetReport);
+	hotkey("&", longFleetReport);
+	longFleetReport.help = "Generate a detailed fleet report on all carriers in your scanning range, and copy it to the clipboard." +
+		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.";
 
 	function briefFleetReport() {
 		let universe = NeptunesPride.universe;
@@ -368,14 +388,17 @@ function NeptunesPrideAgent() {
 		clip(flights.map(x => x[1]).join("\n"));
 	};
 
-	Mousetrap.bind("^", briefFleetReport);
+	hotkey("^", briefFleetReport);
+	briefFleetReport.help = "Generate a summary fleet report on all carriers in your scanning range, and copy it to the clipboard." +
+		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.";
 
 	function screenshot() {
 		let map = NeptunesPride.npui.map;
 		clip(map.canvas[0].toDataURL('image/webp', 0.05));
 	}
 
-	Mousetrap.bind("#", screenshot);
+	hotkey("#", screenshot);
+	screenshot.help = "Create a data: URL of the current map. Paste it into a browser window to view. This is likely to be removed.";
 
 	let homePlanets = function() {
 		let p = NeptunesPride.universe.galaxy.players; 
@@ -390,7 +413,10 @@ function NeptunesPrideAgent() {
 		}
 		clip(output.join("\n"));
 	}
-	Mousetrap.bind("!", homePlanets);
+	hotkey("!", homePlanets);
+	homePlanets.help = "Generate a player summary report and copy it to the clipboard." +
+		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " + 
+		"It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.";
 
 	let drawOverlayString = function(context, s, x, y, fgColor) {
 			context.fillStyle = "#000000";
@@ -700,7 +726,11 @@ function NeptunesPrideAgent() {
 				return msToEtaString(ms, "");
 			}
 		}
-		Mousetrap.bind("%", function() { relativeTimes = !relativeTimes; })
+		let toggleRelative = function() { relativeTimes = !relativeTimes; }
+		hotkey("%", toggleRelative);
+		toggleRelative.help = "Change the display of ETAs from relative times to absolute clock times. Makes predicting " +
+			"important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " + 
+			"will need to refresh the display to see the different times.";
 		hooksLoaded = true;
 	}
 
@@ -719,7 +749,8 @@ function NeptunesPrideAgent() {
 			console.log("Game not fully initialized yet; wait.", NeptunesPride.universe);
 		}
 	}
-	Mousetrap.bind("@", init);
+	hotkey("@", init);
+	init.help = "Reinitialize Neptune's Pride Agent. Use the @ hotkey if the version is not being shown on the map after dragging.";
 
 	if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
 		console.log("Universe already loaded. Hyperlink fleets & load hooks.");
@@ -779,10 +810,32 @@ function NeptunesPrideAgent() {
 			init();
 		}
 	}
-	Mousetrap.bind(">", switchUser);
-	Mousetrap.bind("|", mergeUser);
+	hotkey(">", switchUser);
+	switchUser.help = "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " + 
+		"it is not your own alias to help remind you that you aren't in control of this user.";
+	hotkey("|", mergeUser);
+	mergeUser.help = "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " + 
+		"passes and you've reloaded, but you still want the merged scan data from two players onscreen.";
 	NeptunesPride.np.on("switch_user_api", switchUser);
 	NeptunesPride.np.on("merge_user_api", mergeUser);
+
+  let npaHelp = function() {
+		let help = [ "<H1>" + title + "</H1>" ];
+		for (pair in hotkeys) {
+			let key = hotkeys[pair][0];
+			let action = hotkeys[pair][1];
+			help.push("<h2>Hotkey: " + key + "</h2>");
+			if (action.help) {
+				help.push(action.help);
+			} else {
+				help.push("<p>No documentation yet.<p><code>" + action.toLocaleString() + "</code>");
+			}
+		}
+		NeptunesPride.universe.helpHTML = help.join("");
+		NeptunesPride.np.trigger("show_screen", "help");
+	}
+	npaHelp.help = "Display this help screen.";
+	hotkey("?", npaHelp);
 
 	console.log("Neptune's Pride Agent injection fini.");
 }
