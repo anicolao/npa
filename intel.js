@@ -837,6 +837,36 @@ function NeptunesPrideAgent() {
 	npaHelp.help = "Display this help screen.";
 	hotkey("?", npaHelp);
 
+	var autocompleteMode = 0;
+	let autocompleteTrigger = function(e) {
+		if (e.target.type === "textarea") {
+			if (autocompleteMode) {
+				let start = autocompleteMode;
+				let endBracket = e.target.value.indexOf("]", start);
+				if (endBracket === -1) endBracket = e.target.value.length;
+				let autoString = e.target.value.substring(start, endBracket);
+				let key = e.key;
+				if (key === "]") {
+					autocompleteMode = 0;
+					let m = autoString.match(/^[0-9][0-9]*$/);
+					if (m && m.length) {
+						let puid = Number(autoString);
+						let end = e.target.selectionEnd;
+						let auto = "" + puid + "]] " + NeptunesPride.universe.galaxy.players[puid].alias;
+						e.target.value = e.target.value.substring(0, start) + auto + e.target.value.substring(end, e.target.value.length);
+						e.target.selectionStart = start + auto.length;
+						e.target.selectionEnd = start + auto.length;
+					}
+				}
+			} else if (e.target.selectionStart > 1) {
+				let start = e.target.selectionStart - 2;
+				let ss = e.target.value.substring(start, start+2);
+				autocompleteMode = ss === "[[" ? e.target.selectionStart : 0;
+			}
+		}
+	}
+	document.body.addEventListener('keyup', autocompleteTrigger);
+
 	console.log("Neptune's Pride Agent injection fini.");
 }
 
