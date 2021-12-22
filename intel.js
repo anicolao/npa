@@ -772,8 +772,8 @@ function NeptunesPrideAgent() {
 			let eggers = jQuery.ajax({ type: 'POST', url: "https://np.ironhelmet.com/api", async: false, data: params, dataType: "json"})
 			let universe = NeptunesPride.universe;
 			let scan = eggers.responseJSON.scanning_data;
-			universe.galaxy.stars = {...universe.galaxy.stars, ...scan.stars};
-			universe.galaxy.fleets = {...universe.galaxy.fleets, ...scan.fleets};
+			universe.galaxy.stars = {...scan.stars, ...universe.galaxy.stars};
+			universe.galaxy.fleets = {...scan.fleets, ...universe.galaxy.fleets};
 			NeptunesPride.np.onFullUniverse(null, universe.galaxy);
 			NeptunesPride.npui.onHideScreen(null, true);
 			init();
