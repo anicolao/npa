@@ -371,16 +371,9 @@ function NeptunesPrideAgent() {
 			let fleet = fleets[f];
 			if (fleet.o && fleet.o.length > 0) {
 				let stop = fleet.o[0][1];
-				if (stars[stop] === undefined) continue;
-				let dx = stars[stop].x - fleet.x;
-				let dy = stars[stop].y - fleet.y;
-				let distance = Math.sqrt(dx*dx + dy*dy);
-				let ticks = 0;
-				let remaining = distance;
-				while (remaining > 0) {
-					remaining -= NeptunesPride.universe.galaxy.fleet_speed;
-					ticks += 1;
-				}
+				let ticks = fleet.etaFirst;
+				let starname = stars[stop] && stars[stop].n;
+				if (!starname) continue;
 				flights.push([ticks, "[[{0}]] [[{1}]] {2} → [[{3}]] {4}".format(fleet.puid, fleet.n, fleet.st, stars[stop].n, tickToEtaString(ticks, ""))]);
 			}
 		}
