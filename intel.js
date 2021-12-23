@@ -804,6 +804,12 @@ function NeptunesPrideAgent() {
 			let universe = NeptunesPride.universe;
 			let scan = eggers.responseJSON.scanning_data;
 			universe.galaxy.stars = {...scan.stars, ...universe.galaxy.stars};
+			for (s in scan.stars) {
+				star = scan.stars[s];
+				if (star.v !== "0") {
+					universe.galaxy.stars[s] = {...universe.galaxy.stars[s], ...star};
+				}
+			}
 			universe.galaxy.fleets = {...scan.fleets, ...universe.galaxy.fleets};
 			NeptunesPride.np.onFullUniverse(null, universe.galaxy);
 			NeptunesPride.npui.onHideScreen(null, true);
