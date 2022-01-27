@@ -12,11 +12,26 @@ function NeptunesPrideAgent() {
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title);
 
+	var lastClip = "Error";
+	let clip = function(text) {
+		lastClip = text;
+	}
+
+	let copy = function(reportFn) {
+		return function() {
+			reportFn();
+			navigator.clipboard.writeText(lastClip);
+		}
+	}
+
 	let hotkeys = [];
 	let hotkey = function(key, action) {
 		hotkeys.push([key, action]);
-		Mousetrap.bind(key, action);
+		Mousetrap.bind(key, copy(action));
 	}
+
+	Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => console.log("Crux.touchEnabled set ignored", x) });
+	Object.defineProperty(NeptunesPride.npui.map, 'ignoreMouseEvents', { get: () => false, set: (x) => console.log("NeptunesPride.npui.map.ignoreMouseEvents set ignored", x) });
 
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
@@ -33,11 +48,7 @@ function NeptunesPrideAgent() {
 		};
 	}
 
-	var lastClip = "Error";
-	let clip = function(text) {
-		lastClip = text;
-		navigator.clipboard.writeText(text);
-	}
+
 
 	linkFleets = function() {
 		let universe = NeptunesPride.universe;
