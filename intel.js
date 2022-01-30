@@ -30,8 +30,6 @@ function NeptunesPrideAgent() {
 		Mousetrap.bind(key, copy(action));
 	}
 
-	Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => console.log("Crux.touchEnabled set ignored", x) });
-	Object.defineProperty(NeptunesPride.npui.map, 'ignoreMouseEvents', { get: () => false, set: (x) => console.log("NeptunesPride.npui.map.ignoreMouseEvents set ignored", x) });
 
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
@@ -735,6 +733,10 @@ function NeptunesPrideAgent() {
 		toggleRelative.help = "Change the display of ETAs from relative times to absolute clock times. Makes predicting " +
 			"important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " + 
 			"will need to refresh the display to see the different times.";
+
+		Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => console.log("Crux.touchEnabled set ignored", x) });
+		Object.defineProperty(NeptunesPride.npui.map, 'ignoreMouseEvents', { get: () => false, set: (x) => console.log("NeptunesPride.npui.map.ignoreMouseEvents set ignored", x) });
+
 		hooksLoaded = true;
 	}
 
