@@ -1,4 +1,4 @@
-11;rgb:3030/0a0a/2424# Use Git Version of Plugin
+# Use Git Version of Plugin
 
 Clone this repository somewhere on your system. Either by unzipping it, using terminal `git` or github desktop. Once you have a copy on your system use the following to enable this git version:
 
