@@ -55,3 +55,6 @@ div.screenshot:hover {
 .blue-text{
 	color: #0096FF;
 }
+.clickable{
+	cursor: pointer;
+}
