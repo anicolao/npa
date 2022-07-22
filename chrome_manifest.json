@@ -3,11 +3,10 @@
 
   "name": "Stoned Ape Tools",
   "description": "Tools that only a stoned ape could use. ",
-  "version": "2.8",
-  "manifest_version": 3,  
+  "version": "2.7",
+  "manifest_version": 3,
   "permissions": [
-    "scripting",
-    "cookies"
+    "scripting"
   ],
   "host_permissions": [
     "https://np.ironhelmet.com/*"
@@ -16,7 +15,6 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "js.cookie.js",
         "intel.js"
       ],
       "matches": [

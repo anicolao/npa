@@ -2,7 +2,7 @@
 @name        Neptune's Pride Agent CSS
 @description CSS fixups for NP UI
 @match       https://np.ironhelmet.com/*
-@version     1.16
+@version     2.1
 @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.css
 ==/UserStyle== */
 
@@ -43,4 +43,15 @@ div.screenshot:hover {
 	left:0;
 	border: 5px solid #00ff00;
 	z-index: 10000;
+}
+
+
+.orange-text{
+	color: #FFA500;
+}
+.red-text{
+	color: #CC2222;
+}
+.blue-text{
+	color: #0096FF;
 }

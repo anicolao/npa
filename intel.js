@@ -1,11 +1,307 @@
-// ==UserScript==
-// @name        Neptune's Pride Agent
-// @description HUD and reporting for Neptune's Pride.
-// @match       https://np.ironhelmet.com/*
-// @version     1.16
-// @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.js
-// ==/UserScript==
 
+/*! js-cookie v3.0.1 | MIT */
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e=e||self,function(){var n=e.Cookies,o=e.Cookies=t();o.noConflict=function(){return e.Cookies=n,o}}())}(this,(function(){"use strict";function e(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var o in n)e[o]=n[o]}return e}return function t(n,o){function r(t,r,i){if("undefined"!=typeof document){"number"==typeof(i=e({},o,i)).expires&&(i.expires=new Date(Date.now()+864e5*i.expires)),i.expires&&(i.expires=i.expires.toUTCString()),t=encodeURIComponent(t).replace(/%(2[346B]|5E|60|7C)/g,decodeURIComponent).replace(/[()]/g,escape);var c="";for(var u in i)i[u]&&(c+="; "+u,!0!==i[u]&&(c+="="+i[u].split(";")[0]));return document.cookie=t+"="+n.write(r,t)+c}}return Object.create({set:r,get:function(e){if("undefined"!=typeof document&&(!arguments.length||e)){for(var t=document.cookie?document.cookie.split("; "):[],o={},r=0;r<t.length;r++){var i=t[r].split("="),c=i.slice(1).join("=");try{var u=decodeURIComponent(i[0]);if(o[u]=n.read(c,u),e===u)break}catch(e){}}return e?o[e]:o}},remove:function(t,n){r(t,"",e({},n,{expires:-1}))},withAttributes:function(n){return t(this.converter,e({},this.attributes,n))},withConverter:function(n){return t(e({},this.converter,n),this.attributes)}},{attributes:{value:Object.freeze(o)},converter:{value:Object.freeze(n)}})}({read:function(e){return'"'===e[0]&&(e=e.slice(1,-1)),e.replace(/(%[\dA-F]{2})+/gi,decodeURIComponent)},write:function(e){return encodeURIComponent(e).replace(/%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,decodeURIComponent)}},{path:"/"})}));
+
+//Get ledger info to see what is owed
+
+const get_hero = ()=>{
+    let gal = NeptunesPride.universe.galaxy
+    let player = gal['player_uid']
+    return gal.players[Number(player)]
+}
+const get_ledger = (messages)=>{
+	let loading = Crux.Text("","rel txt_center pad12").rawHTML(`Parsing ${messages.length} messages.`)
+		loading.roost(NeptunesPride.npui.activeScreen)
+	console.log(messages.length)
+	let uid = get_hero().uid
+	let ledger = {}
+	messages.filter(m=>m.payload.template=="money_sent"||m.payload.template=="shared_technology")
+		.map(m=>m.payload)
+		.forEach(m=>{
+			let liaison = m.from_puid==uid ? m.to_puid : m.from_puid
+			let value = m.template=="money_sent"? m.amount : m.price
+			value *= m.from_puid==uid? 1 : -1 // amount is (+) if credit & (-) if debt
+			liaison in ledger ? ledger[liaison]+=value : ledger[liaison]=value
+		});
+
+	let players = []
+	for (const [key, p] of Object.entries(NeptunesPride.universe.galaxy.players)) {
+		p.debt = 0
+	}
+	for(let uid in ledger){
+		let player = NeptunesPride.universe.galaxy.players[uid]
+		player.debt = ledger[uid]
+		players.push(player)
+	}
+	get_hero().ledger = ledger
+	return players
+}
+
+/*
+Ledger Display
+*/
+//Handler for new message ajax request
+const recieve_new_messages = (response)=>{
+	const npui = NeptunesPride.npui
+	const universe = NeptunesPride.universe
+	const players = get_ledger(response.report.messages)
+
+	const ledgerScreen = npui.ledgerScreen();
+
+	npui.onHideScreen(null, true);
+	npui.onHideSelectionMenu();
+	npui.trigger("hide_side_menu");
+	npui.trigger("reset_edit_mode");
+	npui.activeScreen = ledgerScreen;
+	ledgerScreen.roost(npui.screenContainer);
+	npui.layoutElement(ledgerScreen)
+
+	players.forEach(p=>{
+		let player = npui.PlayerNameIconRow(universe.galaxy.players[p.uid]).roost(npui.activeScreen);
+		player.addStyle("player_cell")
+		let prompt = p.debt>0 ? "They owe" : "You owe"
+		if (p.debt == 0){
+			prompt = "Balance"
+		}
+		if (p.debt<0){
+			Crux.Text("", "pad12 txt_right red-text")
+					.rawHTML(`${prompt}: ${p.debt}`)
+                    .grid(20, 0, 10, 3)
+                    .roost(player);
+			if (true || p.debt*-1 <= get_hero().cash){
+				Crux.Button("forgive", "forgive_debt", { targetPlayer: p.uid })
+								.grid(17, 0, 6, 3)
+								.roost(player);
+			}
+		}else if (p.debt > 0){
+			Crux.Text("", "pad12 txt_right blue-text")
+					.rawHTML(`${prompt}: ${p.debt}`)
+                    .grid(20, 0, 10, 3)
+                    .roost(player);
+		}else if (p.debt==0){
+			Crux.Text("", "pad12 txt_right orange-text")
+					.rawHTML(`${prompt}: ${p.debt}`)
+                    .grid(20, 0, 10, 3)
+                    .roost(player);
+		}
+	})
+}
+
+const renderLedger = ()=>{
+	Mousetrap.bind(["m", "M"], function () {NeptunesPride.np.trigger("trigger_ledger");});
+	const np = NeptunesPride.np
+	const npui = NeptunesPride.npui
+	const inbox = NeptunesPride.inbox
+	const universe = NeptunesPride.universe
+	NeptunesPride.templates["ledger"] = "Ledger";
+	NeptunesPride.templates["forgive"] = "Pay Debt";
+	NeptunesPride.templates["forgive_debt"] = "Are you sure you want to forgive this debt?"
+	if (!npui.hasmenuitem){
+		npui.SideMenuItem("icon-database", "ledger", "trigger_ledger").roost(npui.sideMenu);
+		npui.hasmenuitem=true
+	}
+	npui.ledgerScreen = (config)=>{return npui.Screen("ledger")};
+	NeptunesPride.np.on('trigger_ledger',()=>{
+		const ledgerScreen = npui.ledgerScreen();
+		let loading = Crux.Text("","rel txt_center pad12 section_title").rawHTML(`Tabulating Ledger...`)
+		loading.roost(ledgerScreen)
+
+		npui.onHideScreen(null, true);
+		npui.onHideSelectionMenu();
+		npui.trigger("hide_side_menu");
+		npui.trigger("reset_edit_mode");
+		npui.activeScreen = ledgerScreen;
+		ledgerScreen.roost(npui.screenContainer);
+		npui.layoutElement(ledgerScreen)
+		
+		//Switch to ajax
+		jQuery.ajax({ type: 'POST',
+                                url: "/trequest/fetch_game_messages",
+                                async: true,
+                                data: {
+									type: "fetch_game_messages",
+									count: 100000,
+									offset: 0,
+									group: "game_event",
+									version: NeptunesPride.version,
+									game_number: NeptunesPride.gameNumber
+								},
+                                success: recieve_new_messages,
+                                error: console.log,
+                                dataType: "json"});
+	})
+	
+	np.onForgiveDebt = function (event, data) {
+        let targetPlayer = data.targetPlayer;
+		let player = universe.galaxy.players[targetPlayer]
+		let amount = player.debt*-1
+		//let amount = 1
+        universe.player.ledger[targetPlayer] = 0;
+		np.trigger("show_screen",  ["confirm", {
+			message: "forgive_debt",
+			eventKind: 'confirm_forgive_debt',
+			eventData: {type: "order", order: "send_money," + targetPlayer + "," + amount}
+		}]);
+	};
+	np.on("confirm_forgive_debt",(event,data)=>{
+		np.trigger("server_request",data)
+        np.trigger("trigger_ledger")
+	})
+    np.on("forgive_debt", np.onForgiveDebt);
+}
+
+setTimeout(renderLedger,500)
+
+const get_star_gis = ()=>{
+    stars = NeptunesPride.universe.galaxy.stars
+    output = []
+    for(const s in stars){
+	let star = stars[s]
+	output.push({
+            x: star.x,
+            y: star.y,
+            owner: star.qualifiedAlias,
+            economy: star.e,
+            industry: star.i,
+            science: star.s,
+            ships: star.totalDefenses
+        })
+    }
+    return output
+}
+
+
+const get_research = ()=>{
+    let hero = get_hero()
+    let science = hero.total_science
+
+    //Current Science
+    let current = hero.tech[hero.researching]
+    let current_points_remaining = current['brr']*current['level']-current['research']
+    let eta = Math.ceil(current_points_remaining/science) //Hours
+
+    //Next science
+    let next = hero.tech[hero.researching_next]
+    let next_points_remaining = next['brr']*next['level']-next['research']
+    let next_eta = Math.ceil(next_points_remaining/science) + eta
+    let next_level = next['level']+1
+    if (hero.researching==hero.researching_next){
+		//Recurring research
+		next_points_remaining += next['brr']
+		next_eta = Math.ceil((next['brr']*next['level']+1)/science) + eta
+		next_level += 1
+    }
+    let name_map = {
+	scanning: 'Scanning',
+	propulsion: 'Hyperspace Range',
+	terraforming: 'Terraforming',
+	research: 'Experimentation',
+	weapons: 'Weapons',
+	banking: 'Banking',
+	manufacturing: 'Manufacturing'
+    }
+    
+	return {
+		current_name: name_map[hero.researching],
+		current_level: current['level']+1,
+		current_eta: eta,
+		next_name: name_map[hero.researching_next],
+		next_level: next_level,
+		next_eta: next_eta
+	}
+}
+
+const get_research_text = ()=>{
+	const research = get_research()
+    let first_line = `Now: ${research['current_name']} ${research['current_level']} - ${research['current_eta']} ticks.`
+    let second_line = `Next: ${research['next_name']} ${research['next_level']} - ${research['next_eta']} ticks.`
+    return `${first_line}\n${second_line}\n`
+}
+
+const get_weapons_next = ()=>{
+	const research = get_research()
+	if (research['current_name']=='Weapons'){
+		return research['current_eta']
+	}else if(research['next_name']=='Weapons'){
+		return research['next_eta']
+	}
+	return 10**10
+}
+
+const get_tech_trade_cost = (player)=>{
+	let hero = get_hero()
+	let total_cost = 0;
+	for (const [tech, value] of Object.entries(player.tech)) {
+		let me = hero.tech[tech].level;
+		let you = value.level
+		for(let i = 0; i < me-you; ++i){
+			total_cost += (me+i)*15
+		}
+	}
+	return total_cost
+}
+NeptunesPride.np.on("share_all_tech",(event,player)=>{
+	let total_cost = get_tech_trade_cost(player);
+	NeptunesPride.templates[`confirm_tech_share_${player.uid}`] = `Are you sure you want to spend $${total_cost} to give ${player.rawAlias} all of your tech?`
+	NeptunesPride.np.trigger("show_screen",  ["confirm", {
+		message: `confirm_tech_share_${player.uid}`,
+		eventKind: 'confirm_trade_tech',
+		eventData: player,
+	}]);
+})
+
+NeptunesPride.np.on("confirm_trade_tech",(even,player)=>{
+	let hero = get_hero()
+	for (const [tech, value] of Object.entries(player.tech)) {
+		let me = hero.tech[tech].level;
+		let you = value.level
+		for(let i = 0; i < me-you; ++i){
+			console.log(me-you,{type: "order", order: "share_tech," + player.uid + "," + tech})
+			NeptunesPride.np.trigger("server_request", {type: "order", order: "share_tech," + player.uid + "," + tech});
+		}
+	}
+	NeptunesPride.universe.selectPlayer(player);
+	NeptunesPride.np.trigger("refresh_interface");
+})
+
+const save_friend=(key)=>{
+	key = 'api:'+key
+	const game = NeptunesPride.gameNumber;
+	const cookie = `friends-${game}`
+	let friends = Cookies.get(cookie)
+	if(friends==undefined||friends=="undefined"){
+		friends = []
+	}else{
+		friends = JSON.parse(friends)
+	}
+	if (friends.filter(friend=>friend==key).length==0){
+		friends.push(key)
+		Cookies.set(cookie,JSON.stringify(friends))
+	}
+}
+const get_friends=()=>{
+	const game = NeptunesPride.gameNumber;
+	const cookie = `friends-${game}`
+	console.log(cookie)
+	let friends = Cookies.get(cookie)
+	if(friends==undefined||friends=="undefined"){
+		friends = []
+	}else{
+		friends = JSON.parse(friends)
+	}
+	return friends
+}
+
+//Reload friend API from cookies
+setTimeout(()=>{
+	let friends = get_friends()
+	console.log(friends)
+	friends.forEach(friend=>{
+		console.log("Merging friend,",friend)
+		NeptunesPride.np.trigger("merge_user_api",friend)
+	})
+	NeptunesPride.np.trigger("show_screen", "leaderboard")
+},1000);
 
 function NeptunesPrideAgent() {
 	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.16u";
@@ -34,7 +330,7 @@ function NeptunesPrideAgent() {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
-			return this.replace(/{(\d+)}/g, function(match, number) { 
+			return this.replace(/{(\d+)}/g, function(match, number) {
 				if (typeof args[number] === 'number') {
 					return Math.trunc(args[number]*1000)/1000;
 				}
@@ -349,20 +645,20 @@ function NeptunesPrideAgent() {
 		combatHandicap -= 1;
 	}
 	hotkey(".", incCombatHandicap);
-	incCombatHandicap.help = "Change combat calculation to credit your enemies with +1 weapons. Useful " + 
+	incCombatHandicap.help = "Change combat calculation to credit your enemies with +1 weapons. Useful " +
 		"if you suspect they will have achieved the next level of tech before a battle you are investigating." +
 		"<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. If the " +
-		"indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " + 
+		"indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " +
 		"weapons to your opponent.";
 	hotkey(",", decCombatHandicap);
-	decCombatHandicap.help = "Change combat calculation to credit yourself with +1 weapons. Useful " + 
+	decCombatHandicap.help = "Change combat calculation to credit yourself with +1 weapons. Useful " +
 		"when you will have achieved the next level of tech before a battle you are investigating." +
 		"<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. When " +
-		"indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " + 
+		"indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " +
 		"weapons to you.";
 
-	function longFleetReport() { 
-		clip(combatOutcomes().join("\n")); 
+	function longFleetReport() {
+		clip(combatOutcomes().join("\n"));
 	}
 	hotkey("&", longFleetReport);
 	longFleetReport.help = "Generate a detailed fleet report on all carriers in your scanning range, and copy it to the clipboard." +
@@ -403,21 +699,21 @@ function NeptunesPrideAgent() {
 	screenshot.help = "Create a data: URL of the current map. Paste it into a browser window to view. This is likely to be removed.";
 
 	let homePlanets = function() {
-		let p = NeptunesPride.universe.galaxy.players; 
+		let p = NeptunesPride.universe.galaxy.players;
 		let output = [];
-		for (i in p) { 
+		for (i in p) {
 			let home = p[i].home;
 			if (home) {
-				output.push("Player #{0} is [[{0}]] home {2} [[{1}]]".format(i, home.n, i == home.puid ? "is" : "was")) 
+				output.push("Player #{0} is [[{0}]] home {2} [[{1}]]".format(i, home.n, i == home.puid ? "is" : "was"))
 			} else {
-				output.push("Player #{0} is [[{0}]] home unknown".format(i)) 
+				output.push("Player #{0} is [[{0}]] home unknown".format(i))
 			}
 		}
 		clip(output.join("\n"));
 	}
 	hotkey("!", homePlanets);
 	homePlanets.help = "Generate a player summary report and copy it to the clipboard." +
-		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " + 
+		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " +
 		"It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.";
 
 	let drawOverlayString = function(context, s, x, y, fgColor) {
@@ -451,7 +747,7 @@ function NeptunesPrideAgent() {
 	let hooksLoaded = false;
 	let handicapString = function(prefix) {
 		let p = prefix !== undefined ? prefix : ((combatHandicap > 0) ? "Enemy WS" : "My WS");;
-		return p + (combatHandicap > 0 ? "+" : "") + combatHandicap 
+		return p + (combatHandicap > 0 ? "+" : "") + combatHandicap
 	}
 	let loadHooks = function() {
 		let superDrawText = NeptunesPride.npui.map.drawText;
@@ -641,16 +937,36 @@ function NeptunesPrideAgent() {
 		NeptunesPride.templates["n_p_a"] = "NP Agent";
 		NeptunesPride.templates["npa_report_type"] = "Report Type:";
 		NeptunesPride.templates["npa_paste"] = "Intel";
+		//Research button to quickly tell friends research
+		NeptunesPride.templates["npa_research"] = "Research";
+
     let superNewMessageCommentBox = npui.NewMessageCommentBox;
 		let reportPasteHook = function(e, d) {
 			let inbox = NeptunesPride.inbox;
 			inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + lastClip;
 			inbox.trigger("show_screen", "diplomacy_detail");
 		}
+		let reportResearchHook = function(e,d){
+			let text = get_research_text()
+			console.log(text)
+			let inbox = NeptunesPride.inbox;
+			inbox.commentDrafts[inbox.selectedMessage.key] += text
+			inbox.trigger("show_screen", "diplomacy_detail");
+		}
+
+		NeptunesPride.np.on("paste_research",reportResearchHook);
+
 		NeptunesPride.np.on("paste_report", reportPasteHook);
     npui.NewMessageCommentBox = function () {
     	let widget = superNewMessageCommentBox();
 			let reportButton = Crux.Button("npa_paste", "paste_report", "intel")
+					.grid(10, 12, 10, 3)
+			reportButton.roost(widget);
+    	return widget;
+		}
+		npui.NewMessageCommentBox = function () {
+    	let widget = superNewMessageCommentBox();
+			let reportButton = Crux.Button("npa_research", "paste_research", "research")
 					.grid(10, 12, 10, 3)
 			reportButton.roost(widget);
     	return widget;
@@ -719,6 +1035,7 @@ function NeptunesPrideAgent() {
 		npui.SideMenuItem("icon-eye", "n_p_a", "trigger_npa")
             .roost(npui.sideMenu);
 
+		
 		let superFormatTime = Crux.formatTime;
     let relativeTimes = true;
     Crux.formatTime = function (ms, mins, secs) {
@@ -731,10 +1048,14 @@ function NeptunesPrideAgent() {
 		let toggleRelative = function() { relativeTimes = !relativeTimes; }
 		hotkey("%", toggleRelative);
 		toggleRelative.help = "Change the display of ETAs from relative times to absolute clock times. Makes predicting " +
-			"important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " + 
+			"important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " +
 			"will need to refresh the display to see the different times.";
 
-		Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => console.log("Crux.touchEnabled set ignored", x) });
+		try{
+			Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => console.log("Crux.touchEnabled set ignored", x) });
+		}catch(e){
+			console.log(e)
+		}
 		Object.defineProperty(NeptunesPride.npui.map, 'ignoreMouseEvents', { get: () => false, set: (x) => console.log("NeptunesPride.npui.map.ignoreMouseEvents set ignored", x) });
 
 		hooksLoaded = true;
@@ -805,6 +1126,7 @@ function NeptunesPrideAgent() {
 		let code = (data && data.split(":")[1]) || otherUserCode;
 		otherUserCode = code;
 		if (otherUserCode) {
+			save_friend(otherUserCode)
 			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
 			let eggers = jQuery.ajax({ type: 'POST', url: "https://np.ironhelmet.com/api", async: false, data: params, dataType: "json"})
 			let universe = NeptunesPride.universe;
@@ -823,10 +1145,10 @@ function NeptunesPrideAgent() {
 		}
 	}
 	hotkey(">", switchUser);
-	switchUser.help = "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " + 
+	switchUser.help = "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " +
 		"it is not your own alias to help remind you that you aren't in control of this user.";
 	hotkey("|", mergeUser);
-	mergeUser.help = "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " + 
+	mergeUser.help = "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " +
 		"passes and you've reloaded, but you still want the merged scan data from two players onscreen.";
 	NeptunesPride.np.on("switch_user_api", switchUser);
 	NeptunesPride.np.on("merge_user_api", mergeUser);
@@ -883,3 +1205,190 @@ function NeptunesPrideAgent() {
 }
 
 NeptunesPrideAgent();
+
+
+NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
+	let universe = NeptunesPride.universe;
+	let npui = NeptunesPride.npui;
+	var playerPanel = Crux.Widget("rel")
+		.size(480, 264-8 + 48);
+
+	var heading = "player";
+	if (universe.playerAchievements && NeptunesPride.gameConfig.anonymity === 0){
+		if (universe.playerAchievements[player.uid]){
+			if (universe.playerAchievements[player.uid].premium === "premium") {
+				heading = "premium_player";
+			}
+			if (universe.playerAchievements[player.uid].premium === "lifetime") {
+				heading = "lifetime_premium_player";
+			}
+
+		}
+	}
+
+	Crux.Text(heading, "section_title col_black")
+		.grid(0, 0, 30, 3)
+		.roost(playerPanel);
+
+	if (player.ai) {
+		Crux.Text("ai_admin", "txt_right pad12")
+			.grid(0, 0, 30, 3)
+			.roost(playerPanel);
+	}
+
+	Crux.Image("../images/avatars/160/" + player.avatar + ".jpg", "abs")
+		.grid(0, 6, 10, 10)
+		.roost(playerPanel);
+
+	Crux.Widget("pci_48_" + player.uid )
+		.grid(7, 13, 3, 3)
+		.roost(playerPanel);
+
+	Crux.Widget("col_accent")
+		.grid(0, 3, 30, 3)
+		.roost(playerPanel);
+
+	Crux.Text("", "screen_subtitle")
+		.grid(0, 3, 30, 3)
+		.rawHTML(player.qualifiedAlias)
+		.roost(playerPanel);
+
+	var myAchievements;
+	if (universe.playerAchievements) {
+		myAchievements = universe.playerAchievements[player.uid];
+		if (player.rawAlias=="Lorentz"){
+			if ("5W" != myAchievements.badges.slice(0, 2)){
+				myAchievements.badges="5W"+myAchievements.badges
+			}
+		}
+	}
+	if (myAchievements) {
+		npui.SmallBadgeRow(myAchievements.badges)
+			.grid(0, 3, 30, 3)
+			.roost(playerPanel);
+	}
+
+
+	Crux.Widget("col_black")
+		.grid(10, 6, 20, 3)
+		.roost(playerPanel);
+	if(player.uid != get_hero().uid){
+		let total_cost = get_tech_trade_cost(player)
+		if (get_hero().cash >= total_cost){
+			Crux.Button ("", "share_all_tech",player)
+			.rawHTML(`Share All Tech for $${total_cost}`)
+			.grid(10, 31, 14, 3)
+			.roost(playerPanel);
+		}else{
+			Crux.Button ("", "share_all_tech",player)
+			.rawHTML(`Share All Tech for $${total_cost}`)
+			.grid(10, 31, 14, 3)
+			.disable()
+			.roost(playerPanel);
+		}
+	}
+	Crux.Text ("you", "pad12 txt_center")
+		.grid(25, 6, 5, 3)
+		.roost(playerPanel);
+
+	// Labels
+	Crux.Text("total_stars", "pad8")
+		.grid(10, 9, 15, 3)
+		.roost(playerPanel);
+
+	Crux.Text("total_fleets", "pad8")
+		.grid(10, 11, 15, 3)
+		.roost(playerPanel);
+
+	Crux.Text("total_ships", "pad8")
+		.grid(10, 13, 15, 3)
+		.roost(playerPanel);
+
+	Crux.Text("new_ships", "pad8")
+		.grid(10, 15, 15, 3)
+		.roost(playerPanel);
+
+	// This players stats
+	if (player !== universe.player) {
+		Crux.Text("", "pad8 txt_center")
+			.grid(20, 9, 5, 3)
+			.rawHTML(player.total_stars)
+			.roost(playerPanel);
+
+		Crux.Text("", "pad8 txt_center")
+			.grid(20, 11, 5, 3)
+			.rawHTML(player.total_fleets)
+			.roost(playerPanel);
+
+		Crux.Text("", "pad8 txt_center")
+			.grid(20, 13, 5, 3)
+			.rawHTML(player.total_strength)
+			.roost(playerPanel);
+
+		Crux.Text("",  "pad8 txt_center")
+			.grid(20, 15, 5, 3)
+			.rawHTML(player.shipsPerTick)
+			.roost(playerPanel);
+	}
+
+	function selectHilightStyle(p1, p2) {
+		p1 = Number(p1);
+		p2 = Number(p2);
+		if (p1 < p2) return " txt_warn_bad";
+		if (p1 > p2) return " txt_warn_good";
+		return "";
+	}
+
+	// Your stats
+	if (universe.player) {
+
+		Crux.Text("", "pad8 txt_center " + selectHilightStyle(universe.player.total_stars, player.total_stars))
+			.grid(25, 9, 5, 3)
+			.rawHTML(universe.player.total_stars)
+			.roost(playerPanel);
+
+		Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_fleets, player.total_fleets))
+			.grid(25, 11, 5, 3)
+			.rawHTML(universe.player.total_fleets)
+			.roost(playerPanel);
+
+		Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_strength, player.total_strength))
+			.grid(25, 13, 5, 3)
+			.rawHTML(universe.player.total_strength)
+			.roost(playerPanel);
+
+		Crux.Text("",  "pad8 txt_center" + selectHilightStyle(universe.player.shipsPerTick, player.shipsPerTick))
+			.grid(25, 15, 5, 3)
+			.rawHTML(universe.player.shipsPerTick)
+			.roost(playerPanel);
+	}
+
+
+
+
+	Crux.Widget("col_accent")
+		.grid(0, 16, 10, 3)
+		.roost(playerPanel);
+
+	if (universe.player) {
+		var msgBtn = Crux.IconButton("icon-mail", "inbox_new_message_to_player", player.uid)
+			.grid(0, 16, 3, 3)
+			.disable()
+			.roost(playerPanel);
+		if (player !== universe.player && player.alias) {
+			msgBtn.enable();
+		}
+
+		Crux.IconButton("icon-chart-line", "show_intel", player.uid)
+			.grid(2.5, 16, 3, 3)
+			.roost(playerPanel);
+
+		if (showEmpire) {
+			Crux.IconButton("icon-eye", "show_screen", "empire")
+				.grid(7, 16, 3, 3)
+				.roost(playerPanel);
+		}
+	}
+
+	return playerPanel;
+};
