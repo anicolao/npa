@@ -12,3 +12,29 @@ Completed! Welcome to the development cycle. Please send any issues you have!
 # Summary
 
 Stoned ape tools.
+
+
+# Description
+
+Less than 16,000 characters
+
+# Dev Notes
+Screenshots must be up to a maximum of 5, 1280x800 or 640x400 as JPEG or 24-bit PNG (no alpha).
+
+### Small promo tile
+
+440x280 Canvas
+
+JPEG or 24-bit PNG (no alpha)
+
+### Large promo tile
+
+920x680 Canvas
+
+JPEG or 24-bit PNG (no alpha)
+
+### Marquee promo tile
+
+1400x560 Canvas
+
+JPEG or 24-bit PNG (no alpha)
