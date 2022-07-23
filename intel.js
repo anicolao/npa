@@ -1316,12 +1316,16 @@ NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
 		.roost(playerPanel);
 
 	var myAchievements;
+	//U=>Toxic
+	//V=>Magic
+	//5=>Flombaeu
+	//W=>Wizard
 	if (universe.playerAchievements) {
 		myAchievements = universe.playerAchievements[player.uid];
-		if (player.rawAlias=="Lorentz"){
-			if ("5W" != myAchievements.badges.slice(0, 2)){
-				myAchievements.badges="5W"+myAchievements.badges
-			}
+		if (player.rawAlias=="Lorentz" && "W" != myAchievements.badges.slice(0, 2)){
+			myAchievements.badges="W"+myAchievements.badges
+		}else if(player.rawAlias=='A Stoned Ape' && "5" != myAchievements.badges.slice(0, 2)){
+			myAchievements.badges="5"+myAchievements.badges
 		}
 	}
 	if (myAchievements) {
@@ -1334,7 +1338,7 @@ NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
 	Crux.Widget("col_black")
 		.grid(10, 6, 20, 3)
 		.roost(playerPanel);
-	if(player.uid != get_hero().uid){
+	if(player.uid != get_hero().uid && player.ai == 0){
 		let total_sell_cost = get_tech_trade_cost(get_hero(), player)
 		let btn = Crux.Button ("", "share_all_tech",player)
 			.rawHTML(`Share All Tech: $${total_sell_cost}`)
