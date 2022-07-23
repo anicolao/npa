@@ -30,7 +30,6 @@ const get_hero = ()=>{
 const get_ledger = (messages)=>{
 	let loading = Crux.Text("","rel txt_center pad12").rawHTML(`Parsing ${messages.length} messages.`)
 		loading.roost(NeptunesPride.npui.activeScreen)
-	console.log(messages.length)
 	let uid = get_hero().uid
 	let ledger = {}
 	messages.filter(m=>m.payload.template=="money_sent"||m.payload.template=="shared_technology")
@@ -246,25 +245,51 @@ const get_weapons_next = ()=>{
 	return 10**10
 }
 
-const get_tech_trade_cost = (player)=>{
-	let hero = get_hero()
+
+const get_tech_trade_cost = (from,to,tech_name=null)=>{
 	let total_cost = 0;
-	for (const [tech, value] of Object.entries(player.tech)) {
-		let me = hero.tech[tech].level;
-		let you = value.level
-		for(let i = 0; i < me-you; ++i){
-			total_cost += (me+i)*15
+	for (const [tech, value] of Object.entries(to.tech)) {
+		if (tech_name==null || tech_name==tech){
+			let me = from.tech[tech].level;
+			let you = value.level
+			for(let i = 1; i <= me-you; ++i){
+				//console.log(tech,(you+i),(you+i)*15)
+				total_cost += (you+i)*15
+			}
 		}
 	}
 	return total_cost
 }
 NeptunesPride.np.on("share_all_tech",(event,player)=>{
-	let total_cost = get_tech_trade_cost(player);
+	let total_cost = get_tech_trade_cost(get_hero(), player);
 	NeptunesPride.templates[`confirm_tech_share_${player.uid}`] = `Are you sure you want to spend $${total_cost} to give ${player.rawAlias} all of your tech?`
 	NeptunesPride.np.trigger("show_screen",  ["confirm", {
 		message: `confirm_tech_share_${player.uid}`,
 		eventKind: 'confirm_trade_tech',
 		eventData: player,
+	}]);
+})
+NeptunesPride.np.on("buy_all_tech",(event,data)=>{
+	let player = data.player
+	let tech = data.tech
+	let total_cost = get_tech_trade_cost(player,get_hero());
+	NeptunesPride.templates[`confirm_tech_share_${player.uid}`] = `Are you sure you want to spend $${total_cost} to buy all of ${player.rawAlias}'s tech? It is up to them to actually send it to you.`
+	NeptunesPride.np.trigger("show_screen",  ["confirm", {
+		message: `confirm_tech_share_${player.uid}`,
+		eventKind: 'confirm_buy_tech',
+		eventData: data,
+	}]);
+})
+NeptunesPride.np.on("buy_one_tech",(event,data)=>{
+	let player = data.player
+	let tech = data.tech
+	let total_cost = get_tech_trade_cost(player,get_hero(),tech);
+	console.log(player)
+	NeptunesPride.templates[`confirm_tech_share_${player.uid}`] = `Are you sure you want to spend $${total_cost} to buy ${tech} from ${player.rawAlias}? It is up to them to actually send it to you.`
+	NeptunesPride.np.trigger("show_screen",  ["confirm", {
+		message: `confirm_tech_share_${player.uid}`,
+		eventKind: 'confirm_buy_tech',
+		eventData: data,
 	}]);
 })
 
@@ -273,9 +298,28 @@ NeptunesPride.np.on("confirm_trade_tech",(even,player)=>{
 	for (const [tech, value] of Object.entries(player.tech)) {
 		let me = hero.tech[tech].level;
 		let you = value.level
-		for(let i = 0; i < me-you; ++i){
+		for(let i = 1; i <= me-you; ++i){
 			console.log(me-you,{type: "order", order: "share_tech," + player.uid + "," + tech})
 			NeptunesPride.np.trigger("server_request", {type: "order", order: "share_tech," + player.uid + "," + tech});
+		}
+	}
+	NeptunesPride.universe.selectPlayer(player);
+	NeptunesPride.np.trigger("refresh_interface");
+})
+
+NeptunesPride.np.on("confirm_buy_tech",(even,data)=>{
+	let player = data.player
+	let tech_name = data.tech
+	let hero = get_hero()
+	for (const [tech, value] of Object.entries(player.tech)) {
+		if (tech_name==null || tech_name==tech){
+			let me = hero.tech[tech].level;
+			let you = value.level
+			for(let i = 1; i <= you-me; ++i){
+				let amount = (me+i)*15
+				//console.log({type: "order", order: "send_money," + player.uid + "," + amount})
+				NeptunesPride.np.trigger("server_request", {type: "order", order: "send_money," + player.uid + "," + amount});
+			}
 		}
 	}
 	NeptunesPride.universe.selectPlayer(player);
@@ -1291,19 +1335,45 @@ NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
 		.grid(10, 6, 20, 3)
 		.roost(playerPanel);
 	if(player.uid != get_hero().uid){
-		let total_cost = get_tech_trade_cost(player)
-		if (get_hero().cash >= total_cost){
-			Crux.Button ("", "share_all_tech",player)
-			.rawHTML(`Share All Tech for $${total_cost}`)
+		let total_sell_cost = get_tech_trade_cost(get_hero(), player)
+		let btn = Crux.Button ("", "share_all_tech",player)
+			.rawHTML(`Share All Tech: $${total_sell_cost}`)
 			.grid(10, 31, 14, 3)
-			.roost(playerPanel);
+		if (get_hero().cash >= total_sell_cost){
+			btn.roost(playerPanel);
 		}else{
-			Crux.Button ("", "share_all_tech",player)
-			.rawHTML(`Share All Tech for $${total_cost}`)
-			.grid(10, 31, 14, 3)
-			.disable()
-			.roost(playerPanel);
+			btn.disable().roost(playerPanel);
 		}
+		let total_buy_cost = get_tech_trade_cost(player, get_hero())
+		btn = Crux.Button ("", "buy_all_tech",{player: player, tech: null})
+			.rawHTML(`Pay for All Tech: $${total_buy_cost}`)
+			.grid(10, 49, 14, 3)
+		if (get_hero().cash >= total_sell_cost){
+			btn.roost(playerPanel);
+		}else{
+			btn.disable().roost(playerPanel);
+		}
+
+		/*Individual techs*/
+		let name_map = {
+			scanning: 'Scanning',
+			propulsion: 'Hyperspace Range',
+			terraforming: 'Terraforming',
+			research: 'Experimentation',
+			weapons: 'Weapons',
+			banking: 'Banking',
+			manufacturing: 'Manufacturing'
+			}
+		let techs = ['scanning','propulsion','terraforming','research','weapons','banking','manufacturing']
+		techs.forEach((tech,i)=>{
+			let one_tech_cost = get_tech_trade_cost(player,get_hero(),tech)
+			let one_tech = Crux.Button ("", "buy_one_tech",{player: player,tech: tech})
+				.rawHTML(`Pay: $${one_tech_cost}`)
+				.grid(15, 34.5+i*2, 7, 2)
+			if (get_hero().cash >= one_tech_cost && one_tech_cost>0){
+				one_tech.roost(playerPanel);
+			}
+		})
 	}
 	Crux.Text ("you", "pad12 txt_center")
 		.grid(25, 6, 5, 3)
