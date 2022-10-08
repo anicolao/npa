@@ -1513,6 +1513,6 @@ NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
 	return playerPanel;
 };
 
-setTimeout(NeptunesPrideAgent, 300)
-setTimeout(renderLedger, 300)
-setTimeout(apply_hooks, 300)
+setTimeout(NeptunesPrideAgent, 1000)
+setTimeout(renderLedger, 2000)
+setTimeout(apply_hooks, 2000)
