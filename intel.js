@@ -1291,7 +1291,7 @@ function NeptunesPrideAgent() {
 	}
 	document.body.addEventListener('keyup', autocompleteTrigger);
 
-	console.log("Neptune's Pride Agent injection fini.");
+	console.log("SAT: Neptune's Pride Agent injection finished.");
 }
 
 NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
@@ -1493,6 +1493,7 @@ NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
 	if (universe.player) {
 		var msgBtn = Crux.IconButton("icon-mail", "inbox_new_message_to_player", player.uid)
 			.grid(0, 16, 3, 3)
+			.addStyle("fwd")
 			.disable()
 			.roost(playerPanel);
 		if (player !== universe.player && player.alias) {

@@ -14,7 +14,6 @@ div.no_overflow:first-of-type>div:first-of-type {
 	position: sticky;
 	top: 0px;
 	background-color: #1a1d44;
-	z-index: 100;
 	border-bottom: 1px solid #2C3273;
 }
 
@@ -40,9 +39,6 @@ div.screenshot:hover {
 	border: 5px solid #00ff00;
 	z-index: 10000;
 }
-.fwd{
-	z-index: 1000;
-}
 .orange-text{
 	color: #FFA500;
 }
@@ -54,4 +50,7 @@ div.screenshot:hover {
 }
 .clickable{
 	cursor: pointer;
+}
+.fwd{
+	z-index: 100;
 }
