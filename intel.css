@@ -10,6 +10,7 @@
 	overflow: visible !important;
 }
 
+/* Removed z-index because it was blocking the battle calc on stars button */ 
 div.no_overflow:first-of-type>div:first-of-type {
 	position: sticky;
 	top: 0px;
@@ -17,6 +18,10 @@ div.no_overflow:first-of-type>div:first-of-type {
 	border-bottom: 1px solid #2C3273;
 }
 
+/*For the diplomacy top bar was going half under the sliding text */
+#contentArea > div > div.widget.fullscreen > div:nth-child(3) > div > div:nth-child(1){
+	z-index: 100;
+}
 .screenshot {
 	max-width: 128px;
 	overflow: scroll;
