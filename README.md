@@ -1,3 +1,5 @@
+# Stoned Ape Tools
+##Table of Contents
 - [What Tools?](#what-tools-)
   * [What are used for?](#what-are-used-for-)
   * [What does it do?](#what-does-it-do-)
