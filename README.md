@@ -37,7 +37,7 @@ It has a few main modules that expand the interface to give you more control ove
 Ledger (hotkey ‘m’):  Adds a row to the menu titled ‘Ledger’. When clicked tabulates then displays a ledger of debt owed between you and anyone you’ve traded tech or cash with so far in the game. Accurately shows you who you owe money to, who owes you money, and how much money is owed. If you owe someone else money, displays a button to repay the debt owed.
 
 ### Research
-![Research](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/research.png?raw=true)
+![Research](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_research.png?raw=true)
  Research ETA Chat Button: Adds a button to chat between ‘Back’ and ‘Send’ titled ‘Research’. When clicked pastes your current research tech and your next research tech into the chat input box.
 ### Battle Calc
 ![Battle Calc](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_2.png?raw=true)
