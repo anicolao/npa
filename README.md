@@ -1,6 +1,21 @@
 # What Tools?
 
-Computer tools!
+Computer tools, designed to assit your communication betwen your allies; let these tools remove burdensome tasks and recieve a free collection of additions to improve your quality of life.
+
+## What are used for?
+
+This plugin is for [Neptunes Pride](https://np.ironhelmet.com): is the most unique, engaging multiplayer game oriented on a competition to Explore community and space, Expand into the universe, Exploit friends and foes, Exterminate others ([4X](https://en.wikipedia.org/wiki/4X)).
+
+## What does it do?
+It has a few main modules that expand the interface to give you more control over your gamepay:
+ - Ledger: keep track of debts!
+ - Reseach Button: Auto-types your current and next research along with the estimate time (ETA) your current research level.
+ - Battle Calc: Predict battles quickly. 
+ - Bulk Trade: Quickly pay for tech and automatically share all your tech. 
+
+### Ledger
+![Ledger](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_1.png?raw=true)
+
 # Use Git Version of Plugin
 
 Clone this repository somewhere on your system. Either by unzipping it, using terminal `git` or github desktop. Once you have a copy on your system use the following to enable this git version:
