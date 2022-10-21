@@ -16,6 +16,16 @@ It has a few main modules that expand the interface to give you more control ove
 ### Ledger
 ![Ledger](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_1.png?raw=true)
 
+### Research
+![Research](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/research.png?raw=true)
+
+### Battle Calc
+![Battle Calc](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_2.png?raw=true)
+
+### Bulk Trade
+![Bulk Trade](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_3.png?raw=true)
+
+
 # Use Git Version of Plugin
 
 Clone this repository somewhere on your system. Either by unzipping it, using terminal `git` or github desktop. Once you have a copy on your system use the following to enable this git version:
