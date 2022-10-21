@@ -1,3 +1,20 @@
+- [What Tools?](#what-tools-)
+  * [What are used for?](#what-are-used-for-)
+  * [What does it do?](#what-does-it-do-)
+    + [Ledger](#ledger)
+    + [Research](#research)
+    + [Battle Calc](#battle-calc)
+    + [Bulk Trade](#bulk-trade)
+- [Installation](#installation)
+  * [Option 1: Install with chrome plugin store](#option-1--install-with-chrome-plugin-store)
+    + [Does it work on firefox?](#does-it-work-on-firefox-)
+  * [Option 2: Install using Git Version of Plugin](#option-2--install-using-git-version-of-plugin)
+- [Features:](#features-)
+  * [Neptunes Pride Agent](#neptunes-pride-agent)
+  * [Future Features](#future-features)
+- [Previous Description](#previous-description)
+
+
 # What Tools?
 
 Computer tools, designed to assit your communication betwen your allies; let these tools remove burdensome tasks and recieve a free collection of additions to improve your quality of life.
