@@ -1665,7 +1665,9 @@ NeptunesPride.npui.StarInspector = function () {
 	}
 
 	async function apply_fractional_ships(){
-		let selector = "#contentArea > div > div.widget.fullscreen > div:nth-child(3) > div > div:nth-child(5) > div.widget.pad12.icon-rocket-inline.txt_right"
+		let depth = NeptunesPride.gameConfig.turnBased?4:3
+		let selector = `#contentArea > div > div.widget.fullscreen > div:nth-child(${depth}) > div > div:nth-child(5) > div.widget.pad12.icon-rocket-inline.txt_right`
+		
 		let element = $(selector)
 		let counter = 0
 		let fractional_ship = universe.selectedStar['c'].toFixed(2)
