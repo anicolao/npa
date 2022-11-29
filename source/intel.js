@@ -1,4 +1,4 @@
-console.log("working")
+const sat_version = "2.15"
 //Custom UI ComponentsNe
 const PlayerNameIconRowLink = (player) => {
 	let playerNameIconRow = Crux.Widget("rel col_black clickable")
@@ -58,7 +58,7 @@ Ledger Display
 //Handler for new message ajax request
 
 
-const display_tech_trading = ()=>{
+const display_tech_trading = () => {
 	let npui = NeptunesPride.npui
 	var tech_trade_screen = npui.Screen("tech_trading")
 	npui.onHideScreen(null, true);
@@ -72,7 +72,7 @@ const display_tech_trading = ()=>{
 	let trading = Crux.Text("", "rel pad12").rawHTML("Trading..")
 	trading.roost(tech_trade_screen)
 
-	tech_trade_screen.transact = (text)=>{
+	tech_trade_screen.transact = (text) => {
 		let trading = Crux.Text("", "rel pad8").rawHTML(text)
 		trading.roost(tech_trade_screen)
 	}
@@ -131,7 +131,7 @@ const renderLedger = () => {
 	const inbox = NeptunesPride.inbox
 	const universe = NeptunesPride.universe
 	NeptunesPride.templates["ledger"] = "Ledger";
-	NeptunesPride.templates["tech_trading"] = "Trading Technology" 
+	NeptunesPride.templates["tech_trading"] = "Trading Technology"
 	NeptunesPride.templates["forgive"] = "Pay Debt";
 	NeptunesPride.templates["forgive_debt"] = "Are you sure you want to forgive this debt?"
 	if (!npui.hasmenuitem) {
@@ -319,7 +319,7 @@ const apply_hooks = () => {
 	NeptunesPride.np.on("confirm_trade_tech", (even, player) => {
 		let hero = get_hero()
 		let display = display_tech_trading()
-		const close = ()=>{
+		const close = () => {
 			NeptunesPride.universe.selectPlayer(player);
 			NeptunesPride.np.trigger("refresh_interface");
 			NeptunesPride.np.npui.refreshTurnManager();
@@ -329,18 +329,18 @@ const apply_hooks = () => {
 			let me = hero.tech[tech].level;
 			let you = value.level
 			for (let i = 1; i <= me - you; ++i) {
-				setTimeout(()=>{
+				setTimeout(() => {
 					console.log(me - you, { type: "order", order: "share_tech," + player.uid + "," + tech })
-					display.transact(`Sending ${tech} level ${you+i}`)
+					display.transact(`Sending ${tech} level ${you + i}`)
 					NeptunesPride.np.trigger("server_request", { type: "order", order: "share_tech," + player.uid + "," + tech });
-					if (i==me-you){
+					if (i == me - you) {
 						display.transact("Done.")
 					}
 				}, offset)
 				offset += 1000
 			}
 		}
-		setTimeout(close,offset+1000)
+		setTimeout(close, offset + 1000)
 	})
 
 	//Pays a player a certain amount 
@@ -380,6 +380,11 @@ const get_friends = () => {
 	return friends
 }
 
+const wide_view = () => {
+	NeptunesPride.np.trigger("map_center_slide", { x: 0, y: 0 });
+	NeptunesPride.np.trigger("zoom_minimap");
+}
+
 //Reload friend API from cookies
 setTimeout(() => {
 	/*
@@ -394,7 +399,7 @@ setTimeout(() => {
 }, 1000);
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || "SAP";
+	let title = (document && document.currentScript && document.currentScript.title) || `SAT ${sat_version}`;
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title);
 
@@ -1294,226 +1299,400 @@ function NeptunesPrideAgent() {
 	console.log("SAT: Neptune's Pride Agent injection finished.");
 }
 
-NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
-	let universe = NeptunesPride.universe;
-	let npui = NeptunesPride.npui;
-	var playerPanel = Crux.Widget("rel")
-		.size(480, 264 - 8 + 48);
 
-	var heading = "player";
-	if (universe.playerAchievements && NeptunesPride.gameConfig.anonymity === 0) {
-		if (universe.playerAchievements[player.uid]) {
-			if (universe.playerAchievements[player.uid].premium === "premium") {
-				heading = "premium_player";
-			}
-			if (universe.playerAchievements[player.uid].premium === "lifetime") {
-				heading = "lifetime_premium_player";
-			}
-
-		}
+const force_add_custom_player_panel = ()=>{
+	if ("PlayerPanel" in NeptunesPride.npui){
+		add_custom_player_panel()
+	}else{
+		setTimeout(add_custom_player_panel,3000);
 	}
+	 
+}
 
-	Crux.Text(heading, "section_title col_black")
-		.grid(0, 0, 30, 3)
-		.roost(playerPanel);
+const add_custom_player_panel = () => {
+	NeptunesPride.npui.PlayerPanel = function (player, showEmpire) {
+		let universe = NeptunesPride.universe;
+		let npui = NeptunesPride.npui;
+		var playerPanel = Crux.Widget("rel")
+			.size(480, 264 - 8 + 48);
 
-	if (player.ai) {
-		Crux.Text("ai_admin", "txt_right pad12")
+		var heading = "player";
+		if (universe.playerAchievements && NeptunesPride.gameConfig.anonymity === 0) {
+			if (universe.playerAchievements[player.uid]) {
+				if (universe.playerAchievements[player.uid].premium === "premium") {
+					heading = "premium_player";
+				}
+				if (universe.playerAchievements[player.uid].premium === "lifetime") {
+					heading = "lifetime_premium_player";
+				}
+
+			}
+		}
+
+		Crux.Text(heading, "section_title col_black")
 			.grid(0, 0, 30, 3)
 			.roost(playerPanel);
-	}
 
-	Crux.Image("../images/avatars/160/" + player.avatar + ".jpg", "abs")
-		.grid(0, 6, 10, 10)
-		.roost(playerPanel);
-
-	Crux.Widget("pci_48_" + player.uid)
-		.grid(7, 13, 3, 3)
-		.roost(playerPanel);
-
-	Crux.Widget("col_accent")
-		.grid(0, 3, 30, 3)
-		.roost(playerPanel);
-
-	Crux.Text("", "screen_subtitle")
-		.grid(0, 3, 30, 3)
-		.rawHTML(player.qualifiedAlias)
-		.roost(playerPanel);
-
-	var myAchievements;
-	//U=>Toxic
-	//V=>Magic
-	//5=>Flombaeu
-	//W=>Wizard
-	if (universe.playerAchievements) {
-		myAchievements = universe.playerAchievements[player.uid];
-		if (player.rawAlias == "Lorentz" && "W" != myAchievements.badges.slice(0, 1)) {
-			myAchievements.badges = "W" + myAchievements.badges
-		} else if (player.rawAlias == 'A Stoned Ape' && "5" != myAchievements.badges.slice(0, 1)) {
-			myAchievements.badges = "5" + myAchievements.badges
-		}
-	}
-	if (myAchievements) {
-		npui.SmallBadgeRow(myAchievements.badges)
-			.grid(0, 3, 30, 3)
-			.roost(playerPanel);
-	}
-
-
-	Crux.Widget("col_black")
-		.grid(10, 6, 20, 3)
-		.roost(playerPanel);
-	if (player.uid != get_hero().uid && player.ai == 0) {
-		let total_sell_cost = get_tech_trade_cost(get_hero(), player)
-		let btn = Crux.Button("", "share_all_tech", player)
-			.addStyle("fwd")
-			.rawHTML(`Share All Tech: $${total_sell_cost}`)
-			.grid(10, 31, 14, 3)
-		if (get_hero().cash >= total_sell_cost) {
-			btn.roost(playerPanel);
-		} else {
-			btn.disable().roost(playerPanel);
-		}
-		let total_buy_cost = get_tech_trade_cost(player, get_hero())
-		btn = Crux.Button("", "buy_all_tech", { player: player, tech: null, cost: total_buy_cost })
-			.addStyle("fwd")
-			.rawHTML(`Pay for All Tech: $${total_buy_cost}`)
-			.grid(10, 49, 14, 3)
-		if (get_hero().cash >= total_sell_cost) {
-			btn.roost(playerPanel);
-		} else {
-			btn.disable().roost(playerPanel);
-		}
-
-		/*Individual techs*/
-		let name_map = {
-			scanning: 'Scanning',
-			propulsion: 'Hyperspace Range',
-			terraforming: 'Terraforming',
-			research: 'Experimentation',
-			weapons: 'Weapons',
-			banking: 'Banking',
-			manufacturing: 'Manufacturing'
-		}
-		let techs = ['scanning', 'propulsion', 'terraforming', 'research', 'weapons', 'banking', 'manufacturing']
-		techs.forEach((tech, i) => {
-			let one_tech_cost = get_tech_trade_cost(player, get_hero(), tech)
-			let one_tech = Crux.Button("", "buy_one_tech", { player: player, tech: tech, cost: one_tech_cost})
-				.addStyle("fwd")
-				.rawHTML(`Pay: $${one_tech_cost}`)
-				.grid(15, 34.5 + i * 2, 7, 2)
-			if (get_hero().cash >= one_tech_cost && one_tech_cost > 0) {
-				one_tech.roost(playerPanel);
-			}
-		})
-	}
-	Crux.Text("you", "pad12 txt_center")
-		.grid(25, 6, 5, 3)
-		.roost(playerPanel);
-
-	// Labels
-	Crux.Text("total_stars", "pad8")
-		.grid(10, 9, 15, 3)
-		.roost(playerPanel);
-
-	Crux.Text("total_fleets", "pad8")
-		.grid(10, 11, 15, 3)
-		.roost(playerPanel);
-
-	Crux.Text("total_ships", "pad8")
-		.grid(10, 13, 15, 3)
-		.roost(playerPanel);
-
-	Crux.Text("new_ships", "pad8")
-		.grid(10, 15, 15, 3)
-		.roost(playerPanel);
-
-	// This players stats
-	if (player !== universe.player) {
-		Crux.Text("", "pad8 txt_center")
-			.grid(20, 9, 5, 3)
-			.rawHTML(player.total_stars)
-			.roost(playerPanel);
-
-		Crux.Text("", "pad8 txt_center")
-			.grid(20, 11, 5, 3)
-			.rawHTML(player.total_fleets)
-			.roost(playerPanel);
-
-		Crux.Text("", "pad8 txt_center")
-			.grid(20, 13, 5, 3)
-			.rawHTML(player.total_strength)
-			.roost(playerPanel);
-
-		Crux.Text("", "pad8 txt_center")
-			.grid(20, 15, 5, 3)
-			.rawHTML(player.shipsPerTick)
-			.roost(playerPanel);
-	}
-
-	function selectHilightStyle(p1, p2) {
-		p1 = Number(p1);
-		p2 = Number(p2);
-		if (p1 < p2) return " txt_warn_bad";
-		if (p1 > p2) return " txt_warn_good";
-		return "";
-	}
-
-	// Your stats
-	if (universe.player) {
-
-		Crux.Text("", "pad8 txt_center " + selectHilightStyle(universe.player.total_stars, player.total_stars))
-			.grid(25, 9, 5, 3)
-			.rawHTML(universe.player.total_stars)
-			.roost(playerPanel);
-
-		Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_fleets, player.total_fleets))
-			.grid(25, 11, 5, 3)
-			.rawHTML(universe.player.total_fleets)
-			.roost(playerPanel);
-
-		Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_strength, player.total_strength))
-			.grid(25, 13, 5, 3)
-			.rawHTML(universe.player.total_strength)
-			.roost(playerPanel);
-
-		Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.shipsPerTick, player.shipsPerTick))
-			.grid(25, 15, 5, 3)
-			.rawHTML(universe.player.shipsPerTick)
-			.roost(playerPanel);
-	}
-
-
-
-
-	Crux.Widget("col_accent")
-		.grid(0, 16, 10, 3)
-		.roost(playerPanel);
-
-	if (universe.player) {
-		var msgBtn = Crux.IconButton("icon-mail", "inbox_new_message_to_player", player.uid)
-			.grid(0, 16, 3, 3)
-			.addStyle("fwd")
-			.disable()
-			.roost(playerPanel);
-		if (player !== universe.player && player.alias) {
-			msgBtn.enable();
-		}
-
-		Crux.IconButton("icon-chart-line", "show_intel", player.uid)
-			.grid(2.5, 16, 3, 3)
-			.roost(playerPanel);
-
-		if (showEmpire) {
-			Crux.IconButton("icon-eye", "show_screen", "empire")
-				.grid(7, 16, 3, 3)
+		if (player.ai) {
+			Crux.Text("ai_admin", "txt_right pad12")
+				.grid(0, 0, 30, 3)
 				.roost(playerPanel);
 		}
+
+		Crux.Image("../images/avatars/160/" + player.avatar + ".jpg", "abs")
+			.grid(0, 6, 10, 10)
+			.roost(playerPanel);
+
+		Crux.Widget("pci_48_" + player.uid)
+			.grid(7, 13, 3, 3)
+			.roost(playerPanel);
+
+		Crux.Widget("col_accent")
+			.grid(0, 3, 30, 3)
+			.roost(playerPanel);
+
+		Crux.Text("", "screen_subtitle")
+			.grid(0, 3, 30, 3)
+			.rawHTML(player.qualifiedAlias)
+			.roost(playerPanel);
+
+		var myAchievements;
+		//U=>Toxic
+		//V=>Magic
+		//5=>Flombaeu
+		//W=>Wizard
+		if (universe.playerAchievements) {
+			myAchievements = universe.playerAchievements[player.uid];
+			if (player.rawAlias == "Lorentz" && "W" != myAchievements.badges.slice(0, 1)) {
+				myAchievements.badges = "W" + myAchievements.badges
+			} else if (player.rawAlias == 'A Stoned Ape' && "5" != myAchievements.badges.slice(0, 1)) {
+				myAchievements.badges = "5" + myAchievements.badges
+			}
+		}
+		if (myAchievements) {
+			npui.SmallBadgeRow(myAchievements.badges)
+				.grid(0, 3, 30, 3)
+				.roost(playerPanel);
+		}
+
+
+		Crux.Widget("col_black")
+			.grid(10, 6, 20, 3)
+			.roost(playerPanel);
+		if (player.uid != get_hero().uid && player.ai == 0) {
+			//Use this to only view when they are within scanning:
+			//universe.selectedStar.v != "0"
+			let total_sell_cost = get_tech_trade_cost(get_hero(), player)
+			let btn = Crux.Button("", "share_all_tech", player)
+				.addStyle("fwd")
+				.rawHTML(`Share All Tech: $${total_sell_cost}`)
+				.grid(10, 31, 14, 3)
+			if (get_hero().cash >= total_sell_cost) {
+				btn.roost(playerPanel);
+			} else {
+				btn.disable().roost(playerPanel);
+			}
+			let total_buy_cost = get_tech_trade_cost(player, get_hero())
+			btn = Crux.Button("", "buy_all_tech", { player: player, tech: null, cost: total_buy_cost })
+				.addStyle("fwd")
+				.rawHTML(`Pay for All Tech: $${total_buy_cost}`)
+				.grid(10, 49, 14, 3)
+			if (get_hero().cash >= total_sell_cost) {
+				btn.roost(playerPanel);
+			} else {
+				btn.disable().roost(playerPanel);
+			}
+
+			/*Individual techs*/
+			let name_map = {
+				scanning: 'Scanning',
+				propulsion: 'Hyperspace Range',
+				terraforming: 'Terraforming',
+				research: 'Experimentation',
+				weapons: 'Weapons',
+				banking: 'Banking',
+				manufacturing: 'Manufacturing'
+			}
+			let techs = ['scanning', 'propulsion', 'terraforming', 'research', 'weapons', 'banking', 'manufacturing']
+			techs.forEach((tech, i) => {
+				let one_tech_cost = get_tech_trade_cost(player, get_hero(), tech)
+				let one_tech = Crux.Button("", "buy_one_tech", { player: player, tech: tech, cost: one_tech_cost })
+					.addStyle("fwd")
+					.rawHTML(`Pay: $${one_tech_cost}`)
+					.grid(15, 34.5 + i * 2, 7, 2)
+				if (get_hero().cash >= one_tech_cost && one_tech_cost > 0) {
+					one_tech.roost(playerPanel);
+				}
+			})
+		}
+		Crux.Text("you", "pad12 txt_center")
+			.grid(25, 6, 5, 3)
+			.roost(playerPanel);
+
+		// Labels
+		Crux.Text("total_stars", "pad8")
+			.grid(10, 9, 15, 3)
+			.roost(playerPanel);
+
+		Crux.Text("total_fleets", "pad8")
+			.grid(10, 11, 15, 3)
+			.roost(playerPanel);
+
+		Crux.Text("total_ships", "pad8")
+			.grid(10, 13, 15, 3)
+			.roost(playerPanel);
+
+		Crux.Text("new_ships", "pad8")
+			.grid(10, 15, 15, 3)
+			.roost(playerPanel);
+
+		// This players stats
+		if (player !== universe.player) {
+			Crux.Text("", "pad8 txt_center")
+				.grid(20, 9, 5, 3)
+				.rawHTML(player.total_stars)
+				.roost(playerPanel);
+
+			Crux.Text("", "pad8 txt_center")
+				.grid(20, 11, 5, 3)
+				.rawHTML(player.total_fleets)
+				.roost(playerPanel);
+
+			Crux.Text("", "pad8 txt_center")
+				.grid(20, 13, 5, 3)
+				.rawHTML(player.total_strength)
+				.roost(playerPanel);
+
+			Crux.Text("", "pad8 txt_center")
+				.grid(20, 15, 5, 3)
+				.rawHTML(player.shipsPerTick)
+				.roost(playerPanel);
+		}
+
+		function selectHilightStyle(p1, p2) {
+			p1 = Number(p1);
+			p2 = Number(p2);
+			if (p1 < p2) return " txt_warn_bad";
+			if (p1 > p2) return " txt_warn_good";
+			return "";
+		}
+
+		// Your stats
+		if (universe.player) {
+
+			Crux.Text("", "pad8 txt_center " + selectHilightStyle(universe.player.total_stars, player.total_stars))
+				.grid(25, 9, 5, 3)
+				.rawHTML(universe.player.total_stars)
+				.roost(playerPanel);
+
+			Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_fleets, player.total_fleets))
+				.grid(25, 11, 5, 3)
+				.rawHTML(universe.player.total_fleets)
+				.roost(playerPanel);
+
+			Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_strength, player.total_strength))
+				.grid(25, 13, 5, 3)
+				.rawHTML(universe.player.total_strength)
+				.roost(playerPanel);
+
+			Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.shipsPerTick, player.shipsPerTick))
+				.grid(25, 15, 5, 3)
+				.rawHTML(universe.player.shipsPerTick)
+				.roost(playerPanel);
+		}
+
+
+
+
+		Crux.Widget("col_accent")
+			.grid(0, 16, 10, 3)
+			.roost(playerPanel);
+
+		if (universe.player) {
+			var msgBtn = Crux.IconButton("icon-mail", "inbox_new_message_to_player", player.uid)
+				.grid(0, 16, 3, 3)
+				.addStyle("fwd")
+				.disable()
+				.roost(playerPanel);
+			if (player !== universe.player && player.alias) {
+				msgBtn.enable();
+			}
+
+			Crux.IconButton("icon-chart-line", "show_intel", player.uid)
+				.grid(2.5, 16, 3, 3)
+				.roost(playerPanel);
+
+			if (showEmpire) {
+				Crux.IconButton("icon-eye", "show_screen", "empire")
+					.grid(7, 16, 3, 3)
+					.roost(playerPanel);
+			}
+		}
+
+		return playerPanel;
+	};
+}
+
+NeptunesPride.npui.StarInspector = function () {
+	let npui = NeptunesPride.npui;
+	let universe = NeptunesPride.universe;
+	var starInspector = npui.Screen();
+	starInspector.heading.rawHTML(universe.selectedStar.n);
+
+	Crux.IconButton("icon-help", "show_help", "stars")
+		.grid(24.5, 0, 3, 3)
+		.roost(starInspector);
+
+	Crux.IconButton("icon-doc-text", "show_screen", "combat_calculator")
+		.grid(22, 0, 3, 3)
+		.roost(starInspector);
+
+	var starKind = "unscanned_star";
+	if (!universe.selectedStar.player) {
+		starKind = "unclaimed_star";
+	} else {
+		starKind = "enemy_star";
+		if (universe.selectedStar.v === "0") {
+			starKind = "unscanned_enemy";
+		}
 	}
 
-	return playerPanel;
+	if (universe.selectedStar.owned) {
+		starKind = "my_star";
+	}
+	// subtitle
+	starInspector.intro = Crux.Widget("rel")
+		.roost(starInspector);
+
+	Crux.Text(starKind, "pad12 rel col_black txt_center")
+		.format(universe.selectedStar)
+		.roost(starInspector.intro);
+
+	if (starKind === "unclaimed_star") {
+		npui.StarResStatus(true, false)
+			.roost(starInspector);
+		starInspector.footerRequired = false;
+	}
+
+	if (starKind === "unscanned_enemy") {
+		npui.StarResStatus(true, false)
+			.roost(starInspector);
+
+		npui.PlayerPanel(universe.selectedStar.player, true)
+			.roost(starInspector);
+
+	}
+
+	if (starKind === "enemy_star") {
+		npui.StarDefStatus(false)
+			.roost(starInspector);
+
+		npui.StarInfStatus(false)
+			.roost(starInspector);
+
+		Crux.Widget("rel col_black")
+			.size(480, 8)
+			.roost(starInspector);
+
+		npui.ShipConstructionRate()
+			.roost(starInspector);
+
+		if (universe.selectedStar.ga > 0) {
+			Crux.Widget("rel col_black")
+				.size(480, 8)
+				.roost(starInspector);
+			Crux.Text("has_warp_gate", "rel col_accent pad12 txt_center")
+				.size(480, 48)
+				.roost(starInspector);
+
+		}
+
+		npui.PlayerPanel(universe.selectedStar.player, true)
+			.roost(starInspector);
+	}
+
+	if (starKind === "my_star") {
+		npui.StarDefStatus(true)
+			.roost(starInspector);
+
+		npui.StarInfStatus(true)
+			.roost(starInspector);
+
+		Crux.Widget("rel col_black")
+			.size(480, 8)
+			.roost(starInspector);
+
+		npui.ShipConstructionRate()
+			.roost(starInspector);
+
+		Crux.Widget("rel col_black")
+			.size(480, 8)
+			.roost(starInspector);
+
+		npui.StarBuildFleet()
+			.roost(starInspector);
+
+		if (NeptunesPride.gameConfig.buildGates !== 0) {
+			Crux.Widget("rel col_black")
+				.size(480, 8)
+				.roost(starInspector);
+
+			npui.StarGateStatus(true)
+				.roost(starInspector);
+		} else {
+			if (universe.selectedStar.ga > 0) {
+				Crux.Widget("rel col_black")
+					.size(480, 8)
+					.roost(starInspector);
+				Crux.Text("has_warp_gate", "rel col_accent pad12 txt_center")
+					.size(480, 48)
+					.roost(starInspector);
+			}
+		}
+
+		Crux.Widget("rel col_black")
+			.size(480, 8)
+			.roost(starInspector);
+
+		npui.StarAbandon()
+			.roost(starInspector);
+
+		npui.StarPremium()
+			.roost(starInspector);
+
+		npui.PlayerPanel(universe.selectedStar.player, true)
+			.roost(starInspector);
+	}
+
+	async function apply_fractional_ships(){
+		let selector = "#contentArea > div > div.widget.fullscreen > div:nth-child(3) > div > div:nth-child(5) > div.widget.pad12.icon-rocket-inline.txt_right"
+		let element = $(selector)
+		let counter = 0
+		let fractional_ship = universe.selectedStar['c'].toFixed(2)
+		$(selector).append(fractional_ship)
+
+		while (element.length==0 && counter <= 100){
+			await new Promise(r => setTimeout(r, 10));
+			element = $(selector)
+			let fractional_ship = universe.selectedStar['c'].toFixed(2)
+			$(selector).append(fractional_ship)
+			counter += 1
+		}
+	}
+	if ('c' in universe.selectedStar) {
+		apply_fractional_ships()
+	}
+
+	return starInspector;
 };
+
 
 setTimeout(NeptunesPrideAgent, 1000)
 setTimeout(renderLedger, 2000)
 setTimeout(apply_hooks, 2000)
+
+
+//Test to see if PlayerPanel is there
+//If it is overwrites custom one
+//Otherwise while loop & set timeout until its there
+force_add_custom_player_panel()
