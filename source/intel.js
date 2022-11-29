@@ -1,4 +1,4 @@
-const sat_version = "2.15"
+const sat_version = "2.16"
 //Custom UI ComponentsNe
 const PlayerNameIconRowLink = (player) => {
 	let playerNameIconRow = Crux.Widget("rel col_black clickable")
