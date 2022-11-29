@@ -1674,8 +1674,9 @@ NeptunesPride.npui.StarInspector = function () {
 		while (element.length==0 && counter <= 100){
 			await new Promise(r => setTimeout(r, 10));
 			element = $(selector)
-			let fractional_ship = universe.selectedStar['c'].toFixed(2)
-			$(selector).append(fractional_ship)
+			let fractional_ship = universe.selectedStar['c']
+			let new_value = parseInt($(selector).text())+fractional_ship
+			$(selector).text(new_value.toFixed(2))
 			counter += 1
 		}
 	}
