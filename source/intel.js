@@ -1,8 +1,16 @@
-const sat_version = "2.18"
+const sat_version = "2.19"
 
 /*! js-cookie v3.0.1 | MIT */
-!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e=e||self,function(){var n=e.Cookies,o=e.Cookies=t();o.noConflict=function(){return e.Cookies=n,o}}())}(this,(function(){"use strict";function e(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var o in n)e[o]=n[o]}return e}return function t(n,o){function r(t,r,i){if("undefined"!=typeof document){"number"==typeof(i=e({},o,i)).expires&&(i.expires=new Date(Date.now()+864e5*i.expires)),i.expires&&(i.expires=i.expires.toUTCString()),t=encodeURIComponent(t).replace(/%(2[346B]|5E|60|7C)/g,decodeURIComponent).replace(/[()]/g,escape);var c="";for(var u in i)i[u]&&(c+="; "+u,!0!==i[u]&&(c+="="+i[u].split(";")[0]));return document.cookie=t+"="+n.write(r,t)+c}}return Object.create({set:r,get:function(e){if("undefined"!=typeof document&&(!arguments.length||e)){for(var t=document.cookie?document.cookie.split("; "):[],o={},r=0;r<t.length;r++){var i=t[r].split("="),c=i.slice(1).join("=");try{var u=decodeURIComponent(i[0]);if(o[u]=n.read(c,u),e===u)break}catch(e){}}return e?o[e]:o}},remove:function(t,n){r(t,"",e({},n,{expires:-1}))},withAttributes:function(n){return t(this.converter,e({},this.attributes,n))},withConverter:function(n){return t(e({},this.converter,n),this.attributes)}},{attributes:{value:Object.freeze(o)},converter:{value:Object.freeze(n)}})}({read:function(e){return'"'===e[0]&&(e=e.slice(1,-1)),e.replace(/(%[\dA-F]{2})+/gi,decodeURIComponent)},write:function(e){return encodeURIComponent(e).replace(/%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,decodeURIComponent)}},{path:"/"})}));
+!function (e, t) { "object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : (e = e || self, function () { var n = e.Cookies, o = e.Cookies = t(); o.noConflict = function () { return e.Cookies = n, o } }()) }(this, (function () { "use strict"; function e(e) { for (var t = 1; t < arguments.length; t++) { var n = arguments[t]; for (var o in n) e[o] = n[o] } return e } return function t(n, o) { function r(t, r, i) { if ("undefined" != typeof document) { "number" == typeof (i = e({}, o, i)).expires && (i.expires = new Date(Date.now() + 864e5 * i.expires)), i.expires && (i.expires = i.expires.toUTCString()), t = encodeURIComponent(t).replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent).replace(/[()]/g, escape); var c = ""; for (var u in i) i[u] && (c += "; " + u, !0 !== i[u] && (c += "=" + i[u].split(";")[0])); return document.cookie = t + "=" + n.write(r, t) + c } } return Object.create({ set: r, get: function (e) { if ("undefined" != typeof document && (!arguments.length || e)) { for (var t = document.cookie ? document.cookie.split("; ") : [], o = {}, r = 0; r < t.length; r++) { var i = t[r].split("="), c = i.slice(1).join("="); try { var u = decodeURIComponent(i[0]); if (o[u] = n.read(c, u), e === u) break } catch (e) { } } return e ? o[e] : o } }, remove: function (t, n) { r(t, "", e({}, n, { expires: -1 })) }, withAttributes: function (n) { return t(this.converter, e({}, this.attributes, n)) }, withConverter: function (n) { return t(e({}, this.converter, n), this.attributes) } }, { attributes: { value: Object.freeze(o) }, converter: { value: Object.freeze(n) } }) }({ read: function (e) { return '"' === e[0] && (e = e.slice(1, -1)), e.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent) }, write: function (e) { return encodeURIComponent(e).replace(/%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g, decodeURIComponent) } }, { path: "/" }) }));
 
+const image_url = new RegExp("(https:&#x2F;&#x2F;i.imgur.com&#x2F;)([a-zA-Z0-9_]{6,10}\.)(gif|jpe?g|tiff?|png|webp|bmp|GIF|JPE?G|TIFF?|PNG|WEBP|BMP)()$");
+
+function stripHtml(html)
+{
+   let tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent || tmp.innerText || "";
+}
 
 //Custom UI ComponentsNe
 const PlayerNameIconRowLink = (player) => {
@@ -1027,8 +1035,8 @@ function NeptunesPrideAgent() {
 					s = s.replace(pattern, apiLink);
 				} else if (sub.startsWith("data:")) {
 					s = s.replace(pattern, '<div width="100%" class="screenshot"><img class="screenshot" src="' + sub + '"/></div>');
-				} else if (sub.startsWith("https:&#x2F;&#x2F;i.imgur.com")) {
-					s = s.replace(pattern,`<img style="width:100%;" src='${sub}' />`)
+				} else if (image_url.test(sub)) {
+					s = s.replace(pattern, `<img width="100%" src='${sub}' />`)
 				} else {
 					s = s.replace(pattern, "(" + sub + ")");
 				}
@@ -1307,13 +1315,13 @@ function NeptunesPrideAgent() {
 }
 
 
-const force_add_custom_player_panel = ()=>{
-	if ("PlayerPanel" in NeptunesPride.npui){
+const force_add_custom_player_panel = () => {
+	if ("PlayerPanel" in NeptunesPride.npui) {
 		add_custom_player_panel()
-	}else{
-		setTimeout(add_custom_player_panel,3000);
+	} else {
+		setTimeout(add_custom_player_panel, 3000);
 	}
-	 
+
 }
 
 const add_custom_player_panel = () => {
@@ -1671,20 +1679,20 @@ NeptunesPride.npui.StarInspector = function () {
 			.roost(starInspector);
 	}
 
-	async function apply_fractional_ships(){
-		let depth = NeptunesPride.gameConfig.turnBased?4:3
+	async function apply_fractional_ships() {
+		let depth = NeptunesPride.gameConfig.turnBased ? 4 : 3
 		let selector = `#contentArea > div > div.widget.fullscreen > div:nth-child(${depth}) > div > div:nth-child(5) > div.widget.pad12.icon-rocket-inline.txt_right`
-		
+
 		let element = $(selector)
 		let counter = 0
 		let fractional_ship = universe.selectedStar['c'].toFixed(2)
 		$(selector).append(fractional_ship)
 
-		while (element.length==0 && counter <= 100){
+		while (element.length == 0 && counter <= 100) {
 			await new Promise(r => setTimeout(r, 10));
 			element = $(selector)
 			let fractional_ship = universe.selectedStar['c']
-			let new_value = parseInt($(selector).text())+fractional_ship
+			let new_value = parseInt($(selector).text()) + fractional_ship
 			$(selector).text(new_value.toFixed(2))
 			counter += 1
 		}
