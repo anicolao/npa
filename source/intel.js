@@ -1,3 +1,5 @@
+/* global define, Crux, NeptunesPride, Mousetrap, jQuery, Cookies, $ */
+
 const sat_version = "2.21"
 
 const stripHtml = (html) => {
@@ -9,6 +11,7 @@ const stripHtml = (html) => {
 const image_url = (str) => {
 	let safe_str = stripHtml(str)
 	const protocol = "^(https://)"
+	// eslint-disable-next-line no-useless-escape
 	const domains = "(i\.ibb\.co/|i.imgur.com/)"
 	const content = "([-#/;&_\\w]{1,150})"
 	const images = "(.)(gif|jpe?g|tiff?|png|webp|bmp|GIF|JPE?G|TIFF?|PNG|WEBP|BMP)$"
@@ -59,7 +62,7 @@ const get_ledger = (messages) => {
 		});
 
 	let players = []
-	for (const [key, p] of Object.entries(NeptunesPride.universe.galaxy.players)) {
+	for (const [_key, p] of Object.entries(NeptunesPride.universe.galaxy.players)) {
 		p.debt = 0
 	}
 	for (let uid in ledger) {
@@ -192,6 +195,7 @@ const recieve_new_messages = (response) => {
 				.rawHTML(`${prompt}: ${p.debt}`)
 				.grid(20, 0, 10, 3)
 				.roost(player);
+			// eslint-disable-next-line no-constant-condition
 			if (true || p.debt * -1 <= get_hero().cash) {
 				Crux.Button("forgive", "forgive_debt", { targetPlayer: p.uid })
 					.grid(17, 0, 6, 3)
@@ -215,7 +219,6 @@ const renderLedger = () => {
 	Mousetrap.bind(["m", "M"], function () { NeptunesPride.np.trigger("trigger_ledger"); });
 	const np = NeptunesPride.np
 	const npui = NeptunesPride.npui
-	const inbox = NeptunesPride.inbox
 	const universe = NeptunesPride.universe
 	NeptunesPride.templates["ledger"] = "Ledger";
 	NeptunesPride.templates["tech_trading"] = "Trading Technology"
@@ -225,7 +228,7 @@ const renderLedger = () => {
 		npui.SideMenuItem("icon-database", "ledger", "trigger_ledger").roost(npui.sideMenu);
 		npui.hasmenuitem = true
 	}
-	npui.ledgerScreen = (config) => { return npui.Screen("ledger") };
+	npui.ledgerScreen = (_config) => { return npui.Screen("ledger") };
 	NeptunesPride.np.on('trigger_ledger', () => {
 		const ledgerScreen = npui.ledgerScreen();
 		let loading = Crux.Text("", "rel txt_center pad12 section_title").rawHTML(`Tabulating Ledger...`)
@@ -262,9 +265,9 @@ const renderLedger = () => {
 }
 
 
-const get_star_gis = () => {
-	stars = NeptunesPride.universe.galaxy.stars
-	output = []
+const _get_star_gis = () => {
+	let stars = NeptunesPride.universe.galaxy.stars;
+	let output = [];
 	for (const s in stars) {
 		let star = stars[s]
 		output.push({
@@ -330,7 +333,7 @@ const get_research_text = () => {
 	return `${first_line}\n${second_line}\n${third_line}\n`
 }
 
-const get_weapons_next = () => {
+const _get_weapons_next = () => {
 	const research = get_research()
 	if (research['current_name'] == 'Weapons') {
 		return research['current_eta']
@@ -423,7 +426,7 @@ const apply_hooks = () => {
 	})
 }
 
-const wide_view = () => {
+const _wide_view = () => {
 	NeptunesPride.np.trigger("map_center_slide", { x: 0, y: 0 });
 	NeptunesPride.np.trigger("zoom_minimap");
 }
@@ -468,7 +471,7 @@ function NeptunesPrideAgent() {
 
 
 
-	linkFleets = function () {
+	const linkFleets = function () {
 		let universe = NeptunesPride.universe;
 		let fleets = NeptunesPride.universe.galaxy.fleets;
 
@@ -485,7 +488,6 @@ function NeptunesPrideAgent() {
 
 		let output = [];
 		for (const p in players) {
-			let player = players[p];
 			output.push("[[{0}]]".format(p));
 			for (const s in stars) {
 				let star = stars[s];
@@ -556,9 +558,6 @@ function NeptunesPrideAgent() {
 		let players = NeptunesPride.universe.galaxy.players;
 		let fleets = NeptunesPride.universe.galaxy.fleets;
 		let stars = NeptunesPride.universe.galaxy.stars;
-		let now = new Date();
-		let wday = now.getDay();
-		let hour = now.getHours();
 		let flights = [];
 		fleetOutcomes = {};
 		for (const f in fleets) {
@@ -576,7 +575,7 @@ function NeptunesPrideAgent() {
 			}
 		}
 		flights = flights.sort(function (a, b) { return a[0] - b[0]; });
-		arrivals = {};
+		let arrivals = {};
 		let output = [];
 		let arrivalTimes = [];
 		let starstate = {};
@@ -709,7 +708,6 @@ function NeptunesPrideAgent() {
 					defense -= awt;
 				}
 
-				let outcomeString = "ERROR";
 				let newAggregate = 0;
 				let playerContribution = {};
 				let biggestPlayer = -1;
@@ -721,7 +719,6 @@ function NeptunesPrideAgent() {
 						let fleet = fleets[ka[1]];
 						let playerId = ka[0];
 						contribution[k] = offense * contribution[k] / attackersAggregate;
-						let olda = newAggregate;
 						newAggregate += contribution[k];
 						if (playerContribution[playerId]) {
 							playerContribution[playerId] += contribution[k];
@@ -789,12 +786,8 @@ function NeptunesPrideAgent() {
 		"<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.";
 
 	function briefFleetReport() {
-		let universe = NeptunesPride.universe;
 		let fleets = NeptunesPride.universe.galaxy.fleets;
 		let stars = NeptunesPride.universe.galaxy.stars;
-		let now = new Date();
-		let wday = now.getDay();
-		let hour = now.getHours();
 		let flights = [];
 		for (const f in fleets) {
 			let fleet = fleets[f];
@@ -825,7 +818,7 @@ function NeptunesPrideAgent() {
 	let homePlanets = function () {
 		let p = NeptunesPride.universe.galaxy.players;
 		let output = [];
-		for (i in p) {
+		for (let i in p) {
 			let home = p[i].home;
 			if (home) {
 				output.push("Player #{0} is [[{0}]] home {2} [[{1}]]".format(i, home.n, i == home.puid ? "is" : "was"))
@@ -877,7 +870,6 @@ function NeptunesPrideAgent() {
 		let superDrawText = NeptunesPride.npui.map.drawText;
 		NeptunesPride.npui.map.drawText = function () {
 			let universe = NeptunesPride.universe;
-			let stars = NeptunesPride.universe.galaxy.stars;
 			let map = NeptunesPride.npui.map;
 			superDrawText();
 
@@ -1067,12 +1059,12 @@ function NeptunesPrideAgent() {
 
 		let superNewMessageCommentBox = npui.NewMessageCommentBox;
 
-		let reportPasteHook = function (e, d) {
+		let reportPasteHook = function (_e, _d) {
 			let inbox = NeptunesPride.inbox;
 			inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + lastClip;
 			inbox.trigger("show_screen", "diplomacy_detail");
 		}
-		let reportResearchHook = function (e, d) {
+		let reportResearchHook = function (_e, _d) {
 			let text = get_research_text()
 			console.log(text)
 			let inbox = NeptunesPride.inbox;
@@ -1094,7 +1086,7 @@ function NeptunesPrideAgent() {
 			research_button.roost(widget);
 			return widget;
 		}
-		npaReports = function (screenConfig) {
+		const npaReports = function (_screenConfig) {
 			npui.onHideScreen(null, true);
 			npui.onHideSelectionMenu();
 
@@ -1143,7 +1135,7 @@ function NeptunesPrideAgent() {
 				} else if (d === "stars") {
 					starReport();
 				}
-				html = lastClip.replace(/\n/g, '<br>');
+				let html = lastClip.replace(/\n/g, '<br>');
 				html = NeptunesPride.inbox.hyperlinkMessage(html);
 				text.rawHTML(html);
 			};
@@ -1175,11 +1167,11 @@ function NeptunesPrideAgent() {
 			"will need to refresh the display to see the different times.";
 
 		try {
-			Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => console.log("Crux.touchEnabled set ignored", x) });
+			Object.defineProperty(Crux, 'touchEnabled', { get: () => false, set: (x) => { console.log("Crux.touchEnabled set ignored", x) } });
 		} catch (e) {
 			console.log(e)
 		}
-		Object.defineProperty(NeptunesPride.npui.map, 'ignoreMouseEvents', { get: () => false, set: (x) => console.log("NeptunesPride.npui.map.ignoreMouseEvents set ignored", x) });
+		Object.defineProperty(NeptunesPride.npui.map, 'ignoreMouseEvents', { get: () => false, set: (x) => { console.log("NeptunesPride.npui.map.ignoreMouseEvents set ignored", x) } });
 
 		hooksLoaded = true;
 	}
@@ -1254,8 +1246,8 @@ function NeptunesPrideAgent() {
 			let universe = NeptunesPride.universe;
 			let scan = eggers.responseJSON.scanning_data;
 			universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
-			for (s in scan.stars) {
-				star = scan.stars[s];
+			for (let s in scan.stars) {
+				const star = scan.stars[s];
 				if (star.v !== "0") {
 					universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
 				}
@@ -1277,7 +1269,7 @@ function NeptunesPrideAgent() {
 
 	let npaHelp = function () {
 		let help = ["<H1>" + title + "</H1>"];
-		for (pair in hotkeys) {
+		for (let pair in hotkeys) {
 			let key = hotkeys[pair][0];
 			let action = hotkeys[pair][1];
 			help.push("<h2>Hotkey: " + key + "</h2>");
@@ -1431,7 +1423,7 @@ const add_custom_player_panel = () => {
 			}
 
 			/*Individual techs*/
-			let name_map = {
+			let _name_map = {
 				scanning: 'Scanning',
 				propulsion: 'Hyperspace Range',
 				terraforming: 'Terraforming',

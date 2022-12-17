@@ -1,4 +1,5 @@
-const sat_version="1.1.1.1"
+/* global chrome, browser */
+
 const add_intel_plugin = () => {
 	var s = document.createElement('script');
 	s.src = chrome.runtime.getURL('intel.js');
