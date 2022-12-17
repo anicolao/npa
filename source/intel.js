@@ -1059,6 +1059,7 @@ function NeptunesPrideAgent() {
 		NeptunesPride.templates["npa_research"] = "Research";
 
 		let superNewMessageCommentBox = npui.NewMessageCommentBox;
+
 		let reportPasteHook = function (e, d) {
 			let inbox = NeptunesPride.inbox;
 			inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + lastClip;
@@ -1075,18 +1076,15 @@ function NeptunesPrideAgent() {
 		NeptunesPride.np.on("paste_research", reportResearchHook);
 
 		NeptunesPride.np.on("paste_report", reportPasteHook);
+
 		npui.NewMessageCommentBox = function () {
 			let widget = superNewMessageCommentBox();
 			let reportButton = Crux.Button("npa_paste", "paste_report", "intel")
-				.grid(10, 12, 10, 3)
+				.grid(10, 12, 4, 3)
 			reportButton.roost(widget);
-			return widget;
-		}
-		npui.NewMessageCommentBox = function () {
-			let widget = superNewMessageCommentBox();
-			let reportButton = Crux.Button("npa_research", "paste_research", "research")
-				.grid(10, 12, 10, 3)
-			reportButton.roost(widget);
+			let research_button = Crux.Button("npa_research", "paste_research", "research")
+				.grid(14, 12, 6, 3)
+			research_button.roost(widget);
 			return widget;
 		}
 		npaReports = function (screenConfig) {
