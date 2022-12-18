@@ -99,7 +99,7 @@ const display_tech_trading = () => {
 }
 let cached_events = [];
 
-const update_event_cache = (fetchSize) => {
+const update_event_cache = (fetchSize, success, error) => {
 		jQuery.ajax({
 			type: 'POST',
 			url: "/trequest/fetch_game_messages",
@@ -112,8 +112,8 @@ const update_event_cache = (fetchSize) => {
 				version: NeptunesPride.version,
 				game_number: NeptunesPride.gameNumber
 			},
-			success: recieve_new_messages,
-			error: console.log,
+			success,
+			error,
 			dataType: "json"
 		});
 }
@@ -135,8 +135,25 @@ const recieve_new_messages = (response) => {
 		} else if (overlapOffset < 0) {
 			const size = incoming.length * 2;
 			console.log("Missing some events, double fetch to " + size);
-			update_event_cache(size);
+			update_event_cache(size, recieve_new_messages, console.error);
 			return;
+		}
+
+		// we had cached events, but want to be extra paranoid about
+		// correctness. So if the response contained the entire event
+		// log, validate that it exactly matches the cached events.
+		if (response.report.messages.length === cached_events.length) {
+			console.log("*** Validating cached_events ***");
+			const valid = response.report.messages;
+			let invalidEntries = cached_events.filter((e, i) => e.key !== valid[i].key);
+			if (invalidEntries.length) {
+				console.error("!! Invalid entries found: ", invalidEntries);
+			}
+			console.log("*** Validation Completed ***");
+		} else {
+			// the response didn't contain the entire event log. Go fetch
+			// a version that _does_.
+			update_event_cache(100000, recieve_new_messages, console.error);
 		}
 	}
 	cached_events = incoming.concat(cached_events);
@@ -211,7 +228,7 @@ const renderLedger = () => {
 		ledgerScreen.roost(npui.screenContainer);
 		npui.layoutElement(ledgerScreen)
 
-		update_event_cache(4);
+		update_event_cache(4, recieve_new_messages, console.error);
 	})
 
 	np.onForgiveDebt = function (event, data) {
