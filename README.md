@@ -33,18 +33,20 @@ It has a few main modules that expand the interface to give you more control ove
  - Bulk Trade: Quickly pay for tech and automatically share all your tech. 
 
 ### Ledger
-![Ledger](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_1.png?raw=true)
+![Ledger](pictures/ledger.png?raw=true)
+
 Ledger (hotkey ‘m’):  Adds a row to the menu titled ‘Ledger’. When clicked tabulates then displays a ledger of debt owed between you and anyone you’ve traded tech or cash with so far in the game. Accurately shows you who you owe money to, who owes you money, and how much money is owed. If you owe someone else money, displays a button to repay the debt owed.
 
 ### Research
-![Research](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_research.png?raw=true)
- Research ETA Chat Button: Adds a button to chat between ‘Back’ and ‘Send’ titled ‘Research’. When clicked pastes your current research tech and your next research tech into the chat input box.
+![Research](pictures/np_research.png?raw=true)
+
+Research ETA Chat Button: Adds a button to chat between ‘Back’ and ‘Send’ titled ‘Research’. When clicked pastes your current research tech and your next research tech into the chat input box.
 ### Battle Calc
-![Battle Calc](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_2.png?raw=true)
+![Battle Calc](pictures/np_1.png?raw=true)
 When you select a carrier, if the carrier is headed for an enemy star, displays a battle calculator. Accounts for you and your opponent’s current weapons tech, manufacturing tech, and industry.
 
 ### Bulk Trade
-![Bulk Trade](https://github.com/Tsangares/stoned_ape_tools/blob/master/pictures/np_3.png?raw=true)
+![Bulk Trade](pictures/np_3.png?raw=true)
 Quick Tech Trading: Adds 2 buttons to other players’ Empire pages:
  - ‘Share All Tech’ button allows you to share all the tech you have that another player does not in one easy click.
  - ‘Pay for All Tech’ button allows you to send the cash required for another player to send you all the tech they have that you don’t in one easy click (and without having to do any math!).
@@ -102,6 +104,13 @@ New features only available on Stoned Ape Tools 3:
 Example:
 Now: Experimentation 2 - 5 ticks.
 Next: Weapons 2 - 24 ticks.
+
+## Contributing
+
+Please file issues or feature requests to get involved.
+
+See [the developer documentation](DEVELOPMENT.md) if you want to 
+contribute code!
 
 ## Future Features
 Future features (not guaranteed):
