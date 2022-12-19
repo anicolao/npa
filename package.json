@@ -7,15 +7,15 @@
     "sat": "webpack --config webpack.sat.js",
     "npa": "webpack --config webpack.npa.js",
     "lint": "npx rome check source",
-    "format": "npx rome format --write source"
+    "format": "npx rome format --write source",
+    "prepare": "husky install .husky"
   },
-  "license": "MIT",
+  "license": "GPLv3",
   "devDependencies": {
     "@types/chrome": "^0.0.193",
     "copy-webpack-plugin": "^11.0.0",
     "dotenv-webpack": "^8.0.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
+    "husky": "^8.0.0",
     "rome": "^11.0.0",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
@@ -23,16 +23,5 @@
     "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.8.0"
   },
-  "browserslist": "> 0.25%, not dead",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,js}": [
-      "npm run format",
-      "npm run lint"
-    ]
-  }
+  "browserslist": "> 0.25%, not dead"
 }

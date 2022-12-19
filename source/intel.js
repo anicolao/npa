@@ -16,6 +16,7 @@ const image_url = (str) => {
   const images =
     "(.)(gif|jpe?g|tiff?|png|webp|bmp|GIF|JPE?G|TIFF?|PNG|WEBP|BMP)$";
   let regex = new RegExp(protocol + domains + content + images);
+  let unused = "foo";
   return regex.test(safe_str);
 };
 
