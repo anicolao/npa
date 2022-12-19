@@ -36,7 +36,7 @@ You'll also need to have a recent version of git. Check for it with
 git --version
 ```
 
-Start by forking the respository on github. Then:
+Start by forking this repository on github. Then:
 
 ```
 git clone git@github.com/<username>/npa.git
@@ -66,6 +66,10 @@ extension. Then, in Chrome, visit `chrome://extensions`, and turn
 on "developer mode". Finally, use the "Load Unpacked Extension"
 folder to load your freshly built extension by opening the `dist`
 directory that was created by the build process.
+
+On some versions of windows `npm run start` will give an error about
+script execution being disabled. [This article](https://bobbyhadz.com/blog/nodemon-cannot-be-loaded-running-scripts-disabled) shows how to fix
+it, and [this page from Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3) may also be useful.
 
 You'll notice that `npm run start` never exits. It watches your
 filesystem for changes to the source code, which you can make in
@@ -97,3 +101,24 @@ both in the console tab and associated with the extension in the
 chrome://extensions view (useful if you are trying to see if one of
 your users hit an error that you log with `console.error` as it
 persists even after the web page tab is closed). 
+
+### Example Debug Session
+
+Suppose you want to debug the autocomplete code. The feature triggers
+when the user types [[#] into a message. Inspect the page, and use
+the hotkey to search for autocomplete.
+
+In the code, find the line that looks like
+
+```
+                        var puid = Number(autoString);
+```
+
+and put a breakpoint on that line by clicking to its left. Open a new
+message in the game, and type [[0] to see the debugger pop up on the
+autocomplete code. The screen should look something like this:
+
+![Development](pictures/devscreenshot.png?raw=true)
+
+You can step along or hit the continue button to see autocomplete in
+action.
