@@ -16,7 +16,6 @@
     "web_accessible_resources": [
       {
         "resources": [
-          "cookie.js",
           "intel.js"
         ],
         "matches": [
