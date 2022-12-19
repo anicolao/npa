@@ -98,26 +98,37 @@ const display_tech_trading = () => {
 	return tech_trade_screen
 }
 let cached_events = [];
+let cacheFetchStart = new Date();
+let cacheFetchSize = 0;
 
 const update_event_cache = (fetchSize, success, error) => {
-		jQuery.ajax({
-			type: 'POST',
-			url: "/trequest/fetch_game_messages",
-			async: true,
-			data: {
-				type: "fetch_game_messages",
-				count: cached_events.length > 0 ? fetchSize : 100000,
-				offset: 0,
-				group: "game_event",
-				version: NeptunesPride.version,
-				game_number: NeptunesPride.gameNumber
-			},
-			success,
-			error,
-			dataType: "json"
-		});
+	const count = cached_events.length > 0 ? fetchSize : 100000;
+
+	cacheFetchStart = new Date();
+	cacheFetchSize = count;
+
+	jQuery.ajax({
+		type: 'POST',
+		url: "/trequest/fetch_game_messages",
+		async: true,
+		data: {
+			type: "fetch_game_messages",
+			count,
+			offset: 0,
+			group: "game_event",
+			version: NeptunesPride.version,
+			game_number: NeptunesPride.gameNumber
+		},
+		success,
+		error,
+		dataType: "json"
+	});
 }
 const recieve_new_messages = (response) => {
+	const cacheFetchEnd = new Date();
+	const elapsed = cacheFetchEnd.getTime() - cacheFetchStart.getTime();
+	console.log(`Fetched ${cacheFetchSize} events in ${elapsed}ms`);
+
 	const npui = NeptunesPride.npui
 	const universe = NeptunesPride.universe
 	let incoming = response.report.messages;
