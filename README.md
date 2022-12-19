@@ -7,5 +7,9 @@ that makes many administrative and calculation intensive tasks
 in the game Neptune's Pride easier so that you can focus on 
 gameplay and diplomacy instead of spreadsheets and drudgery.
 
-
 More information coming to this README soon!
+
+## Development
+
+If you're interested in helping to code new features or bug fixes, 
+give [DEVELOPMENT.md](DEVELOPMENT.md) a quick read.
