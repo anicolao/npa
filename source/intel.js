@@ -11,7 +11,6 @@ const stripHtml = (html) => {
 const image_url = (str) => {
 	let safe_str = stripHtml(str)
 	const protocol = "^(https://)"
-	// eslint-disable-next-line no-useless-escape
 	const domains = "(i\.ibb\.co/|i.imgur.com/)"
 	const content = "([-#/;&_\\w]{1,150})"
 	const images = "(.)(gif|jpe?g|tiff?|png|webp|bmp|GIF|JPE?G|TIFF?|PNG|WEBP|BMP)$"
@@ -52,12 +51,12 @@ const get_ledger = (messages) => {
 	loading.roost(NeptunesPride.npui.activeScreen)
 	let uid = get_hero().uid
 	let ledger = {}
-	messages.filter(m => m.payload.template == "money_sent" || m.payload.template == "shared_technology")
+	messages.filter(m => m.payload.template === "money_sent" || m.payload.template === "shared_technology")
 		.map(m => m.payload)
 		.forEach(m => {
-			let liaison = m.from_puid == uid ? m.to_puid : m.from_puid
-			let value = m.template == "money_sent" ? m.amount : m.price
-			value *= m.from_puid == uid ? 1 : -1 // amount is (+) if credit & (-) if debt
+			let liaison = m.from_puid === uid ? m.to_puid : m.from_puid
+			let value = m.template === "money_sent" ? m.amount : m.price
+			value *= m.from_puid === uid ? 1 : -1 // amount is (+) if credit & (-) if debt
 			liaison in ledger ? ledger[liaison] += value : ledger[liaison] = value
 		});
 
@@ -148,7 +147,7 @@ const recieve_new_messages = (response) => {
 			incoming = incoming.slice(0, overlapOffset);
 		} else if (overlapOffset < 0) {
 			const size = incoming.length * 2;
-			console.log("Missing some events, double fetch to " + size);
+			console.log(`Missing some events, double fetch to ${size}`);
 			update_event_cache(size, recieve_new_messages, console.error);
 			return;
 		}
@@ -187,7 +186,7 @@ const recieve_new_messages = (response) => {
 		let player = PlayerNameIconRowLink(universe.galaxy.players[p.uid]).roost(npui.activeScreen);
 		player.addStyle("player_cell")
 		let prompt = p.debt > 0 ? "They owe" : "You owe"
-		if (p.debt == 0) {
+		if (p.debt === 0) {
 			prompt = "Balance"
 		}
 		if (p.debt < 0) {
@@ -195,7 +194,7 @@ const recieve_new_messages = (response) => {
 				.rawHTML(`${prompt}: ${p.debt}`)
 				.grid(20, 0, 10, 3)
 				.roost(player);
-			// eslint-disable-next-line no-constant-condition
+			// rome-ignore lint/complexity/useSimplifiedLogicExpression: @Lorentz?
 			if (true || p.debt * -1 <= get_hero().cash) {
 				Crux.Button("forgive", "forgive_debt", { targetPlayer: p.uid })
 					.grid(17, 0, 6, 3)
@@ -206,7 +205,7 @@ const recieve_new_messages = (response) => {
 				.rawHTML(`${prompt}: ${p.debt}`)
 				.grid(20, 0, 10, 3)
 				.roost(player);
-		} else if (p.debt == 0) {
+		} else if (p.debt === 0) {
 			Crux.Text("", "pad12 txt_right orange-text")
 				.rawHTML(`${prompt}: ${p.debt}`)
 				.grid(20, 0, 10, 3)
@@ -231,7 +230,7 @@ const renderLedger = () => {
 	npui.ledgerScreen = (_config) => { return npui.Screen("ledger") };
 	NeptunesPride.np.on('trigger_ledger', () => {
 		const ledgerScreen = npui.ledgerScreen();
-		let loading = Crux.Text("", "rel txt_center pad12 section_title").rawHTML(`Tabulating Ledger...`)
+		let loading = Crux.Text("", "rel txt_center pad12 section_title").rawHTML("Tabulating Ledger...")
 		loading.roost(ledgerScreen)
 
 		npui.onHideScreen(null, true);
@@ -254,7 +253,7 @@ const renderLedger = () => {
 		np.trigger("show_screen", ["confirm", {
 			message: "forgive_debt",
 			eventKind: 'confirm_forgive_debt',
-			eventData: { type: "order", order: "send_money," + targetPlayer + "," + amount }
+			eventData: { type: "order", order: `send_money,${targetPlayer},${amount}` }
 		}]);
 	};
 	np.on("confirm_forgive_debt", (event, data) => {
@@ -298,7 +297,7 @@ const get_research = () => {
 	let next_points_remaining = next['brr'] * next['level'] - next['research']
 	let next_eta = Math.ceil(next_points_remaining / science) + eta
 	let next_level = next['level'] + 1
-	if (hero.researching == hero.researching_next) {
+	if (hero.researching === hero.researching_next) {
 		//Recurring research
 		next_points_remaining += next['brr']
 		next_eta = Math.ceil((next['brr'] * next['level'] + 1) / science) + eta
@@ -335,9 +334,9 @@ const get_research_text = () => {
 
 const _get_weapons_next = () => {
 	const research = get_research()
-	if (research['current_name'] == 'Weapons') {
+	if (research['current_name'] === 'Weapons') {
 		return research['current_eta']
-	} else if (research['next_name'] == 'Weapons') {
+	} else if (research['next_name'] === 'Weapons') {
 		return research['next_eta']
 	}
 	return 10 ** 10
@@ -347,7 +346,7 @@ const _get_weapons_next = () => {
 const get_tech_trade_cost = (from, to, tech_name = null) => {
 	let total_cost = 0;
 	for (const [tech, value] of Object.entries(to.tech)) {
-		if (tech_name == null || tech_name == tech) {
+		if (tech_name == null || tech_name === tech) {
 			let me = from.tech[tech].level;
 			let you = value.level
 			for (let i = 1; i <= me - you; ++i) {
@@ -404,10 +403,10 @@ const apply_hooks = () => {
 			let you = value.level
 			for (let i = 1; i <= me - you; ++i) {
 				setTimeout(() => {
-					console.log(me - you, { type: "order", order: "share_tech," + player.uid + "," + tech })
+					console.log(me - you, { type: "order", order: `share_tech,${player.uid},${tech}` })
 					display.transact(`Sending ${tech} level ${you + i}`)
-					NeptunesPride.np.trigger("server_request", { type: "order", order: "share_tech," + player.uid + "," + tech });
-					if (i == me - you) {
+					NeptunesPride.np.trigger("server_request", { type: "order", order: `share_tech,${player.uid},${tech}` });
+					if (i === me - you) {
 						display.transact("Done.")
 					}
 				}, offset)
@@ -420,7 +419,7 @@ const apply_hooks = () => {
 	//Pays a player a certain amount 
 	NeptunesPride.np.on("confirm_buy_tech", (even, data) => {
 		let player = data.player
-		NeptunesPride.np.trigger("server_request", { type: "order", order: "send_money," + player.uid + "," + data.cost });
+		NeptunesPride.np.trigger("server_request", { type: "order", order: `send_money,${player.uid},${data.cost}` });
 		NeptunesPride.universe.selectPlayer(player);
 		NeptunesPride.np.trigger("refresh_interface");
 	})
@@ -432,7 +431,7 @@ const _wide_view = () => {
 }
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || `SAT ${sat_version}`;
+	let title = (document?.currentScript?.title) || `SAT ${sat_version}`;
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title);
 
@@ -455,13 +454,12 @@ function NeptunesPrideAgent() {
 	}
 
 	if (!String.prototype.format) {
-		String.prototype.format = function () {
-			var args = arguments;
+		String.prototype.format = function (...args) {
 			return this.replace(/{(\d+)}/g, function (match, number) {
 				if (typeof args[number] === 'number') {
 					return Math.trunc(args[number] * 1000) / 1000;
 				}
-				return typeof args[number] != 'undefined'
+				return typeof args[number] !== 'undefined'
 					? args[number]
 					: match
 					;
@@ -477,7 +475,7 @@ function NeptunesPrideAgent() {
 
 		for (const f in fleets) {
 			let fleet = fleets[f];
-			let fleetLink = "<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"" + fleet.uid + "\")'>" + fleet.n + "</a>";
+			let fleetLink = `<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"${fleet.uid}\")'>${fleet.n}</a>`;
 			universe.hyperlinkedMessageInserts[fleet.n] = fleetLink;
 		}
 	};
@@ -491,7 +489,7 @@ function NeptunesPrideAgent() {
 			output.push("[[{0}]]".format(p));
 			for (const s in stars) {
 				let star = stars[s];
-				if (star.puid == p && star.shipsPerTick >= 0) {
+				if (star.puid === p && star.shipsPerTick >= 0) {
 					output.push("  [[{0}]] {1}/{2}/{3} {4} ships".format(star.n, star.e, star.i, star.s, star.totalDefenses));
 				}
 			}
@@ -504,9 +502,9 @@ function NeptunesPrideAgent() {
 
 	let ampm = function (h, m) {
 		if (m < 10)
-			m = "0" + m;
+			m = `0${m}`;
 		if (h < 12) {
-			if (h == 0) h = 12;
+			if (h === 0) h = 12;
 			return "{0}:{1} AM".format(h, m);
 		} else if (h > 12) {
 			return "{0}:{1} PM".format(h - 12, m);
@@ -542,8 +540,8 @@ function NeptunesPrideAgent() {
 		let arrival = new Date(now.getTime() + msplus);
 		let p = prefix !== undefined ? prefix : "ETA ";
 		let ttt = p + ampm(arrival.getHours(), arrival.getMinutes());
-		if (arrival.getDay() != now.getDay())
-			ttt = p + days[arrival.getDay()] + " @ " + ampm(arrival.getHours(), arrival.getMinutes());
+		if (arrival.getDay() !== now.getDay())
+			ttt = `${p}${days[arrival.getDay()]} @ ${ampm(arrival.getHours(), arrival.getMinutes())}`;
 		return ttt;
 	}
 	let tickToEtaString = function (tick, prefix) {
@@ -565,7 +563,7 @@ function NeptunesPrideAgent() {
 			if (fleet.o && fleet.o.length > 0) {
 				let stop = fleet.o[0][1];
 				let ticks = fleet.etaFirst;
-				let starname = stars[stop] && stars[stop].n;
+				let starname = stars[stop]?.n;
 				if (!starname) {
 					continue;
 				}
@@ -607,14 +605,14 @@ function NeptunesPrideAgent() {
 			if (!starstate[starId]) {
 				starstate[starId] = { last_updated: 0, ships: stars[starId].totalDefenses, puid: stars[starId].puid, c: stars[starId].c };
 			}
-			if (starstate[starId].puid == -1) {
+			if (starstate[starId].puid === -1) {
 				// assign ownership of the star to the player whose fleet has traveled the least distance
 				let minDistance = 10000;
 				let owner = -1;
 				for (const i in arrival) {
 					let fleet = arrival[i];
 					let d = universe.distance(stars[starId].x, stars[starId].y, fleet.lx, fleet.ly);
-					if (d < minDistance || owner == -1) {
+					if (d < minDistance || owner === -1) {
 						owner = fleet.puid;
 						minDistance = d;
 					}
@@ -636,9 +634,9 @@ function NeptunesPrideAgent() {
 			}
 			for (const i in arrival) {
 				let fleet = arrival[i];
-				if (fleet.puid == starstate[starId].puid || starstate[starId].puid == -1) {
+				if (fleet.puid === starstate[starId].puid || starstate[starId].puid === -1) {
 					let oldShips = starstate[starId].ships;
-					if (starstate[starId].puid == -1) {
+					if (starstate[starId].puid === -1) {
 						starstate[starId].ships = fleet.st;
 					} else {
 						starstate[starId].ships += fleet.st;
@@ -650,7 +648,7 @@ function NeptunesPrideAgent() {
 			}
 			for (const i in arrival) {
 				let fleet = arrival[i];
-				if (fleet.puid == starstate[starId].puid) {
+				if (fleet.puid === starstate[starId].puid) {
 					let outcomeString = "{0} ships on {1}".format(Math.floor(starstate[starId].ships), stars[starId].n);
 					fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
 				}
@@ -660,7 +658,7 @@ function NeptunesPrideAgent() {
 			let contribution = {};
 			for (const i in arrival) {
 				let fleet = arrival[i];
-				if (fleet.puid != starstate[starId].puid) {
+				if (fleet.puid !== starstate[starId].puid) {
 					let olda = offense;
 					offense += fleet.st;
 					output.push("  [[{4}]]! {0} + {2} on [[{3}]] = {1}".format(olda, offense, fleet.st, fleet.n, fleet.puid));
@@ -740,7 +738,7 @@ function NeptunesPrideAgent() {
 					starstate[starId].ships = defense;
 					for (const i in arrival) {
 						let fleet = arrival[i];
-						if (fleet.puid == starstate[starId].puid) {
+						if (fleet.puid === starstate[starId].puid) {
 							let outcomeString = "{0} ships on {1}".format(Math.floor(starstate[starId].ships), stars[starId].n);
 							fleetOutcomes[fleet.uid] = { eta: tickToEtaString(fleet.etaFirst), outcome: outcomeString };
 						}
@@ -794,7 +792,7 @@ function NeptunesPrideAgent() {
 			if (fleet.o && fleet.o.length > 0) {
 				let stop = fleet.o[0][1];
 				let ticks = fleet.etaFirst;
-				let starname = stars[stop] && stars[stop].n;
+				let starname = stars[stop]?.n;
 				if (!starname) continue;
 				flights.push([ticks, "[[{0}]] [[{1}]] {2} → [[{3}]] {4}".format(fleet.puid, fleet.n, fleet.st, stars[stop].n, tickToEtaString(ticks, ""))]);
 			}
@@ -821,7 +819,7 @@ function NeptunesPrideAgent() {
 		for (let i in p) {
 			let home = p[i].home;
 			if (home) {
-				output.push("Player #{0} is [[{0}]] home {2} [[{1}]]".format(i, home.n, i == home.puid ? "is" : "was"))
+				output.push("Player #{0} is [[{0}]] home {2} [[{1}]]".format(i, home.n, i === home.puid ? "is" : "was"))
 			} else {
 				output.push("Player #{0} is [[{0}]] home unknown".format(i))
 			}
@@ -851,7 +849,7 @@ function NeptunesPrideAgent() {
 		let scanRange = universe.galaxy.players[owner].tech.scanning.value;
 		for (const s in stars) {
 			let star = stars[s];
-			if (star.puid == owner) {
+			if (star.puid === owner) {
 				let distance = universe.distance(star.x, star.y, fleet.x, fleet.y);
 				if (distance <= scanRange) {
 					return true;
@@ -873,13 +871,13 @@ function NeptunesPrideAgent() {
 			let map = NeptunesPride.npui.map;
 			superDrawText();
 
-			map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+			map.context.font = `${(14 * map.pixelRatio)}px OpenSansRegular, sans-serif`;
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "right";
 			map.context.textBaseline = "middle";
 			let v = version;
 			if (combatHandicap !== 0) {
-				v = handicapString() + " " + v;
+				v = `${handicapString()} ${v}`;
 			}
 			drawOverlayString(map.context, v, map.viewportWidth - 10, map.viewportHeight - 16 * map.pixelRatio);
 			if (NeptunesPride.originalPlayer === undefined) {
@@ -892,7 +890,7 @@ function NeptunesPrideAgent() {
 
 			if (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
 				//console.log("Selected fleet", universe.selectedFleet);
-				map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+				map.context.font = `${(14 * map.pixelRatio)}px OpenSansRegular, sans-serif`;
 				map.context.fillStyle = "#FF0000";
 				map.context.textAlign = "left";
 				map.context.textBaseline = "middle";
@@ -930,7 +928,7 @@ function NeptunesPrideAgent() {
 			}
 			if (!NeptunesPride.gameConfig.turnBased && universe.timeToTick(1).length < 3) {
 				let lineHeight = 16 * map.pixelRatio;
-				map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+				map.context.font = `${(14 * map.pixelRatio)}px OpenSansRegular, sans-serif`;
 				map.context.fillStyle = "#FF0000";
 				map.context.textAlign = "left";
 				map.context.textBaseline = "middle";
@@ -940,7 +938,7 @@ function NeptunesPrideAgent() {
 				}
 				drawOverlayString(map.context, s, 1000, lineHeight);
 			}
-			if (universe.selectedStar && universe.selectedStar.puid != universe.player.uid && universe.selectedStar.puid !== -1) {
+			if (universe.selectedStar && universe.selectedStar.puid !== universe.player.uid && universe.selectedStar.puid !== -1) {
 				// enemy star selected; show HUD for scanning visibility
 				map.context.textAlign = "left";
 				map.context.textBaseline = "middle";
@@ -1000,7 +998,7 @@ function NeptunesPrideAgent() {
 									if (anyStarCanSee(universe.selectedStar.puid, fleet)) {
 										visColor = "#888888";
 									}
-									drawOverlayString(map.context, "Scan " + tickToEtaString(ticks), x, y, visColor);
+									drawOverlayString(map.context, `Scan ${tickToEtaString(ticks)}`, x, y, visColor);
 								}
 							}
 						}
@@ -1008,7 +1006,7 @@ function NeptunesPrideAgent() {
 				}
 				//map.context.translate(-xOffset, 0);
 			}
-			if (universe.ruler.stars.length == 2) {
+			if (universe.ruler.stars.length === 2) {
 				let p1 = universe.ruler.stars[0].puid;
 				let p2 = universe.ruler.stars[1].puid;
 				if (p1 !== p2 && p1 !== -1 && p2 !== -1) {
@@ -1020,7 +1018,11 @@ function NeptunesPrideAgent() {
 			if (!s) {
 				return "error";
 			}
-			var i, fp, sp, sub, pattern;
+			var i;
+			var fp;
+			var sp;
+			var sub;
+			var pattern;
 
 			i = 0;
 			fp = 0;
@@ -1034,18 +1036,18 @@ function NeptunesPrideAgent() {
 				fp = s.search("\\[\\[");
 				sp = s.search("\\]\\]");
 				sub = s.slice(fp + 2, sp);
-				pattern = "[[" + sub + "]]";
+				pattern = `[[${sub}]]`;
 				if (templateData[sub] !== undefined) {
 					s = s.replace(pattern, templateData[sub]);
 				} else if (sub.startsWith("api:")) {
-					let apiLink = "<a onClick='Crux.crux.trigger(\"switch_user_api\", \"" + sub + "\")'> View as " + sub + "</a>";
-					apiLink += " or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"" + sub + "\")'> Merge " + sub + "</a>";
+					let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
+					apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
 					s = s.replace(pattern, apiLink);
 				} else if (image_url(sub)) {
 					let safe_url = stripHtml(sub)
 					s = s.replace(pattern, `<img width="100%" src='${safe_url}' />`)
 				} else {
-					s = s.replace(pattern, "(" + sub + ")");
+					s = s.replace(pattern, `(${sub})`);
 				}
 			}
 			return s;
@@ -1177,7 +1179,7 @@ function NeptunesPrideAgent() {
 	}
 
 	let init = function () {
-		if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+		if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
 			linkFleets();
 			console.log("Fleet linking complete.");
 			if (!hooksLoaded) {
@@ -1194,7 +1196,7 @@ function NeptunesPrideAgent() {
 	hotkey("@", init);
 	init.help = "Reinitialize Neptune's Pride Agent. Use the @ hotkey if the version is not being shown on the map after dragging.";
 
-	if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+	if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
 		console.log("Universe already loaded. Hyperlink fleets & load hooks.");
 		init();
 	} else {
@@ -1222,7 +1224,7 @@ function NeptunesPrideAgent() {
 		if (NeptunesPride.originalPlayer === undefined) {
 			NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
 		}
-		let code = (data && data.split(":")[1]) || otherUserCode;
+		let code = (data?.split(":")[1]) || otherUserCode;
 		otherUserCode = code;
 		if (otherUserCode) {
 			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
@@ -1238,7 +1240,7 @@ function NeptunesPrideAgent() {
 		if (NeptunesPride.originalPlayer === undefined) {
 			NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
 		}
-		let code = (data && data.split(":")[1]) || otherUserCode;
+		let code = (data?.split(":")[1]) || otherUserCode;
 		otherUserCode = code;
 		if (otherUserCode) {
 			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
@@ -1268,15 +1270,15 @@ function NeptunesPrideAgent() {
 	NeptunesPride.np.on("merge_user_api", mergeUser);
 
 	let npaHelp = function () {
-		let help = ["<H1>" + title + "</H1>"];
+		let help = [`<H1>${title}</H1>`];
 		for (let pair in hotkeys) {
 			let key = hotkeys[pair][0];
 			let action = hotkeys[pair][1];
-			help.push("<h2>Hotkey: " + key + "</h2>");
+			help.push(`<h2>Hotkey: ${key}</h2>`);
 			if (action.help) {
 				help.push(action.help);
 			} else {
-				help.push("<p>No documentation yet.<p><code>" + action.toLocaleString() + "</code>");
+				help.push(`<p>No documentation yet.<p><code>${action.toLocaleString()}</code>`);
 			}
 		}
 		NeptunesPride.universe.helpHTML = help.join("");
@@ -1297,10 +1299,10 @@ function NeptunesPrideAgent() {
 				if (key === "]") {
 					autocompleteMode = 0;
 					let m = autoString.match(/^[0-9][0-9]*$/);
-					if (m && m.length) {
+					if (m?.length) {
 						let puid = Number(autoString);
 						let end = e.target.selectionEnd;
-						let auto = "" + puid + "]] " + NeptunesPride.universe.galaxy.players[puid].alias;
+						let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
 						e.target.value = e.target.value.substring(0, start) + auto + e.target.value.substring(end, e.target.value.length);
 						e.target.selectionStart = start + auto.length;
 						e.target.selectionEnd = start + auto.length;
@@ -1358,11 +1360,11 @@ const add_custom_player_panel = () => {
 				.roost(playerPanel);
 		}
 
-		Crux.Image("../images/avatars/160/" + player.avatar + ".jpg", "abs")
+		Crux.Image(`../images/avatars/160/${player.avatar}.jpg`, "abs")
 			.grid(0, 6, 10, 10)
 			.roost(playerPanel);
 
-		Crux.Widget("pci_48_" + player.uid)
+		Crux.Widget(`pci_48_${player.uid}`)
 			.grid(7, 13, 3, 3)
 			.roost(playerPanel);
 
@@ -1382,10 +1384,10 @@ const add_custom_player_panel = () => {
 		//W=>Wizard
 		if (universe.playerAchievements) {
 			myAchievements = universe.playerAchievements[player.uid];
-			if (player.rawAlias == "Lorentz" && "W" != myAchievements.badges.slice(0, 1)) {
-				myAchievements.badges = "W" + myAchievements.badges
-			} else if (player.rawAlias == 'A Stoned Ape' && "5" != myAchievements.badges.slice(0, 1)) {
-				myAchievements.badges = "5" + myAchievements.badges
+			if (player.rawAlias === "Lorentz" && "W" !== myAchievements.badges.slice(0, 1)) {
+				myAchievements.badges = `W${myAchievements.badges}`
+			} else if (player.rawAlias === 'A Stoned Ape' && "5" !== myAchievements.badges.slice(0, 1)) {
+				myAchievements.badges = `5${myAchievements.badges}`
 			}
 		}
 		if (myAchievements) {
@@ -1398,7 +1400,7 @@ const add_custom_player_panel = () => {
 		Crux.Widget("col_black")
 			.grid(10, 6, 20, 3)
 			.roost(playerPanel);
-		if (player.uid != get_hero().uid && player.ai == 0) {
+		if (player.uid !== get_hero().uid && player.ai === 0) {
 			//Use this to only view when they are within scanning:
 			//universe.selectedStar.v != "0"
 			let total_sell_cost = get_tech_trade_cost(get_hero(), player)
@@ -1499,22 +1501,22 @@ const add_custom_player_panel = () => {
 		// Your stats
 		if (universe.player) {
 
-			Crux.Text("", "pad8 txt_center " + selectHilightStyle(universe.player.total_stars, player.total_stars))
+			Crux.Text("", `pad8 txt_center ${selectHilightStyle(universe.player.total_stars, player.total_stars)}`)
 				.grid(25, 9, 5, 3)
 				.rawHTML(universe.player.total_stars)
 				.roost(playerPanel);
 
-			Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_fleets, player.total_fleets))
+			Crux.Text("", `pad8 txt_center${selectHilightStyle(universe.player.total_fleets, player.total_fleets)}`)
 				.grid(25, 11, 5, 3)
 				.rawHTML(universe.player.total_fleets)
 				.roost(playerPanel);
 
-			Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.total_strength, player.total_strength))
+			Crux.Text("", `pad8 txt_center${selectHilightStyle(universe.player.total_strength, player.total_strength)}`)
 				.grid(25, 13, 5, 3)
 				.rawHTML(universe.player.total_strength)
 				.roost(playerPanel);
 
-			Crux.Text("", "pad8 txt_center" + selectHilightStyle(universe.player.shipsPerTick, player.shipsPerTick))
+			Crux.Text("", `pad8 txt_center${selectHilightStyle(universe.player.shipsPerTick, player.shipsPerTick)}`)
 				.grid(25, 15, 5, 3)
 				.rawHTML(universe.player.shipsPerTick)
 				.roost(playerPanel);
@@ -1692,7 +1694,7 @@ NeptunesPride.npui.StarInspector = function () {
 		let fractional_ship = universe.selectedStar['c'].toFixed(2)
 		$(selector).append(fractional_ship)
 
-		while (element.length == 0 && counter <= 100) {
+		while (element.length === 0 && counter <= 100) {
 			await new Promise(r => setTimeout(r, 10));
 			element = $(selector)
 			let fractional_ship = universe.selectedStar['c']
