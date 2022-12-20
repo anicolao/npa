@@ -97,10 +97,67 @@ const display_tech_trading = () => {
 	}
 	return tech_trade_screen
 }
+let cached_events = [];
+
+const update_event_cache = (fetchSize, success, error) => {
+		jQuery.ajax({
+			type: 'POST',
+			url: "/trequest/fetch_game_messages",
+			async: true,
+			data: {
+				type: "fetch_game_messages",
+				count: cached_events.length > 0 ? fetchSize : 100000,
+				offset: 0,
+				group: "game_event",
+				version: NeptunesPride.version,
+				game_number: NeptunesPride.gameNumber
+			},
+			success,
+			error,
+			dataType: "json"
+		});
+}
 const recieve_new_messages = (response) => {
 	const npui = NeptunesPride.npui
 	const universe = NeptunesPride.universe
-	const players = get_ledger(response.report.messages)
+	let incoming = response.report.messages;
+	if (cached_events.length > 0) {
+		let overlapOffset = -1;
+		for (let i = 0; i < incoming.length; ++i) {
+			const message = incoming[i];
+			if (message.key === cached_events[0].key) {
+				overlapOffset = i;
+				break;
+			}
+		}
+		if (overlapOffset >= 0) {
+			incoming = incoming.slice(0, overlapOffset);
+		} else if (overlapOffset < 0) {
+			const size = incoming.length * 2;
+			console.log("Missing some events, double fetch to " + size);
+			update_event_cache(size, recieve_new_messages, console.error);
+			return;
+		}
+
+		// we had cached events, but want to be extra paranoid about
+		// correctness. So if the response contained the entire event
+		// log, validate that it exactly matches the cached events.
+		if (response.report.messages.length === cached_events.length) {
+			console.log("*** Validating cached_events ***");
+			const valid = response.report.messages;
+			let invalidEntries = cached_events.filter((e, i) => e.key !== valid[i].key);
+			if (invalidEntries.length) {
+				console.error("!! Invalid entries found: ", invalidEntries);
+			}
+			console.log("*** Validation Completed ***");
+		} else {
+			// the response didn't contain the entire event log. Go fetch
+			// a version that _does_.
+			update_event_cache(100000, recieve_new_messages, console.error);
+		}
+	}
+	cached_events = incoming.concat(cached_events);
+	const players = get_ledger(cached_events);
 
 	const ledgerScreen = npui.ledgerScreen();
 
@@ -171,23 +228,7 @@ const renderLedger = () => {
 		ledgerScreen.roost(npui.screenContainer);
 		npui.layoutElement(ledgerScreen)
 
-		//Switch to ajax
-		jQuery.ajax({
-			type: 'POST',
-			url: "/trequest/fetch_game_messages",
-			async: true,
-			data: {
-				type: "fetch_game_messages",
-				count: 100000,
-				offset: 0,
-				group: "game_event",
-				version: NeptunesPride.version,
-				game_number: NeptunesPride.gameNumber
-			},
-			success: recieve_new_messages,
-			error: console.log,
-			dataType: "json"
-		});
+		update_event_cache(4, recieve_new_messages, console.error);
 	})
 
 	np.onForgiveDebt = function (event, data) {
