@@ -54,14 +54,14 @@ const get_ledger = (messages) => {
   messages
     .filter(
       (m) =>
-        m.payload.template === "money_sent" ||
-        m.payload.template === "shared_technology",
+        m.payload.template == "money_sent" ||
+        m.payload.template == "shared_technology",
     )
     .map((m) => m.payload)
     .forEach((m) => {
-      let liaison = m.from_puid === uid ? m.to_puid : m.from_puid;
-      let value = m.template === "money_sent" ? m.amount : m.price;
-      value *= m.from_puid === uid ? 1 : -1; // amount is (+) if credit & (-) if debt
+      let liaison = m.from_puid == uid ? m.to_puid : m.from_puid;
+      let value = m.template == "money_sent" ? m.amount : m.price;
+      value *= m.from_puid == uid ? 1 : -1; // amount is (+) if credit & (-) if debt
       liaison in ledger
         ? (ledger[liaison] += value)
         : (ledger[liaison] = value);
@@ -198,7 +198,7 @@ const recieve_new_messages = (response) => {
     );
     player.addStyle("player_cell");
     let prompt = p.debt > 0 ? "They owe" : "You owe";
-    if (p.debt === 0) {
+    if (p.debt == 0) {
       prompt = "Balance";
     }
     if (p.debt < 0) {
@@ -217,7 +217,7 @@ const recieve_new_messages = (response) => {
         .rawHTML(`${prompt}: ${p.debt}`)
         .grid(20, 0, 10, 3)
         .roost(player);
-    } else if (p.debt === 0) {
+    } else if (p.debt == 0) {
       Crux.Text("", "pad12 txt_right orange-text")
         .rawHTML(`${prompt}: ${p.debt}`)
         .grid(20, 0, 10, 3)
@@ -323,7 +323,7 @@ const get_research = () => {
   let next_points_remaining = next["brr"] * next["level"] - next["research"];
   let next_eta = Math.ceil(next_points_remaining / science) + eta;
   let next_level = next["level"] + 1;
-  if (hero.researching === hero.researching_next) {
+  if (hero.researching == hero.researching_next) {
     //Recurring research
     next_points_remaining += next["brr"];
     next_eta = Math.ceil((next["brr"] * next["level"] + 1) / science) + eta;
@@ -360,9 +360,9 @@ const get_research_text = () => {
 
 const _get_weapons_next = () => {
   const research = get_research();
-  if (research["current_name"] === "Weapons") {
+  if (research["current_name"] == "Weapons") {
     return research["current_eta"];
-  } else if (research["next_name"] === "Weapons") {
+  } else if (research["next_name"] == "Weapons") {
     return research["next_eta"];
   }
   return 10 ** 10;
@@ -371,7 +371,7 @@ const _get_weapons_next = () => {
 const get_tech_trade_cost = (from, to, tech_name = null) => {
   let total_cost = 0;
   for (const [tech, value] of Object.entries(to.tech)) {
-    if (tech_name == null || tech_name === tech) {
+    if (tech_name == null || tech_name == tech) {
       let me = from.tech[tech].level;
       let you = value.level;
       for (let i = 1; i <= me - you; ++i) {
@@ -452,7 +452,7 @@ const apply_hooks = () => {
             type: "order",
             order: `share_tech,${player.uid},${tech}`,
           });
-          if (i === me - you) {
+          if (i == me - you) {
             display.transact("Done.");
           }
         }, offset);
@@ -508,7 +508,7 @@ function NeptunesPrideAgent() {
         if (typeof args[number] === "number") {
           return Math.trunc(args[number] * 1000) / 1000;
         }
-        return typeof args[number] !== "undefined" ? args[number] : match;
+        return typeof args[number] != "undefined" ? args[number] : match;
       });
     };
   }
@@ -533,7 +533,7 @@ function NeptunesPrideAgent() {
       output.push("[[{0}]]".format(p));
       for (const s in stars) {
         let star = stars[s];
-        if (star.puid === p && star.shipsPerTick >= 0) {
+        if (star.puid == p && star.shipsPerTick >= 0) {
           output.push(
             "  [[{0}]] {1}/{2}/{3} {4} ships".format(
               star.n,
@@ -556,7 +556,7 @@ function NeptunesPrideAgent() {
   let ampm = function (h, m) {
     if (m < 10) m = `0${m}`;
     if (h < 12) {
-      if (h === 0) h = 12;
+      if (h == 0) h = 12;
       return "{0}:{1} AM".format(h, m);
     } else if (h > 12) {
       return "{0}:{1} PM".format(h - 12, m);
@@ -594,7 +594,7 @@ function NeptunesPrideAgent() {
     let arrival = new Date(now.getTime() + msplus);
     let p = prefix !== undefined ? prefix : "ETA ";
     let ttt = p + ampm(arrival.getHours(), arrival.getMinutes());
-    if (arrival.getDay() !== now.getDay())
+    if (arrival.getDay() != now.getDay())
       ttt = `${p}${days[arrival.getDay()]} @ ${ampm(
         arrival.getHours(),
         arrival.getMinutes(),
@@ -685,7 +685,7 @@ function NeptunesPrideAgent() {
           c: stars[starId].c,
         };
       }
-      if (starstate[starId].puid === -1) {
+      if (starstate[starId].puid == -1) {
         // assign ownership of the star to the player whose fleet has traveled the least distance
         let minDistance = 10000;
         let owner = -1;
@@ -697,7 +697,7 @@ function NeptunesPrideAgent() {
             fleet.lx,
             fleet.ly,
           );
-          if (d < minDistance || owner === -1) {
+          if (d < minDistance || owner == -1) {
             owner = fleet.puid;
             minDistance = d;
           }
@@ -737,11 +737,11 @@ function NeptunesPrideAgent() {
       for (const i in arrival) {
         let fleet = arrival[i];
         if (
-          fleet.puid === starstate[starId].puid ||
-          starstate[starId].puid === -1
+          fleet.puid == starstate[starId].puid ||
+          starstate[starId].puid == -1
         ) {
           let oldShips = starstate[starId].ships;
-          if (starstate[starId].puid === -1) {
+          if (starstate[starId].puid == -1) {
             starstate[starId].ships = fleet.st;
           } else {
             starstate[starId].ships += fleet.st;
@@ -758,7 +758,7 @@ function NeptunesPrideAgent() {
       }
       for (const i in arrival) {
         let fleet = arrival[i];
-        if (fleet.puid === starstate[starId].puid) {
+        if (fleet.puid == starstate[starId].puid) {
           let outcomeString = "{0} ships on {1}".format(
             Math.floor(starstate[starId].ships),
             stars[starId].n,
@@ -774,7 +774,7 @@ function NeptunesPrideAgent() {
       let contribution = {};
       for (const i in arrival) {
         let fleet = arrival[i];
-        if (fleet.puid !== starstate[starId].puid) {
+        if (fleet.puid != starstate[starId].puid) {
           let olda = offense;
           offense += fleet.st;
           output.push(
@@ -883,7 +883,7 @@ function NeptunesPrideAgent() {
           starstate[starId].ships = defense;
           for (const i in arrival) {
             let fleet = arrival[i];
-            if (fleet.puid === starstate[starId].puid) {
+            if (fleet.puid == starstate[starId].puid) {
               let outcomeString = "{0} ships on {1}".format(
                 Math.floor(starstate[starId].ships),
                 stars[starId].n,
@@ -999,7 +999,7 @@ function NeptunesPrideAgent() {
           "Player #{0} is [[{0}]] home {2} [[{1}]]".format(
             i,
             home.n,
-            i === home.puid ? "is" : "was",
+            i == home.puid ? "is" : "was",
           ),
         );
       } else {
@@ -1032,7 +1032,7 @@ function NeptunesPrideAgent() {
     let scanRange = universe.galaxy.players[owner].tech.scanning.value;
     for (const s in stars) {
       let star = stars[s];
-      if (star.puid === owner) {
+      if (star.puid == owner) {
         let distance = universe.distance(star.x, star.y, fleet.x, fleet.y);
         if (distance <= scanRange) {
           return true;
@@ -1141,7 +1141,7 @@ function NeptunesPrideAgent() {
       }
       if (
         universe.selectedStar &&
-        universe.selectedStar.puid !== universe.player.uid &&
+        universe.selectedStar.puid != universe.player.uid &&
         universe.selectedStar.puid !== -1
       ) {
         // enemy star selected; show HUD for scanning visibility
@@ -1230,7 +1230,7 @@ function NeptunesPrideAgent() {
         }
         //map.context.translate(-xOffset, 0);
       }
-      if (universe.ruler.stars.length === 2) {
+      if (universe.ruler.stars.length == 2) {
         let p1 = universe.ruler.stars[0].puid;
         let p2 = universe.ruler.stars[1].puid;
         if (p1 !== p2 && p1 !== -1 && p2 !== -1) {
@@ -1498,7 +1498,6 @@ function NeptunesPrideAgent() {
     let code = data?.split(":")[1] || otherUserCode;
     otherUserCode = code;
     if (otherUserCode) {
-      //save_friend(otherUserCode)
       let params = {
         game_number: game,
         api_version: "0.1",
@@ -1653,13 +1652,13 @@ const add_custom_player_panel = () => {
     if (universe.playerAchievements) {
       myAchievements = universe.playerAchievements[player.uid];
       if (
-        player.rawAlias === "Lorentz" &&
-        "W" !== myAchievements.badges.slice(0, 1)
+        player.rawAlias == "Lorentz" &&
+        "W" != myAchievements.badges.slice(0, 1)
       ) {
         myAchievements.badges = `W${myAchievements.badges}`;
       } else if (
-        player.rawAlias === "A Stoned Ape" &&
-        "5" !== myAchievements.badges.slice(0, 1)
+        player.rawAlias == "A Stoned Ape" &&
+        "5" != myAchievements.badges.slice(0, 1)
       ) {
         myAchievements.badges = `5${myAchievements.badges}`;
       }
@@ -1672,7 +1671,7 @@ const add_custom_player_panel = () => {
     }
 
     Crux.Widget("col_black").grid(10, 6, 20, 3).roost(playerPanel);
-    if (player.uid !== get_hero().uid && player.ai === 0) {
+    if (player.uid != get_hero().uid && player.ai == 0) {
       //Use this to only view when they are within scanning:
       //universe.selectedStar.v != "0"
       let total_sell_cost = get_tech_trade_cost(get_hero(), player);
@@ -1962,7 +1961,7 @@ NeptunesPride.npui.StarInspector = function () {
     let fractional_ship = universe.selectedStar["c"].toFixed(2);
     $(selector).append(fractional_ship);
 
-    while (element.length === 0 && counter <= 100) {
+    while (element.length == 0 && counter <= 100) {
       await new Promise((r) => setTimeout(r, 10));
       element = $(selector);
       let fractional_ship = universe.selectedStar["c"];
