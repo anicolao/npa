@@ -23,14 +23,17 @@ So the goals of the development tooling are:
 
 We use npm to configure the development environment, which enables
 easy access to the best in class typescript and javascript development
-tools. You'll need to have installed a recent version of npm for 
-these instructions to work. Check that you have it by running
+tools. You'll need to have installed a 
+[recent version of npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+for these instructions to work. Check that you have it by running
 
 ```
 npm --version
 ```
 
-You'll also need to have a recent version of git. Check for it with
+You'll also need to have a recent 
+[version of git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). 
+Check for it with
 
 ```
 git --version
