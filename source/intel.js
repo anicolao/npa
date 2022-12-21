@@ -1,3 +1,5 @@
+import { clip, lastClip } from "./hotkey";
+
 /* global define, Crux, NeptunesPride, Mousetrap, jQuery, Cookies, $ */
 
 const sat_version = "2.21";
@@ -483,11 +485,6 @@ function NeptunesPrideAgent() {
   let title = document?.currentScript?.title || `SAT ${sat_version}`;
   let version = title.replace(/^.*v/, "v");
   console.log(title);
-
-  var lastClip = "Error";
-  let clip = function (text) {
-    lastClip = text;
-  };
 
   let copy = function (reportFn) {
     return function () {
