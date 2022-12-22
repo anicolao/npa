@@ -2,14 +2,8 @@
 
 const sat_version = "2.21";
 
-const stripHtml = (html) => {
-  let tmp = document.createElement("DIV");
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || "";
-};
 
 const image_url = (str) => {
-  let safe_str = stripHtml(str);
   const protocol = "^(https://)";
   const domains = "(i.ibb.co/|i.imgur.com/)";
   const content = "([-#/;&_\\w]{1,150})";
@@ -17,7 +11,7 @@ const image_url = (str) => {
     "(.)(gif|jpe?g|tiff?|png|webp|bmp|GIF|JPE?G|TIFF?|PNG|WEBP|BMP)$";
   let regex = new RegExp(protocol + domains + content + images);
   let unused = "foo";
-  return regex.test(safe_str);
+  return regex.test(str);
 };
 
 //Custom UI ComponentsNe
@@ -1263,13 +1257,12 @@ function NeptunesPrideAgent() {
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
-        } else if (sub.startsWith("api:")) {
+        } else if (/^api:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
           s = s.replace(pattern, apiLink);
         } else if (image_url(sub)) {
-          let safe_url = stripHtml(sub);
-          s = s.replace(pattern, `<img width="100%" src='${safe_url}' />`);
+          s = s.replace(pattern, `<img width="100%" src='${sub}' />`);
         } else {
           s = s.replace(pattern, `(${sub})`);
         }
