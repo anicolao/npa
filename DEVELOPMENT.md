@@ -125,3 +125,21 @@ autocomplete code. The screen should look something like this:
 
 You can step along or hit the continue button to see autocomplete in
 action.
+
+## Unit tests
+
+Unit tests can be added in `tests/<filename>.spec.ts` and will be
+automatically executed as part of precommit checks. It's good practice
+to set up so that tests are executed as you type (documentation coming
+soon) and you can also run them from the command line any time with:
+```
+npm run test
+```
+
+## Documentation
+
+Markdown is the preferred format for documents (like this one, for
+example) and if you're working at the command line a tool like `glow`
+makes for easy checking that your documentation looks correct when
+formatted. Or, use an editor like `vscode` so that you can live
+preview your markdown in Chromium.

@@ -13,11 +13,6 @@ function NeptunesPrideAgent() {
   let version = title.replace(/^.*v/, "v");
   console.log(title);
 
-  var lastClip = "Error";
-  let clip = function (text) {
-    lastClip = text;
-  };
-
   let copy = function (reportFn) {
     return function () {
       reportFn();
