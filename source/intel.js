@@ -4,7 +4,6 @@ import { clip, lastClip } from "./hotkey";
 
 const sat_version = "2.21";
 
-
 const image_url = (str) => {
   const protocol = "^(https://)";
   const domains = "(i.ibb.co/|i.imgur.com/)";
