@@ -1,5 +1,5 @@
 import { image_url } from "./imageutils";
-import { clip, lastClip } from "./hotkey";
+import { clip, hotkey, hotkeys, lastClip } from "./hotkey";
 
 /* global define, Crux, NeptunesPride, Mousetrap, jQuery, Cookies, $ */
 
@@ -468,19 +468,6 @@ function NeptunesPrideAgent() {
   let title = document?.currentScript?.title || `SAT ${sat_version}`;
   let version = title.replace(/^.*v/, "v");
   console.log(title);
-
-  let copy = function (reportFn) {
-    return function () {
-      reportFn();
-      navigator.clipboard.writeText(lastClip);
-    };
-  };
-
-  let hotkeys = [];
-  let hotkey = function (key, action) {
-    hotkeys.push([key, action]);
-    Mousetrap.bind(key, copy(action));
-  };
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
