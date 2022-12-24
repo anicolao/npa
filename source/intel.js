@@ -1004,6 +1004,32 @@ function NeptunesPrideAgent() {
     "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " +
     "It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.";
 
+  let playerSheet = function () {
+    let p = NeptunesPride.universe.galaxy.players;
+    let output = [];
+    let fields = [
+      "alias",
+      "total_stars",
+      "shipsPerTick",
+      "total_strength",
+      "total_economy",
+      "total_fleets",
+      "total_industry",
+      "total_science",
+    ];
+    output.push(fields.join(","));
+    for (let i in p) {
+      player = { ...p[i] };
+      const record = fields.map((f) => p[i][f]);
+      output.push(record.join(","));
+    }
+    clip(output.join("\n"));
+  };
+  hotkey("$", playerSheet);
+  playerSheet.help =
+    "Generate a player summary mean to be made into a spreadsheet." +
+    "<p>The clipboard should be pasted into a CSV and then imported.";
+
   let drawOverlayString = function (context, s, x, y, fgColor) {
     context.fillStyle = "#000000";
     for (let smear = 1; smear < 4; ++smear) {
