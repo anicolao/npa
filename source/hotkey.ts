@@ -1,27 +1,53 @@
-export var lastClip = "Error";
-export type Callback = () => void;
+var lastClip = "Error";
+interface HelpText {
+  help?: string;
+}
+type Callback = () => void;
+export type HotkeyCallback = Callback & HelpText;
 
 interface KeybindingInterface {
-  bind: (key: string, callback: Callback) => void;
+  bind: (key: string, callback: () => void) => void;
 }
 
 declare global {
   var Mousetrap: KeybindingInterface;
 }
 
-export function clip(text: string): void {
+export function setClip(text: string): void {
   lastClip = text;
 }
 
-const copy = function (reportFn: Callback) {
+export function getClip(): string {
+  return lastClip;
+}
+
+const copy = function (reportFn: HotkeyCallback) {
   return function () {
     reportFn();
     navigator.clipboard.writeText(lastClip);
   };
 };
 
-export var hotkeys: [string, Callback][] = [];
-export function hotkey(key: string, action: Callback) {
-  hotkeys.push([key, action]);
+interface HotkeyMap {
+  [k: string]: HotkeyCallback;
+}
+var hotkeys: HotkeyMap = {};
+export function defineHotkey(
+  key: string,
+  action: HotkeyCallback,
+  help?: string,
+) {
+  if (help) {
+    action.help = help;
+  }
+  hotkeys[key] = action;
   Mousetrap.bind(key, copy(action));
+}
+
+export function getHotkeys() {
+  return Object.keys(hotkeys);
+}
+
+export function getHotkeyCallback(key: string): HotkeyCallback {
+  return hotkeys[key];
 }
