@@ -14,9 +14,10 @@ import {
   getHotkeys,
   getHotkeyCallback,
 } from "./hotkey.ts";
+import { getVersion } from "./version.js";
 
 function NeptunesPrideAgent() {
-  let title = document?.currentScript?.title || "Neptune's Pride Agent v1.18u";
+  let title = getVersion();
   let version = title.replace(/^.*v/, "v");
   console.log(title);
 

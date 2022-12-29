@@ -1,9 +1,54 @@
 #!/bin/bash
-cat <<EOF > dist/version.js
-export const version = {
+cat <<EOF > src/version.js
+export const version_info = {
 	hash: "$(git rev-parse --short HEAD)",
-	date: "$(date)",
+	date: "$(date "+%d %b %Y %H:%M")",
 	status: \`$(git status -s)\`,
 	$(grep version package.json)
 };
+
+export function getVersion() {
+	return \`Neptune's Pride Agent v\${version_info.version} (\${version_info.date} \${version_info.hash})\`;
+}
 EOF
+cat <<EOF > dist/manifest.json
+{
+    "name": "Neptune's Pride Agent",
+		"description": "Enhance NP Triton UI with intel.",
+		$(grep version package.json)
+    "manifest_version": 3,  
+    "permissions": [
+      "scripting"
+    ],
+    "host_permissions": [
+      "https://np.ironhelmet.com/*"
+    ],
+    "action": {},
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "intel.js"
+        ],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
+    ],
+    "content_scripts": [
+      {
+        "matches": [ "https://np.ironhelmet.com/*" ],
+        "css": [ "intel.css" ]
+      }
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+  
+    "icons": {
+      "16": "favicon.png",
+      "48": "favicon.png",
+      "128": "favicon.png"
+    }
+}
+EOF
+  
