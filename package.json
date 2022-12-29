@@ -1,5 +1,6 @@
 {
   "name": "neptunes-pride-agent",
+  "type": "module",
   "version": "3.0.0",
   "description": "Chrome extension for Neptune's Pride players.",
   "scripts": {

@@ -1,11 +1,11 @@
-import { image_url } from "./imageutils";
+import { image_url } from "./imageutils.js";
 import {
   setClip,
   defineHotkey,
   getClip,
   getHotkeys,
   getHotkeyCallback,
-} from "./hotkey";
+} from "./hotkey.ts";
 
 /* global define, Crux, NeptunesPride, Mousetrap, jQuery, Cookies, $ */
 
