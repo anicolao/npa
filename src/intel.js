@@ -13,7 +13,7 @@ import {
   getClip,
   getHotkeys,
   getHotkeyCallback,
-} from "./hotkey";
+} from "./hotkey.ts";
 
 function NeptunesPrideAgent() {
   let title = document?.currentScript?.title || "Neptune's Pride Agent v1.18u";
