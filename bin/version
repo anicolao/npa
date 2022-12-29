@@ -47,9 +47,9 @@ cat <<EOF > dist/manifest.json
     },
   
     "icons": {
-      "16": "favicon.png",
-      "48": "favicon.png",
-      "128": "favicon.png"
+      "16": "icon_16.png",
+      "48": "icon_48.png",
+      "128": "icon_128.png"
     }
 }
 EOF
