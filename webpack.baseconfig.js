@@ -1,6 +1,7 @@
 import {fileURLToPath} from 'node:url';
 import path from 'path';
 import CopyPlugin from 'copy-webpack-plugin';
+import { execaSync } from 'execa';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,11 +25,19 @@ export const common = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true,
+    clean: false,
   },
   plugins: [
     new CopyPlugin({
       patterns: [{ from: 'static' }],
     }),
+    {
+      apply: (compiler) => {
+        compiler.hooks.beforeCompile.tap('VersionPlugin', (compilation) => {
+					console.log("Run ./bin/version");
+					execaSync('./bin/version');
+        });
+      }
+    }
   ],
 };
