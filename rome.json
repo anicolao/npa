@@ -12,6 +12,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "style": {
+      	"noUnusedTemplateLiteral": "off"
+			},
       "suspicious": {
       	"noDoubleEquals": "off"
 			}

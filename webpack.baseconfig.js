@@ -19,6 +19,9 @@ export const common = {
       },
     ],
   },
+  watchOptions: {
+    ignored: /version.js/,
+  },
   resolve: {
     extensions: ['.ts', '.js'],
   },
@@ -33,7 +36,7 @@ export const common = {
     }),
     {
       apply: (compiler) => {
-        compiler.hooks.beforeCompile.tap('VersionPlugin', (compilation) => {
+        compiler.hooks.watchRun.tap('VersionPlugin', (compilation) => {
 					console.log("Run ./bin/version");
 					execaSync('./bin/version');
         });

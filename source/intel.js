@@ -6,10 +6,9 @@ import {
   getHotkeys,
   getHotkeyCallback,
 } from "./hotkey.ts";
+import { getVersion } from "./version.js";
 
 /* global define, Crux, NeptunesPride, Mousetrap, jQuery, Cookies, $ */
-
-const sat_version = "2.21";
 
 //Custom UI ComponentsNe
 const PlayerNameIconRowLink = (player) => {
@@ -471,7 +470,7 @@ const _wide_view = () => {
 };
 
 function NeptunesPrideAgent() {
-  let title = document?.currentScript?.title || `SAT ${sat_version}`;
+  let title = document?.currentScript?.title || getVersion();
   let version = title.replace(/^.*v/, "v");
   console.log(title);
 
@@ -1609,7 +1608,7 @@ function NeptunesPrideAgent() {
   };
   document.body.addEventListener("keyup", autocompleteTrigger);
 
-  console.log("SAT: Neptune's Pride Agent injection finished.");
+  console.log("Neptune's Pride Agent injection finished.");
 }
 
 const force_add_custom_player_panel = () => {
