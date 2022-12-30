@@ -651,7 +651,7 @@ function NeptunesPrideAgent() {
     npui.NewMessageCommentBox = function () {
     	let widget = superNewMessageCommentBox();
 			let reportButton = Crux.Button("npa_paste", "paste_report", "intel")
-					.grid(10, 12, 10, 3)
+					.grid(10, 12, 4, 3)
 			reportButton.roost(widget);
     	return widget;
 		}
