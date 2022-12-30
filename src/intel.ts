@@ -7,40 +7,53 @@
 // ==/UserScript==
 
 /* global Crux, NeptunesPride, Mousetrap, jQuery, */
+import { getVersion } from "./version.js";
 import {
   setClip,
   defineHotkey,
   getClip,
   getHotkeys,
   getHotkeyCallback,
-} from "./hotkey.ts";
-import { getVersion } from "./version.js";
+} from "./hotkey";
 
+interface CruxLib {
+  format: any;
+  formatTime: any;
+  Button: any;
+  Text: any;
+  Widget: any;
+  DropDown: any;
+}
+interface NeptunesPrideData {
+  inbox: any;
+  universe: any;
+  gameNumber: any;
+  np: any;
+  npui: any;
+  originalPlayer: any;
+  gameConfig: any;
+  templates: { [k: string]: string };
+}
+declare global {
+  var jQuery: any;
+  var NeptunesPride: NeptunesPrideData;
+  var Crux: CruxLib;
+  interface String {
+    format(...args: any[]): string;
+  }
+}
 function NeptunesPrideAgent() {
   let title = getVersion();
   let version = title.replace(/^.*v/, "v");
   console.log(title);
 
-  let copy = function (reportFn) {
-    return function () {
-      reportFn();
-      navigator.clipboard.writeText(lastClip);
-    };
-  };
-
-  let hotkeys = [];
-  let hotkey = function (key, action) {
-    hotkeys.push([key, action]);
-    Mousetrap.bind(key, copy(action));
-  };
-
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
-      return this.replace(/{(\d+)}/g, function (match, number) {
-        if (typeof args[number] === "number") {
-          return Math.trunc(args[number] * 1000) / 1000;
+      return this.replace(/{(\d+)}/g, function (match: string, index: number) {
+        if (typeof args[index] === "number") {
+          return Math.trunc(args[index] * 1000) / 1000;
         }
-        return typeof args[number] != "undefined" ? args[number] : match;
+        return typeof args[index] != "undefined" ? args[index] : match;
       });
     };
   }
@@ -87,7 +100,7 @@ function NeptunesPrideAgent() {
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
   );
 
-  let ampm = function (h, m) {
+  let ampm = function (h: number, m: number | string) {
     if (m < 10) m = `0${m}`;
     if (h < 12) {
       if (h == 0) h = 12;
@@ -98,7 +111,7 @@ function NeptunesPrideAgent() {
     return "{0}:{1} PM".format(h, m);
   };
 
-  let msToTick = function (tick, wholeTime) {
+  let msToTick = function (tick: number, wholeTime?: boolean) {
     let universe = NeptunesPride.universe;
     var ms_since_data = 0;
     var tf = universe.galaxy.tick_fragment;
@@ -123,7 +136,7 @@ function NeptunesPrideAgent() {
   };
 
   let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  let msToEtaString = function (msplus, prefix) {
+  let msToEtaString = function (msplus: number, prefix: string) {
     let now = new Date();
     let arrival = new Date(now.getTime() + msplus);
     let p = prefix !== undefined ? prefix : "ETA ";
@@ -135,12 +148,12 @@ function NeptunesPrideAgent() {
       )}`;
     return ttt;
   };
-  let tickToEtaString = function (tick, prefix) {
+  let tickToEtaString = function (tick: number, prefix?: string) {
     let msplus = msToTick(tick);
     return msToEtaString(msplus, prefix);
   };
 
-  let fleetOutcomes = {};
+  let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
   let combatOutcomes = function () {
     let universe = NeptunesPride.universe;
@@ -174,14 +187,20 @@ function NeptunesPrideAgent() {
     flights = flights.sort(function (a, b) {
       return a[0] - b[0];
     });
-    const arrivals = {};
+    let arrivals: { [k: string]: any } = {};
     let output = [];
     let arrivalTimes = [];
-    let starstate = {};
+    interface StarState {
+      last_updated: number;
+      ships: number;
+      puid: number;
+      c: number;
+    }
+    let starstate: { [k: string]: StarState } = {};
     for (const i in flights) {
       let fleet = flights[i][2];
       if (fleet.orbiting) {
-        let orbit = fleet.orbiting.uid;
+        let orbit: string = fleet.orbiting.uid;
         if (!starstate[orbit]) {
           starstate[orbit] = {
             last_updated: 0,
@@ -199,7 +218,7 @@ function NeptunesPrideAgent() {
       ) {
         arrivalTimes.push(flights[i][0]);
       }
-      let arrivalKey = [flights[i][0], fleet.o[0][1]];
+      const arrivalKey = [flights[i][0], fleet.o[0][1]].toString();
       if (arrivals[arrivalKey] !== undefined) {
         arrivals[arrivalKey].push(fleet);
       } else {
@@ -209,7 +228,7 @@ function NeptunesPrideAgent() {
     for (const k in arrivals) {
       let arrival = arrivals[k];
       let ka = k.split(",");
-      let tick = ka[0];
+      let tick = parseInt(ka[0]);
       let starId = ka[1];
       if (!starstate[starId]) {
         starstate[starId] = {
@@ -305,7 +324,7 @@ function NeptunesPrideAgent() {
       }
       let awt = 0;
       let offense = 0;
-      let contribution = {};
+      let contribution: { [k: string]: any } = {};
       for (const i in arrival) {
         let fleet = arrival[i];
         if (fleet.puid != starstate[starId].puid) {
@@ -320,7 +339,7 @@ function NeptunesPrideAgent() {
               fleet.puid,
             ),
           );
-          contribution[[fleet.puid, fleet.uid]] = fleet.st;
+          contribution[[fleet.puid, fleet.uid].toString()] = fleet.st;
           let wt = players[fleet.puid].tech.weapons.level;
           if (wt > awt) {
             awt = wt;
@@ -375,7 +394,7 @@ function NeptunesPrideAgent() {
         }
 
         let newAggregate = 0;
-        let playerContribution = {};
+        let playerContribution: { [k: number]: number } = {};
         let biggestPlayer = -1;
         let biggestPlayerId = starstate[starId].puid;
         if (offense > 0) {
@@ -385,7 +404,7 @@ function NeptunesPrideAgent() {
           for (const k in contribution) {
             let ka = k.split(",");
             let fleet = fleets[ka[1]];
-            let playerId = ka[0];
+            let playerId = parseInt(ka[0]);
             contribution[k] = (offense * contribution[k]) / attackersAggregate;
             newAggregate += contribution[k];
             if (playerContribution[playerId]) {
@@ -575,7 +594,6 @@ function NeptunesPrideAgent() {
     ];
     output.push(fields.join(","));
     for (let i in p) {
-      player = { ...p[i] };
       const record = fields.map((f) => p[i][f]);
       output.push(record.join(","));
     }
@@ -588,7 +606,16 @@ function NeptunesPrideAgent() {
       "<p>The clipboard should be pasted into a CSV and then imported.",
   );
 
-  let drawOverlayString = function (context, s, x, y, fgColor) {
+  let drawOverlayString = function (
+    context: {
+      fillStyle: string;
+      fillText: (arg0: any, arg1: number, arg2: number) => void;
+    },
+    s: string,
+    x: number,
+    y: number,
+    fgColor?: string,
+  ) {
     context.fillStyle = "#000000";
     for (let smear = 1; smear < 4; ++smear) {
       context.fillText(s, x + smear, y + smear);
@@ -600,7 +627,10 @@ function NeptunesPrideAgent() {
     context.fillText(s, x, y);
   };
 
-  let anyStarCanSee = function (owner, fleet) {
+  let anyStarCanSee = function (
+    owner: string | number,
+    fleet: { x: any; y: any },
+  ) {
     let stars = NeptunesPride.universe.galaxy.stars;
     let universe = NeptunesPride.universe;
     let scanRange = universe.galaxy.players[owner].tech.scanning.value;
@@ -617,7 +647,7 @@ function NeptunesPrideAgent() {
   };
 
   let hooksLoaded = false;
-  let handicapString = function (prefix) {
+  let handicapString = function (prefix?: string) {
     let p =
       prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
     return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
@@ -696,7 +726,10 @@ function NeptunesPrideAgent() {
         drawOverlayString(map.context, s, x, y);
         drawOverlayString(map.context, o, x, y + lineHeight);
       }
-      if (universe.timeToTick(1).length < 3) {
+      if (
+        !NeptunesPride.gameConfig.turnBased &&
+        universe.timeToTick(1).length < 3
+      ) {
         let lineHeight = 16 * map.pixelRatio;
         map.context.font = `${
           14 * map.pixelRatio
@@ -809,7 +842,7 @@ function NeptunesPrideAgent() {
         }
       }
     };
-    Crux.format = function (s, templateData) {
+    Crux.format = function (s: string, templateData: { [x: string]: any }) {
       if (!s) {
         return "error";
       }
@@ -854,7 +887,8 @@ function NeptunesPrideAgent() {
     NeptunesPride.templates["npa_report_type"] = "Report Type:";
     NeptunesPride.templates["npa_paste"] = "Intel";
     let superNewMessageCommentBox = npui.NewMessageCommentBox;
-    let reportPasteHook = function (_e, _d) {
+
+    let reportPasteHook = function (_e: any, _d: any) {
       let inbox = NeptunesPride.inbox;
       inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + getClip();
       inbox.trigger("show_screen", "diplomacy_detail");
@@ -871,7 +905,7 @@ function NeptunesPrideAgent() {
       reportButton.roost(widget);
       return widget;
     };
-    const npaReports = function (_screenConfig) {
+    const npaReports = function (_screenConfig: any) {
       npui.onHideScreen(null, true);
       npui.onHideSelectionMenu();
 
@@ -905,7 +939,7 @@ function NeptunesPrideAgent() {
       report.roost(reportScreen);
       output.roost(reportScreen);
 
-      let reportHook = function (e, d) {
+      let reportHook = function (e: number, d: string) {
         console.log("Execute report", e, d);
         if (d === "planets") {
           homePlanets();
@@ -932,7 +966,7 @@ function NeptunesPrideAgent() {
 
     let superFormatTime = Crux.formatTime;
     let relativeTimes = true;
-    Crux.formatTime = function (ms, mins, secs) {
+    Crux.formatTime = function (ms: number, mins: any, secs: any) {
       if (relativeTimes) {
         return superFormatTime(ms, mins, secs);
       } else {
@@ -988,7 +1022,7 @@ function NeptunesPrideAgent() {
   } else {
     console.log("Universe not loaded. Hook onServerResponse.");
     let superOnServerResponse = NeptunesPride.np.onServerResponse;
-    NeptunesPride.np.onServerResponse = function (response) {
+    NeptunesPride.np.onServerResponse = function (response: { event: string }) {
       superOnServerResponse(response);
       if (response.event === "order:player_achievements") {
         console.log("Initial load complete. Reinstall.");
@@ -1004,9 +1038,9 @@ function NeptunesPrideAgent() {
     };
   }
 
-  var otherUserCode = undefined;
+  var otherUserCode: string | undefined = undefined;
   let game = NeptunesPride.gameNumber;
-  let switchUser = function (_event, data) {
+  let switchUser = function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
     }
@@ -1035,7 +1069,7 @@ function NeptunesPrideAgent() {
     }
   };
 
-  let mergeUser = function (_event, data) {
+  let mergeUser = function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
     }
@@ -1086,7 +1120,7 @@ function NeptunesPrideAgent() {
 
   let npaHelp = function () {
     let help = [`<H1>${title}</H1>`];
-    getHotkeys().forEach((key) => {
+    getHotkeys().forEach((key: string) => {
       let action = getHotkeyCallback(key);
       help.push(`<h2>Hotkey: ${key}</h2>`);
       if (action.help) {
@@ -1103,33 +1137,34 @@ function NeptunesPrideAgent() {
   defineHotkey("?", npaHelp, "Display this help screen.");
 
   var autocompleteMode = 0;
-  let autocompleteTrigger = function (e) {
-    if (e.target.type === "textarea") {
+  let autocompleteTrigger = function (e: KeyboardEvent) {
+    const target: any = e.target;
+    if (target.type === "textarea") {
       if (autocompleteMode) {
         let start = autocompleteMode;
-        let endBracket = e.target.value.indexOf("]", start);
-        if (endBracket === -1) endBracket = e.target.value.length;
-        let autoString = e.target.value.substring(start, endBracket);
+        let endBracket = target.value.indexOf("]", start);
+        if (endBracket === -1) endBracket = target.value.length;
+        let autoString = target.value.substring(start, endBracket);
         let key = e.key;
         if (key === "]") {
           autocompleteMode = 0;
           let m = autoString.match(/^[0-9][0-9]*$/);
           if (m?.length) {
             let puid = Number(autoString);
-            let end = e.target.selectionEnd;
+            let end = target.selectionEnd;
             let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
-            e.target.value =
-              e.target.value.substring(0, start) +
+            target.value =
+              target.value.substring(0, start) +
               auto +
-              e.target.value.substring(end, e.target.value.length);
-            e.target.selectionStart = start + auto.length;
-            e.target.selectionEnd = start + auto.length;
+              target.value.substring(end, target.value.length);
+            target.selectionStart = start + auto.length;
+            target.selectionEnd = start + auto.length;
           }
         }
-      } else if (e.target.selectionStart > 1) {
-        let start = e.target.selectionStart - 2;
-        let ss = e.target.value.substring(start, start + 2);
-        autocompleteMode = ss === "[[" ? e.target.selectionStart : 0;
+      } else if (target.selectionStart > 1) {
+        let start = target.selectionStart - 2;
+        let ss = target.value.substring(start, start + 2);
+        autocompleteMode = ss === "[[" ? target.selectionStart : 0;
       }
     }
   };

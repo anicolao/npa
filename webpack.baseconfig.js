@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const common = {
   entry: {
     background: './src/background.js',
-    intel: './src/intel.js',
+    intel: './src/intel.ts',
   },
   module: {
     rules: [

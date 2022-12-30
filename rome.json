@@ -16,7 +16,8 @@
       	"noUnusedTemplateLiteral": "off"
 			},
       "suspicious": {
-      	"noDoubleEquals": "off"
+      	"noDoubleEquals": "off",
+      	"noExplicitAny": "off"
 			}
     }
   }
