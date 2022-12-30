@@ -1,7 +1,0 @@
-#!/bin/bash
-for i in $(grep -l _VERSION *.*)
-do
-	sed -re "s/MAJOR_VERSION/$(cat MAJOR_VERSION)/" -e "s/MINOR_VERSION/$(cat MINOR_VERSION)/" < $i > /tmp/version.$$
-	mv /tmp/version.$$ $i
-	echo "Stamped $i"
-done
