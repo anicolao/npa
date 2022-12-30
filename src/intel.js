@@ -789,7 +789,7 @@ function NeptunesPrideAgent() {
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
-        } else if (sub.startsWith("api:")) {
+        } else if (/^api:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
           s = s.replace(pattern, apiLink);
