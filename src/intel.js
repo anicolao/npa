@@ -9,7 +9,7 @@
 /* global Crux, NeptunesPride, Mousetrap, jQuery, */
 
 function NeptunesPrideAgent() {
-	let title = (document && document.currentScript && document.currentScript.title) || "Neptune's Pride Agent v1.18u";
+	let title = (document?.currentScript?.title) || "Neptune's Pride Agent v1.18u";
 	let version = title.replace(/^.*v/, 'v');
 	console.log(title);
 
@@ -55,7 +55,7 @@ function NeptunesPrideAgent() {
 
 		for (const f in fleets) {
 			let fleet = fleets[f];
-			let fleetLink = "<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"" + fleet.uid + "\")'>" + fleet.n + "</a>";
+			let fleetLink = `<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"${fleet.uid}\")'>${fleet.n}</a>`;
 			universe.hyperlinkedMessageInserts[fleet.n] = fleetLink;
 		}
 	};
@@ -82,7 +82,7 @@ function NeptunesPrideAgent() {
 
 	let ampm = function(h, m) {
 		if (m < 10)
-			m = "0" + m;
+			m = `0${m}`;
 		if (h < 12) {
 			if (h == 0) h = 12;
 			return "{0}:{1} AM".format(h, m);
@@ -121,7 +121,7 @@ function NeptunesPrideAgent() {
 		let p = prefix !== undefined ? prefix : "ETA ";
 		let ttt = p + ampm(arrival.getHours(), arrival.getMinutes());
 		if (arrival.getDay() != now.getDay())
-			ttt = p + days[arrival.getDay()] + " @ " + ampm(arrival.getHours(), arrival.getMinutes());
+			ttt = `${p}${days[arrival.getDay()]} @ ${ampm(arrival.getHours(), arrival.getMinutes())}`;
 		return ttt;
 	}
 	let tickToEtaString = function(tick, prefix) {
@@ -143,7 +143,7 @@ function NeptunesPrideAgent() {
 			if (fleet.o && fleet.o.length > 0) {
 				let stop = fleet.o[0][1];
 				let ticks = fleet.etaFirst;
-				let starname = stars[stop] && stars[stop].n;
+				let starname = stars[stop]?.n;
 				if (!starname) {
 					continue;
 				}
@@ -372,7 +372,7 @@ function NeptunesPrideAgent() {
 			if (fleet.o && fleet.o.length > 0) {
 				let stop = fleet.o[0][1];
 				let ticks = fleet.etaFirst;
-				let starname = stars[stop] && stars[stop].n;
+				let starname = stars[stop]?.n;
 				if (!starname) continue;
 				flights.push([ticks, "[[{0}]] [[{1}]] {2} → [[{3}]] {4}".format(fleet.puid, fleet.n, fleet.st, stars[stop].n, tickToEtaString(ticks, ""))]);
 			}
@@ -451,13 +451,13 @@ function NeptunesPrideAgent() {
 			let map = NeptunesPride.npui.map;
 			superDrawText();
 
-			map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+			map.context.font = `${(14 * map.pixelRatio)}px OpenSansRegular, sans-serif`;
 			map.context.fillStyle = "#FF0000";
 			map.context.textAlign = "right";
 			map.context.textBaseline = "middle";
 			let v = version;
 			if (combatHandicap !== 0) {
-				v = handicapString() + " " + v;
+				v = `${handicapString()} ${v}`;
 			}
 			drawOverlayString(map.context, v, map.viewportWidth - 10, map.viewportHeight - 16 * map.pixelRatio);
 			if (NeptunesPride.originalPlayer === undefined) {
@@ -470,7 +470,7 @@ function NeptunesPrideAgent() {
 
 			if  (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
 				//console.log("Selected fleet", universe.selectedFleet);
-				map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+				map.context.font = `${(14 * map.pixelRatio)}px OpenSansRegular, sans-serif`;
 				map.context.fillStyle = "#FF0000";
 				map.context.textAlign = "left";
 				map.context.textBaseline = "middle";
@@ -508,7 +508,7 @@ function NeptunesPrideAgent() {
 			}
 			if (universe.timeToTick(1).length < 3) {
 				let lineHeight = 16 * map.pixelRatio;
-				map.context.font = (14 * map.pixelRatio) + "px OpenSansRegular, sans-serif";
+				map.context.font = `${(14 * map.pixelRatio)}px OpenSansRegular, sans-serif`;
 				map.context.fillStyle = "#FF0000";
 				map.context.textAlign = "left";
 				map.context.textBaseline = "middle";
@@ -578,7 +578,7 @@ function NeptunesPrideAgent() {
 									if (anyStarCanSee(universe.selectedStar.puid, fleet)) {
 										visColor = "#888888";
 									}
-									drawOverlayString(map.context, "Scan " + tickToEtaString(ticks), x, y, visColor);
+									drawOverlayString(map.context, `Scan ${tickToEtaString(ticks)}`, x, y, visColor);
 								}
 							}
 						}
@@ -598,7 +598,11 @@ function NeptunesPrideAgent() {
 			if (!s) {
 					return "error";
 			}
-			var i, fp, sp, sub, pattern;
+			var i;
+			var fp;
+			var sp;
+			var sub;
+			var pattern;
 
 			i = 0;
 			fp = 0;
@@ -612,17 +616,17 @@ function NeptunesPrideAgent() {
 					fp = s.search("\\[\\[");
 					sp = s.search("\\]\\]");
 					sub = s.slice(fp + 2, sp);
-					pattern = "[[" + sub + "]]";
+					pattern = `[[${sub}]]`;
 					if (templateData[sub] !== undefined) {
 							s = s.replace(pattern, templateData[sub]);
 					} else if (sub.startsWith("api:")) {
-						let apiLink = "<a onClick='Crux.crux.trigger(\"switch_user_api\", \"" + sub + "\")'> View as " + sub + "</a>";
-						apiLink += " or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"" + sub + "\")'> Merge " + sub + "</a>";
+						let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
+						apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
 						s = s.replace(pattern, apiLink);
 					} else if (sub.startsWith("data:")) {
-						s = s.replace(pattern, '<div width="100%" class="screenshot"><img class="screenshot" src="' + sub + '"/></div>');
+						s = s.replace(pattern, `<div width="100%" class="screenshot"><img class="screenshot" src="${sub}"/></div>`);
 					} else {
-							s = s.replace(pattern, "(" + sub + ")");
+							s = s.replace(pattern, `(${sub})`);
 					}
 			}
 			return s;
@@ -731,7 +735,7 @@ function NeptunesPrideAgent() {
 	}
 
 	let init = function() {
-		if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+		if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
 			linkFleets();
 			console.log("Fleet linking complete.");
 			if (!hooksLoaded) {
@@ -748,7 +752,7 @@ function NeptunesPrideAgent() {
 	hotkey("@", init);
 	init.help = "Reinitialize Neptune's Pride Agent. Use the @ hotkey if the version is not being shown on the map after dragging.";
 
-	if (NeptunesPride.universe && NeptunesPride.universe.galaxy && NeptunesPride.npui.map) {
+	if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
 		console.log("Universe already loaded. Hyperlink fleets & load hooks.");
 		init();
 	} else {
@@ -776,7 +780,7 @@ function NeptunesPrideAgent() {
 		if (NeptunesPride.originalPlayer === undefined) {
 			NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
 		}
-		let code = (data && data.split(":")[1]) || otherUserCode;
+		let code = (data?.split(":")[1]) || otherUserCode;
 		otherUserCode = code;
 		if (otherUserCode) {
 			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
@@ -792,7 +796,7 @@ function NeptunesPrideAgent() {
 		if (NeptunesPride.originalPlayer === undefined) {
 			NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
 		}
-		let code = (data && data.split(":")[1]) || otherUserCode;
+		let code = (data?.split(":")[1]) || otherUserCode;
 		otherUserCode = code;
 		if (otherUserCode) {
 			let params = { game_number: game, api_version: "0.1", code: otherUserCode };
@@ -822,15 +826,15 @@ function NeptunesPrideAgent() {
 	NeptunesPride.np.on("merge_user_api", mergeUser);
 
   let npaHelp = function() {
-		let help = [ "<H1>" + title + "</H1>" ];
+		let help = [ `<H1>${title}</H1>` ];
 		for (let pair in hotkeys) {
 			let key = hotkeys[pair][0];
 			let action = hotkeys[pair][1];
-			help.push("<h2>Hotkey: " + key + "</h2>");
+			help.push(`<h2>Hotkey: ${key}</h2>`);
 			if (action.help) {
 				help.push(action.help);
 			} else {
-				help.push("<p>No documentation yet.<p><code>" + action.toLocaleString() + "</code>");
+				help.push(`<p>No documentation yet.<p><code>${action.toLocaleString()}</code>`);
 			}
 		}
 		NeptunesPride.universe.helpHTML = help.join("");
@@ -851,10 +855,10 @@ function NeptunesPrideAgent() {
 				if (key === "]") {
 					autocompleteMode = 0;
 					let m = autoString.match(/^[0-9][0-9]*$/);
-					if (m && m.length) {
+					if (m?.length) {
 						let puid = Number(autoString);
 						let end = e.target.selectionEnd;
-						let auto = "" + puid + "]] " + NeptunesPride.universe.galaxy.players[puid].alias;
+						let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
 						e.target.value = e.target.value.substring(0, start) + auto + e.target.value.substring(end, e.target.value.length);
 						e.target.selectionStart = start + auto.length;
 						e.target.selectionEnd = start + auto.length;

@@ -6,12 +6,12 @@ function intelDump() {
 	var s = document.createElement('script');
 	s.src = chrome.runtime.getURL('intel.js');
 	s.id = "intel";
-	s.title = "Neptune's Pride Agent v" + chrome.runtime.getManifest().version;
+	s.title = `Neptune's Pride Agent v${chrome.runtime.getManifest().version}`;
 	s.onload = function() {
 		this.remove();
 	};
 	(document.head || document.documentElement).appendChild(s);
-	console.log(s.title + " background page.");
+	console.log(`${s.title} background page.`);
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
