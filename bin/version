@@ -16,7 +16,7 @@ cat <<EOF > dist/manifest.json
 {
     "name": "Neptune's Pride Agent",
 		"description": "Enhance NP Triton UI with intel.",
-		$(grep version package.json)
+		$(grep '"version"' package.json)
     "manifest_version": 3,  
     "permissions": [
       "scripting"
