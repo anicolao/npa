@@ -153,6 +153,10 @@ function NeptunesPrideAgent() {
     return msToEtaString(msplus, prefix);
   };
 
+  function tickNumber(ticks: number) {
+    return NeptunesPride.universe.galaxy.tick + ticks;
+  }
+
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
   let combatOutcomes = function () {
@@ -173,12 +177,12 @@ function NeptunesPrideAgent() {
         }
         flights.push([
           ticks,
-          "[[{0}]] [[{1}]] {2} → [[{3}]] {4}".format(
+          "[[{0}]] [[{1}]] {2} → [[{3}]] [[Tick #{4}]]".format(
             fleet.puid,
             fleet.n,
             fleet.st,
             starname,
-            tickToEtaString(ticks),
+            tickNumber(ticks),
           ),
           fleet,
         ]);
@@ -258,8 +262,8 @@ function NeptunesPrideAgent() {
         starstate[starId].puid = owner;
       }
       output.push(
-        "{0}: [[{1}]] [[{2}]] {3} ships".format(
-          tickToEtaString(tick, "@"),
+        "[[Tick #{0}]]: [[{1}]] [[{2}]] {3} ships".format(
+          tickNumber(tick),
           starstate[starId].puid,
           stars[starId].n,
           starstate[starId].ships,
@@ -317,7 +321,7 @@ function NeptunesPrideAgent() {
             stars[starId].n,
           );
           fleetOutcomes[fleet.uid] = {
-            eta: tickToEtaString(fleet.etaFirst),
+            eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
             outcome: outcomeString,
           };
         }
@@ -425,7 +429,7 @@ function NeptunesPrideAgent() {
             );
             let outcomeString = "Wins! {0} land.".format(contribution[k]);
             fleetOutcomes[fleet.uid] = {
-              eta: tickToEtaString(fleet.etaFirst),
+              eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
               outcome: outcomeString,
             };
           }
@@ -442,7 +446,7 @@ function NeptunesPrideAgent() {
                 stars[starId].n,
               );
               fleetOutcomes[fleet.uid] = {
-                eta: tickToEtaString(fleet.etaFirst),
+                eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
                 outcome: outcomeString,
               };
             }
@@ -452,7 +456,7 @@ function NeptunesPrideAgent() {
             let fleet = fleets[ka[1]];
             let outcomeString = "Loses! {0} live.".format(defense);
             fleetOutcomes[fleet.uid] = {
-              eta: tickToEtaString(fleet.etaFirst),
+              eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
               outcome: outcomeString,
             };
           }
@@ -523,7 +527,7 @@ function NeptunesPrideAgent() {
             fleet.n,
             fleet.st,
             stars[stop].n,
-            tickToEtaString(ticks, ""),
+            `[[Tick #${tickNumber(ticks)}]]`,
           ),
         ]);
       }
@@ -616,15 +620,16 @@ function NeptunesPrideAgent() {
     y: number,
     fgColor?: string,
   ) {
+    const str = Crux.format(s, {});
     context.fillStyle = "#000000";
     for (let smear = 1; smear < 4; ++smear) {
-      context.fillText(s, x + smear, y + smear);
-      context.fillText(s, x - smear, y + smear);
-      context.fillText(s, x - smear, y - smear);
-      context.fillText(s, x + smear, y - smear);
+      context.fillText(str, x + smear, y + smear);
+      context.fillText(str, x - smear, y + smear);
+      context.fillText(str, x - smear, y - smear);
+      context.fillText(str, x + smear, y - smear);
     }
     context.fillStyle = fgColor || "#00ff00";
-    context.fillText(s, x, y);
+    context.fillText(str, x, y);
   };
 
   let anyStarCanSee = function (
@@ -822,7 +827,7 @@ function NeptunesPrideAgent() {
                   }
                   drawOverlayString(
                     map.context,
-                    `Scan ${tickToEtaString(ticks)}`,
+                    `Scan [[Tick #${tickNumber(ticks)}]]`,
                     x,
                     y,
                     visColor,
@@ -867,6 +872,12 @@ function NeptunesPrideAgent() {
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
+        } else if (/^Tick #\d\d*$/.test(sub)) {
+          const split = sub.split("#");
+          const tick = parseInt(split[1]);
+          const relativeTick = tick - NeptunesPride.universe.galaxy.tick;
+          let msplus = msToTick(relativeTick, false);
+          s = s.replace(pattern, Crux.formatTime(msplus, true));
         } else if (/^api:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
@@ -965,16 +976,29 @@ function NeptunesPrideAgent() {
     npui.SideMenuItem("icon-eye", "n_p_a", "trigger_npa").roost(npui.sideMenu);
 
     let superFormatTime = Crux.formatTime;
-    let relativeTimes = true;
+    type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
+    const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
+    let relativeTimes: TimeOptionsT = "eta";
     Crux.formatTime = function (ms: number, mins: any, secs: any) {
-      if (relativeTimes) {
+      if (relativeTimes === "relative") {
         return superFormatTime(ms, mins, secs);
-      } else {
+      } else if (relativeTimes === "eta") {
         return msToEtaString(ms, "");
+      } else if (relativeTimes === "tick") {
+        const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+        const tick = ms / rate;
+        return `Tick #${Math.ceil(tick) + NeptunesPride.universe.galaxy.tick}`;
+      } else if (relativeTimes === "tickrel") {
+        const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+        const tick = ms / rate;
+        return `${Math.ceil(tick)} ticks`;
       }
     };
     let toggleRelative = function () {
-      relativeTimes = !relativeTimes;
+      const i = (timeOptions.indexOf(relativeTimes) + 1) % timeOptions.length;
+      relativeTimes = timeOptions[i];
+      NeptunesPride.np.trigger("refresh_interface");
+      NeptunesPride.np.trigger("map_rebuild");
     };
     defineHotkey(
       "%",
