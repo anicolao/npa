@@ -8,7 +8,8 @@ export const version_info = {
 };
 
 export function getVersion() {
-	return \`Neptune's Pride Agent v\${version_info.version} (\${version_info.date} \${version_info.hash})\`;
+  const caution = version_info.status.length > 0 ? '⚠' : '';
+	return \`Neptune's Pride Agent v\${version_info.version} (\${version_info.date} \${caution}\${version_info.hash})\`;
 }
 EOF
 cat <<EOF > dist/manifest.json
