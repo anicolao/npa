@@ -9,7 +9,8 @@
     "lint": "npx rome check src",
     "format": "npx rome format --write src",
     "test": "vitest run --coverage",
-    "prepare": "husky install .husky"
+    "prepare": "husky install .husky",
+    "postversion": "./bin/packagedist"
   },
   "license": "GPLv3",
   "devDependencies": {

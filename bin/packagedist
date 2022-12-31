@@ -1,0 +1,6 @@
+#!/bin/bash
+export VERSION=$(grep '"version"' package.json | awk -F\" '{print $4}')
+echo Packaging version ${VERSION}
+cd dist
+zip ../../versions/np${VERSION}.zip *
+cd -
