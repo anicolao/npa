@@ -866,8 +866,9 @@ function NeptunesPrideAgent() {
       // look for standard patterns
       while (fp >= 0 && i < 1000) {
         i = i + 1;
-        fp = s.search("\\[\\[");
-        sp = s.search("\\]\\]");
+        fp = s.indexOf("[[");
+        sp = s.indexOf("]]");
+        if (fp === -1) break;
         sub = s.slice(fp + 2, sp);
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
@@ -979,9 +980,13 @@ function NeptunesPrideAgent() {
     type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
     const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
     let relativeTimes: TimeOptionsT = "eta";
-    Crux.formatTime = function (ms: number, mins: any, secs: any) {
+    Crux.formatTime = function (
+      ms: number,
+      showMinutes: boolean,
+      showSeconds: boolean,
+    ) {
       if (relativeTimes === "relative") {
-        return superFormatTime(ms, mins, secs);
+        return superFormatTime(ms, showMinutes, showSeconds);
       } else if (relativeTimes === "eta") {
         return msToEtaString(ms, "");
       } else if (relativeTimes === "tick") {
@@ -1160,35 +1165,45 @@ function NeptunesPrideAgent() {
   };
   defineHotkey("?", npaHelp, "Display this help screen.");
 
-  var autocompleteMode = 0;
+  var autocompleteCaret = 0;
   let autocompleteTrigger = function (e: KeyboardEvent) {
     const target: any = e.target;
     if (target.type === "textarea") {
-      if (autocompleteMode) {
-        let start = autocompleteMode;
+      const key = e.key;
+      if (key === "]") {
+        if (autocompleteCaret <= 0) {
+          autocompleteCaret = target.value.lastIndexOf("[[") + 2;
+          if (autocompleteCaret <= 1) {
+            autocompleteCaret = 0;
+            return;
+          }
+          const completed = target.value.indexOf("]]", autocompleteCaret) > -1;
+          if (completed) {
+            autocompleteCaret = 0;
+            return;
+          }
+        }
+        let start = autocompleteCaret;
         let endBracket = target.value.indexOf("]", start);
         if (endBracket === -1) endBracket = target.value.length;
         let autoString = target.value.substring(start, endBracket);
-        let key = e.key;
-        if (key === "]") {
-          autocompleteMode = 0;
-          let m = autoString.match(/^[0-9][0-9]*$/);
-          if (m?.length) {
-            let puid = Number(autoString);
-            let end = target.selectionEnd;
-            let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
-            target.value =
-              target.value.substring(0, start) +
-              auto +
-              target.value.substring(end, target.value.length);
-            target.selectionStart = start + auto.length;
-            target.selectionEnd = start + auto.length;
-          }
+        autocompleteCaret = 0;
+        let m = autoString.match(/^[0-9][0-9]*$/);
+        if (m?.length) {
+          let puid = Number(autoString);
+          let end = target.selectionEnd;
+          let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
+          target.value =
+            target.value.substring(0, start) +
+            auto +
+            target.value.substring(end, target.value.length);
+          target.selectionStart = start + auto.length;
+          target.selectionEnd = start + auto.length;
         }
       } else if (target.selectionStart > 1) {
         let start = target.selectionStart - 2;
         let ss = target.value.substring(start, start + 2);
-        autocompleteMode = ss === "[[" ? target.selectionStart : 0;
+        autocompleteCaret = ss === "[[" ? target.selectionStart : 0;
       }
     }
   };
