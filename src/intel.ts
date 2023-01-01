@@ -660,6 +660,76 @@ function NeptunesPrideAgent() {
     return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
   };
   let territoryOn = true;
+  type CSSRuleMap = { [k: string]: CSSStyleRule };
+  function cssrules(): CSSRuleMap {
+    var rules: { [k: string]: CSSStyleRule } = {};
+    for (var i = 0; i < document.styleSheets.length; ++i) {
+      try {
+        var cssRules = document.styleSheets[i].cssRules;
+        for (var j = 0; j < cssRules.length; ++j) {
+          if (cssRules[j].type === CSSRule.STYLE_RULE) {
+            const style: CSSStyleRule = cssRules[j] as CSSStyleRule;
+            rules[style.selectorText] = style;
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return rules;
+  }
+  const css = cssrules();
+  async function recolorPlayers() {
+    const map = NeptunesPride.npui.map;
+    let ownershipSprites = document.createElement("canvas");
+    ownershipSprites.width = ownershipSprites.height = 64 * 9;
+    let spriteContext: CanvasRenderingContext2D =
+      ownershipSprites.getContext("2d");
+    spriteContext.drawImage(map.starSrc, 0, 0);
+
+    const players = NeptunesPride.universe.galaxy.players;
+    for (let pk in players) {
+      const player = players[pk];
+      const color = player.color;
+      // player underbar in player list
+      css[`.bgpc_${player.uid}`].style.backgroundColor = color;
+      const playerSprite = document.createElement("canvas");
+      playerSprite.width = playerSprite.height = 64 * 9;
+      const playerContext: CanvasRenderingContext2D =
+        playerSprite.getContext("2d");
+      playerContext.drawImage(map.starSrc, 0, 0);
+      playerContext.globalCompositeOperation = "source-in";
+      playerContext.fillStyle = color;
+      const uid = player.uid;
+      const col = Math.floor(uid / 8);
+      const row = Math.floor(uid % 8) + 1;
+      const x = col * 64;
+      const y = row * 64;
+      playerContext.fillRect(x, y, 64, 64);
+
+      const whitePlayer = new Image();
+      whitePlayer.src = playerSprite.toDataURL();
+      await whitePlayer.decode();
+      spriteContext.clearRect(x, y, 64, 64);
+      spriteContext.drawImage(whitePlayer, 0, 0);
+    }
+
+    map.starSrc.src = ownershipSprites.toDataURL();
+    for (let pk in players) {
+      const player = players[pk];
+      const uid = player.uid;
+      const col = Math.floor(uid / 8);
+      const row = Math.floor(uid % 8) + 1;
+      const x = col * 64;
+      const y = row * 64;
+      // player overlay on avatar
+      css[`.pci_48_${player.uid}`].style.background = `url("${
+        map.starSrc.src
+      }") -${x + 8}px -${y + 8}px`;
+    }
+    console.log("Recreating star and fleet sprites");
+    NeptunesPride.np.trigger("map_rebuild");
+  }
   let loadHooks = function () {
     const map = NeptunesPride.npui.map;
 
@@ -1103,6 +1173,24 @@ function NeptunesPrideAgent() {
     "Toggle the territory display. Range and scanning for all stars of the selected empire are shown.",
   );
 
+  let toggleWhitePlayer = function () {
+    const player = NeptunesPride.universe.player;
+    if (NeptunesPride.universe.player.origColor === undefined) {
+      player.origColor = player.color;
+      player.color = "#ffffff";
+    } else {
+      const tmp = player.origColor;
+      player.origColor = player.color;
+      player.color = tmp;
+    }
+    recolorPlayers();
+  };
+  defineHotkey(
+    "w",
+    toggleWhitePlayer,
+    "Toggle between my color and white on the map display.",
+  );
+
   let init = function () {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
       linkFleets();
@@ -1113,6 +1201,7 @@ function NeptunesPrideAgent() {
       } else {
         console.log("HUD setup already done; skipping.");
       }
+      recolorPlayers();
       homePlanets();
     } else {
       console.log(
