@@ -8,6 +8,7 @@
 
 /* global Crux, NeptunesPride, Mousetrap, jQuery, */
 import { getVersion } from "./version.js";
+import { safe_image_url } from "./imageutils";
 import {
   setClip,
   defineHotkey,
@@ -1022,6 +1023,8 @@ function NeptunesPrideAgent() {
           const relativeTick = tick - NeptunesPride.universe.galaxy.tick;
           let msplus = msToTick(relativeTick, false);
           s = s.replace(pattern, Crux.formatTime(msplus, true));
+        } else if (safe_image_url(sub)) {
+          s = s.replace(pattern, `<img width="100%" src='${sub}' />`);
         } else if (/^api:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
