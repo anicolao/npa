@@ -476,9 +476,11 @@ function NeptunesPrideAgent() {
 
   function incCombatHandicap() {
     combatHandicap += 1;
+    NeptunesPride.np.trigger("map_rebuild");
   }
   function decCombatHandicap() {
     combatHandicap -= 1;
+    NeptunesPride.np.trigger("map_rebuild");
   }
   defineHotkey(
     ".",
@@ -657,7 +659,78 @@ function NeptunesPrideAgent() {
       prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
     return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
   };
+  let territoryOn = true;
   let loadHooks = function () {
+    const map = NeptunesPride.npui.map;
+
+    let superDrawScanning = map.drawScanningRange;
+    function drawDisc(
+      x: number,
+      y: number,
+      scale: number,
+      r: number,
+      color: string,
+    ) {
+      const context: CanvasRenderingContext2D = map.context;
+      context.save();
+      context.fillStyle = color;
+      context.translate(x, y);
+      context.scale(scale, scale);
+      context.moveTo(0, 0);
+      context.arc(0, 0, r, 0, Math.PI * 2);
+      context.restore();
+    }
+    function drawStarTerritory(star: any, scanning: boolean) {
+      const x = map.worldToScreenX(star.x);
+      const y = map.worldToScreenY(star.y);
+      const sH = combatHandicap;
+      const lyToMap =
+        star.player.tech.scanning.value / (star.player.tech.scanning.level + 2);
+      const scanRange = (star.player.tech.scanning.level + 2 + sH) * lyToMap;
+      const scale = (scanRange * map.scale * map.pixelRatio) / 250;
+      const r = (map.scanningRangeSprite.width * 0.9) / 2;
+
+      const pH = combatHandicap;
+      const lyrToMap =
+        star.player.tech.propulsion.value /
+        (star.player.tech.propulsion.level + 3);
+      const fleetRange =
+        (star.player.tech.propulsion.level + 3 + pH) * lyrToMap;
+      const fscale = (fleetRange * map.scale * map.pixelRatio) / 250;
+      const fr = (map.fleetRangeSprite.width * 0.9) / 2;
+      const color = `${star.player.color}35`;
+      if (scanning) {
+        drawDisc(x, y, scale, r, color);
+      } else {
+        drawDisc(x, y, fscale, fr, color);
+      }
+    }
+    map.drawScanningRange = function () {
+      superDrawScanning();
+
+      const universe = NeptunesPride.universe;
+      if (universe.selectedStar?.player && territoryOn) {
+        const context: CanvasRenderingContext2D = map.context;
+        let p = universe.selectedStar.player.uid;
+        {
+          let scanning = false;
+          do {
+            scanning = !scanning;
+            context.beginPath();
+            for (let key in universe.galaxy.stars) {
+              const star = universe.galaxy.stars[key];
+              if (star.player?.uid == p) {
+                drawStarTerritory(star, scanning);
+              }
+            }
+            const color = `${universe.galaxy.players[p].color}35`;
+            context.fillStyle = color;
+            context.fill();
+            context.closePath();
+          } while (scanning);
+        }
+      }
+    };
     let superDrawText = NeptunesPride.npui.map.drawText;
     NeptunesPride.npui.map.drawText = function () {
       let universe = NeptunesPride.universe;
@@ -1020,6 +1093,15 @@ function NeptunesPrideAgent() {
 
     hooksLoaded = true;
   };
+  let toggleTerritory = function () {
+    territoryOn = !territoryOn;
+    NeptunesPride.np.trigger("map_rebuild");
+  };
+  defineHotkey(
+    ")",
+    toggleTerritory,
+    "Toggle the territory display. Range and scanning for all stars of the selected empire are shown.",
+  );
 
   let init = function () {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
