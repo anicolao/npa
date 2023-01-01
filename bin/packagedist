@@ -1,6 +1,7 @@
 #!/bin/bash
 export VERSION=$(grep '"version"' package.json | awk -F\" '{print $4}')
 echo Packaging version ${VERSION}
+npm run npa
 cd dist
 zip ../../versions/np${VERSION}.zip *
 cd -

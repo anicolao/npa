@@ -14,7 +14,7 @@ export function getVersion() {
 EOF
 cat <<EOF > dist/manifest.json
 {
-    "name": "Neptune's Pride Agent",
+		"name": "Neptune's Pride Agent$(grep '"version"' package.json | awk -F\. '{print $NF}' | sed -re s/[^1-9]*$// | sed -re 's/[1-9][0-9]*/ άλφα Edition/')",
 		"description": "Enhance NP Triton UI with intel.",
 		$(grep '"version"' package.json)
     "manifest_version": 3,  
