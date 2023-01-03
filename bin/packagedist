@@ -5,3 +5,17 @@ npm run npa
 cd dist
 zip ../../versions/np${VERSION}.zip *
 cd -
+
+NAME="Neptune's Pride Agent άλφα Edition"
+TMPFILE=$(mktemp)
+trap "rm $TMPFILE" EXIT
+sed -re "s/INJECT_VERSION/$VERSION/" -e "s/INJECT_NAME/$NAME/" < firefox/manifest.json > $TMPFILE
+cp $TMPFILE firefox/manifest.json
+DATAURL=$(echo "data:text/javascript;base64,$(cat dist/intel.js | uuencode -m foo | grep -v ^begin | grep -v ^=== | tr -d \\n)")
+sed -re "s!INJECT_USERSCRIPT_URL_HERE!${DATAURL}!" < firefox/background.js > $TMPFILE
+cp $TMPFILE firefox/background.js
+cd firefox
+zip ../../versions/ff${VERSION}.zip * */*
+cd -
+git checkout firefox/manifest.json firefox/background.js
+
