@@ -1159,10 +1159,12 @@ function NeptunesPrideAgent() {
         "will need to refresh the display to see the different times.",
     );
 
-    Object.defineProperty(Crux, "touchEnabled", { get: () => false });
-    Object.defineProperty(NeptunesPride.npui.map, "ignoreMouseEvents", {
-      get: () => false,
-    });
+    if (window.chrome) {
+      Object.defineProperty(Crux, "touchEnabled", { get: () => false });
+      Object.defineProperty(NeptunesPride.npui.map, "ignoreMouseEvents", {
+        get: () => false,
+      });
+    }
 
     hooksLoaded = true;
   };
