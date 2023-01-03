@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Neptune's Pride Agent Injector",
-  "version": "1.0",
+  "name": "INJECT_NAME",
+  "version": "INJECT_VERSION",
 
-  "description": "Inject NPA Userscript for firefox.",
+	"description": "Enhance NP Triton UI with intel.",
   "icons": {
     "48": "icons/icon_48.png",
     "128": "icons/icon_128.png"
