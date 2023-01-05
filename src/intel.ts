@@ -716,6 +716,7 @@ function NeptunesPrideAgent() {
     }
 
     map.starSrc.src = ownershipSprites.toDataURL();
+    await map.starSrc.decode();
     for (let pk in players) {
       const player = players[pk];
       const uid = player.uid;
@@ -730,6 +731,8 @@ function NeptunesPrideAgent() {
     }
     console.log("Recreating star and fleet sprites");
     NeptunesPride.np.trigger("map_rebuild");
+    // firefox workaround: a delayed repaint seems needed?
+    window.setTimeout(() => NeptunesPride.np.trigger("map_rebuild"), 500);
   }
   let loadHooks = function () {
     const map = NeptunesPride.npui.map;
