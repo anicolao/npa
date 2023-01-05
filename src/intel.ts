@@ -1047,14 +1047,17 @@ function NeptunesPrideAgent() {
       const lines = s.split("<br>");
       const output = [];
       let inTable = false;
+      let alignmentRow = false;
+      let alignments: string[] = [];
       for (let linen = 0; linen < lines.length; ++linen) {
         const line = lines[linen];
         if (line.indexOf("---") !== -1) {
           inTable = !inTable;
+          alignmentRow = inTable;
           if (inTable) {
-            output.push('<table width="100%">');
+            output.push('<table class="combat_result">');
             output.push(
-              `<tr><th colspan="10">${line.substring(
+              `<tr><th style="padding: 12px" colspan="10">${line.substring(
                 4,
                 line.length - 4,
               )}</th></tr>`,
@@ -1062,10 +1065,27 @@ function NeptunesPrideAgent() {
           } else {
             output.push("</table>");
           }
+        } else if (
+          inTable &&
+          alignmentRow &&
+          (line.startsWith("--") || line.startsWith(":-"))
+        ) {
+          const data = line.split("|");
+          alignments = data.map((x) =>
+            x.startsWith(":")
+              ? "left"
+              : x.indexOf(":") !== -1
+              ? "right"
+              : "center",
+          );
+          alignmentRow = false;
+          console.log({ alignments });
         } else if (inTable) {
           const data = line.split("|");
-          output.push("<tr>");
-          data.forEach((d) => output.push(`<td>${d}</td>`));
+          output.push('<tr class="combat_result_teams_heading">');
+          data.forEach((d, i) =>
+            output.push(`<td style="text-align: ${alignments[i]}">${d}</td>`),
+          );
           output.push("</tr>");
         } else {
           output.push(line);
@@ -1378,6 +1398,7 @@ function NeptunesPrideAgent() {
         levels[uid] = 0;
       }
       output.push("--- Cash transaction history ---");
+      output.push(":--|:--");
       for (let i = 0; i < messageCache.game_event.length; ++i) {
         const m = messageCache.game_event[i];
         if (m.payload.template === "money_sent") {
@@ -1399,6 +1420,7 @@ function NeptunesPrideAgent() {
       }
       output.push("--- Cash transaction history ---");
       output.push("--- Tech transaction history ---");
+      output.push(":--|:--");
       for (let i = 0; i < messageCache.game_event.length; ++i) {
         const m = messageCache.game_event[i];
         const xlate: { [k: string]: string } = {
@@ -1440,6 +1462,7 @@ function NeptunesPrideAgent() {
       output.push("--- Tech transaction history ---");
 
       preput.push("--- Ledger ---");
+      preput.push(":--|--:|--:");
       preput.push(`Empire|Tech Levels|Credits`);
       for (let p in balances) {
         if (balances[p] !== 0) {
