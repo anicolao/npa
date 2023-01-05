@@ -1514,6 +1514,17 @@ function NeptunesPrideAgent() {
   };
   defineHotkey("k", apiKeys, "Show known API keys.");
 
+  let mergeAllKeys = async function () {
+    const allkeys = (await keys()) as string[];
+    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    for (let i = 0; i < apiKeys.length; ++i) {
+      const key = apiKeys[i];
+      otherUserCode = await get(key);
+      mergeUser();
+    }
+  };
+  defineHotkey("(", mergeAllKeys, "Merge all data from known API keys.");
+
   let npaHelp = function () {
     let help = [`<H1>${title}</H1>`];
     getHotkeys().forEach((key: string) => {
