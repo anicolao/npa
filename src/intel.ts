@@ -17,6 +17,7 @@ import {
   getHotkeyCallback,
 } from "./hotkey";
 import { messageCache, updateMessageCache } from "./events";
+import { get, keys, set } from "./gamestore";
 
 interface CruxLib {
   format: any;
@@ -1034,6 +1035,12 @@ function NeptunesPrideAgent() {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
           s = s.replace(pattern, apiLink);
+        } else if (/^apiv:\w{6}$/.test(sub)) {
+          let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'>${sub}</a>`;
+          s = s.replace(pattern, apiLink);
+        } else if (/^apim:\w{6}$/.test(sub)) {
+          let apiLink = `<a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
+          s = s.replace(pattern, apiLink);
         } else if (sub.startsWith("data:")) {
           s = s.replace(
             pattern,
@@ -1140,6 +1147,7 @@ function NeptunesPrideAgent() {
         combats: "Fleets (long)",
         stars: "Stars",
         accounting: "Accounting",
+        api: "API Keys",
       };
       Crux.DropDown("", selections, "exec_report")
         .grid(15, 0, 15, 3)
@@ -1165,6 +1173,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "accounting") {
           await npaLedger();
+        } else if (d === "api") {
+          await apiKeys();
         }
         let html = getClip().replace(/\n/g, "<br>");
         html = NeptunesPride.inbox.hyperlinkMessage(html);
@@ -1322,6 +1332,13 @@ function NeptunesPrideAgent() {
         data: params,
         dataType: "json",
       });
+      let scan = eggers.responseJSON.scanning_data;
+      let key = `API:${scan.player_uid}`;
+      get(key).then((apiCode) => {
+        if (!apiCode || apiCode !== otherUserCode) {
+          set(key, otherUserCode);
+        }
+      });
       NeptunesPride.np.onFullUniverse(null, eggers.responseJSON.scanning_data);
       NeptunesPride.npui.onHideScreen(null, true);
       NeptunesPride.np.trigger("select_player", [
@@ -1353,6 +1370,12 @@ function NeptunesPrideAgent() {
       });
       let universe = NeptunesPride.universe;
       let scan = eggers.responseJSON.scanning_data;
+      let key = `API:${scan.player_uid}`;
+      get(key).then((apiCode) => {
+        if (!apiCode || apiCode !== otherUserCode) {
+          set(key, otherUserCode);
+        }
+      });
       universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
       for (let s in scan.stars) {
         const star = scan.stars[s];
@@ -1473,6 +1496,23 @@ function NeptunesPrideAgent() {
     setClip(preput.join("\n") + output.join("\n"));
   };
   defineHotkey("a", npaLedger, "Perform accounting and display status.");
+
+  let apiKeys = async function () {
+    const allkeys = (await keys()) as string[];
+    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    const output = [];
+    output.push("--- API Keys ---");
+    output.push(":--|--:|--:");
+    output.push("Empire|View|Merge");
+    for (let i = 0; i < apiKeys.length; ++i) {
+      const key = apiKeys[i];
+      const player = key.substring(4);
+      const code = await get(key);
+      output.push(`[[${player}]]|[[apiv:${code}]]|[[apim:${code}]]`);
+    }
+    setClip(output.join("\n"));
+  };
+  defineHotkey("k", apiKeys, "Show known API keys.");
 
   let npaHelp = function () {
     let help = [`<H1>${title}</H1>`];
