@@ -16,6 +16,7 @@ import {
   getHotkeys,
   getHotkeyCallback,
 } from "./hotkey";
+import { messageCache, updateMessageCache } from "./events";
 
 interface CruxLib {
   format: any;
@@ -26,6 +27,7 @@ interface CruxLib {
   DropDown: any;
 }
 interface NeptunesPrideData {
+  version: any;
   inbox: any;
   universe: any;
   gameNumber: any;
@@ -1041,7 +1043,38 @@ function NeptunesPrideAgent() {
           s = s.replace(pattern, `(${sub})`);
         }
       }
-      return s;
+      // process markdown-like
+      const lines = s.split("<br>");
+      const output = [];
+      let inTable = false;
+      for (let linen = 0; linen < lines.length; ++linen) {
+        const line = lines[linen];
+        if (line.indexOf("---") !== -1) {
+          inTable = !inTable;
+          if (inTable) {
+            output.push('<table width="100%">');
+            output.push(
+              `<tr><th colspan="10">${line.substring(
+                4,
+                line.length - 4,
+              )}</th></tr>`,
+            );
+          } else {
+            output.push("</table>");
+          }
+        } else if (inTable) {
+          const data = line.split("|");
+          output.push("<tr>");
+          data.forEach((d) => output.push(`<td>${d}</td>`));
+          output.push("</tr>");
+        } else {
+          output.push(line);
+          if (linen < lines.length - 1) {
+            output.push("<br>");
+          }
+        }
+      }
+      return output.join("\n");
     };
     let npui = NeptunesPride.npui;
     NeptunesPride.templates["n_p_a"] = "NP Agent";
@@ -1087,6 +1120,7 @@ function NeptunesPrideAgent() {
         fleets: "Fleets (short)",
         combats: "Fleets (long)",
         stars: "Stars",
+        accounting: "Accounting",
       };
       Crux.DropDown("", selections, "exec_report")
         .grid(15, 0, 15, 3)
@@ -1100,7 +1134,7 @@ function NeptunesPrideAgent() {
       report.roost(reportScreen);
       output.roost(reportScreen);
 
-      let reportHook = function (e: number, d: string) {
+      let reportHook = async function (e: number, d: string) {
         console.log("Execute report", e, d);
         if (d === "planets") {
           homePlanets();
@@ -1110,6 +1144,8 @@ function NeptunesPrideAgent() {
           longFleetReport();
         } else if (d === "stars") {
           starReport();
+        } else if (d === "accounting") {
+          await npaLedger();
         }
         let html = getClip().replace(/\n/g, "<br>");
         html = NeptunesPride.inbox.hyperlinkMessage(html);
@@ -1326,6 +1362,96 @@ function NeptunesPrideAgent() {
   NeptunesPride.np.on("switch_user_api", switchUser);
   NeptunesPride.np.on("merge_user_api", mergeUser);
 
+  let npaLedger = async function () {
+    const updated = await updateMessageCache("game_event");
+    const preput: string[] = [];
+    const output: string[] = [];
+    if (!updated) {
+      console.error("Updating message cache failed");
+      output.push("Message cache stale!");
+    } else {
+      const balances: { [k: number]: number } = {};
+      const levels: { [k: number]: number } = {};
+      for (let puid in NeptunesPride.universe.galaxy.players) {
+        const uid = puid as unknown as number;
+        balances[uid] = 0;
+        levels[uid] = 0;
+      }
+      output.push("--- Cash transaction history ---");
+      for (let i = 0; i < messageCache.game_event.length; ++i) {
+        const m = messageCache.game_event[i];
+        if (m.payload.template === "money_sent") {
+          const tick = m.payload.tick;
+          const from = m.payload.from_puid;
+          const to = m.payload.to_puid;
+          const credits = m.payload.amount;
+          if (from === NeptunesPride.universe.player.uid) {
+            balances[to] -= credits;
+          } else {
+            balances[from] += credits;
+          }
+          if (from === NeptunesPride.universe.player.uid) {
+            output.push(`[[Tick #${tick}]]|Sent $${credits} → [[${to}]]`);
+          } else {
+            output.push(`[[Tick #${tick}]]|[[${from}]] → $${credits}`);
+          }
+        }
+      }
+      output.push("--- Cash transaction history ---");
+      output.push("--- Tech transaction history ---");
+      for (let i = 0; i < messageCache.game_event.length; ++i) {
+        const m = messageCache.game_event[i];
+        const xlate: { [k: string]: string } = {
+          bank: "Banking",
+          manu: "Manu",
+          prop: "Range",
+          rese: "Exp",
+          scan: "Scan",
+          terr: "Terra",
+          weap: "Weapons",
+        };
+
+        if (m.payload.template === "shared_technology") {
+          const tick = m.payload.tick;
+          const from = m.payload.from_puid;
+          const to = m.payload.to_puid;
+          const credits = m.payload.price;
+          const level = m.payload.level;
+          if (from === NeptunesPride.universe.player.uid) {
+            balances[to] -= credits;
+            levels[to] -= level;
+          } else {
+            balances[from] += credits;
+            levels[from] += level;
+          }
+          const name = m.payload.name;
+          const xlated = xlate[name.substring(0, 4)];
+          if (from === NeptunesPride.universe.player.uid) {
+            output.push(
+              `[[Tick #${tick}]]|${xlated}${level} $${credits} → [[${to}]]`,
+            );
+          } else {
+            output.push(
+              `[[Tick #${tick}]]|[[${from}]] → ${xlated}${level} $${credits}`,
+            );
+          }
+        }
+      }
+      output.push("--- Tech transaction history ---");
+
+      preput.push("--- Ledger ---");
+      preput.push(`Empire|Tech Levels|Credits`);
+      for (let p in balances) {
+        if (balances[p] !== 0) {
+          preput.push(`[[${p}]]|${levels[p]}|${balances[p]}`);
+        }
+      }
+      preput.push("--- Ledger ---\n");
+    }
+    setClip(preput.join("\n") + output.join("\n"));
+  };
+  defineHotkey("a", npaLedger, "Perform accounting and display status.");
+
   let npaHelp = function () {
     let help = [`<H1>${title}</H1>`];
     getHotkeys().forEach((key: string) => {
@@ -1387,6 +1513,9 @@ function NeptunesPrideAgent() {
     }
   };
   document.body.addEventListener("keyup", autocompleteTrigger);
+
+  updateMessageCache("game_event");
+  updateMessageCache("game_diplomacy");
 
   console.log("Neptune's Pride Agent injection fini.");
 }
