@@ -1079,7 +1079,6 @@ function NeptunesPrideAgent() {
               : "center",
           );
           alignmentRow = false;
-          console.log({ alignments });
         } else if (inTable) {
           const data = line.split("|");
           output.push('<tr class="combat_result_teams_heading">');
