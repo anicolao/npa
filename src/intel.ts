@@ -683,25 +683,38 @@ function NeptunesPrideAgent() {
     return rules;
   }
   const css = cssrules();
+  let originalStarSrc: any = undefined;
   async function recolorPlayers() {
     const map = NeptunesPride.npui.map;
+    if (originalStarSrc === undefined) {
+      originalStarSrc = map.starSrc;
+    }
     let ownershipSprites = document.createElement("canvas");
-    ownershipSprites.width = ownershipSprites.height = 64 * 9;
+    // 7 extra columns for stargate glows
+    ownershipSprites.width = 64 * 9 + 64 * 7;
+    ownershipSprites.height = 64 * 9;
     let spriteContext: CanvasRenderingContext2D =
       ownershipSprites.getContext("2d");
-    spriteContext.drawImage(map.starSrc, 0, 0);
+    spriteContext.drawImage(originalStarSrc, 0, 0);
 
     const players = NeptunesPride.universe.galaxy.players;
     for (let pk in players) {
       const player = players[pk];
       const color = player.color;
-      // player underbar in player list
-      css[`.bgpc_${player.uid}`].style.backgroundColor = color;
+      // player underbar in player list, but these only exist
+      // for the first 8 players.
+      if (parseInt(pk) < 8) {
+        try {
+          css[`.bgpc_${player.uid}`].style.backgroundColor = color;
+        } catch (error) {
+          console.error("Underbar style not found");
+        }
+      }
       const playerSprite = document.createElement("canvas");
       playerSprite.width = playerSprite.height = 64 * 9;
       const playerContext: CanvasRenderingContext2D =
         playerSprite.getContext("2d");
-      playerContext.drawImage(map.starSrc, 0, 0);
+      playerContext.drawImage(originalStarSrc, 0, 0);
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
@@ -717,6 +730,44 @@ function NeptunesPrideAgent() {
       spriteContext.clearRect(x, y, 64, 64);
       spriteContext.drawImage(whitePlayer, 0, 0);
     }
+    // draw stargate glows
+    for (let pk in players) {
+      const player = players[pk];
+      const color = player.color;
+      const playerSprite = document.createElement("canvas");
+      playerSprite.width = playerSprite.height = 64 * 9;
+      const playerContext: CanvasRenderingContext2D =
+        playerSprite.getContext("2d");
+      playerContext.drawImage(map.starSrc, 0, 0);
+      playerContext.globalCompositeOperation = "source-in";
+      playerContext.fillStyle = color;
+      const uid = player.uid;
+      const realcol = Math.floor(uid / 8);
+      const col = 8;
+      const row = Math.floor(uid % 8) + 1;
+      const x = col * 64;
+      const y = row * 64;
+      playerContext.fillRect(x, y, 64, 64);
+
+      const whitePlayer = new Image();
+      whitePlayer.src = playerSprite.toDataURL();
+      await whitePlayer.decode();
+      spriteContext.clearRect(x + realcol * 64, y, 64, 64);
+      spriteContext.drawImage(whitePlayer, realcol * 64, 0);
+    }
+
+    // Override sprite positioning for stars with gates, so
+    // that every player can have a uniquely coloured gate
+    // glow that matches their own colour.
+    const superCreateSpritesStars = NeptunesPride.npui.map.createSpritesStars;
+    NeptunesPride.npui.map.createSpritesStars = () => {
+      superCreateSpritesStars();
+      NeptunesPride.npui.map.sortedStarSprites.forEach((sss: any) => {
+        if (sss.gate && sss.puid >= 0) {
+          sss.gate.spriteX = 64 * 8 + 64 * Math.floor(sss.puid / 8);
+        }
+      });
+    };
 
     map.starSrc.src = ownershipSprites.toDataURL();
     await map.starSrc.decode();
