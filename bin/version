@@ -1,23 +1,23 @@
 #!/bin/bash
 cat <<EOF > src/version.js
 export const version_info = {
-	hash: "$(git rev-parse --short HEAD)",
-	date: "$(date "+%d %b %Y %H:%M")",
-	status: \`$(git status -s)\`,
-	$(grep version package.json)
+  hash: "$(git rev-parse --short HEAD)",
+  date: "$(date "+%d %b %Y %H:%M")",
+  status: \`$(git status -s)\`,
+$(grep version package.json | sed -re 's/^ */  /' -e 's/"//' -e 's/"//'),
 };
 
 export function getVersion() {
-  const caution = version_info.status.length > 0 ? '⚠' : '';
-  const date = version_info.status.length > 0 ? \`\${version_info.date} \` : '';
-	return \`Neptune's Pride Agent v\${version_info.version} (\${date}\${caution}\${version_info.hash})\`;
+  const caution = version_info.status.length > 0 ? "⚠" : "";
+  const date = version_info.status.length > 0 ? \`\${version_info.date} \` : "";
+  return \`Neptune's Pride Agent v\${version_info.version} (\${date}\${caution}\${version_info.hash})\`;
 }
 EOF
 cat <<EOF > dist/manifest.json
 {
-		"name": "Neptune's Pride Agent$(grep '"version"' package.json | awk -F\. '{print $NF}' | sed -re s/[^1-9]*$// | sed -re 's/[1-9][0-9]*/ άλφα Edition/')",
-		"description": "Enhance NP Triton UI with intel.",
-		$(grep '"version"' package.json)
+    "name": "Neptune's Pride Agent$(grep '"version"' package.json | awk -F\. '{print $NF}' | sed -re s/[^1-9]*$// | sed -re 's/[1-9][0-9]*/ άλφα Edition/')",
+    "description": "Enhance NP Triton UI with intel.",
+    $(grep '"version"' package.json | sed -re 's/^ *//')
     "manifest_version": 3,  
     "permissions": [
       "scripting"
