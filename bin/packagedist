@@ -18,5 +18,12 @@ cp $TMPFILE firefox/background.js
 cd firefox
 zip ../../versions/ff${VERSION}.zip * */*
 cd -
+mkdir ../versions/ffsrc.$$
+sed -re "s/INJECT_VERSION/v${VERSION}/" < bin/cleanff/README > ../versions/ffsrc.$$/README
+cp -r src ../versions/ffsrc.$$
+cd ../versions/ffsrc.$$
+tar czvf ../firefox.source.$VERSION.tar.gz *
+cd -
+rm -rf ../versions/ffsrc.$$
 git checkout firefox/manifest.json firefox/background.js
 

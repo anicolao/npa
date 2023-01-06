@@ -1,0 +1,14 @@
+# To build the extension from source,
+# sh -x README to execute this file:
+
+git clone git@github.com:anicolao/npa.git
+mkdir npa/dist
+mkdir versions
+cd npa
+git fetch --all --tags
+git checkout INJECT_VERSION
+npm install
+./bin/version
+./bin/packagedist
+cd ../versions
+ls -l
