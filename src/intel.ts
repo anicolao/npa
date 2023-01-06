@@ -17,7 +17,7 @@ import {
   getHotkeyCallback,
 } from "./hotkey";
 import { messageCache, updateMessageCache } from "./events";
-import { get, keys, set } from "./gamestore";
+import { GameStore } from "./gamestore";
 
 interface CruxLib {
   format: any;
@@ -1313,6 +1313,7 @@ function NeptunesPrideAgent() {
 
   var otherUserCode: string | undefined = undefined;
   let game = NeptunesPride.gameNumber;
+  let store = new GameStore(game);
   let switchUser = function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
@@ -1334,9 +1335,9 @@ function NeptunesPrideAgent() {
       });
       let scan = eggers.responseJSON.scanning_data;
       let key = `API:${scan.player_uid}`;
-      get(key).then((apiCode) => {
+      store.get(key).then((apiCode) => {
         if (!apiCode || apiCode !== otherUserCode) {
-          set(key, otherUserCode);
+          store.set(key, otherUserCode);
         }
       });
       NeptunesPride.np.onFullUniverse(null, eggers.responseJSON.scanning_data);
@@ -1371,9 +1372,9 @@ function NeptunesPrideAgent() {
       let universe = NeptunesPride.universe;
       let scan = eggers.responseJSON.scanning_data;
       let key = `API:${scan.player_uid}`;
-      get(key).then((apiCode) => {
+      store.get(key).then((apiCode) => {
         if (!apiCode || apiCode !== otherUserCode) {
-          set(key, otherUserCode);
+          store.set(key, otherUserCode);
         }
       });
       universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
@@ -1498,7 +1499,7 @@ function NeptunesPrideAgent() {
   defineHotkey("a", npaLedger, "Perform accounting and display status.");
 
   let apiKeys = async function () {
-    const allkeys = (await keys()) as string[];
+    const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
     const output = [];
     output.push("--- API Keys ---");
@@ -1507,7 +1508,7 @@ function NeptunesPrideAgent() {
     for (let i = 0; i < apiKeys.length; ++i) {
       const key = apiKeys[i];
       const player = key.substring(4);
-      const code = await get(key);
+      const code = await store.get(key);
       output.push(`[[${player}]]|[[apiv:${code}]]|[[apim:${code}]]`);
     }
     setClip(output.join("\n"));
@@ -1515,11 +1516,11 @@ function NeptunesPrideAgent() {
   defineHotkey("k", apiKeys, "Show known API keys.");
 
   let mergeAllKeys = async function () {
-    const allkeys = (await keys()) as string[];
+    const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
     for (let i = 0; i < apiKeys.length; ++i) {
       const key = apiKeys[i];
-      otherUserCode = await get(key);
+      otherUserCode = await store.get(key);
       mergeUser();
     }
   };
