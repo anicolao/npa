@@ -997,6 +997,21 @@ function NeptunesPrideAgent() {
         }
       }
     };
+    let base = -1;
+    NeptunesPride.npui.status.on("one_second_tick", () => {
+      if (base === -1) {
+        const msplus = msToTick(1);
+        const parts = superFormatTime(msplus, true, true, true).split(" ");
+        base = parseInt(parts[parts.length - 1].replaceAll("s", "")) + 1;
+      }
+      base -= 1;
+      if (base === 29 && relativeTimes === "relative") {
+        // repaint the map and UI every minute if the user is
+        // displaying the ticking clock.
+        NeptunesPride.np.trigger("map_rebuild");
+        NeptunesPride.np.trigger("refresh_interface");
+      }
+    });
     Crux.format = function (s: string, templateData: { [x: string]: any }) {
       if (!s) {
         return "error";
@@ -1193,12 +1208,18 @@ function NeptunesPrideAgent() {
     let superFormatTime = Crux.formatTime;
     type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
     const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
-    let relativeTimes: TimeOptionsT = "eta";
+    let relativeTimes: TimeOptionsT | null = null;
+    const settings = new GameStore("global_settings");
     Crux.formatTime = function (
       ms: number,
       showMinutes: boolean,
       showSeconds: boolean,
     ) {
+      if (relativeTimes === null) {
+        settings
+          .get("relativeTimes")
+          .then((rt) => (relativeTimes = rt || "relative"));
+      }
       if (relativeTimes === "relative") {
         return superFormatTime(ms, showMinutes, showSeconds);
       } else if (relativeTimes === "eta") {
@@ -1214,8 +1235,14 @@ function NeptunesPrideAgent() {
       }
     };
     let toggleRelative = function () {
+      if (relativeTimes === null) {
+        settings
+          .get("relativeTimes")
+          .then((rt) => (relativeTimes = rt || "relative"));
+      }
       const i = (timeOptions.indexOf(relativeTimes) + 1) % timeOptions.length;
       relativeTimes = timeOptions[i];
+      settings.set("relativeTimes", relativeTimes);
       NeptunesPride.np.trigger("refresh_interface");
       NeptunesPride.np.trigger("map_rebuild");
     };
