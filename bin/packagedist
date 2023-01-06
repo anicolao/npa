@@ -26,4 +26,4 @@ tar czvf ../firefox.source.$VERSION.tar.gz *
 cd -
 rm -rf ../versions/ffsrc.$$
 git checkout firefox/manifest.json firefox/background.js
-
+git push --tags
