@@ -718,7 +718,6 @@ function NeptunesPrideAgent() {
       if (player.shape !== undefined) {
         color = colors[player.color];
       }
-      console.log({ pk, color });
       // player underbar in player list, but these only exist
       // for the first 8 players.
       if (parseInt(pk) < 8) {
@@ -819,12 +818,6 @@ function NeptunesPrideAgent() {
       css[`.pci_48_${player.uid}`].style.background = `url("${
         map.starSrc.src
       }") -${x + 8}px -${y + 8}px`;
-      // player font colour
-      let color = player.color;
-      if (player.shape !== undefined) {
-        color = colors[player.color];
-      }
-      css[`.pc_${player.color}`].style.color = color;
     }
     console.log("Recreating star and fleet sprites");
     NeptunesPride.np.trigger("map_rebuild");
