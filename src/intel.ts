@@ -28,6 +28,7 @@ interface CruxLib {
   DropDown: any;
 }
 interface NeptunesPrideData {
+  gameVersion: string;
   version: any;
   inbox: any;
   universe: any;
@@ -363,7 +364,9 @@ function NeptunesPrideAgent() {
         );
         output.push("    Defenders {0} ships, WS {1}".format(defense, dwt));
         output.push("    Attackers {0} ships, WS {1}".format(offense, awt));
-        dwt += 1;
+        if (NeptunesPride.gameVersion !== "proteus") {
+          dwt += 1;
+        }
         if (starstate[starId].puid !== universe.galaxy.player_uid) {
           if (combatHandicap > 0) {
             dwt += combatHandicap;
@@ -682,12 +685,23 @@ function NeptunesPrideAgent() {
     }
     return rules;
   }
+  const colors = [
+    "#0000ff",
+    "#009fdf",
+    "#40c000",
+    "#ffc000",
+    "#df5f00",
+    "#c00000",
+    "#c000c0",
+    "#6000c0",
+  ];
   const css = cssrules();
   let originalStarSrc: any = undefined;
   async function recolorPlayers() {
     const map = NeptunesPride.npui.map;
     if (originalStarSrc === undefined) {
-      originalStarSrc = map.starSrc;
+      originalStarSrc = new Image();
+      originalStarSrc.src = map.starSrc.src;
     }
     let ownershipSprites = document.createElement("canvas");
     // 7 extra columns for stargate glows
@@ -700,7 +714,11 @@ function NeptunesPrideAgent() {
     const players = NeptunesPride.universe.galaxy.players;
     for (let pk in players) {
       const player = players[pk];
-      const color = player.color;
+      let color = player.color;
+      if (player.shape !== undefined) {
+        color = colors[player.color];
+      }
+      console.log({ pk, color });
       // player underbar in player list, but these only exist
       // for the first 8 players.
       if (parseInt(pk) < 8) {
@@ -718,8 +736,13 @@ function NeptunesPrideAgent() {
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
-      const col = Math.floor(uid / 8);
-      const row = Math.floor(uid % 8) + 1;
+      let col = Math.floor(uid / 8);
+      let row = Math.floor(uid % 8) + 1;
+      if (player.shape !== undefined) {
+        col = player.shape;
+        row = player.color + 1;
+      }
+
       const x = col * 64;
       const y = row * 64;
       playerContext.fillRect(x, y, 64, 64);
@@ -733,7 +756,10 @@ function NeptunesPrideAgent() {
     // draw stargate glows
     for (let pk in players) {
       const player = players[pk];
-      const color = player.color;
+      let color = player.color;
+      if (player.shape !== undefined) {
+        color = colors[player.color];
+      }
       const playerSprite = document.createElement("canvas");
       playerSprite.width = playerSprite.height = 64 * 9;
       const playerContext: CanvasRenderingContext2D =
@@ -742,9 +768,13 @@ function NeptunesPrideAgent() {
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
-      const realcol = Math.floor(uid / 8);
-      const col = 8;
-      const row = Math.floor(uid % 8) + 1;
+      let realcol = Math.floor(uid / 8);
+      let col = 8;
+      let row = Math.floor(uid % 8) + 1;
+      if (player.shape !== undefined) {
+        realcol = player.shape;
+        row = player.color + 1;
+      }
       const x = col * 64;
       const y = row * 64;
       playerContext.fillRect(x, y, 64, 64);
@@ -764,7 +794,10 @@ function NeptunesPrideAgent() {
       superCreateSpritesStars();
       NeptunesPride.npui.map.sortedStarSprites.forEach((sss: any) => {
         if (sss.gate && sss.puid >= 0) {
-          sss.gate.spriteX = 64 * 8 + 64 * Math.floor(sss.puid / 8);
+          let col =
+            NeptunesPride.universe.galaxy.players[sss.puid].shape ||
+            Math.floor(sss.puid / 8);
+          sss.gate.spriteX = 64 * 8 + 64 * col;
         }
       });
     };
@@ -774,14 +807,24 @@ function NeptunesPrideAgent() {
     for (let pk in players) {
       const player = players[pk];
       const uid = player.uid;
-      const col = Math.floor(uid / 8);
-      const row = Math.floor(uid % 8) + 1;
+      let col = Math.floor(uid / 8);
+      let row = Math.floor(uid % 8) + 1;
+      if (player.shape !== undefined) {
+        col = player.shape;
+        row = player.color + 1;
+      }
       const x = col * 64;
       const y = row * 64;
       // player overlay on avatar
       css[`.pci_48_${player.uid}`].style.background = `url("${
         map.starSrc.src
       }") -${x + 8}px -${y + 8}px`;
+      // player font colour
+      let color = player.color;
+      if (player.shape !== undefined) {
+        color = colors[player.color];
+      }
+      css[`.pc_${player.color}`].style.color = color;
     }
     console.log("Recreating star and fleet sprites");
     NeptunesPride.np.trigger("map_rebuild");
@@ -792,16 +835,9 @@ function NeptunesPrideAgent() {
     const map = NeptunesPride.npui.map;
 
     let superDrawScanning = map.drawScanningRange;
-    function drawDisc(
-      x: number,
-      y: number,
-      scale: number,
-      r: number,
-      color: string,
-    ) {
+    function drawDisc(x: number, y: number, scale: number, r: number) {
       const context: CanvasRenderingContext2D = map.context;
       context.save();
-      context.fillStyle = color;
       context.translate(x, y);
       context.scale(scale, scale);
       context.moveTo(0, 0);
@@ -826,11 +862,10 @@ function NeptunesPrideAgent() {
         (star.player.tech.propulsion.level + 3 + pH) * lyrToMap;
       const fscale = (fleetRange * map.scale * map.pixelRatio) / 250;
       const fr = (map.fleetRangeSprite.width * 0.9) / 2;
-      const color = `${star.player.color}35`;
       if (scanning) {
-        drawDisc(x, y, scale, r, color);
+        drawDisc(x, y, scale, r);
       } else {
-        drawDisc(x, y, fscale, fr, color);
+        drawDisc(x, y, fscale, fr);
       }
     }
     map.drawScanningRange = function () {
@@ -851,8 +886,13 @@ function NeptunesPrideAgent() {
                 drawStarTerritory(star, scanning);
               }
             }
-            const color = `${universe.galaxy.players[p].color}35`;
-            context.fillStyle = color;
+            const player = universe.galaxy.players[p];
+            let color = player.color;
+            if (player.shape !== undefined) {
+              color = colors[player.color];
+            }
+            const drawColor = `${color}35`;
+            context.fillStyle = drawColor;
             context.fill();
             context.closePath();
           } while (scanning);
@@ -1327,12 +1367,22 @@ function NeptunesPrideAgent() {
   let toggleWhitePlayer = function () {
     const player = NeptunesPride.universe.player;
     if (NeptunesPride.universe.player.origColor === undefined) {
-      player.origColor = player.color;
-      player.color = "#ffffff";
+      if (player.shape !== undefined) {
+        player.origColor = colors[player.color];
+        colors[player.color] = "#ffffff";
+      } else {
+        player.origColor = player.color;
+        player.color = "#ffffff";
+      }
     } else {
       const tmp = player.origColor;
-      player.origColor = player.color;
-      player.color = tmp;
+      if (player.shape !== undefined) {
+        player.origColor = colors[player.color];
+        colors[player.color] = tmp;
+      } else {
+        player.origColor = player.color;
+        player.color = tmp;
+      }
     }
     recolorPlayers();
   };
