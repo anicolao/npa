@@ -74,6 +74,18 @@ function NeptunesPrideAgent() {
     }
   };
 
+  let lastReport = "planets";
+  const prepReport = function (reportName: string, content: string) {
+    lastReport = reportName;
+    setClip(content);
+  };
+  defineHotkey(
+    "`",
+    () => NeptunesPride.npui.trigger("show_screen", "new_fleet"),
+    "Bring up the NP Agent UI." +
+      "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
+  );
+
   function starReport() {
     let players = NeptunesPride.universe.galaxy.players;
     let stars = NeptunesPride.universe.galaxy.stars;
@@ -96,7 +108,7 @@ function NeptunesPrideAgent() {
         }
       }
     }
-    setClip(output.join("\n"));
+    prepReport("stars", output.join("\n"));
   }
   defineHotkey(
     "*",
@@ -509,7 +521,7 @@ function NeptunesPrideAgent() {
   );
 
   function longFleetReport() {
-    setClip(combatOutcomes().join("\n"));
+    prepReport("combats", combatOutcomes().join("\n"));
   }
   defineHotkey(
     "&",
@@ -544,7 +556,7 @@ function NeptunesPrideAgent() {
     flights = flights.sort(function (a, b) {
       return a[0] - b[0];
     });
-    setClip(flights.map((x) => x[1]).join("\n"));
+    prepReport("fleets", flights.map((x) => x[1]).join("\n"));
   }
 
   defineHotkey(
@@ -582,7 +594,7 @@ function NeptunesPrideAgent() {
         output.push("Player #{0} is [[{0}]] home unknown".format(i));
       }
     }
-    setClip(output.join("\n"));
+    prepReport("planets", output.join("\n"));
   };
   defineHotkey(
     "!",
@@ -1224,7 +1236,6 @@ function NeptunesPrideAgent() {
       reportButton.roost(widget);
       return widget;
     };
-    let lastReport = "planets";
     const npaReports = function (_screenConfig: any) {
       npui.onHideScreen(null, true);
       npui.onHideSelectionMenu();
@@ -1637,7 +1648,7 @@ function NeptunesPrideAgent() {
       }
       preput.push("--- Ledger ---\n");
     }
-    setClip(preput.join("\n") + output.join("\n"));
+    prepReport("accounting", preput.join("\n") + output.join("\n"));
   };
   defineHotkey("a", npaLedger, "Perform accounting and display status.");
 
@@ -1654,7 +1665,7 @@ function NeptunesPrideAgent() {
       const code = await store.get(key);
       output.push(`[[${player}]]|[[apiv:${code}]]|[[apim:${code}]]`);
     }
-    setClip(output.join("\n"));
+    prepReport("api", output.join("\n"));
   };
   defineHotkey("k", apiKeys, "Show known API keys.");
 
