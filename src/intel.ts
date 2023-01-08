@@ -73,6 +73,20 @@ function NeptunesPrideAgent() {
       universe.hyperlinkedMessageInserts[fleet.n] = fleetLink;
     }
   };
+  const linkPlayerSymbols = function () {
+    let universe = NeptunesPride.universe;
+    for (let i = 0; i < 64; ++i) {
+      if (universe.hyperlinkedMessageInserts[i]) {
+        universe.hyperlinkedMessageInserts[`#${i}`] =
+          universe.hyperlinkedMessageInserts[i].replace(/><a.*<.a>/, ">");
+        console.log({
+          i,
+          t: universe.hyperlinkedMessageInserts[i],
+          t2: universe.hyperlinkedMessageInserts[`#${i}`],
+        });
+      }
+    }
+  };
 
   let lastReport = "planets";
   const prepReport = function (reportName: string, content: string) {
@@ -1421,6 +1435,7 @@ function NeptunesPrideAgent() {
   let init = function () {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
       linkFleets();
+      linkPlayerSymbols();
       console.log("Fleet linking complete.");
       if (!hooksLoaded) {
         loadHooks();
