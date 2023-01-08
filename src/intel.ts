@@ -79,11 +79,6 @@ function NeptunesPrideAgent() {
       if (universe.hyperlinkedMessageInserts[i]) {
         universe.hyperlinkedMessageInserts[`#${i}`] =
           universe.hyperlinkedMessageInserts[i].replace(/><a.*<.a>/, ">");
-        console.log({
-          i,
-          t: universe.hyperlinkedMessageInserts[i],
-          t2: universe.hyperlinkedMessageInserts[`#${i}`],
-        });
       }
     }
   };
