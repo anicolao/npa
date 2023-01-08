@@ -1224,6 +1224,7 @@ function NeptunesPrideAgent() {
       reportButton.roost(widget);
       return widget;
     };
+    let lastReport = "planets";
     const npaReports = function (_screenConfig: any) {
       npui.onHideScreen(null, true);
       npui.onHideSelectionMenu();
@@ -1248,7 +1249,7 @@ function NeptunesPrideAgent() {
         accounting: "Accounting",
         api: "API Keys",
       };
-      Crux.DropDown("", selections, "exec_report")
+      Crux.DropDown(lastReport, selections, "exec_report")
         .grid(15, 0, 15, 3)
         .roost(report);
 
@@ -1262,6 +1263,7 @@ function NeptunesPrideAgent() {
 
       let reportHook = async function (e: number, d: string) {
         console.log("Execute report", e, d);
+        lastReport = d;
         if (d === "planets") {
           homePlanets();
         } else if (d === "fleets") {
@@ -1279,15 +1281,35 @@ function NeptunesPrideAgent() {
         html = NeptunesPride.inbox.hyperlinkMessage(html);
         text.rawHTML(html);
       };
-      reportHook(0, "planets");
+      reportHook(0, lastReport);
       NeptunesPride.np.on("exec_report", reportHook);
 
       npui.activeScreen = reportScreen;
+      npui.showingScreen = "new_fleet";
+      npui.screenConfig = undefined;
       reportScreen.roost(npui.screenContainer);
       npui.layoutElement(reportScreen);
+      return reportScreen;
     };
-    NeptunesPride.np.on("trigger_npa", npaReports);
-    npui.SideMenuItem("icon-eye", "n_p_a", "trigger_npa").roost(npui.sideMenu);
+    const backMenu = npui.sideMenu.children[npui.sideMenu.children.length - 1];
+    npui.sideMenu.removeChild(backMenu);
+    npui
+      .SideMenuItem("icon-eye", "n_p_a", "show_screen", "new_fleet")
+      .roost(npui.sideMenu);
+    npui
+      .SideMenuItem("icon-left-open", "main_menu", "browse_to", "/")
+      .roost(npui.sideMenu);
+
+    const superNewFleetScreen = npui.NewFleetScreen;
+    npui.NewFleetScreen = (screenConfig: any) => {
+      console.log({ newFleet: 1, screenConfig, showing: npui.showingScreen });
+      if (screenConfig === undefined) {
+        return npaReports(screenConfig);
+      } else {
+        console.log("call super");
+        return superNewFleetScreen(screenConfig);
+      }
+    };
 
     let superFormatTime = Crux.formatTime;
     type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
