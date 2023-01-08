@@ -265,7 +265,7 @@ function NeptunesPrideAgent() {
           last_updated: 0,
           ships: stars[starId].totalDefenses,
           puid: stars[starId].puid,
-          c: stars[starId].c,
+          c: stars[starId].c || 0,
         };
       }
       if (starstate[starId].puid == -1) {
