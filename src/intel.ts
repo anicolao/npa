@@ -1258,7 +1258,7 @@ function NeptunesPrideAgent() {
         .roost(reportScreen);
 
       var report = Crux.Widget("rel  col_accent").size(480, 48);
-      var output = Crux.Widget("rel");
+      var output = Crux.Widget("rel").nudge(-24, 0);
 
       Crux.Text("npa_report_type", "pad12").roost(report);
       var selections = {
