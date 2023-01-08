@@ -1743,7 +1743,20 @@ function NeptunesPrideAgent() {
   document.body.addEventListener("keyup", autocompleteTrigger);
 
   updateMessageCache("game_event");
-  updateMessageCache("game_diplomacy");
+
+  const wst = window.setTimeout;
+  const timeoutCatcher = (
+    callback: TimerHandler,
+    time?: number,
+    ...args: any[]
+  ): number => {
+    if (callback.toLocaleString().indexOf("autocompleteTrigger") !== -1) {
+      console.log("SAT duplicate code detected. Ignore it.");
+      return 0;
+    }
+    return wst(callback, time, args);
+  };
+  window.setTimeout = timeoutCatcher as any;
 
   console.log("Neptune's Pride Agent injection fini.");
 }
