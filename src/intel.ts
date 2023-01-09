@@ -1619,22 +1619,21 @@ function NeptunesPrideAgent() {
   };
   let translateTech = (name: string) => xlate[name.substring(0, 4)];
 
-  let tradingReport = async function () {
-    lastReport = "trading";
-    const allkeys = (await store.keys()) as string[];
-    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
-    let output: string[] = [];
-    output.push("--- Allied Technology ---");
+  let techTable = function (
+    output: string[],
+    playerIndexes: number[],
+    title: string,
+  ) {
+    output.push(`--- ${title} ---`);
     let cols = ":--";
-    for (let i = 0; i < apiKeys.length; ++i) {
+    for (let i = 0; i < playerIndexes.length; ++i) {
       cols += "|--";
     }
     output.push(cols);
     const me = NeptunesPride.universe.player.uid;
     cols = `Technology|[[#${me}]]|[[#${me}]]`;
-    for (let i = 0; i < apiKeys.length; ++i) {
-      const key = apiKeys[i];
-      const pi = parseInt(key.substring(4));
+    for (let i = 0; i < playerIndexes.length; ++i) {
+      const pi = playerIndexes[i];
       if (pi === me) {
         continue;
       }
@@ -1643,9 +1642,8 @@ function NeptunesPrideAgent() {
     output.push(cols);
     const rows: string[] = [];
     const myTech = NeptunesPride.universe.player.tech;
-    for (let i = 0; i < apiKeys.length; ++i) {
-      const key = apiKeys[i];
-      const pi = parseInt(key.substring(4));
+    for (let i = 0; i < playerIndexes.length; ++i) {
+      const pi = playerIndexes[i];
       if (pi === NeptunesPride.universe.player.uid) {
         continue;
       }
@@ -1656,7 +1654,9 @@ function NeptunesPrideAgent() {
         if (!rows[i]) {
           rows[i] = translateTech(t);
           rows[i] += `|${myTech[t].level}`;
-          rows[i] += `|${myTech[t].research}/${myTech[t].brr}`;
+          rows[i] += `|${myTech[t].research}/${
+            myTech[t].brr * myTech[t].level
+          }`;
         }
         const level = levels[t].level;
         if (level < myTech[t].level) {
@@ -1668,8 +1668,29 @@ function NeptunesPrideAgent() {
         }
       });
     }
-    output = output.concat(rows);
-    output.push("--- Allied Technology ---");
+    rows.forEach((r) => output.push(r));
+    output.push(`--- ${title} ---`);
+  };
+  let tradingReport = async function () {
+    lastReport = "trading";
+    const allkeys = (await store.keys()) as string[];
+    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
+    let output: string[] = [];
+    techTable(output, playerIndexes, "Allied Technology");
+    let players = NeptunesPride.universe.galaxy.players;
+    let allPlayers = Object.keys(players);
+    const numPerTable = 5;
+    for (let start = 0; start < allPlayers.length; ) {
+      let subset = allPlayers.slice(start, start + numPerTable);
+      let indexes = subset.map((k) => players[k].uid);
+      techTable(
+        output,
+        indexes,
+        `Players ${start} - ${start - 1 + subset.length}`,
+      );
+      start += subset.length;
+    }
     prepReport("technology", output.join("\n"));
   };
   defineHotkey(
