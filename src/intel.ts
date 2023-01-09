@@ -1178,6 +1178,14 @@ function NeptunesPrideAgent() {
           const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
+        } else if (/^good:\w\w*$/.test(sub)) {
+          const splits = sub.split(":");
+          const text = splits[1];
+          s = s.replace(pattern, `<span class="txt_warn_good">${text}</span>`);
+        } else if (/^bad:\w\w*$/.test(sub)) {
+          const splits = sub.split(":");
+          const text = splits[1];
+          s = s.replace(pattern, `<span class="txt_warn_bad">${text}</span>`);
         } else if (sub.startsWith("data:")) {
           s = s.replace(
             pattern,
@@ -1279,6 +1287,7 @@ function NeptunesPrideAgent() {
 
       Crux.Text("npa_report_type", "pad12").roost(report);
       var selections = {
+        trading: "Trading",
         planets: "Home Planets",
         fleets: "Fleets (short)",
         combats: "Fleets (long)",
@@ -1599,6 +1608,79 @@ function NeptunesPrideAgent() {
   NeptunesPride.np.on("switch_user_api", switchUser);
   NeptunesPride.np.on("merge_user_api", mergeUser);
 
+  const xlate: { [k: string]: string } = {
+    bank: "Banking",
+    manu: "Manu",
+    prop: "Range",
+    rese: "Exp",
+    scan: "Scan",
+    terr: "Terra",
+    weap: "Weapons",
+  };
+  let translateTech = (name: string) => xlate[name.substring(0, 4)];
+
+  let tradingReport = async function () {
+    lastReport = "trading";
+    const allkeys = (await store.keys()) as string[];
+    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    let output: string[] = [];
+    output.push("--- Allied Technology ---");
+    let cols = ":--";
+    for (let i = 0; i < apiKeys.length; ++i) {
+      cols += "|--";
+    }
+    output.push(cols);
+    const me = NeptunesPride.universe.player.uid;
+    cols = `Technology|[[#${me}]]|[[#${me}]]`;
+    for (let i = 0; i < apiKeys.length; ++i) {
+      const key = apiKeys[i];
+      const pi = parseInt(key.substring(4));
+      if (pi === me) {
+        continue;
+      }
+      cols += `|[[#${pi}]]`;
+    }
+    output.push(cols);
+    const rows: string[] = [];
+    const myTech = NeptunesPride.universe.player.tech;
+    for (let i = 0; i < apiKeys.length; ++i) {
+      const key = apiKeys[i];
+      const pi = parseInt(key.substring(4));
+      if (pi === NeptunesPride.universe.player.uid) {
+        continue;
+      }
+      const player = NeptunesPride.universe.galaxy.players[pi];
+      const levels = player.tech;
+      const techs = Object.keys(player.tech);
+      techs.map((t, i) => {
+        if (!rows[i]) {
+          rows[i] = translateTech(t);
+          rows[i] += `|${myTech[t].level}`;
+          rows[i] += `|${myTech[t].research}/${myTech[t].brr}`;
+        }
+        const level = levels[t].level;
+        if (level < myTech[t].level) {
+          rows[i] += `|[[good:${level}]]`;
+        } else if (level > myTech[t].level) {
+          rows[i] += `|[[bad:${level}]]`;
+        } else {
+          rows[i] += `|${level}`;
+        }
+      });
+    }
+    output = output.concat(rows);
+    output.push("--- Allied Technology ---");
+    prepReport("technology", output.join("\n"));
+  };
+  defineHotkey(
+    "t",
+    tradingReport,
+    "The trading report lets you review where you are relative to others and " +
+      "provides shortcuts to ease trading of tech as needed. It overrides the game's " +
+      "t hotkey because r already has the same functionality of showing research.",
+    "Trading",
+  );
+
   let npaLedger = async function () {
     lastReport = "accounting";
     const updated = await updateMessageCache("game_event");
@@ -1641,15 +1723,6 @@ function NeptunesPrideAgent() {
       output.push(":--|:--");
       for (let i = 0; i < messageCache.game_event.length; ++i) {
         const m = messageCache.game_event[i];
-        const xlate: { [k: string]: string } = {
-          bank: "Banking",
-          manu: "Manu",
-          prop: "Range",
-          rese: "Exp",
-          scan: "Scan",
-          terr: "Terra",
-          weap: "Weapons",
-        };
 
         if (m.payload.template === "shared_technology") {
           const tick = m.payload.tick;
@@ -1665,7 +1738,7 @@ function NeptunesPrideAgent() {
             levels[from] += level;
           }
           const name = m.payload.name;
-          const xlated = xlate[name.substring(0, 4)];
+          const xlated = translateTech(name);
           if (from === NeptunesPride.universe.player.uid) {
             output.push(
               `[[Tick #${tick}]]|${xlated}${level} $${credits} → [[${to}]]`,
