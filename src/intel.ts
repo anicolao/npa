@@ -1841,7 +1841,7 @@ function NeptunesPrideAgent() {
     getHotkeys().forEach((key: string) => {
       let action = getHotkeyCallback(key);
       let button = Crux.format(`[[goto:${key}]]`, {});
-      help.push(`<h2>Hotkey: ${key} ${button}</h2>)}`);
+      help.push(`<h2>Hotkey: ${key} ${button}</h2>`);
       if (action.help) {
         help.push(action.help);
       } else {
