@@ -1548,6 +1548,10 @@ function NeptunesPrideAgent() {
           universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
         }
       }
+      for (let pk in universe.galaxy.players) {
+        const player = universe.galaxy.players[pk];
+        player.alias = player.rawAlias;
+      }
       universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
       NeptunesPride.np.onFullUniverse(null, universe.galaxy);
       NeptunesPride.npui.onHideScreen(null, true);
