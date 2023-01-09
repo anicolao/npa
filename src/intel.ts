@@ -1705,7 +1705,7 @@ function NeptunesPrideAgent() {
     prepReport("technology", output.join("\n"));
   };
   defineHotkey(
-    "w",
+    "e",
     tradingReport,
     "The trading report lets you review where you are relative to others and " +
       "provides shortcuts to ease trading of tech as needed.",
