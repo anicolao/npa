@@ -93,6 +93,7 @@ function NeptunesPrideAgent() {
     () => NeptunesPride.npui.trigger("show_screen", "new_fleet"),
     "Bring up the NP Agent UI." +
       "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
+    "Open NPA UI",
   );
 
   function starReport() {
@@ -124,6 +125,7 @@ function NeptunesPrideAgent() {
     starReport,
     "Generate a report on all stars in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Star Report",
   );
 
   let ampm = function (h: number, m: number | string) {
@@ -518,6 +520,7 @@ function NeptunesPrideAgent() {
       "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. If the " +
       "indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " +
       "weapons to your opponent.",
+    "+ Handicap",
   );
   defineHotkey(
     ",",
@@ -527,6 +530,7 @@ function NeptunesPrideAgent() {
       "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. When " +
       "indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " +
       "weapons to you.",
+    "- Handicap",
   );
 
   function longFleetReport() {
@@ -537,6 +541,7 @@ function NeptunesPrideAgent() {
     longFleetReport,
     "Generate a detailed fleet report on all carriers in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Fleets (long)",
   );
 
   function briefFleetReport() {
@@ -573,6 +578,7 @@ function NeptunesPrideAgent() {
     briefFleetReport,
     "Generate a summary fleet report on all carriers in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Fleets (short)",
   );
 
   function screenshot() {
@@ -584,6 +590,7 @@ function NeptunesPrideAgent() {
     "#",
     screenshot,
     "Create a data: URL of the current map. Paste it into a browser window to view. This is likely to be removed.",
+    "Screenshot",
   );
 
   let homePlanets = function () {
@@ -611,6 +618,7 @@ function NeptunesPrideAgent() {
     "Generate a player summary report and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " +
       "It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.",
+    "Homeworlds",
   );
 
   let playerSheet = function () {
@@ -638,6 +646,7 @@ function NeptunesPrideAgent() {
     playerSheet,
     "Generate a player summary mean to be made into a spreadsheet." +
       "<p>The clipboard should be pasted into a CSV and then imported.",
+    "Summary CSV",
   );
 
   let drawOverlayString = function (
@@ -1161,6 +1170,14 @@ function NeptunesPrideAgent() {
         } else if (/^apim:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
+        } else if (/^hotkey:[^:]$/.test(sub) || /^goto:[^:]/.test(sub)) {
+          const splits = sub.split(":");
+          const key = splits[1];
+          const action = getHotkeyCallback(key);
+          const label = action?.button || `Trigger ${sub}`;
+          const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
+          let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
+          s = s.replace(pattern, keyLink);
         } else if (sub.startsWith("data:")) {
           s = s.replace(
             pattern,
@@ -1268,6 +1285,7 @@ function NeptunesPrideAgent() {
         stars: "Stars",
         accounting: "Accounting",
         api: "API Keys",
+        controls: "Controls",
       };
       Crux.DropDown(lastReport, selections, "exec_report")
         .grid(15, 0, 15, 3)
@@ -1294,6 +1312,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "accounting") {
           await npaLedger();
+        } else if (d === "controls") {
+          npaControls();
         } else if (d === "api") {
           await apiKeys();
         }
@@ -1378,6 +1398,7 @@ function NeptunesPrideAgent() {
       "Change the display of ETAs from relative times to absolute clock times. Makes predicting " +
         "important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " +
         "will need to refresh the display to see the different times.",
+      "Timebase",
     );
 
     if (window.chrome) {
@@ -1397,6 +1418,7 @@ function NeptunesPrideAgent() {
     ")",
     toggleTerritory,
     "Toggle the territory display. Range and scanning for all stars of the selected empire are shown.",
+    "Toggle Territory",
   );
 
   let toggleWhitePlayer = function () {
@@ -1425,6 +1447,7 @@ function NeptunesPrideAgent() {
     "w",
     toggleWhitePlayer,
     "Toggle between my color and white on the map display.",
+    "Whiteout",
   );
 
   let init = function () {
@@ -1451,6 +1474,7 @@ function NeptunesPrideAgent() {
     "@",
     init,
     "Reinitialize Neptune's Pride Agent. Use the @ hotkey if the version is not being shown on the map after dragging.",
+    "Reload NPA",
   );
 
   if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
@@ -1563,17 +1587,20 @@ function NeptunesPrideAgent() {
     switchUser,
     "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " +
       "it is not your own alias to help remind you that you aren't in control of this user.",
+    "Next User",
   );
   defineHotkey(
     "|",
     mergeUser,
     "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " +
       "passes and you've reloaded, but you still want the merged scan data from two players onscreen.",
+    "Merge User",
   );
   NeptunesPride.np.on("switch_user_api", switchUser);
   NeptunesPride.np.on("merge_user_api", mergeUser);
 
   let npaLedger = async function () {
+    lastReport = "accounting";
     const updated = await updateMessageCache("game_event");
     const preput: string[] = [];
     const output: string[] = [];
@@ -1664,9 +1691,15 @@ function NeptunesPrideAgent() {
     }
     prepReport("accounting", preput.join("\n") + output.join("\n"));
   };
-  defineHotkey("a", npaLedger, "Perform accounting and display status.");
+  defineHotkey(
+    "a",
+    npaLedger,
+    "Perform accounting and display status.",
+    "Accounting",
+  );
 
   let apiKeys = async function () {
+    lastReport = "api";
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
     const output = [];
@@ -1681,7 +1714,7 @@ function NeptunesPrideAgent() {
     }
     prepReport("api", output.join("\n"));
   };
-  defineHotkey("k", apiKeys, "Show known API keys.");
+  defineHotkey("k", apiKeys, "Show known API keys.", "API Keys");
 
   let mergeAllKeys = async function () {
     const allkeys = (await store.keys()) as string[];
@@ -1692,13 +1725,19 @@ function NeptunesPrideAgent() {
       mergeUser();
     }
   };
-  defineHotkey("(", mergeAllKeys, "Merge all data from known API keys.");
+  defineHotkey(
+    "(",
+    mergeAllKeys,
+    "Merge all data from known API keys.",
+    "Merge All",
+  );
 
   let npaHelp = function () {
     let help = [`<H1>${title}</H1>`];
     getHotkeys().forEach((key: string) => {
       let action = getHotkeyCallback(key);
-      help.push(`<h2>Hotkey: ${key}</h2>`);
+      let button = Crux.format(`[[goto:${key}]]`, {});
+      help.push(`<h2>Hotkey: ${key} ${button}</h2>)}`);
       if (action.help) {
         help.push(action.help);
       } else {
@@ -1710,7 +1749,28 @@ function NeptunesPrideAgent() {
     NeptunesPride.universe.helpHTML = help.join("");
     NeptunesPride.np.trigger("show_screen", "help");
   };
-  defineHotkey("?", npaHelp, "Display this help screen.");
+  defineHotkey("?", npaHelp, "Display this help screen.", "NPA Help");
+
+  let npaControls = function () {
+    const output: string[] = [];
+    output.push("--- Controls ---");
+    output.push(":--|--:");
+    let partial = "";
+    getHotkeys().forEach((key: string) => {
+      let action = getHotkeyCallback(key);
+      let control = Crux.format(`[[goto:${key}]]`, {});
+      partial += control;
+      if (partial.indexOf("|") === -1) {
+        partial += "|";
+      } else {
+        output.push(partial);
+        partial = "";
+      }
+    });
+    prepReport("controls", output.join("\n"));
+    output.push("--- Controls ---");
+  };
+  defineHotkey("~", npaControls, "Generate NPA Buttons.", "Controls");
 
   var autocompleteCaret = 0;
   let autocompleteTrigger = function (e: KeyboardEvent) {

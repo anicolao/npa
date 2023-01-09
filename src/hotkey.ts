@@ -3,6 +3,7 @@ import * as Mousetrap from "mousetrap";
 var lastClip = "Error";
 interface HelpText {
   help?: string;
+  button?: string;
 }
 type Callback = () => void;
 export type HotkeyCallback = Callback & HelpText;
@@ -30,9 +31,15 @@ export function defineHotkey(
   key: string,
   action: HotkeyCallback,
   help?: string,
+  button?: string,
 ) {
   if (help) {
     action.help = help;
+  }
+  if (button) {
+    action.button = button;
+  } else {
+    action.button = key;
   }
   hotkeys[key] = action;
   Mousetrap.bind(key, copy(action));
