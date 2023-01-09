@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/chai": "^4.3.3",
     "@types/chrome": "^0.0.193",
+    "@types/mousetrap": "^1.6.11",
     "c8": "^7.12.0",
     "chai": "^4.3.6",
     "copy-webpack-plugin": "^11.0.0",
@@ -32,6 +33,7 @@
   },
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
-    "idb": "^7.1.1"
+    "idb": "^7.1.1",
+    "mousetrap": "^1.6.5"
   }
 }

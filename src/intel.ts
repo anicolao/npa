@@ -6,7 +6,7 @@
 // @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.js
 // ==/UserScript==
 
-/* global Crux, NeptunesPride, Mousetrap, jQuery, */
+/* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
 import { safe_image_url } from "./imageutils";
 import {

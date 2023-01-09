@@ -1,17 +1,11 @@
+import * as Mousetrap from "mousetrap";
+
 var lastClip = "Error";
 interface HelpText {
   help?: string;
 }
 type Callback = () => void;
 export type HotkeyCallback = Callback & HelpText;
-
-interface KeybindingInterface {
-  bind: (key: string, callback: () => void) => void;
-}
-
-declare global {
-  var Mousetrap: KeybindingInterface;
-}
 
 export function setClip(text: string): void {
   lastClip = text;
