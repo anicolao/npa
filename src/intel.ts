@@ -1319,6 +1319,8 @@ function NeptunesPrideAgent() {
           longFleetReport();
         } else if (d === "stars") {
           starReport();
+        } else if (d === "trading") {
+          await tradingReport();
         } else if (d === "accounting") {
           await npaLedger();
         } else if (d === "controls") {
@@ -1680,6 +1682,15 @@ function NeptunesPrideAgent() {
     techTable(output, playerIndexes, "Allied Technology");
     let players = NeptunesPride.universe.galaxy.players;
     let allPlayers = Object.keys(players);
+    let scanned = NeptunesPride.gameConfig.tradeScanned ? "Scanned " : "";
+    if (NeptunesPride.gameConfig.tradeScanned) {
+      allPlayers = allPlayers.filter(
+        (k) =>
+          NeptunesPride.universe.player.scannedPlayers.indexOf(
+            players[k].uid,
+          ) >= 0,
+      );
+    }
     const numPerTable = 5;
     for (let start = 0; start < allPlayers.length; ) {
       let subset = allPlayers.slice(start, start + numPerTable);
@@ -1687,18 +1698,17 @@ function NeptunesPrideAgent() {
       techTable(
         output,
         indexes,
-        `Players ${start} - ${start - 1 + subset.length}`,
+        `${scanned}Players ${start} - ${start - 1 + subset.length}`,
       );
       start += subset.length;
     }
     prepReport("technology", output.join("\n"));
   };
   defineHotkey(
-    "t",
+    "w",
     tradingReport,
     "The trading report lets you review where you are relative to others and " +
-      "provides shortcuts to ease trading of tech as needed. It overrides the game's " +
-      "t hotkey because r already has the same functionality of showing research.",
+      "provides shortcuts to ease trading of tech as needed.",
     "Trading",
   );
 
