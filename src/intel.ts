@@ -20,6 +20,8 @@ import { messageCache, updateMessageCache } from "./events";
 import { GameStore } from "./gamestore";
 
 interface CruxLib {
+  touchEnabled: boolean;
+  crux: any;
   format: any;
   formatTime: any;
   Button: any;
@@ -1417,6 +1419,12 @@ function NeptunesPrideAgent() {
       Object.defineProperty(NeptunesPride.npui.map, "ignoreMouseEvents", {
         get: () => false,
       });
+    } else if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+      // safari: trackpad is available and works on iPads
+      Crux.crux.onTouchDown = () => {
+        Crux.touchEnabled = false;
+      };
+      Crux.crux.one("touchstart", Crux.crux.onTouchDown);
     }
 
     hooksLoaded = true;
