@@ -1570,12 +1570,30 @@ function NeptunesPrideAgent() {
       });
       let universe = NeptunesPride.universe;
       let scan = eggers.responseJSON.scanning_data;
-      let key = `API:${scan.player_uid}`;
-      store.get(key).then((apiCode) => {
-        if (!apiCode || apiCode !== otherUserCode) {
-          store.set(key, otherUserCode);
+      if (scan?.player_uid >= 0) {
+        let key = `API:${scan.player_uid}`;
+        const setCode = otherUserCode;
+        store.get(key).then((apiCode) => {
+          if (!apiCode || apiCode !== otherUserCode) {
+            store.set(key, setCode);
+          }
+        });
+      } else {
+        if (otherUserCode !== "badkey") {
+          const badCode = otherUserCode;
+          store.keys().then((allKeys: string[]) => {
+            const apiKeys = allKeys.filter((x) => x.startsWith("API:"));
+            apiKeys.forEach((key) => {
+              store.get(key).then((apiCode) => {
+                if (apiCode === badCode) {
+                  store.set(key, "badkey");
+                }
+              });
+            });
+          });
         }
-      });
+        return;
+      }
       universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
       for (let s in scan.stars) {
         const star = scan.stars[s];
