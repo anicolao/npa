@@ -1180,11 +1180,11 @@ function NeptunesPrideAgent() {
           const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
-        } else if (/^good:\w\w*$/.test(sub)) {
+        } else if (/^good:-?[\w-\.][\w-\.]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
           s = s.replace(pattern, `<span class="txt_warn_good">${text}</span>`);
-        } else if (/^bad:\w\w*$/.test(sub)) {
+        } else if (/^bad:[\w-\.][\w-\.]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
           s = s.replace(pattern, `<span class="txt_warn_bad">${text}</span>`);
@@ -1814,7 +1814,11 @@ function NeptunesPrideAgent() {
       preput.push(`Empire|Tech Levels|Credits`);
       for (let p in balances) {
         if (balances[p] !== 0) {
-          preput.push(`[[${p}]]|${levels[p]}|${balances[p]}`);
+          if (balances[p] > 0) {
+            preput.push(`[[${p}]]|${levels[p]}|[[bad:${balances[p]}]]`);
+          } else {
+            preput.push(`[[${p}]]|${levels[p]}|[[good:${balances[p]}]]`);
+          }
         }
       }
       preput.push("--- Ledger ---\n");
