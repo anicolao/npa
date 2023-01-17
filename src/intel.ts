@@ -30,6 +30,7 @@ interface CruxLib {
   DropDown: any;
 }
 interface NeptunesPrideData {
+  sendTech: (recipient: number, tech: string) => void;
   gameVersion: string;
   version: any;
   inbox: any;
@@ -1188,6 +1189,13 @@ function NeptunesPrideAgent() {
           const splits = sub.split(":");
           const text = splits[1];
           s = s.replace(pattern, `<span class="txt_warn_bad">${text}</span>`);
+        } else if (/^sendtech:\d\d*:\w\w*:-?[\w-\.][\w-\.]*$/.test(sub)) {
+          const splits = sub.split(":");
+          const player = parseInt(splits[1]);
+          const tech = splits[2];
+          const label = splits[3];
+          let sendLink = `<span class="txt_warn_good" onClick='{NeptunesPride.sendTech(${player}, "${tech}")}'>${label}</span>`;
+          s = s.replace(pattern, sendLink);
         } else if (sub.startsWith("data:")) {
           s = s.replace(
             pattern,
@@ -1691,7 +1699,7 @@ function NeptunesPrideAgent() {
         }
         const level = levels[t].level;
         if (level < myTech[t].level) {
-          rows[i] += `|[[good:${level}]]`;
+          rows[i] += `|[[sendtech:${pi}:${t}:${level}]]`;
         } else if (level > myTech[t].level) {
           rows[i] += `|[[bad:${level}]]`;
         } else {
@@ -1740,6 +1748,15 @@ function NeptunesPrideAgent() {
       "provides shortcuts to ease trading of tech as needed.",
     "Trading",
   );
+
+  NeptunesPride.sendTech = (recipient: number, tech: string) => {
+    const universe = NeptunesPride.universe;
+    const players = universe.galaxy.players;
+    universe.selectedPlayer = players[recipient];
+    const trade = NeptunesPride.npui.EmpireTrade(universe.selectedPlayer);
+    trade.techSelection.setValue(tech);
+    trade.onPreTradeTech();
+  };
 
   let getUserScanData = function (apiKey: string) {
     let params = {
