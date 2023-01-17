@@ -1289,6 +1289,7 @@ function NeptunesPrideAgent() {
 
       Crux.Text("npa_report_type", "pad12").roost(report);
       var selections = {
+        research: "Research",
         trading: "Trading",
         planets: "Home Planets",
         fleets: "Fleets (short)",
@@ -1323,6 +1324,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "trading") {
           await tradingReport();
+        } else if (d === "research") {
+          await researchReport();
         } else if (d === "accounting") {
           await npaLedger();
         } else if (d === "controls") {
@@ -1737,6 +1740,54 @@ function NeptunesPrideAgent() {
       "provides shortcuts to ease trading of tech as needed.",
     "Trading",
   );
+
+  let getUserScanData = function (apiKey: string) {
+    let params = {
+      game_number: game,
+      api_version: "0.1",
+      code: apiKey,
+    };
+    let api = jQuery.ajax({
+      type: "POST",
+      url: "https://np.ironhelmet.com/api",
+      async: false,
+      data: params,
+      dataType: "json",
+    });
+    return api.responseJSON.scanning_data;
+  };
+  let researchReport = async function () {
+    lastReport = "research";
+    const allkeys = (await store.keys()) as string[];
+    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
+    let output: string[] = [];
+    output.push("--- Alliance Research Progress ---");
+    output.push(":--|:--|--|--:");
+    for (let pii = 0; pii < playerIndexes.length; ++pii) {
+      const pi = playerIndexes[pii];
+      const p = NeptunesPride.universe.galaxy.players[pi];
+      const apiKey = await store.get(apiKeys[pii]);
+      const scan = getUserScanData(apiKey);
+      if (scan) {
+        console.log({ scanData: scan });
+        const player = scan.players[pi];
+        const tech = player.tech[player.researching];
+        const soFar = tech.research;
+        const total = tech.brr * tech.level;
+        const remaining = total - soFar;
+        const science = p.total_science;
+        const tick = scan.tick + Math.ceil(remaining / science);
+        const techName = translateTech(player.researching);
+        output.push(
+          `[[${pi}]]|${techName}|${p.total_science}|[[Tick #${tick}]]`,
+        );
+      }
+    }
+    output.push("--- Alliance Research Progress ---");
+    prepReport("research", output.join("\n"));
+  };
+  defineHotkey("E", researchReport, "The research report.", "Research");
 
   let npaLedger = async function () {
     lastReport = "accounting";
