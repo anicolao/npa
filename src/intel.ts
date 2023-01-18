@@ -1645,6 +1645,7 @@ function NeptunesPrideAgent() {
         player.alias = player.rawAlias;
       }
       universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
+      universe.galaxy.tick_fragment = scan.tick_fragment;
       NeptunesPride.np.onFullUniverse(null, universe.galaxy);
       NeptunesPride.npui.onHideScreen(null, true);
       init();
