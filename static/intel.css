@@ -44,3 +44,6 @@ div.screenshot:hover {
 	border: 5px solid #00ff00;
 	z-index: 10000;
 }
+
+.button:hover { background: #FF9000; }
+.button:active { background: #00AA00; }
