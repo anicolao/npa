@@ -1778,7 +1778,18 @@ function NeptunesPrideAgent() {
     trade.onPreTradeTech();
   };
 
-  let getUserScanData = function (apiKey: string) {
+  let getUserScanData = async function (apiKey: string) {
+    const cacheKey = `CACHED_${apiKey}`;
+    const cachedScan = await store.get(cacheKey);
+    if (cachedScan) {
+      const freshness = new Date().getTime() - cachedScan.now;
+      const tickness =
+        cachedScan.tick_fragment * cachedScan.tick_rate * 60 * 1000;
+      console.log({ freshness, tickness, cachedScan });
+      if (freshness < tickness && freshness < 60 * 5 * 1000) {
+        return cachedScan;
+      }
+    }
     let params = {
       game_number: game,
       api_version: "0.1",
@@ -1791,6 +1802,7 @@ function NeptunesPrideAgent() {
       data: params,
       dataType: "json",
     });
+    store.set(cacheKey, api.responseJSON.scanning_data);
     return api.responseJSON.scanning_data;
   };
   let researchReport = async function () {
@@ -1800,14 +1812,14 @@ function NeptunesPrideAgent() {
     const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
     let output: string[] = [];
     output.push("--- Alliance Research Progress ---");
-    output.push(":--|:--|--|--:");
+    output.push(":--|:--|--:|--:");
+    output.push("Empire|Tech|ETA|Science");
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
       const p = NeptunesPride.universe.galaxy.players[pi];
       const apiKey = await store.get(apiKeys[pii]);
-      const scan = getUserScanData(apiKey);
+      const scan = await getUserScanData(apiKey);
       if (scan) {
-        console.log({ scanData: scan });
         const player = scan.players[pi];
         const tech = player.tech[player.researching];
         const soFar = tech.research;
@@ -1817,7 +1829,7 @@ function NeptunesPrideAgent() {
         const tick = scan.tick + Math.ceil(remaining / science);
         const techName = translateTech(player.researching);
         output.push(
-          `[[${pi}]]|${techName}|${p.total_science}|[[Tick #${tick}]]`,
+          `[[${pi}]]|${techName}|[[Tick #${tick}]]|${p.total_science}`,
         );
       }
     }
