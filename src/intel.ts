@@ -167,6 +167,12 @@ function NeptunesPrideAgent() {
   };
 
   let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  let msToTurnString = function (ms: number, prefix: string) {
+    const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+    const tick = ms / rate;
+    const turn = Math.ceil(tick / NeptunesPride.gameConfig.turnJumpTicks);
+    return `${turn} turn${turn !== 1 ? "s" : ""}`;
+  };
   let msToEtaString = function (msplus: number, prefix: string) {
     let now = new Date();
     let arrival = new Date(now.getTime() + msplus);
@@ -1393,6 +1399,9 @@ function NeptunesPrideAgent() {
       if (relativeTimes === "relative") {
         return superFormatTime(ms, showMinutes, showSeconds);
       } else if (relativeTimes === "eta") {
+        if (NeptunesPride.gameConfig.turnBased) {
+          return msToTurnString(ms, "");
+        }
         return msToEtaString(ms, "");
       } else if (relativeTimes === "tick") {
         const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
@@ -1436,6 +1445,17 @@ function NeptunesPrideAgent() {
         Crux.touchEnabled = false;
       };
       Crux.crux.one("touchstart", Crux.crux.onTouchDown);
+    }
+
+    if (NeptunesPride.gameConfig.turnBased) {
+      const submitButton: any[] = jQuery(':contains("Submit Turn")');
+      if (
+        submitButton.length === 9 &&
+        submitButton[7] &&
+        submitButton[7].style
+      ) {
+        submitButton[7].style.zIndex = 0;
+      }
     }
 
     hooksLoaded = true;
