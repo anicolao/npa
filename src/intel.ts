@@ -1219,7 +1219,7 @@ function NeptunesPrideAgent() {
       let alignments: string[] = [];
       for (let linen = 0; linen < lines.length; ++linen) {
         const line = lines[linen];
-        if (line.indexOf("---") !== -1) {
+        if (line.indexOf("---") !== -1 && line.indexOf("---", 3) !== -1) {
           inTable = !inTable;
           alignmentRow = inTable;
           if (inTable) {
