@@ -1971,6 +1971,7 @@ function NeptunesPrideAgent() {
     getHotkeys().forEach((key: string) => {
       let action = getHotkeyCallback(key);
       let button = Crux.format(`[[goto:${key}]]`, {});
+      if (key === "?") button = Crux.format(`[[hotkey:${key}]]`, {});
       help.push(`<h2>Hotkey: ${key} ${button}</h2>`);
       if (action.help) {
         help.push(action.help);
@@ -1993,6 +1994,7 @@ function NeptunesPrideAgent() {
     getHotkeys().forEach((key: string) => {
       let action = getHotkeyCallback(key);
       let control = Crux.format(`[[goto:${key}]]`, {});
+      if (key === "?") control = Crux.format(`[[hotkey:${key}]]`, {});
       partial += control;
       if (partial.indexOf("|") === -1) {
         partial += "|";
