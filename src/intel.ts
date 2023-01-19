@@ -1352,7 +1352,7 @@ function NeptunesPrideAgent() {
         text.rawHTML(html);
       };
       reportHook(0, lastReport);
-      NeptunesPride.np.on("exec_report", reportHook);
+      reportScreen.on("exec_report", reportHook);
 
       npui.activeScreen = reportScreen;
       npui.showingScreen = "new_fleet";
