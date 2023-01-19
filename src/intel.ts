@@ -1552,33 +1552,16 @@ function NeptunesPrideAgent() {
   var otherUserCode: string | undefined = undefined;
   let game = NeptunesPride.gameNumber;
   let store = new GameStore(game);
-  let switchUser = function (_event?: any, data?: string) {
+  let switchUser = async function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
     }
     let code = data?.split(":")[1] || otherUserCode;
     otherUserCode = code;
     if (otherUserCode) {
-      let params = {
-        game_number: game,
-        api_version: "0.1",
-        code: otherUserCode,
-      };
-      let eggers = jQuery.ajax({
-        type: "POST",
-        url: "https://np.ironhelmet.com/api",
-        async: false,
-        data: params,
-        dataType: "json",
-      });
-      let scan = eggers.responseJSON.scanning_data;
-      let key = `API:${scan.player_uid}`;
-      store.get(key).then((apiCode) => {
-        if (!apiCode || apiCode !== otherUserCode) {
-          store.set(key, otherUserCode);
-        }
-      });
-      NeptunesPride.np.onFullUniverse(null, eggers.responseJSON.scanning_data);
+      let scan = await getUserScanData(code);
+      if (!cacheApiKey(code, scan)) return;
+      NeptunesPride.np.onFullUniverse(null, scan);
       NeptunesPride.npui.onHideScreen(null, true);
       NeptunesPride.np.trigger("select_player", [
         NeptunesPride.universe.player.uid,
@@ -1588,55 +1571,45 @@ function NeptunesPrideAgent() {
     }
   };
 
-  let mergeUser = function (_event?: any, data?: string) {
+  let cacheApiKey = function (code: string, scan: any) {
+    if (scan?.player_uid >= 0) {
+      let key = `API:${scan.player_uid}`;
+      store.get(key).then((apiCode) => {
+        if (!apiCode || apiCode !== otherUserCode) {
+          store.set(key, code);
+        }
+      });
+    } else {
+      if (otherUserCode !== "badkey") {
+        store.keys().then((allKeys: string[]) => {
+          const apiKeys = allKeys.filter((x) => x.startsWith("API:"));
+          apiKeys.forEach((key) => {
+            store.get(key).then((apiCode) => {
+              if (apiCode === code) {
+                store.set(key, "badkey");
+              }
+            });
+          });
+        });
+      }
+      return false;
+    }
+    return true;
+  };
+  let mergeUser = async function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
     }
-    let code = data?.split(":")[1] || otherUserCode;
+    const code = data?.split(":")[1] || otherUserCode;
     otherUserCode = code;
     if (otherUserCode) {
-      let params = {
-        game_number: game,
-        api_version: "0.1",
-        code: otherUserCode,
-      };
-      let eggers = jQuery.ajax({
-        type: "POST",
-        url: "https://np.ironhelmet.com/api",
-        async: false,
-        data: params,
-        dataType: "json",
-      });
-      let universe = NeptunesPride.universe;
-      let scan = eggers.responseJSON.scanning_data;
-      if (scan?.player_uid >= 0) {
-        let key = `API:${scan.player_uid}`;
-        const setCode = otherUserCode;
-        store.get(key).then((apiCode) => {
-          if (!apiCode || apiCode !== otherUserCode) {
-            store.set(key, setCode);
-          }
-        });
-      } else {
-        if (otherUserCode !== "badkey") {
-          const badCode = otherUserCode;
-          store.keys().then((allKeys: string[]) => {
-            const apiKeys = allKeys.filter((x) => x.startsWith("API:"));
-            apiKeys.forEach((key) => {
-              store.get(key).then((apiCode) => {
-                if (apiCode === badCode) {
-                  store.set(key, "badkey");
-                }
-              });
-            });
-          });
-        }
-        return;
-      }
+      let scan = await getUserScanData(code);
+      if (!cacheApiKey(code, scan)) return;
+      const universe = NeptunesPride.universe;
       universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
       for (let s in scan.stars) {
         const star = scan.stars[s];
-        if (star.v !== "0") {
+        if (star.v !== "0" && universe.galaxy.stars[s].v === "0") {
           universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
         }
       }
@@ -1645,7 +1618,8 @@ function NeptunesPrideAgent() {
         player.alias = player.rawAlias;
       }
       universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
-      universe.galaxy.tick_fragment = scan.tick_fragment;
+      const tf = 1 - msToTick(1) / (scan.tick_rate * 60 * 1000);
+      universe.galaxy.tick_fragment = tf;
       NeptunesPride.np.onFullUniverse(null, universe.galaxy);
       NeptunesPride.npui.onHideScreen(null, true);
       init();
@@ -1779,6 +1753,18 @@ function NeptunesPrideAgent() {
     trade.onPreTradeTech();
   };
 
+  async function post(url: string, data: any): Promise<any> {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: new URLSearchParams(data).toString(),
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+  }
   let getUserScanData = async function (apiKey: string) {
     const cacheKey = `CACHED_${apiKey}`;
     const cachedScan = await store.get(cacheKey);
@@ -1796,15 +1782,9 @@ function NeptunesPrideAgent() {
       api_version: "0.1",
       code: apiKey,
     };
-    let api = jQuery.ajax({
-      type: "POST",
-      url: "https://np.ironhelmet.com/api",
-      async: false,
-      data: params,
-      dataType: "json",
-    });
-    store.set(cacheKey, api.responseJSON.scanning_data);
-    return api.responseJSON.scanning_data;
+    let api = await post("https://np.ironhelmet.com/api", params);
+    store.set(cacheKey, api.scanning_data);
+    return api.scanning_data;
   };
   let researchReport = async function () {
     lastReport = "research";
