@@ -1625,6 +1625,15 @@ function NeptunesPrideAgent() {
         player.alias = player.rawAlias;
       }
       universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
+      for (let f in scan.fleets) {
+        const fleet = scan.fleets[f];
+        if (fleet.puid == scan.player_uid) {
+          universe.galaxy.fleets[f] = {
+            ...universe.galaxy.fleets[f],
+            ...fleet,
+          };
+        }
+      }
       const tf = 1 - msToTick(1) / (scan.tick_rate * 60 * 1000);
       universe.galaxy.tick_fragment = tf;
       NeptunesPride.np.onFullUniverse(null, universe.galaxy);
