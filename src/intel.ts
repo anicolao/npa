@@ -1447,16 +1447,23 @@ function NeptunesPrideAgent() {
       Crux.crux.one("touchstart", Crux.crux.onTouchDown);
     }
 
-    if (NeptunesPride.gameConfig.turnBased) {
-      const submitButton: any[] = jQuery(':contains("Submit Turn")');
-      if (
-        submitButton.length === 9 &&
-        submitButton[7] &&
-        submitButton[7].style
-      ) {
-        submitButton[7].style.zIndex = 0;
+    const fixSubmitButton = () => {
+      if (NeptunesPride.gameConfig.turnBased) {
+        const submitButton: any[] = jQuery(':contains("Submit Turn")');
+        if (
+          submitButton.length === 9 &&
+          submitButton[7] &&
+          submitButton[7].style
+        ) {
+          submitButton[7].style.zIndex = 0;
+          return true;
+        }
+        return false;
       }
-    }
+      return true;
+    };
+    fixSubmitButton();
+    NeptunesPride.np.on("refresh_interface", fixSubmitButton);
 
     hooksLoaded = true;
   };
