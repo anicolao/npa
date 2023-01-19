@@ -1800,8 +1800,8 @@ function NeptunesPrideAgent() {
     const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
     let output: string[] = [];
     output.push("--- Alliance Research Progress ---");
-    output.push(":--|:--|--:|--:");
-    output.push("Empire|Tech|ETA|Science");
+    output.push(":--|:--|--:|--:|--:|--");
+    output.push("Empire|Tech|ETA|Progress|Sci|ΔS");
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
       const p = NeptunesPride.universe.galaxy.players[pi];
@@ -1814,10 +1814,19 @@ function NeptunesPrideAgent() {
         const total = tech.brr * tech.level;
         const remaining = total - soFar;
         const science = p.total_science;
-        const tick = scan.tick + Math.ceil(remaining / science);
+        const tickIncr = Math.ceil(remaining / science);
+        const tick = scan.tick + tickIncr;
+        let upgrade = "";
+        for (let i = 1; i < 10; ++i) {
+          const betterTick = Math.ceil(remaining / (science + i));
+          if (betterTick < tickIncr) {
+            upgrade = `${i}`;
+            break;
+          }
+        }
         const techName = translateTech(player.researching);
         output.push(
-          `[[${pi}]]|${techName}|[[Tick #${tick}]]|${p.total_science}`,
+          `[[${pi}]]|${techName}|[[Tick #${tick}]]|${soFar}/${total}|${p.total_science}|${upgrade}`,
         );
       }
     }
