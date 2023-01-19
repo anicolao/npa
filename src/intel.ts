@@ -1801,7 +1801,7 @@ function NeptunesPrideAgent() {
     let output: string[] = [];
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
-    output.push("Empire|Tech|ETA|Progress|Sci|ΔS");
+    output.push("Empire|Tech|ETA|Progress|Sci|↑S");
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
       const p = NeptunesPride.universe.galaxy.players[pi];
@@ -1833,7 +1833,12 @@ function NeptunesPrideAgent() {
     output.push("--- Alliance Research Progress ---");
     prepReport("research", output.join("\n"));
   };
-  defineHotkey("E", researchReport, "The research report.", "Research");
+  defineHotkey(
+    "E",
+    researchReport,
+    "The research report shows you tech progress for allies. The ↑S column tells you how much science is needed to reduce delivery time by at least one tick.",
+    "Research",
+  );
 
   let npaLedger = async function () {
     lastReport = "accounting";
