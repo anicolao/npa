@@ -1778,7 +1778,7 @@ function NeptunesPrideAgent() {
     if (cachedScan) {
       const freshness = new Date().getTime() - cachedScan.now;
       const tickness =
-        cachedScan.tick_fragment * cachedScan.tick_rate * 60 * 1000;
+        (1 - cachedScan.tick_fragment) * cachedScan.tick_rate * 60 * 1000;
       console.log({ freshness, tickness, cachedScan });
       if (freshness < tickness && freshness < 60 * 5 * 1000) {
         return cachedScan;
