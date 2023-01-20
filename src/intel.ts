@@ -444,11 +444,25 @@ function NeptunesPrideAgent() {
           output.push(
             "  Attackers win with {0} ships remaining".format(offense),
           );
-          for (const k in contribution) {
+          const pairs: [string, number][] = Object.keys(contribution).map(
+            (k) => [k, contribution[k]],
+          );
+          pairs.sort((a, b) => b[1] - a[1]);
+          let roundOffDebt = 0;
+          for (let i = 0; i < pairs.length; ++i) {
+            let k = pairs[i][0];
             let ka = k.split(",");
             let fleet = fleets[ka[1]];
             let playerId = parseInt(ka[0]);
-            contribution[k] = (offense * contribution[k]) / attackersAggregate;
+            let c = (offense * contribution[k]) / attackersAggregate;
+            let intPart = Math.floor(c);
+            let roundOff = c - intPart;
+            roundOffDebt += roundOff;
+            if (roundOffDebt > 0.0) {
+              roundOffDebt -= 1.0;
+              intPart++;
+            }
+            contribution[k] = intPart;
             newAggregate += contribution[k];
             if (playerContribution[playerId]) {
               playerContribution[playerId] += contribution[k];
