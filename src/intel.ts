@@ -1340,7 +1340,6 @@ function NeptunesPrideAgent() {
       output.roost(reportScreen);
 
       let reportHook = async function (e: number, d: string) {
-        console.log("Execute report", e, d);
         lastReport = d;
         if (d === "planets") {
           homePlanets();
@@ -1386,11 +1385,9 @@ function NeptunesPrideAgent() {
 
     const superNewFleetScreen = npui.NewFleetScreen;
     npui.NewFleetScreen = (screenConfig: any) => {
-      console.log({ newFleet: 1, screenConfig, showing: npui.showingScreen });
       if (screenConfig === undefined) {
         return npaReports(screenConfig);
       } else {
-        console.log("call super");
         return superNewFleetScreen(screenConfig);
       }
     };
@@ -1675,6 +1672,38 @@ function NeptunesPrideAgent() {
   NeptunesPride.np.on("switch_user_api", switchUser);
   NeptunesPride.np.on("merge_user_api", mergeUser);
 
+  let myApiKey = "";
+  const recordAPICode = async function (_event: any, code: string) {
+    let scan = await getUserScanData(code);
+    if (!cacheApiKey(code, scan)) {
+      console.error("Failed to load our own scan data?");
+      myApiKey = "";
+    } else {
+      myApiKey = code;
+    }
+  };
+  NeptunesPride.np.on("order:api_code", recordAPICode);
+  let refreshScanData = async function () {
+    const allkeys = (await store.keys()) as string[];
+    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
+    for (let pii = 0; pii < playerIndexes.length; ++pii) {
+      const apiKey = await store.get(apiKeys[pii]);
+      getUserScanData(apiKey);
+      const uid = playerIndexes[pii];
+      if (NeptunesPride.originalPlayer && NeptunesPride.originalPlayer == uid) {
+        myApiKey = apiKey;
+      }
+      if (
+        !NeptunesPride.originalPlayer &&
+        NeptunesPride.universe.player.uid == uid
+      ) {
+        myApiKey = apiKey;
+      }
+    }
+  };
+  NeptunesPride.np.on("refresh_interface", refreshScanData);
+
   const xlate: { [k: string]: string } = {
     bank: "Banking",
     manu: "Manu",
@@ -1805,7 +1834,6 @@ function NeptunesPrideAgent() {
       const freshness = new Date().getTime() - cachedScan.now;
       const tickness =
         (1 - cachedScan.tick_fragment) * cachedScan.tick_rate * 60 * 1000;
-      console.log({ freshness, tickness, cachedScan });
       if (freshness < tickness && freshness < 60 * 5 * 1000) {
         return cachedScan;
       }
@@ -2041,7 +2069,7 @@ function NeptunesPrideAgent() {
     const target: any = e.target;
     if (target.type === "textarea") {
       const key = e.key;
-      if (key === "]") {
+      if (key === "]" || key === ":") {
         if (autocompleteCaret <= 0) {
           autocompleteCaret = target.value.lastIndexOf("[[") + 2;
           if (autocompleteCaret <= 1) {
@@ -2064,6 +2092,17 @@ function NeptunesPrideAgent() {
           let puid = Number(autoString);
           let end = target.selectionEnd;
           let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
+          target.value =
+            target.value.substring(0, start) +
+            auto +
+            target.value.substring(end, target.value.length);
+          target.selectionStart = start + auto.length;
+          target.selectionEnd = start + auto.length;
+        }
+        m = autoString.match(/api:/);
+        if (m?.length && myApiKey) {
+          let auto = `api:${myApiKey}]]`;
+          let end = target.selectionEnd;
           target.value =
             target.value.substring(0, start) +
             auto +
