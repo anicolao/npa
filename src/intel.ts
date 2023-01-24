@@ -31,6 +31,7 @@ interface CruxLib {
 }
 interface NeptunesPrideData {
   sendTech: (recipient: number, tech: string) => void;
+  sendCash: (recipient: number, price: number) => void;
   gameVersion: string;
   version: any;
   inbox: any;
@@ -1253,6 +1254,13 @@ function NeptunesPrideAgent() {
           const label = splits[3];
           let sendLink = `<span class="txt_warn_good" onClick='{NeptunesPride.sendTech(${player}, "${tech}")}'>${label}</span>`;
           s = s.replace(pattern, sendLink);
+        } else if (/^sendcash:\d\d*:\d\d*:-?[\w-\.][\w-\.]*$/.test(sub)) {
+          const splits = sub.split(":");
+          const player = parseInt(splits[1]);
+          const amount = parseInt(splits[2]);
+          const label = splits[3];
+          let sendLink = `<span class="txt_warn_bad" onClick='{NeptunesPride.sendCash(${player}, "${amount}")}'>${label}</span>`;
+          s = s.replace(pattern, sendLink);
         } else if (sub.startsWith("data:")) {
           s = s.replace(
             pattern,
@@ -1795,7 +1803,9 @@ function NeptunesPrideAgent() {
         if (level < myTech[t].level) {
           rows[i] += `|[[sendtech:${pi}:${t}:${level}]]`;
         } else if (level > myTech[t].level) {
-          rows[i] += `|[[bad:${level}]]`;
+          const amount =
+            (myTech[t].level + 1) * NeptunesPride.gameConfig.tradeCost;
+          rows[i] += `|[[sendcash:${pi}:${amount}:${level}]]`;
         } else {
           rows[i] += `|${level}`;
         }
@@ -1850,6 +1860,29 @@ function NeptunesPrideAgent() {
     const trade = NeptunesPride.npui.EmpireTrade(universe.selectedPlayer);
     trade.techSelection.setValue(tech);
     trade.onPreTradeTech();
+  };
+
+  NeptunesPride.sendCash = (recipient: number, credits: number) => {
+    NeptunesPride.templates["confirm_send_cash"] =
+      "Are you sure you want to send<br>[[alias]]<br>$[[amount]] credits?";
+    const npui = NeptunesPride.npui;
+    const player = NeptunesPride.universe.galaxy.players[recipient];
+    npui.trigger("hide_screen");
+    var screenConfig = {
+      message: "confirm_send_cash",
+      messageTemplateData: {
+        amount: credits,
+        alias: player.colourBox + player.hyperlinkedRawAlias,
+      },
+      eventKind: "send_money",
+      eventData: {
+        targetPlayer: player,
+        amount: credits,
+      },
+      notification: false,
+      returnScreen: "empire",
+    };
+    npui.trigger("show_screen", ["confirm", screenConfig]);
   };
 
   async function post(url: string, data: any): Promise<any> {
