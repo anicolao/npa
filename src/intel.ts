@@ -231,11 +231,16 @@ function NeptunesPrideAgent() {
     let arrivals: { [k: string]: any } = {};
     let output = [];
     let arrivalTimes = [];
+    interface DepartureRecord {
+      leaving: number;
+      origShips: number;
+    }
     interface StarState {
       last_updated: number;
       ships: number;
       puid: number;
       c: number;
+      departures: { [k: number]: DepartureRecord };
     }
     let starstate: { [k: string]: StarState } = {};
     for (const i in flights) {
@@ -248,10 +253,28 @@ function NeptunesPrideAgent() {
             ships: stars[orbit].totalDefenses,
             puid: stars[orbit].puid,
             c: stars[orbit].c,
+            departures: {},
           };
         }
         // This fleet is departing this tick; remove it from the origin star's totalDefenses
-        starstate[orbit].ships -= fleet.st;
+        if (fleet.o.length > 0) {
+          const tick = fleet.o[0][0] - 1;
+          if (tick >= 0) {
+            const origShips = starstate[orbit].ships;
+            if (starstate[orbit].departures[tick] === undefined) {
+              starstate[orbit].departures[tick] = {
+                leaving: fleet.st,
+                origShips,
+              };
+            } else {
+              const leaving =
+                starstate[orbit].departures[tick].leaving + fleet.st;
+              starstate[orbit].departures[tick] = { leaving, origShips };
+            }
+          } else {
+            starstate[orbit].ships -= fleet.st;
+          }
+        }
       }
       if (
         arrivalTimes.length === 0 ||
@@ -277,6 +300,7 @@ function NeptunesPrideAgent() {
           ships: stars[starId].totalDefenses,
           puid: stars[starId].puid,
           c: stars[starId].c || 0,
+          departures: {},
         };
       }
       if (starstate[starId].puid == -1) {
@@ -309,6 +333,19 @@ function NeptunesPrideAgent() {
       let tickDelta = tick - starstate[starId].last_updated - 1;
       if (tickDelta > 0) {
         let oldShips = starstate[starId].ships;
+        const start = starstate[starId].last_updated;
+        const departures = starstate[starId].departures;
+        for (let i = start; i < start + tickDelta; ++i) {
+          if (departures[i]) {
+            const ratio = oldShips / departures[i].origShips;
+            const departing = Math.ceil(departures[i].leaving * ratio);
+            starstate[starId].ships -= departing;
+            output.push("  {0} depart".format(departing));
+          }
+        }
+        if (starstate[starId].ships < oldShips) {
+          oldShips = starstate[starId].ships;
+        }
         starstate[starId].last_updated = tick - 1;
         if (stars[starId].shipsPerTick) {
           let oldc = starstate[starId].c;
