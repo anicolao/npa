@@ -1773,12 +1773,14 @@ function NeptunesPrideAgent() {
     output.push(cols);
     const me = NeptunesPride.universe.player.uid;
     cols = `Technology|[[#${me}]]|[[#${me}]]`;
+    let allAmounts: { [k: number]: number } = {};
     for (let i = 0; i < playerIndexes.length; ++i) {
       const pi = playerIndexes[i];
       if (pi === me) {
         continue;
       }
       cols += `|[[#${pi}]]`;
+      allAmounts[pi] = 0;
     }
     output.push(cols);
     const rows: string[] = [];
@@ -1806,12 +1808,26 @@ function NeptunesPrideAgent() {
           const amount =
             (myTech[t].level + 1) * NeptunesPride.gameConfig.tradeCost;
           rows[i] += `|[[sendcash:${pi}:${amount}:${level}]]`;
+          for (let incs = level; incs > myTech[t].level; --incs) {
+            allAmounts[pi] += incs * NeptunesPride.gameConfig.tradeCost;
+          }
         } else {
           rows[i] += `|${level}`;
         }
       });
     }
+    let payFooter = [
+      "Pay for all",
+      "",
+      "",
+      ...Object.keys(allAmounts).map((pi) =>
+        allAmounts[pi] > 0
+          ? `[[sendcash:${pi}:${allAmounts[pi]}:${allAmounts[pi]}]]`
+          : "",
+      ),
+    ];
     rows.forEach((r) => output.push(r));
+    output.push(payFooter.join("|"));
     output.push(`--- ${title} ---`);
   };
   let tradingReport = async function () {
