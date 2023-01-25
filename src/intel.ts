@@ -2133,7 +2133,9 @@ function NeptunesPrideAgent() {
       for (let p in balances) {
         if (balances[p] !== 0) {
           if (balances[p] > 0) {
-            preput.push(`[[${p}]]|${levels[p]}|[[bad:${balances[p]}]]`);
+            preput.push(
+              `[[${p}]]|${levels[p]}|[[sendcash:${p}:${balances[p]}:${balances[p]}]]`,
+            );
           } else {
             preput.push(`[[${p}]]|${levels[p]}|[[good:${balances[p]}]]`);
           }
