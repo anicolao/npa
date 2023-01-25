@@ -30,6 +30,7 @@ interface CruxLib {
   DropDown: any;
 }
 interface NeptunesPrideData {
+  sendAllTech: (recipient: number) => void;
   sendTech: (recipient: number, tech: string) => void;
   sendCash: (recipient: number, price: number) => void;
   gameVersion: string;
@@ -1254,6 +1255,12 @@ function NeptunesPrideAgent() {
           const label = splits[3];
           let sendLink = `<span class="txt_warn_good" onClick='{NeptunesPride.sendTech(${player}, "${tech}")}'>${label}</span>`;
           s = s.replace(pattern, sendLink);
+        } else if (/^sendalltech:\d\d*:-?[\w-\.][\w-\.]*$/.test(sub)) {
+          const splits = sub.split(":");
+          const player = parseInt(splits[1]);
+          const label = splits[2];
+          let sendLink = `<span class="txt_warn_good" onClick='{NeptunesPride.sendAllTech(${player})}'>${label}</span>`;
+          s = s.replace(pattern, sendLink);
         } else if (/^sendcash:\d\d*:\d\d*:-?[\w-\.][\w-\.]*$/.test(sub)) {
           const splits = sub.split(":");
           const player = parseInt(splits[1]);
@@ -1774,6 +1781,7 @@ function NeptunesPrideAgent() {
     const me = NeptunesPride.universe.player.uid;
     cols = `Technology|[[#${me}]]|[[#${me}]]`;
     let allAmounts: { [k: number]: number } = {};
+    let allSendAmounts: { [k: number]: number } = {};
     for (let i = 0; i < playerIndexes.length; ++i) {
       const pi = playerIndexes[i];
       if (pi === me) {
@@ -1781,6 +1789,7 @@ function NeptunesPrideAgent() {
       }
       cols += `|[[#${pi}]]`;
       allAmounts[pi] = 0;
+      allSendAmounts[pi] = 0;
     }
     output.push(cols);
     const rows: string[] = [];
@@ -1804,6 +1813,10 @@ function NeptunesPrideAgent() {
         const level = levels[t].level;
         if (level < myTech[t].level) {
           rows[i] += `|[[sendtech:${pi}:${t}:${level}]]`;
+          for (let incs = level; incs < myTech[t].level; ++incs) {
+            allSendAmounts[pi] +=
+              (incs + 1) * NeptunesPride.gameConfig.tradeCost;
+          }
         } else if (level > myTech[t].level) {
           const amount =
             (myTech[t].level + 1) * NeptunesPride.gameConfig.tradeCost;
@@ -1820,14 +1833,25 @@ function NeptunesPrideAgent() {
       "Pay for all",
       "",
       "",
-      ...Object.keys(allAmounts).map((pi) =>
+      ...Object.keys(allAmounts).map((pi: any) =>
         allAmounts[pi] > 0
           ? `[[sendcash:${pi}:${allAmounts[pi]}:${allAmounts[pi]}]]`
           : "",
       ),
     ];
+    let sendFooter = [
+      "Send all",
+      "",
+      "",
+      ...Object.keys(allSendAmounts).map((pi: any) =>
+        allSendAmounts[pi] > 0
+          ? `[[sendalltech:${pi}:${allSendAmounts[pi]}]]`
+          : "",
+      ),
+    ];
     rows.forEach((r) => output.push(r));
     output.push(payFooter.join("|"));
+    output.push(sendFooter.join("|"));
     output.push(`--- ${title} ---`);
   };
   let tradingReport = async function () {
@@ -1878,6 +1902,58 @@ function NeptunesPrideAgent() {
     trade.onPreTradeTech();
   };
 
+  NeptunesPride.sendAllTech = (recipient: number) => {
+    NeptunesPride.templates["confirm_send_bulktech"] =
+      "Are you sure you want to send<br>[[alias]]<br>[[techs]]?";
+    const npui = NeptunesPride.npui;
+    const player = NeptunesPride.universe.galaxy.players[recipient];
+    let techs: string[] = [];
+    const myTech = NeptunesPride.universe.player.tech;
+    const levels = player.tech;
+    techs = Object.keys(player.tech).filter(
+      (t) => levels[t].level < myTech[t].level,
+    );
+    npui.trigger("hide_screen");
+    var screenConfig = {
+      message: "confirm_send_bulktech",
+      messageTemplateData: {
+        techs: techs.map(translateTech).join(", "),
+        alias: player.colourBox + player.hyperlinkedRawAlias,
+      },
+      eventKind: "send_bulktech",
+      eventData: {
+        targetPlayer: player,
+        techs,
+      },
+      notification: false,
+      returnScreen: "empire",
+    };
+    npui.trigger("show_screen", ["confirm", screenConfig]);
+  };
+  const sendBulkTech = (
+    _event: any,
+    data: { targetPlayer: string; techs: string[] },
+  ) => {
+    const universe = NeptunesPride.universe;
+    const np = NeptunesPride.np;
+    var targetPlayer: any = data.targetPlayer;
+    for (let i = 0; i < data.techs.length; ++i) {
+      var name = data.techs[i];
+      var price =
+        (targetPlayer.tech[name].level + 1) * universe.galaxy.trade_cost;
+      if (universe.player.cash >= price) {
+        targetPlayer.tech[name].level += 1;
+        universe.player.cash -= price;
+        np.trigger("server_request", {
+          type: "order",
+          order: `share_tech,${targetPlayer.uid},${name}`,
+        });
+      }
+    }
+    universe.selectPlayer(targetPlayer);
+    np.trigger("refresh_interface");
+  };
+  NeptunesPride.np.on("send_bulktech", sendBulkTech);
   NeptunesPride.sendCash = (recipient: number, credits: number) => {
     NeptunesPride.templates["confirm_send_cash"] =
       "Are you sure you want to send<br>[[alias]]<br>$[[amount]] credits?";
