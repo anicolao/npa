@@ -547,6 +547,9 @@ function NeptunesPrideAgent() {
             let ka = k.split(",");
             let fleet = fleets[ka[1]];
             let outcomeString = "Loses! {0} live.".format(defense);
+            if (fleet.puid == starstate[starId].puid) {
+              outcomeString = "Wins! {0} land.".format(defense);
+            }
             fleetOutcomes[fleet.uid] = {
               eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
               outcome: outcomeString,
