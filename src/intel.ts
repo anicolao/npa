@@ -1063,8 +1063,9 @@ function NeptunesPrideAgent() {
           const rotationAngle = function (star1: any, star2: any) {
             const xoff = star1.x - star2.x;
             const yoff = star1.y - star2.y;
-            const flip = Math.PI * (xoff < 0 ? 1 : 0);
-            return Math.atan2(yoff, xoff) + flip;
+            const flipped = xoff < 0;
+            const flip = Math.PI * (flipped ? 1 : 0);
+            return { angle: Math.atan2(yoff, xoff) + flip, flipped };
           };
           map.context.save();
           map.context.globalAlpha = 1;
@@ -1072,7 +1073,8 @@ function NeptunesPrideAgent() {
           map.context.lineWidth = 2 * map.pixelRatio;
           map.context.lineCap = "round";
           map.context.translate(midX, midY);
-          map.context.rotate(rotationAngle(star, other));
+          const { angle, flipped } = rotationAngle(star, other);
+          map.context.rotate(angle);
           const visArcRadius =
             map.worldToScreenX(visTicks * speed) - map.worldToScreenX(0);
           const visArcX =
@@ -1080,6 +1082,7 @@ function NeptunesPrideAgent() {
           const start =
             map.worldToScreenX(tickDistance - 2 * speed) -
             map.worldToScreenX(0);
+          const dist = map.worldToScreenX(tickDistance) - map.worldToScreenX(0);
           const end =
             map.worldToScreenX(tickDistance - 2 * speed) -
             map.worldToScreenX(0);
@@ -1088,17 +1091,25 @@ function NeptunesPrideAgent() {
             map.context.moveTo(-start / 2, 0);
             map.context.lineTo(end / 2, 0);
             map.context.stroke();
-            if (visArcRadius < visArcX + end) {
+            if (visArcRadius - visArcX - end / 2 + 1.0 <= 1.0) {
               map.context.beginPath();
               const arcLen = (Math.PI * 8) / visArcRadius;
-              map.context.arc(-visArcX, 0, visArcRadius, -arcLen, arcLen);
+              const flipPi = flipped ? Math.PI : 0;
+              const x = flipped ? visArcX : -visArcX;
+              map.context.arc(
+                x,
+                0,
+                visArcRadius,
+                flipPi - arcLen,
+                flipPi + arcLen,
+              );
               map.context.stroke();
             }
           }
           map.context.textAlign = "center";
           map.context.translate(0, -8 * map.pixelRatio);
           drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0);
-          if (visArcRadius >= visArcX + end) {
+          if (visArcRadius - dist + 1.0 > 1.0) {
             map.context.translate(0, 2 * 9 * map.pixelRatio);
             drawString("invisible", 0, 0);
           }
