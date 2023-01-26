@@ -583,11 +583,13 @@ function NeptunesPrideAgent() {
     "8",
     decAutoRuler,
     "Decrease number of distances shown by the auto ruler.",
+    "- Rulers",
   );
   defineHotkey(
     "9",
     incAutoRuler,
     "Increase number of distances shown by the auto ruler.",
+    "+ Rulers",
   );
   function incCombatHandicap() {
     combatHandicap += 1;
@@ -1070,6 +1072,7 @@ function NeptunesPrideAgent() {
           map.context.save();
           map.context.globalAlpha = 1;
           map.context.strokeStyle = color;
+          map.context.fillStyle = color;
           map.context.lineWidth = 2 * map.pixelRatio;
           map.context.lineCap = "round";
           map.context.translate(midX, midY);
@@ -1091,6 +1094,20 @@ function NeptunesPrideAgent() {
             map.context.moveTo(-start / 2, 0);
             map.context.lineTo(end / 2, 0);
             map.context.stroke();
+            map.context.beginPath();
+            const arrow = flipped ? -1 : 1;
+            const arrowSize = 5;
+            map.context.moveTo((arrow * end) / 2, 0);
+            map.context.lineTo(
+              (arrow * end) / 2 - arrow * arrowSize * map.pixelRatio,
+              arrowSize * map.pixelRatio,
+            );
+            map.context.lineTo(
+              (arrow * end) / 2 - arrow * arrowSize * map.pixelRatio,
+              -arrowSize * map.pixelRatio,
+            );
+            map.context.closePath();
+            map.context.fill();
             if (visArcRadius - visArcX - end / 2 + 1.0 <= 1.0) {
               map.context.beginPath();
               const arcLen = (Math.PI * 8) / visArcRadius;
@@ -1120,9 +1137,9 @@ function NeptunesPrideAgent() {
         const enemyTicks = drawHUDRuler(star, other, "#aa0000");
         const ticks = Math.ceil(Math.sqrt(distance(star, support) / speedSq));
         if (enemyTicks - visTicks >= ticks) {
-          drawHUDRuler(support, star, "#00aa00");
+          drawHUDRuler(star, support, "#00aa00");
         } else {
-          drawHUDRuler(support, star, "#888888");
+          drawHUDRuler(star, support, "#888888");
         }
 
         for (let i = 0; showAll && i < closerStars.length; ++i) {
@@ -1130,9 +1147,9 @@ function NeptunesPrideAgent() {
           if (o.puid == star.puid) {
             const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
             if (enemyTicks - visTicks >= ticks) {
-              drawHUDRuler(o, star, "#00aa00");
+              drawHUDRuler(star, o, "#00aa00");
             } else {
-              drawHUDRuler(o, star, "#888888");
+              drawHUDRuler(star, o, "#888888");
             }
           } else {
             drawHUDRuler(star, o, "#aa0000");
