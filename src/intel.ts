@@ -197,6 +197,7 @@ function NeptunesPrideAgent() {
   }
 
   let fleetOutcomes: { [k: number]: any } = {};
+  let autoRulerPower = 1;
   let combatHandicap = 0;
   let combatOutcomes = function () {
     let universe = NeptunesPride.universe;
@@ -569,6 +570,25 @@ function NeptunesPrideAgent() {
     return output;
   };
 
+  function incAutoRuler() {
+    autoRulerPower += 1;
+    NeptunesPride.np.trigger("map_rebuild");
+  }
+  function decAutoRuler() {
+    autoRulerPower -= 1;
+    if (autoRulerPower < 0) autoRulerPower = 0;
+    NeptunesPride.np.trigger("map_rebuild");
+  }
+  defineHotkey(
+    "8",
+    decAutoRuler,
+    "Decrease number of distances shown by the auto ruler.",
+  );
+  defineHotkey(
+    "9",
+    incAutoRuler,
+    "Increase number of distances shown by the auto ruler.",
+  );
   function incCombatHandicap() {
     combatHandicap += 1;
     NeptunesPride.np.trigger("map_rebuild");
@@ -713,6 +733,18 @@ function NeptunesPrideAgent() {
       "<p>The clipboard should be pasted into a CSV and then imported.",
     "Summary CSV",
   );
+
+  let drawString = function (
+    s: string,
+    x: number,
+    y: number,
+    fgColor?: string,
+  ) {
+    const str = Crux.format(s, {});
+    const context = NeptunesPride.npui.map.context;
+    context.fillStyle = fgColor || "#00ff00";
+    context.fillText(str, x, y);
+  };
 
   let drawOverlayString = function (
     context: {
@@ -956,6 +988,130 @@ function NeptunesPrideAgent() {
         drawDisc(x, y, fscale, fr);
       }
     }
+    const distance = function (star1: any, star2: any) {
+      const xoff = star1.x - star2.x;
+      const yoff = star1.y - star2.y;
+      const gatefactor = star1?.ga * star2?.ga * 9 || 1;
+      return (xoff * xoff + yoff * yoff) / gatefactor;
+    };
+    const findClosestStars = function (star: any, stepsOut: number) {
+      const map = NeptunesPride.npui.map;
+      const stars = NeptunesPride.universe.galaxy.stars;
+      let closest = star;
+      let closestSupport = star;
+      const addCoords = (s: any) => {
+        return { ...s, x: s.worldX, y: s.worldY };
+      };
+      let sortedByDistanceSquared = map.sortedStarSprites.map(addCoords);
+      sortedByDistanceSquared.sort(
+        (a: any, b: any) => distance(star, b) - distance(star, a),
+      );
+      let i = sortedByDistanceSquared.length;
+      do {
+        i -= 1;
+        const candidate = stars[sortedByDistanceSquared[i].uid];
+        if (
+          candidate.puid !== star.puid &&
+          (closest === star || stepsOut > 0)
+        ) {
+          closest = candidate;
+          stepsOut--;
+          console.log({ stepsOut });
+        } else if (candidate.puid === star.puid && closestSupport === star) {
+          closestSupport = candidate;
+        }
+      } while (
+        (closest === star || closestSupport === star || stepsOut > 0) &&
+        i > 0
+      );
+      const closestDist = distance(star, closest);
+      const closerStars: any[] = [];
+      for (let i = 0; i < sortedByDistanceSquared.length; ++i) {
+        const candidate = stars[sortedByDistanceSquared[i].uid];
+        const dsQ = distance(star, candidate);
+        if (
+          dsQ <= closestDist &&
+          candidate !== closest &&
+          candidate !== closestSupport &&
+          candidate !== star
+        ) {
+          closerStars.push(candidate);
+        }
+      }
+
+      return [closest, closestSupport, closerStars];
+    };
+    const drawAutoRuler = function () {
+      const universe = NeptunesPride.universe;
+      const map = NeptunesPride.npui.map;
+      if (universe.selectedStar && autoRulerPower > 0) {
+        const visTicks = NeptunesPride.gameConfig.turnBased
+          ? NeptunesPride.gameConfig.turnJumpTicks
+          : 1;
+        const speed = NeptunesPride.universe.galaxy.fleet_speed;
+        const speedSq = speed * speed;
+        const star = universe.selectedStar;
+        const stepsOut = Math.ceil(autoRulerPower / 2);
+        const showAll = autoRulerPower % 2 === 0;
+        const [other, support, closerStars] = findClosestStars(star, stepsOut);
+        const drawHUDRuler = function (star: any, other: any, color: string) {
+          map.context.globalAlpha = 1;
+          map.context.strokeStyle = color;
+          map.context.lineWidth = 2 * map.pixelRatio;
+          map.context.lineCap = "round";
+          map.context.beginPath();
+          map.context.moveTo(
+            map.worldToScreenX(star.x),
+            map.worldToScreenY(star.y),
+          );
+          const ticks = Math.ceil(Math.sqrt(distance(star, other) / speedSq));
+          map.context.lineTo(
+            map.worldToScreenX(other.x),
+            map.worldToScreenY(other.y),
+          );
+          map.context.stroke();
+          map.context.setLineDash([]);
+          const midX = map.worldToScreenX((star.x + other.x) / 2);
+          const midY = map.worldToScreenY((star.y + other.y) / 2);
+
+          const rotationAngle = function (star1: any, star2: any) {
+            const xoff = star1.x - star2.x;
+            const yoff = star1.y - star2.y;
+            const flip = Math.PI * (xoff < 0 ? 1 : 0);
+            return Math.atan2(yoff, xoff) + flip;
+          };
+          map.context.save();
+          map.context.translate(midX, midY);
+          map.context.rotate(rotationAngle(star, other));
+          map.context.textAlign = "center";
+          map.context.translate(0, -8 * map.pixelRatio);
+          drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0);
+          map.context.restore();
+          return ticks;
+        };
+        const enemyTicks = drawHUDRuler(star, other, "#aa0000cc");
+        const ticks = Math.ceil(Math.sqrt(distance(star, support) / speedSq));
+        if (enemyTicks - visTicks >= ticks) {
+          drawHUDRuler(star, support, "#00aa00cc");
+        } else {
+          drawHUDRuler(star, support, "#888888cc");
+        }
+
+        for (let i = 0; showAll && i < closerStars.length; ++i) {
+          const o = closerStars[i];
+          if (o.puid == star.puid) {
+            const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
+            if (enemyTicks - visTicks >= ticks) {
+              drawHUDRuler(star, o, "#00aa00cc");
+            } else {
+              drawHUDRuler(star, o, "#888888cc");
+            }
+          } else {
+            drawHUDRuler(star, o, "#aa0000cc");
+          }
+        }
+      }
+    };
     map.drawScanningRange = function () {
       superDrawScanning();
 
@@ -1175,6 +1331,8 @@ function NeptunesPrideAgent() {
           //console.log("two star ruler");
         }
       }
+
+      drawAutoRuler();
     };
     let base = -1;
     NeptunesPride.npui.status.on("one_second_tick", () => {
