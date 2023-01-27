@@ -1001,24 +1001,24 @@ function NeptunesPrideAgent() {
       const stars = NeptunesPride.universe.galaxy.stars;
       let closest = star;
       let closestSupport = star;
-      const addCoords = (s: any) => {
-        return { ...s, x: s.worldX, y: s.worldY };
+      const toStars = (s: any) => {
+        return stars[s.uid];
       };
-      let sortedByDistanceSquared = map.sortedStarSprites.map(addCoords);
+      let sortedByDistanceSquared = map.sortedStarSprites.map(toStars);
       sortedByDistanceSquared.sort(
         (a: any, b: any) => distance(star, b) - distance(star, a),
       );
       let i = sortedByDistanceSquared.length;
       do {
         i -= 1;
-        const candidate = stars[sortedByDistanceSquared[i].uid];
+        const candidate = sortedByDistanceSquared[i];
+        const dist = distance(star, candidate);
         if (
           candidate.puid !== star.puid &&
           (closest === star || stepsOut > 0)
         ) {
           closest = candidate;
           stepsOut--;
-          console.log({ stepsOut });
         } else if (candidate.puid === star.puid && closestSupport === star) {
           closestSupport = candidate;
         }
