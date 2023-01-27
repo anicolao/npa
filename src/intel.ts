@@ -1387,7 +1387,7 @@ function NeptunesPrideAgent() {
         base = parseInt(parts[parts.length - 1].replaceAll("s", "")) + 1;
       }
       base -= 1;
-      if (base === 29 && relativeTimes === "relative") {
+      if (base === 29 && relativeTimes === "relative" && showingOurUI) {
         // repaint the map and UI every minute if the user is
         // displaying the ticking clock.
         NeptunesPride.np.trigger("map_rebuild");
@@ -1642,6 +1642,13 @@ function NeptunesPrideAgent() {
       .roost(npui.sideMenu);
 
     const superNewFleetScreen = npui.NewFleetScreen;
+    let showingOurUI = false;
+    NeptunesPride.np.on(
+      "show_screen",
+      (_event: any, name: any, screenConfig: any) => {
+        showingOurUI = name === "new_fleet" && screenConfig === undefined;
+      },
+    );
     npui.NewFleetScreen = (screenConfig: any) => {
       if (screenConfig === undefined) {
         return npaReports(screenConfig);
