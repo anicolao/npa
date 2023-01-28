@@ -52,10 +52,17 @@ declare global {
     format(...args: any[]): string;
   }
 }
+
 function NeptunesPrideAgent() {
   let title = getVersion();
   let version = title.replace(/^.*v/, "v");
   console.log(title);
+
+  const settings: GameStore = new GameStore("global_settings");
+
+  type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
+  const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
+  settings.newSetting("relativeTimes", timeOptions[0]);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -1387,7 +1394,11 @@ function NeptunesPrideAgent() {
         base = parseInt(parts[parts.length - 1].replaceAll("s", "")) + 1;
       }
       base -= 1;
-      if (base === 29 && relativeTimes === "relative" && showingOurUI) {
+      if (
+        base === 29 &&
+        settings.relativeTimes === "relative" &&
+        showingOurUI
+      ) {
         // repaint the map and UI every minute if the user is
         // displaying the ticking clock.
         NeptunesPride.np.trigger("map_rebuild");
@@ -1658,46 +1669,32 @@ function NeptunesPrideAgent() {
     };
 
     let superFormatTime = Crux.formatTime;
-    type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
-    const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
-    let relativeTimes: TimeOptionsT | null = null;
-    const settings = new GameStore("global_settings");
     Crux.formatTime = function (
       ms: number,
       showMinutes: boolean,
       showSeconds: boolean,
     ) {
-      if (relativeTimes === null) {
-        settings
-          .get("relativeTimes")
-          .then((rt) => (relativeTimes = rt || "relative"));
-      }
-      if (relativeTimes === "relative") {
+      if (settings.relativeTimes === "relative") {
         return superFormatTime(ms, showMinutes, showSeconds);
-      } else if (relativeTimes === "eta") {
+      } else if (settings.relativeTimes === "eta") {
         if (NeptunesPride.gameConfig.turnBased) {
           return msToTurnString(ms, "");
         }
         return msToEtaString(ms, "");
-      } else if (relativeTimes === "tick") {
+      } else if (settings.relativeTimes === "tick") {
         const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
         const tick = ms / rate;
         return `Tick #${Math.ceil(tick) + NeptunesPride.universe.galaxy.tick}`;
-      } else if (relativeTimes === "tickrel") {
+      } else if (settings.relativeTimes === "tickrel") {
         const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
         const tick = ms / rate;
         return `${Math.ceil(tick)} ticks`;
       }
     };
     let toggleRelative = function () {
-      if (relativeTimes === null) {
-        settings
-          .get("relativeTimes")
-          .then((rt) => (relativeTimes = rt || "relative"));
-      }
-      const i = (timeOptions.indexOf(relativeTimes) + 1) % timeOptions.length;
-      relativeTimes = timeOptions[i];
-      settings.set("relativeTimes", relativeTimes);
+      const i =
+        (timeOptions.indexOf(settings.relativeTimes) + 1) % timeOptions.length;
+      settings.relativeTimes = timeOptions[i];
       NeptunesPride.np.trigger("refresh_interface");
       NeptunesPride.np.trigger("map_rebuild");
     };
