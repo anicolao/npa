@@ -14,18 +14,12 @@ export class GameStore {
   }
 
   async get(key: string) {
-    console.log("GameStore.get", { key });
-    return (await this.dbPromise).get(this.storename, key).then((v) => {
-      console.log("GameStore.get resolved", { key, v });
-      return v;
-    });
+    return (await this.dbPromise).get(this.storename, key);
   }
   async set(key: string, val: any) {
-    console.log("GameStore.set", { key, val });
     return (await this.dbPromise).put(this.storename, val, key);
   }
   async del(key: string) {
-    console.log("GameStore.del", { key });
     return (await this.dbPromise).delete(this.storename, key);
   }
   async clear() {
