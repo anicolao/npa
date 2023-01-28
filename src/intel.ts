@@ -63,6 +63,7 @@ function NeptunesPrideAgent() {
   type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
   const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
   settings.newSetting("relativeTimes", timeOptions[0]);
+  settings.newSetting("autoRulerPower", 1);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -204,7 +205,6 @@ function NeptunesPrideAgent() {
   }
 
   let fleetOutcomes: { [k: number]: any } = {};
-  let autoRulerPower = 1;
   let combatHandicap = 0;
   let combatOutcomes = function () {
     let universe = NeptunesPride.universe;
@@ -577,15 +577,16 @@ function NeptunesPrideAgent() {
     return output;
   };
 
-  function incAutoRuler() {
-    autoRulerPower += 1;
+  const incAutoRuler = () => {
+    settings.autoRulerPower += 1;
     NeptunesPride.np.trigger("map_rebuild");
-  }
-  function decAutoRuler() {
-    autoRulerPower -= 1;
-    if (autoRulerPower < 0) autoRulerPower = 0;
+  };
+  const decAutoRuler = () => {
+    let nextPower = settings.autoRulerPower - 1;
+    if (nextPower < 0) nextPower = 0;
+    settings.autoRulerPower = nextPower;
     NeptunesPride.np.trigger("map_rebuild");
-  }
+  };
   defineHotkey(
     "8",
     decAutoRuler,
@@ -1053,15 +1054,19 @@ function NeptunesPrideAgent() {
     const drawAutoRuler = function () {
       const universe = NeptunesPride.universe;
       const map = NeptunesPride.npui.map;
-      if (universe.selectedStar && autoRulerPower > 0 && map.scale >= 200) {
+      if (
+        universe.selectedStar &&
+        settings.autoRulerPower > 0 &&
+        map.scale >= 200
+      ) {
         const visTicks = NeptunesPride.gameConfig.turnBased
           ? NeptunesPride.gameConfig.turnJumpTicks
           : 1;
         const speed = NeptunesPride.universe.galaxy.fleet_speed;
         const speedSq = speed * speed;
         const star = universe.selectedStar;
-        const stepsOut = Math.ceil(autoRulerPower / 2);
-        const showAll = autoRulerPower % 2 === 0;
+        const stepsOut = Math.ceil(settings.autoRulerPower / 2);
+        const showAll = settings.autoRulerPower % 2 === 0;
         const [other, support, closerStars] = findClosestStars(star, stepsOut);
         const drawHUDRuler = function (star: any, other: any, color: string) {
           const tickDistance = Math.sqrt(distance(star, other));
@@ -1691,7 +1696,7 @@ function NeptunesPrideAgent() {
         return `${Math.ceil(tick)} ticks`;
       }
     };
-    let toggleRelative = function () {
+    const toggleRelative = function () {
       const i =
         (timeOptions.indexOf(settings.relativeTimes) + 1) % timeOptions.length;
       settings.relativeTimes = timeOptions[i];
