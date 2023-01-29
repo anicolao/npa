@@ -16,8 +16,9 @@ import {
   getHotkeys,
   getHotkeyCallback,
 } from "./hotkey";
-import { messageCache, updateMessageCache } from "./events";
+import { messageCache, updateMessageCache, restoreFromDB } from "./events";
 import { GameStore } from "./gamestore";
+import { post } from "./network";
 
 interface CruxLib {
   touchEnabled: boolean;
@@ -2220,18 +2221,6 @@ function NeptunesPrideAgent() {
     npui.trigger("show_screen", ["confirm", screenConfig]);
   };
 
-  async function post(url: string, data: any): Promise<any> {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-      body: new URLSearchParams(data).toString(),
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
   let getUserScanData = async function (apiKey: string) {
     const cacheKey = `CACHED_${apiKey}`;
     const cachedScan = await store.get(cacheKey);
@@ -2526,7 +2515,7 @@ function NeptunesPrideAgent() {
   };
   document.body.addEventListener("keyup", autocompleteTrigger);
 
-  updateMessageCache("game_event");
+  restoreFromDB("game_event").then(() => updateMessageCache("game_event"));
 
   const wst = window.setTimeout;
   const timeoutCatcher = (

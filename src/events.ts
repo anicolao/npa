@@ -1,4 +1,5 @@
 import { openDB } from "idb";
+import { post } from "./network";
 export const messageCache: { [k: string]: any[] } = {
   game_event: [],
   game_diplomacy: [],
@@ -34,74 +35,73 @@ async function restore(group: string) {
   return db.getAllFromIndex(group, "date");
 }
 
-export function cacheEventResponseCallback(
-  group: "game_event" | "game_diplomacy",
-  resolve: (value: boolean | PromiseLike<boolean>) => void,
-) {
-  return async (response: { report: { messages: any } }) => {
-    if (messageCache[group].length === 0) {
-      try {
-        messageCache[group] = await restore(group);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    let incoming = response.report.messages;
-    if (messageCache[group].length > 0) {
-      let overlapOffset = -1;
-      for (let i = 0; i < incoming.length; ++i) {
-        const message = incoming[i];
-        if (message.key === messageCache[group][0].key) {
-          overlapOffset = i;
-          break;
-        }
-      }
-      if (overlapOffset >= 0) {
-        incoming = incoming.slice(0, overlapOffset);
-      } else if (overlapOffset < 0) {
-        const size = incoming.length * 2;
-        console.log(`Missing some events, double fetch to ${size}`);
-        requestRecentMessages(size, group);
-        return;
-      }
-    }
+export async function restoreFromDB(group: "game_event" | "game_diplomacy") {
+  if (messageCache[group].length === 0) {
     try {
-      store(incoming, group);
+      messageCache[group] = await restore(group);
+      console.log(
+        `Restored message cache from db: ${messageCache[group].length}`,
+      );
     } catch (err) {
       console.error(err);
     }
-    messageCache[group] = incoming.concat(messageCache[group]);
-    resolve(true);
-  };
+  }
+}
+async function cacheEventResponseCallback(
+  group: "game_event" | "game_diplomacy",
+  response: { report: { messages: any } },
+): Promise<boolean> {
+  await restoreFromDB(group);
+  let incoming = response.report.messages;
+  if (messageCache[group].length > 0) {
+    let overlapOffset = -1;
+    for (let i = 0; i < incoming.length; ++i) {
+      const message = incoming[i];
+      if (message.key === messageCache[group][0].key) {
+        overlapOffset = i;
+        break;
+      }
+    }
+    if (overlapOffset >= 0) {
+      console.log(`Incoming messages total: ${incoming.length}`);
+      incoming = incoming.slice(0, overlapOffset);
+      console.log(`Incoming messages new: ${incoming.length}`);
+    } else if (overlapOffset < 0) {
+      const size = incoming.length * 2;
+      console.log(`Missing some events, double fetch to ${size}`);
+      return requestRecentMessages(size, group);
+    }
+  }
+  try {
+    store(incoming, group);
+  } catch (err) {
+    console.error(err);
+  }
+  messageCache[group] = incoming.concat(messageCache[group]);
+  console.log(`Return full message set of ${messageCache[group].length}`);
+  return true;
 }
 
-export function requestRecentMessages(
+export async function requestRecentMessages(
   fetchSize: number,
   group: "game_event" | "game_diplomacy",
 ) {
-  const ret = new Promise<boolean>((resolve, reject) => {
-    jQuery.ajax({
-      type: "POST",
-      url: "/trequest/fetch_game_messages",
-      async: true,
-      data: {
-        type: "fetch_game_messages",
-        count: messageCache[group].length > 0 ? fetchSize : 100000,
-        offset: 0,
-        group,
-        version: NeptunesPride.version,
-        game_number: NeptunesPride.gameNumber,
-      },
-      success: cacheEventResponseCallback(group, resolve),
-      error: reject,
-      dataType: "json",
-    });
-  });
-  return ret;
+  console.log("requestRecentMessages");
+  const url = "/trequest/fetch_game_messages";
+  const data = {
+    type: "fetch_game_messages",
+    count: messageCache[group].length > 0 ? fetchSize : 100000,
+    offset: 0,
+    group,
+    version: NeptunesPride.version,
+    game_number: NeptunesPride.gameNumber,
+  };
+  return cacheEventResponseCallback(group, await post(url, data));
 }
 
 export function updateMessageCache(
   group: "game_event" | "game_diplomacy",
 ): Promise<boolean> {
+  console.log("updateMessageCache");
   return requestRecentMessages(4, group);
 }
