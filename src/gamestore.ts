@@ -29,10 +29,10 @@ export class GameStore {
     return (await this.dbPromise).getAllKeys(this.storename);
   }
 
-  newSetting<T>(
-    name: string,
+  newSetting<L extends string, T>(
+    name: L,
     defaultValue: T,
-  ): asserts this is GameStore & Record<string, T> {
+  ): asserts this is GameStore & Record<L, T> {
     let _cached: T | null = null;
     this.get(name).then((v) => {
       if (v !== undefined) _cached = v;

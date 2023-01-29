@@ -64,6 +64,8 @@ function NeptunesPrideAgent() {
   const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
   settings.newSetting("relativeTimes", timeOptions[0]);
   settings.newSetting("autoRulerPower", 1);
+  settings.newSetting("territoryOn", true);
+  settings.newSetting("whitePlayer", false);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -803,7 +805,6 @@ function NeptunesPrideAgent() {
       prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
     return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
   };
-  let territoryOn = true;
   type CSSRuleMap = { [k: string]: CSSStyleRule };
   function cssrules(): CSSRuleMap {
     var rules: { [k: string]: CSSStyleRule } = {};
@@ -1173,7 +1174,7 @@ function NeptunesPrideAgent() {
       superDrawScanning();
 
       const universe = NeptunesPride.universe;
-      if (universe.selectedStar?.player && territoryOn) {
+      if (universe.selectedStar?.player && settings.territoryOn) {
         const context: CanvasRenderingContext2D = map.context;
         let p = universe.selectedStar.player.uid;
         {
@@ -1749,7 +1750,7 @@ function NeptunesPrideAgent() {
     hooksLoaded = true;
   };
   let toggleTerritory = function () {
-    territoryOn = !territoryOn;
+    settings.territoryOn = !settings.territoryOn;
     NeptunesPride.np.trigger("map_rebuild");
   };
   defineHotkey(
@@ -1761,6 +1762,7 @@ function NeptunesPrideAgent() {
 
   let toggleWhitePlayer = function () {
     const player = NeptunesPride.universe.player;
+    settings.whitePlayer = !settings.whitePlayer;
     if (NeptunesPride.universe.player.origColor === undefined) {
       if (player.shape !== undefined) {
         player.origColor = colors[player.color];
@@ -1787,6 +1789,13 @@ function NeptunesPrideAgent() {
     "Toggle between my color and white on the map display.",
     "Whiteout",
   );
+  const checkRecolor = () => {
+    if (settings.whitePlayer) {
+      settings.whitePlayer = false;
+      toggleWhitePlayer();
+    }
+  };
+  window.setTimeout(checkRecolor, 1000);
 
   let init = function () {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
