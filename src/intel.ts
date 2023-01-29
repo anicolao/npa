@@ -1069,6 +1069,9 @@ function NeptunesPrideAgent() {
         const stepsOut = Math.ceil(settings.autoRulerPower / 2);
         const showAll = settings.autoRulerPower % 2 === 0;
         const [other, support, closerStars] = findClosestStars(star, stepsOut);
+        const enemyColor = "#f3172d";
+        const ineffectiveSupportColor = "#888888";
+        const effectiveSupportColor = "#00ff00";
         const drawHUDRuler = function (star: any, other: any, color: string) {
           const tickDistance = Math.sqrt(distance(star, other));
           const ticks = Math.ceil(tickDistance / speed);
@@ -1085,6 +1088,10 @@ function NeptunesPrideAgent() {
           map.context.save();
           map.context.globalAlpha = 1;
           map.context.strokeStyle = color;
+          map.context.shadowColor = "black";
+          map.context.shadowOffsetX = 2;
+          map.context.shadowOffsetY = 2;
+          map.context.shadowBlur = 2;
           map.context.fillStyle = color;
           map.context.lineWidth = 2 * map.pixelRatio;
           map.context.lineCap = "round";
@@ -1138,21 +1145,25 @@ function NeptunesPrideAgent() {
           }
           map.context.textAlign = "center";
           map.context.translate(0, -8 * map.pixelRatio);
-          drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0, color);
+          const textColor =
+            color === ineffectiveSupportColor
+              ? ineffectiveSupportColor
+              : effectiveSupportColor;
+          drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0, textColor);
           if (visArcRadius - dist + 1.0 > 1.0) {
             map.context.translate(0, 2 * 9 * map.pixelRatio);
-            drawString("invisible", 0, 0, color);
+            drawString("invisible", 0, 0, textColor);
           }
           map.context.setLineDash([]);
           map.context.restore();
           return ticks;
         };
-        const enemyTicks = drawHUDRuler(star, other, "#aa0000");
+        const enemyTicks = drawHUDRuler(star, other, enemyColor);
         const ticks = Math.ceil(Math.sqrt(distance(star, support) / speedSq));
         if (enemyTicks - visTicks >= ticks) {
-          drawHUDRuler(star, support, "#00aa00");
+          drawHUDRuler(star, support, effectiveSupportColor);
         } else {
-          drawHUDRuler(star, support, "#888888");
+          drawHUDRuler(star, support, ineffectiveSupportColor);
         }
 
         for (let i = 0; showAll && i < closerStars.length; ++i) {
@@ -1160,12 +1171,12 @@ function NeptunesPrideAgent() {
           if (o.puid == star.puid) {
             const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
             if (enemyTicks - visTicks >= ticks) {
-              drawHUDRuler(star, o, "#00aa00");
+              drawHUDRuler(star, o, effectiveSupportColor);
             } else {
-              drawHUDRuler(star, o, "#888888");
+              drawHUDRuler(star, o, ineffectiveSupportColor);
             }
           } else {
-            drawHUDRuler(star, o, "#aa0000");
+            drawHUDRuler(star, o, enemyColor);
           }
         }
       }
