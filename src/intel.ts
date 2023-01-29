@@ -1740,7 +1740,7 @@ function NeptunesPrideAgent() {
     const fixSubmitButton = () => {
       if (NeptunesPride.gameConfig.turnBased) {
         let submitButton: any[] = jQuery(':contains("Submit Turn")');
-        if (submitButton.length !== 9) {
+        if (submitButton.length !== 9 && submitButton.length !== 11) {
           submitButton = jQuery(':contains("Submitted")');
         }
         if (
@@ -1749,6 +1749,14 @@ function NeptunesPrideAgent() {
           submitButton[7].style
         ) {
           submitButton[7].style.zIndex = 0;
+          return true;
+        }
+        if (
+          submitButton.length === 11 &&
+          submitButton[9] &&
+          submitButton[9].style
+        ) {
+          submitButton[9].style.zIndex = 0;
           return true;
         }
         return false;
