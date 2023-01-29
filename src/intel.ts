@@ -1138,10 +1138,10 @@ function NeptunesPrideAgent() {
           }
           map.context.textAlign = "center";
           map.context.translate(0, -8 * map.pixelRatio);
-          drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0);
+          drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0, color);
           if (visArcRadius - dist + 1.0 > 1.0) {
             map.context.translate(0, 2 * 9 * map.pixelRatio);
-            drawString("invisible", 0, 0);
+            drawString("invisible", 0, 0, color);
           }
           map.context.setLineDash([]);
           map.context.restore();
