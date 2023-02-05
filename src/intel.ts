@@ -19,6 +19,7 @@ import {
 import { messageCache, updateMessageCache, restoreFromDB } from "./events";
 import { GameStore } from "./gamestore";
 import { post } from "./network";
+import { getServerScans, scanCache } from "./npaserver";
 
 interface CruxLib {
   touchEnabled: boolean;
@@ -142,6 +143,46 @@ function NeptunesPrideAgent() {
     "Generate a report on all stars in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "Star Report",
+  );
+
+  function ownershipReport() {
+    let players = NeptunesPride.universe.galaxy.players;
+    let stars = NeptunesPride.universe.galaxy.stars;
+
+    const output = [];
+    if (myApiKey) {
+      output.push("Star ownership changes:");
+      const scans = scanCache[myApiKey];
+      let stars = JSON.parse(scans[0].apis).scanning_data.stars;
+      //console.log("--- Star Captures ---");
+      //console.log(":--|:--|:--|:--");
+      //console.log("Time|Loser|Winner|Star");
+      for (let i = 0; i < scans.length; ++i) {
+        let scanData = JSON.parse(scans[i].apis).scanning_data;
+        let newStars = scanData.stars;
+        let tick = scanData.tick;
+        for (let k in stars) {
+          if (stars[k].puid !== newStars[k].puid && stars[k].puid !== -1) {
+            output.push(
+              `[[Tick #${tick}]] [[${stars[k].puid}]] → [[${newStars[k].puid}]] [[${newStars[k].n}]]`,
+            );
+            //console.log(`[[Tick #${tick}]]|[[${stars[k].puid}]]|[[${newStars[k].puid}]]|[[${newStars[k].n}]]`);
+          }
+          stars[k] = newStars[k];
+        }
+      }
+      //console.log("--- Star Captures ---");
+    } else {
+      output.push("API Key unknown. Find it and merge it, or regenerate.");
+    }
+    prepReport("ownership", output.join("\n"));
+  }
+  defineHotkey(
+    ";",
+    ownershipReport,
+    "Generate a report changes in star ownership and copy to the clipboard." +
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Star Ownership",
   );
 
   let ampm = function (h: number, m: number | string) {
@@ -1610,6 +1651,7 @@ function NeptunesPrideAgent() {
         fleets: "Fleets (short)",
         combats: "Fleets (long)",
         stars: "Stars",
+        ownership: "Ownership",
         accounting: "Accounting",
         api: "API Keys",
         controls: "Controls",
@@ -1636,6 +1678,8 @@ function NeptunesPrideAgent() {
           longFleetReport();
         } else if (d === "stars") {
           starReport();
+        } else if (d === "ownership") {
+          ownershipReport();
         } else if (d === "trading") {
           await tradingReport();
         } else if (d === "research") {
@@ -2516,6 +2560,23 @@ function NeptunesPrideAgent() {
   document.body.addEventListener("keyup", autocompleteTrigger);
 
   restoreFromDB("game_event").then(() => updateMessageCache("game_event"));
+
+  const loadScanData = () =>
+    refreshScanData().then(() => {
+      if (myApiKey) {
+        console.log(`Loading scan data for ${myApiKey}`);
+        getServerScans(myApiKey);
+      } else {
+        console.log("API Key unknown. No scan history.");
+      }
+    });
+  if (NeptunesPride.universe?.player?.uid !== undefined) {
+    console.log("Universe already loaded, refresh scan data.");
+    loadScanData();
+  } else {
+    console.log("Universe not loaded, hook full_universe for scan data.");
+    NeptunesPride.np.on("order:full_universe", loadScanData);
+  }
 
   const wst = window.setTimeout;
   const timeoutCatcher = (

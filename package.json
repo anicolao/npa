@@ -33,6 +33,7 @@
   },
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
+    "firebase": "^9.17.1",
     "idb": "^7.1.1",
     "mousetrap": "^1.6.5"
   }
