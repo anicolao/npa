@@ -157,14 +157,25 @@ function NeptunesPrideAgent() {
       //console.log("--- Star Captures ---");
       //console.log(":--|:--|:--|:--");
       //console.log("Time|Loser|Winner|Star");
+      const abandoned: { [k: string]: boolean } = {};
       for (let i = 0; i < scans.length; ++i) {
         let scanData = JSON.parse(scans[i].apis).scanning_data;
         let newStars = scanData.stars;
         let tick = scanData.tick;
         for (let k in stars) {
-          if (stars[k].puid !== newStars[k].puid && stars[k].puid !== -1) {
+          if (
+            stars[k].puid !== newStars[k].puid &&
+            (stars[k].puid !== -1 || abandoned[k])
+          ) {
+            if (newStars[k].puid === -1) {
+              abandoned[k] = true;
+            }
+            const nameOwner = (uid: any) =>
+              uid !== -1 ? `[[${uid}]]` : "Abandoned";
+            const oldOwner = nameOwner(stars[k].puid);
+            const newOwner = nameOwner(newStars[k].puid);
             output.push(
-              `[[Tick #${tick}]] [[${stars[k].puid}]] → [[${newStars[k].puid}]] [[${newStars[k].n}]]`,
+              `[[Tick #${tick}]] ${oldOwner} →  ${newOwner} [[${newStars[k].n}]]`,
             );
             //console.log(`[[Tick #${tick}]]|[[${stars[k].puid}]]|[[${newStars[k].puid}]]|[[${newStars[k].n}]]`);
           }
