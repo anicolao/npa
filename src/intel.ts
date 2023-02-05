@@ -1339,11 +1339,18 @@ function NeptunesPrideAgent() {
       if (NeptunesPride.originalPlayer === undefined) {
         NeptunesPride.originalPlayer = universe.player.uid;
       }
+      let unrealContextString = "";
       if (NeptunesPride.originalPlayer !== universe.player.uid) {
-        let n = universe.galaxy.players[universe.player.uid].alias;
+        unrealContextString =
+          universe.galaxy.players[universe.player.uid].alias;
+      }
+      if (timeTravelTick > -1) {
+        unrealContextString = `Time machine @ [[Tick #${timeTravelTick}]] ${unrealContextString}`;
+      }
+      if (unrealContextString) {
         drawOverlayString(
           map.context,
-          n,
+          unrealContextString,
           map.viewportWidth - 100,
           map.viewportHeight - 2 * 16 * map.pixelRatio,
         );
@@ -2076,6 +2083,64 @@ function NeptunesPrideAgent() {
   );
   NeptunesPride.np.on("switch_user_api", switchUser);
   NeptunesPride.np.on("merge_user_api", mergeUser);
+
+  let timeTravelTick = -1;
+  let timeTravelTickIndex = -1;
+  let getTimeTravelScan = function () {
+    const scans = scanCache[myApiKey];
+    if (timeTravelTickIndex === -1) {
+      timeTravelTickIndex = scans.length - 1;
+    }
+    let scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+    while (scan.tick !== timeTravelTick) {
+      if (scan.tick < timeTravelTick) {
+        timeTravelTickIndex++;
+        if (timeTravelTickIndex === scans.length) {
+          timeTravelTick = -1;
+          timeTravelTickIndex = -1;
+          NeptunesPride.np.trigger("server_request", {
+            type: "order",
+            order: "full_universe_report",
+          });
+          return null;
+        }
+      } else timeTravelTickIndex--;
+      console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
+      scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+    }
+    return scan;
+  };
+  let timeTravel = function () {
+    if (myApiKey) {
+      const scan = getTimeTravelScan();
+      if (scan === null) return;
+      NeptunesPride.np.onFullUniverse(null, scan);
+      NeptunesPride.npui.onHideScreen(null, true);
+      init();
+    }
+  };
+  let timeTravelBack = function () {
+    if (timeTravelTick === -1) {
+      timeTravelTick = NeptunesPride.universe.galaxy.tick;
+    }
+    timeTravelTick -= 1;
+    if (timeTravelTick < 0) timeTravelTick = 0;
+    timeTravel();
+  };
+  let timeTravelForward = function () {
+    timeTravelTick += 1;
+    timeTravel();
+  };
+  defineHotkey(
+    "left",
+    timeTravelBack,
+    "Go back a tick in time." + "Time Machine: Back",
+  );
+  defineHotkey(
+    "right",
+    timeTravelForward,
+    "Go back a tick in time." + "Time Machine: Back",
+  );
 
   let myApiKey = "";
   const recordAPICode = async function (_event: any, code: string) {
