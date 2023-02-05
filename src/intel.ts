@@ -146,12 +146,11 @@ function NeptunesPrideAgent() {
   );
 
   function ownershipReport() {
-    let players = NeptunesPride.universe.galaxy.players;
-    let stars = NeptunesPride.universe.galaxy.stars;
-
-    const output = [];
+    let output = [];
+    const explorers = [];
     if (myApiKey) {
       output.push("Star ownership changes:");
+      explorers.push("Exploration report:");
       const scans = scanCache[myApiKey];
       let stars = JSON.parse(scans[0].apis).scanning_data.stars;
       //console.log("--- Star Captures ---");
@@ -163,6 +162,10 @@ function NeptunesPrideAgent() {
         let newStars = scanData.stars;
         let tick = scanData.tick;
         for (let k in stars) {
+          const nameOwner = (uid: any) =>
+            uid !== -1 ? `[[${uid}]]` : "Abandoned";
+          const oldOwner = nameOwner(stars[k].puid);
+          const newOwner = nameOwner(newStars[k].puid);
           if (
             stars[k].puid !== newStars[k].puid &&
             (stars[k].puid !== -1 || abandoned[k])
@@ -170,14 +173,14 @@ function NeptunesPrideAgent() {
             if (newStars[k].puid === -1) {
               abandoned[k] = true;
             }
-            const nameOwner = (uid: any) =>
-              uid !== -1 ? `[[${uid}]]` : "Abandoned";
-            const oldOwner = nameOwner(stars[k].puid);
-            const newOwner = nameOwner(newStars[k].puid);
             output.push(
               `[[Tick #${tick}]] ${oldOwner} →  ${newOwner} [[${newStars[k].n}]]`,
             );
             //console.log(`[[Tick #${tick}]]|[[${stars[k].puid}]]|[[${newStars[k].puid}]]|[[${newStars[k].n}]]`);
+          } else if (stars[k].puid !== newStars[k].puid) {
+            explorers.push(
+              `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
+            );
           }
           stars[k] = newStars[k];
         }
@@ -185,6 +188,9 @@ function NeptunesPrideAgent() {
       //console.log("--- Star Captures ---");
     } else {
       output.push("API Key unknown. Find it and merge it, or regenerate.");
+    }
+    if (output.length === 1) {
+      output = explorers;
     }
     prepReport("ownership", output.join("\n"));
   }
@@ -194,6 +200,51 @@ function NeptunesPrideAgent() {
     "Generate a report changes in star ownership and copy to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "Star Ownership",
+  );
+
+  function activityReport() {
+    const output = [];
+    output.push("Activity report:");
+    if (myApiKey && scanCache[myApiKey]?.length > 0) {
+      const players = NeptunesPride.universe.galaxy.players;
+      const scans = scanCache[myApiKey];
+      let prior = JSON.parse(scans[0].apis).scanning_data.players;
+      const pk =
+        NeptunesPride.universe.selectedSpaceObject?.puid ||
+        NeptunesPride.universe.player.uid;
+      for (let i = 1; i < scans.length; ++i) {
+        let scan = JSON.parse(scans[i].apis).scanning_data;
+        let row = scan.players;
+        const active = (p: any, last: any) => {
+          console.log({ p, last });
+          if (p.total_economy > last.total_economy) return true;
+          if (p.total_fleets > last.total_fleets) return true;
+          const manualUpgrade =
+            p.total_stars === last.total_stars || p.tick === last.tick;
+          if (p.total_industry > last.total_industry && manualUpgrade)
+            return true;
+          if (p.total_science > last.total_science && manualUpgrade)
+            return true;
+          return false;
+        };
+        if (active(row[pk], prior[pk])) {
+          output.push(
+            `[[Tick #${scan.tick}]] [[${pk}]] ${row[pk].total_economy}/${row[pk].total_industry}/${row[pk].total_science} F${row[pk].total_fleets} S${row[pk].total_stars}`,
+          );
+        }
+        prior = row;
+      }
+    } else {
+      output.push("API Key unknown. Find it and merge it, or regenerate.");
+    }
+    prepReport("activity", output.join("\n"));
+  }
+  defineHotkey(
+    ":",
+    activityReport,
+    "Generate a report of current player activity." +
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Activity Timestamps",
   );
 
   let ampm = function (h: number, m: number | string) {
@@ -1663,6 +1714,7 @@ function NeptunesPrideAgent() {
         combats: "Fleets (long)",
         stars: "Stars",
         ownership: "Ownership",
+        activity: "Activity",
         accounting: "Accounting",
         api: "API Keys",
         controls: "Controls",
@@ -1691,6 +1743,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "ownership") {
           ownershipReport();
+        } else if (d === "activity") {
+          activityReport();
         } else if (d === "trading") {
           await tradingReport();
         } else if (d === "research") {
