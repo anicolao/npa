@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import {
+  addDoc,
   collection,
   doc,
   getFirestore,
@@ -96,6 +97,12 @@ function moveData() {
     });
     console.log(`wrote ${grandTotal} records.`);
   });
+}
+
+export function registerForScans(apikey: string) {
+  const gameid = NeptunesPride.gameNumber;
+  const store = collection(firestore, `newkey`);
+  addDoc(store, { game_id: gameid, api_key: apikey });
 }
 
 export async function getServerScans(apikey: string) {

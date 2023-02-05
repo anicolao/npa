@@ -19,7 +19,7 @@ import {
 import { messageCache, updateMessageCache, restoreFromDB } from "./events";
 import { GameStore } from "./gamestore";
 import { post } from "./network";
-import { getServerScans, scanCache } from "./npaserver";
+import { getServerScans, registerForScans, scanCache } from "./npaserver";
 
 interface CruxLib {
   touchEnabled: boolean;
@@ -2020,6 +2020,7 @@ function NeptunesPrideAgent() {
       myApiKey = "";
     } else {
       myApiKey = code;
+      registerForScans(myApiKey);
     }
   };
   NeptunesPride.np.on("order:api_code", recordAPICode);
