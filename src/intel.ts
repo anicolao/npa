@@ -1809,6 +1809,9 @@ function NeptunesPrideAgent() {
       showSeconds: boolean,
     ) {
       if (settings.relativeTimes === "relative") {
+        if (ms < 0) {
+          return `-${superFormatTime(-ms, showMinutes, showSeconds)}`;
+        }
         return superFormatTime(ms, showMinutes, showSeconds);
       } else if (settings.relativeTimes === "eta") {
         if (NeptunesPride.gameConfig.turnBased) {
@@ -2092,8 +2095,8 @@ function NeptunesPrideAgent() {
       timeTravelTickIndex = scans.length - 1;
     }
     let scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
-    while (scan.tick !== timeTravelTick) {
-      if (scan.tick < timeTravelTick) {
+    if (scan.tick < timeTravelTick) {
+      while (scan.tick < timeTravelTick) {
         timeTravelTickIndex++;
         if (timeTravelTickIndex === scans.length) {
           timeTravelTick = -1;
@@ -2104,9 +2107,15 @@ function NeptunesPrideAgent() {
           });
           return null;
         }
-      } else timeTravelTickIndex--;
-      console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-      scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+        console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
+        scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+      }
+    } else if (scan.tick > timeTravelTick) {
+      while (scan.tick > timeTravelTick && timeTravelTickIndex > 0) {
+        timeTravelTickIndex--;
+        console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
+        scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+      }
     }
     return scan;
   };
