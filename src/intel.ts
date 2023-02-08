@@ -8,7 +8,7 @@
 
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
-import { safe_image_url } from "./imageutils";
+import { safe_image_url, youtube } from "./imageutils";
 import {
   setClip,
   defineHotkey,
@@ -1566,7 +1566,14 @@ function NeptunesPrideAgent() {
           let msplus = msToTick(relativeTick, false);
           s = s.replace(pattern, Crux.formatTime(msplus, true));
         } else if (safe_image_url(sub)) {
-          s = s.replace(pattern, `<img width="100%" src='${sub}' />`);
+          s = s.replace(pattern, `<img  width="100%" src='${sub}' />`);
+        } else if (youtube(sub)) {
+          const embedURL = sub.replace("watch?v=", "embed/");
+          console.log({ embedURL });
+          s = s.replace(
+            pattern,
+            `<p align="center"><iframe width="280" height="158" src="${embedURL}" title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; web-share" allowfullscreen></iframe><br/><a href=${sub} target="_blank">Open Youtube in a new tab</a></p>`,
+          );
         } else if (/^api:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;

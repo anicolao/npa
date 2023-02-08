@@ -3,3 +3,7 @@ export function safe_image_url(u: string) {
     u,
   );
 }
+
+export function youtube(u: string) {
+  return /^https:&#x2F;&#x2F;www\.youtube\.com&#x2F;watch\?v=\w{6,50}$/.test(u);
+}
