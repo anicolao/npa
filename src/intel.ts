@@ -258,6 +258,12 @@ function NeptunesPrideAgent() {
     return "{0}:{1} PM".format(h, m);
   };
 
+  let trueTick = 0;
+  const recordTrueTick = function () {
+    trueTick = NeptunesPride.universe.galaxy.tick;
+    timeTravelTick = -1;
+  };
+  NeptunesPride.np.on("order:full_universe", recordTrueTick);
   let msToTick = function (tick: number, wholeTime?: boolean) {
     let universe = NeptunesPride.universe;
     var ms_since_data = 0;
@@ -290,7 +296,8 @@ function NeptunesPrideAgent() {
     return `${turn} turn${turn !== 1 ? "s" : ""}`;
   };
   let msToEtaString = function (msplus: number, prefix: string) {
-    let now = new Date();
+    let nowMS = NeptunesPride.universe.galaxy.now;
+    let now = new Date(nowMS);
     let arrival = new Date(now.getTime() + msplus);
     let p = prefix !== undefined ? prefix : "ETA ";
     let ttt = p + ampm(arrival.getHours(), arrival.getMinutes());
@@ -1345,7 +1352,7 @@ function NeptunesPrideAgent() {
           universe.galaxy.players[universe.player.uid].alias;
       }
       if (timeTravelTick > -1) {
-        unrealContextString = `Time machine @ [[Tick #${timeTravelTick}]] ${unrealContextString}`;
+        unrealContextString = `Time machine @ [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
       }
       if (unrealContextString) {
         drawOverlayString(
@@ -1559,10 +1566,17 @@ function NeptunesPrideAgent() {
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
-        } else if (/^Tick #\d\d*$/.test(sub)) {
+        } else if (/^Tick #\d\d*#?$/.test(sub)) {
           const split = sub.split("#");
           const tick = parseInt(split[1]);
-          const relativeTick = tick - NeptunesPride.universe.galaxy.tick;
+          let relativeTick = tick - NeptunesPride.universe.galaxy.tick;
+          if (
+            split.length === 3 &&
+            settings.relativeTimes.indexOf("rel") !== -1
+          ) {
+            // time travel display
+            relativeTick += NeptunesPride.universe.galaxy.tick - trueTick;
+          }
           let msplus = msToTick(relativeTick, false);
           s = s.replace(pattern, Crux.formatTime(msplus, true));
         } else if (safe_image_url(sub)) {
@@ -2096,12 +2110,20 @@ function NeptunesPrideAgent() {
 
   let timeTravelTick = -1;
   let timeTravelTickIndex = -1;
+  const adjustNow = function (scan: any) {
+    const wholeTick = scan.tick_rate * 60 * 1000;
+    const fragment = scan.tick_fragment * wholeTick;
+    const now = scan.now - fragment;
+    const tick_fragment = 0; //((new Date().getTime() - now) % wholeTick)/ wholeTick;
+    return { ...scan, now, tick_fragment };
+  };
   let getTimeTravelScan = function () {
     const scans = scanCache[myApiKey];
     if (timeTravelTickIndex === -1) {
       timeTravelTickIndex = scans.length - 1;
     }
     let scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+    scan = adjustNow(scan);
     if (scan.tick < timeTravelTick) {
       while (scan.tick < timeTravelTick) {
         timeTravelTickIndex++;
@@ -2116,14 +2138,17 @@ function NeptunesPrideAgent() {
         }
         console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
         scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+        scan = adjustNow(scan);
       }
     } else if (scan.tick > timeTravelTick) {
       while (scan.tick > timeTravelTick && timeTravelTickIndex > 0) {
         timeTravelTickIndex--;
         console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
         scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+        scan = adjustNow(scan);
       }
     }
+    timeTravelTick = scan.tick;
     return scan;
   };
   let timeTravel = function () {
