@@ -24,6 +24,4 @@ async function loadNPA() {
   });
 }
 
-dataurl = 'INJECT_USERSCRIPT_URL_HERE';
-
-loadNPA();
+dataurl = 
