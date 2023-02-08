@@ -24,4 +24,3 @@ async function loadNPA() {
   });
 }
 
-dataurl = 
