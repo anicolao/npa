@@ -16,6 +16,7 @@ export const common = {
         test: /\.(js|ts)x?$/,
         use: ['ts-loader'],
         exclude: /node_modules/,
+        sideEffects: false,
       },
     ],
   },

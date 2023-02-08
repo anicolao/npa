@@ -13,7 +13,7 @@ trap "rm $TMPFILE" EXIT
 sed -re "s/INJECT_VERSION/$VERSION/" -e "s/INJECT_NAME/$NAME/" < firefox/manifest.json > $TMPFILE
 cp $TMPFILE firefox/manifest.json
 cat firefox/background.js > $TMPFILE
-echo "'data:text/javascript;base64,$(cat dist/intel.js | uuencode -m foo | grep -v ^begin | grep -v ^=== | tr -d \\n)';" >> $TMPFILE
+echo "dataurl = 'data:text/javascript;base64,$(cat dist/intel.js | uuencode -m foo | grep -v ^begin | grep -v ^=== | tr -d \\n)';" >> $TMPFILE
 echo "loadNPA();" >> $TMPFILE
 
 cp $TMPFILE firefox/background.js
