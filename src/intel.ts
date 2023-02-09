@@ -1420,12 +1420,15 @@ function NeptunesPrideAgent() {
       }
       if (timeTravelTick > -1) {
         unrealContextString = `Time machine @ [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
+      } else {
+        unrealContextString = `${unrealContextString} [[Tick #${trueTick}#a]]`;
       }
       if (unrealContextString) {
+        map.context.textAlign = "right";
         drawOverlayString(
           map.context,
           unrealContextString,
-          map.viewportWidth - 100,
+          map.viewportWidth - 10,
           map.viewportHeight - 2 * 16 * map.pixelRatio,
         );
       }
@@ -1633,19 +1636,22 @@ function NeptunesPrideAgent() {
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
-        } else if (/^Tick #\d\d*#?$/.test(sub)) {
+        } else if (/^Tick #\d\d*(#a?)?$/.test(sub)) {
           const split = sub.split("#");
           const tick = parseInt(split[1]);
           let relativeTick = tick - NeptunesPride.universe.galaxy.tick;
-          if (
-            split.length === 3 &&
-            settings.relativeTimes.indexOf("rel") !== -1
-          ) {
-            // time travel display
-            relativeTick += NeptunesPride.universe.galaxy.tick - trueTick;
+          if (split[2] === "a") {
+            s = s.replace(pattern, `Tick #${tick}`);
+          } else {
+            if (split.length === 3) {
+              if (settings.relativeTimes.indexOf("rel") !== -1) {
+                // time travel display
+                relativeTick += NeptunesPride.universe.galaxy.tick - trueTick;
+              }
+            }
+            let msplus = msToTick(relativeTick, false);
+            s = s.replace(pattern, Crux.formatTime(msplus, true));
           }
-          let msplus = msToTick(relativeTick, false);
-          s = s.replace(pattern, Crux.formatTime(msplus, true));
         } else if (safe_image_url(sub)) {
           s = s.replace(pattern, `<img  width="100%" src='${sub}' />`);
         } else if (youtube(sub)) {
