@@ -692,11 +692,11 @@ function NeptunesPrideAgent() {
   };
 
   const incTerritoryBrightness = () => {
-    settings.territoryBrightness = (settings.territoryBrightness + 1) % 3;
+    settings.territoryBrightness = (settings.territoryBrightness + 1) % 4;
     NeptunesPride.np.trigger("map_rebuild");
   };
   const decTerritoryBrightness = () => {
-    let nextPower = (settings.territoryBrightness - 1) % 3;
+    let nextPower = (settings.territoryBrightness - 1) % 4;
     if (nextPower < 0) nextPower = 2;
     settings.territoryBrightness = nextPower;
     NeptunesPride.np.trigger("map_rebuild");
@@ -1099,8 +1099,13 @@ function NeptunesPrideAgent() {
   let loadHooks = function () {
     const map = NeptunesPride.npui.map;
 
-    function drawDisc(x: number, y: number, scale: number, r: number) {
-      const context: CanvasRenderingContext2D = map.context;
+    function drawDisc(
+      context: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      scale: number,
+      r: number,
+    ) {
       context.save();
       context.translate(x, y);
       context.scale(scale, scale);
@@ -1108,7 +1113,11 @@ function NeptunesPrideAgent() {
       context.arc(0, 0, r, 0, Math.PI * 2);
       context.restore();
     }
-    function drawStarTerritory(star: any, outer: boolean) {
+    function drawStarTerritory(
+      context: CanvasRenderingContext2D,
+      star: any,
+      outer: boolean,
+    ) {
       const x = map.worldToScreenX(star.x);
       const y = map.worldToScreenY(star.y);
       const sH = combatHandicap;
@@ -1129,9 +1138,9 @@ function NeptunesPrideAgent() {
       const minR = Math.min(r, fr);
       const maxR = Math.max(r, fr);
       if (outer) {
-        drawDisc(x, y, fscale, minR);
+        drawDisc(context, x, y, fscale, minR);
       } else {
-        drawDisc(x, y, scale, maxR);
+        drawDisc(context, x, y, scale, maxR);
       }
     }
     const distance = function (star1: any, star2: any) {
@@ -1326,12 +1335,21 @@ function NeptunesPrideAgent() {
           let outer = false;
           do {
             outer = !outer;
+            let bubbleLayer = document.createElement("canvas");
+            bubbleLayer.width = context.canvas.width;
+            bubbleLayer.height = context.canvas.height;
+            let territoryBrightness = settings.territoryBrightness;
+            const bcontext: CanvasRenderingContext2D =
+              territoryBrightness === 3
+                ? context
+                : bubbleLayer.getContext("2d");
+            territoryBrightness %= 3;
             let bubbles = () => {
-              context.beginPath();
+              bcontext.beginPath();
               for (let key in universe.galaxy.stars) {
                 const star = universe.galaxy.stars[key];
                 if (star.player?.uid == p) {
-                  drawStarTerritory(star, outer);
+                  drawStarTerritory(bcontext, star, outer);
                 }
               }
               const player = universe.galaxy.players[p];
@@ -1346,29 +1364,32 @@ function NeptunesPrideAgent() {
               const b =
                 parseInt(color.substring(5, 7).toUpperCase(), 16) / 255.0;
               const l = 0.299 * r + 0.587 * g + 0.114 * b;
-              const territoryBrightness = settings.territoryBrightness;
               const a = Math.max((1 - l) / 4, 0.1) * territoryBrightness;
               const c = (x: number) => Math.floor(x * 255);
               const cc = `rgba(${c(r)}, ${c(g)}, ${c(b)}, ${a})`;
-              context.fillStyle = cc;
-              context.strokeStyle = `${color}50`;
+              bcontext.fillStyle = cc;
+              bcontext.strokeStyle = `${color}aa`;
+              bcontext.lineWidth = 2 * map.pixelRatio;
               if (territoryBrightness === 0) {
-                if (context.globalCompositeOperation === "destination-out") {
-                  context.fillStyle = "#fff";
-                  context.fill();
+                if (bcontext.globalCompositeOperation === "destination-out") {
+                  bcontext.fillStyle = "#fff";
+                  bcontext.fill();
                 } else {
-                  context.stroke();
+                  bcontext.stroke();
                 }
-              } else if (context.globalCompositeOperation === "source-over") {
-                context.fill();
+              } else if (bcontext.globalCompositeOperation === "source-over") {
+                bcontext.fill();
               }
-              context.closePath();
+              bcontext.closePath();
             };
-            context.globalCompositeOperation = "source-over";
+            bcontext.globalCompositeOperation = "source-over";
             bubbles();
-            context.globalCompositeOperation = "destination-out";
+            bcontext.globalCompositeOperation = "destination-out";
             bubbles();
-            context.globalCompositeOperation = "source-over";
+            bcontext.globalCompositeOperation = "source-over";
+            if (context !== bcontext) {
+              context.drawImage(bcontext.canvas, 0, 0);
+            }
           } while (outer);
         }
       }
