@@ -1018,11 +1018,8 @@ function NeptunesPrideAgent() {
       const y = row * 64;
       playerContext.fillRect(x, y, 64, 64);
 
-      const whitePlayer = new Image();
-      whitePlayer.src = playerSprite.toDataURL();
-      await whitePlayer.decode();
       spriteContext.clearRect(x, y, 64, 64);
-      spriteContext.drawImage(whitePlayer, 0, 0);
+      spriteContext.drawImage(playerSprite, 0, 0);
     }
     // draw stargate glows
     for (let pk in players) {
@@ -1050,11 +1047,8 @@ function NeptunesPrideAgent() {
       const y = row * 64;
       playerContext.fillRect(x, y, 64, 64);
 
-      const whitePlayer = new Image();
-      whitePlayer.src = playerSprite.toDataURL();
-      await whitePlayer.decode();
       spriteContext.clearRect(x + realcol * 64, y, 64, 64);
-      spriteContext.drawImage(whitePlayer, realcol * 64, 0);
+      spriteContext.drawImage(playerSprite, realcol * 64, 0);
     }
 
     // Override sprite positioning for stars with gates, so
