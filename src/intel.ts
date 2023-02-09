@@ -68,6 +68,7 @@ function NeptunesPrideAgent() {
   settings.newSetting("autoRulerPower", 1);
   settings.newSetting("territoryOn", true);
   settings.newSetting("whitePlayer", false);
+  settings.newSetting("territoryBrightness", 1);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -690,6 +691,28 @@ function NeptunesPrideAgent() {
     return output;
   };
 
+  const incTerritoryBrightness = () => {
+    settings.territoryBrightness = (settings.territoryBrightness + 1) % 3;
+    NeptunesPride.np.trigger("map_rebuild");
+  };
+  const decTerritoryBrightness = () => {
+    let nextPower = (settings.territoryBrightness - 1) % 3;
+    if (nextPower < 0) nextPower = 2;
+    settings.territoryBrightness = nextPower;
+    NeptunesPride.np.trigger("map_rebuild");
+  };
+  defineHotkey(
+    "ctrl+8",
+    decTerritoryBrightness,
+    "Adjust territory display style.",
+    "- Territory Brightness",
+  );
+  defineHotkey(
+    "ctrl+9",
+    incTerritoryBrightness,
+    "Adjust territory display style.",
+    "+ Territory Brightness",
+  );
   const incAutoRuler = () => {
     settings.autoRulerPower += 1;
     NeptunesPride.np.trigger("map_rebuild");
@@ -1076,7 +1099,6 @@ function NeptunesPrideAgent() {
   let loadHooks = function () {
     const map = NeptunesPride.npui.map;
 
-    let superDrawScanning = map.drawScanningRange;
     function drawDisc(x: number, y: number, scale: number, r: number) {
       const context: CanvasRenderingContext2D = map.context;
       context.save();
@@ -1086,7 +1108,7 @@ function NeptunesPrideAgent() {
       context.arc(0, 0, r, 0, Math.PI * 2);
       context.restore();
     }
-    function drawStarTerritory(star: any, scanning: boolean) {
+    function drawStarTerritory(star: any, outer: boolean) {
       const x = map.worldToScreenX(star.x);
       const y = map.worldToScreenY(star.y);
       const sH = combatHandicap;
@@ -1104,10 +1126,12 @@ function NeptunesPrideAgent() {
         (star.player.tech.propulsion.level + 3 + pH) * lyrToMap;
       const fscale = (fleetRange * map.scale * map.pixelRatio) / 250;
       const fr = (map.fleetRangeSprite.width * 0.9) / 2;
-      if (scanning) {
-        drawDisc(x, y, scale, r);
+      const minR = Math.min(r, fr);
+      const maxR = Math.max(r, fr);
+      if (outer) {
+        drawDisc(x, y, fscale, minR);
       } else {
-        drawDisc(x, y, fscale, fr);
+        drawDisc(x, y, scale, maxR);
       }
     }
     const distance = function (star1: any, star2: any) {
@@ -1292,36 +1316,64 @@ function NeptunesPrideAgent() {
         }
       }
     };
-    map.drawScanningRange = function () {
-      superDrawScanning();
-
+    const superDrawStars = map.drawStars;
+    map.drawStars = function () {
       const universe = NeptunesPride.universe;
       if (universe.selectedStar?.player && settings.territoryOn) {
         const context: CanvasRenderingContext2D = map.context;
         let p = universe.selectedStar.player.uid;
         {
-          let scanning = false;
+          let outer = false;
           do {
-            scanning = !scanning;
-            context.beginPath();
-            for (let key in universe.galaxy.stars) {
-              const star = universe.galaxy.stars[key];
-              if (star.player?.uid == p) {
-                drawStarTerritory(star, scanning);
+            outer = !outer;
+            let bubbles = () => {
+              context.beginPath();
+              for (let key in universe.galaxy.stars) {
+                const star = universe.galaxy.stars[key];
+                if (star.player?.uid == p) {
+                  drawStarTerritory(star, outer);
+                }
               }
-            }
-            const player = universe.galaxy.players[p];
-            let color = player.color;
-            if (player.shape !== undefined) {
-              color = colors[player.color];
-            }
-            const drawColor = `${color}35`;
-            context.fillStyle = drawColor;
-            context.fill();
-            context.closePath();
-          } while (scanning);
+              const player = universe.galaxy.players[p];
+              let color = player.color;
+              if (player.shape !== undefined) {
+                color = colors[player.color];
+              }
+              const r =
+                parseInt(color.substring(1, 3).toUpperCase(), 16) / 255.0;
+              const g =
+                parseInt(color.substring(3, 5).toUpperCase(), 16) / 255.0;
+              const b =
+                parseInt(color.substring(5, 7).toUpperCase(), 16) / 255.0;
+              const l = 0.299 * r + 0.587 * g + 0.114 * b;
+              const territoryBrightness = settings.territoryBrightness;
+              const a = Math.max((1 - l) / 4, 0.1) * territoryBrightness;
+              const c = (x: number) => Math.floor(x * 255);
+              const cc = `rgba(${c(r)}, ${c(g)}, ${c(b)}, ${a})`;
+              context.fillStyle = cc;
+              context.strokeStyle = `${color}50`;
+              if (territoryBrightness === 0) {
+                if (context.globalCompositeOperation === "destination-out") {
+                  context.fillStyle = "#fff";
+                  context.fill();
+                } else {
+                  context.stroke();
+                }
+              } else if (context.globalCompositeOperation === "source-over") {
+                context.fill();
+              }
+              context.closePath();
+            };
+            context.globalCompositeOperation = "source-over";
+            bubbles();
+            context.globalCompositeOperation = "destination-out";
+            bubbles();
+            context.globalCompositeOperation = "source-over";
+          } while (outer);
         }
       }
+
+      superDrawStars();
     };
     let superDrawText = NeptunesPride.npui.map.drawText;
     NeptunesPride.npui.map.drawText = function () {
