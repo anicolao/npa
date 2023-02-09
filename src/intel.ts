@@ -1394,6 +1394,15 @@ function NeptunesPrideAgent() {
     NeptunesPride.npui.map.drawText = function () {
       let universe = NeptunesPride.universe;
       let map = NeptunesPride.npui.map;
+      const puids = Object.keys(universe.galaxy.players);
+      const huids = puids.map((x) => universe.galaxy.players[x].huid);
+      NeptunesPride.npui.map.sortedStarSprites.forEach((sss: any) => {
+        if (huids.indexOf(sss.uid) !== -1) {
+          if (sss.playerAlias.indexOf("Homeworld") === -1) {
+            sss.playerAlias += " (Homeworld)";
+          }
+        }
+      });
       superDrawText();
 
       map.context.font = `${14 * map.pixelRatio}px OpenSansRegular, sans-serif`;
