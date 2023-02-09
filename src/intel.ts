@@ -297,7 +297,7 @@ function NeptunesPrideAgent() {
     return `${turn} turn${turn !== 1 ? "s" : ""}`;
   };
   let msToEtaString = function (msplus: number, prefix: string) {
-    let nowMS = NeptunesPride.universe.galaxy.now;
+    let nowMS = new Date().getTime() + NeptunesPride.universe.locTimeCorrection;
     let now = new Date(nowMS);
     let arrival = new Date(now.getTime() + msplus);
     let p = prefix !== undefined ? prefix : "ETA ";
