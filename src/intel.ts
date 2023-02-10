@@ -154,31 +154,28 @@ function NeptunesPrideAgent() {
       explorers.push("Exploration report:");
       const scans = scanCache[myApiKey];
       let stars = JSON.parse(scans[0].apis).scanning_data.stars;
-      //console.log("--- Star Captures ---");
-      //console.log(":--|:--|:--|:--");
-      //console.log("Time|Loser|Winner|Star");
       const abandoned: { [k: string]: boolean } = {};
       for (let i = 0; i < scans.length; ++i) {
         let scanData = JSON.parse(scans[i].apis).scanning_data;
         let newStars = scanData.stars;
         let tick = scanData.tick;
-        for (let k in stars) {
+        for (let k in newStars) {
           const nameOwner = (uid: any) =>
-            uid !== -1 ? `[[${uid}]]` : "Abandoned";
-          const oldOwner = nameOwner(stars[k].puid);
-          const newOwner = nameOwner(newStars[k].puid);
+            uid !== -1 && uid !== undefined ? `[[${uid}]]` : "Abandoned";
+          const unowned = (uid: any) => nameOwner(uid) === "Abandoned";
+          const oldOwner = nameOwner(stars[k]?.puid);
+          const newOwner = nameOwner(newStars[k]?.puid);
           if (
-            stars[k].puid !== newStars[k].puid &&
-            (stars[k].puid !== -1 || abandoned[k])
+            stars[k]?.puid !== newStars[k]?.puid &&
+            (!unowned(stars[k]?.puid) || abandoned[k])
           ) {
-            if (newStars[k].puid === -1) {
+            if (newStars[k]?.puid === -1) {
               abandoned[k] = true;
             }
             output.push(
               `[[Tick #${tick}]] ${oldOwner} →  ${newOwner} [[${newStars[k].n}]]`,
             );
-            //console.log(`[[Tick #${tick}]]|[[${stars[k].puid}]]|[[${newStars[k].puid}]]|[[${newStars[k].n}]]`);
-          } else if (stars[k].puid !== newStars[k].puid) {
+          } else if (stars[k]?.puid !== newStars[k]?.puid) {
             explorers.push(
               `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
             );
@@ -186,7 +183,6 @@ function NeptunesPrideAgent() {
           stars[k] = newStars[k];
         }
       }
-      //console.log("--- Star Captures ---");
     } else {
       output.push("API Key unknown. Find it and merge it, or regenerate.");
     }
@@ -207,7 +203,6 @@ function NeptunesPrideAgent() {
     const output = [];
     output.push("Activity report:");
     if (myApiKey && scanCache[myApiKey]?.length > 0) {
-      const players = NeptunesPride.universe.galaxy.players;
       const scans = scanCache[myApiKey];
       let prior = JSON.parse(scans[0].apis).scanning_data.players;
       const pk =
@@ -217,7 +212,6 @@ function NeptunesPrideAgent() {
         let scan = JSON.parse(scans[i].apis).scanning_data;
         let row = scan.players;
         const active = (p: any, last: any) => {
-          console.log({ p, last });
           if (p.total_economy > last.total_economy) return true;
           if (p.total_fleets > last.total_fleets) return true;
           const manualUpgrade =
