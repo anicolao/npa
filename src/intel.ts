@@ -1056,9 +1056,8 @@ function NeptunesPrideAgent() {
       superCreateSpritesStars();
       NeptunesPride.npui.map.sortedStarSprites.forEach((sss: any) => {
         if (sss.gate && sss.puid >= 0) {
-          let col =
-            NeptunesPride.universe.galaxy.players[sss.puid].shape ||
-            Math.floor(sss.puid / 8);
+          const shape = NeptunesPride.universe.galaxy.players[sss.puid].shape;
+          let col = shape !== undefined ? shape : Math.floor(sss.puid / 8);
           sss.gate.spriteX = 64 * 8 + 64 * col;
         }
       });
