@@ -1111,7 +1111,7 @@ function NeptunesPrideAgent() {
       context: CanvasRenderingContext2D,
       star: any,
       outer: boolean,
-    ) {
+    ): boolean {
       const x = map.worldToScreenX(star.x);
       const y = map.worldToScreenY(star.y);
       const sH = combatHandicap;
@@ -1129,12 +1129,19 @@ function NeptunesPrideAgent() {
         (star.player.tech.propulsion.level + 3 + pH) * lyrToMap;
       const fscale = (fleetRange * map.scale * map.pixelRatio) / 250;
       const fr = (map.fleetRangeSprite.width * 0.9) / 2;
-      const minR = Math.min(r, fr);
-      const maxR = Math.max(r, fr);
+      const maxR = Math.max(scanRange, fleetRange);
+      let drawFleetRange = false;
       if (outer) {
-        drawDisc(context, x, y, fscale, minR);
+        if (fleetRange === maxR) drawFleetRange = true;
       } else {
-        drawDisc(context, x, y, scale, maxR);
+        if (scanRange === maxR) drawFleetRange = true;
+      }
+      if (drawFleetRange) {
+        drawDisc(context, x, y, fscale, fr);
+        return false;
+      } else {
+        drawDisc(context, x, y, scale, r);
+        return true;
       }
     }
     const distance = function (star1: any, star2: any) {
@@ -1340,10 +1347,11 @@ function NeptunesPrideAgent() {
             territoryBrightness %= 3;
             let bubbles = () => {
               bcontext.beginPath();
+              let scanning = false;
               for (let key in universe.galaxy.stars) {
                 const star = universe.galaxy.stars[key];
                 if (star.player?.uid == p) {
-                  drawStarTerritory(bcontext, star, outer);
+                  scanning = drawStarTerritory(bcontext, star, outer);
                 }
               }
               const player = universe.galaxy.players[p];
@@ -1369,7 +1377,12 @@ function NeptunesPrideAgent() {
                   bcontext.fillStyle = "#fff";
                   bcontext.fill();
                 } else {
+                  if (scanning) {
+                    bcontext.setLineDash([10, 15]);
+                    bcontext.strokeStyle = `${color}ff`;
+                  }
                   bcontext.stroke();
+                  bcontext.setLineDash([]);
                 }
               } else if (bcontext.globalCompositeOperation === "source-over") {
                 bcontext.fill();
