@@ -254,8 +254,16 @@ function NeptunesPrideAgent() {
   };
 
   let trueTick = 0;
-  const recordTrueTick = function () {
-    trueTick = NeptunesPride.universe.galaxy.tick;
+  const recordTrueTick = function (_: any, galaxy: any) {
+    trueTick = galaxy.tick;
+    if (galaxy.players[0].shape !== undefined) {
+      colorMap = colorMap.map((_, uid) => {
+        if (galaxy.players[uid] !== undefined) {
+          return colors[galaxy.players[uid].color];
+        }
+        return colorMap[uid];
+      });
+    }
     timeTravelTick = -1;
   };
   NeptunesPride.np.on("order:full_universe", recordTrueTick);
@@ -961,6 +969,7 @@ function NeptunesPrideAgent() {
     "#c000c0",
     "#6000c0",
   ];
+  let colorMap = colors.flatMap((x) => colors);
   const css = cssrules();
   let originalStarSrc: any = undefined;
   async function recolorPlayers() {
@@ -980,10 +989,7 @@ function NeptunesPrideAgent() {
     const players = NeptunesPride.universe.galaxy.players;
     for (let pk in players) {
       const player = players[pk];
-      let color = player.color;
-      if (player.shape !== undefined) {
-        color = colors[player.color];
-      }
+      const color = colorMap[player.uid];
       // player underbar in player list, but these only exist
       // for the first 8 players.
       if (parseInt(pk) < 8) {
@@ -1018,10 +1024,7 @@ function NeptunesPrideAgent() {
     // draw stargate glows
     for (let pk in players) {
       const player = players[pk];
-      let color = player.color;
-      if (player.shape !== undefined) {
-        color = colors[player.color];
-      }
+      const color = colorMap[player.uid];
       const playerSprite = document.createElement("canvas");
       playerSprite.width = playerSprite.height = 64 * 9;
       const playerContext: CanvasRenderingContext2D =
@@ -1349,10 +1352,7 @@ function NeptunesPrideAgent() {
                 }
               }
               const player = universe.galaxy.players[p];
-              let color = player.color;
-              if (player.shape !== undefined) {
-                color = colors[player.color];
-              }
+              const color = colorMap[player.uid];
               const r =
                 parseInt(color.substring(1, 3).toUpperCase(), 16) / 255.0;
               const g =
@@ -2012,22 +2012,13 @@ function NeptunesPrideAgent() {
   let toggleWhitePlayer = function () {
     const player = NeptunesPride.universe.player;
     settings.whitePlayer = !settings.whitePlayer;
-    if (NeptunesPride.universe.player.origColor === undefined) {
-      if (player.shape !== undefined) {
-        player.origColor = colors[player.color];
-        colors[player.color] = "#ffffff";
-      } else {
-        player.origColor = player.color;
-        player.color = "#ffffff";
-      }
+    if (settings.whitePlayer) {
+      colorMap[player.uid] = "#ffffff";
     } else {
-      const tmp = player.origColor;
       if (player.shape !== undefined) {
-        player.origColor = colors[player.color];
-        colors[player.color] = tmp;
+        colorMap[player.uid] = colors[player.color];
       } else {
-        player.origColor = player.color;
-        player.color = tmp;
+        colorMap[player.uid] = player.color;
       }
     }
     recolorPlayers();
