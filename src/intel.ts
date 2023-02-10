@@ -2199,7 +2199,7 @@ function NeptunesPrideAgent() {
     const tick_fragment = 0; //((new Date().getTime() - now) % wholeTick)/ wholeTick;
     return { ...scan, now, tick_fragment };
   };
-  let getTimeTravelScan = function () {
+  let getTimeTravelScan = function (dir: "back" | "forwards") {
     const scans = scanCache[myApiKey];
     if (timeTravelTickIndex === -1) {
       timeTravelTickIndex = scans.length - 1;
@@ -2207,7 +2207,7 @@ function NeptunesPrideAgent() {
     let scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
     scan = adjustNow(scan);
     if (scan.tick < timeTravelTick) {
-      while (scan.tick < timeTravelTick) {
+      while (scan.tick < timeTravelTick && dir === "forwards") {
         timeTravelTickIndex++;
         if (timeTravelTickIndex === scans.length) {
           timeTravelTick = -1;
@@ -2223,7 +2223,11 @@ function NeptunesPrideAgent() {
         scan = adjustNow(scan);
       }
     } else if (scan.tick > timeTravelTick) {
-      while (scan.tick > timeTravelTick && timeTravelTickIndex > 0) {
+      while (
+        scan.tick > timeTravelTick &&
+        timeTravelTickIndex > 0 &&
+        dir === "back"
+      ) {
         timeTravelTickIndex--;
         console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
         scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
@@ -2233,9 +2237,9 @@ function NeptunesPrideAgent() {
     timeTravelTick = scan.tick;
     return scan;
   };
-  let timeTravel = function () {
+  let timeTravel = function (dir: "back" | "forwards") {
     if (myApiKey) {
-      const scan = getTimeTravelScan();
+      const scan = getTimeTravelScan(dir);
       if (scan === null) return;
       NeptunesPride.np.onFullUniverse(null, scan);
       NeptunesPride.npui.onHideScreen(null, true);
@@ -2248,11 +2252,11 @@ function NeptunesPrideAgent() {
     }
     timeTravelTick -= 1;
     if (timeTravelTick < 0) timeTravelTick = 0;
-    timeTravel();
+    timeTravel("back");
   };
   let timeTravelForward = function () {
     timeTravelTick += 1;
-    timeTravel();
+    timeTravel("forwards");
   };
   defineHotkey(
     "left",
