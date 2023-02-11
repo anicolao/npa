@@ -1371,7 +1371,10 @@ function NeptunesPrideAgent() {
                   bcontext.fill();
                 } else {
                   if (scanning) {
-                    bcontext.setLineDash([10, 15]);
+                    bcontext.setLineDash([
+                      4 * map.pixelRatio,
+                      6 * map.pixelRatio,
+                    ]);
                     bcontext.strokeStyle = `${color}ff`;
                   }
                   bcontext.stroke();
