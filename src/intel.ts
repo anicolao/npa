@@ -2011,16 +2011,28 @@ function NeptunesPrideAgent() {
     "Toggle Territory",
   );
 
+  const setPlayerColor = function (uid: number, color: string) {
+    const player = NeptunesPride.universe.galaxy.players[uid];
+    colorMap[player.uid] = color;
+    if (player.shape !== undefined) {
+      player.colorStyle = colorMap[player.uid];
+    } else {
+      player.prevColor = player.color;
+      player.color = colorMap[player.uid];
+    }
+  };
   let toggleWhitePlayer = function () {
     const player = NeptunesPride.universe.player;
     settings.whitePlayer = !settings.whitePlayer;
     if (settings.whitePlayer) {
-      colorMap[player.uid] = "#ffffff";
+      setPlayerColor(player.uid, "#ffffff");
     } else {
       if (player.shape !== undefined) {
-        colorMap[player.uid] = colors[player.color];
+        setPlayerColor(player.uid, colors[player.color]);
       } else {
-        colorMap[player.uid] = player.color;
+        if (player.prevColor !== undefined) {
+          setPlayerColor(player.uid, player.prevColor);
+        }
       }
     }
     recolorPlayers();
