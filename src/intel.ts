@@ -1144,6 +1144,15 @@ function NeptunesPrideAgent() {
       const xoff = star1.x - star2.x;
       const yoff = star1.y - star2.y;
       const gatefactor = star1?.ga * star2?.ga * 9 || 1;
+      if (NeptunesPride.gameVersion === "proteus") {
+        if (gatefactor > 1) {
+          const actualDistanceSquared = xoff * xoff + yoff * yoff;
+          const twelveTickDistance =
+            12 * NeptunesPride.universe.galaxy.fleet_speed;
+          const cap = twelveTickDistance * twelveTickDistance;
+          return Math.min(actualDistanceSquared, cap);
+        }
+      }
       return (xoff * xoff + yoff * yoff) / gatefactor;
     };
     const findClosestStars = function (star: any, stepsOut: number) {
