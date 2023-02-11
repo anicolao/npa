@@ -2357,18 +2357,22 @@ function NeptunesPrideAgent() {
           }`;
         }
         const level = levels[t].level;
+        const tradeCostForLevel = function (level: number) {
+          if (NeptunesPride.gameVersion === "proteus") {
+            return level * level * 5;
+          }
+          return level * NeptunesPride.gameConfig.tradeCost;
+        };
         if (level < myTech[t].level) {
           rows[i] += `|[[sendtech:${pi}:${t}:${level}]]`;
           for (let incs = level; incs < myTech[t].level; ++incs) {
-            allSendAmounts[pi] +=
-              (incs + 1) * NeptunesPride.gameConfig.tradeCost;
+            allSendAmounts[pi] += tradeCostForLevel(incs + 1);
           }
         } else if (level > myTech[t].level) {
-          const amount =
-            (myTech[t].level + 1) * NeptunesPride.gameConfig.tradeCost;
+          const amount = tradeCostForLevel(myTech[t].level + 1);
           rows[i] += `|[[sendcash:${pi}:${amount}:${level}]]`;
           for (let incs = level; incs > myTech[t].level; --incs) {
-            allAmounts[pi] += incs * NeptunesPride.gameConfig.tradeCost;
+            allAmounts[pi] += tradeCostForLevel(incs);
           }
         } else {
           rows[i] += `|${level}`;
