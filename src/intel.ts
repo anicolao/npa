@@ -176,9 +176,11 @@ function NeptunesPrideAgent() {
               `[[Tick #${tick}]] ${oldOwner} →  ${newOwner} [[${newStars[k].n}]]`,
             );
           } else if (stars[k]?.puid !== newStars[k]?.puid) {
-            explorers.push(
-              `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
-            );
+            if (!unowned(newStars[k]?.puid)) {
+              explorers.push(
+                `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
+              );
+            }
           }
           stars[k] = newStars[k];
         }
