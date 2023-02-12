@@ -1452,6 +1452,9 @@ function NeptunesPrideAgent() {
       } else {
         unrealContextString = `${unrealContextString} [[Tick #${trueTick}#a]]`;
       }
+      if (universe.batchedRequests.length > 0) {
+        unrealContextString = `${universe.batchedRequests.length} orders pending (${universe.batchedRequestTimeout}s) ${unrealContextString}`;
+      }
       if (unrealContextString) {
         map.context.textAlign = "right";
         drawOverlayString(
@@ -1621,6 +1624,7 @@ function NeptunesPrideAgent() {
       drawAutoRuler();
     };
     let base = -1;
+    let wasBatched = false;
     NeptunesPride.npui.status.on("one_second_tick", () => {
       if (base === -1) {
         const msplus = msToTick(1);
@@ -1637,6 +1641,13 @@ function NeptunesPrideAgent() {
         // displaying the ticking clock.
         NeptunesPride.np.trigger("map_rebuild");
         NeptunesPride.np.trigger("refresh_interface");
+      } else if (
+        NeptunesPride.universe.batchedRequests.length > 0 ||
+        wasBatched
+      ) {
+        // draw the countdown for batch requests
+        wasBatched = NeptunesPride.universe.batchedRequests.length > 0;
+        NeptunesPride.np.trigger("map_rebuild");
       }
     });
     Crux.format = function (s: string, templateData: { [x: string]: any }) {
