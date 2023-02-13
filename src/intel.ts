@@ -380,7 +380,7 @@ function NeptunesPrideAgent() {
             last_updated: 0,
             ships: stars[orbit].totalDefenses,
             puid: stars[orbit].puid,
-            c: stars[orbit].c,
+            c: stars[orbit].c || 0,
             departures: {},
           };
         }
