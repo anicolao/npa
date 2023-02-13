@@ -2440,12 +2440,9 @@ function NeptunesPrideAgent() {
   };
   let tradingReport = async function () {
     lastReport = "trading";
-    const allkeys = (await store.keys()) as string[];
-    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
-    const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
+    const { players, playerIndexes } = await getAlliedKeysAndIndexes();
     let output: string[] = [];
     techTable(output, playerIndexes, "Allied Technology");
-    let players = NeptunesPride.universe.galaxy.players;
     let allPlayers = Object.keys(players);
     let scanned = NeptunesPride.gameConfig.tradeScanned ? "Scanned " : "";
     if (NeptunesPride.gameConfig.tradeScanned) {
@@ -2581,18 +2578,28 @@ function NeptunesPrideAgent() {
     store.set(cacheKey, api.scanning_data);
     return api.scanning_data;
   };
+  const getPlayerIndex = function (apikey: string) {
+    return parseInt(apikey.substring(4));
+  };
+  const getAlliedKeysAndIndexes = async function () {
+    const allkeys = (await store.keys()) as string[];
+    const players = NeptunesPride.universe.galaxy.players;
+    const apiKeys = allkeys.filter(
+      (x) => x.startsWith("API:") && players[getPlayerIndex(x)].conceded === 0,
+    );
+    const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
+    return { players, apiKeys, playerIndexes };
+  };
   let researchReport = async function () {
     lastReport = "research";
-    const allkeys = (await store.keys()) as string[];
-    const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
-    const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
+    const { players, apiKeys, playerIndexes } = await getAlliedKeysAndIndexes();
     let output: string[] = [];
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
     output.push("Empire|Tech|ETA|Progress|Sci|↑S");
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
-      const p = NeptunesPride.universe.galaxy.players[pi];
+      const p = players[pi];
       const apiKey = await store.get(apiKeys[pii]);
       const scan = await getUserScanData(apiKey);
       if (scan) {
