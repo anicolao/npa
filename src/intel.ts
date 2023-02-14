@@ -2862,7 +2862,9 @@ function NeptunesPrideAgent() {
   };
   document.body.addEventListener("keyup", autocompleteTrigger);
 
-  restoreFromDB("game_event").then(() => updateMessageCache("game_event"));
+  restoreFromDB("game_event")
+    .then(() => updateMessageCache("game_event"))
+    .then(() => updateMessageCache("game_diplomacy"));
 
   const loadScanData = () =>
     refreshScanData().then(() => {

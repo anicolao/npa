@@ -17,9 +17,12 @@ async function store(incoming: any[], group: string) {
 
   const tx = db.transaction(group, "readwrite");
   await Promise.all([
-    ...incoming.map((x) =>
-      tx.store.add({ ...x, date: -Date.parse(x.created) }),
-    ),
+    ...incoming.map((x) => {
+      if (x.comment_count === 0) {
+        return tx.store.add({ ...x, date: -Date.parse(x.created) });
+      }
+      return tx.store.put({ ...x, date: -Date.parse(x.created) });
+    }),
     tx.done,
   ]);
 }
@@ -55,9 +58,13 @@ async function cacheEventResponseCallback(
   let incoming = response.report.messages;
   if (messageCache[group].length > 0) {
     let overlapOffset = -1;
+    const latest = messageCache[group][0];
     for (let i = 0; i < incoming.length; ++i) {
       const message = incoming[i];
-      if (message.key === messageCache[group][0].key) {
+      if (
+        message.key === latest.key &&
+        message.comment_count === latest.comment_count
+      ) {
         overlapOffset = i;
         break;
       }
