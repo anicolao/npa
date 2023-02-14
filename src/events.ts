@@ -21,7 +21,7 @@ async function store(incoming: any[], group: string) {
       if (x.comment_count === 0) {
         return tx.store.add({ ...x, date: -Date.parse(x.created) });
       }
-      return tx.store.put({ ...x, date: -Date.parse(x.created) });
+      return tx.store.put({ ...x, date: -Date.parse(x.activity) });
     }),
     tx.done,
   ]);
