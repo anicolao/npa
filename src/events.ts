@@ -5,8 +5,11 @@ export const messageCache: { [k: string]: any[] } = {
   game_diplomacy: [],
 };
 
+function dbName(group: string) {
+  return `${NeptunesPride.gameNumber}:${group}`;
+}
 async function store(incoming: any[], group: string) {
-  const db = await openDB(group + NeptunesPride.gameNumber, 1, {
+  const db = await openDB(dbName(group), 1, {
     upgrade(db) {
       const store = db.createObjectStore(group, {
         keyPath: "key",
@@ -18,17 +21,28 @@ async function store(incoming: any[], group: string) {
   const tx = db.transaction(group, "readwrite");
   await Promise.all([
     ...incoming.map((x) => {
-      if (x.comment_count === 0) {
+      if (x?.comment_count === 0) {
         return tx.store.add({ ...x, date: -Date.parse(x.created) });
       }
-      requestMessageComments(10, x.key);
-      return tx.store.put({ ...x, date: -Date.parse(x.activity) });
+      return tx.store
+        .put({ ...x, date: -Date.parse(x?.activity || x.created) })
+        .then(async () => {
+          if (x.comment_count) {
+            if (messageCache[x.key]?.length === undefined) {
+              requestMessageComments(x.comment_count, x.key);
+            } else {
+              const len = messageCache[x.key].length;
+              const delta = x.comment_count - len + 1;
+              requestMessageComments(delta, x.key);
+            }
+          }
+        });
     }),
     tx.done,
   ]);
 }
 async function restore(group: string) {
-  const db = await openDB(group + NeptunesPride.gameNumber, 1, {
+  const db = await openDB(dbName(group), 1, {
     upgrade(db) {
       const store = db.createObjectStore(group, {
         keyPath: "key",
@@ -49,24 +63,21 @@ export async function restoreFromDB(
     try {
       messageCache[group] = await restore(group);
       console.log(
-        `Restored message cache from db: ${messageCache[group].length}`,
+        `Restored message cache for ${group} from db: ${messageCache[group].length}`,
       );
+      if (group === "game_diplomacy") {
+        messageCache[group].forEach((message) => restoreFromDB(message.key));
+      }
     } catch (err) {
       console.error(err);
     }
   }
 }
 async function cacheEventResponseCallback(
-  group: "game_event" | "game_diplomacy" | "message_comments",
+  group: "game_event" | "game_diplomacy" | string,
   response: { report: { messages: any } },
 ): Promise<boolean> {
   let incoming = response.report.messages;
-  if (group === "message_comments") {
-    if (response.report.messages?.length <= 0) {
-      return false;
-    }
-    group = response.report.messages[0].key;
-  }
   await restoreFromDB(group);
   if (messageCache[group].length > 0) {
     let overlapOffset = -1;
@@ -130,7 +141,7 @@ export async function requestMessageComments(
   fetchSize: number,
   message_key: string,
 ) {
-  console.log("reqeustMessageComments");
+  console.log(`reqeustMessageComments ${fetchSize} for ${message_key}`);
   const url = "/trequest/fetch_game_message_comments";
   const data = {
     type: "fetch_game_message_comments",
@@ -140,7 +151,7 @@ export async function requestMessageComments(
     version: NeptunesPride.version,
     game_number: NeptunesPride.gameNumber,
   };
-  return cacheEventResponseCallback("message_comments", await post(url, data));
+  return cacheEventResponseCallback(message_key, await post(url, data));
 }
 
 export function updateMessageCache(
