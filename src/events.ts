@@ -5,6 +5,20 @@ export const messageCache: { [k: string]: any[] } = {
   game_diplomacy: [],
 };
 
+interface Message {
+  activity?: string;
+  comment_count?: number;
+  created: string;
+  date: number;
+  group?: "game_event" | "game_diplomacy";
+  key: string;
+  payload?: any;
+  status?: "read" | "unread";
+  body?: string;
+}
+
+export const messageIndex: { [word: string]: Message } = {};
+
 function dbName(group: string) {
   return `${NeptunesPride.gameNumber}:${group}`;
 }
@@ -53,6 +67,10 @@ async function restore(group: string) {
   return db.getAllFromIndex(group, "date");
 }
 
+function indexMessages(messages: any[]) {
+  //messages.forEach(message => console.log({message}))
+}
+
 export async function restoreFromDB(
   group: "game_event" | "game_diplomacy" | string,
 ) {
@@ -62,6 +80,7 @@ export async function restoreFromDB(
   if (messageCache[group].length === 0) {
     try {
       messageCache[group] = await restore(group);
+      indexMessages(messageCache[group]);
       console.log(
         `Restored message cache for ${group} from db: ${messageCache[group].length}`,
       );
@@ -92,16 +111,31 @@ async function cacheEventResponseCallback(
           overlapOffset = i;
           break;
         }
-        latest = messageCache[group][first];
+        messageCache[group] = messageCache[group].slice(1);
+        latest = messageCache[group][0];
+        i = 0;
       }
     }
     if (overlapOffset >= 0) {
       console.log(`Incoming messages total: ${incoming.length}`);
       incoming = incoming.slice(0, overlapOffset);
       console.log(`Incoming messages new: ${incoming.length}`);
+      if (group === "game_diplomacy") {
+        // possibly the incoming messages replace old ones with updates
+        const incomingKeys = incoming.map((m: any) => m.key);
+        let indices: any[] = [];
+        messageCache[group].forEach((message, i) => {
+          if (incomingKeys.indexOf(message.key) !== -1) {
+            indices.push(i);
+          }
+        });
+        indices = indices.reverse();
+        console.log(`Removing ${indices.length} old messages`);
+        indices.forEach((i) => messageCache[group].splice(i, 1));
+      }
     } else if (overlapOffset < 0) {
       const size = incoming.length * 2;
-      console.log(`Missing some events, double fetch to ${size}`);
+      console.log(`Missing some events for ${group}, double fetch to ${size}`);
       if (group === "game_event" || group === "game_diplomacy") {
         return requestRecentMessages(size, group);
       }
@@ -113,6 +147,7 @@ async function cacheEventResponseCallback(
   } catch (err) {
     console.error(err);
   }
+  indexMessages(incoming);
   messageCache[group] = incoming.concat(messageCache[group]);
   console.log(
     `Return full message set for ${group} of ${messageCache[group].length}`,
