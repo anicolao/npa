@@ -17,7 +17,12 @@ interface Message {
   body?: string;
 }
 
-export const messageIndex: { [word: string]: Message } = {};
+interface TypedMessage {
+  group: string;
+  message: Message;
+}
+
+export const messageIndex: { [word: string]: TypedMessage[] } = {};
 
 function dbName(group: string) {
   return `${NeptunesPride.gameNumber}:${group}`;
@@ -67,8 +72,21 @@ async function restore(group: string) {
   return db.getAllFromIndex(group, "date");
 }
 
-function indexMessages(messages: any[]) {
-  //messages.forEach(message => console.log({message}))
+function indexMessages(group: string, messages: any[]) {
+  messages.forEach((message) => {
+    if (message.body || message.payload?.body) {
+      const body = message.body || message.payload?.body;
+      const tokens = body.split(/[^\w\d]+/);
+      tokens.forEach((token: string) => {
+        if (token) {
+          if (messageIndex[token] === undefined) {
+            messageIndex[token] = [];
+          }
+          messageIndex[token].push({ group, message });
+        }
+      });
+    }
+  });
 }
 
 export async function restoreFromDB(
@@ -80,7 +98,7 @@ export async function restoreFromDB(
   if (messageCache[group].length === 0) {
     try {
       messageCache[group] = await restore(group);
-      indexMessages(messageCache[group]);
+      indexMessages(group, messageCache[group]);
       console.log(
         `Restored message cache for ${group} from db: ${messageCache[group].length}`,
       );
@@ -147,7 +165,7 @@ async function cacheEventResponseCallback(
   } catch (err) {
     console.error(err);
   }
-  indexMessages(incoming);
+  indexMessages(group, incoming);
   messageCache[group] = incoming.concat(messageCache[group]);
   console.log(
     `Return full message set for ${group} of ${messageCache[group].length}`,

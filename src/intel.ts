@@ -16,7 +16,12 @@ import {
   getHotkeys,
   getHotkeyCallback,
 } from "./hotkey";
-import { messageCache, updateMessageCache, restoreFromDB } from "./events";
+import {
+  messageCache,
+  updateMessageCache,
+  restoreFromDB,
+  messageIndex,
+} from "./events";
 import { GameStore } from "./gamestore";
 import { post } from "./network";
 import { getServerScans, registerForScans, scanCache } from "./npaserver";
@@ -2864,7 +2869,19 @@ function NeptunesPrideAgent() {
 
   restoreFromDB("game_event")
     .then(() => updateMessageCache("game_event"))
-    .then(() => updateMessageCache("game_diplomacy"));
+    .then(() => updateMessageCache("game_diplomacy"))
+    .then(() => {
+      window.setTimeout(() => {
+        const keys = messageIndex["api"]
+          .flatMap((m: any) => {
+            const body = m.message.body || m.message.payload?.body;
+            return body.match(/\[\[api:\w\w\w\w\w\w\]\]/);
+          })
+          .filter((k) => k)
+          .filter((v, i, a) => a.indexOf(v) === i);
+        console.log("Probable API Keys: ", keys);
+      }, 1000);
+    });
 
   const loadScanData = () =>
     refreshScanData().then(() => {
