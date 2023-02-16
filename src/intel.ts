@@ -2301,12 +2301,12 @@ function NeptunesPrideAgent() {
     timeTravel("forwards");
   };
   defineHotkey(
-    "left",
+    "ctrl-left",
     timeTravelBack,
     "Go back a tick in time." + "Time Machine: Back",
   );
   defineHotkey(
-    "right",
+    "ctrl-right",
     timeTravelForward,
     "Go back a tick in time." + "Time Machine: Back",
   );
@@ -2739,20 +2739,46 @@ function NeptunesPrideAgent() {
     "Accounting",
   );
 
+  let allSeenKeys: string[] = [];
+  const getCodeFromApiText = (key: string) => {
+    const tokens = key.split(/[^\w]/);
+    return tokens[3];
+  };
   let apiKeys = async function () {
     lastReport = "api";
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+    const mergedCodes = [];
     const output = [];
-    output.push("--- API Keys ---");
+    output.push("--- Allied API Keys ---");
     output.push(":--|--:|--:");
     output.push("Empire|View|Merge");
     for (let i = 0; i < apiKeys.length; ++i) {
       const key = apiKeys[i];
       const player = key.substring(4);
       const code = await store.get(key);
+      mergedCodes.push(code);
       output.push(`[[${player}]]|[[apiv:${code}]]|[[apim:${code}]]`);
     }
+    output.push("--- Allied API Keys ---");
+    output.push("--- All Seen Keys ---");
+    output.push(":--|--:|--:");
+    output.push("Empire|Merge|Last?");
+    allSeenKeys.forEach((key) => {
+      let owner = "Unknown";
+      let good = "❌";
+      const code = getCodeFromApiText(key);
+      if (scanCache[code]?.length > 0) {
+        const last = scanCache[code].length - 1;
+        let scan = JSON.parse(scanCache[code][last].apis).scanning_data;
+        let uid = scan.player_uid;
+        owner = `[[${uid}]]`;
+        good = `[[Tick #${scan.tick}]]`;
+      }
+      const merge = key.replace(":", "m:");
+      output.push(`${owner}|${merge}|${good}`);
+    });
+    output.push("--- All Seen Keys ---");
     prepReport("api", output.join("\n"));
   };
   defineHotkey("k", apiKeys, "Show known API keys.", "API Keys");
@@ -2875,14 +2901,24 @@ function NeptunesPrideAgent() {
     .then(() => updateMessageCache("game_diplomacy"))
     .then(() => {
       window.setTimeout(() => {
-        const keys = messageIndex["api"]
+        allSeenKeys = messageIndex["api"]
           .flatMap((m: any) => {
             const body = m.message.body || m.message.payload?.body;
             return body.match(/\[\[api:\w\w\w\w\w\w\]\]/);
           })
           .filter((k) => k)
           .filter((v, i, a) => a.indexOf(v) === i);
-        console.log("Probable API Keys: ", keys);
+        console.log("Probable API Keys: ", allSeenKeys);
+        allSeenKeys.forEach(async (key) => {
+          const code = getCodeFromApiText(key);
+          await getServerScans(code);
+          if (scanCache[code]?.length > 0) {
+            console.log(`Scans for ${code} cached`);
+            return;
+          }
+          console.log(`Scans for ${code} not cached yet, register for them`);
+          registerForScans(code);
+        });
       }, 1000);
     });
 
