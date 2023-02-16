@@ -2179,6 +2179,15 @@ function NeptunesPrideAgent() {
   };
   const mergeScanData = (scan: any) => {
     const universe = NeptunesPride.universe;
+    if (timeTravelTick === -1) {
+      let uid = NeptunesPride.universe.galaxy.player_uid;
+      if (NeptunesPride.originalPlayer) {
+        uid = NeptunesPride.originalPlayer;
+      }
+      if (scan.player_uid === uid) {
+        return;
+      }
+    }
     universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
     for (let s in scan.stars) {
       const star = scan.stars[s];
