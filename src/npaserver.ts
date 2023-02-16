@@ -63,42 +63,6 @@ export async function restoreFromDB(gameId: number, apikey: string) {
   }
 }
 
-function moveData() {
-  const db = firestore;
-  const query = collection(db, "private/metadata/active");
-  let grandTotal = 0;
-  onSnapshot(query, function (snapshot) {
-    snapshot.docChanges().forEach(function (change) {
-      const key = change.doc.data();
-      console.log(`Processing game ${key.game_id} ${key.api_key}`);
-      const game = key.game_id;
-      const apiKey = key.api_key;
-      const query = collection(db, `${game}:${apiKey}`);
-      const store = collection(db, `scans/${game}/${game}:${apiKey}`);
-      onSnapshot(query, function (snapshot) {
-        let count = 0;
-        const batch = writeBatch(db);
-        console.log(`Read ${snapshot.docChanges().length} records`);
-        snapshot.docChanges().forEach(function (change) {
-          const d = change.doc.data();
-          if (d.timestamp) {
-            //batch.set(doc(store, `${d.timestamp}`), d);
-            setDoc(doc(store, `${d.timestamp}`), d);
-            count++;
-            console.log(`commit ${count}`);
-          } else {
-            console.log(`rejected ${JSON.stringify(d)}`);
-          }
-        });
-        console.log(`committed ${count} total`);
-        grandTotal += count;
-        batch.commit();
-      });
-    });
-    console.log(`wrote ${grandTotal} records.`);
-  });
-}
-
 export function registerForScans(apikey: string) {
   const gameid = NeptunesPride.gameNumber;
   const store = collection(firestore, `newkey`);
@@ -119,22 +83,6 @@ export async function getServerScans(apikey: string) {
   console.log(`getServerScans: ${timestamp} ${apikey}`);
   const gamekey = `scans/${gameid}/${gameid}:${apikey}`;
   const scans = collection(firestore, gamekey);
-  /* OWN the server 
-  //moveData();
-  onSnapshot(collection(firestore, "active"), (querySnapshot) => {
-    querySnapshot.docChanges().forEach((change) => {
-      if (
-        change.type === "added" ||
-        (change.type === "modified" && change.doc)
-      ) {
-        let doc = change.doc;
-        let scan = doc.data() as any;
-        console.log(doc.id);
-        console.log(scan);
-      }
-    });
-  });
-  */
   return onSnapshot(
     query(scans, where("timestamp", ">", timestamp), orderBy("timestamp")),
     (querySnapshot) => {
