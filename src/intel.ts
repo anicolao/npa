@@ -243,7 +243,7 @@ function NeptunesPrideAgent() {
     prepReport("activity", output.join("\n"));
   }
   defineHotkey(
-    ":",
+    "shift+;",
     activityReport,
     "Generate a report of current player activity." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
@@ -1868,6 +1868,7 @@ function NeptunesPrideAgent() {
         accounting: "Accounting",
         api: "API Keys",
         controls: "Controls",
+        help: "Help",
       };
       Crux.DropDown(lastReport, selections, "exec_report")
         .grid(15, 0, 15, 3)
@@ -1882,6 +1883,10 @@ function NeptunesPrideAgent() {
       output.roost(reportScreen);
 
       let reportHook = async function (e: number, d: string) {
+        if (d === "help") {
+          npaHelp();
+          return;
+        }
         lastReport = d;
         if (d === "planets") {
           homePlanets();
@@ -2333,12 +2338,14 @@ function NeptunesPrideAgent() {
   defineHotkey(
     "ctrl+,",
     timeTravelBack,
-    "Go back a tick in time." + "Time Machine: Back",
+    "Go back a tick in time.",
+    "Time Machine: Back",
   );
   defineHotkey(
     "ctrl+.",
     timeTravelForward,
-    "Go back a tick in time." + "Time Machine: Back",
+    "Go forward a tick in time.",
+    "Time Machine: Forward",
   );
 
   let myApiKey = "";
@@ -2831,6 +2838,10 @@ function NeptunesPrideAgent() {
 
   let npaHelp = function () {
     let help = [`<H1>${title}</H1>`];
+    help.push(" Neptune's Pride Agent is meant to help you focus on");
+    help.push(" diplomacy and spend less time doing tedious calculations");
+    help.push(" or manually sharing information.");
+    help.push("<h1>Hotkey Reference</h1>");
     getHotkeys().forEach((key: string) => {
       let action = getHotkeyCallback(key);
       let button = Crux.format(`[[goto:${key}]]`, {});
