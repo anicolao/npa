@@ -27,6 +27,7 @@ import { post } from "./network";
 import { getServerScans, registerForScans, scanCache } from "./npaserver";
 
 interface CruxLib {
+  IconButton: any;
   touchEnabled: boolean;
   crux: any;
   format: any;
@@ -1847,6 +1848,9 @@ function NeptunesPrideAgent() {
       Crux.Text("", "rel pad12 txt_center col_black  section_title")
         .rawHTML(title)
         .roost(reportScreen);
+      Crux.IconButton("icon-help", "show_screen", "help")
+        .grid(24.5, 0, 3, 3)
+        .roost(reportScreen).onClick = npaHelp;
 
       var report = Crux.Widget("rel  col_accent").size(480, 48);
       var output = Crux.Widget("rel").nudge(-24, 0);
