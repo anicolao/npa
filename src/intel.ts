@@ -1972,6 +1972,9 @@ function NeptunesPrideAgent() {
         (timeOptions.indexOf(settings.relativeTimes) + 1) % timeOptions.length;
       settings.relativeTimes = timeOptions[i];
       NeptunesPride.np.trigger("refresh_interface");
+      if (NeptunesPride.npui.rulerToolbar) {
+        NeptunesPride.np.trigger("show_ruler_toolbar");
+      }
       NeptunesPride.np.trigger("map_rebuild");
     };
     defineHotkey(
