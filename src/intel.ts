@@ -2177,6 +2177,32 @@ function NeptunesPrideAgent() {
     }
     return true;
   };
+  const mergeScanData = (scan: any) => {
+    const universe = NeptunesPride.universe;
+    universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
+    for (let s in scan.stars) {
+      const star = scan.stars[s];
+      if (star.v !== "0" && universe.galaxy.stars[s].v === "0") {
+        universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
+      }
+    }
+    for (let pk in universe.galaxy.players) {
+      const player = universe.galaxy.players[pk];
+      player.alias = player.rawAlias;
+    }
+    universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
+    for (let f in scan.fleets) {
+      const fleet = scan.fleets[f];
+      if (fleet.puid == scan.player_uid) {
+        universe.galaxy.fleets[f] = {
+          ...universe.galaxy.fleets[f],
+          ...fleet,
+        };
+      }
+    }
+    const tf = 1 - msToTick(1) / (scan.tick_rate * 60 * 1000);
+    universe.galaxy.tick_fragment = tf;
+  };
   let mergeUser = async function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
@@ -2186,31 +2212,8 @@ function NeptunesPrideAgent() {
     if (otherUserCode) {
       let scan = await getUserScanData(code);
       if (!cacheApiKey(code, scan)) return;
-      const universe = NeptunesPride.universe;
-      universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
-      for (let s in scan.stars) {
-        const star = scan.stars[s];
-        if (star.v !== "0" && universe.galaxy.stars[s].v === "0") {
-          universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
-        }
-      }
-      for (let pk in universe.galaxy.players) {
-        const player = universe.galaxy.players[pk];
-        player.alias = player.rawAlias;
-      }
-      universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
-      for (let f in scan.fleets) {
-        const fleet = scan.fleets[f];
-        if (fleet.puid == scan.player_uid) {
-          universe.galaxy.fleets[f] = {
-            ...universe.galaxy.fleets[f],
-            ...fleet,
-          };
-        }
-      }
-      const tf = 1 - msToTick(1) / (scan.tick_rate * 60 * 1000);
-      universe.galaxy.tick_fragment = tf;
-      NeptunesPride.np.onFullUniverse(null, universe.galaxy);
+      mergeScanData(scan);
+      NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
       NeptunesPride.npui.onHideScreen(null, true);
       init();
     }
@@ -2233,7 +2236,7 @@ function NeptunesPrideAgent() {
   NeptunesPride.np.on("merge_user_api", mergeUser);
 
   let timeTravelTick = -1;
-  let timeTravelTickIndex = -1;
+  let timeTravelTickIndices: { [k: string]: number } = {};
   const adjustNow = function (scan: any) {
     const wholeTick = scan.tick_rate * 60 * 1000;
     const fragment = scan.tick_fragment * wholeTick;
@@ -2241,10 +2244,12 @@ function NeptunesPrideAgent() {
     const tick_fragment = 0; //((new Date().getTime() - now) % wholeTick)/ wholeTick;
     return { ...scan, now, tick_fragment };
   };
-  let getTimeTravelScan = function (dir: "back" | "forwards") {
-    const scans = scanCache[myApiKey];
-    if (timeTravelTickIndex === -1) {
-      timeTravelTickIndex = scans.length - 1;
+  let getTimeTravelScan = function (apikey: string, dir: "back" | "forwards") {
+    const scans = scanCache[getCodeFromApiText(apikey)];
+    if (!scans) return null;
+    let timeTravelTickIndex = scans.length - 1;
+    if (timeTravelTickIndices[apikey] !== undefined) {
+      timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
     let scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
     scan = adjustNow(scan);
@@ -2253,7 +2258,7 @@ function NeptunesPrideAgent() {
         timeTravelTickIndex++;
         if (timeTravelTickIndex === scans.length) {
           timeTravelTick = -1;
-          timeTravelTickIndex = -1;
+          timeTravelTickIndices[apikey] = undefined;
           NeptunesPride.np.trigger("server_request", {
             type: "order",
             order: "full_universe_report",
@@ -2276,17 +2281,29 @@ function NeptunesPrideAgent() {
         scan = adjustNow(scan);
       }
     }
-    timeTravelTick = scan.tick;
+    timeTravelTickIndices[apikey] = timeTravelTickIndex;
     return scan;
   };
-  let timeTravel = function (dir: "back" | "forwards") {
-    if (myApiKey) {
-      const scan = getTimeTravelScan(dir);
-      if (scan === null) return;
-      NeptunesPride.np.onFullUniverse(null, scan);
-      NeptunesPride.npui.onHideScreen(null, true);
-      init();
+  let timeTravel = function (dir: "back" | "forwards"): boolean {
+    const scans = allSeenKeys
+      .map((k) => getTimeTravelScan(k, dir))
+      .filter((scan) => scan && scan.tick === timeTravelTick);
+    if (scans.length === 0) {
+      return false;
     }
+    const myId = NeptunesPride.originalPlayer
+      ? NeptunesPride.originalPlayer
+      : NeptunesPride.universe.galaxy.player_uid;
+    const myScan = scans.filter((scan) => scan.player_uid === myId);
+    const first = myScan.length > 0 ? myScan[0] : scans[0];
+    NeptunesPride.np.onFullUniverse(null, first);
+
+    scans.forEach((scan) => {
+      mergeScanData(scan);
+    });
+    NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
+    NeptunesPride.npui.onHideScreen(null, true);
+    init();
   };
   let timeTravelBack = function () {
     if (timeTravelTick === -1) {
@@ -2301,12 +2318,12 @@ function NeptunesPrideAgent() {
     timeTravel("forwards");
   };
   defineHotkey(
-    "ctrl-left",
+    "ctrl+,",
     timeTravelBack,
     "Go back a tick in time." + "Time Machine: Back",
   );
   defineHotkey(
-    "ctrl-right",
+    "ctrl+.",
     timeTravelForward,
     "Go back a tick in time." + "Time Machine: Back",
   );
