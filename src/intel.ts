@@ -2193,6 +2193,10 @@ function NeptunesPrideAgent() {
   };
   const mergeScanData = (scan: any) => {
     const universe = NeptunesPride.universe;
+    for (let pk in universe.galaxy.players) {
+      const player = universe.galaxy.players[pk];
+      player.alias = player.rawAlias;
+    }
     if (timeTravelTick === -1) {
       let uid = NeptunesPride.universe.galaxy.player_uid;
       if (NeptunesPride.originalPlayer) {
@@ -2208,10 +2212,6 @@ function NeptunesPrideAgent() {
       if (star.v !== "0" && universe.galaxy.stars[s].v === "0") {
         universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
       }
-    }
-    for (let pk in universe.galaxy.players) {
-      const player = universe.galaxy.players[pk];
-      player.alias = player.rawAlias;
     }
     universe.galaxy.fleets = { ...scan.fleets, ...universe.galaxy.fleets };
     for (let f in scan.fleets) {
