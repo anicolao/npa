@@ -2333,12 +2333,20 @@ function NeptunesPrideAgent() {
     if (timeTravelTick === -1) {
       timeTravelTick = NeptunesPride.universe.galaxy.tick;
     }
-    timeTravelTick -= 1;
+    if (NeptunesPride.gameConfig.turnBased) {
+      timeTravelTick -= NeptunesPride.gameConfig.turnJumpTicks;
+    } else {
+      timeTravelTick -= 1;
+    }
     if (timeTravelTick < 0) timeTravelTick = 0;
     timeTravel("back");
   };
   let timeTravelForward = function () {
-    timeTravelTick += 1;
+    if (NeptunesPride.gameConfig.turnBased) {
+      timeTravelTick += NeptunesPride.gameConfig.turnJumpTicks;
+    } else {
+      timeTravelTick += 1;
+    }
     timeTravel("forwards");
   };
   defineHotkey(
