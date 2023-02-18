@@ -25,6 +25,7 @@ import {
 import { GameStore } from "./gamestore";
 import { post } from "./network";
 import { getServerScans, registerForScans, scanCache } from "./npaserver";
+import { isWithinRange } from "./visibility";
 
 interface CruxLib {
   IconButton: any;
@@ -1123,7 +1124,8 @@ function NeptunesPrideAgent() {
         star.player.tech.scanning.value / (star.player.tech.scanning.level + 2);
       const scanRange = (star.player.tech.scanning.level + 2 + sH) * lyToMap;
       const scale = (scanRange * map.scale * map.pixelRatio) / 250;
-      const r = (map.scanningRangeSprite.width * 0.9) / 2;
+      const fudgeDown = 0.86;
+      const r = (map.scanningRangeSprite.width * fudgeDown) / 2;
 
       const pH = combatHandicap;
       const lyrToMap =
@@ -1132,7 +1134,7 @@ function NeptunesPrideAgent() {
       const fleetRange =
         (star.player.tech.propulsion.level + 3 + pH) * lyrToMap;
       const fscale = (fleetRange * map.scale * map.pixelRatio) / 250;
-      const fr = (map.fleetRangeSprite.width * 0.9) / 2;
+      const fr = (map.fleetRangeSprite.width * fudgeDown) / 2;
       const maxR = Math.max(scanRange, fleetRange);
       let drawFleetRange = false;
       if (outer) {
@@ -1147,6 +1149,18 @@ function NeptunesPrideAgent() {
         drawDisc(context, x, y, scale, r);
         return true;
       }
+    }
+
+    function drawStarPimple(context: CanvasRenderingContext2D, star: any) {
+      const x = map.worldToScreenX(star.x);
+      const y = map.worldToScreenY(star.y);
+      const r = 24;
+      var scaleFactor = map.scale / 400;
+      if (scaleFactor < 0.35) scaleFactor = 0.35;
+      if (scaleFactor > 1) scaleFactor = 1;
+      scaleFactor *= map.pixelRatio;
+
+      drawDisc(context, x, y, scaleFactor, r);
     }
     const distance = function (star1: any, star2: any) {
       const xoff = star1.x - star2.x;
@@ -1361,10 +1375,22 @@ function NeptunesPrideAgent() {
             let bubbles = () => {
               bcontext.beginPath();
               let scanning = false;
+              const scanRange =
+                universe.selectedStar.player.tech.scanning.value;
+              const fleetRange =
+                universe.selectedStar.player.tech.propulsion.value;
               for (let key in universe.galaxy.stars) {
                 const star = universe.galaxy.stars[key];
                 if (star.player?.uid == p) {
                   scanning = drawStarTerritory(bcontext, star, outer);
+                } else {
+                  const range = outer
+                    ? Math.max(scanRange, fleetRange)
+                    : Math.min(scanRange, fleetRange);
+                  const galaxy = NeptunesPride.universe.galaxy;
+                  if (isWithinRange(p, range, star, galaxy)) {
+                    drawStarPimple(bcontext, star);
+                  }
                 }
               }
               const player = universe.galaxy.players[p];
