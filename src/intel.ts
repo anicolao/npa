@@ -26,6 +26,7 @@ import { GameStore } from "./gamestore";
 import { post } from "./network";
 import { getServerScans, registerForScans, scanCache } from "./npaserver";
 import { isWithinRange } from "./visibility";
+import { Player } from "./galaxy";
 
 interface CruxLib {
   IconButton: any;
@@ -1112,6 +1113,28 @@ function NeptunesPrideAgent() {
       context.arc(0, 0, r, 0, Math.PI * 2);
       context.restore();
     }
+
+    function getScaleFactor() {
+      var scaleFactor = map.scale / 400;
+      if (scaleFactor < 0.35) scaleFactor = 0.35;
+      if (scaleFactor > 1) scaleFactor = 1;
+      scaleFactor *= map.pixelRatio;
+      return scaleFactor;
+    }
+
+    function getAdjustedScanRange(player: Player) {
+      const sH = combatHandicap;
+      const scanRange = (player.tech.scanning.level + 2 + sH) * (1.0 / 8);
+      return scanRange;
+    }
+    function getAdjustedFleetRange(player: Player) {
+      const pH = combatHandicap;
+      const scanRange = (player.tech.propulsion.level + 3 + pH) * (1.0 / 8);
+      return scanRange;
+    }
+    function worldToPixels(dist: number) {
+      return map.worldToScreenX(Math.abs(dist)) - map.worldToScreenX(0);
+    }
     function drawStarTerritory(
       context: CanvasRenderingContext2D,
       star: any,
@@ -1119,34 +1142,25 @@ function NeptunesPrideAgent() {
     ): boolean {
       const x = map.worldToScreenX(star.x);
       const y = map.worldToScreenY(star.y);
-      const sH = combatHandicap;
-      const lyToMap =
-        star.player.tech.scanning.value / (star.player.tech.scanning.level + 2);
-      const scanRange = (star.player.tech.scanning.level + 2 + sH) * lyToMap;
-      const scale = (scanRange * map.scale * map.pixelRatio) / 250;
-      const fudgeDown = 0.86;
-      const r = (map.scanningRangeSprite.width * fudgeDown) / 2;
+      const scanRange = getAdjustedScanRange(star.player);
+      const fleetRange = getAdjustedFleetRange(star.player);
 
-      const pH = combatHandicap;
-      const lyrToMap =
-        star.player.tech.propulsion.value /
-        (star.player.tech.propulsion.level + 3);
-      const fleetRange =
-        (star.player.tech.propulsion.level + 3 + pH) * lyrToMap;
-      const fscale = (fleetRange * map.scale * map.pixelRatio) / 250;
-      const fr = (map.fleetRangeSprite.width * fudgeDown) / 2;
       const maxR = Math.max(scanRange, fleetRange);
+
       let drawFleetRange = false;
       if (outer) {
         if (fleetRange === maxR) drawFleetRange = true;
       } else {
         if (scanRange === maxR) drawFleetRange = true;
       }
+      const fudgeDown = 0.98;
       if (drawFleetRange) {
-        drawDisc(context, x, y, fscale, fr);
+        const r = worldToPixels(fleetRange * fudgeDown);
+        drawDisc(context, x, y, 1, r);
         return false;
       } else {
-        drawDisc(context, x, y, scale, r);
+        const r = worldToPixels(scanRange * fudgeDown);
+        drawDisc(context, x, y, 1, r);
         return true;
       }
     }
@@ -1155,10 +1169,7 @@ function NeptunesPrideAgent() {
       const x = map.worldToScreenX(star.x);
       const y = map.worldToScreenY(star.y);
       const r = 24;
-      var scaleFactor = map.scale / 400;
-      if (scaleFactor < 0.35) scaleFactor = 0.35;
-      if (scaleFactor > 1) scaleFactor = 1;
-      scaleFactor *= map.pixelRatio;
+      var scaleFactor = getScaleFactor();
 
       drawDisc(context, x, y, scaleFactor, r);
     }
@@ -1375,10 +1386,12 @@ function NeptunesPrideAgent() {
             let bubbles = () => {
               bcontext.beginPath();
               let scanning = false;
-              const scanRange =
-                universe.selectedStar.player.tech.scanning.value;
-              const fleetRange =
-                universe.selectedStar.player.tech.propulsion.value;
+              const scanRange = getAdjustedScanRange(
+                universe.selectedStar.player,
+              );
+              const fleetRange = getAdjustedFleetRange(
+                universe.selectedStar.player,
+              );
               for (let key in universe.galaxy.stars) {
                 const star = universe.galaxy.stars[key];
                 if (star.player?.uid == p) {

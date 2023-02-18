@@ -82,7 +82,13 @@ export interface TechInfo {
   research?: number; // research points so far
 }
 export interface Tech {
-  tech: { [name: string]: TechInfo };
+  banking: TechInfo;
+  manufacturing: TechInfo;
+  propulsion: TechInfo;
+  research: TechInfo;
+  scanning: TechInfo;
+  terraforming: TechInfo;
+  weapons: TechInfo;
 }
 export interface UnscannedStar extends SpaceObject {
   v: "0"; // unscanned (!visible)
