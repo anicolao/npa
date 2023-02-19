@@ -3015,6 +3015,37 @@ function NeptunesPrideAgent() {
           registerForScans(code);
         });
       }, 1000);
+    })
+    .then(() => {
+      const overrideOnNewMessages = (event: any, data: any) => {
+        if (data.group === "game_diplomacy") {
+          for (let i = 0; i < data.messages.length; ++i) {
+            const incoming = data.messages[i];
+            for (let j = 0; j < 100; ++j) {
+              const m = messageCache["game_diplomacy"][j];
+              if (m.key === incoming.key) {
+                incoming.status = m.status;
+                break;
+              }
+            }
+          }
+          updateMessageCache("game_diplomacy");
+        } else {
+          updateMessageCache("game_event");
+        }
+        return NeptunesPride.inbox.onNewMessages(event, data);
+      };
+      const handlers = NeptunesPride.inbox.handlers;
+      for (let h = 0; h < handlers.length; h++) {
+        const candidate = handlers[h];
+        if (candidate.name === "message:new_messages") {
+          const node = Crux.crux;
+          candidate.func = overrideOnNewMessages;
+          node.ui.off(candidate.name, NeptunesPride.inbox.onNewMessages);
+          node.ui.on(candidate.name, overrideOnNewMessages);
+          break;
+        }
+      }
     });
 
   const loadScanData = () =>

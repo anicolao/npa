@@ -125,7 +125,17 @@ async function cacheEventResponseCallback(
       const message = incoming[i];
       if (message.key === latest.key) {
         first++;
-        if (message?.comment_count === latest?.comment_count || first >= len) {
+        const isUnchanged = (message: any, latest: any) => {
+          if (
+            message.group !== "game_event" &&
+            message?.status &&
+            message.status !== latest?.status
+          ) {
+            return false;
+          }
+          return message?.comment_count === latest?.comment_count;
+        };
+        if (isUnchanged(message, latest) || first >= len) {
           overlapOffset = i;
           break;
         }
