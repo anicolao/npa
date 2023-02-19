@@ -2617,17 +2617,20 @@ function NeptunesPrideAgent() {
     const universe = NeptunesPride.universe;
     const np = NeptunesPride.np;
     var targetPlayer: any = data.targetPlayer;
+    const my = NeptunesPride.universe.player;
     for (let i = 0; i < data.techs.length; ++i) {
       var name = data.techs[i];
-      var price =
-        (targetPlayer.tech[name].level + 1) * universe.galaxy.trade_cost;
-      if (universe.player.cash >= price) {
-        targetPlayer.tech[name].level += 1;
-        universe.player.cash -= price;
-        np.trigger("server_request", {
-          type: "order",
-          order: `share_tech,${targetPlayer.uid},${name}`,
-        });
+      while (targetPlayer.tech[name].level < my.tech[name].level) {
+        var price =
+          (targetPlayer.tech[name].level + 1) * universe.galaxy.trade_cost;
+        if (universe.player.cash >= price) {
+          targetPlayer.tech[name].level += 1;
+          universe.player.cash -= price;
+          np.trigger("server_request", {
+            type: "order",
+            order: `share_tech,${targetPlayer.uid},${name}`,
+          });
+        }
       }
     }
     universe.selectPlayer(targetPlayer);
