@@ -2962,11 +2962,13 @@ function NeptunesPrideAgent() {
       const code = getCodeFromApiText(key);
       if (scanCache[code]?.length > 0) {
         let last = scanCache[code].length - 1;
+        let eof = scanCache[code][last]?.eof;
         let scan = JSON.parse(scanCache[code][last].apis).scanning_data;
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
-        while (uid === undefined && --last > 0) {
-          scan = JSON.parse(scanCache[code][last].apis).scanning_data;
+        while ((uid === undefined || eof) && --last > 0) {
+          eof = scanCache[code][last]?.eof;
+          let scan = JSON.parse(scanCache[code][last].apis).scanning_data;
           uid = scan?.player_uid;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;

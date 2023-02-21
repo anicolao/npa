@@ -81,6 +81,9 @@ function trimInvalidEntries(apikey: string) {
     trim++;
     scanCache[apikey] = scanCache[apikey].slice(0, trim);
     console.log(`trimInvalidEntries: ${apikey} ${len} -> ${trim}`);
+    if (trim > 0) {
+      scanCache[apikey][trim - 1].eof = true;
+    }
   }
 }
 export async function getServerScans(apikey: string) {
