@@ -7,9 +7,7 @@ import {
   onSnapshot,
   orderBy,
   query,
-  setDoc,
   where,
-  writeBatch,
 } from "firebase/firestore";
 import { openDB } from "idb";
 
@@ -69,6 +67,22 @@ export function registerForScans(apikey: string) {
   addDoc(store, { game_id: gameid, api_key: apikey });
 }
 
+function trimInvalidEntries(apikey: string) {
+  const len = scanCache[apikey].length;
+  let trim = len - 1;
+  while (
+    JSON.parse(scanCache[apikey][trim].apis)?.scanning_data?.tick ===
+      undefined &&
+    trim >= 0
+  ) {
+    trim--;
+  }
+  if (trim + 1 < len) {
+    trim++;
+    scanCache[apikey] = scanCache[apikey].slice(0, trim);
+    console.log(`trimInvalidEntries: ${apikey} ${len} -> ${trim}`);
+  }
+}
 export async function getServerScans(apikey: string) {
   const gameid = NeptunesPride.gameNumber;
   await restoreFromDB(gameid, apikey);
@@ -80,7 +94,8 @@ export async function getServerScans(apikey: string) {
   } else {
     scanCache[apikey] = [];
   }
-  console.log(`getServerScans: ${timestamp} ${apikey}`);
+  console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
+  trimInvalidEntries(apikey);
   const gamekey = `scans/${gameid}/${gameid}:${apikey}`;
   const scans = collection(firestore, gamekey);
   return onSnapshot(
@@ -100,6 +115,7 @@ export async function getServerScans(apikey: string) {
       store(incoming, gameid, apikey);
       console.log(`Added ${incoming.length} scans`);
       scanCache[apikey] = scanCache[apikey].concat(incoming);
+      trimInvalidEntries(apikey);
     },
     (error) => {
       console.log("scans query failing: ");
