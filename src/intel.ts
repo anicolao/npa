@@ -26,7 +26,7 @@ import { GameStore } from "./gamestore";
 import { post } from "./network";
 import { getServerScans, registerForScans, scanCache } from "./npaserver";
 import { isWithinRange } from "./visibility";
-import { Player } from "./galaxy";
+import { Player, Star } from "./galaxy";
 
 interface CruxLib {
   IconButton: any;
@@ -207,6 +207,101 @@ function NeptunesPrideAgent() {
     "Generate a report changes in star ownership and copy to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "Star Ownership",
+  );
+
+  function buyAllTheHypotheticalEconomy(
+    output: string[],
+    techType: "terra" | "bank" | "none",
+  ) {
+    const universe = NeptunesPride.universe;
+    const galaxy = universe.galaxy;
+    const me = { ...universe.player };
+    const myUid = me.uid;
+    let allMyStars = Object.keys(galaxy.stars)
+      .map((k) => {
+        return { ...galaxy.stars[k] };
+      })
+      .filter((s) => s.puid === myUid);
+    const cc = (a: any, b: any) => {
+      return a.uce - b.uce;
+    };
+    if (techType === "terra") {
+      allMyStars = allMyStars.map((s) => {
+        return { ...s, r: s.r + 5 };
+      });
+      allMyStars.forEach((s) => (s.uce = universe.calcUCE(s)));
+      allMyStars.forEach((s) => (s.uci = universe.calcUCI(s)));
+      allMyStars.forEach((s) => (s.ucs = universe.calcUCS(s)));
+      allMyStars.forEach((s) => (s.ucg = universe.calcUCG(s)));
+    }
+    allMyStars = allMyStars.sort(cc);
+    let HEAD = 0;
+    let count = 0;
+    while (
+      allMyStars[HEAD].uce <= universe.player.cash &&
+      HEAD < allMyStars.length
+    ) {
+      universe.upgradeEconomy(allMyStars[HEAD]);
+      count++;
+      allMyStars = allMyStars.sort(cc);
+    }
+    if (techType === "bank") {
+      universe.player.cash += 75;
+    }
+    return count;
+  }
+  function economistReport() {
+    let output = [];
+    const universe = NeptunesPride.universe;
+    const me = { ...universe.player };
+    const myUid = me.uid;
+    let myCash = me?.cash || 1000;
+    universe.player.cash = myCash;
+    const preEcon = universe.player.total_economy;
+    output.push(`--- Economists Report for [[${myUid}]] ($${myCash}) ---`);
+    output.push(`Technology|New Income|Balance`);
+    output.push(`:--|--:|--:`);
+    let count = buyAllTheHypotheticalEconomy(output, "none");
+    let cost = myCash - universe.player.cash;
+    let newIncome = count * 10;
+    let balance =
+      universe.player.total_economy * 10 +
+      universe.player.cash +
+      universe.player.tech.banking.level * 75;
+    output.push(`No Tech|$${newIncome}|$${balance}`);
+    universe.player.cash = myCash;
+    universe.player.total_economy = preEcon;
+    count = buyAllTheHypotheticalEconomy(output, "bank");
+    cost = myCash - universe.player.cash + 75;
+    newIncome = count * 10 + 75;
+    balance =
+      universe.player.total_economy * 10 +
+      universe.player.cash +
+      universe.player.tech.banking.level * 75;
+    //output.push(`Bought ${count} economy for ${cost} using banking with ${universe.player.cash} left over.`)
+    output.push(`Banking|$${newIncome}|$${balance}`);
+    universe.player.cash = myCash;
+    universe.player.total_economy = preEcon;
+    count = buyAllTheHypotheticalEconomy(output, "terra");
+    cost = myCash - universe.player.cash;
+    newIncome = count * 10;
+    balance =
+      universe.player.total_economy * 10 +
+      universe.player.cash +
+      universe.player.tech.banking.level * 75;
+    output.push(`Terraforming|$${newIncome}|$${balance}`);
+    output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
+    //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
+    universe.player.cash = myCash;
+    universe.player.total_economy = preEcon;
+    prepReport("economists", output.join("\n"));
+  }
+  defineHotkey(
+    "ctrl+4",
+    economistReport,
+    "Your economists are keen to tell you about banking vs terraforming." +
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Economists",
   );
 
   function activityReport() {
@@ -1909,6 +2004,7 @@ function NeptunesPrideAgent() {
         combats: "Fleets (long)",
         stars: "Stars",
         ownership: "Ownership",
+        economists: "Economists",
         activity: "Activity",
         accounting: "Accounting",
         api: "API Keys",
@@ -1943,6 +2039,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "ownership") {
           ownershipReport();
+        } else if (d === "economists") {
+          economistReport();
         } else if (d === "activity") {
           activityReport();
         } else if (d === "trading") {
