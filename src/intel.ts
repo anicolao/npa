@@ -2915,9 +2915,28 @@ function NeptunesPrideAgent() {
       output.push("--- Cash transaction history ---");
       output.push("--- Tech transaction history ---");
       output.push(":--|:--");
+      const peaceAccepted: { [k: number]: boolean } = {};
       for (let i = 0; i < messageCache.game_event.length; ++i) {
         const m = messageCache.game_event[i];
 
+        if (m.payload.template?.startsWith("peace")) {
+          console.log("Peace: ", m.payload);
+          if (m.payload.price) {
+            const to = m.payload.to_puid;
+            let credits = m.payload.price;
+            if (peaceAccepted[to]) credits /= 2;
+            balances[to] -= credits;
+            const tick = m.payload.tick;
+            output.push(
+              `[[Tick #${tick}]]|Alliance Costs $${credits} → [[${to}]]`,
+            );
+          } else {
+            const from = m.payload.from_puid;
+            peaceAccepted[from] = true;
+            const tick = m.payload.tick;
+            output.push(`[[Tick #${tick}]]|Alliance accepted by [[${from}]]`);
+          }
+        }
         if (m.payload.template === "shared_technology") {
           const tick = m.payload.tick;
           const from = m.payload.from_puid;
