@@ -432,11 +432,18 @@ function NeptunesPrideAgent() {
     return NeptunesPride.universe.galaxy.tick + ticks;
   }
 
+  const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
+    const players = NeptunesPride.universe.galaxy.players;
+    const fOwner = players[fleetOwnerId];
+    const sOwner = players[starOwnerId];
+    const warMap = fOwner?.war || sOwner?.war || {};
+    return fleetOwnerId == starOwnerId || warMap[fleetOwnerId] == 0;
+  };
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
   let combatOutcomes = function () {
-    let universe = NeptunesPride.universe;
-    let players = NeptunesPride.universe.galaxy.players;
+    const universe = NeptunesPride.universe;
+    const players = NeptunesPride.universe.galaxy.players;
     let fleets = NeptunesPride.universe.galaxy.fleets;
     let stars = NeptunesPride.universe.galaxy.stars;
     let flights = [];
@@ -606,7 +613,7 @@ function NeptunesPrideAgent() {
       for (const i in arrival) {
         let fleet = arrival[i];
         if (
-          fleet.puid == starstate[starId].puid ||
+          alliedFleet(fleet.puid, starstate[starId].puid) ||
           starstate[starId].puid == -1
         ) {
           let oldShips = starstate[starId].ships;
@@ -627,7 +634,7 @@ function NeptunesPrideAgent() {
       }
       for (const i in arrival) {
         let fleet = arrival[i];
-        if (fleet.puid == starstate[starId].puid) {
+        if (alliedFleet(fleet.puid, starstate[starId].puid)) {
           let outcomeString = "{0} ships on {1}".format(
             Math.floor(starstate[starId].ships),
             stars[starId].n,
@@ -643,7 +650,7 @@ function NeptunesPrideAgent() {
       let contribution: { [k: string]: any } = {};
       for (const i in arrival) {
         let fleet = arrival[i];
-        if (fleet.puid != starstate[starId].puid) {
+        if (!alliedFleet(fleet.puid, starstate[starId].puid)) {
           let olda = offense;
           offense += fleet.st;
           output.push(
@@ -768,7 +775,7 @@ function NeptunesPrideAgent() {
           starstate[starId].ships = defense;
           for (const i in arrival) {
             let fleet = arrival[i];
-            if (fleet.puid == starstate[starId].puid) {
+            if (alliedFleet(fleet.puid, starstate[starId].puid)) {
               let outcomeString = "{0} ships on {1}".format(
                 Math.floor(starstate[starId].ships),
                 stars[starId].n,
@@ -783,7 +790,7 @@ function NeptunesPrideAgent() {
             let ka = k.split(",");
             let fleet = fleets[ka[1]];
             let outcomeString = "Loses! {0} live.".format(defense);
-            if (fleet.puid == starstate[starId].puid) {
+            if (alliedFleet(fleet.puid, starstate[starId].puid)) {
               outcomeString = "Wins! {0} land.".format(defense);
             }
             fleetOutcomes[fleet.uid] = {
@@ -1695,7 +1702,7 @@ function NeptunesPrideAgent() {
         let fleets = NeptunesPride.universe.galaxy.fleets;
         for (const f in fleets) {
           let fleet = fleets[f];
-          if (fleet.puid === universe.player.uid) {
+          if (alliedFleet(fleet.puid, universe.player.uid)) {
             let dx = universe.selectedStar.x - fleet.x;
             let dy = universe.selectedStar.y - fleet.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
