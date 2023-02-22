@@ -3175,17 +3175,19 @@ function NeptunesPrideAgent() {
     .then(() => {
       const overrideOnNewMessages = (event: any, data: any) => {
         if (data.group === "game_diplomacy") {
-          for (let i = 0; i < data.messages.length; ++i) {
-            const incoming = data.messages[i];
-            for (let j = 0; j < 100; ++j) {
-              const m = messageCache["game_diplomacy"][j];
-              if (m.key === incoming.key) {
-                incoming.status = m.status;
-                break;
+          updateMessageCache("game_diplomacy").then(() => {
+            for (let i = 0; i < data.messages.length; ++i) {
+              const incoming = data.messages[i];
+              for (let j = 0; j < 100; ++j) {
+                const m = messageCache["game_diplomacy"][j];
+                if (m.key === incoming.key) {
+                  incoming.status = m.status;
+                  break;
+                }
               }
             }
-          }
-          updateMessageCache("game_diplomacy");
+            NeptunesPride.inbox.onNewMessages(event, data);
+          });
         } else {
           updateMessageCache("game_event");
         }
