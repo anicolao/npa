@@ -799,10 +799,18 @@ function NeptunesPrideAgent() {
   };
 
   const incTerritoryBrightness = () => {
+    if (!settings.territoryOn) {
+      toggleTerritory();
+      return;
+    }
     settings.territoryBrightness = (settings.territoryBrightness + 1) % 4;
     NeptunesPride.np.trigger("map_rebuild");
   };
   const decTerritoryBrightness = () => {
+    if (!settings.territoryOn) {
+      toggleTerritory();
+      return;
+    }
     let nextPower = (settings.territoryBrightness - 1) % 4;
     if (nextPower < 0) nextPower = 2;
     settings.territoryBrightness = nextPower;

@@ -20,6 +20,7 @@ const copy = function (reportFn: HotkeyCallback) {
   return function () {
     reportFn();
     navigator.clipboard.writeText(lastClip);
+    return false;
   };
 };
 
