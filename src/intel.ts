@@ -478,7 +478,11 @@ function NeptunesPrideAgent() {
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
     const warMap = fOwner?.war || sOwner?.war || {};
-    return fleetOwnerId == starOwnerId || warMap[fleetOwnerId] == 0;
+    return (
+      fleetOwnerId == starOwnerId ||
+      warMap[fleetOwnerId] == 0 ||
+      warMap[starOwnerId] == 0
+    );
   };
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
