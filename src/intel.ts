@@ -27,6 +27,7 @@ import { post } from "./network";
 import { getServerScans, registerForScans, scanCache } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { Player, Star } from "./galaxy";
+import * as Mousetrap from "mousetrap";
 
 interface CruxLib {
   IconButton: any;
@@ -3046,22 +3047,28 @@ function NeptunesPrideAgent() {
   let npaControls = function () {
     const output: string[] = [];
     output.push("--- Controls ---");
-    output.push(":--|--:");
-    let partial = "";
+    output.push(":--|--|--:");
+    output.push("Button||Hotkey");
+    var div = document.createElement("div");
     getHotkeys().forEach((key: string) => {
-      let action = getHotkeyCallback(key);
-      let control = Crux.format(`[[goto:${key}]]`, {});
-      if (key === "?") control = Crux.format(`[[hotkey:${key}]]`, {});
-      partial += control;
-      if (partial.indexOf("|") === -1) {
-        partial += "|";
+      let control = `[[goto:${key}]]`;
+      if (key === "?") control = `[[hotkey:${key}]]`;
+      if (key === "<") key = "&lt;";
+      else if (key === ">") key = "&gt;";
+      else if (key === "&") key = "&amp;";
+      else if (key.length === 1) {
+        key = `&#${key.charCodeAt(0)};`;
       } else {
-        output.push(partial);
-        partial = "";
+        console.log({ key });
+        div.innerText = key;
+        key = div.innerHTML;
       }
+      const partial = `${control}||${key}`;
+      output.push(partial);
     });
-    prepReport("controls", output.join("\n"));
     output.push("--- Controls ---");
+    prepReport("controls", output.join("\n"));
+    window.setTimeout(() => Mousetrap.trigger("`"), 500);
   };
   defineHotkey("~", npaControls, "Generate NPA Buttons.", "Controls");
 
