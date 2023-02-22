@@ -2407,8 +2407,8 @@ function NeptunesPrideAgent() {
   };
   let getTimeTravelScan = function (apikey: string, dir: "back" | "forwards") {
     const scans = scanCache[getCodeFromApiText(apikey)];
-    if (!scans) return null;
-    let timeTravelTickIndex = scans.length - 1;
+    if (!scans || scans.length === 0) return null;
+    let timeTravelTickIndex = dir === "back" ? scans.length - 1 : 0;
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
@@ -2418,12 +2418,7 @@ function NeptunesPrideAgent() {
       while (scan.tick < timeTravelTick && dir === "forwards") {
         timeTravelTickIndex++;
         if (timeTravelTickIndex === scans.length) {
-          timeTravelTick = -1;
           timeTravelTickIndices[apikey] = undefined;
-          NeptunesPride.np.trigger("server_request", {
-            type: "order",
-            order: "full_universe_report",
-          });
           return null;
         }
         console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
@@ -2431,18 +2426,19 @@ function NeptunesPrideAgent() {
         scan = adjustNow(scan);
       }
     } else if (scan.tick > timeTravelTick) {
-      while (
-        scan.tick > timeTravelTick &&
-        timeTravelTickIndex > 0 &&
-        dir === "back"
-      ) {
+      while (scan.tick > timeTravelTick && dir === "back") {
         timeTravelTickIndex--;
+        if (timeTravelTickIndex < 0) {
+          timeTravelTickIndices[apikey] = undefined;
+          return null;
+        }
         console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
         scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
         scan = adjustNow(scan);
       }
     }
     timeTravelTickIndices[apikey] = timeTravelTickIndex;
+    console.log(`Found scan for ${timeTravelTick} ${apikey}:${scan.tick}`);
     return scan;
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
@@ -2728,6 +2724,8 @@ function NeptunesPrideAgent() {
             type: "order",
             order: `share_tech,${targetPlayer.uid},${name}`,
           });
+        } else {
+          break;
         }
       }
     }
