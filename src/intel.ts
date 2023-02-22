@@ -24,7 +24,12 @@ import {
 } from "./events";
 import { GameStore } from "./gamestore";
 import { post } from "./network";
-import { getServerScans, registerForScans, scanCache } from "./npaserver";
+import {
+  getScan,
+  getServerScans,
+  registerForScans,
+  scanCache,
+} from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { Player, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
@@ -169,10 +174,10 @@ function NeptunesPrideAgent() {
       output.push("Star ownership changes:");
       explorers.push("Exploration report:");
       const scans = scanCache[myApiKey];
-      let stars = JSON.parse(scans[0].apis).scanning_data.stars;
+      let stars = getScan(scans, 0).stars;
       const abandoned: { [k: string]: boolean } = {};
       for (let i = 0; i < scans.length; ++i) {
-        let scanData = JSON.parse(scans[i].apis).scanning_data;
+        let scanData = getScan(scans, i);
         let newStars = scanData.stars;
         let tick = scanData.tick;
         for (let k in newStars) {
@@ -335,14 +340,25 @@ function NeptunesPrideAgent() {
   function activityReport() {
     const output = [];
     output.push("Activity report:");
-    if (myApiKey && scanCache[myApiKey]?.length > 0) {
-      const scans = scanCache[myApiKey];
-      let prior = JSON.parse(scans[0].apis).scanning_data.players;
-      const pk =
-        NeptunesPride.universe.selectedSpaceObject?.puid ||
-        NeptunesPride.universe.player.uid;
-      for (let i = 1; i < scans.length; ++i) {
-        let scan = JSON.parse(scans[i].apis).scanning_data;
+    let currentTick = 0;
+    const myId = NeptunesPride.originalPlayer
+      ? NeptunesPride.originalPlayer
+      : NeptunesPride.universe.galaxy.player_uid;
+    let prior = null;
+    const pk =
+      NeptunesPride.universe.selectedSpaceObject?.puid >= 0
+        ? NeptunesPride.universe.selectedSpaceObject?.puid
+        : NeptunesPride.universe.player.uid;
+    const startMillis = new Date().getTime();
+    timeTravelTickIndices = {};
+    do {
+      const scanList = allSeenKeys
+        .map((k) => getTimeTravelScanForTick(currentTick, k, "forwards"))
+        .filter((scan) => scan && scan.tick === currentTick);
+      if (scanList.length > 0) {
+        let myScan = scanList.filter((scan) => scan.player_uid === myId);
+        let scan = myScan.length > 0 ? myScan[0] : scanList[0];
+        if (prior === null) prior = scan.players;
         let row = scan.players;
         const active = (p: any, last: any) => {
           if (p.total_economy > last.total_economy) return true;
@@ -362,9 +378,13 @@ function NeptunesPrideAgent() {
         }
         prior = row;
       }
-    } else {
-      output.push("API Key unknown. Find it and merge it, or regenerate.");
+      currentTick++;
+    } while (currentTick < trueTick);
+    if (output.length === 1) {
+      output.push("No activity data found.");
     }
+    const endMillis = new Date().getTime();
+    //output.push(`Time required ${endMillis - startMillis}ms`);
     prepReport("activity", output.join("\n"));
   }
   defineHotkey(
@@ -2448,39 +2468,46 @@ function NeptunesPrideAgent() {
     return { ...scan, now, tick_fragment };
   };
   let getTimeTravelScan = function (apikey: string, dir: "back" | "forwards") {
+    return getTimeTravelScanForTick(timeTravelTick, apikey, dir);
+  };
+  let getTimeTravelScanForTick = function (
+    targetTick: number,
+    apikey: string,
+    dir: "back" | "forwards",
+  ) {
     const scans = scanCache[getCodeFromApiText(apikey)];
     if (!scans || scans.length === 0) return null;
     let timeTravelTickIndex = dir === "back" ? scans.length - 1 : 0;
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
-    let scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+    let scan = getScan(scans, timeTravelTickIndex);
     scan = adjustNow(scan);
-    if (scan.tick < timeTravelTick) {
-      while (scan.tick < timeTravelTick && dir === "forwards") {
+    if (scan.tick < targetTick) {
+      while (scan.tick < targetTick && dir === "forwards") {
         timeTravelTickIndex++;
         if (timeTravelTickIndex === scans.length) {
           timeTravelTickIndices[apikey] = undefined;
           return null;
         }
-        console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+        //console.log({ timeTravelTickIndex, len: scans.length, targetTick });
+        scan = getScan(scans, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
-    } else if (scan.tick > timeTravelTick) {
-      while (scan.tick > timeTravelTick && dir === "back") {
+    } else if (scan.tick > targetTick) {
+      while (scan.tick > targetTick && dir === "back") {
         timeTravelTickIndex--;
         if (timeTravelTickIndex < 0) {
           timeTravelTickIndices[apikey] = undefined;
           return null;
         }
-        console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = JSON.parse(scans[timeTravelTickIndex].apis).scanning_data;
+        //console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
+        scan = getScan(scans, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     }
     timeTravelTickIndices[apikey] = timeTravelTickIndex;
-    console.log(`Found scan for ${timeTravelTick} ${apikey}:${scan.tick}`);
+    //console.log(`Found scan for ${targetTick} ${apikey}:${scan.tick}`);
     return scan;
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
@@ -3022,12 +3049,12 @@ function NeptunesPrideAgent() {
       if (scanCache[code]?.length > 0) {
         let last = scanCache[code].length - 1;
         let eof = scanCache[code][last]?.eof;
-        let scan = JSON.parse(scanCache[code][last].apis).scanning_data;
+        let scan = getScan(scanCache[code], last);
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
           eof = scanCache[code][last]?.eof;
-          let scan = JSON.parse(scanCache[code][last].apis).scanning_data;
+          let scan = getScan(scanCache[code], last);
           uid = scan?.player_uid;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;

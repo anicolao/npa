@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 import {
   addDoc,
   collection,
-  doc,
   getFirestore,
   onSnapshot,
   orderBy,
@@ -10,6 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { openDB } from "idb";
+import { type ScanningData } from "./galaxy";
 
 export const scanCache: { [k: string]: any[] } = {};
 
@@ -125,4 +125,11 @@ export async function getServerScans(apikey: string) {
       console.error(error);
     },
   );
+}
+
+export function getScan(scans: any[], index: number): ScanningData {
+  if (scans[index].cached === undefined) {
+    scans[index].cached = JSON.parse(scans[index].apis).scanning_data;
+  }
+  return scans[index].cached;
 }
