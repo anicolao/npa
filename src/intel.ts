@@ -218,8 +218,8 @@ function NeptunesPrideAgent() {
   );
 
   function buyAllTheHypotheticalEconomy(
-    output: string[],
     techType: "terra" | "bank" | "none",
+    buy: "E" | "I" | "S",
   ) {
     const universe = NeptunesPride.universe;
     const galaxy = universe.galaxy;
@@ -231,6 +231,8 @@ function NeptunesPrideAgent() {
       })
       .filter((s) => s.puid === myUid);
     const cc = (a: any, b: any) => {
+      if (buy === "I") return a.uci - b.uci;
+      if (buy === "S") return a.ucs - b.ucs;
       return a.uce - b.uce;
     };
     if (techType === "terra") {
@@ -249,7 +251,9 @@ function NeptunesPrideAgent() {
       allMyStars[HEAD].uce <= universe.player.cash &&
       HEAD < allMyStars.length
     ) {
-      universe.upgradeEconomy(allMyStars[HEAD]);
+      if (buy === "E") universe.upgradeEconomy(allMyStars[HEAD]);
+      if (buy === "I") universe.upgradeIndustry(allMyStars[HEAD]);
+      if (buy === "S") universe.upgradeScience(allMyStars[HEAD]);
       count++;
       allMyStars = allMyStars.sort(cc);
     }
@@ -266,20 +270,32 @@ function NeptunesPrideAgent() {
     let myCash = me?.cash || 1000;
     universe.player.cash = myCash;
     const preEcon = universe.player.total_economy;
+    const preInd = universe.player.total_industry;
+    const preSci = universe.player.total_science;
+    const buyAllTheThings = (balance: number) => {
+      universe.player.cash = balance;
+      let e = buyAllTheHypotheticalEconomy("none", "E");
+      universe.player.cash = balance;
+      let i = buyAllTheHypotheticalEconomy("none", "I");
+      universe.player.cash = balance;
+      let s = buyAllTheHypotheticalEconomy("none", "S");
+      return { e, i, s };
+    };
     output.push(`--- Economists Report for [[${myUid}]] ($${myCash}) ---`);
-    output.push(`Technology|New Income|Balance`);
     output.push(`:--|--:|--:`);
-    let count = buyAllTheHypotheticalEconomy(output, "none");
+    output.push(`Technology|New Income (Balance)|Buys one of E/I/S`);
+    let count = buyAllTheHypotheticalEconomy("none", "E");
     let cost = myCash - universe.player.cash;
     let newIncome = count * 10;
     let balance =
       universe.player.total_economy * 10 +
       universe.player.cash +
       universe.player.tech.banking.level * 75;
-    output.push(`No Tech|$${newIncome}|$${balance}`);
+    let { e, i, s } = buyAllTheThings(balance);
+    output.push(`No Tech|$${newIncome} ($${balance})|${e}/${i}/${s}`);
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
-    count = buyAllTheHypotheticalEconomy(output, "bank");
+    count = buyAllTheHypotheticalEconomy("bank", "E");
     cost = myCash - universe.player.cash + 75;
     newIncome = count * 10 + 75;
     balance =
@@ -287,21 +303,25 @@ function NeptunesPrideAgent() {
       universe.player.cash +
       universe.player.tech.banking.level * 75;
     //output.push(`Bought ${count} economy for ${cost} using banking with ${universe.player.cash} left over.`)
-    output.push(`Banking|$${newIncome}|$${balance}`);
+    ({ e, i, s } = buyAllTheThings(balance));
+    output.push(`Banking|$${newIncome} ($${balance})|${e}/${i}/${s}`);
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
-    count = buyAllTheHypotheticalEconomy(output, "terra");
+    count = buyAllTheHypotheticalEconomy("terra", "E");
     cost = myCash - universe.player.cash;
     newIncome = count * 10;
     balance =
       universe.player.total_economy * 10 +
       universe.player.cash +
       universe.player.tech.banking.level * 75;
-    output.push(`Terraforming|$${newIncome}|$${balance}`);
+    ({ e, i, s } = buyAllTheThings(balance));
+    output.push(`Terraforming|$${newIncome} ($${balance})|${e}/${i}/${s}`);
     output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
     //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
+    universe.player.total_industry = preInd;
+    universe.player.total_science = preSci;
     prepReport("economists", output.join("\n"));
   }
   defineHotkey(
