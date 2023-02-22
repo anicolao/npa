@@ -110,13 +110,20 @@ function NeptunesPrideAgent() {
   };
 
   let lastReport = "planets";
+  let showingOurUI = false;
+  let reportSelector: any = null;
+  const showUI = () => NeptunesPride.npui.trigger("show_screen", "new_fleet");
   const prepReport = function (reportName: string, content: string) {
+    if (showingOurUI && reportName !== reportSelector.getValue()) {
+      reportSelector.setValue(reportName);
+      reportSelector.onChange();
+    }
     lastReport = reportName;
     setClip(content);
   };
   defineHotkey(
     "`",
-    () => NeptunesPride.npui.trigger("show_screen", "new_fleet"),
+    showUI,
     "Bring up the NP Agent UI." +
       "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
     "Open NPA UI",
@@ -2019,7 +2026,7 @@ function NeptunesPrideAgent() {
         controls: "Controls",
         help: "Help",
       };
-      Crux.DropDown(lastReport, selections, "exec_report")
+      reportSelector = Crux.DropDown(lastReport, selections, "exec_report")
         .grid(15, 0, 15, 3)
         .roost(report);
 
@@ -2086,7 +2093,6 @@ function NeptunesPrideAgent() {
       .roost(npui.sideMenu);
 
     const superNewFleetScreen = npui.NewFleetScreen;
-    let showingOurUI = false;
     NeptunesPride.np.on(
       "show_screen",
       (_event: any, name: any, screenConfig: any) => {
@@ -2665,7 +2671,7 @@ function NeptunesPrideAgent() {
       );
       start += subset.length;
     }
-    prepReport("technology", output.join("\n"));
+    prepReport("trading", output.join("\n"));
   };
   defineHotkey(
     "e",
