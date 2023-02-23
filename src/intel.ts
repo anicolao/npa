@@ -3240,9 +3240,10 @@ function NeptunesPrideAgent() {
           updateMessageCache("game_diplomacy").then(() => {
             for (let i = 0; i < data.messages.length; ++i) {
               const incoming = data.messages[i];
-              for (let j = 0; j < 100; ++j) {
+              let limit = Math.min(100, messageCache["game_diplomacy"].length);
+              for (let j = 0; j < limit; ++j) {
                 const m = messageCache["game_diplomacy"][j];
-                if (m.key === incoming.key) {
+                if (m.key === incoming.key && m.status !== "read") {
                   incoming.status = m.status;
                   break;
                 }
