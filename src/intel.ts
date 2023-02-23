@@ -322,6 +322,21 @@ function NeptunesPrideAgent() {
     //output.push(`Bought ${count} economy for ${cost} using banking with ${universe.player.cash} left over.`)
     ({ e, i, s } = buyAllTheThings(balance));
     output.push(`Banking|$${newIncome} ($${balance})|${e}/${i}/${s}`);
+    const bankCost = tradeCostForLevel(universe.player.tech.banking.level + 1);
+    universe.player.cash = myCash - bankCost;
+    universe.player.total_economy = preEcon;
+    count = buyAllTheHypotheticalEconomy("bank", "E");
+    cost = myCash - universe.player.cash + 75;
+    newIncome = count * 10 + 75;
+    balance =
+      universe.player.total_economy * 10 +
+      universe.player.cash +
+      universe.player.tech.banking.level * 75;
+    //output.push(`Bought ${count} economy for ${cost} using banking with ${universe.player.cash} left over.`)
+    ({ e, i, s } = buyAllTheThings(balance));
+    output.push(
+      `Buy it ($${bankCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
+    );
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
     count = buyAllTheHypotheticalEconomy("terra", "E");
@@ -333,6 +348,22 @@ function NeptunesPrideAgent() {
       universe.player.tech.banking.level * 75;
     ({ e, i, s } = buyAllTheThings(balance));
     output.push(`Terraforming|$${newIncome} ($${balance})|${e}/${i}/${s}`);
+    const terraCost = tradeCostForLevel(
+      universe.player.tech.terraforming.level + 1,
+    );
+    universe.player.cash = myCash - terraCost;
+    universe.player.total_economy = preEcon;
+    count = buyAllTheHypotheticalEconomy("terra", "E");
+    cost = myCash - universe.player.cash;
+    newIncome = count * 10;
+    balance =
+      universe.player.total_economy * 10 +
+      universe.player.cash +
+      universe.player.tech.banking.level * 75;
+    ({ e, i, s } = buyAllTheThings(balance));
+    output.push(
+      `Buy it ($${terraCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
+    );
     output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
     //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
     universe.player.cash = myCash;
@@ -2628,6 +2659,12 @@ function NeptunesPrideAgent() {
   };
   let translateTech = (name: string) => xlate[name.substring(0, 4)];
 
+  const tradeCostForLevel = function (level: number) {
+    if (NeptunesPride.gameVersion === "proteus") {
+      return level * level * 5;
+    }
+    return level * NeptunesPride.gameConfig.tradeCost;
+  };
   let techTable = function (
     output: string[],
     playerIndexes: number[],
@@ -2672,12 +2709,6 @@ function NeptunesPrideAgent() {
           }`;
         }
         const level = levels[t].level;
-        const tradeCostForLevel = function (level: number) {
-          if (NeptunesPride.gameVersion === "proteus") {
-            return level * level * 5;
-          }
-          return level * NeptunesPride.gameConfig.tradeCost;
-        };
         if (level < myTech[t].level) {
           rows[i] += `|[[sendtech:${pi}:${t}:${level}]]`;
           for (let incs = level; incs < myTech[t].level; ++incs) {
