@@ -2969,9 +2969,14 @@ function NeptunesPrideAgent() {
           console.log("Peace: ", m.payload);
           if (m.payload.price) {
             const to = m.payload.to_puid;
+            const from = m.payload.from_puid;
             let credits = m.payload.price;
             if (peaceAccepted[to]) credits /= 2;
-            balances[to] -= credits;
+            if (from === NeptunesPride.universe.player.uid) {
+              balances[to] -= credits;
+            } else {
+              balances[from] += credits;
+            }
             const tick = m.payload.tick;
             output.push(
               `[[Tick #${tick}]]|Alliance Costs $${credits} → [[${to}]]`,
