@@ -432,6 +432,9 @@ function NeptunesPrideAgent() {
     timeTravelTick = -1;
   };
   NeptunesPride.np.on("order:full_universe", recordTrueTick);
+  if (NeptunesPride?.universe?.galaxy?.tick !== undefined) {
+    recordTrueTick(null, NeptunesPride.universe.galaxy);
+  }
   let msToTick = function (tick: number, wholeTime?: boolean) {
     let universe = NeptunesPride.universe;
     var ms_since_data = 0;
