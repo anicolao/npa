@@ -87,6 +87,10 @@ function trimInvalidEntries(apikey: string) {
   }
 }
 export async function getServerScans(apikey: string) {
+  if (scanCache[apikey] !== undefined) {
+    console.log(`Already watching ${apikey}`);
+    return;
+  }
   const gameid = NeptunesPride.gameNumber;
   await restoreFromDB(gameid, apikey);
   const len = scanCache[apikey]?.length || 0;
@@ -116,7 +120,7 @@ export async function getServerScans(apikey: string) {
         }
       });
       store(incoming, gameid, apikey);
-      console.log(`Added ${incoming.length} scans`);
+      console.log(`Added ${incoming.length} scans for ${gameid}:${apikey}`);
       scanCache[apikey] = scanCache[apikey].concat(incoming);
       trimInvalidEntries(apikey);
     },
