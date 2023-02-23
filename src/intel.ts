@@ -170,25 +170,35 @@ function NeptunesPrideAgent() {
   function ownershipReport() {
     let output = [];
     const explorers = [];
-    if (myApiKey) {
-      output.push("Star ownership changes:");
-      explorers.push("Exploration report:");
-      const scans = scanCache[myApiKey];
-      let stars = getScan(scans, 0).stars;
-      const abandoned: { [k: string]: boolean } = {};
-      for (let i = 0; i < scans.length; ++i) {
-        let scanData = getScan(scans, i);
+    let currentTick = 0;
+    const myId = NeptunesPride.originalPlayer
+      ? NeptunesPride.originalPlayer
+      : NeptunesPride.universe.galaxy.player_uid;
+    timeTravelTickIndices = {};
+    output.push("Star ownership changes:");
+    explorers.push("Exploration report:");
+    const abandoned: { [k: string]: boolean } = {};
+    let prior = null;
+    do {
+      const scanList = allSeenKeys
+        .map((k) => getTimeTravelScanForTick(currentTick, k, "forwards"))
+        .filter((scan) => scan && scan.tick === currentTick);
+      if (scanList.length > 0) {
+        let myScan = scanList.filter((scan) => scan.player_uid === myId);
+        let scan = myScan.length > 0 ? myScan[0] : scanList[0];
+        if (prior === null) prior = scan.stars;
+        let scanData = scan;
         let newStars = scanData.stars;
         let tick = scanData.tick;
         for (let k in newStars) {
           const nameOwner = (uid: any) =>
             uid !== -1 && uid !== undefined ? `[[${uid}]]` : "Abandoned";
           const unowned = (uid: any) => nameOwner(uid) === "Abandoned";
-          const oldOwner = nameOwner(stars[k]?.puid);
+          const oldOwner = nameOwner(prior[k]?.puid);
           const newOwner = nameOwner(newStars[k]?.puid);
           if (
-            stars[k]?.puid !== newStars[k]?.puid &&
-            (!unowned(stars[k]?.puid) || abandoned[k])
+            prior[k]?.puid !== newStars[k]?.puid &&
+            (!unowned(prior[k]?.puid) || abandoned[k])
           ) {
             if (newStars[k]?.puid === -1) {
               abandoned[k] = true;
@@ -196,18 +206,20 @@ function NeptunesPrideAgent() {
             output.push(
               `[[Tick #${tick}]] ${oldOwner} →  ${newOwner} [[${newStars[k].n}]]`,
             );
-          } else if (stars[k]?.puid !== newStars[k]?.puid) {
+          } else if (prior[k]?.puid !== newStars[k]?.puid) {
             if (!unowned(newStars[k]?.puid)) {
               explorers.push(
                 `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
               );
             }
           }
-          stars[k] = newStars[k];
+          prior[k] = newStars[k];
         }
       }
-    } else {
-      output.push("API Key unknown. Find it and merge it, or regenerate.");
+      currentTick++;
+    } while (currentTick < trueTick);
+    if (output.length === 1 && explorers.length === 1) {
+      output.push("No API data found");
     }
     if (output.length === 1) {
       output = explorers;
