@@ -3329,6 +3329,9 @@ function NeptunesPrideAgent() {
           updateMessageCache("game_diplomacy").then(() => {
             for (let i = 0; i < data.messages.length; ++i) {
               const incoming = data.messages[i];
+              if (typeof incoming.payload.to_uids !== "string") {
+                incoming.payload.to_uids = incoming.payload.to_uids.join(",");
+              }
               let limit = Math.min(100, messageCache["game_diplomacy"].length);
               for (let j = 0; j < limit; ++j) {
                 const m = messageCache["game_diplomacy"][j];
