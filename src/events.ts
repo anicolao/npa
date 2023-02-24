@@ -42,6 +42,12 @@ async function store(incoming: any[], group: string) {
     ...incoming.map((x) => {
       if (x?.comment_count === 0) {
         return tx.store.add({ ...x, date: -Date.parse(x.created) });
+      } else if (messageCache[x.key] && x?.comment_count) {
+        const message = messageCache[group].filter((e) => e.key === x.key);
+        if (message.length === 1 && message[0].status !== "read") {
+          console.log(`Override unread state from db for ${message[0].key}`);
+          x.status = message[0].status;
+        }
       }
       return tx.store
         .put({ ...x, date: -Date.parse(x?.activity || x.created) })
