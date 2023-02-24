@@ -3358,6 +3358,8 @@ function NeptunesPrideAgent() {
               const incoming = data.messages[i];
               if (typeof incoming.payload.to_uids !== "string") {
                 incoming.payload.to_uids = incoming.payload.to_uids.join(",");
+                incoming.payload.to_aliases =
+                  incoming.payload.to_aliases.join(",");
               }
               let limit = Math.min(100, messageCache["game_diplomacy"].length);
               for (let j = 0; j < limit; ++j) {
