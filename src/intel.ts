@@ -577,6 +577,7 @@ function NeptunesPrideAgent() {
       puid: number;
       c: number;
       departures: { [k: number]: DepartureRecord };
+      weapons: number;
     }
     let starstate: { [k: string]: StarState } = {};
     for (const i in flights) {
@@ -584,12 +585,20 @@ function NeptunesPrideAgent() {
       if (fleet.orbiting) {
         let orbit: string = fleet.orbiting.uid;
         if (!starstate[orbit]) {
+          const ownerWeapons = players[stars[orbit].puid].tech.weapons.level;
+          const weapons = Math.max(
+            ownerWeapons,
+            ...stars[orbit]?.alliedDefenders.map(
+              (d: number) => players[d].tech.weapons.level,
+            ),
+          );
           starstate[orbit] = {
             last_updated: 0,
             ships: stars[orbit].totalDefenses,
             puid: stars[orbit].puid,
             c: stars[orbit].c || 0,
             departures: {},
+            weapons,
           };
         }
         // This fleet is departing this tick; remove it from the origin star's totalDefenses
@@ -631,12 +640,20 @@ function NeptunesPrideAgent() {
       let tick = parseInt(ka[0]);
       let starId = ka[1];
       if (!starstate[starId]) {
+        const ownerWeapons = players[stars[starId].puid]?.tech.weapons.level;
+        const weapons = Math.max(
+          ownerWeapons || 0,
+          ...stars[starId]?.alliedDefenders.map(
+            (d: number) => players[d].tech.weapons.level,
+          ),
+        );
         starstate[starId] = {
           last_updated: 0,
           ships: stars[starId].totalDefenses,
           puid: stars[starId].puid,
           c: stars[starId].c || 0,
           departures: {},
+          weapons,
         };
       }
       if (starstate[starId].puid == -1) {
@@ -657,6 +674,16 @@ function NeptunesPrideAgent() {
           }
         }
         starstate[starId].puid = owner;
+      }
+      for (const i in arrival) {
+        let fleet = arrival[i];
+        if (alliedFleet(fleet.puid, starstate[starId].puid)) {
+          const weapons = Math.max(
+            starstate[starId].weapons,
+            players[fleet.puid].tech.weapons.level,
+          );
+          starstate[starId].weapons = weapons;
+        }
       }
       output.push(
         "[[Tick #{0}]]: [[{1}]] [[{2}]] {3} ships".format(
@@ -762,7 +789,7 @@ function NeptunesPrideAgent() {
       }
       let attackersAggregate = offense;
       while (offense > 0) {
-        let dwt = players[starstate[starId].puid].tech.weapons.level;
+        let dwt = starstate[starId].weapons;
         let defense = starstate[starId].ships;
         output.push(
           "  Combat! [[{0}]] defending".format(starstate[starId].puid),
