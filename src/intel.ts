@@ -1106,7 +1106,7 @@ function NeptunesPrideAgent() {
     y: number,
     fgColor?: string,
   ) {
-    const str = Crux.format(s, {});
+    const str = Crux.format(s, { linkTimes: false });
     const context = NeptunesPride.npui.map.context;
     context.fillStyle = fgColor || "#00ff00";
     context.fillText(str, x, y);
@@ -1122,7 +1122,7 @@ function NeptunesPrideAgent() {
     y: number,
     fgColor?: string,
   ) {
-    const str = Crux.format(s, {});
+    const str = Crux.format(s, { linkTimes: false });
     context.fillStyle = "#000000";
     for (let smear = 1; smear < 4; ++smear) {
       context.fillText(str, x + smear, y + smear);
@@ -1909,6 +1909,11 @@ function NeptunesPrideAgent() {
       }
     });
     Crux.format = function (s: string, templateData: { [x: string]: any }) {
+      let formatTime = Crux.formatTime;
+      if (templateData?.linkTimes === false) {
+        formatTime = timeText;
+        templateData.linkTimes = undefined;
+      }
       if (!s) {
         return "error";
       }
@@ -1949,7 +1954,7 @@ function NeptunesPrideAgent() {
               }
             }
             let msplus = msToTick(relativeTick, false);
-            s = s.replace(pattern, Crux.formatTime(msplus, true));
+            s = s.replace(pattern, formatTime(msplus, true));
           }
         } else if (safe_image_url(sub)) {
           s = s.replace(pattern, `<img  width="100%" src='${sub}' />`);
@@ -2206,7 +2211,7 @@ function NeptunesPrideAgent() {
     };
 
     let superFormatTime = Crux.formatTime;
-    Crux.formatTime = function (
+    const timeText = function (
       ms: number,
       showMinutes: boolean,
       showSeconds: boolean,
@@ -2230,6 +2235,17 @@ function NeptunesPrideAgent() {
         const tick = ms / rate;
         return `${Math.ceil(tick)} ticks`;
       }
+    };
+    Crux.formatTime = function (
+      ms: number,
+      showMinutes: boolean,
+      showSeconds: boolean,
+    ) {
+      const text = timeText(ms, showMinutes, showSeconds);
+      const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+      const relTick = ms / rate;
+      const absTick = Math.ceil(relTick) + NeptunesPride.universe.galaxy.tick;
+      return `<a onClick='Crux.crux.trigger(\"warp_time\", \"${absTick}\")'>${text}</a>`;
     };
     const toggleRelative = function () {
       const i =
@@ -2582,6 +2598,16 @@ function NeptunesPrideAgent() {
     NeptunesPride.npui.onHideScreen(null, true);
     init();
   };
+  let warpTime = function (_event?: any, data?: string) {
+    timeTravelTick = parseInt(data);
+    const gtick = NeptunesPride.universe.galaxy.tick;
+    if (timeTravelTick < gtick) {
+      timeTravel("back");
+    } else if (timeTravelTick > gtick) {
+      timeTravel("forwards");
+    }
+  };
+  NeptunesPride.np.on("warp_time", warpTime);
   let timeTravelBack = function () {
     if (timeTravelTick === -1) {
       timeTravelTick = NeptunesPride.universe.galaxy.tick;
@@ -2613,6 +2639,30 @@ function NeptunesPrideAgent() {
     timeTravelForward,
     "Go forward a tick in time.",
     "Time Machine: Forward",
+  );
+  let timeTravelBackCycle = function () {
+    if (timeTravelTick === -1) {
+      timeTravelTick = NeptunesPride.universe.galaxy.tick;
+    }
+    timeTravelTick -= NeptunesPride.gameConfig.productionTicks;
+    if (timeTravelTick < 0) timeTravelTick = 0;
+    timeTravel("back");
+  };
+  let timeTravelForwardCycle = function () {
+    timeTravelTick += NeptunesPride.gameConfig.productionTicks;
+    timeTravel("forwards");
+  };
+  defineHotkey(
+    "ctrl+m",
+    timeTravelBackCycle,
+    `Go back in time a full cycle (${NeptunesPride.gameConfig.productionTicks} ticks).`,
+    `Time Machine: -${NeptunesPride.gameConfig.productionTicks} ticks`,
+  );
+  defineHotkey(
+    "ctrl+/",
+    timeTravelForwardCycle,
+    `Go forward a full cycle (${NeptunesPride.gameConfig.productionTicks} ticks).`,
+    `Time Machine: +${NeptunesPride.gameConfig.productionTicks} ticks`,
   );
 
   let myApiKey = "";
