@@ -52,14 +52,20 @@ async function store(incoming: any[], group: string) {
       return tx.store
         .put({ ...x, date: -Date.parse(x?.activity || x.created) })
         .then(async () => {
-          if (x.comment_count) {
-            if (messageCache[x.key]?.length === undefined) {
-              requestMessageComments(x.comment_count, x.key);
-            } else {
-              const len = messageCache[x.key].length;
-              const delta = x.comment_count - len + 1;
-              requestMessageComments(delta, x.key);
+          if (x.status === "read") {
+            if (x.comment_count) {
+              if (messageCache[x.key]?.length === undefined) {
+                requestMessageComments(x.comment_count, x.key);
+              } else {
+                const len = messageCache[x.key].length;
+                const delta = x.comment_count - len + 1;
+                requestMessageComments(delta, x.key);
+              }
             }
+          } else {
+            console.log(
+              `Avoid caching comments for ${x.key} since it is unread: ${x?.payload?.subject}`,
+            );
           }
         });
     }),
