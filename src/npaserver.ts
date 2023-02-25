@@ -70,11 +70,7 @@ export function registerForScans(apikey: string) {
 function trimInvalidEntries(apikey: string) {
   const len = scanCache[apikey].length;
   let trim = len - 1;
-  while (
-    JSON.parse(scanCache[apikey][trim].apis)?.scanning_data?.tick ===
-      undefined &&
-    trim >= 0
-  ) {
+  while (getScan(scanCache[apikey], trim)?.tick === undefined && trim >= 0) {
     trim--;
   }
   if (trim + 1 < len) {
@@ -95,6 +91,13 @@ export async function getServerScans(apikey: string) {
   await restoreFromDB(gameid, apikey);
   const len = scanCache[apikey]?.length || 0;
   console.log(`Fetched ${len} entries from ${apikey}`);
+  scanCache[apikey].forEach((scan, i) => {
+    parseScan(scan);
+    const last = i - 1;
+    if (last >= 0) {
+      //compressDeltas(scanCache[apikey][last], scan);
+    }
+  });
   let timestamp = 0;
   if (len > 0) {
     timestamp = scanCache[apikey][len - 1].timestamp;
@@ -116,7 +119,12 @@ export async function getServerScans(apikey: string) {
         ) {
           let doc = change.doc;
           let scan = doc.data() as any;
+          parseScan(scan);
+          const last = incoming.length - 1;
           incoming.push(scan);
+          if (last >= 0) {
+            //compressDeltas(incoming[last], scan);
+          }
         }
       });
       store(incoming, gameid, apikey);
@@ -131,9 +139,43 @@ export async function getServerScans(apikey: string) {
   );
 }
 
-export function getScan(scans: any[], index: number): ScanningData {
-  if (scans[index].cached === undefined) {
-    scans[index].cached = JSON.parse(scans[index].apis).scanning_data;
+let count = 0;
+function compressDeltas(older: any, newer: any) {
+  const oldScan = parseScan(older);
+  const newScan = parseScan(newer);
+  const newStars: { [k: string]: any } = {};
+  for (let sk in newScan.stars) {
+    const newStar = newScan.stars[sk];
+    const newKeys = Object.keys(newStar);
+    let oldStar = oldScan.stars[sk];
+    if (oldStar !== undefined) {
+      let oldKeys = Object.keys(oldStar);
+      while (oldKeys.length === newKeys.length) {
+        oldStar = Object.getPrototypeOf(oldKeys);
+        oldKeys = Object.keys(oldStar);
+      }
+      let created = Object.create(oldStar);
+      for (let k in newStar) {
+        if (newStar[k] !== created[k]) {
+          created[k] = newStar[k];
+        }
+        newStars[sk] = created;
+      }
+    } else {
+      console.error("Skipped thinning");
+      newStars[sk] = newStar;
+    }
   }
-  return scans[index].cached;
+  newScan.stars = newStars;
+}
+function parseScan(scan: any) {
+  if (scan.cached === undefined) {
+    scan.cached = JSON.parse(scan.apis).scanning_data;
+    scan.apis = undefined;
+    console.log(`cleared ${++count} scans`);
+  }
+  return scan.cached;
+}
+export function getScan(scans: any[], index: number): ScanningData {
+  return parseScan(scans[index]);
 }
