@@ -3352,29 +3352,7 @@ function NeptunesPrideAgent() {
     })
     .then(() => {
       const overrideOnNewMessages = (event: any, data: any) => {
-        if (data.group === "game_diplomacy") {
-          updateMessageCache("game_diplomacy").then(() => {
-            for (let i = 0; i < data.messages.length; ++i) {
-              const incoming = data.messages[i];
-              if (typeof incoming.payload.to_uids !== "string") {
-                incoming.payload.to_uids = incoming.payload.to_uids.join(",");
-                incoming.payload.to_aliases =
-                  incoming.payload.to_aliases.join(",");
-              }
-              let limit = Math.min(100, messageCache["game_diplomacy"].length);
-              for (let j = 0; j < limit; ++j) {
-                const m = messageCache["game_diplomacy"][j];
-                if (m.key === incoming.key && m.status !== "read") {
-                  incoming.status = m.status;
-                  break;
-                }
-              }
-            }
-            NeptunesPride.inbox.onNewMessages(event, data);
-          });
-        } else {
-          updateMessageCache("game_event");
-        }
+        updateMessageCache(data.group);
         return NeptunesPride.inbox.onNewMessages(event, data);
       };
       const handlers = NeptunesPride.inbox.handlers;
