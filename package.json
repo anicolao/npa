@@ -7,7 +7,7 @@
     "start": "webpack --watch --config webpack.dev.js",
     "npa": "webpack --config webpack.npa.js",
     "lint": "npx rome check src",
-    "format": "npx rome format --write src",
+    "format": "npx rome format --write src tests",
     "test": "vitest run --coverage",
     "prepare": "husky install .husky",
     "postversion": "./bin/packagedist"
