@@ -2757,6 +2757,7 @@ function NeptunesPrideAgent() {
     cols = `Technology|[[#${me}]]|[[#${me}]]`;
     let allAmounts: { [k: number]: number } = {};
     let allSendAmounts: { [k: number]: number } = {};
+    const columns = [];
     for (let i = 0; i < playerIndexes.length; ++i) {
       const pi = playerIndexes[i];
       if (pi === me) {
@@ -2765,15 +2766,12 @@ function NeptunesPrideAgent() {
       cols += `|[[#${pi}]]`;
       allAmounts[pi] = 0;
       allSendAmounts[pi] = 0;
+      columns.push(pi);
     }
     output.push(cols);
     const rows: string[] = [];
     const myTech = NeptunesPride.universe.player.tech;
-    for (let i = 0; i < playerIndexes.length; ++i) {
-      const pi = playerIndexes[i];
-      if (pi === NeptunesPride.universe.player.uid) {
-        continue;
-      }
+    columns.forEach((pi) => {
       const player = NeptunesPride.universe.galaxy.players[pi];
       const levels = player.tech;
       const techs = Object.keys(player.tech);
@@ -2801,12 +2799,12 @@ function NeptunesPrideAgent() {
           rows[i] += `|${level}`;
         }
       });
-    }
+    });
     let payFooter = [
       "Pay for all",
       "",
       "",
-      ...Object.keys(allAmounts).map((pi: any) =>
+      ...columns.map((pi: any) =>
         allAmounts[pi] > 0
           ? `[[sendcash:${pi}:${allAmounts[pi]}:${allAmounts[pi]}]]`
           : "",
