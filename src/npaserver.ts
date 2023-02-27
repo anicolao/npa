@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { openDB } from "idb";
 import { type ScanningData } from "./galaxy";
+import { diff2 as diff, patch2 as patch } from "./patch";
 
 export const scanCache: { [k: string]: any[] } = {};
 
@@ -70,7 +71,7 @@ export function registerForScans(apikey: string) {
 function trimInvalidEntries(apikey: string) {
   const len = scanCache[apikey].length;
   let trim = len - 1;
-  while (getScan(scanCache[apikey], trim)?.tick === undefined && trim >= 0) {
+  while (trim >= 0 && getScan(scanCache[apikey], trim)?.tick === undefined) {
     trim--;
   }
   if (trim + 1 < len) {
@@ -94,8 +95,8 @@ export async function getServerScans(apikey: string) {
   scanCache[apikey].forEach((scan, i) => {
     parseScan(scan);
     const last = i - 1;
-    if (last >= 0) {
-      //compressDeltas(scanCache[apikey][last], scan);
+    if (last >= 0 && scan.error === undefined) {
+      compressDeltas(scanCache[apikey][last], scan);
     }
   });
   let timestamp = 0;
@@ -122,8 +123,8 @@ export async function getServerScans(apikey: string) {
           parseScan(scan);
           const last = incoming.length - 1;
           incoming.push(scan);
-          if (last >= 0) {
-            //compressDeltas(incoming[last], scan);
+          if (last >= 0 && scan.error === undefined) {
+            compressDeltas(incoming[last], scan);
           }
         }
       });
@@ -143,36 +144,46 @@ let count = 0;
 function compressDeltas(older: any, newer: any) {
   const oldScan = parseScan(older);
   const newScan = parseScan(newer);
-  const newStars: { [k: string]: any } = {};
-  for (let sk in newScan.stars) {
-    const newStar = newScan.stars[sk];
-    const newKeys = Object.keys(newStar);
-    let oldStar = oldScan.stars[sk];
-    if (oldStar !== undefined) {
-      let oldKeys = Object.keys(oldStar);
-      while (oldKeys.length === newKeys.length) {
-        oldStar = Object.getPrototypeOf(oldKeys);
-        oldKeys = Object.keys(oldStar);
-      }
-      let created = Object.create(oldStar);
-      for (let k in newStar) {
-        if (newStar[k] !== created[k]) {
-          created[k] = newStar[k];
-        }
-        newStars[sk] = created;
-      }
-    } else {
-      console.error("Skipped thinning");
-      newStars[sk] = newStar;
-    }
+  const pForward = diff(oldScan, newScan);
+  const pBackward = diff(newScan, oldScan);
+  newer.prev = older;
+  older.next = newer;
+  newer.back = pBackward;
+  older.forward = pForward;
+  if (older.back !== undefined) {
+    older.cached = undefined;
   }
-  newScan.stars = newStars;
 }
 function parseScan(scan: any) {
-  if (scan.cached === undefined) {
-    scan.cached = JSON.parse(scan.apis).scanning_data;
-    scan.apis = undefined;
-    console.log(`cleared ${++count} scans`);
+  if (scan.cached === undefined && scan.error === undefined) {
+    if (scan.apis !== undefined) {
+      const parse = JSON.parse(scan.apis);
+      if (parse.error) {
+        scan.error = parse.error;
+      }
+      scan.cached = JSON.parse(scan.apis).scanning_data;
+      scan.apis = undefined;
+    } else {
+      if (scan?.next?.cached) {
+        let scanContent = scan.next.cached;
+        if (scan.next.next) {
+          scan.next.cached = undefined;
+        } else {
+          scanContent = window.structuredClone(scanContent);
+        }
+        scan.cached = patch(scanContent, scan.next.back);
+      } else if (scan?.prev?.cached) {
+        let scanContent = scan.prev.cached;
+        if (scan.prev.prev) {
+          scan.prev.cached = undefined;
+        } else {
+          scanContent = window.structuredClone(scanContent);
+        }
+        scan.cached = patch(scanContent, scan.prev.forward);
+      } else {
+        console.error("multi jump NIY");
+      }
+    }
   }
   return scan.cached;
 }
