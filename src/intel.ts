@@ -29,6 +29,7 @@ import {
   getServerScans,
   registerForScans,
   scanCache,
+  scanInfo,
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { Player, Star } from "./galaxy";
@@ -179,8 +180,9 @@ function NeptunesPrideAgent() {
     explorers.push("Exploration report:");
     const abandoned: { [k: string]: boolean } = {};
     let prior = null;
+    const myKeys = getMyKeys();
     do {
-      const scanList = allSeenKeys
+      const scanList = myKeys
         .map((k) => getTimeTravelScanForTick(currentTick, k, "forwards"))
         .filter((scan) => scan && scan.tick === currentTick);
       if (scanList.length > 0) {
@@ -380,6 +382,15 @@ function NeptunesPrideAgent() {
     "Economists",
   );
 
+  function getMyKeys() {
+    const myId = NeptunesPride.originalPlayer
+      ? NeptunesPride.originalPlayer
+      : NeptunesPride.universe.galaxy.player_uid;
+
+    return allSeenKeys.filter(
+      (k) => scanInfo[getCodeFromApiText(k)].puid === myId,
+    );
+  }
   function activityReport() {
     const output = [];
     output.push("Activity report:");
@@ -394,8 +405,9 @@ function NeptunesPrideAgent() {
         : NeptunesPride.universe.player.uid;
     const startMillis = new Date().getTime();
     timeTravelTickIndices = {};
+    const myKeys = getMyKeys();
     do {
-      const scanList = allSeenKeys
+      const scanList = myKeys
         .map((k) => getTimeTravelScanForTick(currentTick, k, "forwards"))
         .filter((scan) => scan && scan.tick === currentTick);
       if (scanList.length > 0) {
@@ -427,7 +439,7 @@ function NeptunesPrideAgent() {
       output.push("No activity data found.");
     }
     const endMillis = new Date().getTime();
-    output.push(`Time required ${endMillis - startMillis}ms`);
+    //output.push(`Time required ${endMillis - startMillis}ms`);
     prepReport("activity", output.join("\n"));
   }
   defineHotkey(

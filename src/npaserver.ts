@@ -12,6 +12,12 @@ import { openDB } from "idb";
 import { type ScanningData } from "./galaxy";
 import { diff2 as diff, patch2 as patch } from "./patch";
 
+export interface ApiInfo {
+  firstTick: number;
+  lastTick: number;
+  puid: number;
+}
+export const scanInfo: { [k: string]: ApiInfo } = {};
 export const scanCache: { [k: string]: any[] } = {};
 
 async function open(dbName: string) {
@@ -171,6 +177,8 @@ export async function getServerScans(apikey: string) {
           }
           console.log(`Validated ${len} entries for ${apikey}`);
           console.log(`Reverse validating ${apikey}...`);
+          let lastTick = -1;
+          let firstTick = -1;
           let last = end >= 0 ? end : len - 1;
           for (let i = last; i >= 0; --i) {
             if (i < len) {
@@ -181,8 +189,16 @@ export async function getServerScans(apikey: string) {
               console.error(
                 `Invalid: cannot find good scan data @ index ${i} for ${apikey}`,
               );
+            } else if (scanExists.tick > lastTick) {
+              lastTick = scanExists.tick;
             }
             if (i === 0) {
+              firstTick = scanExists?.tick;
+              scanInfo[apikey] = {
+                puid: scanExists.player_uid,
+                firstTick: firstTick,
+                lastTick: lastTick,
+              };
               const check = cached !== undefined ? cached : JSON.parse(apis);
               const d = diff(check, scanExists);
               if (d !== null) {
