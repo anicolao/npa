@@ -320,6 +320,10 @@ function parseScan(scan: any) {
   }
   return scan.cached;
 }
-export function getScan(scans: any[], index: number): ScanningData {
+function getScan(scans: any[], index: number): ScanningData {
   return parseScan(scans[index]);
+}
+
+export function getScanClone(scans: any[], index: number): ScanningData {
+  return window.structuredClone(getScan(scans, index));
 }

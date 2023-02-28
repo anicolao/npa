@@ -25,7 +25,7 @@ import {
 import { GameStore } from "./gamestore";
 import { post } from "./network";
 import {
-  getScan,
+  getScanClone,
   getServerScans,
   registerForScans,
   scanCache,
@@ -2574,7 +2574,7 @@ function NeptunesPrideAgent() {
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
-    let scan = getScan(scans, timeTravelTickIndex);
+    let scan = getScanClone(scans, timeTravelTickIndex);
     scan = adjustNow(scan);
     if (scan.tick < targetTick) {
       while (scan.tick < targetTick && dir === "forwards") {
@@ -2584,7 +2584,7 @@ function NeptunesPrideAgent() {
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, targetTick });
-        scan = getScan(scans, timeTravelTickIndex);
+        scan = getScanClone(scans, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     } else if (scan.tick > targetTick) {
@@ -2595,7 +2595,7 @@ function NeptunesPrideAgent() {
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = getScan(scans, timeTravelTickIndex);
+        scan = getScanClone(scans, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     }
@@ -3179,12 +3179,12 @@ function NeptunesPrideAgent() {
       if (scanCache[code]?.length > 0) {
         let last = scanCache[code].length - 1;
         let eof = scanCache[code][last]?.eof;
-        let scan = getScan(scanCache[code], last);
+        let scan = getScanClone(scanCache[code], last);
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
           eof = scanCache[code][last]?.eof;
-          let scan = getScan(scanCache[code], last);
+          let scan = getScanClone(scanCache[code], last);
           uid = scan?.player_uid;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;
