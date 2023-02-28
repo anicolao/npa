@@ -817,7 +817,7 @@ function NeptunesPrideAgent() {
             output.push(
               "    Defenders WS{0} = {1}".format(handicapString(""), dwt),
             );
-          } else {
+          } else if (combatHandicap < 0) {
             awt -= combatHandicap;
             output.push(
               "    Attackers WS{0} = {1}".format(handicapString(""), awt),
@@ -829,7 +829,7 @@ function NeptunesPrideAgent() {
             output.push(
               "    Attackers WS{0} = {1}".format(handicapString(""), awt),
             );
-          } else {
+          } else if (combatHandicap < 0) {
             dwt -= combatHandicap;
             output.push(
               "    Defenders WS{0} = {1}".format(handicapString(""), dwt),
@@ -853,8 +853,19 @@ function NeptunesPrideAgent() {
         let biggestPlayer = -1;
         let biggestPlayerId = starstate[starId].puid;
         if (offense > 0) {
+          let defeatedOffense = offense;
+          while (defeatedOffense > 0) {
+            defeatedOffense -= dwt;
+            defense -= awt;
+          }
           output.push(
-            "  Attackers win with {0} ships remaining".format(offense),
+            "  Attackers win with {0} ships remaining)".format(
+              offense,
+              -defense,
+            ),
+          );
+          output.push(
+            "  +{1} defenders needed to survive".format(offense, -defense),
           );
           const pairs: [string, number][] = Object.keys(contribution).map(
             (k) => [k, contribution[k]],
@@ -892,7 +903,10 @@ function NeptunesPrideAgent() {
                 fleet.n,
               ),
             );
-            let outcomeString = "Wins! {0} land.".format(contribution[k]);
+            let outcomeString = "Wins! {0} land\n+{1} to defend".format(
+              contribution[k],
+              -defense,
+            );
             fleetOutcomes[fleet.uid] = {
               eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
               outcome: outcomeString,
@@ -902,6 +916,12 @@ function NeptunesPrideAgent() {
           starstate[starId].puid = biggestPlayerId;
           starstate[starId].ships = playerContribution[biggestPlayerId];
         } else {
+          let defeatedDefense = defense;
+          while (defeatedDefense > 0) {
+            defeatedDefense -= awt;
+            offense -= dwt;
+          }
+          output.push("  +{0} more attackers needed".format(-offense));
           starstate[starId].ships = defense;
           for (const i in arrival) {
             let fleet = arrival[i];
@@ -919,7 +939,10 @@ function NeptunesPrideAgent() {
           for (const k in contribution) {
             let ka = k.split(",");
             let fleet = fleets[ka[1]];
-            let outcomeString = "Loses! {0} live.".format(defense);
+            let outcomeString = "Loses! {0} live\n+{1} to win".format(
+              defense,
+              -offense,
+            );
             if (alliedFleet(fleet.puid, starstate[starId].puid)) {
               outcomeString = "Wins! {0} land.".format(defense);
             }
@@ -1793,14 +1816,21 @@ function NeptunesPrideAgent() {
         }
         combatOutcomes();
         let s = fleetOutcomes[universe.selectedFleet.uid].eta;
-        let o = fleetOutcomes[universe.selectedFleet.uid].outcome;
+        let o = fleetOutcomes[universe.selectedFleet.uid].outcome.split("\n");
         let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
         let y = map.worldToScreenY(universe.selectedFleet.y) + offsety;
         if (offsetx < 0) {
           map.context.textAlign = "right";
         }
         drawOverlayString(map.context, s, x, y);
-        drawOverlayString(map.context, o, x, y + lineHeight);
+        for (let line = 0; line < o.length; ++line) {
+          drawOverlayString(
+            map.context,
+            o[line],
+            x,
+            y + (line + 1) * lineHeight,
+          );
+        }
       }
       if (
         !NeptunesPride.gameConfig.turnBased &&
