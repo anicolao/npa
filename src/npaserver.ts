@@ -30,7 +30,15 @@ async function store(incoming: any[], gameId: number, apikey: string) {
   const db = await open(dbName);
 
   const tx = db.transaction(dbName, "readwrite");
-  await Promise.all([...incoming.map((x) => tx.store.put(x)), tx.done]);
+  await Promise.all([
+    ...incoming.map((x) => {
+      const persist = { ...x };
+      persist.prev = undefined;
+      persist.next = undefined;
+      tx.store.put(persist);
+    }),
+    tx.done,
+  ]);
 }
 
 async function restore(gameId: number, apikey: string) {
@@ -92,18 +100,129 @@ export async function getServerScans(apikey: string) {
   await restoreFromDB(gameid, apikey);
   const len = scanCache[apikey]?.length || 0;
   console.log(`Fetched ${len} entries from ${apikey}`);
-  scanCache[apikey].forEach((scan, i) => {
-    parseScan(scan);
-    const last = i - 1;
-    if (last >= 0 && scan.error === undefined) {
-      compressDeltas(scanCache[apikey][last], scan);
-    }
-  });
   let timestamp = 0;
   if (len > 0) {
-    timestamp = scanCache[apikey][len - 1].timestamp;
+    const validEntry = (x: number) => {
+      const scan = scanCache[apikey][x];
+      if (x === 0)
+        return (
+          (scan.apis !== undefined || scan.cached !== undefined) && scan.forward
+        );
+      if (scan.apis || scan.error) return true;
+      if (scan.cached && scan.back) return true;
+      return scan.back && scan.forward;
+    };
+    let offset = 0;
+    for (offset = 0; offset < len; ++offset) {
+      if (!validEntry(offset)) {
+        break;
+      }
+    }
+    offset -= 1;
+    if (offset >= 0) {
+      if (offset < len - 1) {
+        console.error(`Valid entries ${offset}/${len} for ${apikey}`);
+        scanCache[apikey] = scanCache[apikey].slice(0, offset + 1);
+      } else {
+        console.log(`All valid entries ${offset}/${len} for ${apikey}`);
+        if (len > 0) {
+          if (scanCache[apikey][0].apis || scanCache[apikey][0].cached) {
+            console.log(
+              "Valid: 0th entry has an apis or cached state",
+              scanCache[apikey][0],
+            );
+          } else {
+            console.error(
+              "Invalid: 0th entry missing an apis string",
+              scanCache[apikey][0],
+            );
+          }
+          console.log(`Validating ${len} entries...`);
+          let apis = "";
+          let cached = {};
+          if (len > 0) {
+            apis = scanCache[apikey][0].apis;
+            cached = scanCache[apikey][0].cached;
+          }
+          let endOfKeyData = false;
+          let end = -1;
+          for (let i = 0; i < len; ++i) {
+            if (i > 0) {
+              scanCache[apikey][i].prev = scanCache[apikey][i - 1];
+            }
+            const scanExists = getScan(scanCache[apikey], i);
+            if (!scanExists || scanExists?.tick === undefined) {
+              if (scanCache[apikey][i].error) {
+                if (!endOfKeyData) {
+                  endOfKeyData = true;
+                  end = i;
+                  console.log(`Valid: End of ${apikey} @ ${end}`);
+                }
+              } else {
+                console.error(
+                  `Invalid: cannot find good scan data @ index ${i} for ${apikey}`,
+                );
+              }
+            } else if (endOfKeyData) {
+              console.error(
+                `Invalid: found good scan data @ index ${i} for ${apikey} after endOfKeyData @ ${end}`,
+              );
+            }
+          }
+          console.log(`Validated ${len} entries for ${apikey}`);
+          console.log(`Reverse validating ${apikey}...`);
+          let last = end >= 0 ? end : len - 1;
+          for (let i = last; i >= 0; --i) {
+            if (i < len) {
+              scanCache[apikey][i].next = scanCache[apikey][i + 1];
+            }
+            const scanExists = getScan(scanCache[apikey], i);
+            if (!scanExists || scanExists?.tick === undefined) {
+              console.error(
+                `Invalid: cannot find good scan data @ index ${i} for ${apikey}`,
+              );
+            }
+            if (i === 0) {
+              const check = cached !== undefined ? cached : JSON.parse(apis);
+              const d = diff(check, scanExists);
+              if (d !== null) {
+                console.error(`Invalid: index ${i} doesn't match ${apis}`);
+              } else {
+                console.log(`Valid: index ${i} matches!`);
+              }
+            }
+          }
+        }
+      }
+      timestamp = scanCache[apikey][offset].timestamp;
+    } else {
+      console.error(`No valid entries found for ${apikey}`);
+      scanCache[apikey] = [];
+    }
   } else {
     scanCache[apikey] = [];
+  }
+  const computedDiffs: any[] = [];
+  scanCache[apikey].forEach((scan, i) => {
+    if (scan.apis) {
+      parseScan(scan);
+    }
+    const last = i - 1;
+    if (last >= 0 && scan.error === undefined && scan.back === undefined) {
+      const lastCache = scanCache[apikey][last].cached;
+      compressDeltas(scanCache[apikey][last], scan);
+      if (lastCache !== scanCache[apikey][last].cached) {
+        computedDiffs.push(scanCache[apikey][last]);
+      }
+    }
+    if (last >= 0 && scan.prev === undefined) {
+      scan.prev = scanCache[apikey][last];
+      scanCache[apikey][last].next = scan;
+    }
+  });
+  if (computedDiffs.length) {
+    console.log(`Storing ${computedDiffs.length} freshly computed diffs`);
+    store(computedDiffs, gameid, apikey);
   }
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   trimInvalidEntries(apikey);
@@ -125,6 +244,12 @@ export async function getServerScans(apikey: string) {
           incoming.push(scan);
           if (last >= 0 && scan.error === undefined) {
             compressDeltas(incoming[last], scan);
+          } else if (last === -1 && scan.error === undefined) {
+            const cachedLast = scanCache[apikey].length - 1;
+            if (cachedLast >= 0) {
+              compressDeltas(scanCache[apikey][cachedLast], scan);
+              store(scanCache[apikey].slice(-1), gameid, apikey);
+            }
           }
         }
       });
@@ -140,7 +265,6 @@ export async function getServerScans(apikey: string) {
   );
 }
 
-let count = 0;
 function compressDeltas(older: any, newer: any) {
   const oldScan = parseScan(older);
   const newScan = parseScan(newer);
@@ -171,6 +295,9 @@ function parseScan(scan: any) {
         } else {
           scanContent = window.structuredClone(scanContent);
         }
+        if (scan.next.back === undefined) {
+          console.error("Patching with undefined back");
+        }
         scan.cached = patch(scanContent, scan.next.back);
       } else if (scan?.prev?.cached) {
         let scanContent = scan.prev.cached;
@@ -179,11 +306,17 @@ function parseScan(scan: any) {
         } else {
           scanContent = window.structuredClone(scanContent);
         }
+        if (scan.prev.forward === undefined) {
+          console.error("Patching with undefined forward");
+        }
         scan.cached = patch(scanContent, scan.prev.forward);
       } else {
         console.error("multi jump NIY");
       }
     }
+  }
+  if (scan.cached === undefined && scan.error === undefined) {
+    console.error(`parseScans returning undefined for`, scan);
   }
   return scan.cached;
 }
