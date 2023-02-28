@@ -544,7 +544,7 @@ function NeptunesPrideAgent() {
   };
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
-  let combatOutcomes = function () {
+  let combatOutcomes = function (filter: (s: string) => boolean) {
     const universe = NeptunesPride.universe;
     const players = NeptunesPride.universe.galaxy.players;
     let fleets = NeptunesPride.universe.galaxy.fleets;
@@ -577,7 +577,7 @@ function NeptunesPrideAgent() {
       return a[0] - b[0];
     });
     let arrivals: { [k: string]: any } = {};
-    let output = [];
+    let output: string[] = [];
     let arrivalTimes = [];
     interface DepartureRecord {
       leaving: number;
@@ -647,6 +647,7 @@ function NeptunesPrideAgent() {
       }
     }
     for (const k in arrivals) {
+      const stanza = [];
       let arrival = arrivals[k];
       let ka = k.split(",");
       let tick = parseInt(ka[0]);
@@ -697,7 +698,7 @@ function NeptunesPrideAgent() {
           starstate[starId].weapons = weapons;
         }
       }
-      output.push(
+      stanza.push(
         "[[Tick #{0}]]: [[{1}]] [[{2}]] {3} ships".format(
           tickNumber(tick),
           starstate[starId].puid,
@@ -715,7 +716,7 @@ function NeptunesPrideAgent() {
             const ratio = oldShips / departures[i].origShips;
             const departing = Math.ceil(departures[i].leaving * ratio);
             starstate[starId].ships -= departing;
-            output.push("  {0} depart".format(departing));
+            stanza.push("  {0} depart".format(departing));
           }
         }
         if (starstate[starId].ships < oldShips) {
@@ -729,7 +730,7 @@ function NeptunesPrideAgent() {
           starstate[starId].c =
             starstate[starId].ships - Math.trunc(starstate[starId].ships);
           starstate[starId].ships -= starstate[starId].c;
-          output.push(
+          stanza.push(
             "  {0}+{3} + {2}/h = {1}+{4}".format(
               oldShips,
               starstate[starId].ships,
@@ -758,7 +759,7 @@ function NeptunesPrideAgent() {
             fleet.st,
             fleet.n,
           );
-          output.push(landingString);
+          stanza.push(landingString);
           landingString = landingString.substring(2);
         }
       }
@@ -783,7 +784,7 @@ function NeptunesPrideAgent() {
         if (!alliedFleet(fleet.puid, starstate[starId].puid)) {
           let olda = offense;
           offense += fleet.st;
-          output.push(
+          stanza.push(
             "  [[{4}]]! {0} + {2} on [[{3}]] = {1}".format(
               olda,
               offense,
@@ -803,35 +804,35 @@ function NeptunesPrideAgent() {
       while (offense > 0) {
         let dwt = starstate[starId].weapons;
         let defense = starstate[starId].ships;
-        output.push(
+        stanza.push(
           "  Combat! [[{0}]] defending".format(starstate[starId].puid),
         );
-        output.push("    Defenders {0} ships, WS {1}".format(defense, dwt));
-        output.push("    Attackers {0} ships, WS {1}".format(offense, awt));
+        stanza.push("    Defenders {0} ships, WS {1}".format(defense, dwt));
+        stanza.push("    Attackers {0} ships, WS {1}".format(offense, awt));
         if (NeptunesPride.gameVersion !== "proteus") {
           dwt += 1;
         }
         if (starstate[starId].puid !== universe.galaxy.player_uid) {
           if (combatHandicap > 0) {
             dwt += combatHandicap;
-            output.push(
+            stanza.push(
               "    Defenders WS{0} = {1}".format(handicapString(""), dwt),
             );
           } else if (combatHandicap < 0) {
             awt -= combatHandicap;
-            output.push(
+            stanza.push(
               "    Attackers WS{0} = {1}".format(handicapString(""), awt),
             );
           }
         } else {
           if (combatHandicap > 0) {
             awt += combatHandicap;
-            output.push(
+            stanza.push(
               "    Attackers WS{0} = {1}".format(handicapString(""), awt),
             );
           } else if (combatHandicap < 0) {
             dwt -= combatHandicap;
-            output.push(
+            stanza.push(
               "    Defenders WS{0} = {1}".format(handicapString(""), dwt),
             );
           }
@@ -858,13 +859,13 @@ function NeptunesPrideAgent() {
             defeatedOffense -= dwt;
             defense -= awt;
           }
-          output.push(
+          stanza.push(
             "  Attackers win with {0} ships remaining)".format(
               offense,
               -defense,
             ),
           );
-          output.push(
+          stanza.push(
             "  +{1} defenders needed to survive".format(offense, -defense),
           );
           const pairs: [string, number][] = Object.keys(contribution).map(
@@ -896,7 +897,7 @@ function NeptunesPrideAgent() {
               biggestPlayer = playerContribution[playerId];
               biggestPlayerId = playerId;
             }
-            output.push(
+            stanza.push(
               "    [[{0}]] has {1} on [[{2}]]".format(
                 fleet.puid,
                 contribution[k],
@@ -921,7 +922,7 @@ function NeptunesPrideAgent() {
             defeatedDefense -= awt;
             offense -= dwt;
           }
-          output.push("  +{0} more attackers needed".format(-offense));
+          stanza.push("  +{0} more attackers needed".format(-offense));
           starstate[starId].ships = defense;
           for (const i in arrival) {
             let fleet = arrival[i];
@@ -954,13 +955,20 @@ function NeptunesPrideAgent() {
         }
         attackersAggregate = offense;
       }
-      output.push(
+      stanza.push(
         "  [[{0}]] [[{1}]] {2} ships".format(
           starstate[starId].puid,
           stars[starId].n,
           starstate[starId].ships,
         ),
       );
+      let include = false;
+      stanza.forEach((s) => {
+        include = include || filter(s);
+      });
+      if (include) {
+        output = output.concat(stanza);
+      }
     }
     return output;
   };
@@ -1047,7 +1055,7 @@ function NeptunesPrideAgent() {
   );
 
   function longFleetReport() {
-    prepReport("combats", combatOutcomes().join("\n"));
+    prepReport("combats", combatOutcomes(() => true).join("\n"));
   }
   defineHotkey(
     "&",
@@ -1055,6 +1063,40 @@ function NeptunesPrideAgent() {
     "Generate a detailed fleet report on all carriers in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "Fleets (long)",
+  );
+
+  function filteredFleetReport() {
+    let find = NeptunesPride.universe.selectedSpaceObject?.n;
+    if (find === undefined) {
+      prepReport("filteredcombats", "Select a fleet or star.");
+    } else {
+      find = `[[${find}]]`;
+      prepReport(
+        "filteredcombats",
+        combatOutcomes((s) => s.indexOf(find) !== -1).join("\n"),
+      );
+    }
+  }
+  defineHotkey(
+    "D",
+    filteredFleetReport,
+    "Generate a detailed report on fleet movements involving the selected fleet or star, and copy it to the clipboard." +
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Fleets (filtered)",
+  );
+
+  function combatReport() {
+    prepReport(
+      "onlycombats",
+      combatOutcomes((s) => s.indexOf("Combat!") !== -1).join("\n"),
+    );
+  }
+  defineHotkey(
+    "d",
+    combatReport,
+    "Generate a detailed combat report on all visible combats, and copy it to the clipboard." +
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "All Combat",
   );
 
   function briefFleetReport() {
@@ -1814,7 +1856,7 @@ function NeptunesPrideAgent() {
         if (offsety < 0 && dy < 0) {
           offsety *= -1;
         }
-        combatOutcomes();
+        combatOutcomes(() => true);
         let s = fleetOutcomes[universe.selectedFleet.uid].eta;
         let o = fleetOutcomes[universe.selectedFleet.uid].outcome.split("\n");
         let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
@@ -2189,6 +2231,8 @@ function NeptunesPrideAgent() {
         planets: "Home Planets",
         fleets: "Fleets (short)",
         combats: "Fleets (long)",
+        filteredcombats: "Fleets (filtered)",
+        onlycombats: "All Combats",
         stars: "Stars",
         ownership: "Ownership",
         economists: "Economists",
@@ -2222,6 +2266,10 @@ function NeptunesPrideAgent() {
           briefFleetReport();
         } else if (d === "combats") {
           longFleetReport();
+        } else if (d === "onlycombats") {
+          combatReport();
+        } else if (d === "filteredcombats") {
+          filteredFleetReport();
         } else if (d === "stars") {
           starReport();
         } else if (d === "ownership") {
