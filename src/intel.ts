@@ -25,7 +25,7 @@ import {
 import { GameStore } from "./gamestore";
 import { post } from "./network";
 import {
-  getScanClone,
+  getScan,
   getServerScans,
   registerForScans,
   scanCache,
@@ -427,7 +427,7 @@ function NeptunesPrideAgent() {
       output.push("No activity data found.");
     }
     const endMillis = new Date().getTime();
-    //output.push(`Time required ${endMillis - startMillis}ms`);
+    output.push(`Time required ${endMillis - startMillis}ms`);
     prepReport("activity", output.join("\n"));
   }
   defineHotkey(
@@ -2574,7 +2574,7 @@ function NeptunesPrideAgent() {
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
-    let scan = getScanClone(scans, timeTravelTickIndex);
+    let scan = getScan(scans, timeTravelTickIndex);
     scan = adjustNow(scan);
     if (scan.tick < targetTick) {
       while (scan.tick < targetTick && dir === "forwards") {
@@ -2584,7 +2584,7 @@ function NeptunesPrideAgent() {
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, targetTick });
-        scan = getScanClone(scans, timeTravelTickIndex);
+        scan = getScan(scans, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     } else if (scan.tick > targetTick) {
@@ -2595,13 +2595,14 @@ function NeptunesPrideAgent() {
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = getScanClone(scans, timeTravelTickIndex);
+        scan = getScan(scans, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     }
     timeTravelTickIndices[apikey] = timeTravelTickIndex;
-    //console.log(`Found scan for ${targetTick} ${apikey}:${scan.tick}`);
-    return scan;
+    //const steps = timeTravelTickIndices[apikey] - timeTravelTickIndex;
+    //console.log(`Found scan for ${targetTick} ${apikey}:${scan.tick} ${steps}`);
+    return window.structuredClone(scan);
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
     const scans = allSeenKeys
@@ -3179,12 +3180,12 @@ function NeptunesPrideAgent() {
       if (scanCache[code]?.length > 0) {
         let last = scanCache[code].length - 1;
         let eof = scanCache[code][last]?.eof;
-        let scan = getScanClone(scanCache[code], last);
+        let scan = getScan(scanCache[code], last);
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
           eof = scanCache[code][last]?.eof;
-          let scan = getScanClone(scanCache[code], last);
+          let scan = getScan(scanCache[code], last);
           uid = scan?.player_uid;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;

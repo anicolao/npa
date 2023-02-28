@@ -320,7 +320,7 @@ function parseScan(scan: any) {
   }
   return scan.cached;
 }
-function getScan(scans: any[], index: number): ScanningData {
+export function getScan(scans: any[], index: number): ScanningData {
   return parseScan(scans[index]);
 }
 
