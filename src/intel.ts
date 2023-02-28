@@ -2635,7 +2635,6 @@ function NeptunesPrideAgent() {
       mergeScanData(scan);
     });
     NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
-    NeptunesPride.npui.onHideScreen(null, true);
     init();
   };
   let warpTime = function (_event?: any, data?: string) {
