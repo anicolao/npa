@@ -2592,7 +2592,10 @@ function NeptunesPrideAgent() {
     universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
     for (let s in scan.stars) {
       const star = scan.stars[s];
-      if (star.v !== "0" && universe.galaxy.stars[s].v === "0") {
+      if (
+        (star.v !== "0" && universe.galaxy.stars[s].v === "0") ||
+        star.puid === scan.player_uid
+      ) {
         universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
       }
     }
