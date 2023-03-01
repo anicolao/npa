@@ -2041,7 +2041,7 @@ function NeptunesPrideAgent() {
       pattern = "";
 
       // look for standard patterns
-      const SUBSTITUTION_LIMIT = 5000;
+      const SUBSTITUTION_LIMIT = 10000;
       while (fp >= 0 && i < SUBSTITUTION_LIMIT) {
         i = i + 1;
         fp = s.indexOf("[[");
