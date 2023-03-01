@@ -74,11 +74,12 @@ export function patch2(a: Patch2, p: Patch2): Patch2 {
   }
   if (typeof p !== "object") return p;
   let newA: { [k: string]: Patch2 } = a as { [k: string]: Patch2 };
-  Object.entries(p).forEach((e) => {
-    if (e[1] === null) {
-      delete newA[e[0]];
+  Object.keys(p).forEach((key) => {
+    const value = p[key];
+    if (value === null) {
+      delete newA[key];
     } else {
-      newA[e[0]] = patch2(newA[e[0]], e[1]);
+      newA[key] = patch2(newA[key], value);
     }
   });
   if (Array.isArray(newA)) {
