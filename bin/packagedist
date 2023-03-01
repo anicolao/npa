@@ -3,6 +3,10 @@ export VERSION=$(grep '"version"' package.json | awk -F\" '{print $4}')
 echo Packaging version ${VERSION}
 ./bin/version
 npm run npa
+case $? in
+	0) ;;
+	*) echo "Compile failed"; exit 1 ;;
+esac
 cd dist
 zip ../../versions/np${VERSION}.zip *
 cd -
