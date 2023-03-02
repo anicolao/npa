@@ -860,7 +860,7 @@ function NeptunesPrideAgent() {
             defense -= awt;
           }
           stanza.push(
-            "  Attackers win with {0} ships remaining)".format(
+            "  Attackers win with {0} ships remaining".format(
               offense,
               -defense,
             ),
@@ -913,9 +913,17 @@ function NeptunesPrideAgent() {
               outcome: outcomeString,
             };
           }
-          offense = newAggregate - playerContribution[biggestPlayerId];
           starstate[starId].puid = biggestPlayerId;
-          starstate[starId].ships = playerContribution[biggestPlayerId];
+          starstate[starId].ships = 0;
+          offense = newAggregate;
+          for (let k in contribution) {
+            let ka = k.split(",");
+            const puid = parseInt(ka[0]);
+            if (alliedFleet(biggestPlayerId, puid)) {
+              offense -= contribution[k];
+              starstate[starId].ships += contribution[k];
+            }
+          }
         } else {
           let defeatedDefense = defense;
           while (defeatedDefense > 0) {
