@@ -3,7 +3,7 @@ export const turn345 = {
     admin: -1,
     fleet_speed: 0.0416666666666667,
     fleets: {
-      "142": {
+      142: {
         l: 0,
         lx: "-2.80252077",
         ly: "-1.94321157",
@@ -16,7 +16,7 @@ export const turn345 = {
         x: "-2.76294524",
         y: "-1.95624569",
       },
-      "143": {
+      143: {
         l: 0,
         lx: "-2.95322264",
         ly: "-1.82771343",
@@ -29,7 +29,7 @@ export const turn345 = {
         x: "-2.98832476",
         y: "-1.85016230",
       },
-      "144": {
+      144: {
         l: 0,
         lx: "-2.89084791",
         ly: "-2.17492652",
@@ -43,7 +43,7 @@ export const turn345 = {
         x: "-2.91342525",
         y: "-2.19179432",
       },
-      "145": {
+      145: {
         l: 0,
         lx: "-2.13860758",
         ly: "-0.69519775",
@@ -59,7 +59,7 @@ export const turn345 = {
         x: "-2.11883809",
         y: "-0.65851972",
       },
-      "147": {
+      147: {
         l: 0,
         lx: "-2.67165853",
         ly: "-1.96276121",
@@ -75,7 +75,7 @@ export const turn345 = {
         x: "-2.63324275",
         y: "-1.94662617",
       },
-      "148": {
+      148: {
         l: 0,
         lx: "-2.94056896",
         ly: "-2.07570644",
@@ -88,7 +88,7 @@ export const turn345 = {
         x: "-2.97665335",
         y: "-2.05487311",
       },
-      "155": {
+      155: {
         l: 0,
         lx: "-3.33312256",
         ly: "-2.49573659",
@@ -102,7 +102,7 @@ export const turn345 = {
         x: "-3.33428507",
         y: "-2.49628921",
       },
-      "229": {
+      229: {
         l: 0,
         lx: "-2.82567124",
         ly: "-1.88165464",
@@ -116,7 +116,7 @@ export const turn345 = {
         x: "-2.80161119",
         y: "-1.87628921",
       },
-      "271": {
+      271: {
         l: 0,
         lx: "-3.07114321",
         ly: "-2.36314642",
@@ -130,7 +130,7 @@ export const turn345 = {
         x: "-3.06970364",
         y: "-2.37051713",
       },
-      "273": {
+      273: {
         l: 0,
         lx: "-3.07954951",
         ly: "-1.85197275",
@@ -148,7 +148,7 @@ export const turn345 = {
         x: "-3.07954951",
         y: "-1.85197275",
       },
-      "274": {
+      274: {
         l: 0,
         lx: "-0.86636702",
         ly: "-1.80996271",
@@ -161,7 +161,7 @@ export const turn345 = {
         x: "-0.90759439",
         y: "-1.80392823",
       },
-      "276": {
+      276: {
         l: 0,
         lx: "-3.52092670",
         ly: "-2.36598179",
@@ -175,7 +175,7 @@ export const turn345 = {
         x: "-3.49873536",
         y: "-2.37125293",
       },
-      "278": {
+      278: {
         l: 0,
         lx: "-3.07114321",
         ly: "-2.36314642",
@@ -189,7 +189,7 @@ export const turn345 = {
         x: "-3.06970364",
         y: "-2.37051713",
       },
-      "87": {
+      87: {
         l: 0,
         lx: "-1.56902754",
         ly: "0.16915336",
@@ -202,7 +202,7 @@ export const turn345 = {
         x: "-1.58383832",
         y: "0.13020786",
       },
-      "95": {
+      95: {
         l: 0,
         lx: "-2.61551249",
         ly: "-1.98540238",
@@ -223,7 +223,7 @@ export const turn345 = {
     paused: false,
     player_uid: 13,
     players: {
-      "0": {
+      0: {
         ai: 0,
         alias: "TokoBalthar",
         avatar: 38,
@@ -271,7 +271,7 @@ export const turn345 = {
         total_strength: 256,
         uid: 0,
       },
-      "1": {
+      1: {
         ai: 1,
         alias: "squirrelmt",
         avatar: 44,
@@ -319,7 +319,7 @@ export const turn345 = {
         total_strength: 145,
         uid: 1,
       },
-      "10": {
+      10: {
         ai: 1,
         alias: "Supro",
         avatar: 38,
@@ -367,7 +367,7 @@ export const turn345 = {
         total_strength: 159,
         uid: 10,
       },
-      "11": {
+      11: {
         ai: 0,
         alias: "Winton",
         avatar: 38,
@@ -415,7 +415,7 @@ export const turn345 = {
         total_strength: 232,
         uid: 11,
       },
-      "12": {
+      12: {
         ai: 1,
         alias: "GGabryy",
         avatar: 36,
@@ -463,77 +463,77 @@ export const turn345 = {
         total_strength: 138,
         uid: 12,
       },
-      "13": {
+      13: {
         ai: 0,
         alias: "Osric",
         avatar: 31,
         cash: 143,
         conceded: 0,
         countdown_to_war: {
-          "0": 0,
-          "1": 0,
-          "10": 0,
-          "11": 0,
-          "12": 0,
-          "13": 0,
-          "14": 0,
-          "15": 0,
-          "16": 0,
-          "17": 0,
-          "18": 0,
-          "19": 0,
-          "2": 0,
-          "20": 0,
-          "21": 0,
-          "22": 0,
-          "23": 0,
-          "24": 0,
-          "25": 0,
-          "26": 0,
-          "27": 0,
-          "28": 0,
-          "29": 0,
-          "3": 0,
-          "30": 0,
-          "31": 0,
-          "32": 0,
-          "33": 0,
-          "34": 0,
-          "35": 0,
-          "36": 0,
-          "37": 0,
-          "38": 0,
-          "39": 0,
-          "4": 0,
-          "40": 0,
-          "41": 0,
-          "42": 0,
-          "43": 0,
-          "44": 0,
-          "45": 0,
-          "46": 0,
-          "47": 0,
-          "48": 0,
-          "49": 0,
-          "5": 0,
-          "50": 0,
-          "51": 0,
-          "52": 0,
-          "53": 0,
-          "54": 0,
-          "55": 0,
-          "56": 0,
-          "57": 0,
-          "58": 0,
-          "59": 0,
-          "6": 0,
-          "60": 0,
-          "61": 0,
-          "62": 0,
-          "63": 0,
-          "7": 0,
-          "8": 0,
-          "9": 0,
+          0: 0,
+          1: 0,
+          10: 0,
+          11: 0,
+          12: 0,
+          13: 0,
+          14: 0,
+          15: 0,
+          16: 0,
+          17: 0,
+          18: 0,
+          19: 0,
+          2: 0,
+          20: 0,
+          21: 0,
+          22: 0,
+          23: 0,
+          24: 0,
+          25: 0,
+          26: 0,
+          27: 0,
+          28: 0,
+          29: 0,
+          3: 0,
+          30: 0,
+          31: 0,
+          32: 0,
+          33: 0,
+          34: 0,
+          35: 0,
+          36: 0,
+          37: 0,
+          38: 0,
+          39: 0,
+          4: 0,
+          40: 0,
+          41: 0,
+          42: 0,
+          43: 0,
+          44: 0,
+          45: 0,
+          46: 0,
+          47: 0,
+          48: 0,
+          49: 0,
+          5: 0,
+          50: 0,
+          51: 0,
+          52: 0,
+          53: 0,
+          54: 0,
+          55: 0,
+          56: 0,
+          57: 0,
+          58: 0,
+          59: 0,
+          6: 0,
+          60: 0,
+          61: 0,
+          62: 0,
+          63: 0,
+          7: 0,
+          8: 0,
+          9: 0,
         },
         huid: 34,
         karma_to_give: 16,
@@ -609,73 +609,73 @@ export const turn345 = {
         total_strength: 290,
         uid: 13,
         war: {
-          "0": 3,
-          "1": 3,
-          "10": 3,
-          "11": 3,
-          "12": 3,
-          "13": 3,
-          "14": 3,
-          "15": 3,
-          "16": 3,
-          "17": 3,
-          "18": 3,
-          "19": 3,
-          "2": 3,
-          "20": 3,
-          "21": 3,
-          "22": 3,
-          "23": 3,
-          "24": 3,
-          "25": 3,
-          "26": 3,
-          "27": 3,
-          "28": 3,
-          "29": 3,
-          "3": 3,
-          "30": 3,
-          "31": 3,
-          "32": 3,
-          "33": 3,
-          "34": 3,
-          "35": 3,
-          "36": 3,
-          "37": 3,
-          "38": 3,
-          "39": 3,
-          "4": 3,
-          "40": 3,
-          "41": 3,
-          "42": 3,
-          "43": 3,
-          "44": 3,
-          "45": 3,
-          "46": 3,
-          "47": 3,
-          "48": 3,
-          "49": 3,
-          "5": 3,
-          "50": 3,
-          "51": 3,
-          "52": 3,
-          "53": 3,
-          "54": 3,
-          "55": 3,
-          "56": 3,
-          "57": 3,
-          "58": 3,
-          "59": 3,
-          "6": 3,
-          "60": 3,
-          "61": 3,
-          "62": 3,
-          "63": 3,
-          "7": 3,
-          "8": 3,
-          "9": 3,
+          0: 3,
+          1: 3,
+          10: 3,
+          11: 3,
+          12: 3,
+          13: 3,
+          14: 3,
+          15: 3,
+          16: 3,
+          17: 3,
+          18: 3,
+          19: 3,
+          2: 3,
+          20: 3,
+          21: 3,
+          22: 3,
+          23: 3,
+          24: 3,
+          25: 3,
+          26: 3,
+          27: 3,
+          28: 3,
+          29: 3,
+          3: 3,
+          30: 3,
+          31: 3,
+          32: 3,
+          33: 3,
+          34: 3,
+          35: 3,
+          36: 3,
+          37: 3,
+          38: 3,
+          39: 3,
+          4: 3,
+          40: 3,
+          41: 3,
+          42: 3,
+          43: 3,
+          44: 3,
+          45: 3,
+          46: 3,
+          47: 3,
+          48: 3,
+          49: 3,
+          5: 3,
+          50: 3,
+          51: 3,
+          52: 3,
+          53: 3,
+          54: 3,
+          55: 3,
+          56: 3,
+          57: 3,
+          58: 3,
+          59: 3,
+          6: 3,
+          60: 3,
+          61: 3,
+          62: 3,
+          63: 3,
+          7: 3,
+          8: 3,
+          9: 3,
         },
       },
-      "14": {
+      14: {
         ai: 0,
         alias: "Chavo del 8",
         avatar: 50,
@@ -723,7 +723,7 @@ export const turn345 = {
         total_strength: 287,
         uid: 14,
       },
-      "15": {
+      15: {
         ai: 0,
         alias: "Amirna",
         avatar: 34,
@@ -771,7 +771,7 @@ export const turn345 = {
         total_strength: 262,
         uid: 15,
       },
-      "16": {
+      16: {
         ai: 0,
         alias: "Ungoliant",
         avatar: 28,
@@ -819,7 +819,7 @@ export const turn345 = {
         total_strength: 259,
         uid: 16,
       },
-      "17": {
+      17: {
         ai: 0,
         alias: "Humpty",
         avatar: 25,
@@ -867,7 +867,7 @@ export const turn345 = {
         total_strength: 273,
         uid: 17,
       },
-      "18": {
+      18: {
         ai: 1,
         alias: "HealthyStuff",
         avatar: 38,
@@ -915,7 +915,7 @@ export const turn345 = {
         total_strength: 125,
         uid: 18,
       },
-      "19": {
+      19: {
         ai: 0,
         alias: "Gia Vol",
         avatar: 38,
@@ -963,7 +963,7 @@ export const turn345 = {
         total_strength: 192,
         uid: 19,
       },
-      "2": {
+      2: {
         ai: 0,
         alias: "Dalinar",
         avatar: 44,
@@ -1011,7 +1011,7 @@ export const turn345 = {
         total_strength: 290,
         uid: 2,
       },
-      "20": {
+      20: {
         ai: 1,
         alias: "GuiBed02",
         avatar: 34,
@@ -1059,7 +1059,7 @@ export const turn345 = {
         total_strength: 96,
         uid: 20,
       },
-      "21": {
+      21: {
         ai: 0,
         alias: "GP519",
         avatar: 32,
@@ -1107,7 +1107,7 @@ export const turn345 = {
         total_strength: 312,
         uid: 21,
       },
-      "22": {
+      22: {
         ai: 0,
         alias: "BelSon",
         avatar: 16,
@@ -1155,7 +1155,7 @@ export const turn345 = {
         total_strength: 193,
         uid: 22,
       },
-      "23": {
+      23: {
         ai: 0,
         alias: "Momonga",
         avatar: 38,
@@ -1203,7 +1203,7 @@ export const turn345 = {
         total_strength: 299,
         uid: 23,
       },
-      "24": {
+      24: {
         ai: 1,
         alias: "Jimtex",
         avatar: 38,
@@ -1251,7 +1251,7 @@ export const turn345 = {
         total_strength: 229,
         uid: 24,
       },
-      "25": {
+      25: {
         ai: 0,
         alias: "Lennox",
         avatar: 34,
@@ -1299,7 +1299,7 @@ export const turn345 = {
         total_strength: 274,
         uid: 25,
       },
-      "26": {
+      26: {
         ai: 1,
         alias: "muerteati",
         avatar: 50,
@@ -1347,7 +1347,7 @@ export const turn345 = {
         total_strength: 149,
         uid: 26,
       },
-      "27": {
+      27: {
         ai: 0,
         alias: "The Bishop",
         avatar: 38,
@@ -1395,7 +1395,7 @@ export const turn345 = {
         total_strength: 219,
         uid: 27,
       },
-      "28": {
+      28: {
         ai: 0,
         alias: "hildegaard",
         avatar: 34,
@@ -1443,7 +1443,7 @@ export const turn345 = {
         total_strength: 259,
         uid: 28,
       },
-      "29": {
+      29: {
         ai: 1,
         alias: "Leluch",
         avatar: 36,
@@ -1491,7 +1491,7 @@ export const turn345 = {
         total_strength: 259,
         uid: 29,
       },
-      "3": {
+      3: {
         ai: 0,
         alias: "SpaceFluff",
         avatar: 36,
@@ -1539,7 +1539,7 @@ export const turn345 = {
         total_strength: 223,
         uid: 3,
       },
-      "30": {
+      30: {
         ai: 0,
         alias: "Communion of Minds",
         avatar: 24,
@@ -1587,7 +1587,7 @@ export const turn345 = {
         total_strength: 212,
         uid: 30,
       },
-      "31": {
+      31: {
         ai: 0,
         alias: "Ruhelos",
         avatar: 23,
@@ -1635,7 +1635,7 @@ export const turn345 = {
         total_strength: 274,
         uid: 31,
       },
-      "32": {
+      32: {
         ai: 1,
         alias: "mrfunbun",
         avatar: 38,
@@ -1683,7 +1683,7 @@ export const turn345 = {
         total_strength: 212,
         uid: 32,
       },
-      "33": {
+      33: {
         ai: 0,
         alias: "WestEndBoy",
         avatar: 38,
@@ -1731,7 +1731,7 @@ export const turn345 = {
         total_strength: 256,
         uid: 33,
       },
-      "34": {
+      34: {
         ai: 0,
         alias: "Fighting Temeraire",
         avatar: 38,
@@ -1779,7 +1779,7 @@ export const turn345 = {
         total_strength: 275,
         uid: 34,
       },
-      "35": {
+      35: {
         ai: 0,
         alias: "just to clarify",
         avatar: 33,
@@ -1827,7 +1827,7 @@ export const turn345 = {
         total_strength: 153,
         uid: 35,
       },
-      "36": {
+      36: {
         ai: 0,
         alias: "Jim Hawkins",
         avatar: 38,
@@ -1875,7 +1875,7 @@ export const turn345 = {
         total_strength: 167,
         uid: 36,
       },
-      "37": {
+      37: {
         ai: 1,
         alias: "AwesomeDude77",
         avatar: 50,
@@ -1923,7 +1923,7 @@ export const turn345 = {
         total_strength: 103,
         uid: 37,
       },
-      "38": {
+      38: {
         ai: 0,
         alias: "cynane",
         avatar: 34,
@@ -1971,7 +1971,7 @@ export const turn345 = {
         total_strength: 241,
         uid: 38,
       },
-      "39": {
+      39: {
         ai: 1,
         alias: "Sousnie",
         avatar: 32,
@@ -2019,7 +2019,7 @@ export const turn345 = {
         total_strength: 183,
         uid: 39,
       },
-      "4": {
+      4: {
         ai: 1,
         alias: "Slicertos",
         avatar: 17,
@@ -2067,7 +2067,7 @@ export const turn345 = {
         total_strength: 172,
         uid: 4,
       },
-      "40": {
+      40: {
         ai: 0,
         alias: "Gremily",
         avatar: 50,
@@ -2115,7 +2115,7 @@ export const turn345 = {
         total_strength: 273,
         uid: 40,
       },
-      "41": {
+      41: {
         ai: 0,
         alias: "Alpharius87",
         avatar: 50,
@@ -2163,7 +2163,7 @@ export const turn345 = {
         total_strength: 192,
         uid: 41,
       },
-      "42": {
+      42: {
         ai: 0,
         alias: "Zazondak",
         avatar: 32,
@@ -2211,7 +2211,7 @@ export const turn345 = {
         total_strength: 200,
         uid: 42,
       },
-      "43": {
+      43: {
         ai: 0,
         alias: "DobytheMagicalHouseElf",
         avatar: 33,
@@ -2259,7 +2259,7 @@ export const turn345 = {
         total_strength: 208,
         uid: 43,
       },
-      "44": {
+      44: {
         ai: 0,
         alias: "Shadow Jack",
         avatar: 32,
@@ -2307,7 +2307,7 @@ export const turn345 = {
         total_strength: 170,
         uid: 44,
       },
-      "45": {
+      45: {
         ai: 1,
         alias: "Savage777",
         avatar: 36,
@@ -2355,7 +2355,7 @@ export const turn345 = {
         total_strength: 135,
         uid: 45,
       },
-      "46": {
+      46: {
         ai: 1,
         alias: "Sixtys",
         avatar: 33,
@@ -2403,7 +2403,7 @@ export const turn345 = {
         total_strength: 203,
         uid: 46,
       },
-      "47": {
+      47: {
         ai: 0,
         alias: "Neemah",
         avatar: 50,
@@ -2451,7 +2451,7 @@ export const turn345 = {
         total_strength: 185,
         uid: 47,
       },
-      "48": {
+      48: {
         ai: 0,
         alias: "KiwiNoob",
         avatar: 44,
@@ -2499,7 +2499,7 @@ export const turn345 = {
         total_strength: 270,
         uid: 48,
       },
-      "49": {
+      49: {
         ai: 0,
         alias: "Macaria",
         avatar: 34,
@@ -2547,7 +2547,7 @@ export const turn345 = {
         total_strength: 344,
         uid: 49,
       },
-      "5": {
+      5: {
         ai: 0,
         alias: "UofU",
         avatar: 33,
@@ -2595,7 +2595,7 @@ export const turn345 = {
         total_strength: 246,
         uid: 5,
       },
-      "50": {
+      50: {
         ai: 0,
         alias: "Gomber",
         avatar: 38,
@@ -2643,7 +2643,7 @@ export const turn345 = {
         total_strength: 249,
         uid: 50,
       },
-      "51": {
+      51: {
         ai: 1,
         alias: "gb1",
         avatar: 38,
@@ -2691,7 +2691,7 @@ export const turn345 = {
         total_strength: 155,
         uid: 51,
       },
-      "52": {
+      52: {
         ai: 0,
         alias: "Praxus",
         avatar: 33,
@@ -2739,7 +2739,7 @@ export const turn345 = {
         total_strength: 161,
         uid: 52,
       },
-      "53": {
+      53: {
         ai: 0,
         alias: "The Frjjilo Empire",
         avatar: 16,
@@ -2787,7 +2787,7 @@ export const turn345 = {
         total_strength: 255,
         uid: 53,
       },
-      "54": {
+      54: {
         ai: 0,
         alias: "Fulgrum",
         avatar: 38,
@@ -2835,7 +2835,7 @@ export const turn345 = {
         total_strength: 300,
         uid: 54,
       },
-      "55": {
+      55: {
         ai: 0,
         alias: "Miles Chang",
         avatar: 20,
@@ -2883,7 +2883,7 @@ export const turn345 = {
         total_strength: 315,
         uid: 55,
       },
-      "56": {
+      56: {
         ai: 0,
         alias: "Rurik",
         avatar: 38,
@@ -2931,7 +2931,7 @@ export const turn345 = {
         total_strength: 231,
         uid: 56,
       },
-      "57": {
+      57: {
         ai: 1,
         alias: "Scoots",
         avatar: 38,
@@ -2979,7 +2979,7 @@ export const turn345 = {
         total_strength: 142,
         uid: 57,
       },
-      "58": {
+      58: {
         ai: 1,
         alias: "Bonkens",
         avatar: 16,
@@ -3027,7 +3027,7 @@ export const turn345 = {
         total_strength: 191,
         uid: 58,
       },
-      "59": {
+      59: {
         ai: 0,
         alias: "Avantirs",
         avatar: 32,
@@ -3075,7 +3075,7 @@ export const turn345 = {
         total_strength: 231,
         uid: 59,
       },
-      "6": {
+      6: {
         ai: 0,
         alias: "The New Bellum",
         avatar: 32,
@@ -3123,7 +3123,7 @@ export const turn345 = {
         total_strength: 290,
         uid: 6,
       },
-      "60": {
+      60: {
         ai: 0,
         alias: "Gingey",
         avatar: 14,
@@ -3171,7 +3171,7 @@ export const turn345 = {
         total_strength: 255,
         uid: 60,
       },
-      "61": {
+      61: {
         ai: 1,
         alias: "Oil War of Terror",
         avatar: 38,
@@ -3219,7 +3219,7 @@ export const turn345 = {
         total_strength: 209,
         uid: 61,
       },
-      "62": {
+      62: {
         ai: 0,
         alias: "Nimrod",
         avatar: 25,
@@ -3267,7 +3267,7 @@ export const turn345 = {
         total_strength: 244,
         uid: 62,
       },
-      "63": {
+      63: {
         ai: 0,
         alias: "BigPooper",
         avatar: 7,
@@ -3315,7 +3315,7 @@ export const turn345 = {
         total_strength: 163,
         uid: 63,
       },
-      "7": {
+      7: {
         ai: 0,
         alias: "TheTopRamen",
         avatar: 25,
@@ -3363,7 +3363,7 @@ export const turn345 = {
         total_strength: 246,
         uid: 7,
       },
-      "8": {
+      8: {
         ai: 1,
         alias: "Macheta",
         avatar: 33,
@@ -3411,7 +3411,7 @@ export const turn345 = {
         total_strength: 167,
         uid: 8,
       },
-      "9": {
+      9: {
         ai: 1,
         alias: "Phsycic",
         avatar: 32,
@@ -3464,7 +3464,7 @@ export const turn345 = {
     production_rate: 20,
     productions: 4,
     stars: {
-      "1": {
+      1: {
         n: "Wet Zug",
         puid: 42,
         uid: 1,
@@ -3472,7 +3472,7 @@ export const turn345 = {
         x: "2.1565",
         y: "-2.5742",
       },
-      "10": {
+      10: {
         n: "Antares",
         puid: 52,
         uid: 10,
@@ -3480,7 +3480,7 @@ export const turn345 = {
         x: "3.3913",
         y: "2.4713",
       },
-      "100": {
+      100: {
         n: "Thabit",
         puid: 6,
         uid: 100,
@@ -3488,7 +3488,7 @@ export const turn345 = {
         x: "1.6976",
         y: "-1.9542",
       },
-      "1000": {
+      1000: {
         n: "TseenKee",
         puid: 8,
         uid: 1000,
@@ -3496,7 +3496,7 @@ export const turn345 = {
         x: "4.1416",
         y: "-4.1590",
       },
-      "1001": {
+      1001: {
         n: "Hamal",
         puid: -1,
         uid: 1001,
@@ -3504,7 +3504,7 @@ export const turn345 = {
         x: "4.9439",
         y: "-3.1465",
       },
-      "1002": {
+      1002: {
         n: "Last Bam",
         puid: 61,
         uid: 1002,
@@ -3512,7 +3512,7 @@ export const turn345 = {
         x: "4.4015",
         y: "-4.4026",
       },
-      "1003": {
+      1003: {
         n: "Wild Alya",
         puid: 27,
         uid: 1003,
@@ -3520,7 +3520,7 @@ export const turn345 = {
         x: "3.5109",
         y: "-3.6795",
       },
-      "1004": {
+      1004: {
         n: "Xi Aldhafera",
         puid: -1,
         uid: 1004,
@@ -3528,7 +3528,7 @@ export const turn345 = {
         x: "5.3735",
         y: "-3.7730",
       },
-      "1005": {
+      1005: {
         n: "Last Asellus",
         puid: 61,
         uid: 1005,
@@ -3536,7 +3536,7 @@ export const turn345 = {
         x: "3.6378",
         y: "-4.3653",
       },
-      "101": {
+      101: {
         n: "Zeta Muliphein",
         puid: 6,
         uid: 101,
@@ -3544,7 +3544,7 @@ export const turn345 = {
         x: "1.6626",
         y: "-1.5481",
       },
-      "1013": {
+      1013: {
         n: "Askella",
         puid: 27,
         uid: 1013,
@@ -3552,7 +3552,7 @@ export const turn345 = {
         x: "3.1559",
         y: "-2.7717",
       },
-      "1014": {
+      1014: {
         n: "Mud",
         puid: 27,
         uid: 1014,
@@ -3560,7 +3560,7 @@ export const turn345 = {
         x: "3.6580",
         y: "-3.4936",
       },
-      "1015": {
+      1015: {
         n: "Delta Cebalrai",
         puid: 61,
         uid: 1015,
@@ -3568,7 +3568,7 @@ export const turn345 = {
         x: "3.2840",
         y: "-3.8069",
       },
-      "1016": {
+      1016: {
         n: "Alphecca",
         puid: 27,
         uid: 1016,
@@ -3576,7 +3576,7 @@ export const turn345 = {
         x: "3.5296",
         y: "-2.5525",
       },
-      "1017": {
+      1017: {
         n: "Black Kaf",
         puid: 27,
         uid: 1017,
@@ -3584,7 +3584,7 @@ export const turn345 = {
         x: "3.6898",
         y: "-2.5381",
       },
-      "1018": {
+      1018: {
         n: "Kullat",
         puid: 61,
         uid: 1018,
@@ -3592,7 +3592,7 @@ export const turn345 = {
         x: "3.3856",
         y: "-4.0746",
       },
-      "1019": {
+      1019: {
         n: "Old Gacrux",
         puid: 27,
         uid: 1019,
@@ -3600,7 +3600,7 @@ export const turn345 = {
         x: "2.5959",
         y: "-3.9503",
       },
-      "1020": {
+      1020: {
         n: "Skore",
         puid: 61,
         uid: 1020,
@@ -3608,7 +3608,7 @@ export const turn345 = {
         x: "3.5099",
         y: "-4.2374",
       },
-      "1021": {
+      1021: {
         n: "Soft Kullat",
         puid: -1,
         uid: 1021,
@@ -3616,7 +3616,7 @@ export const turn345 = {
         x: "2.2695",
         y: "-3.8670",
       },
-      "1022": {
+      1022: {
         n: "Izar",
         puid: 42,
         uid: 1022,
@@ -3624,7 +3624,7 @@ export const turn345 = {
         x: "1.9836",
         y: "-3.4140",
       },
-      "1023": {
+      1023: {
         n: "Sarir",
         puid: 42,
         uid: 1023,
@@ -3632,7 +3632,7 @@ export const turn345 = {
         x: "1.8714",
         y: "-3.1942",
       },
-      "1024": {
+      1024: {
         n: "Lush Aludra",
         puid: -1,
         uid: 1024,
@@ -3640,7 +3640,7 @@ export const turn345 = {
         x: "2.3975",
         y: "-4.3836",
       },
-      "103": {
+      103: {
         n: "Delta Arich",
         puid: 47,
         uid: 103,
@@ -3648,7 +3648,7 @@ export const turn345 = {
         x: "0.3084",
         y: "-2.4012",
       },
-      "104": {
+      104: {
         n: "Hot Matar",
         puid: 6,
         uid: 104,
@@ -3656,7 +3656,7 @@ export const turn345 = {
         x: "1.5761",
         y: "-1.0994",
       },
-      "106": {
+      106: {
         n: "Salm",
         puid: 6,
         uid: 106,
@@ -3664,7 +3664,7 @@ export const turn345 = {
         x: "1.4838",
         y: "-0.8519",
       },
-      "107": {
+      107: {
         n: "Eta Ice",
         puid: 40,
         uid: 107,
@@ -3672,7 +3672,7 @@ export const turn345 = {
         x: "0.5476",
         y: "-0.8068",
       },
-      "108": {
+      108: {
         n: "Sigma Nihal",
         puid: 42,
         uid: 108,
@@ -3680,7 +3680,7 @@ export const turn345 = {
         x: "2.2595",
         y: "-2.6337",
       },
-      "109": {
+      109: {
         n: "Tegmen",
         puid: 47,
         uid: 109,
@@ -3688,7 +3688,7 @@ export const turn345 = {
         x: "-0.3473",
         y: "-1.7021",
       },
-      "11": {
+      11: {
         n: "Young Algenib",
         puid: 2,
         uid: 11,
@@ -3696,7 +3696,7 @@ export const turn345 = {
         x: "4.2681",
         y: "3.3481",
       },
-      "110": {
+      110: {
         n: "Fast Kat",
         puid: 6,
         uid: 110,
@@ -3704,7 +3704,7 @@ export const turn345 = {
         x: "2.1177",
         y: "-1.4791",
       },
-      "112": {
+      112: {
         n: "Fax",
         puid: 6,
         uid: 112,
@@ -3712,7 +3712,7 @@ export const turn345 = {
         x: "1.8407",
         y: "-1.2193",
       },
-      "114": {
+      114: {
         n: "Last Yay",
         puid: 42,
         uid: 114,
@@ -3720,7 +3720,7 @@ export const turn345 = {
         x: "2.6705",
         y: "-1.2436",
       },
-      "116": {
+      116: {
         n: "Alhajoth",
         puid: 6,
         uid: 116,
@@ -3728,7 +3728,7 @@ export const turn345 = {
         x: "2.1565",
         y: "-0.6262",
       },
-      "117": {
+      117: {
         n: "Fort Pherkad",
         puid: 42,
         uid: 117,
@@ -3736,7 +3736,7 @@ export const turn345 = {
         x: "2.9302",
         y: "-1.5415",
       },
-      "118": {
+      118: {
         n: "Pure Rasalas",
         puid: 6,
         uid: 118,
@@ -3744,7 +3744,7 @@ export const turn345 = {
         x: "2.2344",
         y: "-0.4436",
       },
-      "119": {
+      119: {
         n: "Goo",
         puid: 42,
         uid: 119,
@@ -3752,7 +3752,7 @@ export const turn345 = {
         x: "2.9650",
         y: "-1.9003",
       },
-      "12": {
+      12: {
         n: "Gienah",
         puid: 41,
         uid: 12,
@@ -3760,7 +3760,7 @@ export const turn345 = {
         x: "3.0703",
         y: "3.6690",
       },
-      "120": {
+      120: {
         n: "Schedir",
         puid: 62,
         uid: 120,
@@ -3768,7 +3768,7 @@ export const turn345 = {
         x: "2.9202",
         y: "-0.5705",
       },
-      "121": {
+      121: {
         n: "Mi",
         puid: 6,
         uid: 121,
@@ -3776,7 +3776,7 @@ export const turn345 = {
         x: "1.4025",
         y: "-2.2328",
       },
-      "122": {
+      122: {
         n: "Wild Aldib",
         puid: 6,
         uid: 122,
@@ -3784,7 +3784,7 @@ export const turn345 = {
         x: "1.8288",
         y: "-0.1113",
       },
-      "123": {
+      123: {
         n: "Cold Rotanev",
         puid: 6,
         uid: 123,
@@ -3792,7 +3792,7 @@ export const turn345 = {
         x: "2.3925",
         y: "0.0041",
       },
-      "124": {
+      124: {
         n: "Odd Zuben",
         puid: -1,
         uid: 124,
@@ -3800,7 +3800,7 @@ export const turn345 = {
         x: "0.8990",
         y: "-0.6082",
       },
-      "125": {
+      125: {
         n: "Beta Adhafera",
         puid: 62,
         uid: 125,
@@ -3808,7 +3808,7 @@ export const turn345 = {
         x: "3.2434",
         y: "-0.5648",
       },
-      "128": {
+      128: {
         n: "Red Gatria",
         puid: 62,
         uid: 128,
@@ -3816,7 +3816,7 @@ export const turn345 = {
         x: "3.0836",
         y: "-0.3111",
       },
-      "129": {
+      129: {
         n: "Rukbat",
         puid: 62,
         uid: 129,
@@ -3824,7 +3824,7 @@ export const turn345 = {
         x: "2.7163",
         y: "-0.6236",
       },
-      "13": {
+      13: {
         n: "Duo",
         puid: 55,
         uid: 13,
@@ -3832,7 +3832,7 @@ export const turn345 = {
         x: "1.8312",
         y: "3.7143",
       },
-      "130": {
+      130: {
         n: "Fort Haedus",
         puid: 63,
         uid: 130,
@@ -3840,7 +3840,7 @@ export const turn345 = {
         x: "3.7015",
         y: "-0.3189",
       },
-      "131": {
+      131: {
         n: "Port Edasich",
         puid: 33,
         uid: 131,
@@ -3848,7 +3848,7 @@ export const turn345 = {
         x: "3.5844",
         y: "-0.1011",
       },
-      "132": {
+      132: {
         n: "Red Giedi",
         puid: 62,
         uid: 132,
@@ -3856,7 +3856,7 @@ export const turn345 = {
         x: "2.8918",
         y: "0.0117",
       },
-      "134": {
+      134: {
         n: "Slow Alhajoth",
         puid: 42,
         uid: 134,
@@ -3864,7 +3864,7 @@ export const turn345 = {
         x: "2.8928",
         y: "-1.6417",
       },
-      "136": {
+      136: {
         n: "Zeta Achernar",
         puid: 6,
         uid: 136,
@@ -3872,7 +3872,7 @@ export const turn345 = {
         x: "2.5576",
         y: "0.2467",
       },
-      "137": {
+      137: {
         n: "Bright Peacock",
         puid: 6,
         uid: 137,
@@ -3880,7 +3880,7 @@ export const turn345 = {
         x: "2.1340",
         y: "-0.0812",
       },
-      "138": {
+      138: {
         n: "Theta Aladfar",
         puid: 63,
         uid: 138,
@@ -3888,7 +3888,7 @@ export const turn345 = {
         x: "4.2714",
         y: "0.1593",
       },
-      "139": {
+      139: {
         n: "White Wasat",
         puid: 6,
         uid: 139,
@@ -3896,7 +3896,7 @@ export const turn345 = {
         x: "1.7839",
         y: "-0.8408",
       },
-      "14": {
+      14: {
         n: "Arrakis",
         puid: 3,
         uid: 14,
@@ -3904,7 +3904,7 @@ export const turn345 = {
         x: "1.4238",
         y: "2.5431",
       },
-      "140": {
+      140: {
         n: "Hot Mira",
         puid: 33,
         uid: 140,
@@ -3912,7 +3912,7 @@ export const turn345 = {
         x: "3.3137",
         y: "0.4907",
       },
-      "143": {
+      143: {
         n: "Jib",
         puid: 33,
         uid: 143,
@@ -3920,7 +3920,7 @@ export const turn345 = {
         x: "3.3886",
         y: "0.9262",
       },
-      "144": {
+      144: {
         n: "Free Alrischa",
         puid: 33,
         uid: 144,
@@ -3928,7 +3928,7 @@ export const turn345 = {
         x: "3.3280",
         y: "-0.0005",
       },
-      "145": {
+      145: {
         n: "Mira",
         puid: 33,
         uid: 145,
@@ -3936,7 +3936,7 @@ export const turn345 = {
         x: "3.7230",
         y: "-0.0536",
       },
-      "146": {
+      146: {
         n: "Odd Menkalinan",
         puid: 24,
         uid: 146,
@@ -3944,7 +3944,7 @@ export const turn345 = {
         x: "4.1604",
         y: "0.3808",
       },
-      "147": {
+      147: {
         n: "Pure Etamin",
         puid: 33,
         uid: 147,
@@ -3952,7 +3952,7 @@ export const turn345 = {
         x: "3.1246",
         y: "1.2297",
       },
-      "148": {
+      148: {
         n: "Last Terebellum",
         puid: 24,
         uid: 148,
@@ -3960,7 +3960,7 @@ export const turn345 = {
         x: "4.2733",
         y: "0.8816",
       },
-      "149": {
+      149: {
         n: "Wild Acrux",
         puid: 63,
         uid: 149,
@@ -3968,7 +3968,7 @@ export const turn345 = {
         x: "3.8802",
         y: "-0.3908",
       },
-      "15": {
+      15: {
         n: "Parliament of Souls",
         puid: 30,
         uid: 15,
@@ -3976,7 +3976,7 @@ export const turn345 = {
         x: "0.6132",
         y: "3.4815",
       },
-      "150": {
+      150: {
         n: "Alkes",
         puid: 62,
         uid: 150,
@@ -3984,7 +3984,7 @@ export const turn345 = {
         x: "2.7689",
         y: "-0.3236",
       },
-      "151": {
+      151: {
         n: "Bright Rukh",
         puid: 33,
         uid: 151,
@@ -3992,7 +3992,7 @@ export const turn345 = {
         x: "3.0619",
         y: "1.6060",
       },
-      "152": {
+      152: {
         n: "Pure Becrux",
         puid: 63,
         uid: 152,
@@ -4000,7 +4000,7 @@ export const turn345 = {
         x: "4.6528",
         y: "0.0708",
       },
-      "153": {
+      153: {
         n: "Fast Toe",
         puid: 63,
         uid: 153,
@@ -4008,7 +4008,7 @@ export const turn345 = {
         x: "4.5042",
         y: "-0.3698",
       },
-      "154": {
+      154: {
         n: "Sadatoni",
         puid: 6,
         uid: 154,
@@ -4016,7 +4016,7 @@ export const turn345 = {
         x: "2.3508",
         y: "-0.4296",
       },
-      "155": {
+      155: {
         n: "Hot Scheddi",
         puid: 63,
         uid: 155,
@@ -4024,7 +4024,7 @@ export const turn345 = {
         x: "4.2606",
         y: "-0.3581",
       },
-      "156": {
+      156: {
         n: "Slow Kita",
         puid: 63,
         uid: 156,
@@ -4032,7 +4032,7 @@ export const turn345 = {
         x: "4.6299",
         y: "-0.3899",
       },
-      "157": {
+      157: {
         n: "Cold Shy",
         puid: -1,
         uid: 157,
@@ -4040,7 +4040,7 @@ export const turn345 = {
         x: "4.7324",
         y: "-0.2485",
       },
-      "158": {
+      158: {
         n: "Free Zavijava",
         puid: 63,
         uid: 158,
@@ -4048,7 +4048,7 @@ export const turn345 = {
         x: "4.4389",
         y: "-0.7342",
       },
-      "16": {
+      16: {
         n: "Bam",
         puid: 19,
         uid: 16,
@@ -4056,7 +4056,7 @@ export const turn345 = {
         x: "0.2058",
         y: "2.3104",
       },
-      "160": {
+      160: {
         n: "Blue Praecipua",
         puid: 63,
         uid: 160,
@@ -4064,7 +4064,7 @@ export const turn345 = {
         x: "4.5083",
         y: "-0.9125",
       },
-      "161": {
+      161: {
         n: "Merak",
         puid: -1,
         uid: 161,
@@ -4072,7 +4072,7 @@ export const turn345 = {
         x: "5.0147",
         y: "0.0472",
       },
-      "162": {
+      162: {
         n: "Eta Mizar",
         puid: 63,
         uid: 162,
@@ -4080,7 +4080,7 @@ export const turn345 = {
         x: "4.7400",
         y: "-1.0327",
       },
-      "163": {
+      163: {
         n: "Baham",
         puid: 63,
         uid: 163,
@@ -4088,7 +4088,7 @@ export const turn345 = {
         x: "5.0864",
         y: "-0.8814",
       },
-      "164": {
+      164: {
         n: "Blue Muphrid",
         puid: 63,
         uid: 164,
@@ -4096,7 +4096,7 @@ export const turn345 = {
         x: "5.2563",
         y: "-0.8003",
       },
-      "165": {
+      165: {
         n: "Kit",
         puid: -1,
         uid: 165,
@@ -4104,7 +4104,7 @@ export const turn345 = {
         x: "5.4164",
         y: "0.0626",
       },
-      "166": {
+      166: {
         n: "Sheratan",
         puid: 24,
         uid: 166,
@@ -4112,7 +4112,7 @@ export const turn345 = {
         x: "4.5038",
         y: "0.8617",
       },
-      "169": {
+      169: {
         n: "Pi Sceptrum",
         puid: 33,
         uid: 169,
@@ -4120,7 +4120,7 @@ export const turn345 = {
         x: "3.6755",
         y: "0.9507",
       },
-      "17": {
+      17: {
         n: "Git",
         puid: 35,
         uid: 17,
@@ -4128,7 +4128,7 @@ export const turn345 = {
         x: "-0.4142",
         y: "1.2365",
       },
-      "170": {
+      170: {
         n: "Wei",
         puid: 24,
         uid: 170,
@@ -4136,7 +4136,7 @@ export const turn345 = {
         x: "4.7792",
         y: "0.8723",
       },
-      "171": {
+      171: {
         n: "Blue Salm",
         puid: 24,
         uid: 171,
@@ -4144,7 +4144,7 @@ export const turn345 = {
         x: "4.3950",
         y: "0.9534",
       },
-      "172": {
+      172: {
         n: "Hard Neo",
         puid: 24,
         uid: 172,
@@ -4152,7 +4152,7 @@ export const turn345 = {
         x: "4.9703",
         y: "0.9112",
       },
-      "173": {
+      173: {
         n: "Red Pux",
         puid: 24,
         uid: 173,
@@ -4160,7 +4160,7 @@ export const turn345 = {
         x: "4.4198",
         y: "0.5396",
       },
-      "174": {
+      174: {
         n: "Free Pax",
         puid: 24,
         uid: 174,
@@ -4168,7 +4168,7 @@ export const turn345 = {
         x: "4.1301",
         y: "0.7761",
       },
-      "175": {
+      175: {
         n: "Cold Alnitak",
         puid: 24,
         uid: 175,
@@ -4176,7 +4176,7 @@ export const turn345 = {
         x: "4.0769",
         y: "1.1711",
       },
-      "176": {
+      176: {
         n: "Tarazet",
         puid: 24,
         uid: 176,
@@ -4184,7 +4184,7 @@ export const turn345 = {
         x: "4.0211",
         y: "0.5572",
       },
-      "177": {
+      177: {
         n: "Fast Rigil",
         puid: -1,
         uid: 177,
@@ -4192,7 +4192,7 @@ export const turn345 = {
         x: "5.3280",
         y: "0.5107",
       },
-      "178": {
+      178: {
         n: "Sigma Corvid",
         puid: -1,
         uid: 178,
@@ -4200,7 +4200,7 @@ export const turn345 = {
         x: "5.5147",
         y: "0.7559",
       },
-      "179": {
+      179: {
         n: "Delta Avior",
         puid: 56,
         uid: 179,
@@ -4208,7 +4208,7 @@ export const turn345 = {
         x: "4.2171",
         y: "1.8057",
       },
-      "18": {
+      18: {
         n: "Lost Grassias",
         puid: 40,
         uid: 18,
@@ -4216,7 +4216,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "-1.0774",
       },
-      "180": {
+      180: {
         n: "Brachium",
         puid: 56,
         uid: 180,
@@ -4224,7 +4224,7 @@ export const turn345 = {
         x: "5.2537",
         y: "1.7958",
       },
-      "181": {
+      181: {
         n: "Delta Mirach",
         puid: 56,
         uid: 181,
@@ -4232,7 +4232,7 @@ export const turn345 = {
         x: "5.5328",
         y: "1.6652",
       },
-      "182": {
+      182: {
         n: "Porrima",
         puid: 33,
         uid: 182,
@@ -4240,7 +4240,7 @@ export const turn345 = {
         x: "3.6645",
         y: "0.0974",
       },
-      "183": {
+      183: {
         n: "Samakah",
         puid: 33,
         uid: 183,
@@ -4248,7 +4248,7 @@ export const turn345 = {
         x: "3.2753",
         y: "0.9112",
       },
-      "184": {
+      184: {
         n: "Sigma Algorab",
         puid: 56,
         uid: 184,
@@ -4256,7 +4256,7 @@ export const turn345 = {
         x: "5.9502",
         y: "1.5248",
       },
-      "185": {
+      185: {
         n: "Asellus",
         puid: 2,
         uid: 185,
@@ -4264,7 +4264,7 @@ export const turn345 = {
         x: "4.4396",
         y: "2.1373",
       },
-      "186": {
+      186: {
         n: "Dull Tabit",
         puid: 2,
         uid: 186,
@@ -4272,7 +4272,7 @@ export const turn345 = {
         x: "4.7881",
         y: "2.2897",
       },
-      "187": {
+      187: {
         n: "Regulus",
         puid: 2,
         uid: 187,
@@ -4280,7 +4280,7 @@ export const turn345 = {
         x: "4.5597",
         y: "2.4851",
       },
-      "188": {
+      188: {
         n: "Saw",
         puid: 56,
         uid: 188,
@@ -4288,7 +4288,7 @@ export const turn345 = {
         x: "4.8351",
         y: "1.7989",
       },
-      "189": {
+      189: {
         n: "Koi",
         puid: 2,
         uid: 189,
@@ -4296,7 +4296,7 @@ export const turn345 = {
         x: "4.7676",
         y: "2.6409",
       },
-      "19": {
+      19: {
         n: "Xi Seginus",
         puid: 29,
         uid: 19,
@@ -4304,7 +4304,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "0.1626",
       },
-      "190": {
+      190: {
         n: "Cold Rat",
         puid: 2,
         uid: 190,
@@ -4312,7 +4312,7 @@ export const turn345 = {
         x: "4.3787",
         y: "2.7283",
       },
-      "191": {
+      191: {
         n: "Odd Kullat",
         puid: 2,
         uid: 191,
@@ -4320,7 +4320,7 @@ export const turn345 = {
         x: "4.7723",
         y: "2.8342",
       },
-      "193": {
+      193: {
         n: "Soft Furud",
         puid: 56,
         uid: 193,
@@ -4328,7 +4328,7 @@ export const turn345 = {
         x: "5.1637",
         y: "1.4655",
       },
-      "194": {
+      194: {
         n: "Lush Korn",
         puid: 56,
         uid: 194,
@@ -4336,7 +4336,7 @@ export const turn345 = {
         x: "3.8329",
         y: "1.5159",
       },
-      "195": {
+      195: {
         n: "Biham",
         puid: 56,
         uid: 195,
@@ -4344,7 +4344,7 @@ export const turn345 = {
         x: "5.6649",
         y: "2.2445",
       },
-      "196": {
+      196: {
         n: "White Nusakan",
         puid: 56,
         uid: 196,
@@ -4352,7 +4352,7 @@ export const turn345 = {
         x: "5.4876",
         y: "1.3964",
       },
-      "197": {
+      197: {
         n: "Muscida",
         puid: 56,
         uid: 197,
@@ -4360,7 +4360,7 @@ export const turn345 = {
         x: "5.8502",
         y: "2.0400",
       },
-      "199": {
+      199: {
         n: "Imp",
         puid: 24,
         uid: 199,
@@ -4368,7 +4368,7 @@ export const turn345 = {
         x: "5.0856",
         y: "0.7859",
       },
-      "2": {
+      2: {
         n: "Cold Alamak",
         puid: 47,
         uid: 2,
@@ -4376,7 +4376,7 @@ export const turn345 = {
         x: "-0.1574",
         y: "-1.9542",
       },
-      "20": {
+      20: {
         n: "Old Tor",
         puid: 49,
         uid: 20,
@@ -4384,7 +4384,7 @@ export const turn345 = {
         x: "-1.6542",
         y: "1.2365",
       },
-      "200": {
+      200: {
         n: "Young Alcyone",
         puid: 52,
         uid: 200,
@@ -4392,7 +4392,7 @@ export const turn345 = {
         x: "3.2553",
         y: "2.4079",
       },
-      "201": {
+      201: {
         n: "Soft Alrai",
         puid: 52,
         uid: 201,
@@ -4400,7 +4400,7 @@ export const turn345 = {
         x: "3.1710",
         y: "2.5740",
       },
-      "203": {
+      203: {
         n: "Dry Alnasl",
         puid: 52,
         uid: 203,
@@ -4408,7 +4408,7 @@ export const turn345 = {
         x: "3.1768",
         y: "2.8428",
       },
-      "205": {
+      205: {
         n: "Yay",
         puid: 56,
         uid: 205,
@@ -4416,7 +4416,7 @@ export const turn345 = {
         x: "3.9969",
         y: "2.3645",
       },
-      "21": {
+      21: {
         n: "Sadr",
         puid: 0,
         uid: 21,
@@ -4424,7 +4424,7 @@ export const turn345 = {
         x: "-2.2742",
         y: "2.3104",
       },
-      "210": {
+      210: {
         n: "Ascella",
         puid: 3,
         uid: 210,
@@ -4432,7 +4432,7 @@ export const turn345 = {
         x: "2.5639",
         y: "3.1655",
       },
-      "212": {
+      212: {
         n: "Slow Nekkar",
         puid: 3,
         uid: 212,
@@ -4440,7 +4440,7 @@ export const turn345 = {
         x: "2.2439",
         y: "3.0063",
       },
-      "213": {
+      213: {
         n: "Cold AlKap",
         puid: 3,
         uid: 213,
@@ -4448,7 +4448,7 @@ export const turn345 = {
         x: "2.3502",
         y: "1.5977",
       },
-      "214": {
+      214: {
         n: "Beta Garnet",
         puid: 24,
         uid: 214,
@@ -4456,7 +4456,7 @@ export const turn345 = {
         x: "4.4180",
         y: "1.4446",
       },
-      "215": {
+      215: {
         n: "Rub",
         puid: 2,
         uid: 215,
@@ -4464,7 +4464,7 @@ export const turn345 = {
         x: "4.1821",
         y: "3.4710",
       },
-      "216": {
+      216: {
         n: "White Lucida",
         puid: 2,
         uid: 216,
@@ -4472,7 +4472,7 @@ export const turn345 = {
         x: "4.0690",
         y: "3.4875",
       },
-      "217": {
+      217: {
         n: "Sceptrum",
         puid: 2,
         uid: 217,
@@ -4480,7 +4480,7 @@ export const turn345 = {
         x: "4.2681",
         y: "3.0121",
       },
-      "22": {
+      22: {
         n: "Beta Heka",
         puid: 21,
         uid: 22,
@@ -4488,7 +4488,7 @@ export const turn345 = {
         x: "-3.4922",
         y: "2.5431",
       },
-      "221": {
+      221: {
         n: "Wezen",
         puid: 2,
         uid: 221,
@@ -4496,7 +4496,7 @@ export const turn345 = {
         x: "3.6264",
         y: "3.0489",
       },
-      "222": {
+      222: {
         n: "Keg",
         puid: -1,
         uid: 222,
@@ -4504,7 +4504,7 @@ export const turn345 = {
         x: "5.0208",
         y: "3.6220",
       },
-      "223": {
+      223: {
         n: "Nova Askella",
         puid: 2,
         uid: 223,
@@ -4512,7 +4512,7 @@ export const turn345 = {
         x: "4.9002",
         y: "2.7159",
       },
-      "224": {
+      224: {
         n: "Albali",
         puid: -1,
         uid: 224,
@@ -4520,7 +4520,7 @@ export const turn345 = {
         x: "4.7616",
         y: "4.2029",
       },
-      "225": {
+      225: {
         n: "Kastra",
         puid: 41,
         uid: 225,
@@ -4528,7 +4528,7 @@ export const turn345 = {
         x: "3.4408",
         y: "4.0423",
       },
-      "226": {
+      226: {
         n: "Theta Tag",
         puid: 41,
         uid: 226,
@@ -4536,7 +4536,7 @@ export const turn345 = {
         x: "3.0996",
         y: "3.2458",
       },
-      "227": {
+      227: {
         n: "Fez",
         puid: 52,
         uid: 227,
@@ -4544,7 +4544,7 @@ export const turn345 = {
         x: "3.4543",
         y: "2.3783",
       },
-      "228": {
+      228: {
         n: "Sigma Meissa",
         puid: -1,
         uid: 228,
@@ -4552,7 +4552,7 @@ export const turn345 = {
         x: "5.1416",
         y: "4.3891",
       },
-      "229": {
+      229: {
         n: "Nova Acubens",
         puid: -1,
         uid: 229,
@@ -4560,7 +4560,7 @@ export const turn345 = {
         x: "4.6439",
         y: "4.7506",
       },
-      "23": {
+      23: {
         n: "Nu Tack",
         puid: 57,
         uid: 23,
@@ -4568,7 +4568,7 @@ export const turn345 = {
         x: "-2.6816",
         y: "3.4815",
       },
-      "230": {
+      230: {
         n: "Beta Albaldah",
         puid: 41,
         uid: 230,
@@ -4576,7 +4576,7 @@ export const turn345 = {
         x: "3.0315",
         y: "3.8139",
       },
-      "231": {
+      231: {
         n: "Nunki",
         puid: 41,
         uid: 231,
@@ -4584,7 +4584,7 @@ export const turn345 = {
         x: "3.2808",
         y: "3.7905",
       },
-      "232": {
+      232: {
         n: "Red AlGiedi",
         puid: 41,
         uid: 232,
@@ -4592,7 +4592,7 @@ export const turn345 = {
         x: "3.3861",
         y: "3.5541",
       },
-      "233": {
+      233: {
         n: "Grand Dubhe",
         puid: 41,
         uid: 233,
@@ -4600,7 +4600,7 @@ export const turn345 = {
         x: "2.7189",
         y: "3.4230",
       },
-      "234": {
+      234: {
         n: "Dark Beid",
         puid: 41,
         uid: 234,
@@ -4608,7 +4608,7 @@ export const turn345 = {
         x: "2.9797",
         y: "4.1831",
       },
-      "236": {
+      236: {
         n: "Blue Saw",
         puid: 55,
         uid: 236,
@@ -4616,7 +4616,7 @@ export const turn345 = {
         x: "2.4572",
         y: "4.0230",
       },
-      "237": {
+      237: {
         n: "Diadem",
         puid: 41,
         uid: 237,
@@ -4624,7 +4624,7 @@ export const turn345 = {
         x: "3.8441",
         y: "3.8763",
       },
-      "239": {
+      239: {
         n: "Zeta Terebellum",
         puid: 2,
         uid: 239,
@@ -4632,7 +4632,7 @@ export const turn345 = {
         x: "3.8264",
         y: "3.0346",
       },
-      "24": {
+      24: {
         n: "Phact",
         puid: 50,
         uid: 24,
@@ -4640,7 +4640,7 @@ export const turn345 = {
         x: "-3.8996",
         y: "3.7143",
       },
-      "240": {
+      240: {
         n: "Zug",
         puid: -1,
         uid: 240,
@@ -4648,7 +4648,7 @@ export const turn345 = {
         x: "3.2579",
         y: "4.7326",
       },
-      "241": {
+      241: {
         n: "Spy",
         puid: 55,
         uid: 241,
@@ -4656,7 +4656,7 @@ export const turn345 = {
         x: "2.1718",
         y: "4.4230",
       },
-      "243": {
+      243: {
         n: "Xi Acamar",
         puid: -1,
         uid: 243,
@@ -4664,7 +4664,7 @@ export const turn345 = {
         x: "3.8498",
         y: "4.7823",
       },
-      "245": {
+      245: {
         n: "Fad",
         puid: 55,
         uid: 245,
@@ -4672,7 +4672,7 @@ export const turn345 = {
         x: "1.8312",
         y: "3.5643",
       },
-      "246": {
+      246: {
         n: "Tau Murzim",
         puid: 55,
         uid: 246,
@@ -4680,7 +4680,7 @@ export const turn345 = {
         x: "1.5919",
         y: "3.6721",
       },
-      "247": {
+      247: {
         n: "Mac",
         puid: 55,
         uid: 247,
@@ -4688,7 +4688,7 @@ export const turn345 = {
         x: "1.8605",
         y: "4.0490",
       },
-      "248": {
+      248: {
         n: "Jabbah",
         puid: 55,
         uid: 248,
@@ -4696,7 +4696,7 @@ export const turn345 = {
         x: "1.4798",
         y: "3.4682",
       },
-      "249": {
+      249: {
         n: "Slow Kit",
         puid: 55,
         uid: 249,
@@ -4704,7 +4704,7 @@ export const turn345 = {
         x: "1.4313",
         y: "4.0498",
       },
-      "25": {
+      25: {
         n: "Juxta",
         puid: 44,
         uid: 25,
@@ -4712,7 +4712,7 @@ export const turn345 = {
         x: "-5.1388",
         y: "3.6690",
       },
-      "250": {
+      250: {
         n: "Sabik",
         puid: 55,
         uid: 250,
@@ -4720,7 +4720,7 @@ export const turn345 = {
         x: "2.1839",
         y: "4.2180",
       },
-      "251": {
+      251: {
         n: "Lanx",
         puid: 41,
         uid: 251,
@@ -4728,7 +4728,7 @@ export const turn345 = {
         x: "2.5150",
         y: "3.5310",
       },
-      "252": {
+      252: {
         n: "Odd Syrma",
         puid: 55,
         uid: 252,
@@ -4736,7 +4736,7 @@ export const turn345 = {
         x: "1.1052",
         y: "4.0528",
       },
-      "253": {
+      253: {
         n: "Last Nashira",
         puid: 3,
         uid: 253,
@@ -4744,7 +4744,7 @@ export const turn345 = {
         x: "1.3184",
         y: "2.9819",
       },
-      "254": {
+      254: {
         n: "Port Mirzam",
         puid: 55,
         uid: 254,
@@ -4752,7 +4752,7 @@ export const turn345 = {
         x: "0.9037",
         y: "4.0518",
       },
-      "255": {
+      255: {
         n: "Theta Matar",
         puid: 3,
         uid: 255,
@@ -4760,7 +4760,7 @@ export const turn345 = {
         x: "1.5516",
         y: "2.6711",
       },
-      "256": {
+      256: {
         n: "Odd Atria",
         puid: 3,
         uid: 256,
@@ -4768,7 +4768,7 @@ export const turn345 = {
         x: "2.2324",
         y: "2.6120",
       },
-      "257": {
+      257: {
         n: "Free Pug",
         puid: -1,
         uid: 257,
@@ -4776,7 +4776,7 @@ export const turn345 = {
         x: "2.6449",
         y: "4.6841",
       },
-      "259": {
+      259: {
         n: "Acamar",
         puid: 52,
         uid: 259,
@@ -4784,7 +4784,7 @@ export const turn345 = {
         x: "2.7645",
         y: "2.6020",
       },
-      "26": {
+      26: {
         n: "Slow Septen",
         puid: 58,
         uid: 26,
@@ -4792,7 +4792,7 @@ export const turn345 = {
         x: "-5.4597",
         y: "2.4713",
       },
-      "261": {
+      261: {
         n: "Hard Beid",
         puid: 3,
         uid: 261,
@@ -4800,7 +4800,7 @@ export const turn345 = {
         x: "1.5800",
         y: "2.3570",
       },
-      "262": {
+      262: {
         n: "Zeta Hydrobius",
         puid: 3,
         uid: 262,
@@ -4808,7 +4808,7 @@ export const turn345 = {
         x: "1.7547",
         y: "2.4848",
       },
-      "263": {
+      263: {
         n: "Jih",
         puid: 3,
         uid: 263,
@@ -4816,7 +4816,7 @@ export const turn345 = {
         x: "1.0094",
         y: "2.6541",
       },
-      "264": {
+      264: {
         n: "Mega Wow",
         puid: 3,
         uid: 264,
@@ -4824,7 +4824,7 @@ export const turn345 = {
         x: "1.8968",
         y: "2.7637",
       },
-      "266": {
+      266: {
         n: "Peacock",
         puid: 3,
         uid: 266,
@@ -4832,7 +4832,7 @@ export const turn345 = {
         x: "1.7778",
         y: "1.9300",
       },
-      "267": {
+      267: {
         n: "Last Ill",
         puid: 3,
         uid: 267,
@@ -4840,7 +4840,7 @@ export const turn345 = {
         x: "1.2847",
         y: "3.3319",
       },
-      "268": {
+      268: {
         n: "Eta Alkalurops",
         puid: 3,
         uid: 268,
@@ -4848,7 +4848,7 @@ export const turn345 = {
         x: "1.8708",
         y: "1.7689",
       },
-      "269": {
+      269: {
         n: "Alshain",
         puid: 3,
         uid: 269,
@@ -4856,7 +4856,7 @@ export const turn345 = {
         x: "1.9899",
         y: "1.7346",
       },
-      "27": {
+      27: {
         n: "Chort",
         puid: 11,
         uid: 27,
@@ -4864,7 +4864,7 @@ export const turn345 = {
         x: "-6.3365",
         y: "3.3481",
       },
-      "270": {
+      270: {
         n: "Scheddi",
         puid: 3,
         uid: 270,
@@ -4872,7 +4872,7 @@ export const turn345 = {
         x: "1.7931",
         y: "1.5282",
       },
-      "271": {
+      271: {
         n: "Rasalas",
         puid: 19,
         uid: 271,
@@ -4880,7 +4880,7 @@ export const turn345 = {
         x: "0.6698",
         y: "1.6445",
       },
-      "272": {
+      272: {
         n: "Sheer shelf Monolith",
         puid: 30,
         uid: 272,
@@ -4888,7 +4888,7 @@ export const turn345 = {
         x: "1.0961",
         y: "3.7660",
       },
-      "273": {
+      273: {
         n: "Alhena",
         puid: 3,
         uid: 273,
@@ -4896,7 +4896,7 @@ export const turn345 = {
         x: "2.5370",
         y: "1.7636",
       },
-      "274": {
+      274: {
         n: "Eta Tabit",
         puid: 3,
         uid: 274,
@@ -4904,7 +4904,7 @@ export const turn345 = {
         x: "2.0374",
         y: "1.2271",
       },
-      "275": {
+      275: {
         n: "Gardens of Sahasrara",
         puid: 30,
         uid: 275,
@@ -4912,7 +4912,7 @@ export const turn345 = {
         x: "0.6882",
         y: "3.3516",
       },
-      "276": {
+      276: {
         n: "Net Abwen Netwold",
         puid: 30,
         uid: 276,
@@ -4920,7 +4920,7 @@ export const turn345 = {
         x: "0.4570",
         y: "3.2954",
       },
-      "277": {
+      277: {
         n: "Ajna  Meditation Sphere",
         puid: 30,
         uid: 277,
@@ -4928,7 +4928,7 @@ export const turn345 = {
         x: "0.2975",
         y: "3.5964",
       },
-      "278": {
+      278: {
         n: "Adhpida Netwold",
         puid: 30,
         uid: 278,
@@ -4936,7 +4936,7 @@ export const turn345 = {
         x: "0.9646",
         y: "3.7276",
       },
-      "279": {
+      279: {
         n: "Vishudhi Palace",
         puid: 30,
         uid: 279,
@@ -4944,7 +4944,7 @@ export const turn345 = {
         x: "0.4347",
         y: "3.9720",
       },
-      "28": {
+      28: {
         n: "Tau Diadem",
         puid: 38,
         uid: 28,
@@ -4952,7 +4952,7 @@ export const turn345 = {
         x: "-6.6574",
         y: "2.1503",
       },
-      "280": {
+      280: {
         n: "Amethyst Aura Presinct",
         puid: 30,
         uid: 280,
@@ -4960,7 +4960,7 @@ export const turn345 = {
         x: "0.2605",
         y: "3.9853",
       },
-      "281": {
+      281: {
         n: "Zaniah",
         puid: 30,
         uid: 281,
@@ -4968,7 +4968,7 @@ export const turn345 = {
         x: "0.4300",
         y: "4.1654",
       },
-      "282": {
+      282: {
         n: "Aludra",
         puid: 55,
         uid: 282,
@@ -4976,7 +4976,7 @@ export const turn345 = {
         x: "1.2268",
         y: "3.9964",
       },
-      "283": {
+      283: {
         n: "Rat",
         puid: 55,
         uid: 283,
@@ -4984,7 +4984,7 @@ export const turn345 = {
         x: "1.2454",
         y: "4.1137",
       },
-      "284": {
+      284: {
         n: "Cold Alpheratz",
         puid: 19,
         uid: 284,
@@ -4992,7 +4992,7 @@ export const turn345 = {
         x: "-0.3700",
         y: "3.3955",
       },
-      "285": {
+      285: {
         n: "Pleione",
         puid: 55,
         uid: 285,
@@ -5000,7 +5000,7 @@ export const turn345 = {
         x: "1.1532",
         y: "4.4168",
       },
-      "286": {
+      286: {
         n: "Ram",
         puid: 55,
         uid: 286,
@@ -5008,7 +5008,7 @@ export const turn345 = {
         x: "1.6763",
         y: "3.9772",
       },
-      "287": {
+      287: {
         n: "Soft Asterion",
         puid: 19,
         uid: 287,
@@ -5016,7 +5016,7 @@ export const turn345 = {
         x: "-0.6097",
         y: "3.8092",
       },
-      "288": {
+      288: {
         n: "New Alpha",
         puid: 3,
         uid: 288,
@@ -5024,7 +5024,7 @@ export const turn345 = {
         x: "1.0780",
         y: "2.2045",
       },
-      "289": {
+      289: {
         n: "Last Menkar",
         puid: 19,
         uid: 289,
@@ -5032,7 +5032,7 @@ export const turn345 = {
         x: "-0.8167",
         y: "3.2294",
       },
-      "29": {
+      29: {
         n: "Kappa Sadalbari",
         puid: 28,
         uid: 29,
@@ -5040,7 +5040,7 @@ export const turn345 = {
         x: "-6.7027",
         y: "0.9112",
       },
-      "290": {
+      290: {
         n: "Old Hadar",
         puid: 19,
         uid: 290,
@@ -5048,7 +5048,7 @@ export const turn345 = {
         x: "0.0997",
         y: "2.2043",
       },
-      "291": {
+      291: {
         n: "Pure Vega",
         puid: 19,
         uid: 291,
@@ -5056,7 +5056,7 @@ export const turn345 = {
         x: "-0.0289",
         y: "2.2475",
       },
-      "292": {
+      292: {
         n: "Hot Rye",
         puid: 19,
         uid: 292,
@@ -5064,7 +5064,7 @@ export const turn345 = {
         x: "0.2351",
         y: "1.9756",
       },
-      "293": {
+      293: {
         n: "Mega Tic",
         puid: 19,
         uid: 293,
@@ -5072,7 +5072,7 @@ export const turn345 = {
         x: "0.3871",
         y: "2.6992",
       },
-      "294": {
+      294: {
         n: "Hassaleh",
         puid: 19,
         uid: 294,
@@ -5080,7 +5080,7 @@ export const turn345 = {
         x: "-0.2984",
         y: "2.4455",
       },
-      "296": {
+      296: {
         n: "Last Menkab",
         puid: 35,
         uid: 296,
@@ -5088,7 +5088,7 @@ export const turn345 = {
         x: "-0.2003",
         y: "1.7304",
       },
-      "297": {
+      297: {
         n: "Bharani",
         puid: 19,
         uid: 297,
@@ -5096,7 +5096,7 @@ export const turn345 = {
         x: "-0.3091",
         y: "2.9240",
       },
-      "298": {
+      298: {
         n: "Theta Gatria",
         puid: 3,
         uid: 298,
@@ -5104,7 +5104,7 @@ export const turn345 = {
         x: "0.9381",
         y: "1.7976",
       },
-      "299": {
+      299: {
         n: "Shaula",
         puid: 35,
         uid: 299,
@@ -5112,7 +5112,7 @@ export const turn345 = {
         x: "-0.4286",
         y: "1.5543",
       },
-      "3": {
+      3: {
         n: "Ruchbah",
         puid: 39,
         uid: 3,
@@ -5120,7 +5120,7 @@ export const turn345 = {
         x: "1.0826",
         y: "-1.9542",
       },
-      "30": {
+      30: {
         n: "Lost Cursa",
         puid: 1,
         uid: 30,
@@ -5128,7 +5128,7 @@ export const turn345 = {
         x: "-5.5315",
         y: "0.5038",
       },
-      "300": {
+      300: {
         n: "Free Sham",
         puid: 35,
         uid: 300,
@@ -5136,7 +5136,7 @@ export const turn345 = {
         x: "-0.5579",
         y: "1.5467",
       },
-      "301": {
+      301: {
         n: "Hot Rukbat",
         puid: 35,
         uid: 301,
@@ -5144,7 +5144,7 @@ export const turn345 = {
         x: "0.0021",
         y: "1.1552",
       },
-      "302": {
+      302: {
         n: "Xi Merak",
         puid: 35,
         uid: 302,
@@ -5152,7 +5152,7 @@ export const turn345 = {
         x: "-0.2272",
         y: "1.1207",
       },
-      "303": {
+      303: {
         n: "Wet Alpheratz",
         puid: 3,
         uid: 303,
@@ -5160,7 +5160,7 @@ export const turn345 = {
         x: "1.5442",
         y: "2.5463",
       },
-      "304": {
+      304: {
         n: "Mebsuta",
         puid: -1,
         uid: 304,
@@ -5168,7 +5168,7 @@ export const turn345 = {
         x: "1.2325",
         y: "1.2836",
       },
-      "305": {
+      305: {
         n: "Xi Gut",
         puid: 35,
         uid: 305,
@@ -5176,7 +5176,7 @@ export const turn345 = {
         x: "-0.5203",
         y: "1.1304",
       },
-      "306": {
+      306: {
         n: "Mu Shaula",
         puid: 35,
         uid: 306,
@@ -5184,7 +5184,7 @@ export const turn345 = {
         x: "-0.3115",
         y: "1.0162",
       },
-      "307": {
+      307: {
         n: "Alrai",
         puid: 35,
         uid: 307,
@@ -5192,7 +5192,7 @@ export const turn345 = {
         x: "-0.2993",
         y: "1.5522",
       },
-      "308": {
+      308: {
         n: "Last Alshat",
         puid: 35,
         uid: 308,
@@ -5200,7 +5200,7 @@ export const turn345 = {
         x: "0.0083",
         y: "1.3110",
       },
-      "31": {
+      31: {
         n: "Zoo",
         puid: 25,
         uid: 31,
@@ -5208,7 +5208,7 @@ export const turn345 = {
         x: "-6.4699",
         y: "-0.3068",
       },
-      "311": {
+      311: {
         n: "Dull Chort",
         puid: 19,
         uid: 311,
@@ -5216,7 +5216,7 @@ export const turn345 = {
         x: "-0.0081",
         y: "1.8164",
       },
-      "312": {
+      312: {
         n: "Slow Atik",
         puid: 35,
         uid: 312,
@@ -5224,7 +5224,7 @@ export const turn345 = {
         x: "-1.0278",
         y: "1.7513",
       },
-      "313": {
+      313: {
         n: "Cor",
         puid: 35,
         uid: 313,
@@ -5232,7 +5232,7 @@ export const turn345 = {
         x: "0.2180",
         y: "0.6043",
       },
-      "314": {
+      314: {
         n: "Tau Mud",
         puid: 35,
         uid: 314,
@@ -5240,7 +5240,7 @@ export const turn345 = {
         x: "0.3419",
         y: "0.6020",
       },
-      "315": {
+      315: {
         n: "Altarf",
         puid: 19,
         uid: 315,
@@ -5248,7 +5248,7 @@ export const turn345 = {
         x: "0.4705",
         y: "1.8559",
       },
-      "317": {
+      317: {
         n: "Slow Sabik",
         puid: 49,
         uid: 317,
@@ -5256,7 +5256,7 @@ export const turn345 = {
         x: "-1.1404",
         y: "2.2735",
       },
-      "319": {
+      319: {
         n: "Kleeia",
         puid: 49,
         uid: 319,
@@ -5264,7 +5264,7 @@ export const turn345 = {
         x: "-1.8607",
         y: "1.1099",
       },
-      "32": {
+      32: {
         n: "Mega Cursa",
         puid: 10,
         uid: 32,
@@ -5272,7 +5272,7 @@ export const turn345 = {
         x: "-5.2988",
         y: "-0.7142",
       },
-      "320": {
+      320: {
         n: "Tag",
         puid: 40,
         uid: 320,
@@ -5280,7 +5280,7 @@ export const turn345 = {
         x: "-0.8865",
         y: "-1.1034",
       },
-      "321": {
+      321: {
         n: "Sargas",
         puid: 40,
         uid: 321,
@@ -5288,7 +5288,7 @@ export const turn345 = {
         x: "-1.2689",
         y: "-1.0145",
       },
-      "323": {
+      323: {
         n: "Eta Vindemiatrix",
         puid: 40,
         uid: 323,
@@ -5296,7 +5296,7 @@ export const turn345 = {
         x: "-0.8875",
         y: "-1.4805",
       },
-      "324": {
+      324: {
         n: "New Sulafat",
         puid: 40,
         uid: 324,
@@ -5304,7 +5304,7 @@ export const turn345 = {
         x: "-0.7732",
         y: "-1.5295",
       },
-      "325": {
+      325: {
         n: "Gamma Alaraph",
         puid: 40,
         uid: 325,
@@ -5312,7 +5312,7 @@ export const turn345 = {
         x: "-0.4215",
         y: "-1.0238",
       },
-      "326": {
+      326: {
         c: 0,
         e: 0,
         ga: 0,
@@ -5328,7 +5328,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "-1.7854",
       },
-      "327": {
+      327: {
         n: "Zavijava",
         puid: 40,
         uid: 327,
@@ -5336,7 +5336,7 @@ export const turn345 = {
         x: "-0.2605",
         y: "-0.8701",
       },
-      "328": {
+      328: {
         c: 0,
         e: 0,
         ga: 0,
@@ -5352,7 +5352,7 @@ export const turn345 = {
         x: "-1.9146",
         y: "-1.2326",
       },
-      "329": {
+      329: {
         n: "Zeta Pax",
         puid: 40,
         uid: 329,
@@ -5360,7 +5360,7 @@ export const turn345 = {
         x: "-0.0808",
         y: "-0.8219",
       },
-      "33": {
+      33: {
         n: "Ice",
         puid: 16,
         uid: 33,
@@ -5368,7 +5368,7 @@ export const turn345 = {
         x: "-4.2249",
         y: "-1.3342",
       },
-      "330": {
+      330: {
         c: 0,
         e: 1,
         ga: 0,
@@ -5384,7 +5384,7 @@ export const turn345 = {
         x: "-1.2217",
         y: "-2.1410",
       },
-      "331": {
+      331: {
         c: 0,
         e: 0,
         ga: 0,
@@ -5400,7 +5400,7 @@ export const turn345 = {
         x: "-2.1365",
         y: "-1.4786",
       },
-      "332": {
+      332: {
         n: "Last Tyl",
         puid: 40,
         uid: 332,
@@ -5408,7 +5408,7 @@ export const turn345 = {
         x: "0.2126",
         y: "-0.8576",
       },
-      "333": {
+      333: {
         n: "Aldebaran",
         puid: 60,
         uid: 333,
@@ -5416,7 +5416,7 @@ export const turn345 = {
         x: "-0.7982",
         y: "-2.4158",
       },
-      "334": {
+      334: {
         c: 0,
         e: 0,
         ga: 0,
@@ -5432,7 +5432,7 @@ export const turn345 = {
         x: "-2.1465",
         y: "-0.1441",
       },
-      "335": {
+      335: {
         n: "White Jib",
         puid: 29,
         uid: 335,
@@ -5440,7 +5440,7 @@ export const turn345 = {
         x: "-1.0976",
         y: "0.2985",
       },
-      "337": {
+      337: {
         n: "Algenib",
         puid: 29,
         uid: 337,
@@ -5448,7 +5448,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "0.4986",
       },
-      "339": {
+      339: {
         c: 0.5,
         e: 4,
         ga: 0,
@@ -5464,7 +5464,7 @@ export const turn345 = {
         x: "-1.5542",
         y: "0.2081",
       },
-      "34": {
+      34: {
         c: 0,
         e: 5,
         ga: 0,
@@ -5480,7 +5480,7 @@ export const turn345 = {
         x: "-1.9110",
         y: "-1.9542",
       },
-      "340": {
+      340: {
         n: "Pi Alrami",
         puid: 40,
         uid: 340,
@@ -5488,7 +5488,7 @@ export const turn345 = {
         x: "-0.9274",
         y: "-0.4431",
       },
-      "341": {
+      341: {
         n: "Dry Electra",
         puid: 29,
         uid: 341,
@@ -5496,7 +5496,7 @@ export const turn345 = {
         x: "-1.2174",
         y: "0.8465",
       },
-      "342": {
+      342: {
         n: "Mu Taygeta",
         puid: 40,
         uid: 342,
@@ -5504,7 +5504,7 @@ export const turn345 = {
         x: "-0.8951",
         y: "-0.6262",
       },
-      "343": {
+      343: {
         c: 0,
         e: 0,
         ga: 0,
@@ -5520,7 +5520,7 @@ export const turn345 = {
         x: "-1.7665",
         y: "-0.3502",
       },
-      "344": {
+      344: {
         n: "Beta Sadalmelik",
         puid: 29,
         uid: 344,
@@ -5528,7 +5528,7 @@ export const turn345 = {
         x: "-1.9287",
         y: "0.5797",
       },
-      "345": {
+      345: {
         c: 0.7,
         e: 0,
         ga: 0,
@@ -5544,7 +5544,7 @@ export const turn345 = {
         x: "-2.0130",
         y: "-0.2938",
       },
-      "347": {
+      347: {
         c: 1,
         e: 3,
         ga: 0,
@@ -5560,7 +5560,7 @@ export const turn345 = {
         x: "-1.4672",
         y: "-1.0270",
       },
-      "348": {
+      348: {
         n: "Cold Sadatoni",
         puid: 35,
         uid: 348,
@@ -5568,7 +5568,7 @@ export const turn345 = {
         x: "0.0069",
         y: "1.0362",
       },
-      "349": {
+      349: {
         n: "Vega",
         puid: 35,
         uid: 349,
@@ -5576,7 +5576,7 @@ export const turn345 = {
         x: "-0.6584",
         y: "1.5651",
       },
-      "35": {
+      35: {
         c: 0,
         e: 5,
         ga: 0,
@@ -5592,7 +5592,7 @@ export const turn345 = {
         x: "-3.1510",
         y: "-1.9542",
       },
-      "350": {
+      350: {
         n: "Tau Sheliak",
         puid: 49,
         uid: 350,
@@ -5600,7 +5600,7 @@ export const turn345 = {
         x: "-1.8036",
         y: "1.2495",
       },
-      "351": {
+      351: {
         n: "Nova Rub",
         puid: 49,
         uid: 351,
@@ -5608,7 +5608,7 @@ export const turn345 = {
         x: "-1.6964",
         y: "1.4758",
       },
-      "354": {
+      354: {
         n: "Pure Sasin",
         puid: 35,
         uid: 354,
@@ -5616,7 +5616,7 @@ export const turn345 = {
         x: "-1.1401",
         y: "1.3271",
       },
-      "355": {
+      355: {
         n: "Delta Alrami",
         puid: 29,
         uid: 355,
@@ -5624,7 +5624,7 @@ export const turn345 = {
         x: "-1.6542",
         y: "0.6215",
       },
-      "356": {
+      356: {
         n: "Nova Alioth",
         puid: 35,
         uid: 356,
@@ -5632,7 +5632,7 @@ export const turn345 = {
         x: "-1.1991",
         y: "1.7788",
       },
-      "357": {
+      357: {
         n: "Zeta Dux",
         puid: 49,
         uid: 357,
@@ -5640,7 +5640,7 @@ export const turn345 = {
         x: "-1.5151",
         y: "2.0253",
       },
-      "359": {
+      359: {
         n: "Alpheratz",
         puid: -1,
         uid: 359,
@@ -5648,7 +5648,7 @@ export const turn345 = {
         x: "-2.6262",
         y: "1.0651",
       },
-      "36": {
+      36: {
         n: "Alfecca",
         puid: 26,
         uid: 36,
@@ -5656,7 +5656,7 @@ export const turn345 = {
         x: "-4.2249",
         y: "-2.5742",
       },
-      "360": {
+      360: {
         n: "Odd Arcturus",
         puid: 35,
         uid: 360,
@@ -5664,7 +5664,7 @@ export const turn345 = {
         x: "-0.5906",
         y: "1.0489",
       },
-      "361": {
+      361: {
         n: "Propus",
         puid: -1,
         uid: 361,
@@ -5672,7 +5672,7 @@ export const turn345 = {
         x: "-2.8272",
         y: "1.2365",
       },
-      "362": {
+      362: {
         n: "Zeta Diadem",
         puid: 0,
         uid: 362,
@@ -5680,7 +5680,7 @@ export const turn345 = {
         x: "-1.6542",
         y: "2.5025",
       },
-      "365": {
+      365: {
         n: "Hot Alaraph",
         puid: 0,
         uid: 365,
@@ -5688,7 +5688,7 @@ export const turn345 = {
         x: "-2.1265",
         y: "2.2843",
       },
-      "366": {
+      366: {
         n: "New Altais",
         puid: 0,
         uid: 366,
@@ -5696,7 +5696,7 @@ export const turn345 = {
         x: "-2.1348",
         y: "2.1113",
       },
-      "367": {
+      367: {
         n: "Talitha",
         puid: 0,
         uid: 367,
@@ -5704,7 +5704,7 @@ export const turn345 = {
         x: "-2.2449",
         y: "2.6451",
       },
-      "369": {
+      369: {
         n: "Alderamin",
         puid: 0,
         uid: 369,
@@ -5712,7 +5712,7 @@ export const turn345 = {
         x: "-1.9387",
         y: "2.7102",
       },
-      "37": {
+      37: {
         n: "Dry Neshmet",
         puid: 15,
         uid: 37,
@@ -5720,7 +5720,7 @@ export const turn345 = {
         x: "-5.2988",
         y: "-3.1942",
       },
-      "371": {
+      371: {
         n: "Grand Sadr",
         puid: 49,
         uid: 371,
@@ -5728,7 +5728,7 @@ export const turn345 = {
         x: "-1.9750",
         y: "1.6687",
       },
-      "372": {
+      372: {
         n: "Young Alpha",
         puid: 49,
         uid: 372,
@@ -5736,7 +5736,7 @@ export const turn345 = {
         x: "-1.5805",
         y: "1.9099",
       },
-      "373": {
+      373: {
         n: "Slow Bunda",
         puid: 0,
         uid: 373,
@@ -5744,7 +5744,7 @@ export const turn345 = {
         x: "-2.7212",
         y: "3.0846",
       },
-      "374": {
+      374: {
         n: "Alpha Enif",
         puid: 49,
         uid: 374,
@@ -5752,7 +5752,7 @@ export const turn345 = {
         x: "-2.0187",
         y: "1.3570",
       },
-      "375": {
+      375: {
         n: "Wild Maia",
         puid: -1,
         uid: 375,
@@ -5760,7 +5760,7 @@ export const turn345 = {
         x: "-3.0379",
         y: "1.5467",
       },
-      "376": {
+      376: {
         n: "Dull Celaeno",
         puid: 0,
         uid: 376,
@@ -5768,7 +5768,7 @@ export const turn345 = {
         x: "-1.3133",
         y: "2.9832",
       },
-      "377": {
+      377: {
         n: "Bunda",
         puid: -1,
         uid: 377,
@@ -5776,7 +5776,7 @@ export const turn345 = {
         x: "-2.4940",
         y: "1.0636",
       },
-      "378": {
+      378: {
         n: "Betria",
         puid: 35,
         uid: 378,
@@ -5784,7 +5784,7 @@ export const turn345 = {
         x: "-1.0973",
         y: "1.6309",
       },
-      "379": {
+      379: {
         n: "Urn",
         puid: 21,
         uid: 379,
@@ -5792,7 +5792,7 @@ export const turn345 = {
         x: "-3.3865",
         y: "3.2437",
       },
-      "38": {
+      38: {
         n: "Fast Mirzam",
         puid: 48,
         uid: 38,
@@ -5800,7 +5800,7 @@ export const turn345 = {
         x: "-5.5315",
         y: "-4.4122",
       },
-      "381": {
+      381: {
         n: "Gamma Dnoces",
         puid: 21,
         uid: 381,
@@ -5808,7 +5808,7 @@ export const turn345 = {
         x: "-3.2817",
         y: "2.4216",
       },
-      "382": {
+      382: {
         n: "Marfik",
         puid: 21,
         uid: 382,
@@ -5816,7 +5816,7 @@ export const turn345 = {
         x: "-3.4922",
         y: "2.2071",
       },
-      "383": {
+      383: {
         n: "Pi Botein",
         puid: 21,
         uid: 383,
@@ -5824,7 +5824,7 @@ export const turn345 = {
         x: "-3.6735",
         y: "2.9319",
       },
-      "384": {
+      384: {
         n: "Hard Mahasim",
         puid: 50,
         uid: 384,
@@ -5832,7 +5832,7 @@ export const turn345 = {
         x: "-3.6273",
         y: "3.0473",
       },
-      "385": {
+      385: {
         n: "Old Fad",
         puid: 50,
         uid: 385,
@@ -5840,7 +5840,7 @@ export const turn345 = {
         x: "-3.9959",
         y: "2.8959",
       },
-      "386": {
+      386: {
         n: "Young Deneb",
         puid: 0,
         uid: 386,
@@ -5848,7 +5848,7 @@ export const turn345 = {
         x: "-2.8269",
         y: "2.7853",
       },
-      "389": {
+      389: {
         n: "Electra",
         puid: -1,
         uid: 389,
@@ -5856,7 +5856,7 @@ export const turn345 = {
         x: "-3.8297",
         y: "1.6156",
       },
-      "39": {
+      39: {
         n: "Soft Wazn",
         puid: 48,
         uid: 39,
@@ -5864,7 +5864,7 @@ export const turn345 = {
         x: "-6.4699",
         y: "-3.6016",
       },
-      "390": {
+      390: {
         n: "Alnilam",
         puid: 21,
         uid: 390,
@@ -5872,7 +5872,7 @@ export const turn345 = {
         x: "-3.0357",
         y: "3.5219",
       },
-      "391": {
+      391: {
         n: "Terebellum",
         puid: 57,
         uid: 391,
@@ -5880,7 +5880,7 @@ export const turn345 = {
         x: "-2.6627",
         y: "3.3725",
       },
-      "393": {
+      393: {
         n: "Sigma Algol",
         puid: 0,
         uid: 393,
@@ -5888,7 +5888,7 @@ export const turn345 = {
         x: "-2.2605",
         y: "3.1174",
       },
-      "396": {
+      396: {
         n: "Kuma",
         puid: 57,
         uid: 396,
@@ -5896,7 +5896,7 @@ export const turn345 = {
         x: "-2.7028",
         y: "3.2394",
       },
-      "397": {
+      397: {
         n: "Mirzam",
         puid: 57,
         uid: 397,
@@ -5904,7 +5904,7 @@ export const turn345 = {
         x: "-2.3456",
         y: "3.4815",
       },
-      "4": {
+      4: {
         n: "Beta Biham",
         puid: 6,
         uid: 4,
@@ -5912,7 +5912,7 @@ export const turn345 = {
         x: "2.1565",
         y: "-1.3342",
       },
-      "40": {
+      40: {
         n: "Alrischa",
         puid: 7,
         uid: 40,
@@ -5920,7 +5920,7 @@ export const turn345 = {
         x: "-6.7027",
         y: "-4.8196",
       },
-      "400": {
+      400: {
         n: "Alpha Cheleb",
         puid: -1,
         uid: 400,
@@ -5928,7 +5928,7 @@ export const turn345 = {
         x: "-2.3289",
         y: "3.9853",
       },
-      "401": {
+      401: {
         n: "Menkent",
         puid: -1,
         uid: 401,
@@ -5936,7 +5936,7 @@ export const turn345 = {
         x: "-2.2265",
         y: "4.0239",
       },
-      "402": {
+      402: {
         n: "Gamma Pollux",
         puid: 50,
         uid: 402,
@@ -5944,7 +5944,7 @@ export const turn345 = {
         x: "-3.4796",
         y: "3.5513",
       },
-      "403": {
+      403: {
         n: "Eta Kat",
         puid: 21,
         uid: 403,
@@ -5952,7 +5952,7 @@ export const turn345 = {
         x: "-3.4139",
         y: "2.9687",
       },
-      "404": {
+      404: {
         n: "Giennah",
         puid: 21,
         uid: 404,
@@ -5960,7 +5960,7 @@ export const turn345 = {
         x: "-3.3795",
         y: "2.7836",
       },
-      "405": {
+      405: {
         n: "Nova Spy",
         puid: 21,
         uid: 405,
@@ -5968,7 +5968,7 @@ export const turn345 = {
         x: "-3.5663",
         y: "2.8621",
       },
-      "407": {
+      407: {
         n: "Odd Eltanin",
         puid: -1,
         uid: 407,
@@ -5976,7 +5976,7 @@ export const turn345 = {
         x: "-1.9555",
         y: "4.5186",
       },
-      "408": {
+      408: {
         n: "New Azha",
         puid: -1,
         uid: 408,
@@ -5984,7 +5984,7 @@ export const turn345 = {
         x: "-1.4499",
         y: "4.0559",
       },
-      "409": {
+      409: {
         n: "Nova Fin",
         puid: 0,
         uid: 409,
@@ -5992,7 +5992,7 @@ export const turn345 = {
         x: "-1.4922",
         y: "2.6487",
       },
-      "41": {
+      41: {
         n: "Nu Sasin",
         puid: 32,
         uid: 41,
@@ -6000,7 +6000,7 @@ export const turn345 = {
         x: "-6.6574",
         y: "-6.0588",
       },
-      "410": {
+      410: {
         n: "Lush Sadachbia",
         puid: 50,
         uid: 410,
@@ -6008,7 +6008,7 @@ export const turn345 = {
         x: "-4.0145",
         y: "3.6178",
       },
-      "411": {
+      411: {
         n: "Lush Alkes",
         puid: 50,
         uid: 411,
@@ -6016,7 +6016,7 @@ export const turn345 = {
         x: "-3.9208",
         y: "3.4722",
       },
-      "412": {
+      412: {
         n: "Hard Rana",
         puid: 50,
         uid: 412,
@@ -6024,7 +6024,7 @@ export const turn345 = {
         x: "-3.7069",
         y: "3.9895",
       },
-      "413": {
+      413: {
         n: "Wazn",
         puid: 50,
         uid: 413,
@@ -6032,7 +6032,7 @@ export const turn345 = {
         x: "-3.4964",
         y: "3.8610",
       },
-      "414": {
+      414: {
         n: "Dry Albali",
         puid: 44,
         uid: 414,
@@ -6040,7 +6040,7 @@ export const turn345 = {
         x: "-4.2351",
         y: "4.1141",
       },
-      "415": {
+      415: {
         n: "Tau Alniyat",
         puid: 50,
         uid: 415,
@@ -6048,7 +6048,7 @@ export const turn345 = {
         x: "-3.2869",
         y: "3.6607",
       },
-      "416": {
+      416: {
         n: "Atlas",
         puid: 50,
         uid: 416,
@@ -6056,7 +6056,7 @@ export const turn345 = {
         x: "-3.8379",
         y: "3.0090",
       },
-      "417": {
+      417: {
         n: "Last Betria",
         puid: 50,
         uid: 417,
@@ -6064,7 +6064,7 @@ export const turn345 = {
         x: "-3.2059",
         y: "4.1148",
       },
-      "418": {
+      418: {
         n: "Ire",
         puid: 50,
         uid: 418,
@@ -6072,7 +6072,7 @@ export const turn345 = {
         x: "-3.3868",
         y: "4.4466",
       },
-      "419": {
+      419: {
         n: "Zeta Baham",
         puid: 44,
         uid: 419,
@@ -6080,7 +6080,7 @@ export const turn345 = {
         x: "-4.8529",
         y: "3.9697",
       },
-      "42": {
+      42: {
         n: "Elm",
         puid: 46,
         uid: 42,
@@ -6088,7 +6088,7 @@ export const turn345 = {
         x: "-5.4597",
         y: "-6.3797",
       },
-      "420": {
+      420: {
         n: "Hard Tureis",
         puid: 50,
         uid: 420,
@@ -6096,7 +6096,7 @@ export const turn345 = {
         x: "-3.4431",
         y: "4.6931",
       },
-      "422": {
+      422: {
         n: "Ancha",
         puid: 50,
         uid: 422,
@@ -6104,7 +6104,7 @@ export const turn345 = {
         x: "-3.6797",
         y: "4.9610",
       },
-      "423": {
+      423: {
         n: "Tau Nog",
         puid: 21,
         uid: 423,
@@ -6112,7 +6112,7 @@ export const turn345 = {
         x: "-3.7811",
         y: "2.3604",
       },
-      "424": {
+      424: {
         n: "Gamma Kraz",
         puid: 44,
         uid: 424,
@@ -6120,7 +6120,7 @@ export const turn345 = {
         x: "-5.2640",
         y: "4.2109",
       },
-      "425": {
+      425: {
         n: "Red Lesath",
         puid: 44,
         uid: 425,
@@ -6128,7 +6128,7 @@ export const turn345 = {
         x: "-5.0638",
         y: "3.5391",
       },
-      "426": {
+      426: {
         n: "Nu Menkent",
         puid: 44,
         uid: 426,
@@ -6136,7 +6136,7 @@ export const turn345 = {
         x: "-5.2219",
         y: "3.8974",
       },
-      "427": {
+      427: {
         n: "AlNair",
         puid: 44,
         uid: 427,
@@ -6144,7 +6144,7 @@ export const turn345 = {
         x: "-4.9708",
         y: "3.3780",
       },
-      "428": {
+      428: {
         n: "Grand Sadalsuud",
         puid: 44,
         uid: 428,
@@ -6152,7 +6152,7 @@ export const turn345 = {
         x: "-5.1014",
         y: "4.0964",
       },
-      "429": {
+      429: {
         n: "Hot Angetenar",
         puid: 44,
         uid: 429,
@@ -6160,7 +6160,7 @@ export const turn345 = {
         x: "-4.9602",
         y: "3.1785",
       },
-      "43": {
+      43: {
         n: "Blue Kraz",
         puid: 22,
         uid: 43,
@@ -6168,7 +6168,7 @@ export const turn345 = {
         x: "-6.3365",
         y: "-7.2565",
       },
-      "430": {
+      430: {
         n: "Praecipua",
         puid: 44,
         uid: 430,
@@ -6176,7 +6176,7 @@ export const turn345 = {
         x: "-4.7039",
         y: "4.1039",
       },
-      "431": {
+      431: {
         n: "Theta Dabih",
         puid: 44,
         uid: 431,
@@ -6184,7 +6184,7 @@ export const turn345 = {
         x: "-4.5256",
         y: "3.3150",
       },
-      "432": {
+      432: {
         n: "Hot Wasat",
         puid: 44,
         uid: 432,
@@ -6192,7 +6192,7 @@ export const turn345 = {
         x: "-5.2086",
         y: "4.4670",
       },
-      "433": {
+      433: {
         n: "Gomeisa",
         puid: 44,
         uid: 433,
@@ -6200,7 +6200,7 @@ export const turn345 = {
         x: "-5.6515",
         y: "2.9367",
       },
-      "434": {
+      434: {
         n: "Young Enif",
         puid: 44,
         uid: 434,
@@ -6208,7 +6208,7 @@ export const turn345 = {
         x: "-4.4408",
         y: "4.3669",
       },
-      "435": {
+      435: {
         n: "Last Ash",
         puid: 44,
         uid: 435,
@@ -6216,7 +6216,7 @@ export const turn345 = {
         x: "-4.9512",
         y: "4.7326",
       },
-      "436": {
+      436: {
         n: "Enif",
         puid: 50,
         uid: 436,
@@ -6224,7 +6224,7 @@ export const turn345 = {
         x: "-4.3848",
         y: "2.7705",
       },
-      "437": {
+      437: {
         n: "Procyon",
         puid: 44,
         uid: 437,
@@ -6232,7 +6232,7 @@ export const turn345 = {
         x: "-4.7058",
         y: "4.8587",
       },
-      "438": {
+      438: {
         n: "Young Alshat",
         puid: 50,
         uid: 438,
@@ -6240,7 +6240,7 @@ export const turn345 = {
         x: "-3.8261",
         y: "4.0208",
       },
-      "439": {
+      439: {
         n: "Dull Ice",
         puid: 38,
         uid: 439,
@@ -6248,7 +6248,7 @@ export const turn345 = {
         x: "-6.2510",
         y: "2.7357",
       },
-      "44": {
+      44: {
         n: "Markab",
         puid: 23,
         uid: 44,
@@ -6256,7 +6256,7 @@ export const turn345 = {
         x: "-5.1388",
         y: "-7.5774",
       },
-      "440": {
+      440: {
         n: "Menkib",
         puid: 58,
         uid: 440,
@@ -6264,7 +6264,7 @@ export const turn345 = {
         x: "-5.3847",
         y: "2.6012",
       },
-      "441": {
+      441: {
         n: "Port Ankaa",
         puid: 44,
         uid: 441,
@@ -6272,7 +6272,7 @@ export const turn345 = {
         x: "-5.6880",
         y: "2.5544",
       },
-      "442": {
+      442: {
         n: "Dheneb",
         puid: 58,
         uid: 442,
@@ -6280,7 +6280,7 @@ export const turn345 = {
         x: "-5.1288",
         y: "2.5296",
       },
-      "443": {
+      443: {
         n: "Dull Ruchbah",
         puid: 38,
         uid: 443,
@@ -6288,7 +6288,7 @@ export const turn345 = {
         x: "-5.8741",
         y: "2.3602",
       },
-      "444": {
+      444: {
         n: "Old Zaniah",
         puid: 38,
         uid: 444,
@@ -6296,7 +6296,7 @@ export const turn345 = {
         x: "-5.9738",
         y: "2.3806",
       },
-      "445": {
+      445: {
         n: "Alpha Aludra",
         puid: 58,
         uid: 445,
@@ -6304,7 +6304,7 @@ export const turn345 = {
         x: "-5.5665",
         y: "1.8656",
       },
-      "446": {
+      446: {
         n: "Odd Fad",
         puid: 58,
         uid: 446,
@@ -6312,7 +6312,7 @@ export const turn345 = {
         x: "-4.7517",
         y: "2.4713",
       },
-      "447": {
+      447: {
         n: "Last Aladfar",
         puid: -1,
         uid: 447,
@@ -6320,7 +6320,7 @@ export const turn345 = {
         x: "-4.7660",
         y: "2.0708",
       },
-      "448": {
+      448: {
         n: "Zit",
         puid: 38,
         uid: 448,
@@ -6328,7 +6328,7 @@ export const turn345 = {
         x: "-6.3401",
         y: "2.3160",
       },
-      "449": {
+      449: {
         n: "Ankaa",
         puid: 38,
         uid: 449,
@@ -6336,7 +6336,7 @@ export const turn345 = {
         x: "-6.4131",
         y: "2.7267",
       },
-      "45": {
+      45: {
         n: "Asp",
         puid: 54,
         uid: 45,
@@ -6344,7 +6344,7 @@ export const turn345 = {
         x: "-3.8996",
         y: "-7.6227",
       },
-      "450": {
+      450: {
         n: "Wet Alshain",
         puid: 44,
         uid: 450,
@@ -6352,7 +6352,7 @@ export const turn345 = {
         x: "-4.6960",
         y: "3.2349",
       },
-      "453": {
+      453: {
         n: "Shy",
         puid: 11,
         uid: 453,
@@ -6360,7 +6360,7 @@ export const turn345 = {
         x: "-6.4206",
         y: "3.4322",
       },
-      "454": {
+      454: {
         n: "Bellatrix",
         puid: 38,
         uid: 454,
@@ -6368,7 +6368,7 @@ export const turn345 = {
         x: "-6.9117",
         y: "2.4713",
       },
-      "455": {
+      455: {
         n: "Paw",
         puid: 11,
         uid: 455,
@@ -6376,7 +6376,7 @@ export const turn345 = {
         x: "-6.2304",
         y: "3.2420",
       },
-      "456": {
+      456: {
         n: "Fort Birdun",
         puid: 11,
         uid: 456,
@@ -6384,7 +6384,7 @@ export const turn345 = {
         x: "-6.1260",
         y: "3.2266",
       },
-      "457": {
+      457: {
         n: "Ick",
         puid: 11,
         uid: 457,
@@ -6392,7 +6392,7 @@ export const turn345 = {
         x: "-6.6610",
         y: "3.2611",
       },
-      "458": {
+      458: {
         n: "Wasat",
         puid: 11,
         uid: 458,
@@ -6400,7 +6400,7 @@ export const turn345 = {
         x: "-6.4832",
         y: "3.7512",
       },
-      "459": {
+      459: {
         n: "Pan",
         puid: 11,
         uid: 459,
@@ -6408,7 +6408,7 @@ export const turn345 = {
         x: "-6.8096",
         y: "3.5687",
       },
-      "46": {
+      46: {
         n: "Wet Alhena",
         puid: 20,
         uid: 46,
@@ -6416,7 +6416,7 @@ export const turn345 = {
         x: "-3.4922",
         y: "-6.4515",
       },
-      "460": {
+      460: {
         n: "New Sarin",
         puid: 11,
         uid: 460,
@@ -6424,7 +6424,7 @@ export const turn345 = {
         x: "-5.7238",
         y: "3.4017",
       },
-      "461": {
+      461: {
         n: "Alcor",
         puid: 11,
         uid: 461,
@@ -6432,7 +6432,7 @@ export const turn345 = {
         x: "-6.9782",
         y: "3.0489",
       },
-      "462": {
+      462: {
         n: "Homam",
         puid: 11,
         uid: 462,
@@ -6440,7 +6440,7 @@ export const turn345 = {
         x: "-6.6105",
         y: "4.1008",
       },
-      "463": {
+      463: {
         n: "Nova Becrux",
         puid: 44,
         uid: 463,
@@ -6448,7 +6448,7 @@ export const turn345 = {
         x: "-5.4730",
         y: "3.5795",
       },
-      "464": {
+      464: {
         n: "Pure Shaula",
         puid: 11,
         uid: 464,
@@ -6456,7 +6456,7 @@ export const turn345 = {
         x: "-6.3365",
         y: "4.3351",
       },
-      "465": {
+      465: {
         n: "Beta Benetnasch",
         puid: 44,
         uid: 465,
@@ -6464,7 +6464,7 @@ export const turn345 = {
         x: "-5.3577",
         y: "2.8917",
       },
-      "466": {
+      466: {
         n: "Port Ugh",
         puid: 11,
         uid: 466,
@@ -6472,7 +6472,7 @@ export const turn345 = {
         x: "-6.5402",
         y: "4.5033",
       },
-      "468": {
+      468: {
         n: "Asterion",
         puid: 58,
         uid: 468,
@@ -6480,7 +6480,7 @@ export const turn345 = {
         x: "-5.4629",
         y: "2.3070",
       },
-      "469": {
+      469: {
         n: "Kappa Raw",
         puid: 44,
         uid: 469,
@@ -6488,7 +6488,7 @@ export const turn345 = {
         x: "-5.2242",
         y: "2.4148",
       },
-      "47": {
+      47: {
         n: "Nu Lesath",
         puid: 36,
         uid: 47,
@@ -6496,7 +6496,7 @@ export const turn345 = {
         x: "-2.6816",
         y: "-7.3899",
       },
-      "470": {
+      470: {
         n: "Blue Rana",
         puid: 38,
         uid: 470,
@@ -6504,7 +6504,7 @@ export const turn345 = {
         x: "-6.7984",
         y: "2.0990",
       },
-      "471": {
+      471: {
         n: "Red Ash",
         puid: 38,
         uid: 471,
@@ -6512,7 +6512,7 @@ export const turn345 = {
         x: "-6.7203",
         y: "2.3851",
       },
-      "472": {
+      472: {
         n: "Lost Algorab",
         puid: 38,
         uid: 472,
@@ -6520,7 +6520,7 @@ export const turn345 = {
         x: "-6.9327",
         y: "2.3431",
       },
-      "473": {
+      473: {
         n: "Mu Nash",
         puid: 38,
         uid: 473,
@@ -6528,7 +6528,7 @@ export const turn345 = {
         x: "-6.6948",
         y: "2.5777",
       },
-      "474": {
+      474: {
         n: "Yum",
         puid: 38,
         uid: 474,
@@ -6536,7 +6536,7 @@ export const turn345 = {
         x: "-7.0265",
         y: "2.5195",
       },
-      "475": {
+      475: {
         n: "Xi Wezen",
         puid: 38,
         uid: 475,
@@ -6544,7 +6544,7 @@ export const turn345 = {
         x: "-6.6038",
         y: "2.7630",
       },
-      "476": {
+      476: {
         n: "Grand Gomeisa",
         puid: 11,
         uid: 476,
@@ -6552,7 +6552,7 @@ export const turn345 = {
         x: "-7.1581",
         y: "2.6510",
       },
-      "477": {
+      477: {
         n: "Odd Elk",
         puid: 28,
         uid: 477,
@@ -6560,7 +6560,7 @@ export const turn345 = {
         x: "-6.1980",
         y: "1.4942",
       },
-      "478": {
+      478: {
         n: "Delta Thabit",
         puid: 38,
         uid: 478,
@@ -6568,7 +6568,7 @@ export const turn345 = {
         x: "-7.3898",
         y: "2.6631",
       },
-      "479": {
+      479: {
         n: "Last Alniyat",
         puid: -1,
         uid: 479,
@@ -6576,7 +6576,7 @@ export const turn345 = {
         x: "-7.6407",
         y: "2.0643",
       },
-      "48": {
+      48: {
         n: "Last Phact",
         puid: 43,
         uid: 48,
@@ -6584,7 +6584,7 @@ export const turn345 = {
         x: "-2.2742",
         y: "-6.2188",
       },
-      "480": {
+      480: {
         n: "Cold Alzir",
         puid: 11,
         uid: 480,
@@ -6592,7 +6592,7 @@ export const turn345 = {
         x: "-7.0268",
         y: "3.1652",
       },
-      "481": {
+      481: {
         n: "Zeta Azaleh",
         puid: 58,
         uid: 481,
@@ -6600,7 +6600,7 @@ export const turn345 = {
         x: "-5.5943",
         y: "2.6461",
       },
-      "482": {
+      482: {
         n: "Slow TseenKee",
         puid: 11,
         uid: 482,
@@ -6608,7 +6608,7 @@ export const turn345 = {
         x: "-6.8773",
         y: "3.3971",
       },
-      "483": {
+      483: {
         n: "Alpha Aldib",
         puid: 11,
         uid: 483,
@@ -6616,7 +6616,7 @@ export const turn345 = {
         x: "-5.9779",
         y: "3.3273",
       },
-      "484": {
+      484: {
         n: "Grand Yay",
         puid: 44,
         uid: 484,
@@ -6624,7 +6624,7 @@ export const turn345 = {
         x: "-5.2549",
         y: "2.5261",
       },
-      "485": {
+      485: {
         n: "Etamin",
         puid: 28,
         uid: 485,
@@ -6632,7 +6632,7 @@ export const turn345 = {
         x: "-6.6514",
         y: "0.7702",
       },
-      "486": {
+      486: {
         n: "Tau Acrab",
         puid: 28,
         uid: 486,
@@ -6640,7 +6640,7 @@ export const turn345 = {
         x: "-6.8745",
         y: "1.0830",
       },
-      "487": {
+      487: {
         n: "Tau Hadar",
         puid: 28,
         uid: 487,
@@ -6648,7 +6648,7 @@ export const turn345 = {
         x: "-6.7320",
         y: "1.2459",
       },
-      "488": {
+      488: {
         n: "Furud",
         puid: 28,
         uid: 488,
@@ -6656,7 +6656,7 @@ export const turn345 = {
         x: "-6.3513",
         y: "1.1572",
       },
-      "489": {
+      489: {
         n: "Eta Atria",
         puid: 28,
         uid: 489,
@@ -6664,7 +6664,7 @@ export const turn345 = {
         x: "-6.1886",
         y: "1.0018",
       },
-      "49": {
+      49: {
         n: "Kappa AlKurud",
         puid: 14,
         uid: 49,
@@ -6672,7 +6672,7 @@ export const turn345 = {
         x: "-1.6542",
         y: "-5.1449",
       },
-      "490": {
+      490: {
         n: "Black Ale",
         puid: 25,
         uid: 490,
@@ -6680,7 +6680,7 @@ export const turn345 = {
         x: "-6.7027",
         y: "0.2962",
       },
-      "491": {
+      491: {
         n: "Fast Albaldah",
         puid: 25,
         uid: 491,
@@ -6688,7 +6688,7 @@ export const turn345 = {
         x: "-6.9448",
         y: "0.2459",
       },
-      "492": {
+      492: {
         n: "Mega Heze",
         puid: 25,
         uid: 492,
@@ -6696,7 +6696,7 @@ export const turn345 = {
         x: "-6.8418",
         y: "0.1223",
       },
-      "493": {
+      493: {
         n: "Red Algenib",
         puid: -1,
         uid: 493,
@@ -6704,7 +6704,7 @@ export const turn345 = {
         x: "-7.5831",
         y: "0.7559",
       },
-      "494": {
+      494: {
         n: "Dabih",
         puid: 25,
         uid: 494,
@@ -6712,7 +6712,7 @@ export const turn345 = {
         x: "-5.8942",
         y: "0.3450",
       },
-      "496": {
+      496: {
         n: "Zeta Chertan",
         puid: -1,
         uid: 496,
@@ -6720,7 +6720,7 @@ export const turn345 = {
         x: "-7.2892",
         y: "1.9270",
       },
-      "498": {
+      498: {
         n: "Hadir",
         puid: 1,
         uid: 498,
@@ -6728,7 +6728,7 @@ export const turn345 = {
         x: "-5.4256",
         y: "1.3760",
       },
-      "499": {
+      499: {
         n: "Lush Elm",
         puid: 25,
         uid: 499,
@@ -6736,7 +6736,7 @@ export const turn345 = {
         x: "-5.9767",
         y: "-0.3463",
       },
-      "5": {
+      5: {
         n: "Korn",
         puid: 62,
         uid: 5,
@@ -6744,7 +6744,7 @@ export const turn345 = {
         x: "3.2304",
         y: "-0.7142",
       },
-      "50": {
+      50: {
         n: "Albireo",
         puid: 60,
         uid: 50,
@@ -6752,7 +6752,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "-2.8310",
       },
-      "500": {
+      500: {
         n: "Gamma Zit",
         puid: 1,
         uid: 500,
@@ -6760,7 +6760,7 @@ export const turn345 = {
         x: "-5.5576",
         y: "0.3560",
       },
-      "501": {
+      501: {
         n: "Eta Acamar",
         puid: 28,
         uid: 501,
@@ -6768,7 +6768,7 @@ export const turn345 = {
         x: "-5.5527",
         y: "0.7458",
       },
-      "502": {
+      502: {
         n: "Lush Polaris",
         puid: 28,
         uid: 502,
@@ -6776,7 +6776,7 @@ export const turn345 = {
         x: "-5.8472",
         y: "0.6187",
       },
-      "503": {
+      503: {
         n: "New Chara",
         puid: 1,
         uid: 503,
@@ -6784,7 +6784,7 @@ export const turn345 = {
         x: "-5.3848",
         y: "0.9069",
       },
-      "504": {
+      504: {
         n: "Acubens",
         puid: 1,
         uid: 504,
@@ -6792,7 +6792,7 @@ export const turn345 = {
         x: "-5.3964",
         y: "1.0080",
       },
-      "505": {
+      505: {
         n: "Zuben",
         puid: 28,
         uid: 505,
@@ -6800,7 +6800,7 @@ export const turn345 = {
         x: "-5.9664",
         y: "0.9386",
       },
-      "506": {
+      506: {
         n: "Garnet",
         puid: 25,
         uid: 506,
@@ -6808,7 +6808,7 @@ export const turn345 = {
         x: "-5.9376",
         y: "-0.0762",
       },
-      "507": {
+      507: {
         n: "Ant",
         puid: 1,
         uid: 507,
@@ -6816,7 +6816,7 @@ export const turn345 = {
         x: "-4.8378",
         y: "0.1033",
       },
-      "508": {
+      508: {
         n: "Zeta Maasym",
         puid: 25,
         uid: 508,
@@ -6824,7 +6824,7 @@ export const turn345 = {
         x: "-6.1637",
         y: "-0.1284",
       },
-      "509": {
+      509: {
         n: "Alsafi",
         puid: 58,
         uid: 509,
@@ -6832,7 +6832,7 @@ export const turn345 = {
         x: "-5.4455",
         y: "1.4870",
       },
-      "51": {
+      51: {
         n: "Sigma Hydrus",
         puid: 4,
         uid: 51,
@@ -6840,7 +6840,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "-4.0710",
       },
-      "510": {
+      510: {
         n: "Hot Girtab",
         puid: -1,
         uid: 510,
@@ -6848,7 +6848,7 @@ export const turn345 = {
         x: "-4.4883",
         y: "0.2242",
       },
-      "511": {
+      511: {
         n: "Kappa Sky",
         puid: -1,
         uid: 511,
@@ -6856,7 +6856,7 @@ export const turn345 = {
         x: "-4.9450",
         y: "1.5196",
       },
-      "512": {
+      512: {
         n: "Soft Quo",
         puid: -1,
         uid: 512,
@@ -6864,7 +6864,7 @@ export const turn345 = {
         x: "-4.8054",
         y: "1.5408",
       },
-      "513": {
+      513: {
         n: "Young Gacrux",
         puid: 10,
         uid: 513,
@@ -6872,7 +6872,7 @@ export const turn345 = {
         x: "-5.5315",
         y: "-0.8552",
       },
-      "514": {
+      514: {
         n: "Young Saw",
         puid: 16,
         uid: 514,
@@ -6880,7 +6880,7 @@ export const turn345 = {
         x: "-4.8055",
         y: "-0.7537",
       },
-      "517": {
+      517: {
         n: "New Spica",
         puid: 25,
         uid: 517,
@@ -6888,7 +6888,7 @@ export const turn345 = {
         x: "-6.7857",
         y: "-0.1919",
       },
-      "518": {
+      518: {
         n: "SteropeII",
         puid: 25,
         uid: 518,
@@ -6896,7 +6896,7 @@ export const turn345 = {
         x: "-6.6166",
         y: "-0.7099",
       },
-      "519": {
+      519: {
         n: "Denebola",
         puid: 25,
         uid: 519,
@@ -6904,7 +6904,7 @@ export const turn345 = {
         x: "-6.5606",
         y: "-0.8209",
       },
-      "52": {
+      52: {
         n: "Port Hassaleh",
         puid: 34,
         uid: 52,
@@ -6912,7 +6912,7 @@ export const turn345 = {
         x: "-0.4142",
         y: "-5.1449",
       },
-      "520": {
+      520: {
         n: "Avior",
         puid: 25,
         uid: 520,
@@ -6920,7 +6920,7 @@ export const turn345 = {
         x: "-5.9988",
         y: "-0.7021",
       },
-      "522": {
+      522: {
         n: "Dry Brachium",
         puid: 28,
         uid: 522,
@@ -6928,7 +6928,7 @@ export const turn345 = {
         x: "-6.4001",
         y: "0.4912",
       },
-      "523": {
+      523: {
         n: "Fast Alkurah",
         puid: -1,
         uid: 523,
@@ -6936,7 +6936,7 @@ export const turn345 = {
         x: "-7.3605",
         y: "-0.2289",
       },
-      "525": {
+      525: {
         n: "Bright Segin",
         puid: 1,
         uid: 525,
@@ -6944,7 +6944,7 @@ export const turn345 = {
         x: "-5.5346",
         y: "0.2332",
       },
-      "526": {
+      526: {
         n: "Red Yed",
         puid: -1,
         uid: 526,
@@ -6952,7 +6952,7 @@ export const turn345 = {
         x: "-7.4858",
         y: "-0.8933",
       },
-      "527": {
+      527: {
         n: "Young Yed",
         puid: -1,
         uid: 527,
@@ -6960,7 +6960,7 @@ export const turn345 = {
         x: "-7.4397",
         y: "0.5070",
       },
-      "528": {
+      528: {
         n: "Blue Jib",
         puid: -1,
         uid: 528,
@@ -6968,7 +6968,7 @@ export const turn345 = {
         x: "-6.3515",
         y: "-1.6606",
       },
-      "529": {
+      529: {
         n: "Black Talitha",
         puid: 1,
         uid: 529,
@@ -6976,7 +6976,7 @@ export const turn345 = {
         x: "-5.3576",
         y: "0.6265",
       },
-      "53": {
+      53: {
         n: "Eta Mix",
         puid: 5,
         uid: 53,
@@ -6984,7 +6984,7 @@ export const turn345 = {
         x: "0.2058",
         y: "-6.2188",
       },
-      "530": {
+      530: {
         n: "Dull Zaurak",
         puid: 10,
         uid: 530,
@@ -6992,7 +6992,7 @@ export const turn345 = {
         x: "-5.3118",
         y: "-0.8636",
       },
-      "531": {
+      531: {
         n: "Arc",
         puid: 10,
         uid: 531,
@@ -7000,7 +7000,7 @@ export const turn345 = {
         x: "-5.1961",
         y: "-0.4940",
       },
-      "532": {
+      532: {
         n: "Young Altais",
         puid: 16,
         uid: 532,
@@ -7008,7 +7008,7 @@ export const turn345 = {
         x: "-5.1060",
         y: "-0.4390",
       },
-      "534": {
+      534: {
         n: "Menkab",
         puid: 25,
         uid: 534,
@@ -7016,7 +7016,7 @@ export const turn345 = {
         x: "-5.7264",
         y: "-0.4148",
       },
-      "535": {
+      535: {
         n: "Atik",
         puid: 16,
         uid: 535,
@@ -7024,7 +7024,7 @@ export const turn345 = {
         x: "-4.7662",
         y: "-1.0217",
       },
-      "536": {
+      536: {
         n: "Mega Theemin",
         puid: 10,
         uid: 536,
@@ -7032,7 +7032,7 @@ export const turn345 = {
         x: "-5.9826",
         y: "-0.8975",
       },
-      "537": {
+      537: {
         n: "Mega Algedi",
         puid: 1,
         uid: 537,
@@ -7040,7 +7040,7 @@ export const turn345 = {
         x: "-5.3686",
         y: "0.0837",
       },
-      "538": {
+      538: {
         n: "New Arkab",
         puid: 16,
         uid: 538,
@@ -7048,7 +7048,7 @@ export const turn345 = {
         x: "-4.4183",
         y: "-0.5590",
       },
-      "539": {
+      539: {
         n: "Zeta Phad",
         puid: 16,
         uid: 539,
@@ -7056,7 +7056,7 @@ export const turn345 = {
         x: "-4.4440",
         y: "-1.2077",
       },
-      "54": {
+      54: {
         n: "Xi Pax",
         puid: 53,
         uid: 54,
@@ -7064,7 +7064,7 @@ export const turn345 = {
         x: "1.4238",
         y: "-6.4515",
       },
-      "540": {
+      540: {
         n: "Lush Wazn",
         puid: -1,
         uid: 540,
@@ -7072,7 +7072,7 @@ export const turn345 = {
         x: "-4.5351",
         y: "-1.4779",
       },
-      "542": {
+      542: {
         n: "Blue Errai",
         puid: 16,
         uid: 542,
@@ -7080,7 +7080,7 @@ export const turn345 = {
         x: "-4.1091",
         y: "-0.2812",
       },
-      "546": {
+      546: {
         n: "Theta Cox",
         puid: 16,
         uid: 546,
@@ -7088,7 +7088,7 @@ export const turn345 = {
         x: "-4.2878",
         y: "-1.5689",
       },
-      "547": {
+      547: {
         n: "Beta Sulafat",
         puid: 16,
         uid: 547,
@@ -7096,7 +7096,7 @@ export const turn345 = {
         x: "-4.4409",
         y: "-1.0768",
       },
-      "548": {
+      548: {
         n: "Cold Muscida",
         puid: 16,
         uid: 548,
@@ -7104,7 +7104,7 @@ export const turn345 = {
         x: "-4.2249",
         y: "-1.7632",
       },
-      "549": {
+      549: {
         n: "Nekkar",
         puid: 16,
         uid: 549,
@@ -7112,7 +7112,7 @@ export const turn345 = {
         x: "-3.7518",
         y: "-1.5548",
       },
-      "55": {
+      55: {
         n: "Slow Alrai",
         puid: 9,
         uid: 55,
@@ -7120,7 +7120,7 @@ export const turn345 = {
         x: "0.6132",
         y: "-7.3899",
       },
-      "550": {
+      550: {
         n: "Tau Baten",
         puid: 16,
         uid: 550,
@@ -7128,7 +7128,7 @@ export const turn345 = {
         x: "-4.5776",
         y: "-0.8304",
       },
-      "551": {
+      551: {
         n: "Wet Mi",
         puid: 16,
         uid: 551,
@@ -7136,7 +7136,7 @@ export const turn345 = {
         x: "-4.9088",
         y: "-1.1510",
       },
-      "552": {
+      552: {
         n: "Young Asterope",
         puid: 16,
         uid: 552,
@@ -7144,7 +7144,7 @@ export const turn345 = {
         x: "-4.4322",
         y: "-2.1079",
       },
-      "553": {
+      553: {
         c: 0,
         e: 1,
         ga: 0,
@@ -7160,7 +7160,7 @@ export const turn345 = {
         x: "-3.5400",
         y: "-1.9089",
       },
-      "555": {
+      555: {
         n: "Alphard",
         puid: 16,
         uid: 555,
@@ -7168,7 +7168,7 @@ export const turn345 = {
         x: "-5.2885",
         y: "-1.5217",
       },
-      "556": {
+      556: {
         n: "Fort Mizar",
         puid: 15,
         uid: 556,
@@ -7176,7 +7176,7 @@ export const turn345 = {
         x: "-4.9789",
         y: "-2.2328",
       },
-      "557": {
+      557: {
         c: 0,
         e: 0,
         ga: 0,
@@ -7192,7 +7192,7 @@ export const turn345 = {
         x: "-3.4987",
         y: "-2.3713",
       },
-      "558": {
+      558: {
         n: "Rigil",
         puid: 10,
         uid: 558,
@@ -7200,7 +7200,7 @@ export const turn345 = {
         x: "-5.5632",
         y: "-1.0982",
       },
-      "559": {
+      559: {
         n: "Mu Yum",
         puid: 10,
         uid: 559,
@@ -7208,7 +7208,7 @@ export const turn345 = {
         x: "-5.6274",
         y: "-0.9584",
       },
-      "56": {
+      56: {
         n: "Gamma Menchib",
         puid: 59,
         uid: 56,
@@ -7216,7 +7216,7 @@ export const turn345 = {
         x: "1.8312",
         y: "-7.6227",
       },
-      "560": {
+      560: {
         c: 0,
         e: 2,
         ga: 0,
@@ -7232,7 +7232,7 @@ export const turn345 = {
         x: "-1.9970",
         y: "-2.0771",
       },
-      "561": {
+      561: {
         c: 0.2,
         e: 3,
         ga: 0,
@@ -7248,7 +7248,7 @@ export const turn345 = {
         x: "-2.1394",
         y: "-1.8711",
       },
-      "562": {
+      562: {
         c: 0.2,
         e: 2,
         ga: 0,
@@ -7264,7 +7264,7 @@ export const turn345 = {
         x: "-2.1862",
         y: "-1.7615",
       },
-      "563": {
+      563: {
         c: 0,
         e: 1,
         ga: 0,
@@ -7280,7 +7280,7 @@ export const turn345 = {
         x: "-1.4885",
         y: "-2.0287",
       },
-      "564": {
+      564: {
         c: 0,
         e: 3,
         ga: 0,
@@ -7296,7 +7296,7 @@ export const turn345 = {
         x: "-2.0017",
         y: "-2.4683",
       },
-      "565": {
+      565: {
         c: 0,
         e: 1,
         ga: 0,
@@ -7312,7 +7312,7 @@ export const turn345 = {
         x: "-2.5237",
         y: "-1.9006",
       },
-      "566": {
+      566: {
         c: 0.9,
         e: 2,
         ga: 0,
@@ -7328,7 +7328,7 @@ export const turn345 = {
         x: "-1.2693",
         y: "-1.6550",
       },
-      "567": {
+      567: {
         c: 0,
         e: 0,
         ga: 0,
@@ -7344,7 +7344,7 @@ export const turn345 = {
         x: "-2.6847",
         y: "-2.1615",
       },
-      "568": {
+      568: {
         c: 0.6,
         e: 3,
         ga: 0,
@@ -7360,7 +7360,7 @@ export const turn345 = {
         x: "-2.8016",
         y: "-1.8763",
       },
-      "569": {
+      569: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -7376,7 +7376,7 @@ export const turn345 = {
         x: "-2.8830",
         y: "-1.7828",
       },
-      "57": {
+      57: {
         n: "New Muphrid",
         puid: 51,
         uid: 57,
@@ -7384,7 +7384,7 @@ export const turn345 = {
         x: "3.0703",
         y: "-7.5774",
       },
-      "570": {
+      570: {
         c: 0,
         e: 0,
         ga: 0,
@@ -7400,7 +7400,7 @@ export const turn345 = {
         x: "-2.7957",
         y: "-1.3347",
       },
-      "571": {
+      571: {
         c: 0.4,
         e: 1,
         ga: 0,
@@ -7416,7 +7416,7 @@ export const turn345 = {
         x: "-3.0795",
         y: "-1.8520",
       },
-      "572": {
+      572: {
         c: 0.0999999999999999,
         e: 2,
         ga: 0,
@@ -7432,7 +7432,7 @@ export const turn345 = {
         x: "-1.4780",
         y: "-0.7646",
       },
-      "573": {
+      573: {
         n: "Tax",
         puid: 60,
         uid: 573,
@@ -7440,7 +7440,7 @@ export const turn345 = {
         x: "-1.9110",
         y: "-3.3132",
       },
-      "574": {
+      574: {
         c: 0.5,
         e: 2,
         ga: 0,
@@ -7456,7 +7456,7 @@ export const turn345 = {
         x: "-2.0376",
         y: "-0.5077",
       },
-      "575": {
+      575: {
         c: 0,
         e: 1,
         ga: 0,
@@ -7472,7 +7472,7 @@ export const turn345 = {
         x: "-3.2659",
         y: "-1.8578",
       },
-      "576": {
+      576: {
         c: 0.899999999999999,
         e: 1,
         ga: 0,
@@ -7488,7 +7488,7 @@ export const turn345 = {
         x: "-2.9406",
         y: "-2.0757",
       },
-      "577": {
+      577: {
         c: 0.6,
         e: 0,
         ga: 0,
@@ -7504,7 +7504,7 @@ export const turn345 = {
         x: "-2.9134",
         y: "-2.1918",
       },
-      "578": {
+      578: {
         c: 0,
         e: 0,
         ga: 0,
@@ -7520,7 +7520,7 @@ export const turn345 = {
         x: "-2.9049",
         y: "-1.6028",
       },
-      "579": {
+      579: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -7536,7 +7536,7 @@ export const turn345 = {
         x: "-2.6310",
         y: "-1.9997",
       },
-      "58": {
+      58: {
         n: "Lost Jaw",
         puid: 17,
         uid: 58,
@@ -7544,7 +7544,7 @@ export const turn345 = {
         x: "3.3913",
         y: "-6.3797",
       },
-      "580": {
+      580: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -7560,7 +7560,7 @@ export const turn345 = {
         x: "-2.5936",
         y: "-2.2141",
       },
-      "581": {
+      581: {
         n: "Atria",
         puid: 26,
         uid: 581,
@@ -7568,7 +7568,7 @@ export const turn345 = {
         x: "-3.7642",
         y: "-2.3082",
       },
-      "582": {
+      582: {
         c: 0,
         e: 0,
         ga: 0,
@@ -7584,7 +7584,7 @@ export const turn345 = {
         x: "-2.4573",
         y: "-1.5537",
       },
-      "583": {
+      583: {
         n: "Red Tania",
         puid: 16,
         uid: 583,
@@ -7592,7 +7592,7 @@ export const turn345 = {
         x: "-3.7832",
         y: "-1.3221",
       },
-      "584": {
+      584: {
         n: "Aladfar",
         puid: 16,
         uid: 584,
@@ -7600,7 +7600,7 @@ export const turn345 = {
         x: "-3.4065",
         y: "-1.0008",
       },
-      "585": {
+      585: {
         n: "Achird",
         puid: 26,
         uid: 585,
@@ -7608,7 +7608,7 @@ export const turn345 = {
         x: "-3.9147",
         y: "-2.7179",
       },
-      "588": {
+      588: {
         n: "Sigma Rigil",
         puid: 26,
         uid: 588,
@@ -7616,7 +7616,7 @@ export const turn345 = {
         x: "-4.2642",
         y: "-2.7337",
       },
-      "589": {
+      589: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -7632,7 +7632,7 @@ export const turn345 = {
         x: "-2.2177",
         y: "-0.8419",
       },
-      "59": {
+      59: {
         n: "Alniyat",
         puid: 31,
         uid: 59,
@@ -7640,7 +7640,7 @@ export const turn345 = {
         x: "4.2681",
         y: "-7.2565",
       },
-      "590": {
+      590: {
         n: "Free Alhena",
         puid: 26,
         uid: 590,
@@ -7648,7 +7648,7 @@ export const turn345 = {
         x: "-4.1285",
         y: "-2.6891",
       },
-      "591": {
+      591: {
         n: "Hoedus",
         puid: 26,
         uid: 591,
@@ -7656,7 +7656,7 @@ export const turn345 = {
         x: "-4.3643",
         y: "-2.7733",
       },
-      "592": {
+      592: {
         n: "Hard Megrez",
         puid: 26,
         uid: 592,
@@ -7664,7 +7664,7 @@ export const turn345 = {
         x: "-4.0322",
         y: "-2.8494",
       },
-      "593": {
+      593: {
         n: "Bright Miram",
         puid: 15,
         uid: 593,
@@ -7672,7 +7672,7 @@ export const turn345 = {
         x: "-4.6393",
         y: "-2.4632",
       },
-      "594": {
+      594: {
         n: "Sun",
         puid: 26,
         uid: 594,
@@ -7680,7 +7680,7 @@ export const turn345 = {
         x: "-4.0043",
         y: "-3.0473",
       },
-      "595": {
+      595: {
         n: "Sigma Yildun",
         puid: 16,
         uid: 595,
@@ -7688,7 +7688,7 @@ export const turn345 = {
         x: "-4.3317",
         y: "-1.9685",
       },
-      "596": {
+      596: {
         n: "Foe",
         puid: 16,
         uid: 596,
@@ -7696,7 +7696,7 @@ export const turn345 = {
         x: "-4.7255",
         y: "-2.0736",
       },
-      "597": {
+      597: {
         n: "Arkab",
         puid: 16,
         uid: 597,
@@ -7704,7 +7704,7 @@ export const turn345 = {
         x: "-4.4988",
         y: "-1.8215",
       },
-      "598": {
+      598: {
         c: 0,
         e: 0,
         ga: 0,
@@ -7720,7 +7720,7 @@ export const turn345 = {
         x: "-3.3343",
         y: "-2.4963",
       },
-      "599": {
+      599: {
         n: "Dull Arided",
         puid: 16,
         uid: 599,
@@ -7728,7 +7728,7 @@ export const turn345 = {
         x: "-4.9228",
         y: "-1.8763",
       },
-      "6": {
+      6: {
         n: "Dull Regulus",
         puid: 33,
         uid: 6,
@@ -7736,7 +7736,7 @@ export const turn345 = {
         x: "3.4631",
         y: "0.5038",
       },
-      "60": {
+      60: {
         n: "Tau Azimech",
         puid: 17,
         uid: 60,
@@ -7744,7 +7744,7 @@ export const turn345 = {
         x: "4.5890",
         y: "-6.0588",
       },
-      "600": {
+      600: {
         n: "Haedus",
         puid: -1,
         uid: 600,
@@ -7752,7 +7752,7 @@ export const turn345 = {
         x: "-3.9454",
         y: "-3.6174",
       },
-      "601": {
+      601: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -7768,7 +7768,7 @@ export const turn345 = {
         x: "-3.0697",
         y: "-2.3705",
       },
-      "602": {
+      602: {
         n: "Toe",
         puid: 16,
         uid: 602,
@@ -7776,7 +7776,7 @@ export const turn345 = {
         x: "-5.0387",
         y: "-1.6044",
       },
-      "603": {
+      603: {
         n: "Kappa Thuban",
         puid: -1,
         uid: 603,
@@ -7784,7 +7784,7 @@ export const turn345 = {
         x: "-3.4454",
         y: "-3.6874",
       },
-      "604": {
+      604: {
         n: "Black Achernar",
         puid: -1,
         uid: 604,
@@ -7792,7 +7792,7 @@ export const turn345 = {
         x: "-5.6274",
         y: "-2.1984",
       },
-      "605": {
+      605: {
         n: "Red Ri",
         puid: 15,
         uid: 605,
@@ -7800,7 +7800,7 @@ export const turn345 = {
         x: "-5.2354",
         y: "-3.0583",
       },
-      "606": {
+      606: {
         n: "Theta Toliman",
         puid: 15,
         uid: 606,
@@ -7808,7 +7808,7 @@ export const turn345 = {
         x: "-5.4706",
         y: "-3.3660",
       },
-      "607": {
+      607: {
         n: "Black Aldhafera",
         puid: 15,
         uid: 607,
@@ -7816,7 +7816,7 @@ export const turn345 = {
         x: "-5.4915",
         y: "-2.9190",
       },
-      "609": {
+      609: {
         n: "Black Menkent",
         puid: 15,
         uid: 609,
@@ -7824,7 +7824,7 @@ export const turn345 = {
         x: "-4.9632",
         y: "-3.5941",
       },
-      "61": {
+      61: {
         n: "Dull Scheat",
         puid: 8,
         uid: 61,
@@ -7832,7 +7832,7 @@ export const turn345 = {
         x: "4.6343",
         y: "-4.8196",
       },
-      "610": {
+      610: {
         n: "New Giennah",
         puid: 15,
         uid: 610,
@@ -7840,7 +7840,7 @@ export const turn345 = {
         x: "-5.0884",
         y: "-2.6163",
       },
-      "611": {
+      611: {
         n: "Cox",
         puid: 15,
         uid: 611,
@@ -7848,7 +7848,7 @@ export const turn345 = {
         x: "-5.1155",
         y: "-2.5103",
       },
-      "612": {
+      612: {
         n: "Pi Shy",
         puid: 15,
         uid: 612,
@@ -7856,7 +7856,7 @@ export const turn345 = {
         x: "-5.1597",
         y: "-2.4054",
       },
-      "613": {
+      613: {
         n: "Free Dschubba",
         puid: 15,
         uid: 613,
@@ -7864,7 +7864,7 @@ export const turn345 = {
         x: "-4.5664",
         y: "-2.6814",
       },
-      "614": {
+      614: {
         n: "Wet Elnath",
         puid: 48,
         uid: 614,
@@ -7872,7 +7872,7 @@ export const turn345 = {
         x: "-5.9332",
         y: "-3.9503",
       },
-      "615": {
+      615: {
         n: "Cold Fay",
         puid: 48,
         uid: 615,
@@ -7880,7 +7880,7 @@ export const turn345 = {
         x: "-6.2776",
         y: "-2.7378",
       },
-      "616": {
+      616: {
         n: "Tau Corvid",
         puid: -1,
         uid: 616,
@@ -7888,7 +7888,7 @@ export const turn345 = {
         x: "-6.1282",
         y: "-2.3648",
       },
-      "619": {
+      619: {
         n: "Altair",
         puid: 48,
         uid: 619,
@@ -7896,7 +7896,7 @@ export const turn345 = {
         x: "-6.4882",
         y: "-2.3614",
       },
-      "62": {
+      62: {
         n: "Botein",
         puid: 61,
         uid: 62,
@@ -7904,7 +7904,7 @@ export const turn345 = {
         x: "3.4631",
         y: "-4.4122",
       },
-      "620": {
+      620: {
         n: "Lost Sheliak",
         puid: 45,
         uid: 620,
@@ -7912,7 +7912,7 @@ export const turn345 = {
         x: "-5.5828",
         y: "-4.5531",
       },
-      "621": {
+      621: {
         n: "Dull Irk",
         puid: 45,
         uid: 621,
@@ -7920,7 +7920,7 @@ export const turn345 = {
         x: "-5.4288",
         y: "-4.6324",
       },
-      "622": {
+      622: {
         n: "Bright Auva",
         puid: 48,
         uid: 622,
@@ -7928,7 +7928,7 @@ export const turn345 = {
         x: "-5.6464",
         y: "-4.0964",
       },
-      "623": {
+      623: {
         n: "Celaeno",
         puid: 48,
         uid: 623,
@@ -7936,7 +7936,7 @@ export const turn345 = {
         x: "-5.6060",
         y: "-3.9897",
       },
-      "624": {
+      624: {
         n: "Dry Girtab",
         puid: 45,
         uid: 624,
@@ -7944,7 +7944,7 @@ export const turn345 = {
         x: "-6.0357",
         y: "-4.5473",
       },
-      "625": {
+      625: {
         n: "Beta Navi",
         puid: 45,
         uid: 625,
@@ -7952,7 +7952,7 @@ export const turn345 = {
         x: "-4.9189",
         y: "-4.3586",
       },
-      "626": {
+      626: {
         n: "Theta Sualocin",
         puid: 45,
         uid: 626,
@@ -7960,7 +7960,7 @@ export const turn345 = {
         x: "-5.0309",
         y: "-4.9128",
       },
-      "627": {
+      627: {
         n: "Acrab",
         puid: 45,
         uid: 627,
@@ -7968,7 +7968,7 @@ export const turn345 = {
         x: "-4.8056",
         y: "-4.7507",
       },
-      "628": {
+      628: {
         n: "Xi Hassaleh",
         puid: 45,
         uid: 628,
@@ -7976,7 +7976,7 @@ export const turn345 = {
         x: "-4.7573",
         y: "-4.8592",
       },
-      "629": {
+      629: {
         n: "Bright Grafias",
         puid: 15,
         uid: 629,
@@ -7984,7 +7984,7 @@ export const turn345 = {
         x: "-4.7754",
         y: "-3.7777",
       },
-      "63": {
+      63: {
         n: "Azha",
         puid: 12,
         uid: 63,
@@ -7992,7 +7992,7 @@ export const turn345 = {
         x: "4.4015",
         y: "-3.6016",
       },
-      "630": {
+      630: {
         n: "Red Rasalas",
         puid: 15,
         uid: 630,
@@ -8000,7 +8000,7 @@ export const turn345 = {
         x: "-5.0751",
         y: "-3.4334",
       },
-      "631": {
+      631: {
         n: "Mu Sheratan",
         puid: 7,
         uid: 631,
@@ -8008,7 +8008,7 @@ export const turn345 = {
         x: "-6.5474",
         y: "-4.9987",
       },
-      "632": {
+      632: {
         n: "Zeta Azel",
         puid: 46,
         uid: 632,
@@ -8016,7 +8016,7 @@ export const turn345 = {
         x: "-5.3117",
         y: "-5.6589",
       },
-      "633": {
+      633: {
         n: "Mog",
         puid: -1,
         uid: 633,
@@ -8024,7 +8024,7 @@ export const turn345 = {
         x: "-4.7520",
         y: "-5.5254",
       },
-      "634": {
+      634: {
         n: "Eta Chi",
         puid: -1,
         uid: 634,
@@ -8032,7 +8032,7 @@ export const turn345 = {
         x: "-4.5982",
         y: "-5.5245",
       },
-      "635": {
+      635: {
         n: "Wet Pan",
         puid: 48,
         uid: 635,
@@ -8040,7 +8040,7 @@ export const turn345 = {
         x: "-6.3550",
         y: "-3.5052",
       },
-      "636": {
+      636: {
         n: "Delta Antares",
         puid: 48,
         uid: 636,
@@ -8048,7 +8048,7 @@ export const turn345 = {
         x: "-6.6561",
         y: "-3.4454",
       },
-      "637": {
+      637: {
         n: "Red Goo",
         puid: 48,
         uid: 637,
@@ -8056,7 +8056,7 @@ export const turn345 = {
         x: "-6.3830",
         y: "-3.2771",
       },
-      "638": {
+      638: {
         n: "Algedi",
         puid: 48,
         uid: 638,
@@ -8064,7 +8064,7 @@ export const turn345 = {
         x: "-6.0555",
         y: "-3.7126",
       },
-      "639": {
+      639: {
         n: "Pi Mesarthim",
         puid: 48,
         uid: 639,
@@ -8072,7 +8072,7 @@ export const turn345 = {
         x: "-6.9840",
         y: "-3.5110",
       },
-      "64": {
+      64: {
         n: "Cathedra Alula",
         puid: 27,
         uid: 64,
@@ -8080,7 +8080,7 @@ export const turn345 = {
         x: "3.2304",
         y: "-3.1942",
       },
-      "640": {
+      640: {
         n: "Odd Arc",
         puid: 48,
         uid: 640,
@@ -8088,7 +8088,7 @@ export const turn345 = {
         x: "-6.8227",
         y: "-4.1054",
       },
-      "641": {
+      641: {
         n: "Wow",
         puid: 45,
         uid: 641,
@@ -8096,7 +8096,7 @@ export const turn345 = {
         x: "-6.1707",
         y: "-4.2433",
       },
-      "642": {
+      642: {
         n: "Cold Heka",
         puid: 48,
         uid: 642,
@@ -8104,7 +8104,7 @@ export const turn345 = {
         x: "-5.6962",
         y: "-3.8089",
       },
-      "643": {
+      643: {
         n: "Nova Vega",
         puid: 45,
         uid: 643,
@@ -8112,7 +8112,7 @@ export const turn345 = {
         x: "-6.2385",
         y: "-4.4652",
       },
-      "645": {
+      645: {
         n: "Port Alkaid",
         puid: 48,
         uid: 645,
@@ -8120,7 +8120,7 @@ export const turn345 = {
         x: "-5.5346",
         y: "-4.1416",
       },
-      "646": {
+      646: {
         n: "Old Ale",
         puid: -1,
         uid: 646,
@@ -8128,7 +8128,7 @@ export const turn345 = {
         x: "-7.6385",
         y: "-3.7039",
       },
-      "649": {
+      649: {
         n: "Azmidiske",
         puid: 45,
         uid: 649,
@@ -8136,7 +8136,7 @@ export const turn345 = {
         x: "-5.1055",
         y: "-4.0982",
       },
-      "65": {
+      65: {
         n: "Old Arneb",
         puid: 42,
         uid: 65,
@@ -8144,7 +8144,7 @@ export const turn345 = {
         x: "2.0116",
         y: "-2.6130",
       },
-      "650": {
+      650: {
         n: "Dry Sun",
         puid: 7,
         uid: 650,
@@ -8152,7 +8152,7 @@ export const turn345 = {
         x: "-6.7991",
         y: "-4.7047",
       },
-      "651": {
+      651: {
         n: "New Naos",
         puid: 7,
         uid: 651,
@@ -8160,7 +8160,7 @@ export const turn345 = {
         x: "-6.9229",
         y: "-4.7169",
       },
-      "652": {
+      652: {
         n: "Spica",
         puid: 7,
         uid: 652,
@@ -8168,7 +8168,7 @@ export const turn345 = {
         x: "-6.8447",
         y: "-5.1241",
       },
-      "653": {
+      653: {
         n: "Theta Subra",
         puid: 7,
         uid: 653,
@@ -8176,7 +8176,7 @@ export const turn345 = {
         x: "-7.1058",
         y: "-4.6728",
       },
-      "654": {
+      654: {
         n: "Delta Benetnasch",
         puid: 7,
         uid: 654,
@@ -8184,7 +8184,7 @@ export const turn345 = {
         x: "-7.1303",
         y: "-4.5202",
       },
-      "655": {
+      655: {
         n: "Sulafat",
         puid: 7,
         uid: 655,
@@ -8192,7 +8192,7 @@ export const turn345 = {
         x: "-7.3153",
         y: "-4.8732",
       },
-      "656": {
+      656: {
         n: "Decrux",
         puid: 7,
         uid: 656,
@@ -8200,7 +8200,7 @@ export const turn345 = {
         x: "-6.0054",
         y: "-4.9425",
       },
-      "657": {
+      657: {
         n: "Menkalinan",
         puid: 32,
         uid: 657,
@@ -8208,7 +8208,7 @@ export const turn345 = {
         x: "-5.9290",
         y: "-5.0269",
       },
-      "658": {
+      658: {
         n: "Alathfar",
         puid: 48,
         uid: 658,
@@ -8216,7 +8216,7 @@ export const turn345 = {
         x: "-6.7027",
         y: "-3.9256",
       },
-      "659": {
+      659: {
         n: "Grand Subra",
         puid: 45,
         uid: 659,
@@ -8224,7 +8224,7 @@ export const turn345 = {
         x: "-5.7194",
         y: "-4.7336",
       },
-      "66": {
+      66: {
         n: "Mahasim",
         puid: 42,
         uid: 66,
@@ -8232,7 +8232,7 @@ export const turn345 = {
         x: "2.2959",
         y: "-2.3752",
       },
-      "660": {
+      660: {
         n: "Okul",
         puid: -1,
         uid: 660,
@@ -8240,7 +8240,7 @@ export const turn345 = {
         x: "-7.3221",
         y: "-5.7043",
       },
-      "663": {
+      663: {
         n: "Old Zug",
         puid: -1,
         uid: 663,
@@ -8248,7 +8248,7 @@ export const turn345 = {
         x: "-8.0410",
         y: "-5.0556",
       },
-      "664": {
+      664: {
         n: "Arcturus",
         puid: -1,
         uid: 664,
@@ -8256,7 +8256,7 @@ export const turn345 = {
         x: "-7.9601",
         y: "-5.5456",
       },
-      "665": {
+      665: {
         n: "Zaurak",
         puid: 32,
         uid: 665,
@@ -8264,7 +8264,7 @@ export const turn345 = {
         x: "-6.7723",
         y: "-6.1552",
       },
-      "668": {
+      668: {
         n: "Nova Tax",
         puid: 32,
         uid: 668,
@@ -8272,7 +8272,7 @@ export const turn345 = {
         x: "-6.2301",
         y: "-6.0961",
       },
-      "669": {
+      669: {
         n: "Minelava",
         puid: 32,
         uid: 669,
@@ -8280,7 +8280,7 @@ export const turn345 = {
         x: "-6.2054",
         y: "-5.7978",
       },
-      "67": {
+      67: {
         n: "Gamma Haldus",
         puid: 42,
         uid: 67,
@@ -8288,7 +8288,7 @@ export const turn345 = {
         x: "2.3245",
         y: "-2.8652",
       },
-      "670": {
+      670: {
         n: "Sigma Keid",
         puid: 32,
         uid: 670,
@@ -8296,7 +8296,7 @@ export const turn345 = {
         x: "-6.6038",
         y: "-6.6714",
       },
-      "671": {
+      671: {
         n: "Cold Baham",
         puid: 22,
         uid: 671,
@@ -8304,7 +8304,7 @@ export const turn345 = {
         x: "-6.2513",
         y: "-6.6387",
       },
-      "672": {
+      672: {
         n: "Alkurah",
         puid: 22,
         uid: 672,
@@ -8312,7 +8312,7 @@ export const turn345 = {
         x: "-6.1426",
         y: "-6.6724",
       },
-      "673": {
+      673: {
         n: "Ill",
         puid: 32,
         uid: 673,
@@ -8320,7 +8320,7 @@ export const turn345 = {
         x: "-5.9251",
         y: "-5.5460",
       },
-      "674": {
+      674: {
         n: "Wild Sheratan",
         puid: 7,
         uid: 674,
@@ -8328,7 +8328,7 @@ export const turn345 = {
         x: "-6.9950",
         y: "-5.1313",
       },
-      "676": {
+      676: {
         n: "Xi Ashlesha",
         puid: 22,
         uid: 676,
@@ -8336,7 +8336,7 @@ export const turn345 = {
         x: "-6.0709",
         y: "-7.0746",
       },
-      "678": {
+      678: {
         n: "Sky",
         puid: 7,
         uid: 678,
@@ -8344,7 +8344,7 @@ export const turn345 = {
         x: "-5.6164",
         y: "-5.1852",
       },
-      "679": {
+      679: {
         n: "Mega Algol",
         puid: -1,
         uid: 679,
@@ -8352,7 +8352,7 @@ export const turn345 = {
         x: "-7.9149",
         y: "-6.7848",
       },
-      "68": {
+      68: {
         n: "Mu Okul",
         puid: 42,
         uid: 68,
@@ -8360,7 +8360,7 @@ export const turn345 = {
         x: "2.5596",
         y: "-2.4275",
       },
-      "680": {
+      680: {
         n: "Hyadum",
         puid: 46,
         uid: 680,
@@ -8368,7 +8368,7 @@ export const turn345 = {
         x: "-5.5110",
         y: "-6.5206",
       },
-      "681": {
+      681: {
         n: "Eta Jaw",
         puid: 46,
         uid: 681,
@@ -8376,7 +8376,7 @@ export const turn345 = {
         x: "-5.4385",
         y: "-6.1376",
       },
-      "683": {
+      683: {
         n: "Sheliak",
         puid: 46,
         uid: 683,
@@ -8384,7 +8384,7 @@ export const turn345 = {
         x: "-5.1311",
         y: "-6.1039",
       },
-      "686": {
+      686: {
         n: "Hot Yildun",
         puid: 23,
         uid: 686,
@@ -8392,7 +8392,7 @@ export const turn345 = {
         x: "-5.3980",
         y: "-7.0850",
       },
-      "687": {
+      687: {
         n: "Slow Zaniah",
         puid: 23,
         uid: 687,
@@ -8400,7 +8400,7 @@ export const turn345 = {
         x: "-4.8933",
         y: "-6.9461",
       },
-      "688": {
+      688: {
         n: "Alaraph",
         puid: 32,
         uid: 688,
@@ -8408,7 +8408,7 @@ export const turn345 = {
         x: "-5.9725",
         y: "-5.6474",
       },
-      "689": {
+      689: {
         n: "Soft Kaf",
         puid: 23,
         uid: 689,
@@ -8416,7 +8416,7 @@ export const turn345 = {
         x: "-5.2042",
         y: "-7.3331",
       },
-      "69": {
+      69: {
         n: "Tau Mimosa",
         puid: 42,
         uid: 69,
@@ -8424,7 +8424,7 @@ export const turn345 = {
         x: "2.6785",
         y: "-2.5742",
       },
-      "691": {
+      691: {
         n: "Albaldah",
         puid: -1,
         uid: 691,
@@ -8432,7 +8432,7 @@ export const turn345 = {
         x: "-4.3267",
         y: "-6.0761",
       },
-      "692": {
+      692: {
         n: "Beta Mahasim",
         puid: 7,
         uid: 692,
@@ -8440,7 +8440,7 @@ export const turn345 = {
         x: "-6.0927",
         y: "-5.2833",
       },
-      "693": {
+      693: {
         n: "White Markab",
         puid: 22,
         uid: 693,
@@ -8448,7 +8448,7 @@ export const turn345 = {
         x: "-6.3332",
         y: "-7.4207",
       },
-      "694": {
+      694: {
         n: "Zeta Imp",
         puid: 23,
         uid: 694,
@@ -8456,7 +8456,7 @@ export const turn345 = {
         x: "-4.6269",
         y: "-7.5691",
       },
-      "695": {
+      695: {
         n: "Acrux",
         puid: 22,
         uid: 695,
@@ -8464,7 +8464,7 @@ export const turn345 = {
         x: "-6.1865",
         y: "-7.2565",
       },
-      "696": {
+      696: {
         n: "Zeta Ick",
         puid: 22,
         uid: 696,
@@ -8472,7 +8472,7 @@ export const turn345 = {
         x: "-6.4759",
         y: "-7.0574",
       },
-      "697": {
+      697: {
         n: "Kat",
         puid: 22,
         uid: 697,
@@ -8480,7 +8480,7 @@ export const turn345 = {
         x: "-6.0989",
         y: "-7.4941",
       },
-      "698": {
+      698: {
         n: "Pure Grumium",
         puid: 22,
         uid: 698,
@@ -8488,7 +8488,7 @@ export const turn345 = {
         x: "-6.2991",
         y: "-6.8291",
       },
-      "699": {
+      699: {
         n: "Nu Ant",
         puid: 22,
         uid: 699,
@@ -8496,7 +8496,7 @@ export const turn345 = {
         x: "-6.2910",
         y: "-7.7765",
       },
-      "7": {
+      7: {
         n: "Tania",
         puid: 63,
         uid: 7,
@@ -8504,7 +8504,7 @@ export const turn345 = {
         x: "4.4015",
         y: "-0.3068",
       },
-      "70": {
+      70: {
         n: "Black Saiph",
         puid: 42,
         uid: 70,
@@ -8512,7 +8512,7 @@ export const turn345 = {
         x: "2.5092",
         y: "-2.0704",
       },
-      "700": {
+      700: {
         n: "Odd Sadira",
         puid: 22,
         uid: 700,
@@ -8520,7 +8520,7 @@ export const turn345 = {
         x: "-5.7791",
         y: "-6.9966",
       },
-      "701": {
+      701: {
         n: "Errai",
         puid: 32,
         uid: 701,
@@ -8528,7 +8528,7 @@ export const turn345 = {
         x: "-7.0018",
         y: "-7.0143",
       },
-      "702": {
+      702: {
         n: "Proxima",
         puid: 23,
         uid: 702,
@@ -8536,7 +8536,7 @@ export const turn345 = {
         x: "-5.5385",
         y: "-7.1867",
       },
-      "704": {
+      704: {
         n: "Hydrobius",
         puid: 32,
         uid: 704,
@@ -8544,7 +8544,7 @@ export const turn345 = {
         x: "-6.7536",
         y: "-6.3620",
       },
-      "705": {
+      705: {
         n: "Kappa Birdun",
         puid: -1,
         uid: 705,
@@ -8552,7 +8552,7 @@ export const turn345 = {
         x: "-6.9560",
         y: "-8.1412",
       },
-      "707": {
+      707: {
         n: "Deneb",
         puid: 54,
         uid: 707,
@@ -8560,7 +8560,7 @@ export const turn345 = {
         x: "-5.6103",
         y: "-8.2935",
       },
-      "708": {
+      708: {
         n: "Young Menkar",
         puid: 54,
         uid: 708,
@@ -8568,7 +8568,7 @@ export const turn345 = {
         x: "-5.6570",
         y: "-8.4334",
       },
-      "709": {
+      709: {
         n: "Cheleb",
         puid: 54,
         uid: 709,
@@ -8576,7 +8576,7 @@ export const turn345 = {
         x: "-5.9607",
         y: "-8.6590",
       },
-      "71": {
+      71: {
         n: "Mega Alderamin",
         puid: 42,
         uid: 71,
@@ -8584,7 +8584,7 @@ export const turn345 = {
         x: "2.6571",
         y: "-2.0736",
       },
-      "710": {
+      710: {
         n: "Port Misam",
         puid: 23,
         uid: 710,
@@ -8592,7 +8592,7 @@ export const turn345 = {
         x: "-5.1518",
         y: "-7.7269",
       },
-      "711": {
+      711: {
         n: "Hard Alioth",
         puid: 23,
         uid: 711,
@@ -8600,7 +8600,7 @@ export const turn345 = {
         x: "-4.9397",
         y: "-7.7168",
       },
-      "712": {
+      712: {
         n: "Black SteropeII",
         puid: 23,
         uid: 712,
@@ -8608,7 +8608,7 @@ export const turn345 = {
         x: "-5.1388",
         y: "-7.2414",
       },
-      "713": {
+      713: {
         n: "Wild Regor",
         puid: 23,
         uid: 713,
@@ -8616,7 +8616,7 @@ export const turn345 = {
         x: "-5.4902",
         y: "-7.3314",
       },
-      "714": {
+      714: {
         n: "Alpha Rastaban",
         puid: 23,
         uid: 714,
@@ -8624,7 +8624,7 @@ export const turn345 = {
         x: "-5.2294",
         y: "-7.0634",
       },
-      "715": {
+      715: {
         n: "New Pan",
         puid: 22,
         uid: 715,
@@ -8632,7 +8632,7 @@ export const turn345 = {
         x: "-5.7444",
         y: "-7.4706",
       },
-      "716": {
+      716: {
         n: "New Ruchba",
         puid: 54,
         uid: 716,
@@ -8640,7 +8640,7 @@ export const turn345 = {
         x: "-5.2617",
         y: "-8.2747",
       },
-      "717": {
+      717: {
         n: "Gut",
         puid: 54,
         uid: 717,
@@ -8648,7 +8648,7 @@ export const turn345 = {
         x: "-4.8648",
         y: "-8.3301",
       },
-      "718": {
+      718: {
         n: "Situla",
         puid: 54,
         uid: 718,
@@ -8656,7 +8656,7 @@ export const turn345 = {
         x: "-5.3701",
         y: "-8.4410",
       },
-      "721": {
+      721: {
         n: "Dry Asterope",
         puid: 46,
         uid: 721,
@@ -8664,7 +8664,7 @@ export const turn345 = {
         x: "-5.0365",
         y: "-6.4089",
       },
-      "723": {
+      723: {
         n: "New Taygeta",
         puid: 54,
         uid: 723,
@@ -8672,7 +8672,7 @@ export const turn345 = {
         x: "-4.0977",
         y: "-8.4510",
       },
-      "724": {
+      724: {
         n: "Arich",
         puid: 46,
         uid: 724,
@@ -8680,7 +8680,7 @@ export const turn345 = {
         x: "-5.0122",
         y: "-6.1310",
       },
-      "725": {
+      725: {
         n: "AlKurud",
         puid: 54,
         uid: 725,
@@ -8688,7 +8688,7 @@ export const turn345 = {
         x: "-3.7847",
         y: "-7.5263",
       },
-      "726": {
+      726: {
         n: "Azel",
         puid: 54,
         uid: 726,
@@ -8696,7 +8696,7 @@ export const turn345 = {
         x: "-4.0390",
         y: "-7.4236",
       },
-      "727": {
+      727: {
         n: "Fort Bunda",
         puid: 54,
         uid: 727,
@@ -8704,7 +8704,7 @@ export const turn345 = {
         x: "-4.0676",
         y: "-7.9137",
       },
-      "728": {
+      728: {
         n: "Nu Garnet",
         puid: 54,
         uid: 728,
@@ -8712,7 +8712,7 @@ export const turn345 = {
         x: "-3.5280",
         y: "-7.4082",
       },
-      "730": {
+      730: {
         n: "Media",
         puid: 54,
         uid: 730,
@@ -8720,7 +8720,7 @@ export const turn345 = {
         x: "-3.9532",
         y: "-8.2353",
       },
-      "731": {
+      731: {
         n: "Marfark",
         puid: 54,
         uid: 731,
@@ -8728,7 +8728,7 @@ export const turn345 = {
         x: "-3.6004",
         y: "-6.9810",
       },
-      "732": {
+      732: {
         n: "Old Unuk",
         puid: 54,
         uid: 732,
@@ -8736,7 +8736,7 @@ export const turn345 = {
         x: "-4.3590",
         y: "-8.2788",
       },
-      "733": {
+      733: {
         n: "Rana",
         puid: 36,
         uid: 733,
@@ -8744,7 +8744,7 @@ export const turn345 = {
         x: "-3.0090",
         y: "-7.5448",
       },
-      "735": {
+      735: {
         n: "Hot Ksora",
         puid: 54,
         uid: 735,
@@ -8752,7 +8752,7 @@ export const turn345 = {
         x: "-3.7120",
         y: "-8.6863",
       },
-      "736": {
+      736: {
         n: "Kappa Kajam",
         puid: 54,
         uid: 736,
@@ -8760,7 +8760,7 @@ export const turn345 = {
         x: "-4.5724",
         y: "-8.5835",
       },
-      "737": {
+      737: {
         n: "Eta Celaeno",
         puid: 43,
         uid: 737,
@@ -8768,7 +8768,7 @@ export const turn345 = {
         x: "-2.8625",
         y: "-6.8965",
       },
-      "738": {
+      738: {
         n: "Hot Rat",
         puid: 54,
         uid: 738,
@@ -8776,7 +8776,7 @@ export const turn345 = {
         x: "-3.6636",
         y: "-8.9610",
       },
-      "739": {
+      739: {
         n: "Alamak",
         puid: 54,
         uid: 739,
@@ -8784,7 +8784,7 @@ export const turn345 = {
         x: "-4.7324",
         y: "-8.8121",
       },
-      "74": {
+      74: {
         n: "Wet Regor",
         puid: 27,
         uid: 74,
@@ -8792,7 +8792,7 @@ export const turn345 = {
         x: "3.1435",
         y: "-2.5742",
       },
-      "742": {
+      742: {
         n: "Port Alsafi",
         puid: 43,
         uid: 742,
@@ -8800,7 +8800,7 @@ export const turn345 = {
         x: "-3.2012",
         y: "-6.6195",
       },
-      "747": {
+      747: {
         n: "Eta Biham",
         puid: -1,
         uid: 747,
@@ -8808,7 +8808,7 @@ export const turn345 = {
         x: "-3.6995",
         y: "-5.6778",
       },
-      "748": {
+      748: {
         n: "Nova Marfark",
         puid: 43,
         uid: 748,
@@ -8816,7 +8816,7 @@ export const turn345 = {
         x: "-2.8073",
         y: "-5.8769",
       },
-      "749": {
+      749: {
         n: "Hard Arich",
         puid: 43,
         uid: 749,
@@ -8824,7 +8824,7 @@ export const turn345 = {
         x: "-2.5388",
         y: "-6.7070",
       },
-      "75": {
+      75: {
         n: "Blue Kita",
         puid: 27,
         uid: 75,
@@ -8832,7 +8832,7 @@ export const turn345 = {
         x: "2.7759",
         y: "-3.4589",
       },
-      "750": {
+      750: {
         n: "Septen",
         puid: -1,
         uid: 750,
@@ -8840,7 +8840,7 @@ export const turn345 = {
         x: "-4.2558",
         y: "-5.6878",
       },
-      "751": {
+      751: {
         n: "Old Zosma",
         puid: 36,
         uid: 751,
@@ -8848,7 +8848,7 @@ export const turn345 = {
         x: "-3.1886",
         y: "-7.5845",
       },
-      "752": {
+      752: {
         n: "Miram",
         puid: -1,
         uid: 752,
@@ -8856,7 +8856,7 @@ export const turn345 = {
         x: "-4.5292",
         y: "-5.7254",
       },
-      "753": {
+      753: {
         n: "Wet Arcturus",
         puid: 43,
         uid: 753,
@@ -8864,7 +8864,7 @@ export const turn345 = {
         x: "-2.1538",
         y: "-6.2155",
       },
-      "754": {
+      754: {
         n: "Lush Pherkard",
         puid: 43,
         uid: 754,
@@ -8872,7 +8872,7 @@ export const turn345 = {
         x: "-2.0457",
         y: "-6.3250",
       },
-      "755": {
+      755: {
         n: "Sadalsuud",
         puid: 36,
         uid: 755,
@@ -8880,7 +8880,7 @@ export const turn345 = {
         x: "-2.7077",
         y: "-7.2422",
       },
-      "756": {
+      756: {
         n: "Hot Sham",
         puid: 36,
         uid: 756,
@@ -8888,7 +8888,7 @@ export const turn345 = {
         x: "-2.4712",
         y: "-7.5114",
       },
-      "757": {
+      757: {
         n: "White Pug",
         puid: 36,
         uid: 757,
@@ -8896,7 +8896,7 @@ export const turn345 = {
         x: "-2.3906",
         y: "-7.2219",
       },
-      "758": {
+      758: {
         n: "Alkalurops",
         puid: 36,
         uid: 758,
@@ -8904,7 +8904,7 @@ export const turn345 = {
         x: "-2.5003",
         y: "-7.0011",
       },
-      "759": {
+      759: {
         n: "Soft Aldhibah",
         puid: 36,
         uid: 759,
@@ -8912,7 +8912,7 @@ export const turn345 = {
         x: "-3.0507",
         y: "-7.0208",
       },
-      "76": {
+      76: {
         n: "Dull Caph",
         puid: 27,
         uid: 76,
@@ -8920,7 +8920,7 @@ export const turn345 = {
         x: "3.3250",
         y: "-2.4720",
       },
-      "760": {
+      760: {
         n: "Port Giedi",
         puid: 36,
         uid: 760,
@@ -8928,7 +8928,7 @@ export const turn345 = {
         x: "-2.1242",
         y: "-7.1300",
       },
-      "761": {
+      761: {
         n: "Grand Alkaid",
         puid: -1,
         uid: 761,
@@ -8936,7 +8936,7 @@ export const turn345 = {
         x: "-2.3824",
         y: "-8.0316",
       },
-      "763": {
+      763: {
         n: "Neshmet",
         puid: -1,
         uid: 763,
@@ -8944,7 +8944,7 @@ export const turn345 = {
         x: "-1.8714",
         y: "-7.7677",
       },
-      "764": {
+      764: {
         n: "Young Pux",
         puid: -1,
         uid: 764,
@@ -8952,7 +8952,7 @@ export const turn345 = {
         x: "-1.9837",
         y: "-8.0878",
       },
-      "765": {
+      765: {
         n: "Mu Marfik",
         puid: 54,
         uid: 765,
@@ -8960,7 +8960,7 @@ export const turn345 = {
         x: "-3.3758",
         y: "-8.2173",
       },
-      "766": {
+      766: {
         n: "Dry Bharani",
         puid: 54,
         uid: 766,
@@ -8968,7 +8968,7 @@ export const turn345 = {
         x: "-3.3544",
         y: "-8.3508",
       },
-      "767": {
+      767: {
         n: "Fast Ash",
         puid: 54,
         uid: 767,
@@ -8976,7 +8976,7 @@ export const turn345 = {
         x: "-3.9284",
         y: "-7.1701",
       },
-      "768": {
+      768: {
         n: "Edasich",
         puid: 43,
         uid: 768,
@@ -8984,7 +8984,7 @@ export const turn345 = {
         x: "-2.0021",
         y: "-6.2130",
       },
-      "769": {
+      769: {
         n: "Wild Bellatrix",
         puid: 43,
         uid: 769,
@@ -8992,7 +8992,7 @@ export const turn345 = {
         x: "-1.8488",
         y: "-6.2005",
       },
-      "77": {
+      77: {
         n: "Kraz",
         puid: 6,
         uid: 77,
@@ -9000,7 +9000,7 @@ export const turn345 = {
         x: "1.9366",
         y: "-1.3274",
       },
-      "770": {
+      770: {
         n: "Fort Sun",
         puid: 43,
         uid: 770,
@@ -9008,7 +9008,7 @@ export const turn345 = {
         x: "-2.3971",
         y: "-6.1327",
       },
-      "771": {
+      771: {
         n: "Wild Canopus",
         puid: 43,
         uid: 771,
@@ -9016,7 +9016,7 @@ export const turn345 = {
         x: "-2.4304",
         y: "-6.4049",
       },
-      "772": {
+      772: {
         n: "Pi Aldhanab",
         puid: 43,
         uid: 772,
@@ -9024,7 +9024,7 @@ export const turn345 = {
         x: "-2.3891",
         y: "-5.9030",
       },
-      "773": {
+      773: {
         n: "Suhail",
         puid: 43,
         uid: 773,
@@ -9032,7 +9032,7 @@ export const turn345 = {
         x: "-2.5500",
         y: "-5.8901",
       },
-      "774": {
+      774: {
         n: "Gamma Quo",
         puid: 43,
         uid: 774,
@@ -9040,7 +9040,7 @@ export const turn345 = {
         x: "-2.3197",
         y: "-6.7388",
       },
-      "775": {
+      775: {
         n: "Quo",
         puid: 14,
         uid: 775,
@@ -9048,7 +9048,7 @@ export const turn345 = {
         x: "-2.1674",
         y: "-5.6131",
       },
-      "776": {
+      776: {
         n: "Nova Nekkar",
         puid: 14,
         uid: 776,
@@ -9056,7 +9056,7 @@ export const turn345 = {
         x: "-1.6611",
         y: "-5.8648",
       },
-      "778": {
+      778: {
         n: "Mesarthim",
         puid: 14,
         uid: 778,
@@ -9064,7 +9064,7 @@ export const turn345 = {
         x: "-2.1190",
         y: "-5.3383",
       },
-      "779": {
+      779: {
         n: "Lost Mac",
         puid: 5,
         uid: 779,
@@ -9072,7 +9072,7 @@ export const turn345 = {
         x: "-1.3208",
         y: "-6.4742",
       },
-      "78": {
+      78: {
         n: "Corvid",
         puid: 39,
         uid: 78,
@@ -9080,7 +9080,7 @@ export const turn345 = {
         x: "0.8026",
         y: "-2.6927",
       },
-      "781": {
+      781: {
         n: "Tic",
         puid: -1,
         uid: 781,
@@ -9088,7 +9088,7 @@ export const turn345 = {
         x: "-3.2901",
         y: "-5.6323",
       },
-      "782": {
+      782: {
         n: "Sirius",
         puid: 20,
         uid: 782,
@@ -9096,7 +9096,7 @@ export const turn345 = {
         x: "-3.5354",
         y: "-6.3291",
       },
-      "783": {
+      783: {
         n: "Pi Ri",
         puid: 36,
         uid: 783,
@@ -9104,7 +9104,7 @@ export const turn345 = {
         x: "-2.7390",
         y: "-7.4958",
       },
-      "784": {
+      784: {
         n: "New Raw",
         puid: -1,
         uid: 784,
@@ -9112,7 +9112,7 @@ export const turn345 = {
         x: "-1.7776",
         y: "-7.5832",
       },
-      "787": {
+      787: {
         n: "Sasin",
         puid: 14,
         uid: 787,
@@ -9120,7 +9120,7 @@ export const turn345 = {
         x: "-1.9788",
         y: "-5.2318",
       },
-      "788": {
+      788: {
         n: "Wet Bam",
         puid: 14,
         uid: 788,
@@ -9128,7 +9128,7 @@ export const turn345 = {
         x: "-1.2268",
         y: "-5.1075",
       },
-      "789": {
+      789: {
         n: "Dark Toliman",
         puid: 14,
         uid: 789,
@@ -9136,7 +9136,7 @@ export const turn345 = {
         x: "-1.1637",
         y: "-5.3234",
       },
-      "79": {
+      79: {
         n: "Kita",
         puid: 27,
         uid: 79,
@@ -9144,7 +9144,7 @@ export const turn345 = {
         x: "2.4086",
         y: "-4.0041",
       },
-      "790": {
+      790: {
         n: "Tau Gianfar",
         puid: 14,
         uid: 790,
@@ -9152,7 +9152,7 @@ export const turn345 = {
         x: "-1.0763",
         y: "-4.9345",
       },
-      "791": {
+      791: {
         n: "Ale",
         puid: 4,
         uid: 791,
@@ -9160,7 +9160,7 @@ export const turn345 = {
         x: "-1.5925",
         y: "-4.4396",
       },
-      "792": {
+      792: {
         n: "AlGiedi",
         puid: 14,
         uid: 792,
@@ -9168,7 +9168,7 @@ export const turn345 = {
         x: "-0.9605",
         y: "-5.5454",
       },
-      "793": {
+      793: {
         n: "Eta Hyadum",
         puid: 43,
         uid: 793,
@@ -9176,7 +9176,7 @@ export const turn345 = {
         x: "-2.3865",
         y: "-5.6577",
       },
-      "794": {
+      794: {
         n: "Nu Vindemiatrix",
         puid: 43,
         uid: 794,
@@ -9184,7 +9184,7 @@ export const turn345 = {
         x: "-2.4103",
         y: "-5.7793",
       },
-      "795": {
+      795: {
         n: "Dubhe",
         puid: 43,
         uid: 795,
@@ -9192,7 +9192,7 @@ export const turn345 = {
         x: "-2.6974",
         y: "-5.4244",
       },
-      "796": {
+      796: {
         n: "New Media",
         puid: 34,
         uid: 796,
@@ -9200,7 +9200,7 @@ export const turn345 = {
         x: "-0.4990",
         y: "-5.3486",
       },
-      "797": {
+      797: {
         n: "Chi",
         puid: 5,
         uid: 797,
@@ -9208,7 +9208,7 @@ export const turn345 = {
         x: "-1.2212",
         y: "-6.3345",
       },
-      "798": {
+      798: {
         n: "Eta Rigel",
         puid: 60,
         uid: 798,
@@ -9216,7 +9216,7 @@ export const turn345 = {
         x: "-1.5358",
         y: "-3.7911",
       },
-      "799": {
+      799: {
         n: "Tau Fomalhaut",
         puid: 34,
         uid: 799,
@@ -9224,7 +9224,7 @@ export const turn345 = {
         x: "-0.2077",
         y: "-5.2714",
       },
-      "8": {
+      8: {
         n: "Odd Dabih",
         puid: 24,
         uid: 8,
@@ -9232,7 +9232,7 @@ export const turn345 = {
         x: "4.6343",
         y: "0.9112",
       },
-      "80": {
+      80: {
         n: "Grand Keg",
         puid: 47,
         uid: 80,
@@ -9240,7 +9240,7 @@ export const turn345 = {
         x: "-0.2087",
         y: "-2.0952",
       },
-      "800": {
+      800: {
         n: "Maia",
         puid: 60,
         uid: 800,
@@ -9248,7 +9248,7 @@ export const turn345 = {
         x: "-0.9482",
         y: "-2.9539",
       },
-      "802": {
+      802: {
         n: "Gor",
         puid: 60,
         uid: 802,
@@ -9256,7 +9256,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "-2.4950",
       },
-      "803": {
+      803: {
         n: "Megrez",
         puid: 60,
         uid: 803,
@@ -9264,7 +9264,7 @@ export const turn345 = {
         x: "-1.4616",
         y: "-2.8684",
       },
-      "804": {
+      804: {
         n: "Lost Izar",
         puid: 60,
         uid: 804,
@@ -9272,7 +9272,7 @@ export const turn345 = {
         x: "-1.0342",
         y: "-3.3530",
       },
-      "805": {
+      805: {
         c: 0.0999999999999999,
         e: 3,
         ga: 0,
@@ -9288,7 +9288,7 @@ export const turn345 = {
         x: "-0.9274",
         y: "-2.2254",
       },
-      "806": {
+      806: {
         n: "Blue Paw",
         puid: 60,
         uid: 806,
@@ -9296,7 +9296,7 @@ export const turn345 = {
         x: "-1.6995",
         y: "-3.0732",
       },
-      "807": {
+      807: {
         n: "New Alfirk",
         puid: 60,
         uid: 807,
@@ -9304,7 +9304,7 @@ export const turn345 = {
         x: "-0.9644",
         y: "-3.6290",
       },
-      "808": {
+      808: {
         c: 0,
         e: 0,
         ga: 0,
@@ -9320,7 +9320,7 @@ export const turn345 = {
         x: "-1.6089",
         y: "-2.1462",
       },
-      "809": {
+      809: {
         c: 0,
         e: 0,
         ga: 0,
@@ -9336,7 +9336,7 @@ export const turn345 = {
         x: "-1.7321",
         y: "-2.1331",
       },
-      "810": {
+      810: {
         n: "Lost Gianfar",
         puid: 40,
         uid: 810,
@@ -9344,7 +9344,7 @@ export const turn345 = {
         x: "-0.5778",
         y: "-1.8522",
       },
-      "811": {
+      811: {
         n: "Sualocin",
         puid: 60,
         uid: 811,
@@ -9352,7 +9352,7 @@ export const turn345 = {
         x: "-0.6330",
         y: "-3.9333",
       },
-      "813": {
+      813: {
         n: "Becrux",
         puid: 40,
         uid: 813,
@@ -9360,7 +9360,7 @@ export const turn345 = {
         x: "-1.1526",
         y: "-1.4772",
       },
-      "814": {
+      814: {
         c: 0,
         e: 1,
         ga: 0,
@@ -9376,7 +9376,7 @@ export const turn345 = {
         x: "-2.0609",
         y: "-1.8043",
       },
-      "816": {
+      816: {
         n: "Canopus",
         puid: 4,
         uid: 816,
@@ -9384,7 +9384,7 @@ export const turn345 = {
         x: "-0.7949",
         y: "-4.1132",
       },
-      "817": {
+      817: {
         n: "Mu Rye",
         puid: 4,
         uid: 817,
@@ -9392,7 +9392,7 @@ export const turn345 = {
         x: "-1.3651",
         y: "-4.1294",
       },
-      "818": {
+      818: {
         n: "Soft Ancha",
         puid: 14,
         uid: 818,
@@ -9400,7 +9400,7 @@ export const turn345 = {
         x: "-0.9968",
         y: "-4.4984",
       },
-      "819": {
+      819: {
         n: "Delta Zoo",
         puid: 14,
         uid: 819,
@@ -9408,7 +9408,7 @@ export const turn345 = {
         x: "-0.8557",
         y: "-4.5615",
       },
-      "82": {
+      82: {
         n: "Eta Sirius",
         puid: 47,
         uid: 82,
@@ -9416,7 +9416,7 @@ export const turn345 = {
         x: "-0.0704",
         y: "-2.2788",
       },
-      "820": {
+      820: {
         n: "Theta Menkab",
         puid: 60,
         uid: 820,
@@ -9424,7 +9424,7 @@ export const turn345 = {
         x: "-1.4295",
         y: "-3.5999",
       },
-      "821": {
+      821: {
         n: "Thuban",
         puid: 60,
         uid: 821,
@@ -9432,7 +9432,7 @@ export const turn345 = {
         x: "-1.7181",
         y: "-4.2543",
       },
-      "822": {
+      822: {
         n: "Cebalrai",
         puid: 34,
         uid: 822,
@@ -9440,7 +9440,7 @@ export const turn345 = {
         x: "-0.3781",
         y: "-4.5305",
       },
-      "823": {
+      823: {
         n: "Fomalhaut",
         puid: 60,
         uid: 823,
@@ -9448,7 +9448,7 @@ export const turn345 = {
         x: "-0.4596",
         y: "-3.3862",
       },
-      "824": {
+      824: {
         n: "White Mirach",
         puid: 60,
         uid: 824,
@@ -9456,7 +9456,7 @@ export const turn345 = {
         x: "-1.1202",
         y: "-3.0878",
       },
-      "825": {
+      825: {
         n: "Dull Fin",
         puid: 34,
         uid: 825,
@@ -9464,7 +9464,7 @@ export const turn345 = {
         x: "0.0458",
         y: "-4.0710",
       },
-      "826": {
+      826: {
         n: "Mega Aldebaran",
         puid: 60,
         uid: 826,
@@ -9472,7 +9472,7 @@ export const turn345 = {
         x: "-0.1356",
         y: "-3.3170",
       },
-      "827": {
+      827: {
         n: "Rotanev",
         puid: 60,
         uid: 827,
@@ -9480,7 +9480,7 @@ export const turn345 = {
         x: "-0.3081",
         y: "-3.0340",
       },
-      "83": {
+      83: {
         n: "Yak",
         puid: 47,
         uid: 83,
@@ -9488,7 +9488,7 @@ export const turn345 = {
         x: "0.2314",
         y: "-2.1355",
       },
-      "830": {
+      830: {
         n: "Blue Fawaris",
         puid: 34,
         uid: 830,
@@ -9496,7 +9496,7 @@ export const turn345 = {
         x: "-0.2665",
         y: "-5.1188",
       },
-      "831": {
+      831: {
         n: "Bright Aldhibah",
         puid: 34,
         uid: 831,
@@ -9504,7 +9504,7 @@ export const turn345 = {
         x: "-0.2424",
         y: "-4.9731",
       },
-      "834": {
+      834: {
         n: "Alula",
         puid: -1,
         uid: 834,
@@ -9512,7 +9512,7 @@ export const turn345 = {
         x: "-0.9342",
         y: "-5.0994",
       },
-      "835": {
+      835: {
         n: "Pi Mi",
         puid: 34,
         uid: 835,
@@ -9520,7 +9520,7 @@ export const turn345 = {
         x: "-0.6245",
         y: "-4.5670",
       },
-      "836": {
+      836: {
         n: "Sigma Menkalinan",
         puid: 34,
         uid: 836,
@@ -9528,7 +9528,7 @@ export const turn345 = {
         x: "0.0864",
         y: "-4.6443",
       },
-      "837": {
+      837: {
         n: "Aldhafera",
         puid: 34,
         uid: 837,
@@ -9536,7 +9536,7 @@ export const turn345 = {
         x: "-0.2751",
         y: "-4.3561",
       },
-      "838": {
+      838: {
         n: "Zeta Ill",
         puid: 14,
         uid: 838,
@@ -9544,7 +9544,7 @@ export const turn345 = {
         x: "-1.2777",
         y: "-5.3763",
       },
-      "839": {
+      839: {
         n: "Gamma Hamal",
         puid: 34,
         uid: 839,
@@ -9552,7 +9552,7 @@ export const turn345 = {
         x: "-0.7518",
         y: "-4.2174",
       },
-      "84": {
+      84: {
         n: "Slow Fez",
         puid: 60,
         uid: 84,
@@ -9560,7 +9560,7 @@ export const turn345 = {
         x: "-0.3359",
         y: "-2.4447",
       },
-      "840": {
+      840: {
         n: "Ain",
         puid: 34,
         uid: 840,
@@ -9568,7 +9568,7 @@ export const turn345 = {
         x: "0.2053",
         y: "-4.2602",
       },
-      "841": {
+      841: {
         n: "Sigma Ruchba",
         puid: 14,
         uid: 841,
@@ -9576,7 +9576,7 @@ export const turn345 = {
         x: "-1.5165",
         y: "-5.5461",
       },
-      "842": {
+      842: {
         n: "Gacrux",
         puid: 5,
         uid: 842,
@@ -9584,7 +9584,7 @@ export const turn345 = {
         x: "-0.7419",
         y: "-6.3677",
       },
-      "844": {
+      844: {
         n: "Rastaban",
         puid: 5,
         uid: 844,
@@ -9592,7 +9592,7 @@ export const turn345 = {
         x: "-0.1621",
         y: "-6.5748",
       },
-      "847": {
+      847: {
         n: "Pure Gomeisa",
         puid: 5,
         uid: 847,
@@ -9600,7 +9600,7 @@ export const turn345 = {
         x: "0.4632",
         y: "-6.4347",
       },
-      "848": {
+      848: {
         n: "Alfirk",
         puid: 5,
         uid: 848,
@@ -9608,7 +9608,7 @@ export const turn345 = {
         x: "0.6089",
         y: "-6.3655",
       },
-      "849": {
+      849: {
         n: "Gamma Talitha",
         puid: 5,
         uid: 849,
@@ -9616,7 +9616,7 @@ export const turn345 = {
         x: "-0.3162",
         y: "-6.2188",
       },
-      "85": {
+      85: {
         n: "Soft Ire",
         puid: 40,
         uid: 85,
@@ -9624,7 +9624,7 @@ export const turn345 = {
         x: "-0.6285",
         y: "-1.5589",
       },
-      "850": {
+      850: {
         n: "AlKap",
         puid: 5,
         uid: 850,
@@ -9632,7 +9632,7 @@ export const turn345 = {
         x: "-0.3999",
         y: "-6.1120",
       },
-      "851": {
+      851: {
         n: "Kappa Haldus",
         puid: 34,
         uid: 851,
@@ -9640,7 +9640,7 @@ export const turn345 = {
         x: "0.3287",
         y: "-5.5215",
       },
-      "852": {
+      852: {
         n: "Delta Tania",
         puid: 34,
         uid: 852,
@@ -9648,7 +9648,7 @@ export const turn345 = {
         x: "0.7207",
         y: "-5.6052",
       },
-      "853": {
+      853: {
         n: "Xi Sarin",
         puid: 34,
         uid: 853,
@@ -9656,7 +9656,7 @@ export const turn345 = {
         x: "-0.0256",
         y: "-5.3552",
       },
-      "854": {
+      854: {
         n: "Young Sadr",
         puid: 34,
         uid: 854,
@@ -9664,7 +9664,7 @@ export const turn345 = {
         x: "-0.4921",
         y: "-5.5209",
       },
-      "855": {
+      855: {
         n: "Grand Adhara",
         puid: 53,
         uid: 855,
@@ -9672,7 +9672,7 @@ export const turn345 = {
         x: "1.1411",
         y: "-6.7588",
       },
-      "856": {
+      856: {
         n: "Mothallah",
         puid: 34,
         uid: 856,
@@ -9680,7 +9680,7 @@ export const turn345 = {
         x: "0.7015",
         y: "-5.1557",
       },
-      "857": {
+      857: {
         n: "Dry Sirius",
         puid: 53,
         uid: 857,
@@ -9688,7 +9688,7 @@ export const turn345 = {
         x: "1.2428",
         y: "-6.9449",
       },
-      "858": {
+      858: {
         n: "Eltanin",
         puid: 34,
         uid: 858,
@@ -9696,7 +9696,7 @@ export const turn345 = {
         x: "1.0793",
         y: "-5.1777",
       },
-      "859": {
+      859: {
         n: "Grand Thabit",
         puid: 34,
         uid: 859,
@@ -9704,7 +9704,7 @@ export const turn345 = {
         x: "-0.6270",
         y: "-5.0294",
       },
-      "86": {
+      86: {
         n: "Regor",
         puid: 40,
         uid: 86,
@@ -9712,7 +9712,7 @@ export const turn345 = {
         x: "-0.5114",
         y: "-1.3411",
       },
-      "860": {
+      860: {
         n: "Odd Betria",
         puid: 53,
         uid: 860,
@@ -9720,7 +9720,7 @@ export const turn345 = {
         x: "1.5298",
         y: "-6.5576",
       },
-      "861": {
+      861: {
         n: "Lost Wow",
         puid: 53,
         uid: 861,
@@ -9728,7 +9728,7 @@ export const turn345 = {
         x: "1.6668",
         y: "-6.4515",
       },
-      "862": {
+      862: {
         n: "Alnitak",
         puid: 53,
         uid: 862,
@@ -9736,7 +9736,7 @@ export const turn345 = {
         x: "1.6613",
         y: "-6.6891",
       },
-      "863": {
+      863: {
         n: "Dry Zosma",
         puid: 53,
         uid: 863,
@@ -9744,7 +9744,7 @@ export const turn345 = {
         x: "1.8126",
         y: "-6.6328",
       },
-      "864": {
+      864: {
         n: "Soft Mebsuta",
         puid: 5,
         uid: 864,
@@ -9752,7 +9752,7 @@ export const turn345 = {
         x: "0.9037",
         y: "-6.4970",
       },
-      "866": {
+      866: {
         n: "Segin",
         puid: -1,
         uid: 866,
@@ -9760,7 +9760,7 @@ export const turn345 = {
         x: "1.4855",
         y: "-5.7462",
       },
-      "867": {
+      867: {
         n: "New Grumium",
         puid: 59,
         uid: 867,
@@ -9768,7 +9768,7 @@ export const turn345 = {
         x: "1.9386",
         y: "-7.0651",
       },
-      "868": {
+      868: {
         n: "Dark Procyon",
         puid: 53,
         uid: 868,
@@ -9776,7 +9776,7 @@ export const turn345 = {
         x: "1.5017",
         y: "-7.3421",
       },
-      "869": {
+      869: {
         n: "Free Rad",
         puid: 9,
         uid: 869,
@@ -9784,7 +9784,7 @@ export const turn345 = {
         x: "0.7258",
         y: "-7.1494",
       },
-      "870": {
+      870: {
         n: "Altais",
         puid: -1,
         uid: 870,
@@ -9792,7 +9792,7 @@ export const turn345 = {
         x: "2.1874",
         y: "-5.6878",
       },
-      "871": {
+      871: {
         n: "Bright Kleeia",
         puid: 5,
         uid: 871,
@@ -9800,7 +9800,7 @@ export const turn345 = {
         x: "0.3215",
         y: "-6.0503",
       },
-      "872": {
+      872: {
         n: "Mega Ankaa",
         puid: 37,
         uid: 872,
@@ -9808,7 +9808,7 @@ export const turn345 = {
         x: "2.6466",
         y: "-6.1239",
       },
-      "873": {
+      873: {
         n: "Elnath",
         puid: -1,
         uid: 873,
@@ -9816,7 +9816,7 @@ export const turn345 = {
         x: "1.7755",
         y: "-5.1388",
       },
-      "874": {
+      874: {
         n: "Mimosa",
         puid: 37,
         uid: 874,
@@ -9824,7 +9824,7 @@ export const turn345 = {
         x: "2.8263",
         y: "-6.0757",
       },
-      "875": {
+      875: {
         n: "Port Tyl",
         puid: 9,
         uid: 875,
@@ -9832,7 +9832,7 @@ export const turn345 = {
         x: "0.7609",
         y: "-7.4160",
       },
-      "876": {
+      876: {
         n: "Lush Alphecca",
         puid: 9,
         uid: 876,
@@ -9840,7 +9840,7 @@ export const turn345 = {
         x: "0.8334",
         y: "-7.2872",
       },
-      "877": {
+      877: {
         n: "Toliman",
         puid: 9,
         uid: 877,
@@ -9848,7 +9848,7 @@ export const turn345 = {
         x: "0.8059",
         y: "-7.6652",
       },
-      "88": {
+      88: {
         n: "Kaus",
         puid: 40,
         uid: 88,
@@ -9856,7 +9856,7 @@ export const turn345 = {
         x: "0.3554",
         y: "-1.2219",
       },
-      "880": {
+      880: {
         n: "Nu Neo",
         puid: 9,
         uid: 880,
@@ -9864,7 +9864,7 @@ export const turn345 = {
         x: "0.3533",
         y: "-7.9473",
       },
-      "881": {
+      881: {
         n: "Odd Proxima",
         puid: -1,
         uid: 881,
@@ -9872,7 +9872,7 @@ export const turn345 = {
         x: "-0.0921",
         y: "-7.3282",
       },
-      "882": {
+      882: {
         n: "Nusakan",
         puid: -1,
         uid: 882,
@@ -9880,7 +9880,7 @@ export const turn345 = {
         x: "-0.1395",
         y: "-7.6639",
       },
-      "883": {
+      883: {
         n: "Bright Asp",
         puid: 9,
         uid: 883,
@@ -9888,7 +9888,7 @@ export const turn345 = {
         x: "0.3074",
         y: "-8.2300",
       },
-      "884": {
+      884: {
         n: "Beta Zit",
         puid: 53,
         uid: 884,
@@ -9896,7 +9896,7 @@ export const turn345 = {
         x: "1.4680",
         y: "-6.8964",
       },
-      "885": {
+      885: {
         n: "Birdun",
         puid: 5,
         uid: 885,
@@ -9904,7 +9904,7 @@ export const turn345 = {
         x: "0.9826",
         y: "-6.3751",
       },
-      "886": {
+      886: {
         n: "Eta Proxima",
         puid: 5,
         uid: 886,
@@ -9912,7 +9912,7 @@ export const turn345 = {
         x: "0.0267",
         y: "-6.3741",
       },
-      "888": {
+      888: {
         n: "Baten",
         puid: 59,
         uid: 888,
@@ -9920,7 +9920,7 @@ export const turn345 = {
         x: "1.9722",
         y: "-7.3899",
       },
-      "891": {
+      891: {
         n: "Grand Tarazet",
         puid: 59,
         uid: 891,
@@ -9928,7 +9928,7 @@ export const turn345 = {
         x: "2.0302",
         y: "-7.7621",
       },
-      "893": {
+      893: {
         n: "Last Betelgeuse",
         puid: 59,
         uid: 893,
@@ -9936,7 +9936,7 @@ export const turn345 = {
         x: "1.7938",
         y: "-7.1953",
       },
-      "894": {
+      894: {
         n: "Beta Minkar",
         puid: 59,
         uid: 894,
@@ -9944,7 +9944,7 @@ export const turn345 = {
         x: "1.3581",
         y: "-7.8433",
       },
-      "895": {
+      895: {
         n: "Alpha Arkab",
         puid: 53,
         uid: 895,
@@ -9952,7 +9952,7 @@ export const turn345 = {
         x: "1.2533",
         y: "-7.4123",
       },
-      "896": {
+      896: {
         n: "Port Decrux",
         puid: 53,
         uid: 896,
@@ -9960,7 +9960,7 @@ export const turn345 = {
         x: "1.4772",
         y: "-7.0095",
       },
-      "897": {
+      897: {
         n: "Gamma Angetenar",
         puid: 59,
         uid: 897,
@@ -9968,7 +9968,7 @@ export const turn345 = {
         x: "2.3460",
         y: "-7.0091",
       },
-      "898": {
+      898: {
         n: "Eta Alwaid",
         puid: 51,
         uid: 898,
@@ -9976,7 +9976,7 @@ export const turn345 = {
         x: "2.6713",
         y: "-7.3169",
       },
-      "899": {
+      899: {
         n: "Polaris",
         puid: -1,
         uid: 899,
@@ -9984,7 +9984,7 @@ export const turn345 = {
         x: "2.0026",
         y: "-8.5947",
       },
-      "9": {
+      9: {
         n: "Arneb",
         puid: 2,
         uid: 9,
@@ -9992,7 +9992,7 @@ export const turn345 = {
         x: "4.5890",
         y: "2.1503",
       },
-      "900": {
+      900: {
         n: "Raw",
         puid: -1,
         uid: 900,
@@ -10000,7 +10000,7 @@ export const turn345 = {
         x: "2.1107",
         y: "-8.6659",
       },
-      "902": {
+      902: {
         n: "Dark Kastra",
         puid: 9,
         uid: 902,
@@ -10008,7 +10008,7 @@ export const turn345 = {
         x: "0.5700",
         y: "-7.5123",
       },
-      "903": {
+      903: {
         n: "Red Elk",
         puid: 9,
         uid: 903,
@@ -10016,7 +10016,7 @@ export const turn345 = {
         x: "0.4928",
         y: "-7.3867",
       },
-      "905": {
+      905: {
         n: "Dux",
         puid: 51,
         uid: 905,
@@ -10024,7 +10024,7 @@ export const turn345 = {
         x: "3.2003",
         y: "-7.6524",
       },
-      "906": {
+      906: {
         n: "Sarin",
         puid: 51,
         uid: 906,
@@ -10032,7 +10032,7 @@ export const turn345 = {
         x: "2.9677",
         y: "-7.3572",
       },
-      "907": {
+      907: {
         n: "Zeta Asellus",
         puid: 51,
         uid: 907,
@@ -10040,7 +10040,7 @@ export const turn345 = {
         x: "3.3613",
         y: "-7.7454",
       },
-      "908": {
+      908: {
         n: "Hard Giennah",
         puid: 51,
         uid: 908,
@@ -10048,7 +10048,7 @@ export const turn345 = {
         x: "3.2171",
         y: "-7.1743",
       },
-      "909": {
+      909: {
         n: "Saiph",
         puid: 51,
         uid: 909,
@@ -10056,7 +10056,7 @@ export const turn345 = {
         x: "3.4702",
         y: "-7.9130",
       },
-      "91": {
+      91: {
         n: "Nu Furud",
         puid: 39,
         uid: 91,
@@ -10064,7 +10064,7 @@ export const turn345 = {
         x: "0.8585",
         y: "-2.5407",
       },
-      "910": {
+      910: {
         n: "Tack",
         puid: 31,
         uid: 910,
@@ -10072,7 +10072,7 @@ export const turn345 = {
         x: "3.6830",
         y: "-7.6310",
       },
-      "911": {
+      911: {
         n: "Young Albali",
         puid: -1,
         uid: 911,
@@ -10080,7 +10080,7 @@ export const turn345 = {
         x: "2.9474",
         y: "-8.2747",
       },
-      "912": {
+      912: {
         n: "Old Castor",
         puid: 37,
         uid: 912,
@@ -10088,7 +10088,7 @@ export const turn345 = {
         x: "2.5555",
         y: "-6.9638",
       },
-      "913": {
+      913: {
         n: "Soft Fax",
         puid: 31,
         uid: 913,
@@ -10096,7 +10096,7 @@ export const turn345 = {
         x: "3.9339",
         y: "-7.3461",
       },
-      "914": {
+      914: {
         n: "Lush Urn",
         puid: 37,
         uid: 914,
@@ -10104,7 +10104,7 @@ export const turn345 = {
         x: "2.8990",
         y: "-6.6054",
       },
-      "915": {
+      915: {
         n: "Azimech",
         puid: 51,
         uid: 915,
@@ -10112,7 +10112,7 @@ export const turn345 = {
         x: "3.4397",
         y: "-8.5923",
       },
-      "916": {
+      916: {
         n: "Auva",
         puid: 51,
         uid: 916,
@@ -10120,7 +10120,7 @@ export const turn345 = {
         x: "3.6568",
         y: "-8.5933",
       },
-      "917": {
+      917: {
         n: "Theta Scheat",
         puid: 37,
         uid: 917,
@@ -10128,7 +10128,7 @@ export const turn345 = {
         x: "3.1807",
         y: "-6.3163",
       },
-      "918": {
+      918: {
         n: "Minchir",
         puid: 37,
         uid: 918,
@@ -10136,7 +10136,7 @@ export const turn345 = {
         x: "2.4960",
         y: "-6.3458",
       },
-      "92": {
+      92: {
         n: "Matar",
         puid: 60,
         uid: 92,
@@ -10144,7 +10144,7 @@ export const turn345 = {
         x: "-0.6924",
         y: "-3.1016",
       },
-      "920": {
+      920: {
         n: "Irk",
         puid: 37,
         uid: 920,
@@ -10152,7 +10152,7 @@ export const turn345 = {
         x: "3.2503",
         y: "-6.4310",
       },
-      "921": {
+      921: {
         n: "Wet Caph",
         puid: 37,
         uid: 921,
@@ -10160,7 +10160,7 @@ export const turn345 = {
         x: "3.2351",
         y: "-6.1935",
       },
-      "922": {
+      922: {
         n: "Hard Wei",
         puid: 37,
         uid: 922,
@@ -10168,7 +10168,7 @@ export const turn345 = {
         x: "3.4782",
         y: "-6.0551",
       },
-      "923": {
+      923: {
         n: "Dry Rukbat",
         puid: 37,
         uid: 923,
@@ -10176,7 +10176,7 @@ export const turn345 = {
         x: "3.3539",
         y: "-5.9523",
       },
-      "924": {
+      924: {
         n: "Aldhibah",
         puid: 17,
         uid: 924,
@@ -10184,7 +10184,7 @@ export const turn345 = {
         x: "3.9113",
         y: "-6.3342",
       },
-      "926": {
+      926: {
         n: "Lush Meissa",
         puid: 51,
         uid: 926,
@@ -10192,7 +10192,7 @@ export const turn345 = {
         x: "3.0373",
         y: "-6.9928",
       },
-      "927": {
+      927: {
         n: "Girtab",
         puid: 51,
         uid: 927,
@@ -10200,7 +10200,7 @@ export const turn345 = {
         x: "3.3215",
         y: "-7.1776",
       },
-      "928": {
+      928: {
         n: "Beta Etamin",
         puid: 37,
         uid: 928,
@@ -10208,7 +10208,7 @@ export const turn345 = {
         x: "2.5277",
         y: "-6.6111",
       },
-      "929": {
+      929: {
         n: "Black Alcor",
         puid: 31,
         uid: 929,
@@ -10216,7 +10216,7 @@ export const turn345 = {
         x: "4.1474",
         y: "-7.0141",
       },
-      "93": {
+      93: {
         n: "Gamma Yum",
         puid: 40,
         uid: 93,
@@ -10224,7 +10224,7 @@ export const turn345 = {
         x: "0.4169",
         y: "-0.7225",
       },
-      "932": {
+      932: {
         n: "Alpha Pollux",
         puid: 17,
         uid: 932,
@@ -10232,7 +10232,7 @@ export const turn345 = {
         x: "4.6525",
         y: "-6.2693",
       },
-      "933": {
+      933: {
         n: "Unuk",
         puid: 8,
         uid: 933,
@@ -10240,7 +10240,7 @@ export const turn345 = {
         x: "4.3522",
         y: "-5.4187",
       },
-      "934": {
+      934: {
         n: "Hag",
         puid: 31,
         uid: 934,
@@ -10248,7 +10248,7 @@ export const turn345 = {
         x: "4.6487",
         y: "-7.1057",
       },
-      "935": {
+      935: {
         n: "Nova Hoedus",
         puid: 31,
         uid: 935,
@@ -10256,7 +10256,7 @@ export const turn345 = {
         x: "4.1717",
         y: "-7.1416",
       },
-      "936": {
+      936: {
         n: "Black Alrakis",
         puid: 31,
         uid: 936,
@@ -10264,7 +10264,7 @@ export const turn345 = {
         x: "4.4671",
         y: "-7.1171",
       },
-      "937": {
+      937: {
         n: "Nu Alphard",
         puid: 31,
         uid: 937,
@@ -10272,7 +10272,7 @@ export const turn345 = {
         x: "4.0521",
         y: "-7.5139",
       },
-      "938": {
+      938: {
         n: "Tejat",
         puid: 31,
         uid: 938,
@@ -10280,7 +10280,7 @@ export const turn345 = {
         x: "3.9647",
         y: "-6.9531",
       },
-      "939": {
+      939: {
         n: "Alwaid",
         puid: 31,
         uid: 939,
@@ -10288,7 +10288,7 @@ export const turn345 = {
         x: "3.8682",
         y: "-6.9210",
       },
-      "94": {
+      94: {
         n: "Asterope",
         puid: 40,
         uid: 94,
@@ -10296,7 +10296,7 @@ export const turn345 = {
         x: "-0.1574",
         y: "-0.5022",
       },
-      "940": {
+      940: {
         n: "Mirfak",
         puid: 31,
         uid: 940,
@@ -10304,7 +10304,7 @@ export const turn345 = {
         x: "4.3749",
         y: "-6.6508",
       },
-      "941": {
+      941: {
         n: "Wet Git",
         puid: 31,
         uid: 941,
@@ -10312,7 +10312,7 @@ export const turn345 = {
         x: "4.0259",
         y: "-7.9218",
       },
-      "942": {
+      942: {
         n: "Alchiba",
         puid: 17,
         uid: 942,
@@ -10320,7 +10320,7 @@ export const turn345 = {
         x: "4.7830",
         y: "-6.6429",
       },
-      "943": {
+      943: {
         n: "White Merope",
         puid: 31,
         uid: 943,
@@ -10328,7 +10328,7 @@ export const turn345 = {
         x: "3.3877",
         y: "-7.4117",
       },
-      "944": {
+      944: {
         n: "Sadachbia",
         puid: 31,
         uid: 944,
@@ -10336,7 +10336,7 @@ export const turn345 = {
         x: "4.3541",
         y: "-8.2397",
       },
-      "945": {
+      945: {
         n: "Red Nashira",
         puid: 17,
         uid: 945,
@@ -10344,7 +10344,7 @@ export const turn345 = {
         x: "4.8875",
         y: "-6.3718",
       },
-      "947": {
+      947: {
         n: "Tau Mirfak",
         puid: 31,
         uid: 947,
@@ -10352,7 +10352,7 @@ export const turn345 = {
         x: "3.5419",
         y: "-8.2935",
       },
-      "948": {
+      948: {
         n: "Wet Decrux",
         puid: 51,
         uid: 948,
@@ -10360,7 +10360,7 @@ export const turn345 = {
         x: "2.9910",
         y: "-7.7213",
       },
-      "949": {
+      949: {
         n: "New Arrakis",
         puid: -1,
         uid: 949,
@@ -10368,7 +10368,7 @@ export const turn345 = {
         x: "5.6980",
         y: "-7.0044",
       },
-      "95": {
+      95: {
         n: "Merope",
         puid: 39,
         uid: 95,
@@ -10376,7 +10376,7 @@ export const turn345 = {
         x: "0.9332",
         y: "-1.9411",
       },
-      "950": {
+      950: {
         n: "Old Duhr",
         puid: 17,
         uid: 950,
@@ -10384,7 +10384,7 @@ export const turn345 = {
         x: "4.7390",
         y: "-6.0588",
       },
-      "951": {
+      951: {
         n: "Muphrid",
         puid: 17,
         uid: 951,
@@ -10392,7 +10392,7 @@ export const turn345 = {
         x: "4.3900",
         y: "-6.1981",
       },
-      "952": {
+      952: {
         n: "Wild Rukh",
         puid: 17,
         uid: 952,
@@ -10400,7 +10400,7 @@ export const turn345 = {
         x: "4.5890",
         y: "-6.3948",
       },
-      "953": {
+      953: {
         n: "Alpha",
         puid: 17,
         uid: 953,
@@ -10408,7 +10408,7 @@ export const turn345 = {
         x: "5.0115",
         y: "-5.9843",
       },
-      "955": {
+      955: {
         n: "Elk",
         puid: 17,
         uid: 955,
@@ -10416,7 +10416,7 @@ export const turn345 = {
         x: "5.0928",
         y: "-6.4115",
       },
-      "956": {
+      956: {
         n: "Misam",
         puid: 17,
         uid: 956,
@@ -10424,7 +10424,7 @@ export const turn345 = {
         x: "4.8882",
         y: "-6.7004",
       },
-      "957": {
+      957: {
         n: "Sigma Errai",
         puid: 31,
         uid: 957,
@@ -10432,7 +10432,7 @@ export const turn345 = {
         x: "4.1885",
         y: "-6.7524",
       },
-      "958": {
+      958: {
         n: "Port Aldebaran",
         puid: 17,
         uid: 958,
@@ -10440,7 +10440,7 @@ export const turn345 = {
         x: "5.4796",
         y: "-5.9808",
       },
-      "959": {
+      959: {
         n: "White Mesarthim",
         puid: 8,
         uid: 959,
@@ -10448,7 +10448,7 @@ export const turn345 = {
         x: "4.5030",
         y: "-5.0755",
       },
-      "96": {
+      96: {
         n: "Odd Denebola",
         puid: 39,
         uid: 96,
@@ -10456,7 +10456,7 @@ export const turn345 = {
         x: "0.8543",
         y: "-2.0373",
       },
-      "960": {
+      960: {
         n: "Beta Alrakis",
         puid: 17,
         uid: 960,
@@ -10464,7 +10464,7 @@ export const turn345 = {
         x: "5.4164",
         y: "-5.3645",
       },
-      "963": {
+      963: {
         n: "Dark Tag",
         puid: 17,
         uid: 963,
@@ -10472,7 +10472,7 @@ export const turn345 = {
         x: "5.9429",
         y: "-6.1772",
       },
-      "964": {
+      964: {
         n: "Nu Chi",
         puid: 17,
         uid: 964,
@@ -10480,7 +10480,7 @@ export const turn345 = {
         x: "6.0410",
         y: "-6.0588",
       },
-      "967": {
+      967: {
         n: "Pherkad",
         puid: 61,
         uid: 967,
@@ -10488,7 +10488,7 @@ export const turn345 = {
         x: "4.5473",
         y: "-4.4950",
       },
-      "968": {
+      968: {
         n: "Dry Sargas",
         puid: 8,
         uid: 968,
@@ -10496,7 +10496,7 @@ export const turn345 = {
         x: "4.7453",
         y: "-4.4052",
       },
-      "969": {
+      969: {
         n: "Mirach",
         puid: 61,
         uid: 969,
@@ -10504,7 +10504,7 @@ export const turn345 = {
         x: "4.1822",
         y: "-4.5586",
       },
-      "97": {
+      97: {
         n: "Grand Atlas",
         puid: 39,
         uid: 97,
@@ -10512,7 +10512,7 @@ export const turn345 = {
         x: "0.9677",
         y: "-2.2699",
       },
-      "970": {
+      970: {
         n: "Chara",
         puid: -1,
         uid: 970,
@@ -10520,7 +10520,7 @@ export const turn345 = {
         x: "5.2283",
         y: "-4.9788",
       },
-      "971": {
+      971: {
         n: "Sigma Alphecca",
         puid: 61,
         uid: 971,
@@ -10528,7 +10528,7 @@ export const turn345 = {
         x: "4.0211",
         y: "-4.4656",
       },
-      "972": {
+      972: {
         n: "Alpha Nunki",
         puid: 61,
         uid: 972,
@@ -10536,7 +10536,7 @@ export const turn345 = {
         x: "3.8333",
         y: "-4.8196",
       },
-      "973": {
+      973: {
         n: "Young Skore",
         puid: 8,
         uid: 973,
@@ -10544,7 +10544,7 @@ export const turn345 = {
         x: "4.0021",
         y: "-4.1874",
       },
-      "974": {
+      974: {
         n: "Young Alnasl",
         puid: 8,
         uid: 974,
@@ -10552,7 +10552,7 @@ export const turn345 = {
         x: "3.9998",
         y: "-5.5757",
       },
-      "975": {
+      975: {
         n: "Theta Kuma",
         puid: 17,
         uid: 975,
@@ -10560,7 +10560,7 @@ export const turn345 = {
         x: "4.7284",
         y: "-5.8955",
       },
-      "976": {
+      976: {
         n: "Phad",
         puid: 8,
         uid: 976,
@@ -10568,7 +10568,7 @@ export const turn345 = {
         x: "3.6734",
         y: "-5.4924",
       },
-      "977": {
+      977: {
         n: "Pherkard",
         puid: 17,
         uid: 977,
@@ -10576,7 +10576,7 @@ export const turn345 = {
         x: "4.8541",
         y: "-6.0663",
       },
-      "979": {
+      979: {
         n: "Alpha Sadatoni",
         puid: 61,
         uid: 979,
@@ -10584,7 +10584,7 @@ export const turn345 = {
         x: "3.1878",
         y: "-4.6930",
       },
-      "98": {
+      98: {
         n: "Port Ascella",
         puid: 39,
         uid: 98,
@@ -10592,7 +10592,7 @@ export const turn345 = {
         x: "0.8681",
         y: "-2.3257",
       },
-      "980": {
+      980: {
         n: "Blue Dheneb",
         puid: 61,
         uid: 980,
@@ -10600,7 +10600,7 @@ export const turn345 = {
         x: "3.3154",
         y: "-4.4382",
       },
-      "981": {
+      981: {
         n: "Nu Elnath",
         puid: 61,
         uid: 981,
@@ -10608,7 +10608,7 @@ export const turn345 = {
         x: "3.3416",
         y: "-4.2017",
       },
-      "982": {
+      982: {
         n: "Theta Diphda",
         puid: -1,
         uid: 982,
@@ -10616,7 +10616,7 @@ export const turn345 = {
         x: "3.1474",
         y: "-4.5271",
       },
-      "983": {
+      983: {
         n: "Fort Cox",
         puid: 61,
         uid: 983,
@@ -10624,7 +10624,7 @@ export const turn345 = {
         x: "3.8519",
         y: "-4.2309",
       },
-      "984": {
+      984: {
         n: "Adhara",
         puid: -1,
         uid: 984,
@@ -10632,7 +10632,7 @@ export const turn345 = {
         x: "3.2425",
         y: "-4.8853",
       },
-      "985": {
+      985: {
         n: "Zosma",
         puid: 61,
         uid: 985,
@@ -10640,7 +10640,7 @@ export const turn345 = {
         x: "4.0688",
         y: "-4.3054",
       },
-      "986": {
+      986: {
         n: "Delta Mirfak",
         puid: 27,
         uid: 986,
@@ -10648,7 +10648,7 @@ export const turn345 = {
         x: "3.6464",
         y: "-3.7283",
       },
-      "987": {
+      987: {
         n: "Sigma Duo",
         puid: 27,
         uid: 987,
@@ -10656,7 +10656,7 @@ export const turn345 = {
         x: "3.8016",
         y: "-3.6862",
       },
-      "988": {
+      988: {
         n: "Dry Fomalhaut",
         puid: 61,
         uid: 988,
@@ -10664,7 +10664,7 @@ export const turn345 = {
         x: "3.7689",
         y: "-5.2523",
       },
-      "989": {
+      989: {
         n: "Fort Chort",
         puid: 8,
         uid: 989,
@@ -10672,7 +10672,7 @@ export const turn345 = {
         x: "4.2192",
         y: "-5.0466",
       },
-      "99": {
+      99: {
         n: "Theta Zoo",
         puid: 6,
         uid: 99,
@@ -10680,7 +10680,7 @@ export const turn345 = {
         x: "1.5347",
         y: "-1.6932",
       },
-      "990": {
+      990: {
         n: "Wild TienKuan",
         puid: 27,
         uid: 990,
@@ -10688,7 +10688,7 @@ export const turn345 = {
         x: "4.0826",
         y: "-3.5275",
       },
-      "992": {
+      992: {
         n: "Odd Mog",
         puid: 27,
         uid: 992,
@@ -10696,7 +10696,7 @@ export const turn345 = {
         x: "4.0961",
         y: "-3.3158",
       },
-      "993": {
+      993: {
         n: "Castor",
         puid: 8,
         uid: 993,
@@ -10704,7 +10704,7 @@ export const turn345 = {
         x: "4.8169",
         y: "-4.2937",
       },
-      "994": {
+      994: {
         n: "Duhr",
         puid: 8,
         uid: 994,
@@ -10712,7 +10712,7 @@ export const turn345 = {
         x: "3.9597",
         y: "-5.7766",
       },
-      "995": {
+      995: {
         n: "Delta Pee",
         puid: 12,
         uid: 995,
@@ -10720,7 +10720,7 @@ export const turn345 = {
         x: "4.4015",
         y: "-3.4516",
       },
-      "996": {
+      996: {
         n: "Last Yak",
         puid: 12,
         uid: 996,
@@ -10728,7 +10728,7 @@ export const turn345 = {
         x: "4.4227",
         y: "-3.8437",
       },
-      "997": {
+      997: {
         n: "Tau Ash",
         puid: 12,
         uid: 997,
@@ -10736,7 +10736,7 @@ export const turn345 = {
         x: "4.6768",
         y: "-3.4089",
       },
-      "998": {
+      998: {
         n: "Dull Merak",
         puid: 12,
         uid: 998,
@@ -10744,7 +10744,7 @@ export const turn345 = {
         x: "4.3270",
         y: "-3.1791",
       },
-      "999": {
+      999: {
         n: "White Ant",
         puid: 27,
         uid: 999,
@@ -10772,7 +10772,7 @@ export const turn346 = {
     admin: -1,
     fleet_speed: 0.0416666666666667,
     fleets: {
-      "142": {
+      142: {
         l: 0,
         lx: "-2.80252077",
         ly: "-1.94321157",
@@ -10785,7 +10785,7 @@ export const turn346 = {
         x: "-2.76294524",
         y: "-1.95624569",
       },
-      "143": {
+      143: {
         l: 0,
         lx: "-2.95322264",
         ly: "-1.82771343",
@@ -10798,7 +10798,7 @@ export const turn346 = {
         x: "-2.98832476",
         y: "-1.85016230",
       },
-      "144": {
+      144: {
         l: 0,
         lx: "-2.89084791",
         ly: "-2.17492652",
@@ -10812,7 +10812,7 @@ export const turn346 = {
         x: "-2.91342525",
         y: "-2.19179432",
       },
-      "145": {
+      145: {
         l: 0,
         lx: "-2.13860758",
         ly: "-0.69519775",
@@ -10828,7 +10828,7 @@ export const turn346 = {
         x: "-2.11883809",
         y: "-0.65851972",
       },
-      "147": {
+      147: {
         l: 0,
         lx: "-2.67165853",
         ly: "-1.96276121",
@@ -10844,7 +10844,7 @@ export const turn346 = {
         x: "-2.63324275",
         y: "-1.94662617",
       },
-      "148": {
+      148: {
         l: 0,
         lx: "-2.94056896",
         ly: "-2.07570644",
@@ -10857,7 +10857,7 @@ export const turn346 = {
         x: "-2.97665335",
         y: "-2.05487311",
       },
-      "155": {
+      155: {
         l: 0,
         lx: "-3.33312256",
         ly: "-2.49573659",
@@ -10871,7 +10871,7 @@ export const turn346 = {
         x: "-3.33428507",
         y: "-2.49628921",
       },
-      "229": {
+      229: {
         l: 0,
         lx: "-2.82567124",
         ly: "-1.88165464",
@@ -10885,7 +10885,7 @@ export const turn346 = {
         x: "-2.80161119",
         y: "-1.87628921",
       },
-      "271": {
+      271: {
         l: 0,
         lx: "-3.07114321",
         ly: "-2.36314642",
@@ -10899,7 +10899,7 @@ export const turn346 = {
         x: "-3.06970364",
         y: "-2.37051713",
       },
-      "273": {
+      273: {
         l: 0,
         lx: "-3.07954951",
         ly: "-1.85197275",
@@ -10917,7 +10917,7 @@ export const turn346 = {
         x: "-3.07954951",
         y: "-1.85197275",
       },
-      "274": {
+      274: {
         l: 0,
         lx: "-0.86636702",
         ly: "-1.80996271",
@@ -10930,7 +10930,7 @@ export const turn346 = {
         x: "-0.90759439",
         y: "-1.80392823",
       },
-      "276": {
+      276: {
         l: 0,
         lx: "-3.52092670",
         ly: "-2.36598179",
@@ -10944,7 +10944,7 @@ export const turn346 = {
         x: "-3.49873536",
         y: "-2.37125293",
       },
-      "278": {
+      278: {
         l: 0,
         lx: "-3.07114321",
         ly: "-2.36314642",
@@ -10958,7 +10958,7 @@ export const turn346 = {
         x: "-3.06970364",
         y: "-2.37051713",
       },
-      "87": {
+      87: {
         l: 0,
         lx: "-1.56902754",
         ly: "0.16915336",
@@ -10971,7 +10971,7 @@ export const turn346 = {
         x: "-1.58383832",
         y: "0.13020786",
       },
-      "95": {
+      95: {
         l: 0,
         lx: "-2.61551249",
         ly: "-1.98540238",
@@ -10992,7 +10992,7 @@ export const turn346 = {
     paused: false,
     player_uid: 13,
     players: {
-      "0": {
+      0: {
         ai: 0,
         alias: "TokoBalthar",
         avatar: 38,
@@ -11040,7 +11040,7 @@ export const turn346 = {
         total_strength: 256,
         uid: 0,
       },
-      "1": {
+      1: {
         ai: 1,
         alias: "squirrelmt",
         avatar: 44,
@@ -11088,7 +11088,7 @@ export const turn346 = {
         total_strength: 145,
         uid: 1,
       },
-      "10": {
+      10: {
         ai: 1,
         alias: "Supro",
         avatar: 38,
@@ -11136,7 +11136,7 @@ export const turn346 = {
         total_strength: 159,
         uid: 10,
       },
-      "11": {
+      11: {
         ai: 0,
         alias: "Winton",
         avatar: 38,
@@ -11184,7 +11184,7 @@ export const turn346 = {
         total_strength: 232,
         uid: 11,
       },
-      "12": {
+      12: {
         ai: 1,
         alias: "GGabryy",
         avatar: 36,
@@ -11232,77 +11232,77 @@ export const turn346 = {
         total_strength: 138,
         uid: 12,
       },
-      "13": {
+      13: {
         ai: 0,
         alias: "Osric",
         avatar: 31,
         cash: 143,
         conceded: 0,
         countdown_to_war: {
-          "0": 0,
-          "1": 0,
-          "10": 0,
-          "11": 0,
-          "12": 0,
-          "13": 0,
-          "14": 0,
-          "15": 0,
-          "16": 0,
-          "17": 0,
-          "18": 0,
-          "19": 0,
-          "2": 0,
-          "20": 0,
-          "21": 0,
-          "22": 0,
-          "23": 0,
-          "24": 0,
-          "25": 0,
-          "26": 0,
-          "27": 0,
-          "28": 0,
-          "29": 0,
-          "3": 0,
-          "30": 0,
-          "31": 0,
-          "32": 0,
-          "33": 0,
-          "34": 0,
-          "35": 0,
-          "36": 0,
-          "37": 0,
-          "38": 0,
-          "39": 0,
-          "4": 0,
-          "40": 0,
-          "41": 0,
-          "42": 0,
-          "43": 0,
-          "44": 0,
-          "45": 0,
-          "46": 0,
-          "47": 0,
-          "48": 0,
-          "49": 0,
-          "5": 0,
-          "50": 0,
-          "51": 0,
-          "52": 0,
-          "53": 0,
-          "54": 0,
-          "55": 0,
-          "56": 0,
-          "57": 0,
-          "58": 0,
-          "59": 0,
-          "6": 0,
-          "60": 0,
-          "61": 0,
-          "62": 0,
-          "63": 0,
-          "7": 0,
-          "8": 0,
-          "9": 0,
+          0: 0,
+          1: 0,
+          10: 0,
+          11: 0,
+          12: 0,
+          13: 0,
+          14: 0,
+          15: 0,
+          16: 0,
+          17: 0,
+          18: 0,
+          19: 0,
+          2: 0,
+          20: 0,
+          21: 0,
+          22: 0,
+          23: 0,
+          24: 0,
+          25: 0,
+          26: 0,
+          27: 0,
+          28: 0,
+          29: 0,
+          3: 0,
+          30: 0,
+          31: 0,
+          32: 0,
+          33: 0,
+          34: 0,
+          35: 0,
+          36: 0,
+          37: 0,
+          38: 0,
+          39: 0,
+          4: 0,
+          40: 0,
+          41: 0,
+          42: 0,
+          43: 0,
+          44: 0,
+          45: 0,
+          46: 0,
+          47: 0,
+          48: 0,
+          49: 0,
+          5: 0,
+          50: 0,
+          51: 0,
+          52: 0,
+          53: 0,
+          54: 0,
+          55: 0,
+          56: 0,
+          57: 0,
+          58: 0,
+          59: 0,
+          6: 0,
+          60: 0,
+          61: 0,
+          62: 0,
+          63: 0,
+          7: 0,
+          8: 0,
+          9: 0,
         },
         huid: 34,
         karma_to_give: 16,
@@ -11378,73 +11378,73 @@ export const turn346 = {
         total_strength: 290,
         uid: 13,
         war: {
-          "0": 3,
-          "1": 3,
-          "10": 3,
-          "11": 3,
-          "12": 3,
-          "13": 3,
-          "14": 3,
-          "15": 3,
-          "16": 3,
-          "17": 3,
-          "18": 3,
-          "19": 3,
-          "2": 3,
-          "20": 3,
-          "21": 3,
-          "22": 3,
-          "23": 3,
-          "24": 3,
-          "25": 3,
-          "26": 3,
-          "27": 3,
-          "28": 3,
-          "29": 3,
-          "3": 3,
-          "30": 3,
-          "31": 3,
-          "32": 3,
-          "33": 3,
-          "34": 3,
-          "35": 3,
-          "36": 3,
-          "37": 3,
-          "38": 3,
-          "39": 3,
-          "4": 3,
-          "40": 3,
-          "41": 3,
-          "42": 3,
-          "43": 3,
-          "44": 3,
-          "45": 3,
-          "46": 3,
-          "47": 3,
-          "48": 3,
-          "49": 3,
-          "5": 3,
-          "50": 3,
-          "51": 3,
-          "52": 3,
-          "53": 3,
-          "54": 3,
-          "55": 3,
-          "56": 3,
-          "57": 3,
-          "58": 3,
-          "59": 3,
-          "6": 3,
-          "60": 3,
-          "61": 3,
-          "62": 3,
-          "63": 3,
-          "7": 3,
-          "8": 3,
-          "9": 3,
+          0: 3,
+          1: 3,
+          10: 3,
+          11: 3,
+          12: 3,
+          13: 3,
+          14: 3,
+          15: 3,
+          16: 3,
+          17: 3,
+          18: 3,
+          19: 3,
+          2: 3,
+          20: 3,
+          21: 3,
+          22: 3,
+          23: 3,
+          24: 3,
+          25: 3,
+          26: 3,
+          27: 3,
+          28: 3,
+          29: 3,
+          3: 3,
+          30: 3,
+          31: 3,
+          32: 3,
+          33: 3,
+          34: 3,
+          35: 3,
+          36: 3,
+          37: 3,
+          38: 3,
+          39: 3,
+          4: 3,
+          40: 3,
+          41: 3,
+          42: 3,
+          43: 3,
+          44: 3,
+          45: 3,
+          46: 3,
+          47: 3,
+          48: 3,
+          49: 3,
+          5: 3,
+          50: 3,
+          51: 3,
+          52: 3,
+          53: 3,
+          54: 3,
+          55: 3,
+          56: 3,
+          57: 3,
+          58: 3,
+          59: 3,
+          6: 3,
+          60: 3,
+          61: 3,
+          62: 3,
+          63: 3,
+          7: 3,
+          8: 3,
+          9: 3,
         },
       },
-      "14": {
+      14: {
         ai: 0,
         alias: "Chavo del 8",
         avatar: 50,
@@ -11492,7 +11492,7 @@ export const turn346 = {
         total_strength: 287,
         uid: 14,
       },
-      "15": {
+      15: {
         ai: 0,
         alias: "Amirna",
         avatar: 34,
@@ -11540,7 +11540,7 @@ export const turn346 = {
         total_strength: 262,
         uid: 15,
       },
-      "16": {
+      16: {
         ai: 0,
         alias: "Ungoliant",
         avatar: 28,
@@ -11588,7 +11588,7 @@ export const turn346 = {
         total_strength: 259,
         uid: 16,
       },
-      "17": {
+      17: {
         ai: 0,
         alias: "Humpty",
         avatar: 25,
@@ -11636,7 +11636,7 @@ export const turn346 = {
         total_strength: 273,
         uid: 17,
       },
-      "18": {
+      18: {
         ai: 1,
         alias: "HealthyStuff",
         avatar: 38,
@@ -11684,7 +11684,7 @@ export const turn346 = {
         total_strength: 125,
         uid: 18,
       },
-      "19": {
+      19: {
         ai: 0,
         alias: "Gia Vol",
         avatar: 38,
@@ -11732,7 +11732,7 @@ export const turn346 = {
         total_strength: 192,
         uid: 19,
       },
-      "2": {
+      2: {
         ai: 0,
         alias: "Dalinar",
         avatar: 44,
@@ -11780,7 +11780,7 @@ export const turn346 = {
         total_strength: 290,
         uid: 2,
       },
-      "20": {
+      20: {
         ai: 1,
         alias: "GuiBed02",
         avatar: 34,
@@ -11828,7 +11828,7 @@ export const turn346 = {
         total_strength: 96,
         uid: 20,
       },
-      "21": {
+      21: {
         ai: 0,
         alias: "GP519",
         avatar: 32,
@@ -11876,7 +11876,7 @@ export const turn346 = {
         total_strength: 312,
         uid: 21,
       },
-      "22": {
+      22: {
         ai: 0,
         alias: "BelSon",
         avatar: 16,
@@ -11924,7 +11924,7 @@ export const turn346 = {
         total_strength: 193,
         uid: 22,
       },
-      "23": {
+      23: {
         ai: 0,
         alias: "Momonga",
         avatar: 38,
@@ -11972,7 +11972,7 @@ export const turn346 = {
         total_strength: 299,
         uid: 23,
       },
-      "24": {
+      24: {
         ai: 1,
         alias: "Jimtex",
         avatar: 38,
@@ -12020,7 +12020,7 @@ export const turn346 = {
         total_strength: 229,
         uid: 24,
       },
-      "25": {
+      25: {
         ai: 0,
         alias: "Lennox",
         avatar: 34,
@@ -12068,7 +12068,7 @@ export const turn346 = {
         total_strength: 274,
         uid: 25,
       },
-      "26": {
+      26: {
         ai: 1,
         alias: "muerteati",
         avatar: 50,
@@ -12116,7 +12116,7 @@ export const turn346 = {
         total_strength: 149,
         uid: 26,
       },
-      "27": {
+      27: {
         ai: 0,
         alias: "The Bishop",
         avatar: 38,
@@ -12164,7 +12164,7 @@ export const turn346 = {
         total_strength: 219,
         uid: 27,
       },
-      "28": {
+      28: {
         ai: 0,
         alias: "hildegaard",
         avatar: 34,
@@ -12212,7 +12212,7 @@ export const turn346 = {
         total_strength: 259,
         uid: 28,
       },
-      "29": {
+      29: {
         ai: 1,
         alias: "Leluch",
         avatar: 36,
@@ -12260,7 +12260,7 @@ export const turn346 = {
         total_strength: 259,
         uid: 29,
       },
-      "3": {
+      3: {
         ai: 0,
         alias: "SpaceFluff",
         avatar: 36,
@@ -12308,7 +12308,7 @@ export const turn346 = {
         total_strength: 223,
         uid: 3,
       },
-      "30": {
+      30: {
         ai: 0,
         alias: "Communion of Minds",
         avatar: 24,
@@ -12356,7 +12356,7 @@ export const turn346 = {
         total_strength: 212,
         uid: 30,
       },
-      "31": {
+      31: {
         ai: 0,
         alias: "Ruhelos",
         avatar: 23,
@@ -12404,7 +12404,7 @@ export const turn346 = {
         total_strength: 274,
         uid: 31,
       },
-      "32": {
+      32: {
         ai: 1,
         alias: "mrfunbun",
         avatar: 38,
@@ -12452,7 +12452,7 @@ export const turn346 = {
         total_strength: 212,
         uid: 32,
       },
-      "33": {
+      33: {
         ai: 0,
         alias: "WestEndBoy",
         avatar: 38,
@@ -12500,7 +12500,7 @@ export const turn346 = {
         total_strength: 256,
         uid: 33,
       },
-      "34": {
+      34: {
         ai: 0,
         alias: "Fighting Temeraire",
         avatar: 38,
@@ -12548,7 +12548,7 @@ export const turn346 = {
         total_strength: 275,
         uid: 34,
       },
-      "35": {
+      35: {
         ai: 0,
         alias: "just to clarify",
         avatar: 33,
@@ -12596,7 +12596,7 @@ export const turn346 = {
         total_strength: 153,
         uid: 35,
       },
-      "36": {
+      36: {
         ai: 0,
         alias: "Jim Hawkins",
         avatar: 38,
@@ -12644,7 +12644,7 @@ export const turn346 = {
         total_strength: 167,
         uid: 36,
       },
-      "37": {
+      37: {
         ai: 1,
         alias: "AwesomeDude77",
         avatar: 50,
@@ -12692,7 +12692,7 @@ export const turn346 = {
         total_strength: 103,
         uid: 37,
       },
-      "38": {
+      38: {
         ai: 0,
         alias: "cynane",
         avatar: 34,
@@ -12740,7 +12740,7 @@ export const turn346 = {
         total_strength: 241,
         uid: 38,
       },
-      "39": {
+      39: {
         ai: 1,
         alias: "Sousnie",
         avatar: 32,
@@ -12788,7 +12788,7 @@ export const turn346 = {
         total_strength: 183,
         uid: 39,
       },
-      "4": {
+      4: {
         ai: 1,
         alias: "Slicertos",
         avatar: 17,
@@ -12836,7 +12836,7 @@ export const turn346 = {
         total_strength: 172,
         uid: 4,
       },
-      "40": {
+      40: {
         ai: 0,
         alias: "Gremily",
         avatar: 50,
@@ -12884,7 +12884,7 @@ export const turn346 = {
         total_strength: 273,
         uid: 40,
       },
-      "41": {
+      41: {
         ai: 0,
         alias: "Alpharius87",
         avatar: 50,
@@ -12932,7 +12932,7 @@ export const turn346 = {
         total_strength: 192,
         uid: 41,
       },
-      "42": {
+      42: {
         ai: 0,
         alias: "Zazondak",
         avatar: 32,
@@ -12980,7 +12980,7 @@ export const turn346 = {
         total_strength: 200,
         uid: 42,
       },
-      "43": {
+      43: {
         ai: 0,
         alias: "DobytheMagicalHouseElf",
         avatar: 33,
@@ -13028,7 +13028,7 @@ export const turn346 = {
         total_strength: 208,
         uid: 43,
       },
-      "44": {
+      44: {
         ai: 0,
         alias: "Shadow Jack",
         avatar: 32,
@@ -13076,7 +13076,7 @@ export const turn346 = {
         total_strength: 170,
         uid: 44,
       },
-      "45": {
+      45: {
         ai: 1,
         alias: "Savage777",
         avatar: 36,
@@ -13124,7 +13124,7 @@ export const turn346 = {
         total_strength: 135,
         uid: 45,
       },
-      "46": {
+      46: {
         ai: 1,
         alias: "Sixtys",
         avatar: 33,
@@ -13172,7 +13172,7 @@ export const turn346 = {
         total_strength: 203,
         uid: 46,
       },
-      "47": {
+      47: {
         ai: 0,
         alias: "Neemah",
         avatar: 50,
@@ -13220,7 +13220,7 @@ export const turn346 = {
         total_strength: 185,
         uid: 47,
       },
-      "48": {
+      48: {
         ai: 0,
         alias: "KiwiNoob",
         avatar: 44,
@@ -13268,7 +13268,7 @@ export const turn346 = {
         total_strength: 270,
         uid: 48,
       },
-      "49": {
+      49: {
         ai: 0,
         alias: "Macaria",
         avatar: 34,
@@ -13316,7 +13316,7 @@ export const turn346 = {
         total_strength: 344,
         uid: 49,
       },
-      "5": {
+      5: {
         ai: 0,
         alias: "UofU",
         avatar: 33,
@@ -13364,7 +13364,7 @@ export const turn346 = {
         total_strength: 246,
         uid: 5,
       },
-      "50": {
+      50: {
         ai: 0,
         alias: "Gomber",
         avatar: 38,
@@ -13412,7 +13412,7 @@ export const turn346 = {
         total_strength: 249,
         uid: 50,
       },
-      "51": {
+      51: {
         ai: 1,
         alias: "gb1",
         avatar: 38,
@@ -13460,7 +13460,7 @@ export const turn346 = {
         total_strength: 155,
         uid: 51,
       },
-      "52": {
+      52: {
         ai: 0,
         alias: "Praxus",
         avatar: 33,
@@ -13508,7 +13508,7 @@ export const turn346 = {
         total_strength: 161,
         uid: 52,
       },
-      "53": {
+      53: {
         ai: 0,
         alias: "The Frjjilo Empire",
         avatar: 16,
@@ -13556,7 +13556,7 @@ export const turn346 = {
         total_strength: 255,
         uid: 53,
       },
-      "54": {
+      54: {
         ai: 0,
         alias: "Fulgrum",
         avatar: 38,
@@ -13604,7 +13604,7 @@ export const turn346 = {
         total_strength: 300,
         uid: 54,
       },
-      "55": {
+      55: {
         ai: 0,
         alias: "Miles Chang",
         avatar: 20,
@@ -13652,7 +13652,7 @@ export const turn346 = {
         total_strength: 315,
         uid: 55,
       },
-      "56": {
+      56: {
         ai: 0,
         alias: "Rurik",
         avatar: 38,
@@ -13700,7 +13700,7 @@ export const turn346 = {
         total_strength: 231,
         uid: 56,
       },
-      "57": {
+      57: {
         ai: 1,
         alias: "Scoots",
         avatar: 38,
@@ -13748,7 +13748,7 @@ export const turn346 = {
         total_strength: 142,
         uid: 57,
       },
-      "58": {
+      58: {
         ai: 1,
         alias: "Bonkens",
         avatar: 16,
@@ -13796,7 +13796,7 @@ export const turn346 = {
         total_strength: 191,
         uid: 58,
       },
-      "59": {
+      59: {
         ai: 0,
         alias: "Avantirs",
         avatar: 32,
@@ -13844,7 +13844,7 @@ export const turn346 = {
         total_strength: 231,
         uid: 59,
       },
-      "6": {
+      6: {
         ai: 0,
         alias: "The New Bellum",
         avatar: 32,
@@ -13892,7 +13892,7 @@ export const turn346 = {
         total_strength: 290,
         uid: 6,
       },
-      "60": {
+      60: {
         ai: 0,
         alias: "Gingey",
         avatar: 14,
@@ -13940,7 +13940,7 @@ export const turn346 = {
         total_strength: 255,
         uid: 60,
       },
-      "61": {
+      61: {
         ai: 1,
         alias: "Oil War of Terror",
         avatar: 38,
@@ -13988,7 +13988,7 @@ export const turn346 = {
         total_strength: 209,
         uid: 61,
       },
-      "62": {
+      62: {
         ai: 0,
         alias: "Nimrod",
         avatar: 25,
@@ -14036,7 +14036,7 @@ export const turn346 = {
         total_strength: 244,
         uid: 62,
       },
-      "63": {
+      63: {
         ai: 0,
         alias: "BigPooper",
         avatar: 7,
@@ -14084,7 +14084,7 @@ export const turn346 = {
         total_strength: 163,
         uid: 63,
       },
-      "7": {
+      7: {
         ai: 0,
         alias: "TheTopRamen",
         avatar: 25,
@@ -14132,7 +14132,7 @@ export const turn346 = {
         total_strength: 246,
         uid: 7,
       },
-      "8": {
+      8: {
         ai: 1,
         alias: "Macheta",
         avatar: 33,
@@ -14180,7 +14180,7 @@ export const turn346 = {
         total_strength: 167,
         uid: 8,
       },
-      "9": {
+      9: {
         ai: 1,
         alias: "Phsycic",
         avatar: 32,
@@ -14233,7 +14233,7 @@ export const turn346 = {
     production_rate: 20,
     productions: 4,
     stars: {
-      "1": {
+      1: {
         n: "Wet Zug",
         puid: 42,
         uid: 1,
@@ -14241,7 +14241,7 @@ export const turn346 = {
         x: "2.1565",
         y: "-2.5742",
       },
-      "10": {
+      10: {
         n: "Antares",
         puid: 52,
         uid: 10,
@@ -14249,7 +14249,7 @@ export const turn346 = {
         x: "3.3913",
         y: "2.4713",
       },
-      "100": {
+      100: {
         n: "Thabit",
         puid: 6,
         uid: 100,
@@ -14257,7 +14257,7 @@ export const turn346 = {
         x: "1.6976",
         y: "-1.9542",
       },
-      "1000": {
+      1000: {
         n: "TseenKee",
         puid: 8,
         uid: 1000,
@@ -14265,7 +14265,7 @@ export const turn346 = {
         x: "4.1416",
         y: "-4.1590",
       },
-      "1001": {
+      1001: {
         n: "Hamal",
         puid: -1,
         uid: 1001,
@@ -14273,7 +14273,7 @@ export const turn346 = {
         x: "4.9439",
         y: "-3.1465",
       },
-      "1002": {
+      1002: {
         n: "Last Bam",
         puid: 61,
         uid: 1002,
@@ -14281,7 +14281,7 @@ export const turn346 = {
         x: "4.4015",
         y: "-4.4026",
       },
-      "1003": {
+      1003: {
         n: "Wild Alya",
         puid: 27,
         uid: 1003,
@@ -14289,7 +14289,7 @@ export const turn346 = {
         x: "3.5109",
         y: "-3.6795",
       },
-      "1004": {
+      1004: {
         n: "Xi Aldhafera",
         puid: -1,
         uid: 1004,
@@ -14297,7 +14297,7 @@ export const turn346 = {
         x: "5.3735",
         y: "-3.7730",
       },
-      "1005": {
+      1005: {
         n: "Last Asellus",
         puid: 61,
         uid: 1005,
@@ -14305,7 +14305,7 @@ export const turn346 = {
         x: "3.6378",
         y: "-4.3653",
       },
-      "101": {
+      101: {
         n: "Zeta Muliphein",
         puid: 6,
         uid: 101,
@@ -14313,7 +14313,7 @@ export const turn346 = {
         x: "1.6626",
         y: "-1.5481",
       },
-      "1013": {
+      1013: {
         n: "Askella",
         puid: 27,
         uid: 1013,
@@ -14321,7 +14321,7 @@ export const turn346 = {
         x: "3.1559",
         y: "-2.7717",
       },
-      "1014": {
+      1014: {
         n: "Mud",
         puid: 27,
         uid: 1014,
@@ -14329,7 +14329,7 @@ export const turn346 = {
         x: "3.6580",
         y: "-3.4936",
       },
-      "1015": {
+      1015: {
         n: "Delta Cebalrai",
         puid: 61,
         uid: 1015,
@@ -14337,7 +14337,7 @@ export const turn346 = {
         x: "3.2840",
         y: "-3.8069",
       },
-      "1016": {
+      1016: {
         n: "Alphecca",
         puid: 27,
         uid: 1016,
@@ -14345,7 +14345,7 @@ export const turn346 = {
         x: "3.5296",
         y: "-2.5525",
       },
-      "1017": {
+      1017: {
         n: "Black Kaf",
         puid: 27,
         uid: 1017,
@@ -14353,7 +14353,7 @@ export const turn346 = {
         x: "3.6898",
         y: "-2.5381",
       },
-      "1018": {
+      1018: {
         n: "Kullat",
         puid: 61,
         uid: 1018,
@@ -14361,7 +14361,7 @@ export const turn346 = {
         x: "3.3856",
         y: "-4.0746",
       },
-      "1019": {
+      1019: {
         n: "Old Gacrux",
         puid: 27,
         uid: 1019,
@@ -14369,7 +14369,7 @@ export const turn346 = {
         x: "2.5959",
         y: "-3.9503",
       },
-      "1020": {
+      1020: {
         n: "Skore",
         puid: 61,
         uid: 1020,
@@ -14377,7 +14377,7 @@ export const turn346 = {
         x: "3.5099",
         y: "-4.2374",
       },
-      "1021": {
+      1021: {
         n: "Soft Kullat",
         puid: -1,
         uid: 1021,
@@ -14385,7 +14385,7 @@ export const turn346 = {
         x: "2.2695",
         y: "-3.8670",
       },
-      "1022": {
+      1022: {
         n: "Izar",
         puid: 42,
         uid: 1022,
@@ -14393,7 +14393,7 @@ export const turn346 = {
         x: "1.9836",
         y: "-3.4140",
       },
-      "1023": {
+      1023: {
         n: "Sarir",
         puid: 42,
         uid: 1023,
@@ -14401,7 +14401,7 @@ export const turn346 = {
         x: "1.8714",
         y: "-3.1942",
       },
-      "1024": {
+      1024: {
         n: "Lush Aludra",
         puid: -1,
         uid: 1024,
@@ -14409,7 +14409,7 @@ export const turn346 = {
         x: "2.3975",
         y: "-4.3836",
       },
-      "103": {
+      103: {
         n: "Delta Arich",
         puid: 47,
         uid: 103,
@@ -14417,7 +14417,7 @@ export const turn346 = {
         x: "0.3084",
         y: "-2.4012",
       },
-      "104": {
+      104: {
         n: "Hot Matar",
         puid: 6,
         uid: 104,
@@ -14425,7 +14425,7 @@ export const turn346 = {
         x: "1.5761",
         y: "-1.0994",
       },
-      "106": {
+      106: {
         n: "Salm",
         puid: 6,
         uid: 106,
@@ -14433,7 +14433,7 @@ export const turn346 = {
         x: "1.4838",
         y: "-0.8519",
       },
-      "107": {
+      107: {
         n: "Eta Ice",
         puid: 40,
         uid: 107,
@@ -14441,7 +14441,7 @@ export const turn346 = {
         x: "0.5476",
         y: "-0.8068",
       },
-      "108": {
+      108: {
         n: "Sigma Nihal",
         puid: 42,
         uid: 108,
@@ -14449,7 +14449,7 @@ export const turn346 = {
         x: "2.2595",
         y: "-2.6337",
       },
-      "109": {
+      109: {
         n: "Tegmen",
         puid: 47,
         uid: 109,
@@ -14457,7 +14457,7 @@ export const turn346 = {
         x: "-0.3473",
         y: "-1.7021",
       },
-      "11": {
+      11: {
         n: "Young Algenib",
         puid: 2,
         uid: 11,
@@ -14465,7 +14465,7 @@ export const turn346 = {
         x: "4.2681",
         y: "3.3481",
       },
-      "110": {
+      110: {
         n: "Fast Kat",
         puid: 6,
         uid: 110,
@@ -14473,7 +14473,7 @@ export const turn346 = {
         x: "2.1177",
         y: "-1.4791",
       },
-      "112": {
+      112: {
         n: "Fax",
         puid: 6,
         uid: 112,
@@ -14481,7 +14481,7 @@ export const turn346 = {
         x: "1.8407",
         y: "-1.2193",
       },
-      "114": {
+      114: {
         n: "Last Yay",
         puid: 42,
         uid: 114,
@@ -14489,7 +14489,7 @@ export const turn346 = {
         x: "2.6705",
         y: "-1.2436",
       },
-      "116": {
+      116: {
         n: "Alhajoth",
         puid: 6,
         uid: 116,
@@ -14497,7 +14497,7 @@ export const turn346 = {
         x: "2.1565",
         y: "-0.6262",
       },
-      "117": {
+      117: {
         n: "Fort Pherkad",
         puid: 42,
         uid: 117,
@@ -14505,7 +14505,7 @@ export const turn346 = {
         x: "2.9302",
         y: "-1.5415",
       },
-      "118": {
+      118: {
         n: "Pure Rasalas",
         puid: 6,
         uid: 118,
@@ -14513,7 +14513,7 @@ export const turn346 = {
         x: "2.2344",
         y: "-0.4436",
       },
-      "119": {
+      119: {
         n: "Goo",
         puid: 42,
         uid: 119,
@@ -14521,7 +14521,7 @@ export const turn346 = {
         x: "2.9650",
         y: "-1.9003",
       },
-      "12": {
+      12: {
         n: "Gienah",
         puid: 41,
         uid: 12,
@@ -14529,7 +14529,7 @@ export const turn346 = {
         x: "3.0703",
         y: "3.6690",
       },
-      "120": {
+      120: {
         n: "Schedir",
         puid: 62,
         uid: 120,
@@ -14537,7 +14537,7 @@ export const turn346 = {
         x: "2.9202",
         y: "-0.5705",
       },
-      "121": {
+      121: {
         n: "Mi",
         puid: 6,
         uid: 121,
@@ -14545,7 +14545,7 @@ export const turn346 = {
         x: "1.4025",
         y: "-2.2328",
       },
-      "122": {
+      122: {
         n: "Wild Aldib",
         puid: 6,
         uid: 122,
@@ -14553,7 +14553,7 @@ export const turn346 = {
         x: "1.8288",
         y: "-0.1113",
       },
-      "123": {
+      123: {
         n: "Cold Rotanev",
         puid: 6,
         uid: 123,
@@ -14561,7 +14561,7 @@ export const turn346 = {
         x: "2.3925",
         y: "0.0041",
       },
-      "124": {
+      124: {
         n: "Odd Zuben",
         puid: -1,
         uid: 124,
@@ -14569,7 +14569,7 @@ export const turn346 = {
         x: "0.8990",
         y: "-0.6082",
       },
-      "125": {
+      125: {
         n: "Beta Adhafera",
         puid: 62,
         uid: 125,
@@ -14577,7 +14577,7 @@ export const turn346 = {
         x: "3.2434",
         y: "-0.5648",
       },
-      "128": {
+      128: {
         n: "Red Gatria",
         puid: 62,
         uid: 128,
@@ -14585,7 +14585,7 @@ export const turn346 = {
         x: "3.0836",
         y: "-0.3111",
       },
-      "129": {
+      129: {
         n: "Rukbat",
         puid: 62,
         uid: 129,
@@ -14593,7 +14593,7 @@ export const turn346 = {
         x: "2.7163",
         y: "-0.6236",
       },
-      "13": {
+      13: {
         n: "Duo",
         puid: 55,
         uid: 13,
@@ -14601,7 +14601,7 @@ export const turn346 = {
         x: "1.8312",
         y: "3.7143",
       },
-      "130": {
+      130: {
         n: "Fort Haedus",
         puid: 63,
         uid: 130,
@@ -14609,7 +14609,7 @@ export const turn346 = {
         x: "3.7015",
         y: "-0.3189",
       },
-      "131": {
+      131: {
         n: "Port Edasich",
         puid: 33,
         uid: 131,
@@ -14617,7 +14617,7 @@ export const turn346 = {
         x: "3.5844",
         y: "-0.1011",
       },
-      "132": {
+      132: {
         n: "Red Giedi",
         puid: 62,
         uid: 132,
@@ -14625,7 +14625,7 @@ export const turn346 = {
         x: "2.8918",
         y: "0.0117",
       },
-      "134": {
+      134: {
         n: "Slow Alhajoth",
         puid: 42,
         uid: 134,
@@ -14633,7 +14633,7 @@ export const turn346 = {
         x: "2.8928",
         y: "-1.6417",
       },
-      "136": {
+      136: {
         n: "Zeta Achernar",
         puid: 6,
         uid: 136,
@@ -14641,7 +14641,7 @@ export const turn346 = {
         x: "2.5576",
         y: "0.2467",
       },
-      "137": {
+      137: {
         n: "Bright Peacock",
         puid: 6,
         uid: 137,
@@ -14649,7 +14649,7 @@ export const turn346 = {
         x: "2.1340",
         y: "-0.0812",
       },
-      "138": {
+      138: {
         n: "Theta Aladfar",
         puid: 63,
         uid: 138,
@@ -14657,7 +14657,7 @@ export const turn346 = {
         x: "4.2714",
         y: "0.1593",
       },
-      "139": {
+      139: {
         n: "White Wasat",
         puid: 6,
         uid: 139,
@@ -14665,7 +14665,7 @@ export const turn346 = {
         x: "1.7839",
         y: "-0.8408",
       },
-      "14": {
+      14: {
         n: "Arrakis",
         puid: 3,
         uid: 14,
@@ -14673,7 +14673,7 @@ export const turn346 = {
         x: "1.4238",
         y: "2.5431",
       },
-      "140": {
+      140: {
         n: "Hot Mira",
         puid: 33,
         uid: 140,
@@ -14681,7 +14681,7 @@ export const turn346 = {
         x: "3.3137",
         y: "0.4907",
       },
-      "143": {
+      143: {
         n: "Jib",
         puid: 33,
         uid: 143,
@@ -14689,7 +14689,7 @@ export const turn346 = {
         x: "3.3886",
         y: "0.9262",
       },
-      "144": {
+      144: {
         n: "Free Alrischa",
         puid: 33,
         uid: 144,
@@ -14697,7 +14697,7 @@ export const turn346 = {
         x: "3.3280",
         y: "-0.0005",
       },
-      "145": {
+      145: {
         n: "Mira",
         puid: 33,
         uid: 145,
@@ -14705,7 +14705,7 @@ export const turn346 = {
         x: "3.7230",
         y: "-0.0536",
       },
-      "146": {
+      146: {
         n: "Odd Menkalinan",
         puid: 24,
         uid: 146,
@@ -14713,7 +14713,7 @@ export const turn346 = {
         x: "4.1604",
         y: "0.3808",
       },
-      "147": {
+      147: {
         n: "Pure Etamin",
         puid: 33,
         uid: 147,
@@ -14721,7 +14721,7 @@ export const turn346 = {
         x: "3.1246",
         y: "1.2297",
       },
-      "148": {
+      148: {
         n: "Last Terebellum",
         puid: 24,
         uid: 148,
@@ -14729,7 +14729,7 @@ export const turn346 = {
         x: "4.2733",
         y: "0.8816",
       },
-      "149": {
+      149: {
         n: "Wild Acrux",
         puid: 63,
         uid: 149,
@@ -14737,7 +14737,7 @@ export const turn346 = {
         x: "3.8802",
         y: "-0.3908",
       },
-      "15": {
+      15: {
         n: "Parliament of Souls",
         puid: 30,
         uid: 15,
@@ -14745,7 +14745,7 @@ export const turn346 = {
         x: "0.6132",
         y: "3.4815",
       },
-      "150": {
+      150: {
         n: "Alkes",
         puid: 62,
         uid: 150,
@@ -14753,7 +14753,7 @@ export const turn346 = {
         x: "2.7689",
         y: "-0.3236",
       },
-      "151": {
+      151: {
         n: "Bright Rukh",
         puid: 33,
         uid: 151,
@@ -14761,7 +14761,7 @@ export const turn346 = {
         x: "3.0619",
         y: "1.6060",
       },
-      "152": {
+      152: {
         n: "Pure Becrux",
         puid: 63,
         uid: 152,
@@ -14769,7 +14769,7 @@ export const turn346 = {
         x: "4.6528",
         y: "0.0708",
       },
-      "153": {
+      153: {
         n: "Fast Toe",
         puid: 63,
         uid: 153,
@@ -14777,7 +14777,7 @@ export const turn346 = {
         x: "4.5042",
         y: "-0.3698",
       },
-      "154": {
+      154: {
         n: "Sadatoni",
         puid: 6,
         uid: 154,
@@ -14785,7 +14785,7 @@ export const turn346 = {
         x: "2.3508",
         y: "-0.4296",
       },
-      "155": {
+      155: {
         n: "Hot Scheddi",
         puid: 63,
         uid: 155,
@@ -14793,7 +14793,7 @@ export const turn346 = {
         x: "4.2606",
         y: "-0.3581",
       },
-      "156": {
+      156: {
         n: "Slow Kita",
         puid: 63,
         uid: 156,
@@ -14801,7 +14801,7 @@ export const turn346 = {
         x: "4.6299",
         y: "-0.3899",
       },
-      "157": {
+      157: {
         n: "Cold Shy",
         puid: -1,
         uid: 157,
@@ -14809,7 +14809,7 @@ export const turn346 = {
         x: "4.7324",
         y: "-0.2485",
       },
-      "158": {
+      158: {
         n: "Free Zavijava",
         puid: 63,
         uid: 158,
@@ -14817,7 +14817,7 @@ export const turn346 = {
         x: "4.4389",
         y: "-0.7342",
       },
-      "16": {
+      16: {
         n: "Bam",
         puid: 19,
         uid: 16,
@@ -14825,7 +14825,7 @@ export const turn346 = {
         x: "0.2058",
         y: "2.3104",
       },
-      "160": {
+      160: {
         n: "Blue Praecipua",
         puid: 63,
         uid: 160,
@@ -14833,7 +14833,7 @@ export const turn346 = {
         x: "4.5083",
         y: "-0.9125",
       },
-      "161": {
+      161: {
         n: "Merak",
         puid: -1,
         uid: 161,
@@ -14841,7 +14841,7 @@ export const turn346 = {
         x: "5.0147",
         y: "0.0472",
       },
-      "162": {
+      162: {
         n: "Eta Mizar",
         puid: 63,
         uid: 162,
@@ -14849,7 +14849,7 @@ export const turn346 = {
         x: "4.7400",
         y: "-1.0327",
       },
-      "163": {
+      163: {
         n: "Baham",
         puid: 63,
         uid: 163,
@@ -14857,7 +14857,7 @@ export const turn346 = {
         x: "5.0864",
         y: "-0.8814",
       },
-      "164": {
+      164: {
         n: "Blue Muphrid",
         puid: 63,
         uid: 164,
@@ -14865,7 +14865,7 @@ export const turn346 = {
         x: "5.2563",
         y: "-0.8003",
       },
-      "165": {
+      165: {
         n: "Kit",
         puid: -1,
         uid: 165,
@@ -14873,7 +14873,7 @@ export const turn346 = {
         x: "5.4164",
         y: "0.0626",
       },
-      "166": {
+      166: {
         n: "Sheratan",
         puid: 24,
         uid: 166,
@@ -14881,7 +14881,7 @@ export const turn346 = {
         x: "4.5038",
         y: "0.8617",
       },
-      "169": {
+      169: {
         n: "Pi Sceptrum",
         puid: 33,
         uid: 169,
@@ -14889,7 +14889,7 @@ export const turn346 = {
         x: "3.6755",
         y: "0.9507",
       },
-      "17": {
+      17: {
         n: "Git",
         puid: 35,
         uid: 17,
@@ -14897,7 +14897,7 @@ export const turn346 = {
         x: "-0.4142",
         y: "1.2365",
       },
-      "170": {
+      170: {
         n: "Wei",
         puid: 24,
         uid: 170,
@@ -14905,7 +14905,7 @@ export const turn346 = {
         x: "4.7792",
         y: "0.8723",
       },
-      "171": {
+      171: {
         n: "Blue Salm",
         puid: 24,
         uid: 171,
@@ -14913,7 +14913,7 @@ export const turn346 = {
         x: "4.3950",
         y: "0.9534",
       },
-      "172": {
+      172: {
         n: "Hard Neo",
         puid: 24,
         uid: 172,
@@ -14921,7 +14921,7 @@ export const turn346 = {
         x: "4.9703",
         y: "0.9112",
       },
-      "173": {
+      173: {
         n: "Red Pux",
         puid: 24,
         uid: 173,
@@ -14929,7 +14929,7 @@ export const turn346 = {
         x: "4.4198",
         y: "0.5396",
       },
-      "174": {
+      174: {
         n: "Free Pax",
         puid: 24,
         uid: 174,
@@ -14937,7 +14937,7 @@ export const turn346 = {
         x: "4.1301",
         y: "0.7761",
       },
-      "175": {
+      175: {
         n: "Cold Alnitak",
         puid: 24,
         uid: 175,
@@ -14945,7 +14945,7 @@ export const turn346 = {
         x: "4.0769",
         y: "1.1711",
       },
-      "176": {
+      176: {
         n: "Tarazet",
         puid: 24,
         uid: 176,
@@ -14953,7 +14953,7 @@ export const turn346 = {
         x: "4.0211",
         y: "0.5572",
       },
-      "177": {
+      177: {
         n: "Fast Rigil",
         puid: -1,
         uid: 177,
@@ -14961,7 +14961,7 @@ export const turn346 = {
         x: "5.3280",
         y: "0.5107",
       },
-      "178": {
+      178: {
         n: "Sigma Corvid",
         puid: -1,
         uid: 178,
@@ -14969,7 +14969,7 @@ export const turn346 = {
         x: "5.5147",
         y: "0.7559",
       },
-      "179": {
+      179: {
         n: "Delta Avior",
         puid: 56,
         uid: 179,
@@ -14977,7 +14977,7 @@ export const turn346 = {
         x: "4.2171",
         y: "1.8057",
       },
-      "18": {
+      18: {
         n: "Lost Grassias",
         puid: 40,
         uid: 18,
@@ -14985,7 +14985,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "-1.0774",
       },
-      "180": {
+      180: {
         n: "Brachium",
         puid: 56,
         uid: 180,
@@ -14993,7 +14993,7 @@ export const turn346 = {
         x: "5.2537",
         y: "1.7958",
       },
-      "181": {
+      181: {
         n: "Delta Mirach",
         puid: 56,
         uid: 181,
@@ -15001,7 +15001,7 @@ export const turn346 = {
         x: "5.5328",
         y: "1.6652",
       },
-      "182": {
+      182: {
         n: "Porrima",
         puid: 33,
         uid: 182,
@@ -15009,7 +15009,7 @@ export const turn346 = {
         x: "3.6645",
         y: "0.0974",
       },
-      "183": {
+      183: {
         n: "Samakah",
         puid: 33,
         uid: 183,
@@ -15017,7 +15017,7 @@ export const turn346 = {
         x: "3.2753",
         y: "0.9112",
       },
-      "184": {
+      184: {
         n: "Sigma Algorab",
         puid: 56,
         uid: 184,
@@ -15025,7 +15025,7 @@ export const turn346 = {
         x: "5.9502",
         y: "1.5248",
       },
-      "185": {
+      185: {
         n: "Asellus",
         puid: 2,
         uid: 185,
@@ -15033,7 +15033,7 @@ export const turn346 = {
         x: "4.4396",
         y: "2.1373",
       },
-      "186": {
+      186: {
         n: "Dull Tabit",
         puid: 2,
         uid: 186,
@@ -15041,7 +15041,7 @@ export const turn346 = {
         x: "4.7881",
         y: "2.2897",
       },
-      "187": {
+      187: {
         n: "Regulus",
         puid: 2,
         uid: 187,
@@ -15049,7 +15049,7 @@ export const turn346 = {
         x: "4.5597",
         y: "2.4851",
       },
-      "188": {
+      188: {
         n: "Saw",
         puid: 56,
         uid: 188,
@@ -15057,7 +15057,7 @@ export const turn346 = {
         x: "4.8351",
         y: "1.7989",
       },
-      "189": {
+      189: {
         n: "Koi",
         puid: 2,
         uid: 189,
@@ -15065,7 +15065,7 @@ export const turn346 = {
         x: "4.7676",
         y: "2.6409",
       },
-      "19": {
+      19: {
         n: "Xi Seginus",
         puid: 29,
         uid: 19,
@@ -15073,7 +15073,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "0.1626",
       },
-      "190": {
+      190: {
         n: "Cold Rat",
         puid: 2,
         uid: 190,
@@ -15081,7 +15081,7 @@ export const turn346 = {
         x: "4.3787",
         y: "2.7283",
       },
-      "191": {
+      191: {
         n: "Odd Kullat",
         puid: 2,
         uid: 191,
@@ -15089,7 +15089,7 @@ export const turn346 = {
         x: "4.7723",
         y: "2.8342",
       },
-      "193": {
+      193: {
         n: "Soft Furud",
         puid: 56,
         uid: 193,
@@ -15097,7 +15097,7 @@ export const turn346 = {
         x: "5.1637",
         y: "1.4655",
       },
-      "194": {
+      194: {
         n: "Lush Korn",
         puid: 56,
         uid: 194,
@@ -15105,7 +15105,7 @@ export const turn346 = {
         x: "3.8329",
         y: "1.5159",
       },
-      "195": {
+      195: {
         n: "Biham",
         puid: 56,
         uid: 195,
@@ -15113,7 +15113,7 @@ export const turn346 = {
         x: "5.6649",
         y: "2.2445",
       },
-      "196": {
+      196: {
         n: "White Nusakan",
         puid: 56,
         uid: 196,
@@ -15121,7 +15121,7 @@ export const turn346 = {
         x: "5.4876",
         y: "1.3964",
       },
-      "197": {
+      197: {
         n: "Muscida",
         puid: 56,
         uid: 197,
@@ -15129,7 +15129,7 @@ export const turn346 = {
         x: "5.8502",
         y: "2.0400",
       },
-      "199": {
+      199: {
         n: "Imp",
         puid: 24,
         uid: 199,
@@ -15137,7 +15137,7 @@ export const turn346 = {
         x: "5.0856",
         y: "0.7859",
       },
-      "2": {
+      2: {
         n: "Cold Alamak",
         puid: 47,
         uid: 2,
@@ -15145,7 +15145,7 @@ export const turn346 = {
         x: "-0.1574",
         y: "-1.9542",
       },
-      "20": {
+      20: {
         n: "Old Tor",
         puid: 49,
         uid: 20,
@@ -15153,7 +15153,7 @@ export const turn346 = {
         x: "-1.6542",
         y: "1.2365",
       },
-      "200": {
+      200: {
         n: "Young Alcyone",
         puid: 52,
         uid: 200,
@@ -15161,7 +15161,7 @@ export const turn346 = {
         x: "3.2553",
         y: "2.4079",
       },
-      "201": {
+      201: {
         n: "Soft Alrai",
         puid: 52,
         uid: 201,
@@ -15169,7 +15169,7 @@ export const turn346 = {
         x: "3.1710",
         y: "2.5740",
       },
-      "203": {
+      203: {
         n: "Dry Alnasl",
         puid: 52,
         uid: 203,
@@ -15177,7 +15177,7 @@ export const turn346 = {
         x: "3.1768",
         y: "2.8428",
       },
-      "205": {
+      205: {
         n: "Yay",
         puid: 56,
         uid: 205,
@@ -15185,7 +15185,7 @@ export const turn346 = {
         x: "3.9969",
         y: "2.3645",
       },
-      "21": {
+      21: {
         n: "Sadr",
         puid: 0,
         uid: 21,
@@ -15193,7 +15193,7 @@ export const turn346 = {
         x: "-2.2742",
         y: "2.3104",
       },
-      "210": {
+      210: {
         n: "Ascella",
         puid: 3,
         uid: 210,
@@ -15201,7 +15201,7 @@ export const turn346 = {
         x: "2.5639",
         y: "3.1655",
       },
-      "212": {
+      212: {
         n: "Slow Nekkar",
         puid: 3,
         uid: 212,
@@ -15209,7 +15209,7 @@ export const turn346 = {
         x: "2.2439",
         y: "3.0063",
       },
-      "213": {
+      213: {
         n: "Cold AlKap",
         puid: 3,
         uid: 213,
@@ -15217,7 +15217,7 @@ export const turn346 = {
         x: "2.3502",
         y: "1.5977",
       },
-      "214": {
+      214: {
         n: "Beta Garnet",
         puid: 24,
         uid: 214,
@@ -15225,7 +15225,7 @@ export const turn346 = {
         x: "4.4180",
         y: "1.4446",
       },
-      "215": {
+      215: {
         n: "Rub",
         puid: 2,
         uid: 215,
@@ -15233,7 +15233,7 @@ export const turn346 = {
         x: "4.1821",
         y: "3.4710",
       },
-      "216": {
+      216: {
         n: "White Lucida",
         puid: 2,
         uid: 216,
@@ -15241,7 +15241,7 @@ export const turn346 = {
         x: "4.0690",
         y: "3.4875",
       },
-      "217": {
+      217: {
         n: "Sceptrum",
         puid: 2,
         uid: 217,
@@ -15249,7 +15249,7 @@ export const turn346 = {
         x: "4.2681",
         y: "3.0121",
       },
-      "22": {
+      22: {
         n: "Beta Heka",
         puid: 21,
         uid: 22,
@@ -15257,7 +15257,7 @@ export const turn346 = {
         x: "-3.4922",
         y: "2.5431",
       },
-      "221": {
+      221: {
         n: "Wezen",
         puid: 2,
         uid: 221,
@@ -15265,7 +15265,7 @@ export const turn346 = {
         x: "3.6264",
         y: "3.0489",
       },
-      "222": {
+      222: {
         n: "Keg",
         puid: -1,
         uid: 222,
@@ -15273,7 +15273,7 @@ export const turn346 = {
         x: "5.0208",
         y: "3.6220",
       },
-      "223": {
+      223: {
         n: "Nova Askella",
         puid: 2,
         uid: 223,
@@ -15281,7 +15281,7 @@ export const turn346 = {
         x: "4.9002",
         y: "2.7159",
       },
-      "224": {
+      224: {
         n: "Albali",
         puid: -1,
         uid: 224,
@@ -15289,7 +15289,7 @@ export const turn346 = {
         x: "4.7616",
         y: "4.2029",
       },
-      "225": {
+      225: {
         n: "Kastra",
         puid: 41,
         uid: 225,
@@ -15297,7 +15297,7 @@ export const turn346 = {
         x: "3.4408",
         y: "4.0423",
       },
-      "226": {
+      226: {
         n: "Theta Tag",
         puid: 41,
         uid: 226,
@@ -15305,7 +15305,7 @@ export const turn346 = {
         x: "3.0996",
         y: "3.2458",
       },
-      "227": {
+      227: {
         n: "Fez",
         puid: 52,
         uid: 227,
@@ -15313,7 +15313,7 @@ export const turn346 = {
         x: "3.4543",
         y: "2.3783",
       },
-      "228": {
+      228: {
         n: "Sigma Meissa",
         puid: -1,
         uid: 228,
@@ -15321,7 +15321,7 @@ export const turn346 = {
         x: "5.1416",
         y: "4.3891",
       },
-      "229": {
+      229: {
         n: "Nova Acubens",
         puid: -1,
         uid: 229,
@@ -15329,7 +15329,7 @@ export const turn346 = {
         x: "4.6439",
         y: "4.7506",
       },
-      "23": {
+      23: {
         n: "Nu Tack",
         puid: 57,
         uid: 23,
@@ -15337,7 +15337,7 @@ export const turn346 = {
         x: "-2.6816",
         y: "3.4815",
       },
-      "230": {
+      230: {
         n: "Beta Albaldah",
         puid: 41,
         uid: 230,
@@ -15345,7 +15345,7 @@ export const turn346 = {
         x: "3.0315",
         y: "3.8139",
       },
-      "231": {
+      231: {
         n: "Nunki",
         puid: 41,
         uid: 231,
@@ -15353,7 +15353,7 @@ export const turn346 = {
         x: "3.2808",
         y: "3.7905",
       },
-      "232": {
+      232: {
         n: "Red AlGiedi",
         puid: 41,
         uid: 232,
@@ -15361,7 +15361,7 @@ export const turn346 = {
         x: "3.3861",
         y: "3.5541",
       },
-      "233": {
+      233: {
         n: "Grand Dubhe",
         puid: 41,
         uid: 233,
@@ -15369,7 +15369,7 @@ export const turn346 = {
         x: "2.7189",
         y: "3.4230",
       },
-      "234": {
+      234: {
         n: "Dark Beid",
         puid: 41,
         uid: 234,
@@ -15377,7 +15377,7 @@ export const turn346 = {
         x: "2.9797",
         y: "4.1831",
       },
-      "236": {
+      236: {
         n: "Blue Saw",
         puid: 55,
         uid: 236,
@@ -15385,7 +15385,7 @@ export const turn346 = {
         x: "2.4572",
         y: "4.0230",
       },
-      "237": {
+      237: {
         n: "Diadem",
         puid: 41,
         uid: 237,
@@ -15393,7 +15393,7 @@ export const turn346 = {
         x: "3.8441",
         y: "3.8763",
       },
-      "239": {
+      239: {
         n: "Zeta Terebellum",
         puid: 2,
         uid: 239,
@@ -15401,7 +15401,7 @@ export const turn346 = {
         x: "3.8264",
         y: "3.0346",
       },
-      "24": {
+      24: {
         n: "Phact",
         puid: 50,
         uid: 24,
@@ -15409,7 +15409,7 @@ export const turn346 = {
         x: "-3.8996",
         y: "3.7143",
       },
-      "240": {
+      240: {
         n: "Zug",
         puid: -1,
         uid: 240,
@@ -15417,7 +15417,7 @@ export const turn346 = {
         x: "3.2579",
         y: "4.7326",
       },
-      "241": {
+      241: {
         n: "Spy",
         puid: 55,
         uid: 241,
@@ -15425,7 +15425,7 @@ export const turn346 = {
         x: "2.1718",
         y: "4.4230",
       },
-      "243": {
+      243: {
         n: "Xi Acamar",
         puid: -1,
         uid: 243,
@@ -15433,7 +15433,7 @@ export const turn346 = {
         x: "3.8498",
         y: "4.7823",
       },
-      "245": {
+      245: {
         n: "Fad",
         puid: 55,
         uid: 245,
@@ -15441,7 +15441,7 @@ export const turn346 = {
         x: "1.8312",
         y: "3.5643",
       },
-      "246": {
+      246: {
         n: "Tau Murzim",
         puid: 55,
         uid: 246,
@@ -15449,7 +15449,7 @@ export const turn346 = {
         x: "1.5919",
         y: "3.6721",
       },
-      "247": {
+      247: {
         n: "Mac",
         puid: 55,
         uid: 247,
@@ -15457,7 +15457,7 @@ export const turn346 = {
         x: "1.8605",
         y: "4.0490",
       },
-      "248": {
+      248: {
         n: "Jabbah",
         puid: 55,
         uid: 248,
@@ -15465,7 +15465,7 @@ export const turn346 = {
         x: "1.4798",
         y: "3.4682",
       },
-      "249": {
+      249: {
         n: "Slow Kit",
         puid: 55,
         uid: 249,
@@ -15473,7 +15473,7 @@ export const turn346 = {
         x: "1.4313",
         y: "4.0498",
       },
-      "25": {
+      25: {
         n: "Juxta",
         puid: 44,
         uid: 25,
@@ -15481,7 +15481,7 @@ export const turn346 = {
         x: "-5.1388",
         y: "3.6690",
       },
-      "250": {
+      250: {
         n: "Sabik",
         puid: 55,
         uid: 250,
@@ -15489,7 +15489,7 @@ export const turn346 = {
         x: "2.1839",
         y: "4.2180",
       },
-      "251": {
+      251: {
         n: "Lanx",
         puid: 41,
         uid: 251,
@@ -15497,7 +15497,7 @@ export const turn346 = {
         x: "2.5150",
         y: "3.5310",
       },
-      "252": {
+      252: {
         n: "Odd Syrma",
         puid: 55,
         uid: 252,
@@ -15505,7 +15505,7 @@ export const turn346 = {
         x: "1.1052",
         y: "4.0528",
       },
-      "253": {
+      253: {
         n: "Last Nashira",
         puid: 3,
         uid: 253,
@@ -15513,7 +15513,7 @@ export const turn346 = {
         x: "1.3184",
         y: "2.9819",
       },
-      "254": {
+      254: {
         n: "Port Mirzam",
         puid: 55,
         uid: 254,
@@ -15521,7 +15521,7 @@ export const turn346 = {
         x: "0.9037",
         y: "4.0518",
       },
-      "255": {
+      255: {
         n: "Theta Matar",
         puid: 3,
         uid: 255,
@@ -15529,7 +15529,7 @@ export const turn346 = {
         x: "1.5516",
         y: "2.6711",
       },
-      "256": {
+      256: {
         n: "Odd Atria",
         puid: 3,
         uid: 256,
@@ -15537,7 +15537,7 @@ export const turn346 = {
         x: "2.2324",
         y: "2.6120",
       },
-      "257": {
+      257: {
         n: "Free Pug",
         puid: -1,
         uid: 257,
@@ -15545,7 +15545,7 @@ export const turn346 = {
         x: "2.6449",
         y: "4.6841",
       },
-      "259": {
+      259: {
         n: "Acamar",
         puid: 52,
         uid: 259,
@@ -15553,7 +15553,7 @@ export const turn346 = {
         x: "2.7645",
         y: "2.6020",
       },
-      "26": {
+      26: {
         n: "Slow Septen",
         puid: 58,
         uid: 26,
@@ -15561,7 +15561,7 @@ export const turn346 = {
         x: "-5.4597",
         y: "2.4713",
       },
-      "261": {
+      261: {
         n: "Hard Beid",
         puid: 3,
         uid: 261,
@@ -15569,7 +15569,7 @@ export const turn346 = {
         x: "1.5800",
         y: "2.3570",
       },
-      "262": {
+      262: {
         n: "Zeta Hydrobius",
         puid: 3,
         uid: 262,
@@ -15577,7 +15577,7 @@ export const turn346 = {
         x: "1.7547",
         y: "2.4848",
       },
-      "263": {
+      263: {
         n: "Jih",
         puid: 3,
         uid: 263,
@@ -15585,7 +15585,7 @@ export const turn346 = {
         x: "1.0094",
         y: "2.6541",
       },
-      "264": {
+      264: {
         n: "Mega Wow",
         puid: 3,
         uid: 264,
@@ -15593,7 +15593,7 @@ export const turn346 = {
         x: "1.8968",
         y: "2.7637",
       },
-      "266": {
+      266: {
         n: "Peacock",
         puid: 3,
         uid: 266,
@@ -15601,7 +15601,7 @@ export const turn346 = {
         x: "1.7778",
         y: "1.9300",
       },
-      "267": {
+      267: {
         n: "Last Ill",
         puid: 3,
         uid: 267,
@@ -15609,7 +15609,7 @@ export const turn346 = {
         x: "1.2847",
         y: "3.3319",
       },
-      "268": {
+      268: {
         n: "Eta Alkalurops",
         puid: 3,
         uid: 268,
@@ -15617,7 +15617,7 @@ export const turn346 = {
         x: "1.8708",
         y: "1.7689",
       },
-      "269": {
+      269: {
         n: "Alshain",
         puid: 3,
         uid: 269,
@@ -15625,7 +15625,7 @@ export const turn346 = {
         x: "1.9899",
         y: "1.7346",
       },
-      "27": {
+      27: {
         n: "Chort",
         puid: 11,
         uid: 27,
@@ -15633,7 +15633,7 @@ export const turn346 = {
         x: "-6.3365",
         y: "3.3481",
       },
-      "270": {
+      270: {
         n: "Scheddi",
         puid: 3,
         uid: 270,
@@ -15641,7 +15641,7 @@ export const turn346 = {
         x: "1.7931",
         y: "1.5282",
       },
-      "271": {
+      271: {
         n: "Rasalas",
         puid: 19,
         uid: 271,
@@ -15649,7 +15649,7 @@ export const turn346 = {
         x: "0.6698",
         y: "1.6445",
       },
-      "272": {
+      272: {
         n: "Sheer shelf Monolith",
         puid: 30,
         uid: 272,
@@ -15657,7 +15657,7 @@ export const turn346 = {
         x: "1.0961",
         y: "3.7660",
       },
-      "273": {
+      273: {
         n: "Alhena",
         puid: 3,
         uid: 273,
@@ -15665,7 +15665,7 @@ export const turn346 = {
         x: "2.5370",
         y: "1.7636",
       },
-      "274": {
+      274: {
         n: "Eta Tabit",
         puid: 3,
         uid: 274,
@@ -15673,7 +15673,7 @@ export const turn346 = {
         x: "2.0374",
         y: "1.2271",
       },
-      "275": {
+      275: {
         n: "Gardens of Sahasrara",
         puid: 30,
         uid: 275,
@@ -15681,7 +15681,7 @@ export const turn346 = {
         x: "0.6882",
         y: "3.3516",
       },
-      "276": {
+      276: {
         n: "Net Abwen Netwold",
         puid: 30,
         uid: 276,
@@ -15689,7 +15689,7 @@ export const turn346 = {
         x: "0.4570",
         y: "3.2954",
       },
-      "277": {
+      277: {
         n: "Ajna  Meditation Sphere",
         puid: 30,
         uid: 277,
@@ -15697,7 +15697,7 @@ export const turn346 = {
         x: "0.2975",
         y: "3.5964",
       },
-      "278": {
+      278: {
         n: "Adhpida Netwold",
         puid: 30,
         uid: 278,
@@ -15705,7 +15705,7 @@ export const turn346 = {
         x: "0.9646",
         y: "3.7276",
       },
-      "279": {
+      279: {
         n: "Vishudhi Palace",
         puid: 30,
         uid: 279,
@@ -15713,7 +15713,7 @@ export const turn346 = {
         x: "0.4347",
         y: "3.9720",
       },
-      "28": {
+      28: {
         n: "Tau Diadem",
         puid: 38,
         uid: 28,
@@ -15721,7 +15721,7 @@ export const turn346 = {
         x: "-6.6574",
         y: "2.1503",
       },
-      "280": {
+      280: {
         n: "Amethyst Aura Presinct",
         puid: 30,
         uid: 280,
@@ -15729,7 +15729,7 @@ export const turn346 = {
         x: "0.2605",
         y: "3.9853",
       },
-      "281": {
+      281: {
         n: "Zaniah",
         puid: 30,
         uid: 281,
@@ -15737,7 +15737,7 @@ export const turn346 = {
         x: "0.4300",
         y: "4.1654",
       },
-      "282": {
+      282: {
         n: "Aludra",
         puid: 55,
         uid: 282,
@@ -15745,7 +15745,7 @@ export const turn346 = {
         x: "1.2268",
         y: "3.9964",
       },
-      "283": {
+      283: {
         n: "Rat",
         puid: 55,
         uid: 283,
@@ -15753,7 +15753,7 @@ export const turn346 = {
         x: "1.2454",
         y: "4.1137",
       },
-      "284": {
+      284: {
         n: "Cold Alpheratz",
         puid: 19,
         uid: 284,
@@ -15761,7 +15761,7 @@ export const turn346 = {
         x: "-0.3700",
         y: "3.3955",
       },
-      "285": {
+      285: {
         n: "Pleione",
         puid: 55,
         uid: 285,
@@ -15769,7 +15769,7 @@ export const turn346 = {
         x: "1.1532",
         y: "4.4168",
       },
-      "286": {
+      286: {
         n: "Ram",
         puid: 55,
         uid: 286,
@@ -15777,7 +15777,7 @@ export const turn346 = {
         x: "1.6763",
         y: "3.9772",
       },
-      "287": {
+      287: {
         n: "Soft Asterion",
         puid: 19,
         uid: 287,
@@ -15785,7 +15785,7 @@ export const turn346 = {
         x: "-0.6097",
         y: "3.8092",
       },
-      "288": {
+      288: {
         n: "New Alpha",
         puid: 3,
         uid: 288,
@@ -15793,7 +15793,7 @@ export const turn346 = {
         x: "1.0780",
         y: "2.2045",
       },
-      "289": {
+      289: {
         n: "Last Menkar",
         puid: 19,
         uid: 289,
@@ -15801,7 +15801,7 @@ export const turn346 = {
         x: "-0.8167",
         y: "3.2294",
       },
-      "29": {
+      29: {
         n: "Kappa Sadalbari",
         puid: 28,
         uid: 29,
@@ -15809,7 +15809,7 @@ export const turn346 = {
         x: "-6.7027",
         y: "0.9112",
       },
-      "290": {
+      290: {
         n: "Old Hadar",
         puid: 19,
         uid: 290,
@@ -15817,7 +15817,7 @@ export const turn346 = {
         x: "0.0997",
         y: "2.2043",
       },
-      "291": {
+      291: {
         n: "Pure Vega",
         puid: 19,
         uid: 291,
@@ -15825,7 +15825,7 @@ export const turn346 = {
         x: "-0.0289",
         y: "2.2475",
       },
-      "292": {
+      292: {
         n: "Hot Rye",
         puid: 19,
         uid: 292,
@@ -15833,7 +15833,7 @@ export const turn346 = {
         x: "0.2351",
         y: "1.9756",
       },
-      "293": {
+      293: {
         n: "Mega Tic",
         puid: 19,
         uid: 293,
@@ -15841,7 +15841,7 @@ export const turn346 = {
         x: "0.3871",
         y: "2.6992",
       },
-      "294": {
+      294: {
         n: "Hassaleh",
         puid: 19,
         uid: 294,
@@ -15849,7 +15849,7 @@ export const turn346 = {
         x: "-0.2984",
         y: "2.4455",
       },
-      "296": {
+      296: {
         n: "Last Menkab",
         puid: 35,
         uid: 296,
@@ -15857,7 +15857,7 @@ export const turn346 = {
         x: "-0.2003",
         y: "1.7304",
       },
-      "297": {
+      297: {
         n: "Bharani",
         puid: 19,
         uid: 297,
@@ -15865,7 +15865,7 @@ export const turn346 = {
         x: "-0.3091",
         y: "2.9240",
       },
-      "298": {
+      298: {
         n: "Theta Gatria",
         puid: 3,
         uid: 298,
@@ -15873,7 +15873,7 @@ export const turn346 = {
         x: "0.9381",
         y: "1.7976",
       },
-      "299": {
+      299: {
         n: "Shaula",
         puid: 35,
         uid: 299,
@@ -15881,7 +15881,7 @@ export const turn346 = {
         x: "-0.4286",
         y: "1.5543",
       },
-      "3": {
+      3: {
         n: "Ruchbah",
         puid: 39,
         uid: 3,
@@ -15889,7 +15889,7 @@ export const turn346 = {
         x: "1.0826",
         y: "-1.9542",
       },
-      "30": {
+      30: {
         n: "Lost Cursa",
         puid: 1,
         uid: 30,
@@ -15897,7 +15897,7 @@ export const turn346 = {
         x: "-5.5315",
         y: "0.5038",
       },
-      "300": {
+      300: {
         n: "Free Sham",
         puid: 35,
         uid: 300,
@@ -15905,7 +15905,7 @@ export const turn346 = {
         x: "-0.5579",
         y: "1.5467",
       },
-      "301": {
+      301: {
         n: "Hot Rukbat",
         puid: 35,
         uid: 301,
@@ -15913,7 +15913,7 @@ export const turn346 = {
         x: "0.0021",
         y: "1.1552",
       },
-      "302": {
+      302: {
         n: "Xi Merak",
         puid: 35,
         uid: 302,
@@ -15921,7 +15921,7 @@ export const turn346 = {
         x: "-0.2272",
         y: "1.1207",
       },
-      "303": {
+      303: {
         n: "Wet Alpheratz",
         puid: 3,
         uid: 303,
@@ -15929,7 +15929,7 @@ export const turn346 = {
         x: "1.5442",
         y: "2.5463",
       },
-      "304": {
+      304: {
         n: "Mebsuta",
         puid: -1,
         uid: 304,
@@ -15937,7 +15937,7 @@ export const turn346 = {
         x: "1.2325",
         y: "1.2836",
       },
-      "305": {
+      305: {
         n: "Xi Gut",
         puid: 35,
         uid: 305,
@@ -15945,7 +15945,7 @@ export const turn346 = {
         x: "-0.5203",
         y: "1.1304",
       },
-      "306": {
+      306: {
         n: "Mu Shaula",
         puid: 35,
         uid: 306,
@@ -15953,7 +15953,7 @@ export const turn346 = {
         x: "-0.3115",
         y: "1.0162",
       },
-      "307": {
+      307: {
         n: "Alrai",
         puid: 35,
         uid: 307,
@@ -15961,7 +15961,7 @@ export const turn346 = {
         x: "-0.2993",
         y: "1.5522",
       },
-      "308": {
+      308: {
         n: "Last Alshat",
         puid: 35,
         uid: 308,
@@ -15969,7 +15969,7 @@ export const turn346 = {
         x: "0.0083",
         y: "1.3110",
       },
-      "31": {
+      31: {
         n: "Zoo",
         puid: 25,
         uid: 31,
@@ -15977,7 +15977,7 @@ export const turn346 = {
         x: "-6.4699",
         y: "-0.3068",
       },
-      "311": {
+      311: {
         n: "Dull Chort",
         puid: 19,
         uid: 311,
@@ -15985,7 +15985,7 @@ export const turn346 = {
         x: "-0.0081",
         y: "1.8164",
       },
-      "312": {
+      312: {
         n: "Slow Atik",
         puid: 35,
         uid: 312,
@@ -15993,7 +15993,7 @@ export const turn346 = {
         x: "-1.0278",
         y: "1.7513",
       },
-      "313": {
+      313: {
         n: "Cor",
         puid: 35,
         uid: 313,
@@ -16001,7 +16001,7 @@ export const turn346 = {
         x: "0.2180",
         y: "0.6043",
       },
-      "314": {
+      314: {
         n: "Tau Mud",
         puid: 35,
         uid: 314,
@@ -16009,7 +16009,7 @@ export const turn346 = {
         x: "0.3419",
         y: "0.6020",
       },
-      "315": {
+      315: {
         n: "Altarf",
         puid: 19,
         uid: 315,
@@ -16017,7 +16017,7 @@ export const turn346 = {
         x: "0.4705",
         y: "1.8559",
       },
-      "317": {
+      317: {
         n: "Slow Sabik",
         puid: 49,
         uid: 317,
@@ -16025,7 +16025,7 @@ export const turn346 = {
         x: "-1.1404",
         y: "2.2735",
       },
-      "319": {
+      319: {
         n: "Kleeia",
         puid: 49,
         uid: 319,
@@ -16033,7 +16033,7 @@ export const turn346 = {
         x: "-1.8607",
         y: "1.1099",
       },
-      "32": {
+      32: {
         n: "Mega Cursa",
         puid: 10,
         uid: 32,
@@ -16041,7 +16041,7 @@ export const turn346 = {
         x: "-5.2988",
         y: "-0.7142",
       },
-      "320": {
+      320: {
         n: "Tag",
         puid: 40,
         uid: 320,
@@ -16049,7 +16049,7 @@ export const turn346 = {
         x: "-0.8865",
         y: "-1.1034",
       },
-      "321": {
+      321: {
         n: "Sargas",
         puid: 40,
         uid: 321,
@@ -16057,7 +16057,7 @@ export const turn346 = {
         x: "-1.2689",
         y: "-1.0145",
       },
-      "323": {
+      323: {
         n: "Eta Vindemiatrix",
         puid: 40,
         uid: 323,
@@ -16065,7 +16065,7 @@ export const turn346 = {
         x: "-0.8875",
         y: "-1.4805",
       },
-      "324": {
+      324: {
         n: "New Sulafat",
         puid: 40,
         uid: 324,
@@ -16073,7 +16073,7 @@ export const turn346 = {
         x: "-0.7732",
         y: "-1.5295",
       },
-      "325": {
+      325: {
         n: "Gamma Alaraph",
         puid: 40,
         uid: 325,
@@ -16081,7 +16081,7 @@ export const turn346 = {
         x: "-0.4215",
         y: "-1.0238",
       },
-      "326": {
+      326: {
         c: 0,
         e: 0,
         ga: 0,
@@ -16097,7 +16097,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "-1.7854",
       },
-      "327": {
+      327: {
         n: "Zavijava",
         puid: 40,
         uid: 327,
@@ -16105,7 +16105,7 @@ export const turn346 = {
         x: "-0.2605",
         y: "-0.8701",
       },
-      "328": {
+      328: {
         c: 0,
         e: 0,
         ga: 0,
@@ -16121,7 +16121,7 @@ export const turn346 = {
         x: "-1.9146",
         y: "-1.2326",
       },
-      "329": {
+      329: {
         n: "Zeta Pax",
         puid: 40,
         uid: 329,
@@ -16129,7 +16129,7 @@ export const turn346 = {
         x: "-0.0808",
         y: "-0.8219",
       },
-      "33": {
+      33: {
         n: "Ice",
         puid: 16,
         uid: 33,
@@ -16137,7 +16137,7 @@ export const turn346 = {
         x: "-4.2249",
         y: "-1.3342",
       },
-      "330": {
+      330: {
         c: 0,
         e: 1,
         ga: 0,
@@ -16153,7 +16153,7 @@ export const turn346 = {
         x: "-1.2217",
         y: "-2.1410",
       },
-      "331": {
+      331: {
         c: 0,
         e: 0,
         ga: 0,
@@ -16169,7 +16169,7 @@ export const turn346 = {
         x: "-2.1365",
         y: "-1.4786",
       },
-      "332": {
+      332: {
         n: "Last Tyl",
         puid: 40,
         uid: 332,
@@ -16177,7 +16177,7 @@ export const turn346 = {
         x: "0.2126",
         y: "-0.8576",
       },
-      "333": {
+      333: {
         n: "Aldebaran",
         puid: 60,
         uid: 333,
@@ -16185,7 +16185,7 @@ export const turn346 = {
         x: "-0.7982",
         y: "-2.4158",
       },
-      "334": {
+      334: {
         c: 0,
         e: 0,
         ga: 0,
@@ -16201,7 +16201,7 @@ export const turn346 = {
         x: "-2.1465",
         y: "-0.1441",
       },
-      "335": {
+      335: {
         n: "White Jib",
         puid: 29,
         uid: 335,
@@ -16209,7 +16209,7 @@ export const turn346 = {
         x: "-1.0976",
         y: "0.2985",
       },
-      "337": {
+      337: {
         n: "Algenib",
         puid: 29,
         uid: 337,
@@ -16217,7 +16217,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "0.4986",
       },
-      "339": {
+      339: {
         c: 0.5,
         e: 4,
         ga: 0,
@@ -16233,7 +16233,7 @@ export const turn346 = {
         x: "-1.5542",
         y: "0.2081",
       },
-      "34": {
+      34: {
         c: 0,
         e: 5,
         ga: 0,
@@ -16249,7 +16249,7 @@ export const turn346 = {
         x: "-1.9110",
         y: "-1.9542",
       },
-      "340": {
+      340: {
         n: "Pi Alrami",
         puid: 40,
         uid: 340,
@@ -16257,7 +16257,7 @@ export const turn346 = {
         x: "-0.9274",
         y: "-0.4431",
       },
-      "341": {
+      341: {
         n: "Dry Electra",
         puid: 29,
         uid: 341,
@@ -16265,7 +16265,7 @@ export const turn346 = {
         x: "-1.2174",
         y: "0.8465",
       },
-      "342": {
+      342: {
         n: "Mu Taygeta",
         puid: 40,
         uid: 342,
@@ -16273,7 +16273,7 @@ export const turn346 = {
         x: "-0.8951",
         y: "-0.6262",
       },
-      "343": {
+      343: {
         c: 0,
         e: 0,
         ga: 0,
@@ -16289,7 +16289,7 @@ export const turn346 = {
         x: "-1.7665",
         y: "-0.3502",
       },
-      "344": {
+      344: {
         n: "Beta Sadalmelik",
         puid: 29,
         uid: 344,
@@ -16297,7 +16297,7 @@ export const turn346 = {
         x: "-1.9287",
         y: "0.5797",
       },
-      "345": {
+      345: {
         c: 0.7,
         e: 0,
         ga: 0,
@@ -16313,7 +16313,7 @@ export const turn346 = {
         x: "-2.0130",
         y: "-0.2938",
       },
-      "347": {
+      347: {
         c: 1,
         e: 3,
         ga: 0,
@@ -16329,7 +16329,7 @@ export const turn346 = {
         x: "-1.4672",
         y: "-1.0270",
       },
-      "348": {
+      348: {
         n: "Cold Sadatoni",
         puid: 35,
         uid: 348,
@@ -16337,7 +16337,7 @@ export const turn346 = {
         x: "0.0069",
         y: "1.0362",
       },
-      "349": {
+      349: {
         n: "Vega",
         puid: 35,
         uid: 349,
@@ -16345,7 +16345,7 @@ export const turn346 = {
         x: "-0.6584",
         y: "1.5651",
       },
-      "35": {
+      35: {
         c: 0,
         e: 5,
         ga: 0,
@@ -16361,7 +16361,7 @@ export const turn346 = {
         x: "-3.1510",
         y: "-1.9542",
       },
-      "350": {
+      350: {
         n: "Tau Sheliak",
         puid: 49,
         uid: 350,
@@ -16369,7 +16369,7 @@ export const turn346 = {
         x: "-1.8036",
         y: "1.2495",
       },
-      "351": {
+      351: {
         n: "Nova Rub",
         puid: 49,
         uid: 351,
@@ -16377,7 +16377,7 @@ export const turn346 = {
         x: "-1.6964",
         y: "1.4758",
       },
-      "354": {
+      354: {
         n: "Pure Sasin",
         puid: 35,
         uid: 354,
@@ -16385,7 +16385,7 @@ export const turn346 = {
         x: "-1.1401",
         y: "1.3271",
       },
-      "355": {
+      355: {
         n: "Delta Alrami",
         puid: 29,
         uid: 355,
@@ -16393,7 +16393,7 @@ export const turn346 = {
         x: "-1.6542",
         y: "0.6215",
       },
-      "356": {
+      356: {
         n: "Nova Alioth",
         puid: 35,
         uid: 356,
@@ -16401,7 +16401,7 @@ export const turn346 = {
         x: "-1.1991",
         y: "1.7788",
       },
-      "357": {
+      357: {
         n: "Zeta Dux",
         puid: 49,
         uid: 357,
@@ -16409,7 +16409,7 @@ export const turn346 = {
         x: "-1.5151",
         y: "2.0253",
       },
-      "359": {
+      359: {
         n: "Alpheratz",
         puid: -1,
         uid: 359,
@@ -16417,7 +16417,7 @@ export const turn346 = {
         x: "-2.6262",
         y: "1.0651",
       },
-      "36": {
+      36: {
         n: "Alfecca",
         puid: 26,
         uid: 36,
@@ -16425,7 +16425,7 @@ export const turn346 = {
         x: "-4.2249",
         y: "-2.5742",
       },
-      "360": {
+      360: {
         n: "Odd Arcturus",
         puid: 35,
         uid: 360,
@@ -16433,7 +16433,7 @@ export const turn346 = {
         x: "-0.5906",
         y: "1.0489",
       },
-      "361": {
+      361: {
         n: "Propus",
         puid: -1,
         uid: 361,
@@ -16441,7 +16441,7 @@ export const turn346 = {
         x: "-2.8272",
         y: "1.2365",
       },
-      "362": {
+      362: {
         n: "Zeta Diadem",
         puid: 0,
         uid: 362,
@@ -16449,7 +16449,7 @@ export const turn346 = {
         x: "-1.6542",
         y: "2.5025",
       },
-      "365": {
+      365: {
         n: "Hot Alaraph",
         puid: 0,
         uid: 365,
@@ -16457,7 +16457,7 @@ export const turn346 = {
         x: "-2.1265",
         y: "2.2843",
       },
-      "366": {
+      366: {
         n: "New Altais",
         puid: 0,
         uid: 366,
@@ -16465,7 +16465,7 @@ export const turn346 = {
         x: "-2.1348",
         y: "2.1113",
       },
-      "367": {
+      367: {
         n: "Talitha",
         puid: 0,
         uid: 367,
@@ -16473,7 +16473,7 @@ export const turn346 = {
         x: "-2.2449",
         y: "2.6451",
       },
-      "369": {
+      369: {
         n: "Alderamin",
         puid: 0,
         uid: 369,
@@ -16481,7 +16481,7 @@ export const turn346 = {
         x: "-1.9387",
         y: "2.7102",
       },
-      "37": {
+      37: {
         n: "Dry Neshmet",
         puid: 15,
         uid: 37,
@@ -16489,7 +16489,7 @@ export const turn346 = {
         x: "-5.2988",
         y: "-3.1942",
       },
-      "371": {
+      371: {
         n: "Grand Sadr",
         puid: 49,
         uid: 371,
@@ -16497,7 +16497,7 @@ export const turn346 = {
         x: "-1.9750",
         y: "1.6687",
       },
-      "372": {
+      372: {
         n: "Young Alpha",
         puid: 49,
         uid: 372,
@@ -16505,7 +16505,7 @@ export const turn346 = {
         x: "-1.5805",
         y: "1.9099",
       },
-      "373": {
+      373: {
         n: "Slow Bunda",
         puid: 0,
         uid: 373,
@@ -16513,7 +16513,7 @@ export const turn346 = {
         x: "-2.7212",
         y: "3.0846",
       },
-      "374": {
+      374: {
         n: "Alpha Enif",
         puid: 49,
         uid: 374,
@@ -16521,7 +16521,7 @@ export const turn346 = {
         x: "-2.0187",
         y: "1.3570",
       },
-      "375": {
+      375: {
         n: "Wild Maia",
         puid: -1,
         uid: 375,
@@ -16529,7 +16529,7 @@ export const turn346 = {
         x: "-3.0379",
         y: "1.5467",
       },
-      "376": {
+      376: {
         n: "Dull Celaeno",
         puid: 0,
         uid: 376,
@@ -16537,7 +16537,7 @@ export const turn346 = {
         x: "-1.3133",
         y: "2.9832",
       },
-      "377": {
+      377: {
         n: "Bunda",
         puid: -1,
         uid: 377,
@@ -16545,7 +16545,7 @@ export const turn346 = {
         x: "-2.4940",
         y: "1.0636",
       },
-      "378": {
+      378: {
         n: "Betria",
         puid: 35,
         uid: 378,
@@ -16553,7 +16553,7 @@ export const turn346 = {
         x: "-1.0973",
         y: "1.6309",
       },
-      "379": {
+      379: {
         n: "Urn",
         puid: 21,
         uid: 379,
@@ -16561,7 +16561,7 @@ export const turn346 = {
         x: "-3.3865",
         y: "3.2437",
       },
-      "38": {
+      38: {
         n: "Fast Mirzam",
         puid: 48,
         uid: 38,
@@ -16569,7 +16569,7 @@ export const turn346 = {
         x: "-5.5315",
         y: "-4.4122",
       },
-      "381": {
+      381: {
         n: "Gamma Dnoces",
         puid: 21,
         uid: 381,
@@ -16577,7 +16577,7 @@ export const turn346 = {
         x: "-3.2817",
         y: "2.4216",
       },
-      "382": {
+      382: {
         n: "Marfik",
         puid: 21,
         uid: 382,
@@ -16585,7 +16585,7 @@ export const turn346 = {
         x: "-3.4922",
         y: "2.2071",
       },
-      "383": {
+      383: {
         n: "Pi Botein",
         puid: 21,
         uid: 383,
@@ -16593,7 +16593,7 @@ export const turn346 = {
         x: "-3.6735",
         y: "2.9319",
       },
-      "384": {
+      384: {
         n: "Hard Mahasim",
         puid: 50,
         uid: 384,
@@ -16601,7 +16601,7 @@ export const turn346 = {
         x: "-3.6273",
         y: "3.0473",
       },
-      "385": {
+      385: {
         n: "Old Fad",
         puid: 50,
         uid: 385,
@@ -16609,7 +16609,7 @@ export const turn346 = {
         x: "-3.9959",
         y: "2.8959",
       },
-      "386": {
+      386: {
         n: "Young Deneb",
         puid: 0,
         uid: 386,
@@ -16617,7 +16617,7 @@ export const turn346 = {
         x: "-2.8269",
         y: "2.7853",
       },
-      "389": {
+      389: {
         n: "Electra",
         puid: -1,
         uid: 389,
@@ -16625,7 +16625,7 @@ export const turn346 = {
         x: "-3.8297",
         y: "1.6156",
       },
-      "39": {
+      39: {
         n: "Soft Wazn",
         puid: 48,
         uid: 39,
@@ -16633,7 +16633,7 @@ export const turn346 = {
         x: "-6.4699",
         y: "-3.6016",
       },
-      "390": {
+      390: {
         n: "Alnilam",
         puid: 21,
         uid: 390,
@@ -16641,7 +16641,7 @@ export const turn346 = {
         x: "-3.0357",
         y: "3.5219",
       },
-      "391": {
+      391: {
         n: "Terebellum",
         puid: 57,
         uid: 391,
@@ -16649,7 +16649,7 @@ export const turn346 = {
         x: "-2.6627",
         y: "3.3725",
       },
-      "393": {
+      393: {
         n: "Sigma Algol",
         puid: 0,
         uid: 393,
@@ -16657,7 +16657,7 @@ export const turn346 = {
         x: "-2.2605",
         y: "3.1174",
       },
-      "396": {
+      396: {
         n: "Kuma",
         puid: 57,
         uid: 396,
@@ -16665,7 +16665,7 @@ export const turn346 = {
         x: "-2.7028",
         y: "3.2394",
       },
-      "397": {
+      397: {
         n: "Mirzam",
         puid: 57,
         uid: 397,
@@ -16673,7 +16673,7 @@ export const turn346 = {
         x: "-2.3456",
         y: "3.4815",
       },
-      "4": {
+      4: {
         n: "Beta Biham",
         puid: 6,
         uid: 4,
@@ -16681,7 +16681,7 @@ export const turn346 = {
         x: "2.1565",
         y: "-1.3342",
       },
-      "40": {
+      40: {
         n: "Alrischa",
         puid: 7,
         uid: 40,
@@ -16689,7 +16689,7 @@ export const turn346 = {
         x: "-6.7027",
         y: "-4.8196",
       },
-      "400": {
+      400: {
         n: "Alpha Cheleb",
         puid: -1,
         uid: 400,
@@ -16697,7 +16697,7 @@ export const turn346 = {
         x: "-2.3289",
         y: "3.9853",
       },
-      "401": {
+      401: {
         n: "Menkent",
         puid: -1,
         uid: 401,
@@ -16705,7 +16705,7 @@ export const turn346 = {
         x: "-2.2265",
         y: "4.0239",
       },
-      "402": {
+      402: {
         n: "Gamma Pollux",
         puid: 50,
         uid: 402,
@@ -16713,7 +16713,7 @@ export const turn346 = {
         x: "-3.4796",
         y: "3.5513",
       },
-      "403": {
+      403: {
         n: "Eta Kat",
         puid: 21,
         uid: 403,
@@ -16721,7 +16721,7 @@ export const turn346 = {
         x: "-3.4139",
         y: "2.9687",
       },
-      "404": {
+      404: {
         n: "Giennah",
         puid: 21,
         uid: 404,
@@ -16729,7 +16729,7 @@ export const turn346 = {
         x: "-3.3795",
         y: "2.7836",
       },
-      "405": {
+      405: {
         n: "Nova Spy",
         puid: 21,
         uid: 405,
@@ -16737,7 +16737,7 @@ export const turn346 = {
         x: "-3.5663",
         y: "2.8621",
       },
-      "407": {
+      407: {
         n: "Odd Eltanin",
         puid: -1,
         uid: 407,
@@ -16745,7 +16745,7 @@ export const turn346 = {
         x: "-1.9555",
         y: "4.5186",
       },
-      "408": {
+      408: {
         n: "New Azha",
         puid: -1,
         uid: 408,
@@ -16753,7 +16753,7 @@ export const turn346 = {
         x: "-1.4499",
         y: "4.0559",
       },
-      "409": {
+      409: {
         n: "Nova Fin",
         puid: 0,
         uid: 409,
@@ -16761,7 +16761,7 @@ export const turn346 = {
         x: "-1.4922",
         y: "2.6487",
       },
-      "41": {
+      41: {
         n: "Nu Sasin",
         puid: 32,
         uid: 41,
@@ -16769,7 +16769,7 @@ export const turn346 = {
         x: "-6.6574",
         y: "-6.0588",
       },
-      "410": {
+      410: {
         n: "Lush Sadachbia",
         puid: 50,
         uid: 410,
@@ -16777,7 +16777,7 @@ export const turn346 = {
         x: "-4.0145",
         y: "3.6178",
       },
-      "411": {
+      411: {
         n: "Lush Alkes",
         puid: 50,
         uid: 411,
@@ -16785,7 +16785,7 @@ export const turn346 = {
         x: "-3.9208",
         y: "3.4722",
       },
-      "412": {
+      412: {
         n: "Hard Rana",
         puid: 50,
         uid: 412,
@@ -16793,7 +16793,7 @@ export const turn346 = {
         x: "-3.7069",
         y: "3.9895",
       },
-      "413": {
+      413: {
         n: "Wazn",
         puid: 50,
         uid: 413,
@@ -16801,7 +16801,7 @@ export const turn346 = {
         x: "-3.4964",
         y: "3.8610",
       },
-      "414": {
+      414: {
         n: "Dry Albali",
         puid: 44,
         uid: 414,
@@ -16809,7 +16809,7 @@ export const turn346 = {
         x: "-4.2351",
         y: "4.1141",
       },
-      "415": {
+      415: {
         n: "Tau Alniyat",
         puid: 50,
         uid: 415,
@@ -16817,7 +16817,7 @@ export const turn346 = {
         x: "-3.2869",
         y: "3.6607",
       },
-      "416": {
+      416: {
         n: "Atlas",
         puid: 50,
         uid: 416,
@@ -16825,7 +16825,7 @@ export const turn346 = {
         x: "-3.8379",
         y: "3.0090",
       },
-      "417": {
+      417: {
         n: "Last Betria",
         puid: 50,
         uid: 417,
@@ -16833,7 +16833,7 @@ export const turn346 = {
         x: "-3.2059",
         y: "4.1148",
       },
-      "418": {
+      418: {
         n: "Ire",
         puid: 50,
         uid: 418,
@@ -16841,7 +16841,7 @@ export const turn346 = {
         x: "-3.3868",
         y: "4.4466",
       },
-      "419": {
+      419: {
         n: "Zeta Baham",
         puid: 44,
         uid: 419,
@@ -16849,7 +16849,7 @@ export const turn346 = {
         x: "-4.8529",
         y: "3.9697",
       },
-      "42": {
+      42: {
         n: "Elm",
         puid: 46,
         uid: 42,
@@ -16857,7 +16857,7 @@ export const turn346 = {
         x: "-5.4597",
         y: "-6.3797",
       },
-      "420": {
+      420: {
         n: "Hard Tureis",
         puid: 50,
         uid: 420,
@@ -16865,7 +16865,7 @@ export const turn346 = {
         x: "-3.4431",
         y: "4.6931",
       },
-      "422": {
+      422: {
         n: "Ancha",
         puid: 50,
         uid: 422,
@@ -16873,7 +16873,7 @@ export const turn346 = {
         x: "-3.6797",
         y: "4.9610",
       },
-      "423": {
+      423: {
         n: "Tau Nog",
         puid: 21,
         uid: 423,
@@ -16881,7 +16881,7 @@ export const turn346 = {
         x: "-3.7811",
         y: "2.3604",
       },
-      "424": {
+      424: {
         n: "Gamma Kraz",
         puid: 44,
         uid: 424,
@@ -16889,7 +16889,7 @@ export const turn346 = {
         x: "-5.2640",
         y: "4.2109",
       },
-      "425": {
+      425: {
         n: "Red Lesath",
         puid: 44,
         uid: 425,
@@ -16897,7 +16897,7 @@ export const turn346 = {
         x: "-5.0638",
         y: "3.5391",
       },
-      "426": {
+      426: {
         n: "Nu Menkent",
         puid: 44,
         uid: 426,
@@ -16905,7 +16905,7 @@ export const turn346 = {
         x: "-5.2219",
         y: "3.8974",
       },
-      "427": {
+      427: {
         n: "AlNair",
         puid: 44,
         uid: 427,
@@ -16913,7 +16913,7 @@ export const turn346 = {
         x: "-4.9708",
         y: "3.3780",
       },
-      "428": {
+      428: {
         n: "Grand Sadalsuud",
         puid: 44,
         uid: 428,
@@ -16921,7 +16921,7 @@ export const turn346 = {
         x: "-5.1014",
         y: "4.0964",
       },
-      "429": {
+      429: {
         n: "Hot Angetenar",
         puid: 44,
         uid: 429,
@@ -16929,7 +16929,7 @@ export const turn346 = {
         x: "-4.9602",
         y: "3.1785",
       },
-      "43": {
+      43: {
         n: "Blue Kraz",
         puid: 22,
         uid: 43,
@@ -16937,7 +16937,7 @@ export const turn346 = {
         x: "-6.3365",
         y: "-7.2565",
       },
-      "430": {
+      430: {
         n: "Praecipua",
         puid: 44,
         uid: 430,
@@ -16945,7 +16945,7 @@ export const turn346 = {
         x: "-4.7039",
         y: "4.1039",
       },
-      "431": {
+      431: {
         n: "Theta Dabih",
         puid: 44,
         uid: 431,
@@ -16953,7 +16953,7 @@ export const turn346 = {
         x: "-4.5256",
         y: "3.3150",
       },
-      "432": {
+      432: {
         n: "Hot Wasat",
         puid: 44,
         uid: 432,
@@ -16961,7 +16961,7 @@ export const turn346 = {
         x: "-5.2086",
         y: "4.4670",
       },
-      "433": {
+      433: {
         n: "Gomeisa",
         puid: 44,
         uid: 433,
@@ -16969,7 +16969,7 @@ export const turn346 = {
         x: "-5.6515",
         y: "2.9367",
       },
-      "434": {
+      434: {
         n: "Young Enif",
         puid: 44,
         uid: 434,
@@ -16977,7 +16977,7 @@ export const turn346 = {
         x: "-4.4408",
         y: "4.3669",
       },
-      "435": {
+      435: {
         n: "Last Ash",
         puid: 44,
         uid: 435,
@@ -16985,7 +16985,7 @@ export const turn346 = {
         x: "-4.9512",
         y: "4.7326",
       },
-      "436": {
+      436: {
         n: "Enif",
         puid: 50,
         uid: 436,
@@ -16993,7 +16993,7 @@ export const turn346 = {
         x: "-4.3848",
         y: "2.7705",
       },
-      "437": {
+      437: {
         n: "Procyon",
         puid: 44,
         uid: 437,
@@ -17001,7 +17001,7 @@ export const turn346 = {
         x: "-4.7058",
         y: "4.8587",
       },
-      "438": {
+      438: {
         n: "Young Alshat",
         puid: 50,
         uid: 438,
@@ -17009,7 +17009,7 @@ export const turn346 = {
         x: "-3.8261",
         y: "4.0208",
       },
-      "439": {
+      439: {
         n: "Dull Ice",
         puid: 38,
         uid: 439,
@@ -17017,7 +17017,7 @@ export const turn346 = {
         x: "-6.2510",
         y: "2.7357",
       },
-      "44": {
+      44: {
         n: "Markab",
         puid: 23,
         uid: 44,
@@ -17025,7 +17025,7 @@ export const turn346 = {
         x: "-5.1388",
         y: "-7.5774",
       },
-      "440": {
+      440: {
         n: "Menkib",
         puid: 58,
         uid: 440,
@@ -17033,7 +17033,7 @@ export const turn346 = {
         x: "-5.3847",
         y: "2.6012",
       },
-      "441": {
+      441: {
         n: "Port Ankaa",
         puid: 44,
         uid: 441,
@@ -17041,7 +17041,7 @@ export const turn346 = {
         x: "-5.6880",
         y: "2.5544",
       },
-      "442": {
+      442: {
         n: "Dheneb",
         puid: 58,
         uid: 442,
@@ -17049,7 +17049,7 @@ export const turn346 = {
         x: "-5.1288",
         y: "2.5296",
       },
-      "443": {
+      443: {
         n: "Dull Ruchbah",
         puid: 38,
         uid: 443,
@@ -17057,7 +17057,7 @@ export const turn346 = {
         x: "-5.8741",
         y: "2.3602",
       },
-      "444": {
+      444: {
         n: "Old Zaniah",
         puid: 38,
         uid: 444,
@@ -17065,7 +17065,7 @@ export const turn346 = {
         x: "-5.9738",
         y: "2.3806",
       },
-      "445": {
+      445: {
         n: "Alpha Aludra",
         puid: 58,
         uid: 445,
@@ -17073,7 +17073,7 @@ export const turn346 = {
         x: "-5.5665",
         y: "1.8656",
       },
-      "446": {
+      446: {
         n: "Odd Fad",
         puid: 58,
         uid: 446,
@@ -17081,7 +17081,7 @@ export const turn346 = {
         x: "-4.7517",
         y: "2.4713",
       },
-      "447": {
+      447: {
         n: "Last Aladfar",
         puid: -1,
         uid: 447,
@@ -17089,7 +17089,7 @@ export const turn346 = {
         x: "-4.7660",
         y: "2.0708",
       },
-      "448": {
+      448: {
         n: "Zit",
         puid: 38,
         uid: 448,
@@ -17097,7 +17097,7 @@ export const turn346 = {
         x: "-6.3401",
         y: "2.3160",
       },
-      "449": {
+      449: {
         n: "Ankaa",
         puid: 38,
         uid: 449,
@@ -17105,7 +17105,7 @@ export const turn346 = {
         x: "-6.4131",
         y: "2.7267",
       },
-      "45": {
+      45: {
         n: "Asp",
         puid: 54,
         uid: 45,
@@ -17113,7 +17113,7 @@ export const turn346 = {
         x: "-3.8996",
         y: "-7.6227",
       },
-      "450": {
+      450: {
         n: "Wet Alshain",
         puid: 44,
         uid: 450,
@@ -17121,7 +17121,7 @@ export const turn346 = {
         x: "-4.6960",
         y: "3.2349",
       },
-      "453": {
+      453: {
         n: "Shy",
         puid: 11,
         uid: 453,
@@ -17129,7 +17129,7 @@ export const turn346 = {
         x: "-6.4206",
         y: "3.4322",
       },
-      "454": {
+      454: {
         n: "Bellatrix",
         puid: 38,
         uid: 454,
@@ -17137,7 +17137,7 @@ export const turn346 = {
         x: "-6.9117",
         y: "2.4713",
       },
-      "455": {
+      455: {
         n: "Paw",
         puid: 11,
         uid: 455,
@@ -17145,7 +17145,7 @@ export const turn346 = {
         x: "-6.2304",
         y: "3.2420",
       },
-      "456": {
+      456: {
         n: "Fort Birdun",
         puid: 11,
         uid: 456,
@@ -17153,7 +17153,7 @@ export const turn346 = {
         x: "-6.1260",
         y: "3.2266",
       },
-      "457": {
+      457: {
         n: "Ick",
         puid: 11,
         uid: 457,
@@ -17161,7 +17161,7 @@ export const turn346 = {
         x: "-6.6610",
         y: "3.2611",
       },
-      "458": {
+      458: {
         n: "Wasat",
         puid: 11,
         uid: 458,
@@ -17169,7 +17169,7 @@ export const turn346 = {
         x: "-6.4832",
         y: "3.7512",
       },
-      "459": {
+      459: {
         n: "Pan",
         puid: 11,
         uid: 459,
@@ -17177,7 +17177,7 @@ export const turn346 = {
         x: "-6.8096",
         y: "3.5687",
       },
-      "46": {
+      46: {
         n: "Wet Alhena",
         puid: 20,
         uid: 46,
@@ -17185,7 +17185,7 @@ export const turn346 = {
         x: "-3.4922",
         y: "-6.4515",
       },
-      "460": {
+      460: {
         n: "New Sarin",
         puid: 11,
         uid: 460,
@@ -17193,7 +17193,7 @@ export const turn346 = {
         x: "-5.7238",
         y: "3.4017",
       },
-      "461": {
+      461: {
         n: "Alcor",
         puid: 11,
         uid: 461,
@@ -17201,7 +17201,7 @@ export const turn346 = {
         x: "-6.9782",
         y: "3.0489",
       },
-      "462": {
+      462: {
         n: "Homam",
         puid: 11,
         uid: 462,
@@ -17209,7 +17209,7 @@ export const turn346 = {
         x: "-6.6105",
         y: "4.1008",
       },
-      "463": {
+      463: {
         n: "Nova Becrux",
         puid: 44,
         uid: 463,
@@ -17217,7 +17217,7 @@ export const turn346 = {
         x: "-5.4730",
         y: "3.5795",
       },
-      "464": {
+      464: {
         n: "Pure Shaula",
         puid: 11,
         uid: 464,
@@ -17225,7 +17225,7 @@ export const turn346 = {
         x: "-6.3365",
         y: "4.3351",
       },
-      "465": {
+      465: {
         n: "Beta Benetnasch",
         puid: 44,
         uid: 465,
@@ -17233,7 +17233,7 @@ export const turn346 = {
         x: "-5.3577",
         y: "2.8917",
       },
-      "466": {
+      466: {
         n: "Port Ugh",
         puid: 11,
         uid: 466,
@@ -17241,7 +17241,7 @@ export const turn346 = {
         x: "-6.5402",
         y: "4.5033",
       },
-      "468": {
+      468: {
         n: "Asterion",
         puid: 58,
         uid: 468,
@@ -17249,7 +17249,7 @@ export const turn346 = {
         x: "-5.4629",
         y: "2.3070",
       },
-      "469": {
+      469: {
         n: "Kappa Raw",
         puid: 44,
         uid: 469,
@@ -17257,7 +17257,7 @@ export const turn346 = {
         x: "-5.2242",
         y: "2.4148",
       },
-      "47": {
+      47: {
         n: "Nu Lesath",
         puid: 36,
         uid: 47,
@@ -17265,7 +17265,7 @@ export const turn346 = {
         x: "-2.6816",
         y: "-7.3899",
       },
-      "470": {
+      470: {
         n: "Blue Rana",
         puid: 38,
         uid: 470,
@@ -17273,7 +17273,7 @@ export const turn346 = {
         x: "-6.7984",
         y: "2.0990",
       },
-      "471": {
+      471: {
         n: "Red Ash",
         puid: 38,
         uid: 471,
@@ -17281,7 +17281,7 @@ export const turn346 = {
         x: "-6.7203",
         y: "2.3851",
       },
-      "472": {
+      472: {
         n: "Lost Algorab",
         puid: 38,
         uid: 472,
@@ -17289,7 +17289,7 @@ export const turn346 = {
         x: "-6.9327",
         y: "2.3431",
       },
-      "473": {
+      473: {
         n: "Mu Nash",
         puid: 38,
         uid: 473,
@@ -17297,7 +17297,7 @@ export const turn346 = {
         x: "-6.6948",
         y: "2.5777",
       },
-      "474": {
+      474: {
         n: "Yum",
         puid: 38,
         uid: 474,
@@ -17305,7 +17305,7 @@ export const turn346 = {
         x: "-7.0265",
         y: "2.5195",
       },
-      "475": {
+      475: {
         n: "Xi Wezen",
         puid: 38,
         uid: 475,
@@ -17313,7 +17313,7 @@ export const turn346 = {
         x: "-6.6038",
         y: "2.7630",
       },
-      "476": {
+      476: {
         n: "Grand Gomeisa",
         puid: 11,
         uid: 476,
@@ -17321,7 +17321,7 @@ export const turn346 = {
         x: "-7.1581",
         y: "2.6510",
       },
-      "477": {
+      477: {
         n: "Odd Elk",
         puid: 28,
         uid: 477,
@@ -17329,7 +17329,7 @@ export const turn346 = {
         x: "-6.1980",
         y: "1.4942",
       },
-      "478": {
+      478: {
         n: "Delta Thabit",
         puid: 38,
         uid: 478,
@@ -17337,7 +17337,7 @@ export const turn346 = {
         x: "-7.3898",
         y: "2.6631",
       },
-      "479": {
+      479: {
         n: "Last Alniyat",
         puid: -1,
         uid: 479,
@@ -17345,7 +17345,7 @@ export const turn346 = {
         x: "-7.6407",
         y: "2.0643",
       },
-      "48": {
+      48: {
         n: "Last Phact",
         puid: 43,
         uid: 48,
@@ -17353,7 +17353,7 @@ export const turn346 = {
         x: "-2.2742",
         y: "-6.2188",
       },
-      "480": {
+      480: {
         n: "Cold Alzir",
         puid: 11,
         uid: 480,
@@ -17361,7 +17361,7 @@ export const turn346 = {
         x: "-7.0268",
         y: "3.1652",
       },
-      "481": {
+      481: {
         n: "Zeta Azaleh",
         puid: 58,
         uid: 481,
@@ -17369,7 +17369,7 @@ export const turn346 = {
         x: "-5.5943",
         y: "2.6461",
       },
-      "482": {
+      482: {
         n: "Slow TseenKee",
         puid: 11,
         uid: 482,
@@ -17377,7 +17377,7 @@ export const turn346 = {
         x: "-6.8773",
         y: "3.3971",
       },
-      "483": {
+      483: {
         n: "Alpha Aldib",
         puid: 11,
         uid: 483,
@@ -17385,7 +17385,7 @@ export const turn346 = {
         x: "-5.9779",
         y: "3.3273",
       },
-      "484": {
+      484: {
         n: "Grand Yay",
         puid: 44,
         uid: 484,
@@ -17393,7 +17393,7 @@ export const turn346 = {
         x: "-5.2549",
         y: "2.5261",
       },
-      "485": {
+      485: {
         n: "Etamin",
         puid: 28,
         uid: 485,
@@ -17401,7 +17401,7 @@ export const turn346 = {
         x: "-6.6514",
         y: "0.7702",
       },
-      "486": {
+      486: {
         n: "Tau Acrab",
         puid: 28,
         uid: 486,
@@ -17409,7 +17409,7 @@ export const turn346 = {
         x: "-6.8745",
         y: "1.0830",
       },
-      "487": {
+      487: {
         n: "Tau Hadar",
         puid: 28,
         uid: 487,
@@ -17417,7 +17417,7 @@ export const turn346 = {
         x: "-6.7320",
         y: "1.2459",
       },
-      "488": {
+      488: {
         n: "Furud",
         puid: 28,
         uid: 488,
@@ -17425,7 +17425,7 @@ export const turn346 = {
         x: "-6.3513",
         y: "1.1572",
       },
-      "489": {
+      489: {
         n: "Eta Atria",
         puid: 28,
         uid: 489,
@@ -17433,7 +17433,7 @@ export const turn346 = {
         x: "-6.1886",
         y: "1.0018",
       },
-      "49": {
+      49: {
         n: "Kappa AlKurud",
         puid: 14,
         uid: 49,
@@ -17441,7 +17441,7 @@ export const turn346 = {
         x: "-1.6542",
         y: "-5.1449",
       },
-      "490": {
+      490: {
         n: "Black Ale",
         puid: 25,
         uid: 490,
@@ -17449,7 +17449,7 @@ export const turn346 = {
         x: "-6.7027",
         y: "0.2962",
       },
-      "491": {
+      491: {
         n: "Fast Albaldah",
         puid: 25,
         uid: 491,
@@ -17457,7 +17457,7 @@ export const turn346 = {
         x: "-6.9448",
         y: "0.2459",
       },
-      "492": {
+      492: {
         n: "Mega Heze",
         puid: 25,
         uid: 492,
@@ -17465,7 +17465,7 @@ export const turn346 = {
         x: "-6.8418",
         y: "0.1223",
       },
-      "493": {
+      493: {
         n: "Red Algenib",
         puid: -1,
         uid: 493,
@@ -17473,7 +17473,7 @@ export const turn346 = {
         x: "-7.5831",
         y: "0.7559",
       },
-      "494": {
+      494: {
         n: "Dabih",
         puid: 25,
         uid: 494,
@@ -17481,7 +17481,7 @@ export const turn346 = {
         x: "-5.8942",
         y: "0.3450",
       },
-      "496": {
+      496: {
         n: "Zeta Chertan",
         puid: -1,
         uid: 496,
@@ -17489,7 +17489,7 @@ export const turn346 = {
         x: "-7.2892",
         y: "1.9270",
       },
-      "498": {
+      498: {
         n: "Hadir",
         puid: 1,
         uid: 498,
@@ -17497,7 +17497,7 @@ export const turn346 = {
         x: "-5.4256",
         y: "1.3760",
       },
-      "499": {
+      499: {
         n: "Lush Elm",
         puid: 25,
         uid: 499,
@@ -17505,7 +17505,7 @@ export const turn346 = {
         x: "-5.9767",
         y: "-0.3463",
       },
-      "5": {
+      5: {
         n: "Korn",
         puid: 62,
         uid: 5,
@@ -17513,7 +17513,7 @@ export const turn346 = {
         x: "3.2304",
         y: "-0.7142",
       },
-      "50": {
+      50: {
         n: "Albireo",
         puid: 60,
         uid: 50,
@@ -17521,7 +17521,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "-2.8310",
       },
-      "500": {
+      500: {
         n: "Gamma Zit",
         puid: 1,
         uid: 500,
@@ -17529,7 +17529,7 @@ export const turn346 = {
         x: "-5.5576",
         y: "0.3560",
       },
-      "501": {
+      501: {
         n: "Eta Acamar",
         puid: 28,
         uid: 501,
@@ -17537,7 +17537,7 @@ export const turn346 = {
         x: "-5.5527",
         y: "0.7458",
       },
-      "502": {
+      502: {
         n: "Lush Polaris",
         puid: 28,
         uid: 502,
@@ -17545,7 +17545,7 @@ export const turn346 = {
         x: "-5.8472",
         y: "0.6187",
       },
-      "503": {
+      503: {
         n: "New Chara",
         puid: 1,
         uid: 503,
@@ -17553,7 +17553,7 @@ export const turn346 = {
         x: "-5.3848",
         y: "0.9069",
       },
-      "504": {
+      504: {
         n: "Acubens",
         puid: 1,
         uid: 504,
@@ -17561,7 +17561,7 @@ export const turn346 = {
         x: "-5.3964",
         y: "1.0080",
       },
-      "505": {
+      505: {
         n: "Zuben",
         puid: 28,
         uid: 505,
@@ -17569,7 +17569,7 @@ export const turn346 = {
         x: "-5.9664",
         y: "0.9386",
       },
-      "506": {
+      506: {
         n: "Garnet",
         puid: 25,
         uid: 506,
@@ -17577,7 +17577,7 @@ export const turn346 = {
         x: "-5.9376",
         y: "-0.0762",
       },
-      "507": {
+      507: {
         n: "Ant",
         puid: 1,
         uid: 507,
@@ -17585,7 +17585,7 @@ export const turn346 = {
         x: "-4.8378",
         y: "0.1033",
       },
-      "508": {
+      508: {
         n: "Zeta Maasym",
         puid: 25,
         uid: 508,
@@ -17593,7 +17593,7 @@ export const turn346 = {
         x: "-6.1637",
         y: "-0.1284",
       },
-      "509": {
+      509: {
         n: "Alsafi",
         puid: 58,
         uid: 509,
@@ -17601,7 +17601,7 @@ export const turn346 = {
         x: "-5.4455",
         y: "1.4870",
       },
-      "51": {
+      51: {
         n: "Sigma Hydrus",
         puid: 4,
         uid: 51,
@@ -17609,7 +17609,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "-4.0710",
       },
-      "510": {
+      510: {
         n: "Hot Girtab",
         puid: -1,
         uid: 510,
@@ -17617,7 +17617,7 @@ export const turn346 = {
         x: "-4.4883",
         y: "0.2242",
       },
-      "511": {
+      511: {
         n: "Kappa Sky",
         puid: -1,
         uid: 511,
@@ -17625,7 +17625,7 @@ export const turn346 = {
         x: "-4.9450",
         y: "1.5196",
       },
-      "512": {
+      512: {
         n: "Soft Quo",
         puid: -1,
         uid: 512,
@@ -17633,7 +17633,7 @@ export const turn346 = {
         x: "-4.8054",
         y: "1.5408",
       },
-      "513": {
+      513: {
         n: "Young Gacrux",
         puid: 10,
         uid: 513,
@@ -17641,7 +17641,7 @@ export const turn346 = {
         x: "-5.5315",
         y: "-0.8552",
       },
-      "514": {
+      514: {
         n: "Young Saw",
         puid: 16,
         uid: 514,
@@ -17649,7 +17649,7 @@ export const turn346 = {
         x: "-4.8055",
         y: "-0.7537",
       },
-      "517": {
+      517: {
         n: "New Spica",
         puid: 25,
         uid: 517,
@@ -17657,7 +17657,7 @@ export const turn346 = {
         x: "-6.7857",
         y: "-0.1919",
       },
-      "518": {
+      518: {
         n: "SteropeII",
         puid: 25,
         uid: 518,
@@ -17665,7 +17665,7 @@ export const turn346 = {
         x: "-6.6166",
         y: "-0.7099",
       },
-      "519": {
+      519: {
         n: "Denebola",
         puid: 25,
         uid: 519,
@@ -17673,7 +17673,7 @@ export const turn346 = {
         x: "-6.5606",
         y: "-0.8209",
       },
-      "52": {
+      52: {
         n: "Port Hassaleh",
         puid: 34,
         uid: 52,
@@ -17681,7 +17681,7 @@ export const turn346 = {
         x: "-0.4142",
         y: "-5.1449",
       },
-      "520": {
+      520: {
         n: "Avior",
         puid: 25,
         uid: 520,
@@ -17689,7 +17689,7 @@ export const turn346 = {
         x: "-5.9988",
         y: "-0.7021",
       },
-      "522": {
+      522: {
         n: "Dry Brachium",
         puid: 28,
         uid: 522,
@@ -17697,7 +17697,7 @@ export const turn346 = {
         x: "-6.4001",
         y: "0.4912",
       },
-      "523": {
+      523: {
         n: "Fast Alkurah",
         puid: -1,
         uid: 523,
@@ -17705,7 +17705,7 @@ export const turn346 = {
         x: "-7.3605",
         y: "-0.2289",
       },
-      "525": {
+      525: {
         n: "Bright Segin",
         puid: 1,
         uid: 525,
@@ -17713,7 +17713,7 @@ export const turn346 = {
         x: "-5.5346",
         y: "0.2332",
       },
-      "526": {
+      526: {
         n: "Red Yed",
         puid: -1,
         uid: 526,
@@ -17721,7 +17721,7 @@ export const turn346 = {
         x: "-7.4858",
         y: "-0.8933",
       },
-      "527": {
+      527: {
         n: "Young Yed",
         puid: -1,
         uid: 527,
@@ -17729,7 +17729,7 @@ export const turn346 = {
         x: "-7.4397",
         y: "0.5070",
       },
-      "528": {
+      528: {
         n: "Blue Jib",
         puid: -1,
         uid: 528,
@@ -17737,7 +17737,7 @@ export const turn346 = {
         x: "-6.3515",
         y: "-1.6606",
       },
-      "529": {
+      529: {
         n: "Black Talitha",
         puid: 1,
         uid: 529,
@@ -17745,7 +17745,7 @@ export const turn346 = {
         x: "-5.3576",
         y: "0.6265",
       },
-      "53": {
+      53: {
         n: "Eta Mix",
         puid: 5,
         uid: 53,
@@ -17753,7 +17753,7 @@ export const turn346 = {
         x: "0.2058",
         y: "-6.2188",
       },
-      "530": {
+      530: {
         n: "Dull Zaurak",
         puid: 10,
         uid: 530,
@@ -17761,7 +17761,7 @@ export const turn346 = {
         x: "-5.3118",
         y: "-0.8636",
       },
-      "531": {
+      531: {
         n: "Arc",
         puid: 10,
         uid: 531,
@@ -17769,7 +17769,7 @@ export const turn346 = {
         x: "-5.1961",
         y: "-0.4940",
       },
-      "532": {
+      532: {
         n: "Young Altais",
         puid: 16,
         uid: 532,
@@ -17777,7 +17777,7 @@ export const turn346 = {
         x: "-5.1060",
         y: "-0.4390",
       },
-      "534": {
+      534: {
         n: "Menkab",
         puid: 25,
         uid: 534,
@@ -17785,7 +17785,7 @@ export const turn346 = {
         x: "-5.7264",
         y: "-0.4148",
       },
-      "535": {
+      535: {
         n: "Atik",
         puid: 16,
         uid: 535,
@@ -17793,7 +17793,7 @@ export const turn346 = {
         x: "-4.7662",
         y: "-1.0217",
       },
-      "536": {
+      536: {
         n: "Mega Theemin",
         puid: 10,
         uid: 536,
@@ -17801,7 +17801,7 @@ export const turn346 = {
         x: "-5.9826",
         y: "-0.8975",
       },
-      "537": {
+      537: {
         n: "Mega Algedi",
         puid: 1,
         uid: 537,
@@ -17809,7 +17809,7 @@ export const turn346 = {
         x: "-5.3686",
         y: "0.0837",
       },
-      "538": {
+      538: {
         n: "New Arkab",
         puid: 16,
         uid: 538,
@@ -17817,7 +17817,7 @@ export const turn346 = {
         x: "-4.4183",
         y: "-0.5590",
       },
-      "539": {
+      539: {
         n: "Zeta Phad",
         puid: 16,
         uid: 539,
@@ -17825,7 +17825,7 @@ export const turn346 = {
         x: "-4.4440",
         y: "-1.2077",
       },
-      "54": {
+      54: {
         n: "Xi Pax",
         puid: 53,
         uid: 54,
@@ -17833,7 +17833,7 @@ export const turn346 = {
         x: "1.4238",
         y: "-6.4515",
       },
-      "540": {
+      540: {
         n: "Lush Wazn",
         puid: -1,
         uid: 540,
@@ -17841,7 +17841,7 @@ export const turn346 = {
         x: "-4.5351",
         y: "-1.4779",
       },
-      "542": {
+      542: {
         n: "Blue Errai",
         puid: 16,
         uid: 542,
@@ -17849,7 +17849,7 @@ export const turn346 = {
         x: "-4.1091",
         y: "-0.2812",
       },
-      "546": {
+      546: {
         n: "Theta Cox",
         puid: 16,
         uid: 546,
@@ -17857,7 +17857,7 @@ export const turn346 = {
         x: "-4.2878",
         y: "-1.5689",
       },
-      "547": {
+      547: {
         n: "Beta Sulafat",
         puid: 16,
         uid: 547,
@@ -17865,7 +17865,7 @@ export const turn346 = {
         x: "-4.4409",
         y: "-1.0768",
       },
-      "548": {
+      548: {
         n: "Cold Muscida",
         puid: 16,
         uid: 548,
@@ -17873,7 +17873,7 @@ export const turn346 = {
         x: "-4.2249",
         y: "-1.7632",
       },
-      "549": {
+      549: {
         n: "Nekkar",
         puid: 16,
         uid: 549,
@@ -17881,7 +17881,7 @@ export const turn346 = {
         x: "-3.7518",
         y: "-1.5548",
       },
-      "55": {
+      55: {
         n: "Slow Alrai",
         puid: 9,
         uid: 55,
@@ -17889,7 +17889,7 @@ export const turn346 = {
         x: "0.6132",
         y: "-7.3899",
       },
-      "550": {
+      550: {
         n: "Tau Baten",
         puid: 16,
         uid: 550,
@@ -17897,7 +17897,7 @@ export const turn346 = {
         x: "-4.5776",
         y: "-0.8304",
       },
-      "551": {
+      551: {
         n: "Wet Mi",
         puid: 16,
         uid: 551,
@@ -17905,7 +17905,7 @@ export const turn346 = {
         x: "-4.9088",
         y: "-1.1510",
       },
-      "552": {
+      552: {
         n: "Young Asterope",
         puid: 16,
         uid: 552,
@@ -17913,7 +17913,7 @@ export const turn346 = {
         x: "-4.4322",
         y: "-2.1079",
       },
-      "553": {
+      553: {
         c: 0,
         e: 1,
         ga: 0,
@@ -17929,7 +17929,7 @@ export const turn346 = {
         x: "-3.5400",
         y: "-1.9089",
       },
-      "555": {
+      555: {
         n: "Alphard",
         puid: 16,
         uid: 555,
@@ -17937,7 +17937,7 @@ export const turn346 = {
         x: "-5.2885",
         y: "-1.5217",
       },
-      "556": {
+      556: {
         n: "Fort Mizar",
         puid: 15,
         uid: 556,
@@ -17945,7 +17945,7 @@ export const turn346 = {
         x: "-4.9789",
         y: "-2.2328",
       },
-      "557": {
+      557: {
         c: 0,
         e: 0,
         ga: 0,
@@ -17961,7 +17961,7 @@ export const turn346 = {
         x: "-3.4987",
         y: "-2.3713",
       },
-      "558": {
+      558: {
         n: "Rigil",
         puid: 10,
         uid: 558,
@@ -17969,7 +17969,7 @@ export const turn346 = {
         x: "-5.5632",
         y: "-1.0982",
       },
-      "559": {
+      559: {
         n: "Mu Yum",
         puid: 10,
         uid: 559,
@@ -17977,7 +17977,7 @@ export const turn346 = {
         x: "-5.6274",
         y: "-0.9584",
       },
-      "56": {
+      56: {
         n: "Gamma Menchib",
         puid: 59,
         uid: 56,
@@ -17985,7 +17985,7 @@ export const turn346 = {
         x: "1.8312",
         y: "-7.6227",
       },
-      "560": {
+      560: {
         c: 0,
         e: 2,
         ga: 0,
@@ -18001,7 +18001,7 @@ export const turn346 = {
         x: "-1.9970",
         y: "-2.0771",
       },
-      "561": {
+      561: {
         c: 0.2,
         e: 3,
         ga: 0,
@@ -18017,7 +18017,7 @@ export const turn346 = {
         x: "-2.1394",
         y: "-1.8711",
       },
-      "562": {
+      562: {
         c: 0.2,
         e: 2,
         ga: 0,
@@ -18033,7 +18033,7 @@ export const turn346 = {
         x: "-2.1862",
         y: "-1.7615",
       },
-      "563": {
+      563: {
         c: 0,
         e: 1,
         ga: 0,
@@ -18049,7 +18049,7 @@ export const turn346 = {
         x: "-1.4885",
         y: "-2.0287",
       },
-      "564": {
+      564: {
         c: 0,
         e: 3,
         ga: 0,
@@ -18065,7 +18065,7 @@ export const turn346 = {
         x: "-2.0017",
         y: "-2.4683",
       },
-      "565": {
+      565: {
         c: 0,
         e: 1,
         ga: 0,
@@ -18081,7 +18081,7 @@ export const turn346 = {
         x: "-2.5237",
         y: "-1.9006",
       },
-      "566": {
+      566: {
         c: 0.9,
         e: 2,
         ga: 0,
@@ -18097,7 +18097,7 @@ export const turn346 = {
         x: "-1.2693",
         y: "-1.6550",
       },
-      "567": {
+      567: {
         c: 0,
         e: 0,
         ga: 0,
@@ -18113,7 +18113,7 @@ export const turn346 = {
         x: "-2.6847",
         y: "-2.1615",
       },
-      "568": {
+      568: {
         c: 0.6,
         e: 3,
         ga: 0,
@@ -18129,7 +18129,7 @@ export const turn346 = {
         x: "-2.8016",
         y: "-1.8763",
       },
-      "569": {
+      569: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -18145,7 +18145,7 @@ export const turn346 = {
         x: "-2.8830",
         y: "-1.7828",
       },
-      "57": {
+      57: {
         n: "New Muphrid",
         puid: 51,
         uid: 57,
@@ -18153,7 +18153,7 @@ export const turn346 = {
         x: "3.0703",
         y: "-7.5774",
       },
-      "570": {
+      570: {
         c: 0,
         e: 0,
         ga: 0,
@@ -18169,7 +18169,7 @@ export const turn346 = {
         x: "-2.7957",
         y: "-1.3347",
       },
-      "571": {
+      571: {
         c: 0.4,
         e: 1,
         ga: 0,
@@ -18185,7 +18185,7 @@ export const turn346 = {
         x: "-3.0795",
         y: "-1.8520",
       },
-      "572": {
+      572: {
         c: 0.0999999999999999,
         e: 2,
         ga: 0,
@@ -18201,7 +18201,7 @@ export const turn346 = {
         x: "-1.4780",
         y: "-0.7646",
       },
-      "573": {
+      573: {
         n: "Tax",
         puid: 60,
         uid: 573,
@@ -18209,7 +18209,7 @@ export const turn346 = {
         x: "-1.9110",
         y: "-3.3132",
       },
-      "574": {
+      574: {
         c: 0.5,
         e: 2,
         ga: 0,
@@ -18225,7 +18225,7 @@ export const turn346 = {
         x: "-2.0376",
         y: "-0.5077",
       },
-      "575": {
+      575: {
         c: 0,
         e: 1,
         ga: 0,
@@ -18241,7 +18241,7 @@ export const turn346 = {
         x: "-3.2659",
         y: "-1.8578",
       },
-      "576": {
+      576: {
         c: 0.899999999999999,
         e: 1,
         ga: 0,
@@ -18257,7 +18257,7 @@ export const turn346 = {
         x: "-2.9406",
         y: "-2.0757",
       },
-      "577": {
+      577: {
         c: 0.6,
         e: 0,
         ga: 0,
@@ -18273,7 +18273,7 @@ export const turn346 = {
         x: "-2.9134",
         y: "-2.1918",
       },
-      "578": {
+      578: {
         c: 0,
         e: 0,
         ga: 0,
@@ -18289,7 +18289,7 @@ export const turn346 = {
         x: "-2.9049",
         y: "-1.6028",
       },
-      "579": {
+      579: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -18305,7 +18305,7 @@ export const turn346 = {
         x: "-2.6310",
         y: "-1.9997",
       },
-      "58": {
+      58: {
         n: "Lost Jaw",
         puid: 17,
         uid: 58,
@@ -18313,7 +18313,7 @@ export const turn346 = {
         x: "3.3913",
         y: "-6.3797",
       },
-      "580": {
+      580: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -18329,7 +18329,7 @@ export const turn346 = {
         x: "-2.5936",
         y: "-2.2141",
       },
-      "581": {
+      581: {
         n: "Atria",
         puid: 26,
         uid: 581,
@@ -18337,7 +18337,7 @@ export const turn346 = {
         x: "-3.7642",
         y: "-2.3082",
       },
-      "582": {
+      582: {
         c: 0,
         e: 0,
         ga: 0,
@@ -18353,7 +18353,7 @@ export const turn346 = {
         x: "-2.4573",
         y: "-1.5537",
       },
-      "583": {
+      583: {
         n: "Red Tania",
         puid: 16,
         uid: 583,
@@ -18361,7 +18361,7 @@ export const turn346 = {
         x: "-3.7832",
         y: "-1.3221",
       },
-      "584": {
+      584: {
         n: "Aladfar",
         puid: 16,
         uid: 584,
@@ -18369,7 +18369,7 @@ export const turn346 = {
         x: "-3.4065",
         y: "-1.0008",
       },
-      "585": {
+      585: {
         n: "Achird",
         puid: 26,
         uid: 585,
@@ -18377,7 +18377,7 @@ export const turn346 = {
         x: "-3.9147",
         y: "-2.7179",
       },
-      "588": {
+      588: {
         n: "Sigma Rigil",
         puid: 26,
         uid: 588,
@@ -18385,7 +18385,7 @@ export const turn346 = {
         x: "-4.2642",
         y: "-2.7337",
       },
-      "589": {
+      589: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -18401,7 +18401,7 @@ export const turn346 = {
         x: "-2.2177",
         y: "-0.8419",
       },
-      "59": {
+      59: {
         n: "Alniyat",
         puid: 31,
         uid: 59,
@@ -18409,7 +18409,7 @@ export const turn346 = {
         x: "4.2681",
         y: "-7.2565",
       },
-      "590": {
+      590: {
         n: "Free Alhena",
         puid: 26,
         uid: 590,
@@ -18417,7 +18417,7 @@ export const turn346 = {
         x: "-4.1285",
         y: "-2.6891",
       },
-      "591": {
+      591: {
         n: "Hoedus",
         puid: 26,
         uid: 591,
@@ -18425,7 +18425,7 @@ export const turn346 = {
         x: "-4.3643",
         y: "-2.7733",
       },
-      "592": {
+      592: {
         n: "Hard Megrez",
         puid: 26,
         uid: 592,
@@ -18433,7 +18433,7 @@ export const turn346 = {
         x: "-4.0322",
         y: "-2.8494",
       },
-      "593": {
+      593: {
         n: "Bright Miram",
         puid: 15,
         uid: 593,
@@ -18441,7 +18441,7 @@ export const turn346 = {
         x: "-4.6393",
         y: "-2.4632",
       },
-      "594": {
+      594: {
         n: "Sun",
         puid: 26,
         uid: 594,
@@ -18449,7 +18449,7 @@ export const turn346 = {
         x: "-4.0043",
         y: "-3.0473",
       },
-      "595": {
+      595: {
         n: "Sigma Yildun",
         puid: 16,
         uid: 595,
@@ -18457,7 +18457,7 @@ export const turn346 = {
         x: "-4.3317",
         y: "-1.9685",
       },
-      "596": {
+      596: {
         n: "Foe",
         puid: 16,
         uid: 596,
@@ -18465,7 +18465,7 @@ export const turn346 = {
         x: "-4.7255",
         y: "-2.0736",
       },
-      "597": {
+      597: {
         n: "Arkab",
         puid: 16,
         uid: 597,
@@ -18473,7 +18473,7 @@ export const turn346 = {
         x: "-4.4988",
         y: "-1.8215",
       },
-      "598": {
+      598: {
         c: 0,
         e: 0,
         ga: 0,
@@ -18489,7 +18489,7 @@ export const turn346 = {
         x: "-3.3343",
         y: "-2.4963",
       },
-      "599": {
+      599: {
         n: "Dull Arided",
         puid: 16,
         uid: 599,
@@ -18497,7 +18497,7 @@ export const turn346 = {
         x: "-4.9228",
         y: "-1.8763",
       },
-      "6": {
+      6: {
         n: "Dull Regulus",
         puid: 33,
         uid: 6,
@@ -18505,7 +18505,7 @@ export const turn346 = {
         x: "3.4631",
         y: "0.5038",
       },
-      "60": {
+      60: {
         n: "Tau Azimech",
         puid: 17,
         uid: 60,
@@ -18513,7 +18513,7 @@ export const turn346 = {
         x: "4.5890",
         y: "-6.0588",
       },
-      "600": {
+      600: {
         n: "Haedus",
         puid: -1,
         uid: 600,
@@ -18521,7 +18521,7 @@ export const turn346 = {
         x: "-3.9454",
         y: "-3.6174",
       },
-      "601": {
+      601: {
         c: 0.2,
         e: 1,
         ga: 0,
@@ -18537,7 +18537,7 @@ export const turn346 = {
         x: "-3.0697",
         y: "-2.3705",
       },
-      "602": {
+      602: {
         n: "Toe",
         puid: 16,
         uid: 602,
@@ -18545,7 +18545,7 @@ export const turn346 = {
         x: "-5.0387",
         y: "-1.6044",
       },
-      "603": {
+      603: {
         n: "Kappa Thuban",
         puid: -1,
         uid: 603,
@@ -18553,7 +18553,7 @@ export const turn346 = {
         x: "-3.4454",
         y: "-3.6874",
       },
-      "604": {
+      604: {
         n: "Black Achernar",
         puid: -1,
         uid: 604,
@@ -18561,7 +18561,7 @@ export const turn346 = {
         x: "-5.6274",
         y: "-2.1984",
       },
-      "605": {
+      605: {
         n: "Red Ri",
         puid: 15,
         uid: 605,
@@ -18569,7 +18569,7 @@ export const turn346 = {
         x: "-5.2354",
         y: "-3.0583",
       },
-      "606": {
+      606: {
         n: "Theta Toliman",
         puid: 15,
         uid: 606,
@@ -18577,7 +18577,7 @@ export const turn346 = {
         x: "-5.4706",
         y: "-3.3660",
       },
-      "607": {
+      607: {
         n: "Black Aldhafera",
         puid: 15,
         uid: 607,
@@ -18585,7 +18585,7 @@ export const turn346 = {
         x: "-5.4915",
         y: "-2.9190",
       },
-      "609": {
+      609: {
         n: "Black Menkent",
         puid: 15,
         uid: 609,
@@ -18593,7 +18593,7 @@ export const turn346 = {
         x: "-4.9632",
         y: "-3.5941",
       },
-      "61": {
+      61: {
         n: "Dull Scheat",
         puid: 8,
         uid: 61,
@@ -18601,7 +18601,7 @@ export const turn346 = {
         x: "4.6343",
         y: "-4.8196",
       },
-      "610": {
+      610: {
         n: "New Giennah",
         puid: 15,
         uid: 610,
@@ -18609,7 +18609,7 @@ export const turn346 = {
         x: "-5.0884",
         y: "-2.6163",
       },
-      "611": {
+      611: {
         n: "Cox",
         puid: 15,
         uid: 611,
@@ -18617,7 +18617,7 @@ export const turn346 = {
         x: "-5.1155",
         y: "-2.5103",
       },
-      "612": {
+      612: {
         n: "Pi Shy",
         puid: 15,
         uid: 612,
@@ -18625,7 +18625,7 @@ export const turn346 = {
         x: "-5.1597",
         y: "-2.4054",
       },
-      "613": {
+      613: {
         n: "Free Dschubba",
         puid: 15,
         uid: 613,
@@ -18633,7 +18633,7 @@ export const turn346 = {
         x: "-4.5664",
         y: "-2.6814",
       },
-      "614": {
+      614: {
         n: "Wet Elnath",
         puid: 48,
         uid: 614,
@@ -18641,7 +18641,7 @@ export const turn346 = {
         x: "-5.9332",
         y: "-3.9503",
       },
-      "615": {
+      615: {
         n: "Cold Fay",
         puid: 48,
         uid: 615,
@@ -18649,7 +18649,7 @@ export const turn346 = {
         x: "-6.2776",
         y: "-2.7378",
       },
-      "616": {
+      616: {
         n: "Tau Corvid",
         puid: -1,
         uid: 616,
@@ -18657,7 +18657,7 @@ export const turn346 = {
         x: "-6.1282",
         y: "-2.3648",
       },
-      "619": {
+      619: {
         n: "Altair",
         puid: 48,
         uid: 619,
@@ -18665,7 +18665,7 @@ export const turn346 = {
         x: "-6.4882",
         y: "-2.3614",
       },
-      "62": {
+      62: {
         n: "Botein",
         puid: 61,
         uid: 62,
@@ -18673,7 +18673,7 @@ export const turn346 = {
         x: "3.4631",
         y: "-4.4122",
       },
-      "620": {
+      620: {
         n: "Lost Sheliak",
         puid: 45,
         uid: 620,
@@ -18681,7 +18681,7 @@ export const turn346 = {
         x: "-5.5828",
         y: "-4.5531",
       },
-      "621": {
+      621: {
         n: "Dull Irk",
         puid: 45,
         uid: 621,
@@ -18689,7 +18689,7 @@ export const turn346 = {
         x: "-5.4288",
         y: "-4.6324",
       },
-      "622": {
+      622: {
         n: "Bright Auva",
         puid: 48,
         uid: 622,
@@ -18697,7 +18697,7 @@ export const turn346 = {
         x: "-5.6464",
         y: "-4.0964",
       },
-      "623": {
+      623: {
         n: "Celaeno",
         puid: 48,
         uid: 623,
@@ -18705,7 +18705,7 @@ export const turn346 = {
         x: "-5.6060",
         y: "-3.9897",
       },
-      "624": {
+      624: {
         n: "Dry Girtab",
         puid: 45,
         uid: 624,
@@ -18713,7 +18713,7 @@ export const turn346 = {
         x: "-6.0357",
         y: "-4.5473",
       },
-      "625": {
+      625: {
         n: "Beta Navi",
         puid: 45,
         uid: 625,
@@ -18721,7 +18721,7 @@ export const turn346 = {
         x: "-4.9189",
         y: "-4.3586",
       },
-      "626": {
+      626: {
         n: "Theta Sualocin",
         puid: 45,
         uid: 626,
@@ -18729,7 +18729,7 @@ export const turn346 = {
         x: "-5.0309",
         y: "-4.9128",
       },
-      "627": {
+      627: {
         n: "Acrab",
         puid: 45,
         uid: 627,
@@ -18737,7 +18737,7 @@ export const turn346 = {
         x: "-4.8056",
         y: "-4.7507",
       },
-      "628": {
+      628: {
         n: "Xi Hassaleh",
         puid: 45,
         uid: 628,
@@ -18745,7 +18745,7 @@ export const turn346 = {
         x: "-4.7573",
         y: "-4.8592",
       },
-      "629": {
+      629: {
         n: "Bright Grafias",
         puid: 15,
         uid: 629,
@@ -18753,7 +18753,7 @@ export const turn346 = {
         x: "-4.7754",
         y: "-3.7777",
       },
-      "63": {
+      63: {
         n: "Azha",
         puid: 12,
         uid: 63,
@@ -18761,7 +18761,7 @@ export const turn346 = {
         x: "4.4015",
         y: "-3.6016",
       },
-      "630": {
+      630: {
         n: "Red Rasalas",
         puid: 15,
         uid: 630,
@@ -18769,7 +18769,7 @@ export const turn346 = {
         x: "-5.0751",
         y: "-3.4334",
       },
-      "631": {
+      631: {
         n: "Mu Sheratan",
         puid: 7,
         uid: 631,
@@ -18777,7 +18777,7 @@ export const turn346 = {
         x: "-6.5474",
         y: "-4.9987",
       },
-      "632": {
+      632: {
         n: "Zeta Azel",
         puid: 46,
         uid: 632,
@@ -18785,7 +18785,7 @@ export const turn346 = {
         x: "-5.3117",
         y: "-5.6589",
       },
-      "633": {
+      633: {
         n: "Mog",
         puid: -1,
         uid: 633,
@@ -18793,7 +18793,7 @@ export const turn346 = {
         x: "-4.7520",
         y: "-5.5254",
       },
-      "634": {
+      634: {
         n: "Eta Chi",
         puid: -1,
         uid: 634,
@@ -18801,7 +18801,7 @@ export const turn346 = {
         x: "-4.5982",
         y: "-5.5245",
       },
-      "635": {
+      635: {
         n: "Wet Pan",
         puid: 48,
         uid: 635,
@@ -18809,7 +18809,7 @@ export const turn346 = {
         x: "-6.3550",
         y: "-3.5052",
       },
-      "636": {
+      636: {
         n: "Delta Antares",
         puid: 48,
         uid: 636,
@@ -18817,7 +18817,7 @@ export const turn346 = {
         x: "-6.6561",
         y: "-3.4454",
       },
-      "637": {
+      637: {
         n: "Red Goo",
         puid: 48,
         uid: 637,
@@ -18825,7 +18825,7 @@ export const turn346 = {
         x: "-6.3830",
         y: "-3.2771",
       },
-      "638": {
+      638: {
         n: "Algedi",
         puid: 48,
         uid: 638,
@@ -18833,7 +18833,7 @@ export const turn346 = {
         x: "-6.0555",
         y: "-3.7126",
       },
-      "639": {
+      639: {
         n: "Pi Mesarthim",
         puid: 48,
         uid: 639,
@@ -18841,7 +18841,7 @@ export const turn346 = {
         x: "-6.9840",
         y: "-3.5110",
       },
-      "64": {
+      64: {
         n: "Cathedra Alula",
         puid: 27,
         uid: 64,
@@ -18849,7 +18849,7 @@ export const turn346 = {
         x: "3.2304",
         y: "-3.1942",
       },
-      "640": {
+      640: {
         n: "Odd Arc",
         puid: 48,
         uid: 640,
@@ -18857,7 +18857,7 @@ export const turn346 = {
         x: "-6.8227",
         y: "-4.1054",
       },
-      "641": {
+      641: {
         n: "Wow",
         puid: 45,
         uid: 641,
@@ -18865,7 +18865,7 @@ export const turn346 = {
         x: "-6.1707",
         y: "-4.2433",
       },
-      "642": {
+      642: {
         n: "Cold Heka",
         puid: 48,
         uid: 642,
@@ -18873,7 +18873,7 @@ export const turn346 = {
         x: "-5.6962",
         y: "-3.8089",
       },
-      "643": {
+      643: {
         n: "Nova Vega",
         puid: 45,
         uid: 643,
@@ -18881,7 +18881,7 @@ export const turn346 = {
         x: "-6.2385",
         y: "-4.4652",
       },
-      "645": {
+      645: {
         n: "Port Alkaid",
         puid: 48,
         uid: 645,
@@ -18889,7 +18889,7 @@ export const turn346 = {
         x: "-5.5346",
         y: "-4.1416",
       },
-      "646": {
+      646: {
         n: "Old Ale",
         puid: -1,
         uid: 646,
@@ -18897,7 +18897,7 @@ export const turn346 = {
         x: "-7.6385",
         y: "-3.7039",
       },
-      "649": {
+      649: {
         n: "Azmidiske",
         puid: 45,
         uid: 649,
@@ -18905,7 +18905,7 @@ export const turn346 = {
         x: "-5.1055",
         y: "-4.0982",
       },
-      "65": {
+      65: {
         n: "Old Arneb",
         puid: 42,
         uid: 65,
@@ -18913,7 +18913,7 @@ export const turn346 = {
         x: "2.0116",
         y: "-2.6130",
       },
-      "650": {
+      650: {
         n: "Dry Sun",
         puid: 7,
         uid: 650,
@@ -18921,7 +18921,7 @@ export const turn346 = {
         x: "-6.7991",
         y: "-4.7047",
       },
-      "651": {
+      651: {
         n: "New Naos",
         puid: 7,
         uid: 651,
@@ -18929,7 +18929,7 @@ export const turn346 = {
         x: "-6.9229",
         y: "-4.7169",
       },
-      "652": {
+      652: {
         n: "Spica",
         puid: 7,
         uid: 652,
@@ -18937,7 +18937,7 @@ export const turn346 = {
         x: "-6.8447",
         y: "-5.1241",
       },
-      "653": {
+      653: {
         n: "Theta Subra",
         puid: 7,
         uid: 653,
@@ -18945,7 +18945,7 @@ export const turn346 = {
         x: "-7.1058",
         y: "-4.6728",
       },
-      "654": {
+      654: {
         n: "Delta Benetnasch",
         puid: 7,
         uid: 654,
@@ -18953,7 +18953,7 @@ export const turn346 = {
         x: "-7.1303",
         y: "-4.5202",
       },
-      "655": {
+      655: {
         n: "Sulafat",
         puid: 7,
         uid: 655,
@@ -18961,7 +18961,7 @@ export const turn346 = {
         x: "-7.3153",
         y: "-4.8732",
       },
-      "656": {
+      656: {
         n: "Decrux",
         puid: 7,
         uid: 656,
@@ -18969,7 +18969,7 @@ export const turn346 = {
         x: "-6.0054",
         y: "-4.9425",
       },
-      "657": {
+      657: {
         n: "Menkalinan",
         puid: 32,
         uid: 657,
@@ -18977,7 +18977,7 @@ export const turn346 = {
         x: "-5.9290",
         y: "-5.0269",
       },
-      "658": {
+      658: {
         n: "Alathfar",
         puid: 48,
         uid: 658,
@@ -18985,7 +18985,7 @@ export const turn346 = {
         x: "-6.7027",
         y: "-3.9256",
       },
-      "659": {
+      659: {
         n: "Grand Subra",
         puid: 45,
         uid: 659,
@@ -18993,7 +18993,7 @@ export const turn346 = {
         x: "-5.7194",
         y: "-4.7336",
       },
-      "66": {
+      66: {
         n: "Mahasim",
         puid: 42,
         uid: 66,
@@ -19001,7 +19001,7 @@ export const turn346 = {
         x: "2.2959",
         y: "-2.3752",
       },
-      "660": {
+      660: {
         n: "Okul",
         puid: -1,
         uid: 660,
@@ -19009,7 +19009,7 @@ export const turn346 = {
         x: "-7.3221",
         y: "-5.7043",
       },
-      "663": {
+      663: {
         n: "Old Zug",
         puid: -1,
         uid: 663,
@@ -19017,7 +19017,7 @@ export const turn346 = {
         x: "-8.0410",
         y: "-5.0556",
       },
-      "664": {
+      664: {
         n: "Arcturus",
         puid: -1,
         uid: 664,
@@ -19025,7 +19025,7 @@ export const turn346 = {
         x: "-7.9601",
         y: "-5.5456",
       },
-      "665": {
+      665: {
         n: "Zaurak",
         puid: 32,
         uid: 665,
@@ -19033,7 +19033,7 @@ export const turn346 = {
         x: "-6.7723",
         y: "-6.1552",
       },
-      "668": {
+      668: {
         n: "Nova Tax",
         puid: 32,
         uid: 668,
@@ -19041,7 +19041,7 @@ export const turn346 = {
         x: "-6.2301",
         y: "-6.0961",
       },
-      "669": {
+      669: {
         n: "Minelava",
         puid: 32,
         uid: 669,
@@ -19049,7 +19049,7 @@ export const turn346 = {
         x: "-6.2054",
         y: "-5.7978",
       },
-      "67": {
+      67: {
         n: "Gamma Haldus",
         puid: 42,
         uid: 67,
@@ -19057,7 +19057,7 @@ export const turn346 = {
         x: "2.3245",
         y: "-2.8652",
       },
-      "670": {
+      670: {
         n: "Sigma Keid",
         puid: 32,
         uid: 670,
@@ -19065,7 +19065,7 @@ export const turn346 = {
         x: "-6.6038",
         y: "-6.6714",
       },
-      "671": {
+      671: {
         n: "Cold Baham",
         puid: 22,
         uid: 671,
@@ -19073,7 +19073,7 @@ export const turn346 = {
         x: "-6.2513",
         y: "-6.6387",
       },
-      "672": {
+      672: {
         n: "Alkurah",
         puid: 22,
         uid: 672,
@@ -19081,7 +19081,7 @@ export const turn346 = {
         x: "-6.1426",
         y: "-6.6724",
       },
-      "673": {
+      673: {
         n: "Ill",
         puid: 32,
         uid: 673,
@@ -19089,7 +19089,7 @@ export const turn346 = {
         x: "-5.9251",
         y: "-5.5460",
       },
-      "674": {
+      674: {
         n: "Wild Sheratan",
         puid: 7,
         uid: 674,
@@ -19097,7 +19097,7 @@ export const turn346 = {
         x: "-6.9950",
         y: "-5.1313",
       },
-      "676": {
+      676: {
         n: "Xi Ashlesha",
         puid: 22,
         uid: 676,
@@ -19105,7 +19105,7 @@ export const turn346 = {
         x: "-6.0709",
         y: "-7.0746",
       },
-      "678": {
+      678: {
         n: "Sky",
         puid: 7,
         uid: 678,
@@ -19113,7 +19113,7 @@ export const turn346 = {
         x: "-5.6164",
         y: "-5.1852",
       },
-      "679": {
+      679: {
         n: "Mega Algol",
         puid: -1,
         uid: 679,
@@ -19121,7 +19121,7 @@ export const turn346 = {
         x: "-7.9149",
         y: "-6.7848",
       },
-      "68": {
+      68: {
         n: "Mu Okul",
         puid: 42,
         uid: 68,
@@ -19129,7 +19129,7 @@ export const turn346 = {
         x: "2.5596",
         y: "-2.4275",
       },
-      "680": {
+      680: {
         n: "Hyadum",
         puid: 46,
         uid: 680,
@@ -19137,7 +19137,7 @@ export const turn346 = {
         x: "-5.5110",
         y: "-6.5206",
       },
-      "681": {
+      681: {
         n: "Eta Jaw",
         puid: 46,
         uid: 681,
@@ -19145,7 +19145,7 @@ export const turn346 = {
         x: "-5.4385",
         y: "-6.1376",
       },
-      "683": {
+      683: {
         n: "Sheliak",
         puid: 46,
         uid: 683,
@@ -19153,7 +19153,7 @@ export const turn346 = {
         x: "-5.1311",
         y: "-6.1039",
       },
-      "686": {
+      686: {
         n: "Hot Yildun",
         puid: 23,
         uid: 686,
@@ -19161,7 +19161,7 @@ export const turn346 = {
         x: "-5.3980",
         y: "-7.0850",
       },
-      "687": {
+      687: {
         n: "Slow Zaniah",
         puid: 23,
         uid: 687,
@@ -19169,7 +19169,7 @@ export const turn346 = {
         x: "-4.8933",
         y: "-6.9461",
       },
-      "688": {
+      688: {
         n: "Alaraph",
         puid: 32,
         uid: 688,
@@ -19177,7 +19177,7 @@ export const turn346 = {
         x: "-5.9725",
         y: "-5.6474",
       },
-      "689": {
+      689: {
         n: "Soft Kaf",
         puid: 23,
         uid: 689,
@@ -19185,7 +19185,7 @@ export const turn346 = {
         x: "-5.2042",
         y: "-7.3331",
       },
-      "69": {
+      69: {
         n: "Tau Mimosa",
         puid: 42,
         uid: 69,
@@ -19193,7 +19193,7 @@ export const turn346 = {
         x: "2.6785",
         y: "-2.5742",
       },
-      "691": {
+      691: {
         n: "Albaldah",
         puid: -1,
         uid: 691,
@@ -19201,7 +19201,7 @@ export const turn346 = {
         x: "-4.3267",
         y: "-6.0761",
       },
-      "692": {
+      692: {
         n: "Beta Mahasim",
         puid: 7,
         uid: 692,
@@ -19209,7 +19209,7 @@ export const turn346 = {
         x: "-6.0927",
         y: "-5.2833",
       },
-      "693": {
+      693: {
         n: "White Markab",
         puid: 22,
         uid: 693,
@@ -19217,7 +19217,7 @@ export const turn346 = {
         x: "-6.3332",
         y: "-7.4207",
       },
-      "694": {
+      694: {
         n: "Zeta Imp",
         puid: 23,
         uid: 694,
@@ -19225,7 +19225,7 @@ export const turn346 = {
         x: "-4.6269",
         y: "-7.5691",
       },
-      "695": {
+      695: {
         n: "Acrux",
         puid: 22,
         uid: 695,
@@ -19233,7 +19233,7 @@ export const turn346 = {
         x: "-6.1865",
         y: "-7.2565",
       },
-      "696": {
+      696: {
         n: "Zeta Ick",
         puid: 22,
         uid: 696,
@@ -19241,7 +19241,7 @@ export const turn346 = {
         x: "-6.4759",
         y: "-7.0574",
       },
-      "697": {
+      697: {
         n: "Kat",
         puid: 22,
         uid: 697,
@@ -19249,7 +19249,7 @@ export const turn346 = {
         x: "-6.0989",
         y: "-7.4941",
       },
-      "698": {
+      698: {
         n: "Pure Grumium",
         puid: 22,
         uid: 698,
@@ -19257,7 +19257,7 @@ export const turn346 = {
         x: "-6.2991",
         y: "-6.8291",
       },
-      "699": {
+      699: {
         n: "Nu Ant",
         puid: 22,
         uid: 699,
@@ -19265,7 +19265,7 @@ export const turn346 = {
         x: "-6.2910",
         y: "-7.7765",
       },
-      "7": {
+      7: {
         n: "Tania",
         puid: 63,
         uid: 7,
@@ -19273,7 +19273,7 @@ export const turn346 = {
         x: "4.4015",
         y: "-0.3068",
       },
-      "70": {
+      70: {
         n: "Black Saiph",
         puid: 42,
         uid: 70,
@@ -19281,7 +19281,7 @@ export const turn346 = {
         x: "2.5092",
         y: "-2.0704",
       },
-      "700": {
+      700: {
         n: "Odd Sadira",
         puid: 22,
         uid: 700,
@@ -19289,7 +19289,7 @@ export const turn346 = {
         x: "-5.7791",
         y: "-6.9966",
       },
-      "701": {
+      701: {
         n: "Errai",
         puid: 32,
         uid: 701,
@@ -19297,7 +19297,7 @@ export const turn346 = {
         x: "-7.0018",
         y: "-7.0143",
       },
-      "702": {
+      702: {
         n: "Proxima",
         puid: 23,
         uid: 702,
@@ -19305,7 +19305,7 @@ export const turn346 = {
         x: "-5.5385",
         y: "-7.1867",
       },
-      "704": {
+      704: {
         n: "Hydrobius",
         puid: 32,
         uid: 704,
@@ -19313,7 +19313,7 @@ export const turn346 = {
         x: "-6.7536",
         y: "-6.3620",
       },
-      "705": {
+      705: {
         n: "Kappa Birdun",
         puid: -1,
         uid: 705,
@@ -19321,7 +19321,7 @@ export const turn346 = {
         x: "-6.9560",
         y: "-8.1412",
       },
-      "707": {
+      707: {
         n: "Deneb",
         puid: 54,
         uid: 707,
@@ -19329,7 +19329,7 @@ export const turn346 = {
         x: "-5.6103",
         y: "-8.2935",
       },
-      "708": {
+      708: {
         n: "Young Menkar",
         puid: 54,
         uid: 708,
@@ -19337,7 +19337,7 @@ export const turn346 = {
         x: "-5.6570",
         y: "-8.4334",
       },
-      "709": {
+      709: {
         n: "Cheleb",
         puid: 54,
         uid: 709,
@@ -19345,7 +19345,7 @@ export const turn346 = {
         x: "-5.9607",
         y: "-8.6590",
       },
-      "71": {
+      71: {
         n: "Mega Alderamin",
         puid: 42,
         uid: 71,
@@ -19353,7 +19353,7 @@ export const turn346 = {
         x: "2.6571",
         y: "-2.0736",
       },
-      "710": {
+      710: {
         n: "Port Misam",
         puid: 23,
         uid: 710,
@@ -19361,7 +19361,7 @@ export const turn346 = {
         x: "-5.1518",
         y: "-7.7269",
       },
-      "711": {
+      711: {
         n: "Hard Alioth",
         puid: 23,
         uid: 711,
@@ -19369,7 +19369,7 @@ export const turn346 = {
         x: "-4.9397",
         y: "-7.7168",
       },
-      "712": {
+      712: {
         n: "Black SteropeII",
         puid: 23,
         uid: 712,
@@ -19377,7 +19377,7 @@ export const turn346 = {
         x: "-5.1388",
         y: "-7.2414",
       },
-      "713": {
+      713: {
         n: "Wild Regor",
         puid: 23,
         uid: 713,
@@ -19385,7 +19385,7 @@ export const turn346 = {
         x: "-5.4902",
         y: "-7.3314",
       },
-      "714": {
+      714: {
         n: "Alpha Rastaban",
         puid: 23,
         uid: 714,
@@ -19393,7 +19393,7 @@ export const turn346 = {
         x: "-5.2294",
         y: "-7.0634",
       },
-      "715": {
+      715: {
         n: "New Pan",
         puid: 22,
         uid: 715,
@@ -19401,7 +19401,7 @@ export const turn346 = {
         x: "-5.7444",
         y: "-7.4706",
       },
-      "716": {
+      716: {
         n: "New Ruchba",
         puid: 54,
         uid: 716,
@@ -19409,7 +19409,7 @@ export const turn346 = {
         x: "-5.2617",
         y: "-8.2747",
       },
-      "717": {
+      717: {
         n: "Gut",
         puid: 54,
         uid: 717,
@@ -19417,7 +19417,7 @@ export const turn346 = {
         x: "-4.8648",
         y: "-8.3301",
       },
-      "718": {
+      718: {
         n: "Situla",
         puid: 54,
         uid: 718,
@@ -19425,7 +19425,7 @@ export const turn346 = {
         x: "-5.3701",
         y: "-8.4410",
       },
-      "721": {
+      721: {
         n: "Dry Asterope",
         puid: 46,
         uid: 721,
@@ -19433,7 +19433,7 @@ export const turn346 = {
         x: "-5.0365",
         y: "-6.4089",
       },
-      "723": {
+      723: {
         n: "New Taygeta",
         puid: 54,
         uid: 723,
@@ -19441,7 +19441,7 @@ export const turn346 = {
         x: "-4.0977",
         y: "-8.4510",
       },
-      "724": {
+      724: {
         n: "Arich",
         puid: 46,
         uid: 724,
@@ -19449,7 +19449,7 @@ export const turn346 = {
         x: "-5.0122",
         y: "-6.1310",
       },
-      "725": {
+      725: {
         n: "AlKurud",
         puid: 54,
         uid: 725,
@@ -19457,7 +19457,7 @@ export const turn346 = {
         x: "-3.7847",
         y: "-7.5263",
       },
-      "726": {
+      726: {
         n: "Azel",
         puid: 54,
         uid: 726,
@@ -19465,7 +19465,7 @@ export const turn346 = {
         x: "-4.0390",
         y: "-7.4236",
       },
-      "727": {
+      727: {
         n: "Fort Bunda",
         puid: 54,
         uid: 727,
@@ -19473,7 +19473,7 @@ export const turn346 = {
         x: "-4.0676",
         y: "-7.9137",
       },
-      "728": {
+      728: {
         n: "Nu Garnet",
         puid: 54,
         uid: 728,
@@ -19481,7 +19481,7 @@ export const turn346 = {
         x: "-3.5280",
         y: "-7.4082",
       },
-      "730": {
+      730: {
         n: "Media",
         puid: 54,
         uid: 730,
@@ -19489,7 +19489,7 @@ export const turn346 = {
         x: "-3.9532",
         y: "-8.2353",
       },
-      "731": {
+      731: {
         n: "Marfark",
         puid: 54,
         uid: 731,
@@ -19497,7 +19497,7 @@ export const turn346 = {
         x: "-3.6004",
         y: "-6.9810",
       },
-      "732": {
+      732: {
         n: "Old Unuk",
         puid: 54,
         uid: 732,
@@ -19505,7 +19505,7 @@ export const turn346 = {
         x: "-4.3590",
         y: "-8.2788",
       },
-      "733": {
+      733: {
         n: "Rana",
         puid: 36,
         uid: 733,
@@ -19513,7 +19513,7 @@ export const turn346 = {
         x: "-3.0090",
         y: "-7.5448",
       },
-      "735": {
+      735: {
         n: "Hot Ksora",
         puid: 54,
         uid: 735,
@@ -19521,7 +19521,7 @@ export const turn346 = {
         x: "-3.7120",
         y: "-8.6863",
       },
-      "736": {
+      736: {
         n: "Kappa Kajam",
         puid: 54,
         uid: 736,
@@ -19529,7 +19529,7 @@ export const turn346 = {
         x: "-4.5724",
         y: "-8.5835",
       },
-      "737": {
+      737: {
         n: "Eta Celaeno",
         puid: 43,
         uid: 737,
@@ -19537,7 +19537,7 @@ export const turn346 = {
         x: "-2.8625",
         y: "-6.8965",
       },
-      "738": {
+      738: {
         n: "Hot Rat",
         puid: 54,
         uid: 738,
@@ -19545,7 +19545,7 @@ export const turn346 = {
         x: "-3.6636",
         y: "-8.9610",
       },
-      "739": {
+      739: {
         n: "Alamak",
         puid: 54,
         uid: 739,
@@ -19553,7 +19553,7 @@ export const turn346 = {
         x: "-4.7324",
         y: "-8.8121",
       },
-      "74": {
+      74: {
         n: "Wet Regor",
         puid: 27,
         uid: 74,
@@ -19561,7 +19561,7 @@ export const turn346 = {
         x: "3.1435",
         y: "-2.5742",
       },
-      "742": {
+      742: {
         n: "Port Alsafi",
         puid: 43,
         uid: 742,
@@ -19569,7 +19569,7 @@ export const turn346 = {
         x: "-3.2012",
         y: "-6.6195",
       },
-      "747": {
+      747: {
         n: "Eta Biham",
         puid: -1,
         uid: 747,
@@ -19577,7 +19577,7 @@ export const turn346 = {
         x: "-3.6995",
         y: "-5.6778",
       },
-      "748": {
+      748: {
         n: "Nova Marfark",
         puid: 43,
         uid: 748,
@@ -19585,7 +19585,7 @@ export const turn346 = {
         x: "-2.8073",
         y: "-5.8769",
       },
-      "749": {
+      749: {
         n: "Hard Arich",
         puid: 43,
         uid: 749,
@@ -19593,7 +19593,7 @@ export const turn346 = {
         x: "-2.5388",
         y: "-6.7070",
       },
-      "75": {
+      75: {
         n: "Blue Kita",
         puid: 27,
         uid: 75,
@@ -19601,7 +19601,7 @@ export const turn346 = {
         x: "2.7759",
         y: "-3.4589",
       },
-      "750": {
+      750: {
         n: "Septen",
         puid: -1,
         uid: 750,
@@ -19609,7 +19609,7 @@ export const turn346 = {
         x: "-4.2558",
         y: "-5.6878",
       },
-      "751": {
+      751: {
         n: "Old Zosma",
         puid: 36,
         uid: 751,
@@ -19617,7 +19617,7 @@ export const turn346 = {
         x: "-3.1886",
         y: "-7.5845",
       },
-      "752": {
+      752: {
         n: "Miram",
         puid: -1,
         uid: 752,
@@ -19625,7 +19625,7 @@ export const turn346 = {
         x: "-4.5292",
         y: "-5.7254",
       },
-      "753": {
+      753: {
         n: "Wet Arcturus",
         puid: 43,
         uid: 753,
@@ -19633,7 +19633,7 @@ export const turn346 = {
         x: "-2.1538",
         y: "-6.2155",
       },
-      "754": {
+      754: {
         n: "Lush Pherkard",
         puid: 43,
         uid: 754,
@@ -19641,7 +19641,7 @@ export const turn346 = {
         x: "-2.0457",
         y: "-6.3250",
       },
-      "755": {
+      755: {
         n: "Sadalsuud",
         puid: 36,
         uid: 755,
@@ -19649,7 +19649,7 @@ export const turn346 = {
         x: "-2.7077",
         y: "-7.2422",
       },
-      "756": {
+      756: {
         n: "Hot Sham",
         puid: 36,
         uid: 756,
@@ -19657,7 +19657,7 @@ export const turn346 = {
         x: "-2.4712",
         y: "-7.5114",
       },
-      "757": {
+      757: {
         n: "White Pug",
         puid: 36,
         uid: 757,
@@ -19665,7 +19665,7 @@ export const turn346 = {
         x: "-2.3906",
         y: "-7.2219",
       },
-      "758": {
+      758: {
         n: "Alkalurops",
         puid: 36,
         uid: 758,
@@ -19673,7 +19673,7 @@ export const turn346 = {
         x: "-2.5003",
         y: "-7.0011",
       },
-      "759": {
+      759: {
         n: "Soft Aldhibah",
         puid: 36,
         uid: 759,
@@ -19681,7 +19681,7 @@ export const turn346 = {
         x: "-3.0507",
         y: "-7.0208",
       },
-      "76": {
+      76: {
         n: "Dull Caph",
         puid: 27,
         uid: 76,
@@ -19689,7 +19689,7 @@ export const turn346 = {
         x: "3.3250",
         y: "-2.4720",
       },
-      "760": {
+      760: {
         n: "Port Giedi",
         puid: 36,
         uid: 760,
@@ -19697,7 +19697,7 @@ export const turn346 = {
         x: "-2.1242",
         y: "-7.1300",
       },
-      "761": {
+      761: {
         n: "Grand Alkaid",
         puid: -1,
         uid: 761,
@@ -19705,7 +19705,7 @@ export const turn346 = {
         x: "-2.3824",
         y: "-8.0316",
       },
-      "763": {
+      763: {
         n: "Neshmet",
         puid: -1,
         uid: 763,
@@ -19713,7 +19713,7 @@ export const turn346 = {
         x: "-1.8714",
         y: "-7.7677",
       },
-      "764": {
+      764: {
         n: "Young Pux",
         puid: -1,
         uid: 764,
@@ -19721,7 +19721,7 @@ export const turn346 = {
         x: "-1.9837",
         y: "-8.0878",
       },
-      "765": {
+      765: {
         n: "Mu Marfik",
         puid: 54,
         uid: 765,
@@ -19729,7 +19729,7 @@ export const turn346 = {
         x: "-3.3758",
         y: "-8.2173",
       },
-      "766": {
+      766: {
         n: "Dry Bharani",
         puid: 54,
         uid: 766,
@@ -19737,7 +19737,7 @@ export const turn346 = {
         x: "-3.3544",
         y: "-8.3508",
       },
-      "767": {
+      767: {
         n: "Fast Ash",
         puid: 54,
         uid: 767,
@@ -19745,7 +19745,7 @@ export const turn346 = {
         x: "-3.9284",
         y: "-7.1701",
       },
-      "768": {
+      768: {
         n: "Edasich",
         puid: 43,
         uid: 768,
@@ -19753,7 +19753,7 @@ export const turn346 = {
         x: "-2.0021",
         y: "-6.2130",
       },
-      "769": {
+      769: {
         n: "Wild Bellatrix",
         puid: 43,
         uid: 769,
@@ -19761,7 +19761,7 @@ export const turn346 = {
         x: "-1.8488",
         y: "-6.2005",
       },
-      "77": {
+      77: {
         n: "Kraz",
         puid: 6,
         uid: 77,
@@ -19769,7 +19769,7 @@ export const turn346 = {
         x: "1.9366",
         y: "-1.3274",
       },
-      "770": {
+      770: {
         n: "Fort Sun",
         puid: 43,
         uid: 770,
@@ -19777,7 +19777,7 @@ export const turn346 = {
         x: "-2.3971",
         y: "-6.1327",
       },
-      "771": {
+      771: {
         n: "Wild Canopus",
         puid: 43,
         uid: 771,
@@ -19785,7 +19785,7 @@ export const turn346 = {
         x: "-2.4304",
         y: "-6.4049",
       },
-      "772": {
+      772: {
         n: "Pi Aldhanab",
         puid: 43,
         uid: 772,
@@ -19793,7 +19793,7 @@ export const turn346 = {
         x: "-2.3891",
         y: "-5.9030",
       },
-      "773": {
+      773: {
         n: "Suhail",
         puid: 43,
         uid: 773,
@@ -19801,7 +19801,7 @@ export const turn346 = {
         x: "-2.5500",
         y: "-5.8901",
       },
-      "774": {
+      774: {
         n: "Gamma Quo",
         puid: 43,
         uid: 774,
@@ -19809,7 +19809,7 @@ export const turn346 = {
         x: "-2.3197",
         y: "-6.7388",
       },
-      "775": {
+      775: {
         n: "Quo",
         puid: 14,
         uid: 775,
@@ -19817,7 +19817,7 @@ export const turn346 = {
         x: "-2.1674",
         y: "-5.6131",
       },
-      "776": {
+      776: {
         n: "Nova Nekkar",
         puid: 14,
         uid: 776,
@@ -19825,7 +19825,7 @@ export const turn346 = {
         x: "-1.6611",
         y: "-5.8648",
       },
-      "778": {
+      778: {
         n: "Mesarthim",
         puid: 14,
         uid: 778,
@@ -19833,7 +19833,7 @@ export const turn346 = {
         x: "-2.1190",
         y: "-5.3383",
       },
-      "779": {
+      779: {
         n: "Lost Mac",
         puid: 5,
         uid: 779,
@@ -19841,7 +19841,7 @@ export const turn346 = {
         x: "-1.3208",
         y: "-6.4742",
       },
-      "78": {
+      78: {
         n: "Corvid",
         puid: 39,
         uid: 78,
@@ -19849,7 +19849,7 @@ export const turn346 = {
         x: "0.8026",
         y: "-2.6927",
       },
-      "781": {
+      781: {
         n: "Tic",
         puid: -1,
         uid: 781,
@@ -19857,7 +19857,7 @@ export const turn346 = {
         x: "-3.2901",
         y: "-5.6323",
       },
-      "782": {
+      782: {
         n: "Sirius",
         puid: 20,
         uid: 782,
@@ -19865,7 +19865,7 @@ export const turn346 = {
         x: "-3.5354",
         y: "-6.3291",
       },
-      "783": {
+      783: {
         n: "Pi Ri",
         puid: 36,
         uid: 783,
@@ -19873,7 +19873,7 @@ export const turn346 = {
         x: "-2.7390",
         y: "-7.4958",
       },
-      "784": {
+      784: {
         n: "New Raw",
         puid: -1,
         uid: 784,
@@ -19881,7 +19881,7 @@ export const turn346 = {
         x: "-1.7776",
         y: "-7.5832",
       },
-      "787": {
+      787: {
         n: "Sasin",
         puid: 14,
         uid: 787,
@@ -19889,7 +19889,7 @@ export const turn346 = {
         x: "-1.9788",
         y: "-5.2318",
       },
-      "788": {
+      788: {
         n: "Wet Bam",
         puid: 14,
         uid: 788,
@@ -19897,7 +19897,7 @@ export const turn346 = {
         x: "-1.2268",
         y: "-5.1075",
       },
-      "789": {
+      789: {
         n: "Dark Toliman",
         puid: 14,
         uid: 789,
@@ -19905,7 +19905,7 @@ export const turn346 = {
         x: "-1.1637",
         y: "-5.3234",
       },
-      "79": {
+      79: {
         n: "Kita",
         puid: 27,
         uid: 79,
@@ -19913,7 +19913,7 @@ export const turn346 = {
         x: "2.4086",
         y: "-4.0041",
       },
-      "790": {
+      790: {
         n: "Tau Gianfar",
         puid: 14,
         uid: 790,
@@ -19921,7 +19921,7 @@ export const turn346 = {
         x: "-1.0763",
         y: "-4.9345",
       },
-      "791": {
+      791: {
         n: "Ale",
         puid: 4,
         uid: 791,
@@ -19929,7 +19929,7 @@ export const turn346 = {
         x: "-1.5925",
         y: "-4.4396",
       },
-      "792": {
+      792: {
         n: "AlGiedi",
         puid: 14,
         uid: 792,
@@ -19937,7 +19937,7 @@ export const turn346 = {
         x: "-0.9605",
         y: "-5.5454",
       },
-      "793": {
+      793: {
         n: "Eta Hyadum",
         puid: 43,
         uid: 793,
@@ -19945,7 +19945,7 @@ export const turn346 = {
         x: "-2.3865",
         y: "-5.6577",
       },
-      "794": {
+      794: {
         n: "Nu Vindemiatrix",
         puid: 43,
         uid: 794,
@@ -19953,7 +19953,7 @@ export const turn346 = {
         x: "-2.4103",
         y: "-5.7793",
       },
-      "795": {
+      795: {
         n: "Dubhe",
         puid: 43,
         uid: 795,
@@ -19961,7 +19961,7 @@ export const turn346 = {
         x: "-2.6974",
         y: "-5.4244",
       },
-      "796": {
+      796: {
         n: "New Media",
         puid: 34,
         uid: 796,
@@ -19969,7 +19969,7 @@ export const turn346 = {
         x: "-0.4990",
         y: "-5.3486",
       },
-      "797": {
+      797: {
         n: "Chi",
         puid: 5,
         uid: 797,
@@ -19977,7 +19977,7 @@ export const turn346 = {
         x: "-1.2212",
         y: "-6.3345",
       },
-      "798": {
+      798: {
         n: "Eta Rigel",
         puid: 60,
         uid: 798,
@@ -19985,7 +19985,7 @@ export const turn346 = {
         x: "-1.5358",
         y: "-3.7911",
       },
-      "799": {
+      799: {
         n: "Tau Fomalhaut",
         puid: 34,
         uid: 799,
@@ -19993,7 +19993,7 @@ export const turn346 = {
         x: "-0.2077",
         y: "-5.2714",
       },
-      "8": {
+      8: {
         n: "Odd Dabih",
         puid: 24,
         uid: 8,
@@ -20001,7 +20001,7 @@ export const turn346 = {
         x: "4.6343",
         y: "0.9112",
       },
-      "80": {
+      80: {
         n: "Grand Keg",
         puid: 47,
         uid: 80,
@@ -20009,7 +20009,7 @@ export const turn346 = {
         x: "-0.2087",
         y: "-2.0952",
       },
-      "800": {
+      800: {
         n: "Maia",
         puid: 60,
         uid: 800,
@@ -20017,7 +20017,7 @@ export const turn346 = {
         x: "-0.9482",
         y: "-2.9539",
       },
-      "802": {
+      802: {
         n: "Gor",
         puid: 60,
         uid: 802,
@@ -20025,7 +20025,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "-2.4950",
       },
-      "803": {
+      803: {
         n: "Megrez",
         puid: 60,
         uid: 803,
@@ -20033,7 +20033,7 @@ export const turn346 = {
         x: "-1.4616",
         y: "-2.8684",
       },
-      "804": {
+      804: {
         n: "Lost Izar",
         puid: 60,
         uid: 804,
@@ -20041,7 +20041,7 @@ export const turn346 = {
         x: "-1.0342",
         y: "-3.3530",
       },
-      "805": {
+      805: {
         c: 0.0999999999999999,
         e: 3,
         ga: 0,
@@ -20057,7 +20057,7 @@ export const turn346 = {
         x: "-0.9274",
         y: "-2.2254",
       },
-      "806": {
+      806: {
         n: "Blue Paw",
         puid: 60,
         uid: 806,
@@ -20065,7 +20065,7 @@ export const turn346 = {
         x: "-1.6995",
         y: "-3.0732",
       },
-      "807": {
+      807: {
         n: "New Alfirk",
         puid: 60,
         uid: 807,
@@ -20073,7 +20073,7 @@ export const turn346 = {
         x: "-0.9644",
         y: "-3.6290",
       },
-      "808": {
+      808: {
         c: 0,
         e: 0,
         ga: 0,
@@ -20089,7 +20089,7 @@ export const turn346 = {
         x: "-1.6089",
         y: "-2.1462",
       },
-      "809": {
+      809: {
         c: 0,
         e: 0,
         ga: 0,
@@ -20105,7 +20105,7 @@ export const turn346 = {
         x: "-1.7321",
         y: "-2.1331",
       },
-      "810": {
+      810: {
         n: "Lost Gianfar",
         puid: 40,
         uid: 810,
@@ -20113,7 +20113,7 @@ export const turn346 = {
         x: "-0.5778",
         y: "-1.8522",
       },
-      "811": {
+      811: {
         n: "Sualocin",
         puid: 60,
         uid: 811,
@@ -20121,7 +20121,7 @@ export const turn346 = {
         x: "-0.6330",
         y: "-3.9333",
       },
-      "813": {
+      813: {
         n: "Becrux",
         puid: 40,
         uid: 813,
@@ -20129,7 +20129,7 @@ export const turn346 = {
         x: "-1.1526",
         y: "-1.4772",
       },
-      "814": {
+      814: {
         c: 0,
         e: 1,
         ga: 0,
@@ -20145,7 +20145,7 @@ export const turn346 = {
         x: "-2.0609",
         y: "-1.8043",
       },
-      "816": {
+      816: {
         n: "Canopus",
         puid: 4,
         uid: 816,
@@ -20153,7 +20153,7 @@ export const turn346 = {
         x: "-0.7949",
         y: "-4.1132",
       },
-      "817": {
+      817: {
         n: "Mu Rye",
         puid: 4,
         uid: 817,
@@ -20161,7 +20161,7 @@ export const turn346 = {
         x: "-1.3651",
         y: "-4.1294",
       },
-      "818": {
+      818: {
         n: "Soft Ancha",
         puid: 14,
         uid: 818,
@@ -20169,7 +20169,7 @@ export const turn346 = {
         x: "-0.9968",
         y: "-4.4984",
       },
-      "819": {
+      819: {
         n: "Delta Zoo",
         puid: 14,
         uid: 819,
@@ -20177,7 +20177,7 @@ export const turn346 = {
         x: "-0.8557",
         y: "-4.5615",
       },
-      "82": {
+      82: {
         n: "Eta Sirius",
         puid: 47,
         uid: 82,
@@ -20185,7 +20185,7 @@ export const turn346 = {
         x: "-0.0704",
         y: "-2.2788",
       },
-      "820": {
+      820: {
         n: "Theta Menkab",
         puid: 60,
         uid: 820,
@@ -20193,7 +20193,7 @@ export const turn346 = {
         x: "-1.4295",
         y: "-3.5999",
       },
-      "821": {
+      821: {
         n: "Thuban",
         puid: 60,
         uid: 821,
@@ -20201,7 +20201,7 @@ export const turn346 = {
         x: "-1.7181",
         y: "-4.2543",
       },
-      "822": {
+      822: {
         n: "Cebalrai",
         puid: 34,
         uid: 822,
@@ -20209,7 +20209,7 @@ export const turn346 = {
         x: "-0.3781",
         y: "-4.5305",
       },
-      "823": {
+      823: {
         n: "Fomalhaut",
         puid: 60,
         uid: 823,
@@ -20217,7 +20217,7 @@ export const turn346 = {
         x: "-0.4596",
         y: "-3.3862",
       },
-      "824": {
+      824: {
         n: "White Mirach",
         puid: 60,
         uid: 824,
@@ -20225,7 +20225,7 @@ export const turn346 = {
         x: "-1.1202",
         y: "-3.0878",
       },
-      "825": {
+      825: {
         n: "Dull Fin",
         puid: 34,
         uid: 825,
@@ -20233,7 +20233,7 @@ export const turn346 = {
         x: "0.0458",
         y: "-4.0710",
       },
-      "826": {
+      826: {
         n: "Mega Aldebaran",
         puid: 60,
         uid: 826,
@@ -20241,7 +20241,7 @@ export const turn346 = {
         x: "-0.1356",
         y: "-3.3170",
       },
-      "827": {
+      827: {
         n: "Rotanev",
         puid: 60,
         uid: 827,
@@ -20249,7 +20249,7 @@ export const turn346 = {
         x: "-0.3081",
         y: "-3.0340",
       },
-      "83": {
+      83: {
         n: "Yak",
         puid: 47,
         uid: 83,
@@ -20257,7 +20257,7 @@ export const turn346 = {
         x: "0.2314",
         y: "-2.1355",
       },
-      "830": {
+      830: {
         n: "Blue Fawaris",
         puid: 34,
         uid: 830,
@@ -20265,7 +20265,7 @@ export const turn346 = {
         x: "-0.2665",
         y: "-5.1188",
       },
-      "831": {
+      831: {
         n: "Bright Aldhibah",
         puid: 34,
         uid: 831,
@@ -20273,7 +20273,7 @@ export const turn346 = {
         x: "-0.2424",
         y: "-4.9731",
       },
-      "834": {
+      834: {
         n: "Alula",
         puid: -1,
         uid: 834,
@@ -20281,7 +20281,7 @@ export const turn346 = {
         x: "-0.9342",
         y: "-5.0994",
       },
-      "835": {
+      835: {
         n: "Pi Mi",
         puid: 34,
         uid: 835,
@@ -20289,7 +20289,7 @@ export const turn346 = {
         x: "-0.6245",
         y: "-4.5670",
       },
-      "836": {
+      836: {
         n: "Sigma Menkalinan",
         puid: 34,
         uid: 836,
@@ -20297,7 +20297,7 @@ export const turn346 = {
         x: "0.0864",
         y: "-4.6443",
       },
-      "837": {
+      837: {
         n: "Aldhafera",
         puid: 34,
         uid: 837,
@@ -20305,7 +20305,7 @@ export const turn346 = {
         x: "-0.2751",
         y: "-4.3561",
       },
-      "838": {
+      838: {
         n: "Zeta Ill",
         puid: 14,
         uid: 838,
@@ -20313,7 +20313,7 @@ export const turn346 = {
         x: "-1.2777",
         y: "-5.3763",
       },
-      "839": {
+      839: {
         n: "Gamma Hamal",
         puid: 34,
         uid: 839,
@@ -20321,7 +20321,7 @@ export const turn346 = {
         x: "-0.7518",
         y: "-4.2174",
       },
-      "84": {
+      84: {
         n: "Slow Fez",
         puid: 60,
         uid: 84,
@@ -20329,7 +20329,7 @@ export const turn346 = {
         x: "-0.3359",
         y: "-2.4447",
       },
-      "840": {
+      840: {
         n: "Ain",
         puid: 34,
         uid: 840,
@@ -20337,7 +20337,7 @@ export const turn346 = {
         x: "0.2053",
         y: "-4.2602",
       },
-      "841": {
+      841: {
         n: "Sigma Ruchba",
         puid: 14,
         uid: 841,
@@ -20345,7 +20345,7 @@ export const turn346 = {
         x: "-1.5165",
         y: "-5.5461",
       },
-      "842": {
+      842: {
         n: "Gacrux",
         puid: 5,
         uid: 842,
@@ -20353,7 +20353,7 @@ export const turn346 = {
         x: "-0.7419",
         y: "-6.3677",
       },
-      "844": {
+      844: {
         n: "Rastaban",
         puid: 5,
         uid: 844,
@@ -20361,7 +20361,7 @@ export const turn346 = {
         x: "-0.1621",
         y: "-6.5748",
       },
-      "847": {
+      847: {
         n: "Pure Gomeisa",
         puid: 5,
         uid: 847,
@@ -20369,7 +20369,7 @@ export const turn346 = {
         x: "0.4632",
         y: "-6.4347",
       },
-      "848": {
+      848: {
         n: "Alfirk",
         puid: 5,
         uid: 848,
@@ -20377,7 +20377,7 @@ export const turn346 = {
         x: "0.6089",
         y: "-6.3655",
       },
-      "849": {
+      849: {
         n: "Gamma Talitha",
         puid: 5,
         uid: 849,
@@ -20385,7 +20385,7 @@ export const turn346 = {
         x: "-0.3162",
         y: "-6.2188",
       },
-      "85": {
+      85: {
         n: "Soft Ire",
         puid: 40,
         uid: 85,
@@ -20393,7 +20393,7 @@ export const turn346 = {
         x: "-0.6285",
         y: "-1.5589",
       },
-      "850": {
+      850: {
         n: "AlKap",
         puid: 5,
         uid: 850,
@@ -20401,7 +20401,7 @@ export const turn346 = {
         x: "-0.3999",
         y: "-6.1120",
       },
-      "851": {
+      851: {
         n: "Kappa Haldus",
         puid: 34,
         uid: 851,
@@ -20409,7 +20409,7 @@ export const turn346 = {
         x: "0.3287",
         y: "-5.5215",
       },
-      "852": {
+      852: {
         n: "Delta Tania",
         puid: 34,
         uid: 852,
@@ -20417,7 +20417,7 @@ export const turn346 = {
         x: "0.7207",
         y: "-5.6052",
       },
-      "853": {
+      853: {
         n: "Xi Sarin",
         puid: 34,
         uid: 853,
@@ -20425,7 +20425,7 @@ export const turn346 = {
         x: "-0.0256",
         y: "-5.3552",
       },
-      "854": {
+      854: {
         n: "Young Sadr",
         puid: 34,
         uid: 854,
@@ -20433,7 +20433,7 @@ export const turn346 = {
         x: "-0.4921",
         y: "-5.5209",
       },
-      "855": {
+      855: {
         n: "Grand Adhara",
         puid: 53,
         uid: 855,
@@ -20441,7 +20441,7 @@ export const turn346 = {
         x: "1.1411",
         y: "-6.7588",
       },
-      "856": {
+      856: {
         n: "Mothallah",
         puid: 34,
         uid: 856,
@@ -20449,7 +20449,7 @@ export const turn346 = {
         x: "0.7015",
         y: "-5.1557",
       },
-      "857": {
+      857: {
         n: "Dry Sirius",
         puid: 53,
         uid: 857,
@@ -20457,7 +20457,7 @@ export const turn346 = {
         x: "1.2428",
         y: "-6.9449",
       },
-      "858": {
+      858: {
         n: "Eltanin",
         puid: 34,
         uid: 858,
@@ -20465,7 +20465,7 @@ export const turn346 = {
         x: "1.0793",
         y: "-5.1777",
       },
-      "859": {
+      859: {
         n: "Grand Thabit",
         puid: 34,
         uid: 859,
@@ -20473,7 +20473,7 @@ export const turn346 = {
         x: "-0.6270",
         y: "-5.0294",
       },
-      "86": {
+      86: {
         n: "Regor",
         puid: 40,
         uid: 86,
@@ -20481,7 +20481,7 @@ export const turn346 = {
         x: "-0.5114",
         y: "-1.3411",
       },
-      "860": {
+      860: {
         n: "Odd Betria",
         puid: 53,
         uid: 860,
@@ -20489,7 +20489,7 @@ export const turn346 = {
         x: "1.5298",
         y: "-6.5576",
       },
-      "861": {
+      861: {
         n: "Lost Wow",
         puid: 53,
         uid: 861,
@@ -20497,7 +20497,7 @@ export const turn346 = {
         x: "1.6668",
         y: "-6.4515",
       },
-      "862": {
+      862: {
         n: "Alnitak",
         puid: 53,
         uid: 862,
@@ -20505,7 +20505,7 @@ export const turn346 = {
         x: "1.6613",
         y: "-6.6891",
       },
-      "863": {
+      863: {
         n: "Dry Zosma",
         puid: 53,
         uid: 863,
@@ -20513,7 +20513,7 @@ export const turn346 = {
         x: "1.8126",
         y: "-6.6328",
       },
-      "864": {
+      864: {
         n: "Soft Mebsuta",
         puid: 5,
         uid: 864,
@@ -20521,7 +20521,7 @@ export const turn346 = {
         x: "0.9037",
         y: "-6.4970",
       },
-      "866": {
+      866: {
         n: "Segin",
         puid: -1,
         uid: 866,
@@ -20529,7 +20529,7 @@ export const turn346 = {
         x: "1.4855",
         y: "-5.7462",
       },
-      "867": {
+      867: {
         n: "New Grumium",
         puid: 59,
         uid: 867,
@@ -20537,7 +20537,7 @@ export const turn346 = {
         x: "1.9386",
         y: "-7.0651",
       },
-      "868": {
+      868: {
         n: "Dark Procyon",
         puid: 53,
         uid: 868,
@@ -20545,7 +20545,7 @@ export const turn346 = {
         x: "1.5017",
         y: "-7.3421",
       },
-      "869": {
+      869: {
         n: "Free Rad",
         puid: 9,
         uid: 869,
@@ -20553,7 +20553,7 @@ export const turn346 = {
         x: "0.7258",
         y: "-7.1494",
       },
-      "870": {
+      870: {
         n: "Altais",
         puid: -1,
         uid: 870,
@@ -20561,7 +20561,7 @@ export const turn346 = {
         x: "2.1874",
         y: "-5.6878",
       },
-      "871": {
+      871: {
         n: "Bright Kleeia",
         puid: 5,
         uid: 871,
@@ -20569,7 +20569,7 @@ export const turn346 = {
         x: "0.3215",
         y: "-6.0503",
       },
-      "872": {
+      872: {
         n: "Mega Ankaa",
         puid: 37,
         uid: 872,
@@ -20577,7 +20577,7 @@ export const turn346 = {
         x: "2.6466",
         y: "-6.1239",
       },
-      "873": {
+      873: {
         n: "Elnath",
         puid: -1,
         uid: 873,
@@ -20585,7 +20585,7 @@ export const turn346 = {
         x: "1.7755",
         y: "-5.1388",
       },
-      "874": {
+      874: {
         n: "Mimosa",
         puid: 37,
         uid: 874,
@@ -20593,7 +20593,7 @@ export const turn346 = {
         x: "2.8263",
         y: "-6.0757",
       },
-      "875": {
+      875: {
         n: "Port Tyl",
         puid: 9,
         uid: 875,
@@ -20601,7 +20601,7 @@ export const turn346 = {
         x: "0.7609",
         y: "-7.4160",
       },
-      "876": {
+      876: {
         n: "Lush Alphecca",
         puid: 9,
         uid: 876,
@@ -20609,7 +20609,7 @@ export const turn346 = {
         x: "0.8334",
         y: "-7.2872",
       },
-      "877": {
+      877: {
         n: "Toliman",
         puid: 9,
         uid: 877,
@@ -20617,7 +20617,7 @@ export const turn346 = {
         x: "0.8059",
         y: "-7.6652",
       },
-      "88": {
+      88: {
         n: "Kaus",
         puid: 40,
         uid: 88,
@@ -20625,7 +20625,7 @@ export const turn346 = {
         x: "0.3554",
         y: "-1.2219",
       },
-      "880": {
+      880: {
         n: "Nu Neo",
         puid: 9,
         uid: 880,
@@ -20633,7 +20633,7 @@ export const turn346 = {
         x: "0.3533",
         y: "-7.9473",
       },
-      "881": {
+      881: {
         n: "Odd Proxima",
         puid: -1,
         uid: 881,
@@ -20641,7 +20641,7 @@ export const turn346 = {
         x: "-0.0921",
         y: "-7.3282",
       },
-      "882": {
+      882: {
         n: "Nusakan",
         puid: -1,
         uid: 882,
@@ -20649,7 +20649,7 @@ export const turn346 = {
         x: "-0.1395",
         y: "-7.6639",
       },
-      "883": {
+      883: {
         n: "Bright Asp",
         puid: 9,
         uid: 883,
@@ -20657,7 +20657,7 @@ export const turn346 = {
         x: "0.3074",
         y: "-8.2300",
       },
-      "884": {
+      884: {
         n: "Beta Zit",
         puid: 53,
         uid: 884,
@@ -20665,7 +20665,7 @@ export const turn346 = {
         x: "1.4680",
         y: "-6.8964",
       },
-      "885": {
+      885: {
         n: "Birdun",
         puid: 5,
         uid: 885,
@@ -20673,7 +20673,7 @@ export const turn346 = {
         x: "0.9826",
         y: "-6.3751",
       },
-      "886": {
+      886: {
         n: "Eta Proxima",
         puid: 5,
         uid: 886,
@@ -20681,7 +20681,7 @@ export const turn346 = {
         x: "0.0267",
         y: "-6.3741",
       },
-      "888": {
+      888: {
         n: "Baten",
         puid: 59,
         uid: 888,
@@ -20689,7 +20689,7 @@ export const turn346 = {
         x: "1.9722",
         y: "-7.3899",
       },
-      "891": {
+      891: {
         n: "Grand Tarazet",
         puid: 59,
         uid: 891,
@@ -20697,7 +20697,7 @@ export const turn346 = {
         x: "2.0302",
         y: "-7.7621",
       },
-      "893": {
+      893: {
         n: "Last Betelgeuse",
         puid: 59,
         uid: 893,
@@ -20705,7 +20705,7 @@ export const turn346 = {
         x: "1.7938",
         y: "-7.1953",
       },
-      "894": {
+      894: {
         n: "Beta Minkar",
         puid: 59,
         uid: 894,
@@ -20713,7 +20713,7 @@ export const turn346 = {
         x: "1.3581",
         y: "-7.8433",
       },
-      "895": {
+      895: {
         n: "Alpha Arkab",
         puid: 53,
         uid: 895,
@@ -20721,7 +20721,7 @@ export const turn346 = {
         x: "1.2533",
         y: "-7.4123",
       },
-      "896": {
+      896: {
         n: "Port Decrux",
         puid: 53,
         uid: 896,
@@ -20729,7 +20729,7 @@ export const turn346 = {
         x: "1.4772",
         y: "-7.0095",
       },
-      "897": {
+      897: {
         n: "Gamma Angetenar",
         puid: 59,
         uid: 897,
@@ -20737,7 +20737,7 @@ export const turn346 = {
         x: "2.3460",
         y: "-7.0091",
       },
-      "898": {
+      898: {
         n: "Eta Alwaid",
         puid: 51,
         uid: 898,
@@ -20745,7 +20745,7 @@ export const turn346 = {
         x: "2.6713",
         y: "-7.3169",
       },
-      "899": {
+      899: {
         n: "Polaris",
         puid: -1,
         uid: 899,
@@ -20753,7 +20753,7 @@ export const turn346 = {
         x: "2.0026",
         y: "-8.5947",
       },
-      "9": {
+      9: {
         n: "Arneb",
         puid: 2,
         uid: 9,
@@ -20761,7 +20761,7 @@ export const turn346 = {
         x: "4.5890",
         y: "2.1503",
       },
-      "900": {
+      900: {
         n: "Raw",
         puid: -1,
         uid: 900,
@@ -20769,7 +20769,7 @@ export const turn346 = {
         x: "2.1107",
         y: "-8.6659",
       },
-      "902": {
+      902: {
         n: "Dark Kastra",
         puid: 9,
         uid: 902,
@@ -20777,7 +20777,7 @@ export const turn346 = {
         x: "0.5700",
         y: "-7.5123",
       },
-      "903": {
+      903: {
         n: "Red Elk",
         puid: 9,
         uid: 903,
@@ -20785,7 +20785,7 @@ export const turn346 = {
         x: "0.4928",
         y: "-7.3867",
       },
-      "905": {
+      905: {
         n: "Dux",
         puid: 51,
         uid: 905,
@@ -20793,7 +20793,7 @@ export const turn346 = {
         x: "3.2003",
         y: "-7.6524",
       },
-      "906": {
+      906: {
         n: "Sarin",
         puid: 51,
         uid: 906,
@@ -20801,7 +20801,7 @@ export const turn346 = {
         x: "2.9677",
         y: "-7.3572",
       },
-      "907": {
+      907: {
         n: "Zeta Asellus",
         puid: 51,
         uid: 907,
@@ -20809,7 +20809,7 @@ export const turn346 = {
         x: "3.3613",
         y: "-7.7454",
       },
-      "908": {
+      908: {
         n: "Hard Giennah",
         puid: 51,
         uid: 908,
@@ -20817,7 +20817,7 @@ export const turn346 = {
         x: "3.2171",
         y: "-7.1743",
       },
-      "909": {
+      909: {
         n: "Saiph",
         puid: 51,
         uid: 909,
@@ -20825,7 +20825,7 @@ export const turn346 = {
         x: "3.4702",
         y: "-7.9130",
       },
-      "91": {
+      91: {
         n: "Nu Furud",
         puid: 39,
         uid: 91,
@@ -20833,7 +20833,7 @@ export const turn346 = {
         x: "0.8585",
         y: "-2.5407",
       },
-      "910": {
+      910: {
         n: "Tack",
         puid: 31,
         uid: 910,
@@ -20841,7 +20841,7 @@ export const turn346 = {
         x: "3.6830",
         y: "-7.6310",
       },
-      "911": {
+      911: {
         n: "Young Albali",
         puid: -1,
         uid: 911,
@@ -20849,7 +20849,7 @@ export const turn346 = {
         x: "2.9474",
         y: "-8.2747",
       },
-      "912": {
+      912: {
         n: "Old Castor",
         puid: 37,
         uid: 912,
@@ -20857,7 +20857,7 @@ export const turn346 = {
         x: "2.5555",
         y: "-6.9638",
       },
-      "913": {
+      913: {
         n: "Soft Fax",
         puid: 31,
         uid: 913,
@@ -20865,7 +20865,7 @@ export const turn346 = {
         x: "3.9339",
         y: "-7.3461",
       },
-      "914": {
+      914: {
         n: "Lush Urn",
         puid: 37,
         uid: 914,
@@ -20873,7 +20873,7 @@ export const turn346 = {
         x: "2.8990",
         y: "-6.6054",
       },
-      "915": {
+      915: {
         n: "Azimech",
         puid: 51,
         uid: 915,
@@ -20881,7 +20881,7 @@ export const turn346 = {
         x: "3.4397",
         y: "-8.5923",
       },
-      "916": {
+      916: {
         n: "Auva",
         puid: 51,
         uid: 916,
@@ -20889,7 +20889,7 @@ export const turn346 = {
         x: "3.6568",
         y: "-8.5933",
       },
-      "917": {
+      917: {
         n: "Theta Scheat",
         puid: 37,
         uid: 917,
@@ -20897,7 +20897,7 @@ export const turn346 = {
         x: "3.1807",
         y: "-6.3163",
       },
-      "918": {
+      918: {
         n: "Minchir",
         puid: 37,
         uid: 918,
@@ -20905,7 +20905,7 @@ export const turn346 = {
         x: "2.4960",
         y: "-6.3458",
       },
-      "92": {
+      92: {
         n: "Matar",
         puid: 60,
         uid: 92,
@@ -20913,7 +20913,7 @@ export const turn346 = {
         x: "-0.6924",
         y: "-3.1016",
       },
-      "920": {
+      920: {
         n: "Irk",
         puid: 37,
         uid: 920,
@@ -20921,7 +20921,7 @@ export const turn346 = {
         x: "3.2503",
         y: "-6.4310",
       },
-      "921": {
+      921: {
         n: "Wet Caph",
         puid: 37,
         uid: 921,
@@ -20929,7 +20929,7 @@ export const turn346 = {
         x: "3.2351",
         y: "-6.1935",
       },
-      "922": {
+      922: {
         n: "Hard Wei",
         puid: 37,
         uid: 922,
@@ -20937,7 +20937,7 @@ export const turn346 = {
         x: "3.4782",
         y: "-6.0551",
       },
-      "923": {
+      923: {
         n: "Dry Rukbat",
         puid: 37,
         uid: 923,
@@ -20945,7 +20945,7 @@ export const turn346 = {
         x: "3.3539",
         y: "-5.9523",
       },
-      "924": {
+      924: {
         n: "Aldhibah",
         puid: 17,
         uid: 924,
@@ -20953,7 +20953,7 @@ export const turn346 = {
         x: "3.9113",
         y: "-6.3342",
       },
-      "926": {
+      926: {
         n: "Lush Meissa",
         puid: 51,
         uid: 926,
@@ -20961,7 +20961,7 @@ export const turn346 = {
         x: "3.0373",
         y: "-6.9928",
       },
-      "927": {
+      927: {
         n: "Girtab",
         puid: 51,
         uid: 927,
@@ -20969,7 +20969,7 @@ export const turn346 = {
         x: "3.3215",
         y: "-7.1776",
       },
-      "928": {
+      928: {
         n: "Beta Etamin",
         puid: 37,
         uid: 928,
@@ -20977,7 +20977,7 @@ export const turn346 = {
         x: "2.5277",
         y: "-6.6111",
       },
-      "929": {
+      929: {
         n: "Black Alcor",
         puid: 31,
         uid: 929,
@@ -20985,7 +20985,7 @@ export const turn346 = {
         x: "4.1474",
         y: "-7.0141",
       },
-      "93": {
+      93: {
         n: "Gamma Yum",
         puid: 40,
         uid: 93,
@@ -20993,7 +20993,7 @@ export const turn346 = {
         x: "0.4169",
         y: "-0.7225",
       },
-      "932": {
+      932: {
         n: "Alpha Pollux",
         puid: 17,
         uid: 932,
@@ -21001,7 +21001,7 @@ export const turn346 = {
         x: "4.6525",
         y: "-6.2693",
       },
-      "933": {
+      933: {
         n: "Unuk",
         puid: 8,
         uid: 933,
@@ -21009,7 +21009,7 @@ export const turn346 = {
         x: "4.3522",
         y: "-5.4187",
       },
-      "934": {
+      934: {
         n: "Hag",
         puid: 31,
         uid: 934,
@@ -21017,7 +21017,7 @@ export const turn346 = {
         x: "4.6487",
         y: "-7.1057",
       },
-      "935": {
+      935: {
         n: "Nova Hoedus",
         puid: 31,
         uid: 935,
@@ -21025,7 +21025,7 @@ export const turn346 = {
         x: "4.1717",
         y: "-7.1416",
       },
-      "936": {
+      936: {
         n: "Black Alrakis",
         puid: 31,
         uid: 936,
@@ -21033,7 +21033,7 @@ export const turn346 = {
         x: "4.4671",
         y: "-7.1171",
       },
-      "937": {
+      937: {
         n: "Nu Alphard",
         puid: 31,
         uid: 937,
@@ -21041,7 +21041,7 @@ export const turn346 = {
         x: "4.0521",
         y: "-7.5139",
       },
-      "938": {
+      938: {
         n: "Tejat",
         puid: 31,
         uid: 938,
@@ -21049,7 +21049,7 @@ export const turn346 = {
         x: "3.9647",
         y: "-6.9531",
       },
-      "939": {
+      939: {
         n: "Alwaid",
         puid: 31,
         uid: 939,
@@ -21057,7 +21057,7 @@ export const turn346 = {
         x: "3.8682",
         y: "-6.9210",
       },
-      "94": {
+      94: {
         n: "Asterope",
         puid: 40,
         uid: 94,
@@ -21065,7 +21065,7 @@ export const turn346 = {
         x: "-0.1574",
         y: "-0.5022",
       },
-      "940": {
+      940: {
         n: "Mirfak",
         puid: 31,
         uid: 940,
@@ -21073,7 +21073,7 @@ export const turn346 = {
         x: "4.3749",
         y: "-6.6508",
       },
-      "941": {
+      941: {
         n: "Wet Git",
         puid: 31,
         uid: 941,
@@ -21081,7 +21081,7 @@ export const turn346 = {
         x: "4.0259",
         y: "-7.9218",
       },
-      "942": {
+      942: {
         n: "Alchiba",
         puid: 17,
         uid: 942,
@@ -21089,7 +21089,7 @@ export const turn346 = {
         x: "4.7830",
         y: "-6.6429",
       },
-      "943": {
+      943: {
         n: "White Merope",
         puid: 31,
         uid: 943,
@@ -21097,7 +21097,7 @@ export const turn346 = {
         x: "3.3877",
         y: "-7.4117",
       },
-      "944": {
+      944: {
         n: "Sadachbia",
         puid: 31,
         uid: 944,
@@ -21105,7 +21105,7 @@ export const turn346 = {
         x: "4.3541",
         y: "-8.2397",
       },
-      "945": {
+      945: {
         n: "Red Nashira",
         puid: 17,
         uid: 945,
@@ -21113,7 +21113,7 @@ export const turn346 = {
         x: "4.8875",
         y: "-6.3718",
       },
-      "947": {
+      947: {
         n: "Tau Mirfak",
         puid: 31,
         uid: 947,
@@ -21121,7 +21121,7 @@ export const turn346 = {
         x: "3.5419",
         y: "-8.2935",
       },
-      "948": {
+      948: {
         n: "Wet Decrux",
         puid: 51,
         uid: 948,
@@ -21129,7 +21129,7 @@ export const turn346 = {
         x: "2.9910",
         y: "-7.7213",
       },
-      "949": {
+      949: {
         n: "New Arrakis",
         puid: -1,
         uid: 949,
@@ -21137,7 +21137,7 @@ export const turn346 = {
         x: "5.6980",
         y: "-7.0044",
       },
-      "95": {
+      95: {
         n: "Merope",
         puid: 39,
         uid: 95,
@@ -21145,7 +21145,7 @@ export const turn346 = {
         x: "0.9332",
         y: "-1.9411",
       },
-      "950": {
+      950: {
         n: "Old Duhr",
         puid: 17,
         uid: 950,
@@ -21153,7 +21153,7 @@ export const turn346 = {
         x: "4.7390",
         y: "-6.0588",
       },
-      "951": {
+      951: {
         n: "Muphrid",
         puid: 17,
         uid: 951,
@@ -21161,7 +21161,7 @@ export const turn346 = {
         x: "4.3900",
         y: "-6.1981",
       },
-      "952": {
+      952: {
         n: "Wild Rukh",
         puid: 17,
         uid: 952,
@@ -21169,7 +21169,7 @@ export const turn346 = {
         x: "4.5890",
         y: "-6.3948",
       },
-      "953": {
+      953: {
         n: "Alpha",
         puid: 17,
         uid: 953,
@@ -21177,7 +21177,7 @@ export const turn346 = {
         x: "5.0115",
         y: "-5.9843",
       },
-      "955": {
+      955: {
         n: "Elk",
         puid: 17,
         uid: 955,
@@ -21185,7 +21185,7 @@ export const turn346 = {
         x: "5.0928",
         y: "-6.4115",
       },
-      "956": {
+      956: {
         n: "Misam",
         puid: 17,
         uid: 956,
@@ -21193,7 +21193,7 @@ export const turn346 = {
         x: "4.8882",
         y: "-6.7004",
       },
-      "957": {
+      957: {
         n: "Sigma Errai",
         puid: 31,
         uid: 957,
@@ -21201,7 +21201,7 @@ export const turn346 = {
         x: "4.1885",
         y: "-6.7524",
       },
-      "958": {
+      958: {
         n: "Port Aldebaran",
         puid: 17,
         uid: 958,
@@ -21209,7 +21209,7 @@ export const turn346 = {
         x: "5.4796",
         y: "-5.9808",
       },
-      "959": {
+      959: {
         n: "White Mesarthim",
         puid: 8,
         uid: 959,
@@ -21217,7 +21217,7 @@ export const turn346 = {
         x: "4.5030",
         y: "-5.0755",
       },
-      "96": {
+      96: {
         n: "Odd Denebola",
         puid: 39,
         uid: 96,
@@ -21225,7 +21225,7 @@ export const turn346 = {
         x: "0.8543",
         y: "-2.0373",
       },
-      "960": {
+      960: {
         n: "Beta Alrakis",
         puid: 17,
         uid: 960,
@@ -21233,7 +21233,7 @@ export const turn346 = {
         x: "5.4164",
         y: "-5.3645",
       },
-      "963": {
+      963: {
         n: "Dark Tag",
         puid: 17,
         uid: 963,
@@ -21241,7 +21241,7 @@ export const turn346 = {
         x: "5.9429",
         y: "-6.1772",
       },
-      "964": {
+      964: {
         n: "Nu Chi",
         puid: 17,
         uid: 964,
@@ -21249,7 +21249,7 @@ export const turn346 = {
         x: "6.0410",
         y: "-6.0588",
       },
-      "967": {
+      967: {
         n: "Pherkad",
         puid: 61,
         uid: 967,
@@ -21257,7 +21257,7 @@ export const turn346 = {
         x: "4.5473",
         y: "-4.4950",
       },
-      "968": {
+      968: {
         n: "Dry Sargas",
         puid: 8,
         uid: 968,
@@ -21265,7 +21265,7 @@ export const turn346 = {
         x: "4.7453",
         y: "-4.4052",
       },
-      "969": {
+      969: {
         n: "Mirach",
         puid: 61,
         uid: 969,
@@ -21273,7 +21273,7 @@ export const turn346 = {
         x: "4.1822",
         y: "-4.5586",
       },
-      "97": {
+      97: {
         n: "Grand Atlas",
         puid: 39,
         uid: 97,
@@ -21281,7 +21281,7 @@ export const turn346 = {
         x: "0.9677",
         y: "-2.2699",
       },
-      "970": {
+      970: {
         n: "Chara",
         puid: -1,
         uid: 970,
@@ -21289,7 +21289,7 @@ export const turn346 = {
         x: "5.2283",
         y: "-4.9788",
       },
-      "971": {
+      971: {
         n: "Sigma Alphecca",
         puid: 61,
         uid: 971,
@@ -21297,7 +21297,7 @@ export const turn346 = {
         x: "4.0211",
         y: "-4.4656",
       },
-      "972": {
+      972: {
         n: "Alpha Nunki",
         puid: 61,
         uid: 972,
@@ -21305,7 +21305,7 @@ export const turn346 = {
         x: "3.8333",
         y: "-4.8196",
       },
-      "973": {
+      973: {
         n: "Young Skore",
         puid: 8,
         uid: 973,
@@ -21313,7 +21313,7 @@ export const turn346 = {
         x: "4.0021",
         y: "-4.1874",
       },
-      "974": {
+      974: {
         n: "Young Alnasl",
         puid: 8,
         uid: 974,
@@ -21321,7 +21321,7 @@ export const turn346 = {
         x: "3.9998",
         y: "-5.5757",
       },
-      "975": {
+      975: {
         n: "Theta Kuma",
         puid: 17,
         uid: 975,
@@ -21329,7 +21329,7 @@ export const turn346 = {
         x: "4.7284",
         y: "-5.8955",
       },
-      "976": {
+      976: {
         n: "Phad",
         puid: 8,
         uid: 976,
@@ -21337,7 +21337,7 @@ export const turn346 = {
         x: "3.6734",
         y: "-5.4924",
       },
-      "977": {
+      977: {
         n: "Pherkard",
         puid: 17,
         uid: 977,
@@ -21345,7 +21345,7 @@ export const turn346 = {
         x: "4.8541",
         y: "-6.0663",
       },
-      "979": {
+      979: {
         n: "Alpha Sadatoni",
         puid: 61,
         uid: 979,
@@ -21353,7 +21353,7 @@ export const turn346 = {
         x: "3.1878",
         y: "-4.6930",
       },
-      "98": {
+      98: {
         n: "Port Ascella",
         puid: 39,
         uid: 98,
@@ -21361,7 +21361,7 @@ export const turn346 = {
         x: "0.8681",
         y: "-2.3257",
       },
-      "980": {
+      980: {
         n: "Blue Dheneb",
         puid: 61,
         uid: 980,
@@ -21369,7 +21369,7 @@ export const turn346 = {
         x: "3.3154",
         y: "-4.4382",
       },
-      "981": {
+      981: {
         n: "Nu Elnath",
         puid: 61,
         uid: 981,
@@ -21377,7 +21377,7 @@ export const turn346 = {
         x: "3.3416",
         y: "-4.2017",
       },
-      "982": {
+      982: {
         n: "Theta Diphda",
         puid: -1,
         uid: 982,
@@ -21385,7 +21385,7 @@ export const turn346 = {
         x: "3.1474",
         y: "-4.5271",
       },
-      "983": {
+      983: {
         n: "Fort Cox",
         puid: 61,
         uid: 983,
@@ -21393,7 +21393,7 @@ export const turn346 = {
         x: "3.8519",
         y: "-4.2309",
       },
-      "984": {
+      984: {
         n: "Adhara",
         puid: -1,
         uid: 984,
@@ -21401,7 +21401,7 @@ export const turn346 = {
         x: "3.2425",
         y: "-4.8853",
       },
-      "985": {
+      985: {
         n: "Zosma",
         puid: 61,
         uid: 985,
@@ -21409,7 +21409,7 @@ export const turn346 = {
         x: "4.0688",
         y: "-4.3054",
       },
-      "986": {
+      986: {
         n: "Delta Mirfak",
         puid: 27,
         uid: 986,
@@ -21417,7 +21417,7 @@ export const turn346 = {
         x: "3.6464",
         y: "-3.7283",
       },
-      "987": {
+      987: {
         n: "Sigma Duo",
         puid: 27,
         uid: 987,
@@ -21425,7 +21425,7 @@ export const turn346 = {
         x: "3.8016",
         y: "-3.6862",
       },
-      "988": {
+      988: {
         n: "Dry Fomalhaut",
         puid: 61,
         uid: 988,
@@ -21433,7 +21433,7 @@ export const turn346 = {
         x: "3.7689",
         y: "-5.2523",
       },
-      "989": {
+      989: {
         n: "Fort Chort",
         puid: 8,
         uid: 989,
@@ -21441,7 +21441,7 @@ export const turn346 = {
         x: "4.2192",
         y: "-5.0466",
       },
-      "99": {
+      99: {
         n: "Theta Zoo",
         puid: 6,
         uid: 99,
@@ -21449,7 +21449,7 @@ export const turn346 = {
         x: "1.5347",
         y: "-1.6932",
       },
-      "990": {
+      990: {
         n: "Wild TienKuan",
         puid: 27,
         uid: 990,
@@ -21457,7 +21457,7 @@ export const turn346 = {
         x: "4.0826",
         y: "-3.5275",
       },
-      "992": {
+      992: {
         n: "Odd Mog",
         puid: 27,
         uid: 992,
@@ -21465,7 +21465,7 @@ export const turn346 = {
         x: "4.0961",
         y: "-3.3158",
       },
-      "993": {
+      993: {
         n: "Castor",
         puid: 8,
         uid: 993,
@@ -21473,7 +21473,7 @@ export const turn346 = {
         x: "4.8169",
         y: "-4.2937",
       },
-      "994": {
+      994: {
         n: "Duhr",
         puid: 8,
         uid: 994,
@@ -21481,7 +21481,7 @@ export const turn346 = {
         x: "3.9597",
         y: "-5.7766",
       },
-      "995": {
+      995: {
         n: "Delta Pee",
         puid: 12,
         uid: 995,
@@ -21489,7 +21489,7 @@ export const turn346 = {
         x: "4.4015",
         y: "-3.4516",
       },
-      "996": {
+      996: {
         n: "Last Yak",
         puid: 12,
         uid: 996,
@@ -21497,7 +21497,7 @@ export const turn346 = {
         x: "4.4227",
         y: "-3.8437",
       },
-      "997": {
+      997: {
         n: "Tau Ash",
         puid: 12,
         uid: 997,
@@ -21505,7 +21505,7 @@ export const turn346 = {
         x: "4.6768",
         y: "-3.4089",
       },
-      "998": {
+      998: {
         n: "Dull Merak",
         puid: 12,
         uid: 998,
@@ -21513,7 +21513,7 @@ export const turn346 = {
         x: "4.3270",
         y: "-3.1791",
       },
-      "999": {
+      999: {
         n: "White Ant",
         puid: 27,
         uid: 999,
@@ -21539,7 +21539,7 @@ export const turn346 = {
 export const example1 = {
   older: {
     fleets: {
-      "2": {
+      2: {
         uid: 2,
         l: 0,
         o: [],
@@ -21553,7 +21553,7 @@ export const example1 = {
         ly: "0.64715346",
         ouid: 22,
       },
-      "11": {
+      11: {
         uid: 11,
         l: 0,
         o: [
@@ -21570,7 +21570,7 @@ export const example1 = {
         lx: "-1.65844402",
         ly: "0.72318558",
       },
-      "12": {
+      12: {
         uid: 12,
         l: 1,
         o: [
@@ -21586,7 +21586,7 @@ export const example1 = {
         lx: "0.98017726",
         ly: "2.05863465",
       },
-      "13": {
+      13: {
         uid: 13,
         l: 0,
         o: [[0, 39, 5, 1]],
@@ -21599,7 +21599,7 @@ export const example1 = {
         lx: "0.48378046",
         ly: "1.64210828",
       },
-      "14": {
+      14: {
         uid: 14,
         l: 0,
         o: [
@@ -21615,7 +21615,7 @@ export const example1 = {
         lx: "1.04613904",
         ly: "2.60577529",
       },
-      "25": {
+      25: {
         uid: 25,
         l: 0,
         o: [
@@ -21632,7 +21632,7 @@ export const example1 = {
         lx: "-2.82405356",
         ly: "1.13180791",
       },
-      "32": {
+      32: {
         uid: 32,
         l: 0,
         o: [[0, 19, 5, 1]],
@@ -21645,7 +21645,7 @@ export const example1 = {
         lx: "0.48378046",
         ly: "1.64210828",
       },
-      "33": {
+      33: {
         uid: 33,
         l: 1,
         o: [
@@ -21662,7 +21662,7 @@ export const example1 = {
         lx: "1.03267726",
         ly: "1.96770198",
       },
-      "34": {
+      34: {
         uid: 34,
         l: 0,
         o: [
@@ -21680,7 +21680,7 @@ export const example1 = {
         lx: "1.03267726",
         ly: "1.96770198",
       },
-      "41": {
+      41: {
         uid: 41,
         l: 0,
         o: [
@@ -21697,7 +21697,7 @@ export const example1 = {
         lx: "1.16967752",
         ly: "1.89557131",
       },
-      "45": {
+      45: {
         uid: 45,
         l: 0,
         o: [
@@ -21713,7 +21713,7 @@ export const example1 = {
         lx: "1.72721528",
         ly: "1.85740699",
       },
-      "47": {
+      47: {
         uid: 47,
         l: 0,
         o: [[0, 64, 0, 0]],
@@ -21726,7 +21726,7 @@ export const example1 = {
         lx: "-0.79386071",
         ly: "0.09369228",
       },
-      "51": {
+      51: {
         uid: 51,
         l: 0,
         o: [
@@ -21743,7 +21743,7 @@ export const example1 = {
         lx: "0.63681511",
         ly: "2.75253086",
       },
-      "52": {
+      52: {
         uid: 52,
         l: 0,
         o: [
@@ -21760,7 +21760,7 @@ export const example1 = {
         lx: "-0.71041212",
         ly: "2.19208676",
       },
-      "54": {
+      54: {
         uid: 54,
         l: 0,
         o: [[0, 106, 5, 1]],
@@ -21773,7 +21773,7 @@ export const example1 = {
         lx: "1.27528108",
         ly: "1.80470036",
       },
-      "55": {
+      55: {
         uid: 55,
         l: 0,
         o: [
@@ -21789,7 +21789,7 @@ export const example1 = {
         lx: "0.48378046",
         ly: "1.64210828",
       },
-      "56": {
+      56: {
         uid: 56,
         l: 1,
         o: [
@@ -21805,7 +21805,7 @@ export const example1 = {
         lx: "-0.51982274",
         ly: "3.20463465",
       },
-      "59": {
+      59: {
         uid: 59,
         l: 1,
         o: [
@@ -21830,7 +21830,7 @@ export const example1 = {
     tick_rate: 60,
     production_rate: 24,
     stars: {
-      "1": {
+      1: {
         uid: 1,
         n: "Sheratan",
         puid: 6,
@@ -21838,7 +21838,7 @@ export const example1 = {
         y: "0.7596",
         x: "0.2302",
       },
-      "2": {
+      2: {
         c: 0.20833333333333037,
         e: 5,
         uid: 2,
@@ -21854,7 +21854,7 @@ export const example1 = {
         nr: 50,
         st: 77,
       },
-      "3": {
+      3: {
         uid: 3,
         n: "Alfirk",
         puid: 4,
@@ -21862,7 +21862,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-0.5198",
       },
-      "4": {
+      4: {
         uid: 4,
         n: "Thuban",
         puid: 2,
@@ -21870,7 +21870,7 @@ export const example1 = {
         y: "-0.5394",
         x: "0.9802",
       },
-      "5": {
+      5: {
         c: 0.20833333333333037,
         e: 4,
         uid: 5,
@@ -21886,7 +21886,7 @@ export const example1 = {
         nr: 50,
         st: 2,
       },
-      "6": {
+      6: {
         uid: 6,
         n: "Saiph",
         puid: 5,
@@ -21894,7 +21894,7 @@ export const example1 = {
         y: "0.7596",
         x: "1.7302",
       },
-      "7": {
+      7: {
         uid: 7,
         n: "Auva",
         puid: 7,
@@ -21902,7 +21902,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-2.0198",
       },
-      "8": {
+      8: {
         uid: 8,
         n: "Mintaka",
         puid: 4,
@@ -21910,7 +21910,7 @@ export const example1 = {
         y: "-1.8385",
         x: "0.2302",
       },
-      "9": {
+      9: {
         uid: 9,
         n: "Porrima",
         puid: 6,
@@ -21918,7 +21918,7 @@ export const example1 = {
         y: "0.7596",
         x: "0.3802",
       },
-      "10": {
+      10: {
         uid: 10,
         n: "Menkib",
         puid: 6,
@@ -21926,7 +21926,7 @@ export const example1 = {
         y: "0.9094",
         x: "0.4087",
       },
-      "11": {
+      11: {
         uid: 11,
         n: "Cor",
         puid: 6,
@@ -21934,7 +21934,7 @@ export const example1 = {
         y: "0.5783",
         x: "-0.0287",
       },
-      "12": {
+      12: {
         uid: 12,
         n: "Yum",
         puid: 6,
@@ -21942,7 +21942,7 @@ export const example1 = {
         y: "0.4328",
         x: "0.0013",
       },
-      "13": {
+      13: {
         c: 0.1666666666666683,
         e: 4,
         uid: 13,
@@ -21958,7 +21958,7 @@ export const example1 = {
         nr: 35,
         st: 17,
       },
-      "14": {
+      14: {
         c: 0.1666666666666683,
         e: 4,
         uid: 14,
@@ -21974,7 +21974,7 @@ export const example1 = {
         nr: 31,
         st: 13,
       },
-      "16": {
+      16: {
         uid: 16,
         n: "Alchiba",
         puid: 6,
@@ -21982,7 +21982,7 @@ export const example1 = {
         y: "0.1608",
         x: "-0.1891",
       },
-      "17": {
+      17: {
         uid: 17,
         n: "Dux",
         puid: 2,
@@ -21990,7 +21990,7 @@ export const example1 = {
         y: "0.1840",
         x: "0.8058",
       },
-      "18": {
+      18: {
         uid: 18,
         n: "Fin",
         puid: 2,
@@ -21998,7 +21998,7 @@ export const example1 = {
         y: "-0.1068",
         x: "0.4623",
       },
-      "19": {
+      19: {
         c: 0,
         e: 1,
         uid: 19,
@@ -22014,7 +22014,7 @@ export const example1 = {
         nr: 2,
         st: 1,
       },
-      "20": {
+      20: {
         c: 0,
         e: 1,
         uid: 20,
@@ -22030,7 +22030,7 @@ export const example1 = {
         nr: 10,
         st: 0,
       },
-      "21": {
+      21: {
         c: 0.8750000000000018,
         e: 3,
         uid: 21,
@@ -22046,7 +22046,7 @@ export const example1 = {
         nr: 41,
         st: 51,
       },
-      "22": {
+      22: {
         c: 0.625,
         e: 1,
         uid: 22,
@@ -22062,7 +22062,7 @@ export const example1 = {
         nr: 7,
         st: 0,
       },
-      "24": {
+      24: {
         c: 0,
         e: 2,
         uid: 24,
@@ -22078,7 +22078,7 @@ export const example1 = {
         nr: 15,
         st: 1,
       },
-      "25": {
+      25: {
         c: 0.541666666666667,
         e: 0,
         uid: 25,
@@ -22094,7 +22094,7 @@ export const example1 = {
         nr: 27,
         st: 1,
       },
-      "26": {
+      26: {
         c: 0,
         e: 1,
         uid: 26,
@@ -22110,7 +22110,7 @@ export const example1 = {
         nr: 10,
         st: 0,
       },
-      "27": {
+      27: {
         uid: 27,
         n: "Alshat",
         puid: 5,
@@ -22118,7 +22118,7 @@ export const example1 = {
         y: "0.0648",
         x: "1.7201",
       },
-      "28": {
+      28: {
         c: 0.04166666666666785,
         e: 3,
         uid: 28,
@@ -22134,7 +22134,7 @@ export const example1 = {
         nr: 28,
         st: 25,
       },
-      "30": {
+      30: {
         c: 0,
         e: 0,
         uid: 30,
@@ -22150,7 +22150,7 @@ export const example1 = {
         nr: 2,
         st: 0,
       },
-      "31": {
+      31: {
         uid: 31,
         n: "Alhena",
         puid: 5,
@@ -22158,7 +22158,7 @@ export const example1 = {
         y: "-0.5106",
         x: "1.7439",
       },
-      "33": {
+      33: {
         c: 0.2083333333333346,
         e: 3,
         uid: 33,
@@ -22174,7 +22174,7 @@ export const example1 = {
         nr: 25,
         st: 11,
       },
-      "34": {
+      34: {
         c: 0.08333333333333504,
         e: 4,
         uid: 34,
@@ -22190,7 +22190,7 @@ export const example1 = {
         nr: 35,
         st: 4,
       },
-      "35": {
+      35: {
         c: 0.2083333333333346,
         e: 3,
         uid: 35,
@@ -22206,7 +22206,7 @@ export const example1 = {
         nr: 30,
         st: 40,
       },
-      "36": {
+      36: {
         c: 0.7083333333333348,
         e: 2,
         uid: 36,
@@ -22222,7 +22222,7 @@ export const example1 = {
         nr: 20,
         st: 16,
       },
-      "37": {
+      37: {
         c: 0.5833333333333353,
         e: 3,
         uid: 37,
@@ -22238,7 +22238,7 @@ export const example1 = {
         nr: 26,
         st: 54,
       },
-      "38": {
+      38: {
         c: 0,
         e: 1,
         uid: 38,
@@ -22254,7 +22254,7 @@ export const example1 = {
         nr: 10,
         st: 1,
       },
-      "39": {
+      39: {
         c: 0.04166666666666785,
         e: 2,
         uid: 39,
@@ -22270,7 +22270,7 @@ export const example1 = {
         nr: 16,
         st: 13,
       },
-      "41": {
+      41: {
         c: 0,
         e: 1,
         uid: 41,
@@ -22286,7 +22286,7 @@ export const example1 = {
         nr: 7,
         st: 1,
       },
-      "42": {
+      42: {
         c: 1.3322676295501878e-15,
         e: 3,
         uid: 42,
@@ -22302,7 +22302,7 @@ export const example1 = {
         nr: 31,
         st: 35,
       },
-      "43": {
+      43: {
         c: 0.08333333333333504,
         e: 3,
         uid: 43,
@@ -22318,7 +22318,7 @@ export const example1 = {
         nr: 32,
         st: 62,
       },
-      "44": {
+      44: {
         c: 0.5000000000000002,
         e: 2,
         uid: 44,
@@ -22334,7 +22334,7 @@ export const example1 = {
         nr: 28,
         st: 0,
       },
-      "45": {
+      45: {
         c: 0,
         e: 2,
         uid: 45,
@@ -22350,7 +22350,7 @@ export const example1 = {
         nr: 14,
         st: 1,
       },
-      "46": {
+      46: {
         uid: 46,
         n: "Albireo",
         puid: -1,
@@ -22358,7 +22358,7 @@ export const example1 = {
         y: "3.0637",
         x: "-1.3632",
       },
-      "47": {
+      47: {
         uid: 47,
         n: "Alkes",
         puid: -1,
@@ -22366,7 +22366,7 @@ export const example1 = {
         y: "1.8164",
         x: "-1.8936",
       },
-      "48": {
+      48: {
         c: 0,
         e: 2,
         uid: 48,
@@ -22382,7 +22382,7 @@ export const example1 = {
         nr: 15,
         st: 0,
       },
-      "49": {
+      49: {
         c: 0.08333333333333481,
         e: 2,
         uid: 49,
@@ -22398,7 +22398,7 @@ export const example1 = {
         nr: 21,
         st: 21,
       },
-      "50": {
+      50: {
         c: 0.7083333333333333,
         e: 2,
         uid: 50,
@@ -22414,7 +22414,7 @@ export const example1 = {
         nr: 21,
         st: 3,
       },
-      "51": {
+      51: {
         uid: 51,
         n: "Wasat",
         puid: -1,
@@ -22422,7 +22422,7 @@ export const example1 = {
         y: "2.2092",
         x: "-2.2403",
       },
-      "52": {
+      52: {
         uid: 52,
         n: "Azha",
         puid: 6,
@@ -22430,7 +22430,7 @@ export const example1 = {
         y: "1.0205",
         x: "0.9628",
       },
-      "53": {
+      53: {
         c: 0,
         e: 2,
         uid: 53,
@@ -22446,7 +22446,7 @@ export const example1 = {
         nr: 16,
         st: 1,
       },
-      "54": {
+      54: {
         c: 0.04166666666666785,
         e: 2,
         uid: 54,
@@ -22462,7 +22462,7 @@ export const example1 = {
         nr: 16,
         st: 17,
       },
-      "55": {
+      55: {
         uid: 55,
         n: "Hyadum",
         puid: 4,
@@ -22470,7 +22470,7 @@ export const example1 = {
         y: "-0.5525",
         x: "-0.6693",
       },
-      "56": {
+      56: {
         uid: 56,
         n: "Capella",
         puid: 4,
@@ -22478,7 +22478,7 @@ export const example1 = {
         y: "-0.4791",
         x: "-0.2948",
       },
-      "57": {
+      57: {
         uid: 57,
         n: "Aludra",
         puid: 4,
@@ -22486,7 +22486,7 @@ export const example1 = {
         y: "-0.6730",
         x: "-0.2334",
       },
-      "58": {
+      58: {
         uid: 58,
         n: "Altais",
         puid: 4,
@@ -22494,7 +22494,7 @@ export const example1 = {
         y: "-0.9369",
         x: "-0.5546",
       },
-      "59": {
+      59: {
         uid: 59,
         n: "Alkalurops",
         puid: 4,
@@ -22502,7 +22502,7 @@ export const example1 = {
         y: "-0.2296",
         x: "-0.1506",
       },
-      "60": {
+      60: {
         uid: 60,
         n: "Alcor",
         puid: 4,
@@ -22510,7 +22510,7 @@ export const example1 = {
         y: "-0.0766",
         x: "-0.1958",
       },
-      "61": {
+      61: {
         uid: 61,
         n: "Birdun",
         puid: 4,
@@ -22518,7 +22518,7 @@ export const example1 = {
         y: "-1.0703",
         x: "-0.1481",
       },
-      "62": {
+      62: {
         uid: 62,
         n: "Taygeta",
         puid: 6,
@@ -22526,7 +22526,7 @@ export const example1 = {
         y: "-0.0225",
         x: "-0.0029",
       },
-      "63": {
+      63: {
         uid: 63,
         n: "Electra",
         puid: 4,
@@ -22534,7 +22534,7 @@ export const example1 = {
         y: "-1.3411",
         x: "-0.3785",
       },
-      "64": {
+      64: {
         c: 0.6666666666666683,
         e: 4,
         uid: 64,
@@ -22550,7 +22550,7 @@ export const example1 = {
         nr: 46,
         st: 10,
       },
-      "66": {
+      66: {
         uid: 66,
         n: "Spica",
         puid: 4,
@@ -22558,7 +22558,7 @@ export const example1 = {
         y: "-0.2643",
         x: "-1.5466",
       },
-      "67": {
+      67: {
         uid: 67,
         n: "Albali",
         puid: 4,
@@ -22566,7 +22566,7 @@ export const example1 = {
         y: "-1.6163",
         x: "-0.9118",
       },
-      "68": {
+      68: {
         uid: 68,
         n: "Achird",
         puid: 2,
@@ -22574,7 +22574,7 @@ export const example1 = {
         y: "-0.4323",
         x: "0.7045",
       },
-      "69": {
+      69: {
         c: 0,
         e: 1,
         uid: 69,
@@ -22590,7 +22590,7 @@ export const example1 = {
         nr: 2,
         st: 1,
       },
-      "70": {
+      70: {
         uid: 70,
         n: "Aldib",
         puid: 6,
@@ -22598,7 +22598,7 @@ export const example1 = {
         y: "0.3572",
         x: "0.5488",
       },
-      "71": {
+      71: {
         uid: 71,
         n: "Toliman",
         puid: 2,
@@ -22606,7 +22606,7 @@ export const example1 = {
         y: "-1.5845",
         x: "0.5253",
       },
-      "72": {
+      72: {
         uid: 72,
         n: "Alphecca",
         puid: 7,
@@ -22614,7 +22614,7 @@ export const example1 = {
         y: "-1.5428",
         x: "-1.7156",
       },
-      "73": {
+      73: {
         uid: 73,
         n: "Alaraph",
         puid: 6,
@@ -22622,7 +22622,7 @@ export const example1 = {
         y: "0.8843",
         x: "0.3022",
       },
-      "74": {
+      74: {
         uid: 74,
         n: "Ain",
         puid: 2,
@@ -22630,7 +22630,7 @@ export const example1 = {
         y: "-0.9864",
         x: "1.1483",
       },
-      "75": {
+      75: {
         uid: 75,
         n: "Media",
         puid: 2,
@@ -22638,7 +22638,7 @@ export const example1 = {
         y: "-1.4444",
         x: "1.0477",
       },
-      "78": {
+      78: {
         uid: 78,
         n: "Tic",
         puid: 2,
@@ -22646,7 +22646,7 @@ export const example1 = {
         y: "-0.6693",
         x: "0.9052",
       },
-      "79": {
+      79: {
         uid: 79,
         n: "Hadir",
         puid: 2,
@@ -22654,7 +22654,7 @@ export const example1 = {
         y: "-0.7412",
         x: "1.0967",
       },
-      "82": {
+      82: {
         uid: 82,
         n: "Sadalsuud",
         puid: 2,
@@ -22662,7 +22662,7 @@ export const example1 = {
         y: "-0.1220",
         x: "0.7392",
       },
-      "87": {
+      87: {
         uid: 87,
         n: "Atria",
         puid: 4,
@@ -22670,7 +22670,7 @@ export const example1 = {
         y: "-0.7716",
         x: "0.1137",
       },
-      "88": {
+      88: {
         uid: 88,
         n: "Corvid",
         puid: 5,
@@ -22678,7 +22678,7 @@ export const example1 = {
         y: "0.1535",
         x: "1.6731",
       },
-      "89": {
+      89: {
         uid: 89,
         n: "Pax",
         puid: 2,
@@ -22686,7 +22686,7 @@ export const example1 = {
         y: "-1.5863",
         x: "1.1648",
       },
-      "91": {
+      91: {
         uid: 91,
         n: "Dheneb",
         puid: 2,
@@ -22694,7 +22694,7 @@ export const example1 = {
         y: "-1.5462",
         x: "1.6851",
       },
-      "92": {
+      92: {
         uid: 92,
         n: "Alwaid",
         puid: 6,
@@ -22702,7 +22702,7 @@ export const example1 = {
         y: "0.7279",
         x: "0.6406",
       },
-      "93": {
+      93: {
         uid: 93,
         n: "Alshain",
         puid: 4,
@@ -22710,7 +22710,7 @@ export const example1 = {
         y: "-0.4179",
         x: "-0.4095",
       },
-      "94": {
+      94: {
         uid: 94,
         n: "Mesarthim",
         puid: 2,
@@ -22718,7 +22718,7 @@ export const example1 = {
         y: "-1.7501",
         x: "1.8279",
       },
-      "95": {
+      95: {
         uid: 95,
         n: "Sargas",
         puid: 2,
@@ -22726,7 +22726,7 @@ export const example1 = {
         y: "-0.8105",
         x: "2.5175",
       },
-      "96": {
+      96: {
         uid: 96,
         n: "Miram",
         puid: 2,
@@ -22734,7 +22734,7 @@ export const example1 = {
         y: "-1.4824",
         x: "2.3269",
       },
-      "97": {
+      97: {
         uid: 97,
         n: "Aldhafera",
         puid: 2,
@@ -22742,7 +22742,7 @@ export const example1 = {
         y: "-1.2693",
         x: "2.5454",
       },
-      "98": {
+      98: {
         uid: 98,
         n: "Kullat",
         puid: 4,
@@ -22750,7 +22750,7 @@ export const example1 = {
         y: "-0.0710",
         x: "-0.7681",
       },
-      "99": {
+      99: {
         uid: 99,
         n: "Ruchbah",
         puid: 4,
@@ -22758,7 +22758,7 @@ export const example1 = {
         y: "-1.8780",
         x: "-0.3584",
       },
-      "100": {
+      100: {
         uid: 100,
         n: "Elk",
         puid: 4,
@@ -22766,7 +22766,7 @@ export const example1 = {
         y: "-1.5274",
         x: "-0.7311",
       },
-      "101": {
+      101: {
         c: 0.04166666666666785,
         e: 3,
         uid: 101,
@@ -22782,7 +22782,7 @@ export const example1 = {
         nr: 35,
         st: 7,
       },
-      "102": {
+      102: {
         c: 0.7916666666666679,
         e: 2,
         uid: 102,
@@ -22798,7 +22798,7 @@ export const example1 = {
         nr: 30,
         st: 3,
       },
-      "104": {
+      104: {
         c: 0,
         e: 1,
         uid: 104,
@@ -22814,7 +22814,7 @@ export const example1 = {
         nr: 4,
         st: 1,
       },
-      "105": {
+      105: {
         c: 0.5416666666666679,
         e: 0,
         uid: 105,
@@ -22830,7 +22830,7 @@ export const example1 = {
         nr: 45,
         st: 8,
       },
-      "106": {
+      106: {
         c: 0.7500000000000014,
         e: 2,
         uid: 106,
@@ -22846,7 +22846,7 @@ export const example1 = {
         nr: 37,
         st: 9,
       },
-      "107": {
+      107: {
         c: 2.220446049250313e-16,
         e: 2,
         uid: 107,
@@ -22862,7 +22862,7 @@ export const example1 = {
         nr: 27,
         st: 1,
       },
-      "108": {
+      108: {
         c: 0,
         e: 1,
         uid: 108,
@@ -22878,7 +22878,7 @@ export const example1 = {
         nr: 2,
         st: 1,
       },
-      "109": {
+      109: {
         c: 0.25,
         e: 5,
         uid: 109,
@@ -22894,7 +22894,7 @@ export const example1 = {
         nr: 47,
         st: 20,
       },
-      "110": {
+      110: {
         uid: 110,
         n: "Nusakan",
         puid: 6,
@@ -22902,7 +22902,7 @@ export const example1 = {
         y: "1.1650",
         x: "1.0584",
       },
-      "111": {
+      111: {
         c: 0.6249999999999982,
         e: 3,
         uid: 111,
@@ -22918,7 +22918,7 @@ export const example1 = {
         nr: 31,
         st: 28,
       },
-      "112": {
+      112: {
         uid: 112,
         n: "Hadar",
         puid: 6,
@@ -22926,7 +22926,7 @@ export const example1 = {
         y: "1.0118",
         x: "0.7956",
       },
-      "113": {
+      113: {
         uid: 113,
         n: "Seginus",
         puid: 1,
@@ -22934,7 +22934,7 @@ export const example1 = {
         y: "2.4506",
         x: "2.0571",
       },
-      "114": {
+      114: {
         uid: 114,
         n: "Eta Arc",
         puid: 1,
@@ -22942,7 +22942,7 @@ export const example1 = {
         y: "2.8486",
         x: "1.9216",
       },
-      "115": {
+      115: {
         uid: 115,
         n: "Gut",
         puid: 6,
@@ -22950,7 +22950,7 @@ export const example1 = {
         y: "0.7466",
         x: "0.9802",
       },
-      "116": {
+      116: {
         c: 0,
         e: 1,
         uid: 116,
@@ -22966,7 +22966,7 @@ export const example1 = {
         nr: 5,
         st: 1,
       },
-      "117": {
+      117: {
         c: 0.4166666666666663,
         e: 3,
         uid: 117,
@@ -22982,7 +22982,7 @@ export const example1 = {
         nr: 24,
         st: 1,
       },
-      "118": {
+      118: {
         c: 0,
         e: 1,
         uid: 118,
@@ -22998,7 +22998,7 @@ export const example1 = {
         nr: 3,
         st: 1,
       },
-      "119": {
+      119: {
         uid: 119,
         n: "Maia",
         puid: -1,
@@ -23006,7 +23006,7 @@ export const example1 = {
         y: "3.6964",
         x: "0.8369",
       },
-      "120": {
+      120: {
         uid: 120,
         n: "Sadatoni",
         puid: 1,
@@ -23014,7 +23014,7 @@ export const example1 = {
         y: "3.4733",
         x: "1.9707",
       },
-      "121": {
+      121: {
         uid: 121,
         n: "Ksora",
         puid: -1,
@@ -23022,7 +23022,7 @@ export const example1 = {
         y: "3.8070",
         x: "0.5117",
       },
-      "122": {
+      122: {
         c: 0,
         e: 1,
         uid: 122,
@@ -23038,7 +23038,7 @@ export const example1 = {
         nr: 10,
         st: 1,
       },
-      "123": {
+      123: {
         uid: 123,
         n: "Merga",
         puid: 1,
@@ -23046,7 +23046,7 @@ export const example1 = {
         y: "2.5701",
         x: "2.8888",
       },
-      "124": {
+      124: {
         uid: 124,
         n: "Alkaid",
         puid: 5,
@@ -23054,7 +23054,7 @@ export const example1 = {
         y: "0.7208",
         x: "1.8751",
       },
-      "125": {
+      125: {
         uid: 125,
         n: "Zu",
         puid: 5,
@@ -23062,7 +23062,7 @@ export const example1 = {
         y: "0.5687",
         x: "1.5965",
       },
-      "126": {
+      126: {
         uid: 126,
         n: "Imp",
         puid: 6,
@@ -23070,7 +23070,7 @@ export const example1 = {
         y: "1.0184",
         x: "1.5489",
       },
-      "127": {
+      127: {
         uid: 127,
         n: "Hydrus",
         puid: 6,
@@ -23078,7 +23078,7 @@ export const example1 = {
         y: "1.1212",
         x: "1.5616",
       },
-      "128": {
+      128: {
         uid: 128,
         n: "Dubhe",
         puid: 5,
@@ -23086,7 +23086,7 @@ export const example1 = {
         y: "0.5559",
         x: "2.1670",
       },
-      "130": {
+      130: {
         uid: 130,
         n: "AlKap",
         puid: 6,
@@ -23094,7 +23094,7 @@ export const example1 = {
         y: "0.9273",
         x: "1.1043",
       },
-      "132": {
+      132: {
         uid: 132,
         n: "Cox",
         puid: 6,
@@ -23102,7 +23102,7 @@ export const example1 = {
         y: "0.9009",
         x: "0.9285",
       },
-      "133": {
+      133: {
         uid: 133,
         n: "Alnitak",
         puid: 5,
@@ -23110,7 +23110,7 @@ export const example1 = {
         y: "-0.1238",
         x: "1.8859",
       },
-      "134": {
+      134: {
         uid: 134,
         n: "TseenKee",
         puid: 5,
@@ -23118,7 +23118,7 @@ export const example1 = {
         y: "-0.0432",
         x: "2.2923",
       },
-      "135": {
+      135: {
         c: 0,
         e: 0,
         uid: 135,
@@ -23134,7 +23134,7 @@ export const example1 = {
         nr: 2,
         st: 0,
       },
-      "136": {
+      136: {
         uid: 136,
         n: "Kaus",
         puid: 6,
@@ -23142,7 +23142,7 @@ export const example1 = {
         y: "0.2753",
         x: "0.6915",
       },
-      "137": {
+      137: {
         uid: 137,
         n: "Menkalinan",
         puid: 2,
@@ -23150,7 +23150,7 @@ export const example1 = {
         y: "-0.1819",
         x: "0.9402",
       },
-      "138": {
+      138: {
         uid: 138,
         n: "Alrischa",
         puid: -1,
@@ -23158,7 +23158,7 @@ export const example1 = {
         y: "0.9874",
         x: "3.0222",
       },
-      "139": {
+      139: {
         c: 0.04166666666666785,
         e: 2,
         uid: 139,
@@ -23174,7 +23174,7 @@ export const example1 = {
         nr: 25,
         st: 1,
       },
-      "140": {
+      140: {
         uid: 140,
         n: "Zaurak",
         puid: 6,
@@ -23182,7 +23182,7 @@ export const example1 = {
         y: "0.6308",
         x: "0.2578",
       },
-      "143": {
+      143: {
         uid: 143,
         n: "Elm",
         puid: 1,
@@ -23190,7 +23190,7 @@ export const example1 = {
         y: "2.3824",
         x: "2.3208",
       },
-      "144": {
+      144: {
         c: 0.45833333333333326,
         e: 2,
         uid: 144,
@@ -23206,7 +23206,7 @@ export const example1 = {
         nr: 30,
         st: 17,
       },
-      "145": {
+      145: {
         uid: 145,
         n: "Talitha",
         puid: -1,
@@ -23214,7 +23214,7 @@ export const example1 = {
         y: "1.4070",
         x: "3.5090",
       },
-      "146": {
+      146: {
         uid: 146,
         n: "Toe",
         puid: -1,
@@ -23222,7 +23222,7 @@ export const example1 = {
         y: "1.2710",
         x: "3.6388",
       },
-      "147": {
+      147: {
         uid: 147,
         n: "Ash",
         puid: 7,
@@ -23230,7 +23230,7 @@ export const example1 = {
         y: "-0.6543",
         x: "-2.1162",
       },
-      "148": {
+      148: {
         uid: 148,
         n: "Kraz",
         puid: 7,
@@ -23238,7 +23238,7 @@ export const example1 = {
         y: "-0.6892",
         x: "-1.8413",
       },
-      "149": {
+      149: {
         uid: 149,
         n: "Dschubba",
         puid: 7,
@@ -23246,7 +23246,7 @@ export const example1 = {
         y: "-0.8447",
         x: "-1.9380",
       },
-      "150": {
+      150: {
         uid: 150,
         n: "Shaula",
         puid: 7,
@@ -23254,7 +23254,7 @@ export const example1 = {
         y: "-0.8663",
         x: "-1.7910",
       },
-      "151": {
+      151: {
         uid: 151,
         n: "Ick",
         puid: 7,
@@ -23262,7 +23262,7 @@ export const example1 = {
         y: "-0.9569",
         x: "-2.2608",
       },
-      "153": {
+      153: {
         uid: 153,
         n: "Bharani",
         puid: 7,
@@ -23270,7 +23270,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-2.6678",
       },
-      "154": {
+      154: {
         uid: 154,
         n: "Elnath",
         puid: 7,
@@ -23278,7 +23278,7 @@ export const example1 = {
         y: "-0.9587",
         x: "-1.4210",
       },
-      "155": {
+      155: {
         c: 0.04166666666666785,
         e: 2,
         uid: 155,
@@ -23294,7 +23294,7 @@ export const example1 = {
         nr: 20,
         st: 5,
       },
-      "156": {
+      156: {
         uid: 156,
         n: "Peacock",
         puid: 7,
@@ -23302,7 +23302,7 @@ export const example1 = {
         y: "-1.3823",
         x: "-1.7130",
       },
-      "157": {
+      157: {
         uid: 157,
         n: "Merope",
         puid: 7,
@@ -23310,7 +23310,7 @@ export const example1 = {
         y: "-1.2902",
         x: "-1.3899",
       },
-      "158": {
+      158: {
         uid: 158,
         n: "Wazn",
         puid: -1,
@@ -23318,7 +23318,7 @@ export const example1 = {
         y: "0.2122",
         x: "-2.7715",
       },
-      "161": {
+      161: {
         c: 0.12500000000000178,
         e: 5,
         uid: 161,
@@ -23334,7 +23334,7 @@ export const example1 = {
         nr: 46,
         st: 67,
       },
-      "162": {
+      162: {
         uid: 162,
         n: "Mog",
         puid: 7,
@@ -23342,7 +23342,7 @@ export const example1 = {
         y: "-1.8503",
         x: "-1.5427",
       },
-      "163": {
+      163: {
         uid: 163,
         n: "Neshmet",
         puid: 7,
@@ -23350,7 +23350,7 @@ export const example1 = {
         y: "-1.8194",
         x: "-1.2808",
       },
-      "164": {
+      164: {
         uid: 164,
         n: "Pee",
         puid: -1,
@@ -23358,7 +23358,7 @@ export const example1 = {
         y: "-1.9542",
         x: "-2.6795",
       },
-      "165": {
+      165: {
         uid: 165,
         n: "Tor",
         puid: -1,
@@ -23366,7 +23366,7 @@ export const example1 = {
         y: "-0.2540",
         x: "-3.6388",
       },
-      "166": {
+      166: {
         uid: 166,
         n: "Achernar",
         puid: -1,
@@ -23374,7 +23374,7 @@ export const example1 = {
         y: "-1.7606",
         x: "-3.2410",
       },
-      "167": {
+      167: {
         c: 0,
         e: 1,
         uid: 167,
@@ -23390,7 +23390,7 @@ export const example1 = {
         nr: 5,
         st: 0,
       },
-      "168": {
+      168: {
         uid: 168,
         n: "Mizar",
         puid: 4,
@@ -23398,7 +23398,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-0.1268",
       },
-      "169": {
+      169: {
         c: 0,
         e: 2,
         uid: 169,
@@ -23414,7 +23414,7 @@ export const example1 = {
         nr: 16,
         st: 0,
       },
-      "170": {
+      170: {
         uid: 170,
         n: "Bunda",
         puid: 4,
@@ -23422,7 +23422,7 @@ export const example1 = {
         y: "-1.7524",
         x: "0.1073",
       },
-      "171": {
+      171: {
         uid: 171,
         n: "Altarf",
         puid: 4,
@@ -23430,7 +23430,7 @@ export const example1 = {
         y: "-1.7980",
         x: "0.0007",
       },
-      "172": {
+      172: {
         uid: 172,
         n: "Suhail",
         puid: 4,
@@ -23438,7 +23438,7 @@ export const example1 = {
         y: "-1.9203",
         x: "-0.0751",
       },
-      "173": {
+      173: {
         uid: 173,
         n: "Kuma",
         puid: 4,
@@ -23446,7 +23446,7 @@ export const example1 = {
         y: "-1.4531",
         x: "0.1269",
       },
-      "174": {
+      174: {
         uid: 174,
         n: "Ashlesha",
         puid: 4,
@@ -23454,7 +23454,7 @@ export const example1 = {
         y: "-1.5620",
         x: "-0.1647",
       },
-      "177": {
+      177: {
         uid: 177,
         n: "Menkar",
         puid: 2,
@@ -23462,7 +23462,7 @@ export const example1 = {
         y: "-1.9022",
         x: "0.9584",
       },
-      "178": {
+      178: {
         uid: 178,
         n: "Zosma",
         puid: 2,
@@ -23470,7 +23470,7 @@ export const example1 = {
         y: "-1.0736",
         x: "0.5086",
       },
-      "179": {
+      179: {
         uid: 179,
         n: "Mimosa",
         puid: -1,
@@ -23478,7 +23478,7 @@ export const example1 = {
         y: "-2.7219",
         x: "0.3859",
       },
-      "180": {
+      180: {
         uid: 180,
         n: "Alderamin",
         puid: -1,
@@ -23486,7 +23486,7 @@ export const example1 = {
         y: "-2.8185",
         x: "0.2302",
       },
-      "181": {
+      181: {
         uid: 181,
         n: "Lesath",
         puid: 7,
@@ -23494,7 +23494,7 @@ export const example1 = {
         y: "-2.2020",
         x: "-0.7687",
       },
-      "182": {
+      182: {
         uid: 182,
         n: "Zavijava",
         puid: 4,
@@ -23502,7 +23502,7 @@ export const example1 = {
         y: "-0.7099",
         x: "0.4292",
       },
-      "183": {
+      183: {
         uid: 183,
         n: "Eltanin",
         puid: 2,
@@ -23510,7 +23510,7 @@ export const example1 = {
         y: "-0.8970",
         x: "1.0202",
       },
-      "184": {
+      184: {
         uid: 184,
         n: "Biham",
         puid: 7,
@@ -23518,7 +23518,7 @@ export const example1 = {
         y: "-1.6107",
         x: "-1.0619",
       },
-      "185": {
+      185: {
         uid: 185,
         n: "Ri",
         puid: 4,
@@ -23526,7 +23526,7 @@ export const example1 = {
         y: "-2.8249",
         x: "-0.7562",
       },
-      "186": {
+      186: {
         uid: 186,
         n: "Fez",
         puid: 2,
@@ -23534,7 +23534,7 @@ export const example1 = {
         y: "-0.7934",
         x: "1.2753",
       },
-      "187": {
+      187: {
         uid: 187,
         n: "Raw",
         puid: -1,
@@ -23542,7 +23542,7 @@ export const example1 = {
         y: "-2.6190",
         x: "1.5820",
       },
-      "188": {
+      188: {
         uid: 188,
         n: "Aldebaran",
         puid: 4,
@@ -23550,7 +23550,7 @@ export const example1 = {
         y: "-2.8952",
         x: "-1.0292",
       },
-      "189": {
+      189: {
         uid: 189,
         n: "Rastaban",
         puid: 4,
@@ -23558,7 +23558,7 @@ export const example1 = {
         y: "-3.4613",
         x: "-0.3605",
       },
-      "190": {
+      190: {
         uid: 190,
         n: "Zit",
         puid: -1,
@@ -23566,7 +23566,7 @@ export const example1 = {
         y: "-3.5868",
         x: "0.6986",
       },
-      "191": {
+      191: {
         uid: 191,
         n: "Tack",
         puid: 2,
@@ -23574,7 +23574,7 @@ export const example1 = {
         y: "-0.0596",
         x: "0.8776",
       },
-      "192": {
+      192: {
         uid: 192,
         n: "Ale",
         puid: -1,
@@ -23598,7 +23598,7 @@ export const example1 = {
     turn_based: 0,
     war: 0,
     players: {
-      "0": {
+      0: {
         total_industry: 0,
         regard: 0,
         total_science: 0,
@@ -23646,7 +23646,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 6,
       },
-      "1": {
+      1: {
         total_industry: 9,
         regard: -8,
         total_science: 3,
@@ -23694,7 +23694,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "2": {
+      2: {
         total_industry: 42,
         regard: 0,
         total_science: 17,
@@ -23742,7 +23742,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "3": {
+      3: {
         researching: "weapons",
         uid: 3,
         ai: 0,
@@ -23751,14 +23751,14 @@ export const example1 = {
         ready: 0,
         karma_to_give: 6,
         war: {
-          "0": 3,
-          "1": 3,
-          "2": 3,
-          "3": 3,
-          "4": 3,
-          "5": 3,
-          "6": 3,
-          "7": 3,
+          0: 3,
+          1: 3,
+          2: 3,
+          3: 3,
+          4: 3,
+          5: 3,
+          6: 3,
+          7: 3,
         },
         total_industry: 46,
         total_stars: 39,
@@ -23831,18 +23831,18 @@ export const example1 = {
         researching_next: "weapons",
         total_economy: 81,
         countdown_to_war: {
-          "0": 0,
-          "1": 0,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 0,
-          "6": 0,
-          "7": 0,
+          0: 0,
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
         },
         missed_turns: 0,
       },
-      "4": {
+      4: {
         total_industry: 54,
         regard: -1,
         total_science: 15,
@@ -23890,7 +23890,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "5": {
+      5: {
         total_industry: 18,
         regard: 0,
         total_science: 8,
@@ -23938,7 +23938,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "6": {
+      6: {
         total_industry: 36,
         regard: 0,
         total_science: 16,
@@ -23986,7 +23986,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "7": {
+      7: {
         total_industry: 29,
         regard: -1,
         total_science: 10,
@@ -24065,7 +24065,7 @@ export const example1 = {
   ],
   newer: {
     fleets: {
-      "2": {
+      2: {
         uid: 2,
         l: 0,
         o: [],
@@ -24079,7 +24079,7 @@ export const example1 = {
         ly: "0.64715346",
         ouid: 22,
       },
-      "11": {
+      11: {
         uid: 11,
         l: 0,
         o: [
@@ -24096,7 +24096,7 @@ export const example1 = {
         lx: "-1.65844402",
         ly: "0.72318558",
       },
-      "12": {
+      12: {
         uid: 12,
         l: 1,
         o: [
@@ -24112,7 +24112,7 @@ export const example1 = {
         lx: "0.98017726",
         ly: "2.05863465",
       },
-      "13": {
+      13: {
         uid: 13,
         l: 0,
         o: [[0, 39, 5, 1]],
@@ -24125,7 +24125,7 @@ export const example1 = {
         lx: "0.48378046",
         ly: "1.64210828",
       },
-      "14": {
+      14: {
         uid: 14,
         l: 0,
         o: [
@@ -24141,7 +24141,7 @@ export const example1 = {
         lx: "1.04613904",
         ly: "2.60577529",
       },
-      "25": {
+      25: {
         uid: 25,
         l: 0,
         o: [
@@ -24158,7 +24158,7 @@ export const example1 = {
         lx: "-2.82405356",
         ly: "1.13180791",
       },
-      "32": {
+      32: {
         uid: 32,
         l: 0,
         o: [[0, 19, 5, 1]],
@@ -24171,7 +24171,7 @@ export const example1 = {
         lx: "0.48378046",
         ly: "1.64210828",
       },
-      "33": {
+      33: {
         uid: 33,
         l: 1,
         o: [
@@ -24188,7 +24188,7 @@ export const example1 = {
         lx: "1.03267726",
         ly: "1.96770198",
       },
-      "34": {
+      34: {
         uid: 34,
         l: 0,
         o: [[0, 5, 5, 1], [0, 48, 5, 1], [0, 101, 5, 1], {}],
@@ -24201,7 +24201,7 @@ export const example1 = {
         lx: "1.03267726",
         ly: "1.96770198",
       },
-      "41": {
+      41: {
         uid: 41,
         l: 0,
         o: [
@@ -24218,7 +24218,7 @@ export const example1 = {
         lx: "1.16967752",
         ly: "1.89557131",
       },
-      "45": {
+      45: {
         uid: 45,
         l: 0,
         o: [
@@ -24234,7 +24234,7 @@ export const example1 = {
         lx: "1.72721528",
         ly: "1.85740699",
       },
-      "47": {
+      47: {
         uid: 47,
         l: 0,
         o: [[0, 64, 0, 0]],
@@ -24247,7 +24247,7 @@ export const example1 = {
         lx: "-0.79386071",
         ly: "0.09369228",
       },
-      "51": {
+      51: {
         uid: 51,
         l: 0,
         o: [
@@ -24264,7 +24264,7 @@ export const example1 = {
         lx: "0.63681511",
         ly: "2.75253086",
       },
-      "52": {
+      52: {
         uid: 52,
         l: 0,
         o: [
@@ -24281,7 +24281,7 @@ export const example1 = {
         lx: "-0.71041212",
         ly: "2.19208676",
       },
-      "54": {
+      54: {
         uid: 54,
         l: 0,
         o: [[0, 106, 5, 1]],
@@ -24294,7 +24294,7 @@ export const example1 = {
         lx: "1.27528108",
         ly: "1.80470036",
       },
-      "55": {
+      55: {
         uid: 55,
         l: 0,
         o: [
@@ -24310,7 +24310,7 @@ export const example1 = {
         lx: "0.48378046",
         ly: "1.64210828",
       },
-      "56": {
+      56: {
         uid: 56,
         l: 1,
         o: [
@@ -24326,7 +24326,7 @@ export const example1 = {
         lx: "-0.51982274",
         ly: "3.20463465",
       },
-      "59": {
+      59: {
         uid: 59,
         l: 1,
         o: [
@@ -24351,7 +24351,7 @@ export const example1 = {
     tick_rate: 60,
     production_rate: 24,
     stars: {
-      "1": {
+      1: {
         uid: 1,
         n: "Sheratan",
         puid: 6,
@@ -24359,7 +24359,7 @@ export const example1 = {
         y: "0.7596",
         x: "0.2302",
       },
-      "2": {
+      2: {
         c: 0.20833333333333037,
         e: 5,
         uid: 2,
@@ -24375,7 +24375,7 @@ export const example1 = {
         nr: 50,
         st: 77,
       },
-      "3": {
+      3: {
         uid: 3,
         n: "Alfirk",
         puid: 4,
@@ -24383,7 +24383,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-0.5198",
       },
-      "4": {
+      4: {
         uid: 4,
         n: "Thuban",
         puid: 2,
@@ -24391,7 +24391,7 @@ export const example1 = {
         y: "-0.5394",
         x: "0.9802",
       },
-      "5": {
+      5: {
         c: 0.20833333333333037,
         e: 4,
         uid: 5,
@@ -24407,7 +24407,7 @@ export const example1 = {
         nr: 50,
         st: 2,
       },
-      "6": {
+      6: {
         uid: 6,
         n: "Saiph",
         puid: 5,
@@ -24415,7 +24415,7 @@ export const example1 = {
         y: "0.7596",
         x: "1.7302",
       },
-      "7": {
+      7: {
         uid: 7,
         n: "Auva",
         puid: 7,
@@ -24423,7 +24423,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-2.0198",
       },
-      "8": {
+      8: {
         uid: 8,
         n: "Mintaka",
         puid: 4,
@@ -24431,7 +24431,7 @@ export const example1 = {
         y: "-1.8385",
         x: "0.2302",
       },
-      "9": {
+      9: {
         uid: 9,
         n: "Porrima",
         puid: 6,
@@ -24439,7 +24439,7 @@ export const example1 = {
         y: "0.7596",
         x: "0.3802",
       },
-      "10": {
+      10: {
         uid: 10,
         n: "Menkib",
         puid: 6,
@@ -24447,7 +24447,7 @@ export const example1 = {
         y: "0.9094",
         x: "0.4087",
       },
-      "11": {
+      11: {
         uid: 11,
         n: "Cor",
         puid: 6,
@@ -24455,7 +24455,7 @@ export const example1 = {
         y: "0.5783",
         x: "-0.0287",
       },
-      "12": {
+      12: {
         uid: 12,
         n: "Yum",
         puid: 6,
@@ -24463,7 +24463,7 @@ export const example1 = {
         y: "0.4328",
         x: "0.0013",
       },
-      "13": {
+      13: {
         c: 0.1666666666666683,
         e: 4,
         uid: 13,
@@ -24479,7 +24479,7 @@ export const example1 = {
         nr: 35,
         st: 17,
       },
-      "14": {
+      14: {
         c: 0.1666666666666683,
         e: 4,
         uid: 14,
@@ -24495,7 +24495,7 @@ export const example1 = {
         nr: 31,
         st: 13,
       },
-      "16": {
+      16: {
         uid: 16,
         n: "Alchiba",
         puid: 6,
@@ -24503,7 +24503,7 @@ export const example1 = {
         y: "0.1608",
         x: "-0.1891",
       },
-      "17": {
+      17: {
         uid: 17,
         n: "Dux",
         puid: 2,
@@ -24511,7 +24511,7 @@ export const example1 = {
         y: "0.1840",
         x: "0.8058",
       },
-      "18": {
+      18: {
         uid: 18,
         n: "Fin",
         puid: 2,
@@ -24519,7 +24519,7 @@ export const example1 = {
         y: "-0.1068",
         x: "0.4623",
       },
-      "19": {
+      19: {
         c: 0,
         e: 1,
         uid: 19,
@@ -24535,7 +24535,7 @@ export const example1 = {
         nr: 2,
         st: 1,
       },
-      "20": {
+      20: {
         c: 0,
         e: 1,
         uid: 20,
@@ -24551,7 +24551,7 @@ export const example1 = {
         nr: 10,
         st: 0,
       },
-      "21": {
+      21: {
         c: 0.8750000000000018,
         e: 3,
         uid: 21,
@@ -24567,7 +24567,7 @@ export const example1 = {
         nr: 41,
         st: 51,
       },
-      "22": {
+      22: {
         c: 0.625,
         e: 1,
         uid: 22,
@@ -24583,7 +24583,7 @@ export const example1 = {
         nr: 7,
         st: 0,
       },
-      "24": {
+      24: {
         c: 0,
         e: 2,
         uid: 24,
@@ -24599,7 +24599,7 @@ export const example1 = {
         nr: 15,
         st: 1,
       },
-      "25": {
+      25: {
         c: 0.541666666666667,
         e: 0,
         uid: 25,
@@ -24615,7 +24615,7 @@ export const example1 = {
         nr: 27,
         st: 1,
       },
-      "26": {
+      26: {
         c: 0,
         e: 1,
         uid: 26,
@@ -24631,7 +24631,7 @@ export const example1 = {
         nr: 10,
         st: 0,
       },
-      "27": {
+      27: {
         uid: 27,
         n: "Alshat",
         puid: 5,
@@ -24639,7 +24639,7 @@ export const example1 = {
         y: "0.0648",
         x: "1.7201",
       },
-      "28": {
+      28: {
         c: 0.04166666666666785,
         e: 3,
         uid: 28,
@@ -24655,7 +24655,7 @@ export const example1 = {
         nr: 28,
         st: 25,
       },
-      "30": {
+      30: {
         c: 0,
         e: 0,
         uid: 30,
@@ -24671,7 +24671,7 @@ export const example1 = {
         nr: 2,
         st: 0,
       },
-      "31": {
+      31: {
         uid: 31,
         n: "Alhena",
         puid: 5,
@@ -24679,7 +24679,7 @@ export const example1 = {
         y: "-0.5106",
         x: "1.7439",
       },
-      "33": {
+      33: {
         c: 0.2083333333333346,
         e: 3,
         uid: 33,
@@ -24695,7 +24695,7 @@ export const example1 = {
         nr: 25,
         st: 11,
       },
-      "34": {
+      34: {
         c: 0.08333333333333504,
         e: 4,
         uid: 34,
@@ -24711,7 +24711,7 @@ export const example1 = {
         nr: 35,
         st: 4,
       },
-      "35": {
+      35: {
         c: 0.2083333333333346,
         e: 3,
         uid: 35,
@@ -24727,7 +24727,7 @@ export const example1 = {
         nr: 30,
         st: 40,
       },
-      "36": {
+      36: {
         c: 0.7083333333333348,
         e: 2,
         uid: 36,
@@ -24743,7 +24743,7 @@ export const example1 = {
         nr: 20,
         st: 16,
       },
-      "37": {
+      37: {
         c: 0.5833333333333353,
         e: 3,
         uid: 37,
@@ -24759,7 +24759,7 @@ export const example1 = {
         nr: 26,
         st: 54,
       },
-      "38": {
+      38: {
         c: 0,
         e: 1,
         uid: 38,
@@ -24775,7 +24775,7 @@ export const example1 = {
         nr: 10,
         st: 1,
       },
-      "39": {
+      39: {
         c: 0.04166666666666785,
         e: 2,
         uid: 39,
@@ -24791,7 +24791,7 @@ export const example1 = {
         nr: 16,
         st: 13,
       },
-      "41": {
+      41: {
         c: 0,
         e: 1,
         uid: 41,
@@ -24807,7 +24807,7 @@ export const example1 = {
         nr: 7,
         st: 1,
       },
-      "42": {
+      42: {
         c: 1.3322676295501878e-15,
         e: 3,
         uid: 42,
@@ -24823,7 +24823,7 @@ export const example1 = {
         nr: 31,
         st: 35,
       },
-      "43": {
+      43: {
         c: 0.08333333333333504,
         e: 3,
         uid: 43,
@@ -24839,7 +24839,7 @@ export const example1 = {
         nr: 32,
         st: 62,
       },
-      "44": {
+      44: {
         c: 0.5000000000000002,
         e: 2,
         uid: 44,
@@ -24855,7 +24855,7 @@ export const example1 = {
         nr: 28,
         st: 0,
       },
-      "45": {
+      45: {
         c: 0,
         e: 2,
         uid: 45,
@@ -24871,7 +24871,7 @@ export const example1 = {
         nr: 14,
         st: 1,
       },
-      "46": {
+      46: {
         uid: 46,
         n: "Albireo",
         puid: -1,
@@ -24879,7 +24879,7 @@ export const example1 = {
         y: "3.0637",
         x: "-1.3632",
       },
-      "47": {
+      47: {
         uid: 47,
         n: "Alkes",
         puid: -1,
@@ -24887,7 +24887,7 @@ export const example1 = {
         y: "1.8164",
         x: "-1.8936",
       },
-      "48": {
+      48: {
         c: 0,
         e: 2,
         uid: 48,
@@ -24903,7 +24903,7 @@ export const example1 = {
         nr: 15,
         st: 0,
       },
-      "49": {
+      49: {
         c: 0.08333333333333481,
         e: 2,
         uid: 49,
@@ -24919,7 +24919,7 @@ export const example1 = {
         nr: 21,
         st: 21,
       },
-      "50": {
+      50: {
         c: 0.7083333333333333,
         e: 2,
         uid: 50,
@@ -24935,7 +24935,7 @@ export const example1 = {
         nr: 21,
         st: 3,
       },
-      "51": {
+      51: {
         uid: 51,
         n: "Wasat",
         puid: -1,
@@ -24943,7 +24943,7 @@ export const example1 = {
         y: "2.2092",
         x: "-2.2403",
       },
-      "52": {
+      52: {
         uid: 52,
         n: "Azha",
         puid: 6,
@@ -24951,7 +24951,7 @@ export const example1 = {
         y: "1.0205",
         x: "0.9628",
       },
-      "53": {
+      53: {
         c: 0,
         e: 2,
         uid: 53,
@@ -24967,7 +24967,7 @@ export const example1 = {
         nr: 16,
         st: 1,
       },
-      "54": {
+      54: {
         c: 0.04166666666666785,
         e: 2,
         uid: 54,
@@ -24983,7 +24983,7 @@ export const example1 = {
         nr: 16,
         st: 17,
       },
-      "55": {
+      55: {
         uid: 55,
         n: "Hyadum",
         puid: 4,
@@ -24991,7 +24991,7 @@ export const example1 = {
         y: "-0.5525",
         x: "-0.6693",
       },
-      "56": {
+      56: {
         uid: 56,
         n: "Capella",
         puid: 4,
@@ -24999,7 +24999,7 @@ export const example1 = {
         y: "-0.4791",
         x: "-0.2948",
       },
-      "57": {
+      57: {
         uid: 57,
         n: "Aludra",
         puid: 4,
@@ -25007,7 +25007,7 @@ export const example1 = {
         y: "-0.6730",
         x: "-0.2334",
       },
-      "58": {
+      58: {
         uid: 58,
         n: "Altais",
         puid: 4,
@@ -25015,7 +25015,7 @@ export const example1 = {
         y: "-0.9369",
         x: "-0.5546",
       },
-      "59": {
+      59: {
         uid: 59,
         n: "Alkalurops",
         puid: 4,
@@ -25023,7 +25023,7 @@ export const example1 = {
         y: "-0.2296",
         x: "-0.1506",
       },
-      "60": {
+      60: {
         uid: 60,
         n: "Alcor",
         puid: 4,
@@ -25031,7 +25031,7 @@ export const example1 = {
         y: "-0.0766",
         x: "-0.1958",
       },
-      "61": {
+      61: {
         uid: 61,
         n: "Birdun",
         puid: 4,
@@ -25039,7 +25039,7 @@ export const example1 = {
         y: "-1.0703",
         x: "-0.1481",
       },
-      "62": {
+      62: {
         uid: 62,
         n: "Taygeta",
         puid: 6,
@@ -25047,7 +25047,7 @@ export const example1 = {
         y: "-0.0225",
         x: "-0.0029",
       },
-      "63": {
+      63: {
         uid: 63,
         n: "Electra",
         puid: 4,
@@ -25055,7 +25055,7 @@ export const example1 = {
         y: "-1.3411",
         x: "-0.3785",
       },
-      "64": {
+      64: {
         c: 0.6666666666666683,
         e: 4,
         uid: 64,
@@ -25071,7 +25071,7 @@ export const example1 = {
         nr: 46,
         st: 10,
       },
-      "66": {
+      66: {
         uid: 66,
         n: "Spica",
         puid: 4,
@@ -25079,7 +25079,7 @@ export const example1 = {
         y: "-0.2643",
         x: "-1.5466",
       },
-      "67": {
+      67: {
         uid: 67,
         n: "Albali",
         puid: 4,
@@ -25087,7 +25087,7 @@ export const example1 = {
         y: "-1.6163",
         x: "-0.9118",
       },
-      "68": {
+      68: {
         uid: 68,
         n: "Achird",
         puid: 2,
@@ -25095,7 +25095,7 @@ export const example1 = {
         y: "-0.4323",
         x: "0.7045",
       },
-      "69": {
+      69: {
         c: 0,
         e: 1,
         uid: 69,
@@ -25111,7 +25111,7 @@ export const example1 = {
         nr: 2,
         st: 1,
       },
-      "70": {
+      70: {
         uid: 70,
         n: "Aldib",
         puid: 6,
@@ -25119,7 +25119,7 @@ export const example1 = {
         y: "0.3572",
         x: "0.5488",
       },
-      "71": {
+      71: {
         uid: 71,
         n: "Toliman",
         puid: 2,
@@ -25127,7 +25127,7 @@ export const example1 = {
         y: "-1.5845",
         x: "0.5253",
       },
-      "72": {
+      72: {
         uid: 72,
         n: "Alphecca",
         puid: 7,
@@ -25135,7 +25135,7 @@ export const example1 = {
         y: "-1.5428",
         x: "-1.7156",
       },
-      "73": {
+      73: {
         uid: 73,
         n: "Alaraph",
         puid: 6,
@@ -25143,7 +25143,7 @@ export const example1 = {
         y: "0.8843",
         x: "0.3022",
       },
-      "74": {
+      74: {
         uid: 74,
         n: "Ain",
         puid: 2,
@@ -25151,7 +25151,7 @@ export const example1 = {
         y: "-0.9864",
         x: "1.1483",
       },
-      "75": {
+      75: {
         uid: 75,
         n: "Media",
         puid: 2,
@@ -25159,7 +25159,7 @@ export const example1 = {
         y: "-1.4444",
         x: "1.0477",
       },
-      "78": {
+      78: {
         uid: 78,
         n: "Tic",
         puid: 2,
@@ -25167,7 +25167,7 @@ export const example1 = {
         y: "-0.6693",
         x: "0.9052",
       },
-      "79": {
+      79: {
         uid: 79,
         n: "Hadir",
         puid: 2,
@@ -25175,7 +25175,7 @@ export const example1 = {
         y: "-0.7412",
         x: "1.0967",
       },
-      "82": {
+      82: {
         uid: 82,
         n: "Sadalsuud",
         puid: 2,
@@ -25183,7 +25183,7 @@ export const example1 = {
         y: "-0.1220",
         x: "0.7392",
       },
-      "87": {
+      87: {
         uid: 87,
         n: "Atria",
         puid: 4,
@@ -25191,7 +25191,7 @@ export const example1 = {
         y: "-0.7716",
         x: "0.1137",
       },
-      "88": {
+      88: {
         uid: 88,
         n: "Corvid",
         puid: 5,
@@ -25199,7 +25199,7 @@ export const example1 = {
         y: "0.1535",
         x: "1.6731",
       },
-      "89": {
+      89: {
         uid: 89,
         n: "Pax",
         puid: 2,
@@ -25207,7 +25207,7 @@ export const example1 = {
         y: "-1.5863",
         x: "1.1648",
       },
-      "91": {
+      91: {
         uid: 91,
         n: "Dheneb",
         puid: 2,
@@ -25215,7 +25215,7 @@ export const example1 = {
         y: "-1.5462",
         x: "1.6851",
       },
-      "92": {
+      92: {
         uid: 92,
         n: "Alwaid",
         puid: 6,
@@ -25223,7 +25223,7 @@ export const example1 = {
         y: "0.7279",
         x: "0.6406",
       },
-      "93": {
+      93: {
         uid: 93,
         n: "Alshain",
         puid: 4,
@@ -25231,7 +25231,7 @@ export const example1 = {
         y: "-0.4179",
         x: "-0.4095",
       },
-      "94": {
+      94: {
         uid: 94,
         n: "Mesarthim",
         puid: 2,
@@ -25239,7 +25239,7 @@ export const example1 = {
         y: "-1.7501",
         x: "1.8279",
       },
-      "95": {
+      95: {
         uid: 95,
         n: "Sargas",
         puid: 2,
@@ -25247,7 +25247,7 @@ export const example1 = {
         y: "-0.8105",
         x: "2.5175",
       },
-      "96": {
+      96: {
         uid: 96,
         n: "Miram",
         puid: 2,
@@ -25255,7 +25255,7 @@ export const example1 = {
         y: "-1.4824",
         x: "2.3269",
       },
-      "97": {
+      97: {
         uid: 97,
         n: "Aldhafera",
         puid: 2,
@@ -25263,7 +25263,7 @@ export const example1 = {
         y: "-1.2693",
         x: "2.5454",
       },
-      "98": {
+      98: {
         uid: 98,
         n: "Kullat",
         puid: 4,
@@ -25271,7 +25271,7 @@ export const example1 = {
         y: "-0.0710",
         x: "-0.7681",
       },
-      "99": {
+      99: {
         uid: 99,
         n: "Ruchbah",
         puid: 4,
@@ -25279,7 +25279,7 @@ export const example1 = {
         y: "-1.8780",
         x: "-0.3584",
       },
-      "100": {
+      100: {
         uid: 100,
         n: "Elk",
         puid: 4,
@@ -25287,7 +25287,7 @@ export const example1 = {
         y: "-1.5274",
         x: "-0.7311",
       },
-      "101": {
+      101: {
         c: 0.04166666666666785,
         e: 3,
         uid: 101,
@@ -25303,7 +25303,7 @@ export const example1 = {
         nr: 35,
         st: 7,
       },
-      "102": {
+      102: {
         c: 0.7916666666666679,
         e: 2,
         uid: 102,
@@ -25319,7 +25319,7 @@ export const example1 = {
         nr: 30,
         st: 3,
       },
-      "104": {
+      104: {
         c: 0,
         e: 1,
         uid: 104,
@@ -25335,7 +25335,7 @@ export const example1 = {
         nr: 4,
         st: 1,
       },
-      "105": {
+      105: {
         c: 0.5416666666666679,
         e: 0,
         uid: 105,
@@ -25351,7 +25351,7 @@ export const example1 = {
         nr: 45,
         st: 8,
       },
-      "106": {
+      106: {
         c: 0.7500000000000014,
         e: 2,
         uid: 106,
@@ -25367,7 +25367,7 @@ export const example1 = {
         nr: 37,
         st: 9,
       },
-      "107": {
+      107: {
         c: 2.220446049250313e-16,
         e: 2,
         uid: 107,
@@ -25383,7 +25383,7 @@ export const example1 = {
         nr: 27,
         st: 1,
       },
-      "108": {
+      108: {
         c: 0,
         e: 1,
         uid: 108,
@@ -25399,7 +25399,7 @@ export const example1 = {
         nr: 2,
         st: 1,
       },
-      "109": {
+      109: {
         c: 0.25,
         e: 5,
         uid: 109,
@@ -25415,7 +25415,7 @@ export const example1 = {
         nr: 47,
         st: 20,
       },
-      "110": {
+      110: {
         uid: 110,
         n: "Nusakan",
         puid: 6,
@@ -25423,7 +25423,7 @@ export const example1 = {
         y: "1.1650",
         x: "1.0584",
       },
-      "111": {
+      111: {
         c: 0.6249999999999982,
         e: 3,
         uid: 111,
@@ -25439,7 +25439,7 @@ export const example1 = {
         nr: 31,
         st: 28,
       },
-      "112": {
+      112: {
         uid: 112,
         n: "Hadar",
         puid: 6,
@@ -25447,7 +25447,7 @@ export const example1 = {
         y: "1.0118",
         x: "0.7956",
       },
-      "113": {
+      113: {
         uid: 113,
         n: "Seginus",
         puid: 1,
@@ -25455,7 +25455,7 @@ export const example1 = {
         y: "2.4506",
         x: "2.0571",
       },
-      "114": {
+      114: {
         uid: 114,
         n: "Eta Arc",
         puid: 1,
@@ -25463,7 +25463,7 @@ export const example1 = {
         y: "2.8486",
         x: "1.9216",
       },
-      "115": {
+      115: {
         uid: 115,
         n: "Gut",
         puid: 6,
@@ -25471,7 +25471,7 @@ export const example1 = {
         y: "0.7466",
         x: "0.9802",
       },
-      "116": {
+      116: {
         c: 0,
         e: 1,
         uid: 116,
@@ -25487,7 +25487,7 @@ export const example1 = {
         nr: 5,
         st: 1,
       },
-      "117": {
+      117: {
         c: 0.4166666666666663,
         e: 3,
         uid: 117,
@@ -25503,7 +25503,7 @@ export const example1 = {
         nr: 24,
         st: 1,
       },
-      "118": {
+      118: {
         c: 0,
         e: 1,
         uid: 118,
@@ -25519,7 +25519,7 @@ export const example1 = {
         nr: 3,
         st: 1,
       },
-      "119": {
+      119: {
         uid: 119,
         n: "Maia",
         puid: -1,
@@ -25527,7 +25527,7 @@ export const example1 = {
         y: "3.6964",
         x: "0.8369",
       },
-      "120": {
+      120: {
         uid: 120,
         n: "Sadatoni",
         puid: 1,
@@ -25535,7 +25535,7 @@ export const example1 = {
         y: "3.4733",
         x: "1.9707",
       },
-      "121": {
+      121: {
         uid: 121,
         n: "Ksora",
         puid: -1,
@@ -25543,7 +25543,7 @@ export const example1 = {
         y: "3.8070",
         x: "0.5117",
       },
-      "122": {
+      122: {
         c: 0,
         e: 1,
         uid: 122,
@@ -25559,7 +25559,7 @@ export const example1 = {
         nr: 10,
         st: 1,
       },
-      "123": {
+      123: {
         uid: 123,
         n: "Merga",
         puid: 1,
@@ -25567,7 +25567,7 @@ export const example1 = {
         y: "2.5701",
         x: "2.8888",
       },
-      "124": {
+      124: {
         uid: 124,
         n: "Alkaid",
         puid: 5,
@@ -25575,7 +25575,7 @@ export const example1 = {
         y: "0.7208",
         x: "1.8751",
       },
-      "125": {
+      125: {
         uid: 125,
         n: "Zu",
         puid: 5,
@@ -25583,7 +25583,7 @@ export const example1 = {
         y: "0.5687",
         x: "1.5965",
       },
-      "126": {
+      126: {
         uid: 126,
         n: "Imp",
         puid: 6,
@@ -25591,7 +25591,7 @@ export const example1 = {
         y: "1.0184",
         x: "1.5489",
       },
-      "127": {
+      127: {
         uid: 127,
         n: "Hydrus",
         puid: 6,
@@ -25599,7 +25599,7 @@ export const example1 = {
         y: "1.1212",
         x: "1.5616",
       },
-      "128": {
+      128: {
         uid: 128,
         n: "Dubhe",
         puid: 5,
@@ -25607,7 +25607,7 @@ export const example1 = {
         y: "0.5559",
         x: "2.1670",
       },
-      "130": {
+      130: {
         uid: 130,
         n: "AlKap",
         puid: 6,
@@ -25615,7 +25615,7 @@ export const example1 = {
         y: "0.9273",
         x: "1.1043",
       },
-      "132": {
+      132: {
         uid: 132,
         n: "Cox",
         puid: 6,
@@ -25623,7 +25623,7 @@ export const example1 = {
         y: "0.9009",
         x: "0.9285",
       },
-      "133": {
+      133: {
         uid: 133,
         n: "Alnitak",
         puid: 5,
@@ -25631,7 +25631,7 @@ export const example1 = {
         y: "-0.1238",
         x: "1.8859",
       },
-      "134": {
+      134: {
         uid: 134,
         n: "TseenKee",
         puid: 5,
@@ -25639,7 +25639,7 @@ export const example1 = {
         y: "-0.0432",
         x: "2.2923",
       },
-      "135": {
+      135: {
         c: 0,
         e: 0,
         uid: 135,
@@ -25655,7 +25655,7 @@ export const example1 = {
         nr: 2,
         st: 0,
       },
-      "136": {
+      136: {
         uid: 136,
         n: "Kaus",
         puid: 6,
@@ -25663,7 +25663,7 @@ export const example1 = {
         y: "0.2753",
         x: "0.6915",
       },
-      "137": {
+      137: {
         uid: 137,
         n: "Menkalinan",
         puid: 2,
@@ -25671,7 +25671,7 @@ export const example1 = {
         y: "-0.1819",
         x: "0.9402",
       },
-      "138": {
+      138: {
         uid: 138,
         n: "Alrischa",
         puid: -1,
@@ -25679,7 +25679,7 @@ export const example1 = {
         y: "0.9874",
         x: "3.0222",
       },
-      "139": {
+      139: {
         c: 0.04166666666666785,
         e: 2,
         uid: 139,
@@ -25695,7 +25695,7 @@ export const example1 = {
         nr: 25,
         st: 1,
       },
-      "140": {
+      140: {
         uid: 140,
         n: "Zaurak",
         puid: 6,
@@ -25703,7 +25703,7 @@ export const example1 = {
         y: "0.6308",
         x: "0.2578",
       },
-      "143": {
+      143: {
         uid: 143,
         n: "Elm",
         puid: 1,
@@ -25711,7 +25711,7 @@ export const example1 = {
         y: "2.3824",
         x: "2.3208",
       },
-      "144": {
+      144: {
         c: 0.45833333333333326,
         e: 2,
         uid: 144,
@@ -25727,7 +25727,7 @@ export const example1 = {
         nr: 30,
         st: 17,
       },
-      "145": {
+      145: {
         uid: 145,
         n: "Talitha",
         puid: -1,
@@ -25735,7 +25735,7 @@ export const example1 = {
         y: "1.4070",
         x: "3.5090",
       },
-      "146": {
+      146: {
         uid: 146,
         n: "Toe",
         puid: -1,
@@ -25743,7 +25743,7 @@ export const example1 = {
         y: "1.2710",
         x: "3.6388",
       },
-      "147": {
+      147: {
         uid: 147,
         n: "Ash",
         puid: 7,
@@ -25751,7 +25751,7 @@ export const example1 = {
         y: "-0.6543",
         x: "-2.1162",
       },
-      "148": {
+      148: {
         uid: 148,
         n: "Kraz",
         puid: 7,
@@ -25759,7 +25759,7 @@ export const example1 = {
         y: "-0.6892",
         x: "-1.8413",
       },
-      "149": {
+      149: {
         uid: 149,
         n: "Dschubba",
         puid: 7,
@@ -25767,7 +25767,7 @@ export const example1 = {
         y: "-0.8447",
         x: "-1.9380",
       },
-      "150": {
+      150: {
         uid: 150,
         n: "Shaula",
         puid: 7,
@@ -25775,7 +25775,7 @@ export const example1 = {
         y: "-0.8663",
         x: "-1.7910",
       },
-      "151": {
+      151: {
         uid: 151,
         n: "Ick",
         puid: 7,
@@ -25783,7 +25783,7 @@ export const example1 = {
         y: "-0.9569",
         x: "-2.2608",
       },
-      "153": {
+      153: {
         uid: 153,
         n: "Bharani",
         puid: 7,
@@ -25791,7 +25791,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-2.6678",
       },
-      "154": {
+      154: {
         uid: 154,
         n: "Elnath",
         puid: 7,
@@ -25799,7 +25799,7 @@ export const example1 = {
         y: "-0.9587",
         x: "-1.4210",
       },
-      "155": {
+      155: {
         c: 0.04166666666666785,
         e: 2,
         uid: 155,
@@ -25815,7 +25815,7 @@ export const example1 = {
         nr: 20,
         st: 5,
       },
-      "156": {
+      156: {
         uid: 156,
         n: "Peacock",
         puid: 7,
@@ -25823,7 +25823,7 @@ export const example1 = {
         y: "-1.3823",
         x: "-1.7130",
       },
-      "157": {
+      157: {
         uid: 157,
         n: "Merope",
         puid: 7,
@@ -25831,7 +25831,7 @@ export const example1 = {
         y: "-1.2902",
         x: "-1.3899",
       },
-      "158": {
+      158: {
         uid: 158,
         n: "Wazn",
         puid: -1,
@@ -25839,7 +25839,7 @@ export const example1 = {
         y: "0.2122",
         x: "-2.7715",
       },
-      "161": {
+      161: {
         c: 0.12500000000000178,
         e: 5,
         uid: 161,
@@ -25855,7 +25855,7 @@ export const example1 = {
         nr: 46,
         st: 67,
       },
-      "162": {
+      162: {
         uid: 162,
         n: "Mog",
         puid: 7,
@@ -25863,7 +25863,7 @@ export const example1 = {
         y: "-1.8503",
         x: "-1.5427",
       },
-      "163": {
+      163: {
         uid: 163,
         n: "Neshmet",
         puid: 7,
@@ -25871,7 +25871,7 @@ export const example1 = {
         y: "-1.8194",
         x: "-1.2808",
       },
-      "164": {
+      164: {
         uid: 164,
         n: "Pee",
         puid: -1,
@@ -25879,7 +25879,7 @@ export const example1 = {
         y: "-1.9542",
         x: "-2.6795",
       },
-      "165": {
+      165: {
         uid: 165,
         n: "Tor",
         puid: -1,
@@ -25887,7 +25887,7 @@ export const example1 = {
         y: "-0.2540",
         x: "-3.6388",
       },
-      "166": {
+      166: {
         uid: 166,
         n: "Achernar",
         puid: -1,
@@ -25895,7 +25895,7 @@ export const example1 = {
         y: "-1.7606",
         x: "-3.2410",
       },
-      "167": {
+      167: {
         c: 0,
         e: 1,
         uid: 167,
@@ -25911,7 +25911,7 @@ export const example1 = {
         nr: 5,
         st: 0,
       },
-      "168": {
+      168: {
         uid: 168,
         n: "Mizar",
         puid: 4,
@@ -25919,7 +25919,7 @@ export const example1 = {
         y: "-0.5394",
         x: "-0.1268",
       },
-      "169": {
+      169: {
         c: 0,
         e: 2,
         uid: 169,
@@ -25935,7 +25935,7 @@ export const example1 = {
         nr: 16,
         st: 0,
       },
-      "170": {
+      170: {
         uid: 170,
         n: "Bunda",
         puid: 4,
@@ -25943,7 +25943,7 @@ export const example1 = {
         y: "-1.7524",
         x: "0.1073",
       },
-      "171": {
+      171: {
         uid: 171,
         n: "Altarf",
         puid: 4,
@@ -25951,7 +25951,7 @@ export const example1 = {
         y: "-1.7980",
         x: "0.0007",
       },
-      "172": {
+      172: {
         uid: 172,
         n: "Suhail",
         puid: 4,
@@ -25959,7 +25959,7 @@ export const example1 = {
         y: "-1.9203",
         x: "-0.0751",
       },
-      "173": {
+      173: {
         uid: 173,
         n: "Kuma",
         puid: 4,
@@ -25967,7 +25967,7 @@ export const example1 = {
         y: "-1.4531",
         x: "0.1269",
       },
-      "174": {
+      174: {
         uid: 174,
         n: "Ashlesha",
         puid: 4,
@@ -25975,7 +25975,7 @@ export const example1 = {
         y: "-1.5620",
         x: "-0.1647",
       },
-      "177": {
+      177: {
         uid: 177,
         n: "Menkar",
         puid: 2,
@@ -25983,7 +25983,7 @@ export const example1 = {
         y: "-1.9022",
         x: "0.9584",
       },
-      "178": {
+      178: {
         uid: 178,
         n: "Zosma",
         puid: 2,
@@ -25991,7 +25991,7 @@ export const example1 = {
         y: "-1.0736",
         x: "0.5086",
       },
-      "179": {
+      179: {
         uid: 179,
         n: "Mimosa",
         puid: -1,
@@ -25999,7 +25999,7 @@ export const example1 = {
         y: "-2.7219",
         x: "0.3859",
       },
-      "180": {
+      180: {
         uid: 180,
         n: "Alderamin",
         puid: -1,
@@ -26007,7 +26007,7 @@ export const example1 = {
         y: "-2.8185",
         x: "0.2302",
       },
-      "181": {
+      181: {
         uid: 181,
         n: "Lesath",
         puid: 7,
@@ -26015,7 +26015,7 @@ export const example1 = {
         y: "-2.2020",
         x: "-0.7687",
       },
-      "182": {
+      182: {
         uid: 182,
         n: "Zavijava",
         puid: 4,
@@ -26023,7 +26023,7 @@ export const example1 = {
         y: "-0.7099",
         x: "0.4292",
       },
-      "183": {
+      183: {
         uid: 183,
         n: "Eltanin",
         puid: 2,
@@ -26031,7 +26031,7 @@ export const example1 = {
         y: "-0.8970",
         x: "1.0202",
       },
-      "184": {
+      184: {
         uid: 184,
         n: "Biham",
         puid: 7,
@@ -26039,7 +26039,7 @@ export const example1 = {
         y: "-1.6107",
         x: "-1.0619",
       },
-      "185": {
+      185: {
         uid: 185,
         n: "Ri",
         puid: 4,
@@ -26047,7 +26047,7 @@ export const example1 = {
         y: "-2.8249",
         x: "-0.7562",
       },
-      "186": {
+      186: {
         uid: 186,
         n: "Fez",
         puid: 2,
@@ -26055,7 +26055,7 @@ export const example1 = {
         y: "-0.7934",
         x: "1.2753",
       },
-      "187": {
+      187: {
         uid: 187,
         n: "Raw",
         puid: -1,
@@ -26063,7 +26063,7 @@ export const example1 = {
         y: "-2.6190",
         x: "1.5820",
       },
-      "188": {
+      188: {
         uid: 188,
         n: "Aldebaran",
         puid: 4,
@@ -26071,7 +26071,7 @@ export const example1 = {
         y: "-2.8952",
         x: "-1.0292",
       },
-      "189": {
+      189: {
         uid: 189,
         n: "Rastaban",
         puid: 4,
@@ -26079,7 +26079,7 @@ export const example1 = {
         y: "-3.4613",
         x: "-0.3605",
       },
-      "190": {
+      190: {
         uid: 190,
         n: "Zit",
         puid: -1,
@@ -26087,7 +26087,7 @@ export const example1 = {
         y: "-3.5868",
         x: "0.6986",
       },
-      "191": {
+      191: {
         uid: 191,
         n: "Tack",
         puid: 2,
@@ -26095,7 +26095,7 @@ export const example1 = {
         y: "-0.0596",
         x: "0.8776",
       },
-      "192": {
+      192: {
         uid: 192,
         n: "Ale",
         puid: -1,
@@ -26119,7 +26119,7 @@ export const example1 = {
     turn_based: 0,
     war: 0,
     players: {
-      "0": {
+      0: {
         total_industry: 0,
         regard: 0,
         total_science: 0,
@@ -26167,7 +26167,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 6,
       },
-      "1": {
+      1: {
         total_industry: 9,
         regard: -8,
         total_science: 3,
@@ -26215,7 +26215,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "2": {
+      2: {
         total_industry: 42,
         regard: 0,
         total_science: 17,
@@ -26263,7 +26263,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "3": {
+      3: {
         researching: "weapons",
         uid: 3,
         ai: 0,
@@ -26272,14 +26272,14 @@ export const example1 = {
         ready: 0,
         karma_to_give: 6,
         war: {
-          "0": 3,
-          "1": 3,
-          "2": 3,
-          "3": 3,
-          "4": 3,
-          "5": 3,
-          "6": 3,
-          "7": 3,
+          0: 3,
+          1: 3,
+          2: 3,
+          3: 3,
+          4: 3,
+          5: 3,
+          6: 3,
+          7: 3,
         },
         total_industry: 46,
         total_stars: 39,
@@ -26352,18 +26352,18 @@ export const example1 = {
         researching_next: "weapons",
         total_economy: 81,
         countdown_to_war: {
-          "0": 0,
-          "1": 0,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 0,
-          "6": 0,
-          "7": 0,
+          0: 0,
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
         },
         missed_turns: 0,
       },
-      "4": {
+      4: {
         total_industry: 54,
         regard: -1,
         total_science: 15,
@@ -26411,7 +26411,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "5": {
+      5: {
         total_industry: 18,
         regard: 0,
         total_science: 8,
@@ -26459,7 +26459,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "6": {
+      6: {
         total_industry: 36,
         regard: 0,
         total_science: 16,
@@ -26507,7 +26507,7 @@ export const example1 = {
         missed_turns: 0,
         karma_to_give: 8,
       },
-      "7": {
+      7: {
         total_industry: 29,
         regard: -1,
         total_science: 10,
