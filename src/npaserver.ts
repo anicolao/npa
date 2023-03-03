@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { openDB } from "idb";
 import { type ScanningData } from "./galaxy";
-import { diff2 as diff, patch2 as patch } from "./patch";
+import { diff, patch } from "./patch";
 
 export interface ApiInfo {
   firstTick: number;

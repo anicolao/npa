@@ -1,5 +1,5 @@
 export type Value = boolean | number | string | undefined;
-type Patch2 = { [k: string]: any } | Value;
+type Patch = { [k: string]: any } | Value;
 
 export function clone(o: any) {
   if (typeof o === "object" && o !== null) {
@@ -12,7 +12,7 @@ export function clone(o: any) {
   return o;
 }
 
-export function diff2<T extends Value | object>(a: T, b: T): Patch2 {
+export function diff<T extends Value | object>(a: T, b: T): Patch {
   if (a === b) {
     return null;
   }
@@ -27,7 +27,7 @@ export function diff2<T extends Value | object>(a: T, b: T): Patch2 {
   let ret: { [k: string]: any } = {};
   let entries = 0;
   Object.entries(oldA).forEach((e) => {
-    const d = diff2(oldA[e[0]], newA[e[0]]);
+    const d = diff(oldA[e[0]], newA[e[0]]);
     if (d !== null) {
       ++entries;
       ret[e[0]] = d === undefined ? null : d;
@@ -43,7 +43,7 @@ export function diff2<T extends Value | object>(a: T, b: T): Patch2 {
   return clone(ret);
 }
 
-export function patch2(a: Patch2, p: Patch2): Patch2 {
+export function patch(a: Patch, p: Patch): Patch {
   if (p === null) {
     return a;
   }
@@ -54,13 +54,13 @@ export function patch2(a: Patch2, p: Patch2): Patch2 {
     return p;
   }
   if (typeof p !== "object") return p;
-  let newA: { [k: string]: Patch2 } = a as { [k: string]: Patch2 };
+  let newA: { [k: string]: Patch } = a as { [k: string]: Patch };
   Object.keys(p).forEach((key) => {
     const value = p[key];
     if (value === null) {
       delete newA[key];
     } else {
-      newA[key] = patch2(newA[key], value);
+      newA[key] = patch(newA[key], value);
     }
   });
   if (Array.isArray(newA)) {
