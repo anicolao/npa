@@ -33,6 +33,17 @@ export function diff<T extends Value | object>(a: T, b: T): Patch {
   return ret;
 }
 
+export function clone(o: any) {
+  if (typeof o === "object" && o !== null) {
+    const ret = Array.isArray(o) ? [...o] : { ...o };
+    for (let k in ret) {
+      ret[k] = clone(ret[k]);
+    }
+    return ret;
+  }
+  return o;
+}
+
 type Patch2 = { [k: string]: any } | Value;
 export function diff2<T extends Value | object>(a: T, b: T): Patch2 {
   if (a === b) {
@@ -62,7 +73,7 @@ export function diff2<T extends Value | object>(a: T, b: T): Patch2 {
       ret[e[0]] = newA[e[0]];
     });
   if (entries === 0) return null;
-  return ret;
+  return clone(ret);
 }
 
 export function patch2(a: Patch2, p: Patch2): Patch2 {
@@ -70,6 +81,9 @@ export function patch2(a: Patch2, p: Patch2): Patch2 {
     return a;
   }
   if (typeof a !== typeof p) {
+    if (typeof p === "object") {
+      return clone(p);
+    }
     return p;
   }
   if (typeof p !== "object") return p;

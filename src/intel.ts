@@ -188,7 +188,7 @@ function NeptunesPrideAgent() {
       if (scanList.length > 0) {
         let myScan = scanList.filter((scan) => scan.player_uid === myId);
         let scan = myScan.length > 0 ? myScan[0] : scanList[0];
-        if (prior === null) prior = scan.stars;
+        if (prior === null) prior = { ...scan.stars };
         let scanData = scan;
         let newStars = scanData.stars;
         let tick = scanData.tick;
@@ -215,7 +215,7 @@ function NeptunesPrideAgent() {
               );
             }
           }
-          prior[k] = newStars[k];
+          prior[k] = { ...newStars[k] };
         }
       }
       currentTick++;

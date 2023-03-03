@@ -313,6 +313,34 @@ describe("diff2/patch2 work as expected", () => {
     const identical = diff2(b, regen);
     expect(identical).to.equal(null);
   });
+
+  it("doesn't corrupt a diff if patched again", () => {
+    const a = {};
+    const b = { k: 5 };
+    const d = diff2(a, b);
+    const next = patch2(a, d);
+    expect(typeof d).to.equal("object");
+    expect(typeof next).to.equal("object");
+    if (typeof d === "object" && typeof next === "object") {
+      expect(d.k).to.equal(5);
+      expect(next.k).to.equal(5);
+      next.k = 10;
+      expect(d.k).to.equal(5);
+    }
+  });
+
+  it("doesn't corrupt a diff if source is modified", () => {
+    const a = {};
+    const b = { a: { k: 5 } };
+    const d = diff2(a, b);
+    expect(typeof d).to.equal("object");
+    if (typeof d === "object") {
+      expect(d.a.k).to.equal(5);
+      expect(b.a.k).to.equal(5);
+      b.a.k = 10;
+      expect(d.a.k).to.equal(5);
+    }
+  });
 });
 
 describe("diff produces good patches", () => {
