@@ -34,6 +34,7 @@ import {
 import { isWithinRange } from "./visibility";
 import { Player, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
+import { clone, patch } from "./patch";
 
 interface CruxLib {
   IconButton: any;
@@ -234,6 +235,82 @@ function NeptunesPrideAgent() {
     "Generate a report changes in star ownership and copy to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "Star Ownership",
+  );
+
+  let knownAlliances: boolean[][] | undefined = undefined;
+  function faReport() {
+    let output = [];
+    output.push("Formal Alliances: ");
+    class ScanKeyIterator {
+      apikey;
+      currentScan;
+      constructor(apilink: string) {
+        this.apikey = getCodeFromApiText(apilink);
+        if (scanCache[this.apikey].length)
+          this.currentScan = scanCache[this.apikey][0];
+        else this.currentScan = undefined;
+      }
+      getScan() {
+        return this.currentScan;
+      }
+      hasNext() {
+        return this.currentScan.next !== undefined;
+      }
+      next() {
+        this.currentScan = this?.currentScan.next;
+      }
+      timestamp() {
+        return this?.currentScan?.timestamp;
+      }
+    }
+    const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
+    const alliances: boolean[][] = [];
+    for (let i = 0; i < keyIterators.length; ++i) {
+      const ki = keyIterators[i];
+      const scan = clone(ki.getScan().cached);
+      while (ki.hasNext()) {
+        patch(scan, ki.getScan().forward);
+        if (scan.fleets) {
+          for (let k in scan.fleets) {
+            const fleet = scan.fleets[k];
+            if (fleet?.ouid !== undefined) {
+              const star = scan.stars[fleet.ouid];
+              if (star) {
+                if (star.puid !== fleet.puid && star.puid !== -1) {
+                  if (!alliances[star.puid]) {
+                    alliances[star.puid] = [];
+                  }
+                  if (!alliances[fleet.puid]) {
+                    alliances[fleet.puid] = [];
+                  }
+                  alliances[star.puid][fleet.puid] = true;
+                  alliances[fleet.puid][star.puid] = true;
+                }
+              } else {
+                console.error(`Orbit star missing for ${fleet.n}`);
+              }
+            }
+          }
+        }
+        ki.next();
+      }
+    }
+    for (let i in alliances) {
+      for (let j in alliances[i]) {
+        if (i < j) {
+          output.push(`[[${i}]] ⇔ [[${j}]]`);
+        }
+      }
+    }
+    knownAlliances = alliances;
+    prepReport("fa", output.join("\n"));
+  }
+  defineHotkey(
+    "ctrl+7",
+    faReport,
+    "Generate a report of observed Formal Alliance pairs." +
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+    "Formal Alliances",
   );
 
   function buyAllTheHypotheticalEconomy(
@@ -532,6 +609,9 @@ function NeptunesPrideAgent() {
   }
 
   const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
+    if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
+      faReport();
+    }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
@@ -539,7 +619,8 @@ function NeptunesPrideAgent() {
     return (
       fleetOwnerId == starOwnerId ||
       warMap[fleetOwnerId] == 0 ||
-      warMap[starOwnerId] == 0
+      warMap[starOwnerId] == 0 ||
+      knownAlliances?.[fleetOwnerId]?.[starOwnerId]
     );
   };
   let fleetOutcomes: { [k: number]: any } = {};
@@ -2245,6 +2326,7 @@ function NeptunesPrideAgent() {
         onlycombats: "All Combats",
         stars: "Stars",
         ownership: "Ownership",
+        fa: "Formal Alliances",
         economists: "Economists",
         activity: "Activity",
         accounting: "Accounting",
@@ -2284,6 +2366,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "ownership") {
           ownershipReport();
+        } else if (d === "fa") {
+          faReport();
         } else if (d === "economists") {
           economistReport();
         } else if (d === "activity") {
