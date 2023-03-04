@@ -2789,34 +2789,7 @@ function NeptunesPrideAgent() {
     timeTravelTickIndices[apikey] = timeTravelTickIndex;
     //const steps = timeTravelTickIndices[apikey] - timeTravelTickIndex;
     //console.log(`Found scan for ${targetTick} ${apikey}:${scan.tick} ${steps}`);
-    const ret = { ...scan };
-    ret.stars = {};
-    for (let k in scan.stars) {
-      ret.stars[k] = { ...scan.stars[k] };
-    }
-    ret.fleets = {};
-    for (let k in scan.fleets) {
-      ret.fleets[k] = { ...scan.fleets[k] };
-      ret.fleets[k].o = [...ret.fleets[k].o].map((a) => [...a]);
-    }
-    ret.players = {};
-    for (let p in scan.players) {
-      ret.players[p] = { ...scan.players[p] };
-      ret.players[p].tech.banking = { ...scan.players[p].tech.banking };
-      ret.players[p].tech.manufacturing = {
-        ...scan.players[p].tech.manufacturing,
-      };
-      ret.players[p].tech.propulsion = { ...scan.players[p].tech.propulsion };
-      ret.players[p].tech.research = { ...scan.players[p].tech.research };
-      ret.players[p].tech.scanning = { ...scan.players[p].tech.scanning };
-      if (scan.players[p].tech.terraforming) {
-        ret.players[p].tech.terraforming = {
-          ...scan.players[p].tech.terraforming,
-        };
-      }
-      ret.players[p].tech.weapons = { ...scan.players[p].tech.weapons };
-    }
-    return ret;
+    return clone(scan);
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
     const scans = allSeenKeys
