@@ -237,7 +237,7 @@ function NeptunesPrideAgent() {
     "Star Ownership",
   );
 
-  let knownAlliances: boolean[][] | undefined = undefined;
+  let knownAlliances: number[][] | undefined = undefined;
   function faReport() {
     let output = [];
     output.push("Formal Alliances: ");
@@ -264,7 +264,7 @@ function NeptunesPrideAgent() {
       }
     }
     const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
-    const alliances: boolean[][] = [];
+    const alliances: number[][] = [];
     for (let i = 0; i < keyIterators.length; ++i) {
       const ki = keyIterators[i];
       const scan = clone(ki.getScan().cached);
@@ -283,8 +283,10 @@ function NeptunesPrideAgent() {
                   if (!alliances[fleet.puid]) {
                     alliances[fleet.puid] = [];
                   }
-                  alliances[star.puid][fleet.puid] = true;
-                  alliances[fleet.puid][star.puid] = true;
+                  const seenTick = alliances[star.puid]?.[fleet.puid] || 0;
+                  const maxTick = Math.max(scan.tick, seenTick);
+                  alliances[star.puid][fleet.puid] = maxTick;
+                  alliances[fleet.puid][star.puid] = maxTick;
                 }
               } else {
                 console.error(`Orbit star missing for ${fleet.n}`);
@@ -298,7 +300,7 @@ function NeptunesPrideAgent() {
     for (let i in alliances) {
       for (let j in alliances[i]) {
         if (i < j) {
-          output.push(`[[${i}]] ⇔ [[${j}]]`);
+          output.push(`[[Tick #${alliances[i][j]}]] [[${i}]] ⇔ [[${j}]]`);
         }
       }
     }
@@ -1607,14 +1609,11 @@ function NeptunesPrideAgent() {
       do {
         i -= 1;
         const candidate = sortedByDistanceSquared[i];
-        const dist = distance(star, candidate);
-        if (
-          candidate.puid !== star.puid &&
-          (closest === star || stepsOut > 0)
-        ) {
+        const allied = alliedFleet(candidate.puid, star.puid);
+        if (!allied && (closest === star || stepsOut > 0)) {
           closest = candidate;
           stepsOut--;
-        } else if (candidate.puid === star.puid && closestSupport === star) {
+        } else if (allied && closestSupport === star) {
           closestSupport = candidate;
         }
       } while (
@@ -1754,7 +1753,7 @@ function NeptunesPrideAgent() {
 
         for (let i = 0; showAll && i < closerStars.length; ++i) {
           const o = closerStars[i];
-          if (o.puid == star.puid) {
+          if (alliedFleet(o.puid, star.puid)) {
             const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
             if (enemyTicks - visTicks >= ticks) {
               drawHUDRuler(star, o, effectiveSupportColor);
