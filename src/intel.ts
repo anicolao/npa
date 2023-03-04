@@ -855,10 +855,11 @@ function NeptunesPrideAgent() {
         let biggestPlayerId = starstate[starId].puid;
         if (offense > 0) {
           let defeatedOffense = offense;
-          while (defeatedOffense > 0) {
-            defeatedOffense -= dwt;
+          defense += awt - 1;
+          do {
             defense -= awt;
-          }
+            defeatedOffense -= dwt;
+          } while (defeatedOffense > 0);
           stanza.push(
             "  Attackers win with {0} ships remaining".format(
               offense,
@@ -926,10 +927,11 @@ function NeptunesPrideAgent() {
           }
         } else {
           let defeatedDefense = defense;
-          while (defeatedDefense > 0) {
-            defeatedDefense -= awt;
+          offense += dwt - 1;
+          do {
             offense -= dwt;
-          }
+            defeatedDefense -= awt;
+          } while (defeatedDefense > 0);
           stanza.push("  +{0} more attackers needed".format(-offense));
           starstate[starId].ships = defense;
           for (const i in arrival) {
