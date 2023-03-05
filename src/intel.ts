@@ -1669,8 +1669,14 @@ function NeptunesPrideAgent() {
               const origHandicap = combatHandicap;
               const player = NeptunesPride.universe.galaxy.players[other.puid];
               let fleetRange = getAdjustedFleetRange(player);
+              const flightDistance = universe.distance(
+                star.x,
+                star.y,
+                other.x,
+                other.y,
+              );
               while (
-                tickDistance > fleetRange &&
+                flightDistance > fleetRange &&
                 combatHandicap - origHandicap < 5
               ) {
                 combatHandicap++;
