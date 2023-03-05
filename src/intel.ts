@@ -1663,6 +1663,29 @@ function NeptunesPrideAgent() {
           const midX = map.worldToScreenX((star.x + other.x) / 2);
           const midY = map.worldToScreenY((star.y + other.y) / 2);
 
+          let rangeLevel = 0;
+          if (other.puid !== -1) {
+            const rangeRequired = (puid: number) => {
+              const origHandicap = combatHandicap;
+              const player = NeptunesPride.universe.galaxy.players[other.puid];
+              let fleetRange = getAdjustedFleetRange(player);
+              while (
+                tickDistance > fleetRange &&
+                combatHandicap - origHandicap < 5
+              ) {
+                combatHandicap++;
+                fleetRange = getAdjustedFleetRange(player);
+              }
+              let ret = combatHandicap - origHandicap;
+              combatHandicap = origHandicap;
+              return ret;
+            };
+            rangeLevel = rangeRequired(other.puid);
+            if (rangeLevel > 0) {
+              color = ineffectiveSupportColor;
+            }
+          }
+
           const rotationAngle = function (star1: any, star2: any) {
             const xoff = star1.x - star2.x;
             const yoff = star1.y - star2.y;
@@ -1738,6 +1761,13 @@ function NeptunesPrideAgent() {
           if (visArcRadius - dist + 1.0 > 1.0) {
             map.context.translate(0, 2 * 9 * map.pixelRatio);
             drawString("invisible", 0, 0, textColor);
+          } else {
+            if (other.puid !== -1) {
+              if (rangeLevel > 0) {
+                map.context.translate(0, 2 * 9 * map.pixelRatio);
+                drawString(`range +${rangeLevel}`, 0, 0, textColor);
+              }
+            }
           }
           map.context.setLineDash([]);
           map.context.restore();
