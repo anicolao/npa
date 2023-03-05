@@ -1788,16 +1788,18 @@ function NeptunesPrideAgent() {
         let enemyShips = 0;
         let enemyWS = 1;
         let defenderShips = star.totalDefenses;
-        let defenderWS = 1;
+        const players = NeptunesPride.universe.galaxy.players;
+        let defenderWS = Math.max(
+          players[star.puid].tech.weapons.level,
+          ...star?.alliedDefenders.map(
+            (d: number) => players[d].tech.weapons.level,
+          ),
+        );
         let allVisible = true;
         if (other.puid !== -1) {
           allVisible = allVisible && other.v === "1";
           enemyShips += other.totalDefenses;
-          enemyWS = Math.max(
-            enemyWS,
-            NeptunesPride.universe.galaxy.players[other.puid].tech.weapons
-              .level,
-          );
+          enemyWS = Math.max(enemyWS, players[other.puid].tech.weapons.level);
         }
 
         if (enemyTicks - visTicks >= ticks) {
@@ -1807,8 +1809,7 @@ function NeptunesPrideAgent() {
             defenderShips += support.totalDefenses;
             defenderWS = Math.max(
               defenderWS,
-              NeptunesPride.universe.galaxy.players[support.puid].tech.weapons
-                .level,
+              players[support.puid].tech.weapons.level,
             );
           }
         } else {
@@ -1826,8 +1827,7 @@ function NeptunesPrideAgent() {
                 defenderShips += o.totalDefenses;
                 defenderWS = Math.max(
                   defenderWS,
-                  NeptunesPride.universe.galaxy.players[o.puid].tech.weapons
-                    .level,
+                  players[o.puid].tech.weapons.level,
                 );
               }
             } else {
@@ -1838,11 +1838,7 @@ function NeptunesPrideAgent() {
             if (o.puid !== -1) {
               allVisible = allVisible && o.v === "1";
               enemyShips += o.totalDefenses;
-              enemyWS = Math.max(
-                enemyWS,
-                NeptunesPride.universe.galaxy.players[o.puid].tech.weapons
-                  .level,
-              );
+              enemyWS = Math.max(enemyWS, players[o.puid].tech.weapons.level);
             }
           }
         }
