@@ -1766,6 +1766,16 @@ function NeptunesPrideAgent() {
               if (rangeLevel > 0) {
                 map.context.translate(0, 2 * 9 * map.pixelRatio);
                 drawString(`range +${rangeLevel}`, 0, 0, textColor);
+              } else {
+                map.context.translate(0, 2 * 9 * map.pixelRatio);
+                drawString(
+                  `${other.v !== "0" ? other.totalDefenses : "?"} ship${
+                    other.totalDefenses !== 1 ? "s" : ""
+                  }`,
+                  0,
+                  0,
+                  textColor,
+                );
               }
             }
           }
@@ -1775,8 +1785,32 @@ function NeptunesPrideAgent() {
         };
         const enemyTicks = drawHUDRuler(star, other, enemyColor);
         const ticks = Math.ceil(Math.sqrt(distance(star, support) / speedSq));
+        let enemyShips = 0;
+        let enemyWS = 1;
+        let defenderShips = star.totalDefenses;
+        let defenderWS = 1;
+        let allVisible = true;
+        if (other.puid !== -1) {
+          allVisible = allVisible && other.v === "1";
+          enemyShips += other.totalDefenses;
+          enemyWS = Math.max(
+            enemyWS,
+            NeptunesPride.universe.galaxy.players[other.puid].tech.weapons
+              .level,
+          );
+        }
+
         if (enemyTicks - visTicks >= ticks) {
           drawHUDRuler(star, support, effectiveSupportColor);
+          if (support.puid !== -1) {
+            allVisible = allVisible && support.v === "1";
+            defenderShips += support.totalDefenses;
+            defenderWS = Math.max(
+              defenderWS,
+              NeptunesPride.universe.galaxy.players[support.puid].tech.weapons
+                .level,
+            );
+          }
         } else {
           drawHUDRuler(star, support, ineffectiveSupportColor);
         }
@@ -1787,12 +1821,67 @@ function NeptunesPrideAgent() {
             const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
             if (enemyTicks - visTicks >= ticks) {
               drawHUDRuler(star, o, effectiveSupportColor);
+              if (o.puid !== -1) {
+                allVisible = allVisible && o.v === "1";
+                defenderShips += o.totalDefenses;
+                defenderWS = Math.max(
+                  defenderWS,
+                  NeptunesPride.universe.galaxy.players[o.puid].tech.weapons
+                    .level,
+                );
+              }
             } else {
               drawHUDRuler(star, o, ineffectiveSupportColor);
             }
           } else {
             drawHUDRuler(star, o, enemyColor);
+            if (o.puid !== -1) {
+              allVisible = allVisible && o.v === "1";
+              enemyShips += o.totalDefenses;
+              enemyWS = Math.max(
+                enemyWS,
+                NeptunesPride.universe.galaxy.players[o.puid].tech.weapons
+                  .level,
+              );
+            }
           }
+        }
+        if (NeptunesPride.gameVersion !== "proteus") {
+          defenderWS += 1;
+        }
+        while (defenderShips > 0 && enemyShips > 0) {
+          enemyShips -= defenderWS;
+          if (enemyShips <= 0) break;
+          defenderShips -= enemyWS;
+        }
+        let combatOutcome =
+          enemyShips <= 0 ? `${defenderShips} live` : `${enemyShips} land`;
+        if (!allVisible) {
+          combatOutcome += "?";
+        }
+        const hudX = map.worldToScreenX(star.x + 0.125);
+        const hudY = map.worldToScreenY(star.y) - 9 * map.pixelRatio;
+        map.context.textAlign = "left";
+        drawString(combatOutcome, hudX, hudY, "#00ff00");
+        let attackersWon = true;
+        if (enemyShips <= 0) {
+          defenderShips -= enemyWS;
+          attackersWon = false;
+        }
+        while (defenderShips > 0 || enemyShips > 0) {
+          enemyShips -= defenderWS;
+          defenderShips -= enemyWS;
+        }
+        const yOffset = 2 * 9 * map.pixelRatio;
+        if (attackersWon) {
+          drawString(
+            `${-defenderShips} needed`,
+            hudX,
+            hudY + yOffset,
+            "#00ff00",
+          );
+        } else {
+          drawString(`${-enemyShips} needed`, hudX, hudY + yOffset, "#00ff00");
         }
       }
     };
