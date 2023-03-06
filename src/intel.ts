@@ -1929,6 +1929,7 @@ function NeptunesPrideAgent() {
       }
     };
     const superDrawStars = map.drawStars;
+    const bubbleLayer = document.createElement("canvas");
     map.drawStars = function () {
       const universe = NeptunesPride.universe;
       if (universe.selectedStar?.player && settings.territoryOn) {
@@ -1938,7 +1939,6 @@ function NeptunesPrideAgent() {
           let outer = false;
           do {
             outer = !outer;
-            let bubbleLayer = document.createElement("canvas");
             bubbleLayer.width = context.canvas.width;
             bubbleLayer.height = context.canvas.height;
             let territoryBrightness = settings.territoryBrightness;
