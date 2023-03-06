@@ -35,6 +35,12 @@ import { isWithinRange } from "./visibility";
 import { Player, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
+import {
+  type Stanzas,
+  type Filter,
+  makeReportContent,
+  contains,
+} from "./reports";
 
 interface CruxLib {
   IconButton: any;
@@ -121,13 +127,17 @@ function NeptunesPrideAgent() {
   let showingOurUI = false;
   let reportSelector: any = null;
   const showUI = () => NeptunesPride.npui.trigger("show_screen", "new_fleet");
-  const prepReport = function (reportName: string, content: string) {
+  const prepReport = function (
+    reportName: string,
+    stanzas: (string | string[])[],
+    filter?: Filter,
+  ) {
     if (showingOurUI && reportName !== reportSelector.getValue()) {
       reportSelector.setValue(reportName);
       reportSelector.onChange();
     }
     lastReport = reportName;
-    setClip(content);
+    setClip(makeReportContent(stanzas, filter));
   };
   defineHotkey(
     "`",
@@ -159,7 +169,7 @@ function NeptunesPrideAgent() {
         }
       }
     }
-    prepReport("stars", output.join("\n"));
+    prepReport("stars", output);
   }
   defineHotkey(
     "*",
@@ -227,7 +237,7 @@ function NeptunesPrideAgent() {
     if (output.length === 1) {
       output = explorers;
     }
-    prepReport("ownership", output.join("\n"));
+    prepReport("ownership", output);
   }
   defineHotkey(
     ";",
@@ -305,7 +315,7 @@ function NeptunesPrideAgent() {
       }
     }
     knownAlliances = alliances;
-    prepReport("fa", output.join("\n"));
+    prepReport("fa", output);
   }
   defineHotkey(
     "ctrl+7",
@@ -451,7 +461,7 @@ function NeptunesPrideAgent() {
     universe.player.total_economy = preEcon;
     universe.player.total_industry = preInd;
     universe.player.total_science = preSci;
-    prepReport("economists", output.join("\n"));
+    prepReport("economists", output);
   }
   defineHotkey(
     "ctrl+4",
@@ -519,7 +529,7 @@ function NeptunesPrideAgent() {
     }
     const endMillis = new Date().getTime();
     //output.push(`Time required ${endMillis - startMillis}ms`);
-    prepReport("activity", output.join("\n"));
+    prepReport("activity", output);
   }
   defineHotkey(
     "shift+;",
@@ -627,7 +637,7 @@ function NeptunesPrideAgent() {
   };
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
-  let combatOutcomes = function (filter: (s: string) => boolean) {
+  const combatOutcomes = () => {
     const universe = NeptunesPride.universe;
     const players = NeptunesPride.universe.galaxy.players;
     let fleets = NeptunesPride.universe.galaxy.fleets;
@@ -660,7 +670,7 @@ function NeptunesPrideAgent() {
       return a[0] - b[0];
     });
     let arrivals: { [k: string]: any } = {};
-    let output: string[] = [];
+    let output: Stanzas = [];
     let arrivalTimes = [];
     interface DepartureRecord {
       leaving: number;
@@ -1055,13 +1065,7 @@ function NeptunesPrideAgent() {
           starstate[starId].ships,
         ),
       );
-      let include = false;
-      stanza.forEach((s) => {
-        include = include || filter(s);
-      });
-      if (include) {
-        output = output.concat(stanza);
-      }
+      output.push(stanza);
     }
     return output;
   };
@@ -1148,7 +1152,7 @@ function NeptunesPrideAgent() {
   );
 
   function longFleetReport() {
-    prepReport("combats", combatOutcomes(() => true).join("\n"));
+    prepReport("combats", combatOutcomes());
   }
   defineHotkey(
     "&",
@@ -1161,13 +1165,10 @@ function NeptunesPrideAgent() {
   function filteredFleetReport() {
     let find = NeptunesPride.universe.selectedSpaceObject?.n;
     if (find === undefined) {
-      prepReport("filteredcombats", "Select a fleet or star.");
+      prepReport("filteredcombats", ["Select a fleet or star."]);
     } else {
       find = `[[${find}]]`;
-      prepReport(
-        "filteredcombats",
-        combatOutcomes((s) => s.indexOf(find) !== -1).join("\n"),
-      );
+      prepReport("filteredcombats", combatOutcomes(), contains(find));
     }
   }
   defineHotkey(
@@ -1179,10 +1180,7 @@ function NeptunesPrideAgent() {
   );
 
   function combatReport() {
-    prepReport(
-      "onlycombats",
-      combatOutcomes((s) => s.indexOf("Combat!") !== -1).join("\n"),
-    );
+    prepReport("onlycombats", combatOutcomes(), contains("Combat!"));
   }
   defineHotkey(
     "d",
@@ -1218,7 +1216,10 @@ function NeptunesPrideAgent() {
     flights = flights.sort(function (a, b) {
       return a[0] - b[0];
     });
-    prepReport("fleets", flights.map((x) => x[1]).join("\n"));
+    prepReport(
+      "fleets",
+      flights.map((x) => x[1]),
+    );
   }
 
   defineHotkey(
@@ -1258,7 +1259,7 @@ function NeptunesPrideAgent() {
         output.push("Player #{0} is [[{0}]] home unknown".format(i));
       }
     }
-    prepReport("planets", output.join("\n"));
+    prepReport("planets", output);
   };
   defineHotkey(
     "!",
@@ -2067,7 +2068,7 @@ function NeptunesPrideAgent() {
         if (offsety < 0 && dy < 0) {
           offsety *= -1;
         }
-        combatOutcomes(() => true);
+        combatOutcomes();
         let s = fleetOutcomes[universe.selectedFleet.uid].eta;
         let o = fleetOutcomes[universe.selectedFleet.uid].outcome.split("\n");
         let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
@@ -3158,7 +3159,7 @@ function NeptunesPrideAgent() {
       );
       start += subset.length;
     }
-    prepReport("trading", output.join("\n"));
+    prepReport("trading", output);
   };
   defineHotkey(
     "e",
@@ -3325,7 +3326,7 @@ function NeptunesPrideAgent() {
       }
     }
     output.push("--- Alliance Research Progress ---");
-    prepReport("research", output.join("\n"));
+    prepReport("research", output);
   };
   defineHotkey(
     "E",
@@ -3445,7 +3446,7 @@ function NeptunesPrideAgent() {
       }
       preput.push("--- Ledger ---\n");
     }
-    prepReport("accounting", preput.join("\n") + output.join("\n"));
+    prepReport("accounting", [...preput, ...output]);
   };
   defineHotkey(
     "a",
@@ -3503,7 +3504,7 @@ function NeptunesPrideAgent() {
       output.push(`${owner}|${merge}|${good}`);
     });
     output.push("--- All Seen Keys ---");
-    prepReport("api", output.join("\n"));
+    prepReport("api", output);
   };
   defineHotkey("k", apiKeys, "Show known API keys.", "API Keys");
 
@@ -3570,7 +3571,7 @@ function NeptunesPrideAgent() {
       output.push(partial);
     });
     output.push("--- Controls ---");
-    prepReport("controls", output.join("\n"));
+    prepReport("controls", output);
     window.setTimeout(() => Mousetrap.trigger("`"), 500);
   };
   defineHotkey("~", npaControls, "Generate NPA Buttons.", "Controls");
