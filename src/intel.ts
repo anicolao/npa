@@ -1552,12 +1552,7 @@ function NeptunesPrideAgent() {
       scale: number,
       r: number,
     ) {
-      context.save();
-      context.translate(x, y);
-      context.scale(scale, scale);
-      context.moveTo(0, 0);
-      context.arc(0, 0, r, 0, Math.PI * 2);
-      context.restore();
+      context.arc(x, y, r * scale, 0, Math.PI * 2);
     }
 
     function getScaleFactor() {
