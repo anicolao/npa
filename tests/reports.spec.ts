@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { describe, it } from "vitest";
-import { and, contains, makeReportContent } from "../src/reports";
+import { and, contains, makeReportContent, or } from "../src/reports";
 
 describe("reports and filtering", () => {
   it("can make a basic report", () => {
@@ -47,5 +47,14 @@ describe("reports and filtering", () => {
         and(contains("hello"), contains("world")),
       ),
     ).to.equal("hello, world");
+  });
+
+  it("can handle disjunctions", () => {
+    expect(
+      makeReportContent(
+        [["hello, world"], ["hello"], ["world"]],
+        or(contains("hello"), contains("world")),
+      ),
+    ).to.equal("hello, world\nhello\nworld");
   });
 });
