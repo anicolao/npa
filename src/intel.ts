@@ -40,6 +40,8 @@ import {
   type Filter,
   makeReportContent,
   contains,
+  and,
+  or,
 } from "./reports";
 
 interface CruxLib {
@@ -52,6 +54,7 @@ interface CruxLib {
   Text: any;
   Widget: any;
   DropDown: any;
+  TextInput: any;
 }
 interface NeptunesPrideData {
   sendAllTech: (recipient: number) => void;
@@ -126,6 +129,7 @@ function NeptunesPrideAgent() {
   let lastReport = "planets";
   let showingOurUI = false;
   let reportSelector: any = null;
+  let filterInput: any = null;
   const showUI = () => NeptunesPride.npui.trigger("show_screen", "new_fleet");
   const prepReport = function (
     reportName: string,
@@ -136,8 +140,34 @@ function NeptunesPrideAgent() {
       reportSelector.setValue(reportName);
       reportSelector.onChange();
     }
+    if (filterInput !== null) {
+      const content = filterInput.getValue().toLowerCase();
+      const containsPlayer = (s: string) => {
+        const players = NeptunesPride.universe.galaxy.players;
+        const filters = [];
+        for (let pi in players) {
+          const player = players[pi];
+          if (player.alias.toLowerCase().indexOf(s) !== -1) {
+            filters.push(contains(`(${pi})`));
+          }
+        }
+        return filters.reduce(or, () => false);
+      };
+      const contentFilter = or(contains(content), containsPlayer(content));
+      if (content) {
+        if (filter) {
+          filter = and(filter, contentFilter);
+        } else {
+          filter = contentFilter;
+        }
+      }
+    }
     lastReport = reportName;
-    setClip(makeReportContent(stanzas, filter));
+    setClip(
+      makeReportContent(stanzas, filter, (s) =>
+        Crux.format(s, {}).toLowerCase(),
+      ),
+    );
   };
   defineHotkey(
     "`",
@@ -153,11 +183,11 @@ function NeptunesPrideAgent() {
 
     let output = [];
     for (const p in players) {
-      output.push("[[{0}]]".format(p));
+      output.push(["[[{0}]]".format(p)]);
       for (const s in stars) {
         let star = stars[s];
         if (star.puid == p && star.shipsPerTick >= 0) {
-          output.push(
+          output.push([
             "  [[{0}]] {1}/{2}/{3} {4} ships".format(
               star.n,
               star.e,
@@ -165,7 +195,7 @@ function NeptunesPrideAgent() {
               star.s,
               star.totalDefenses,
             ),
-          );
+          ]);
         }
       }
     }
@@ -237,7 +267,10 @@ function NeptunesPrideAgent() {
     if (output.length === 1) {
       output = explorers;
     }
-    prepReport("ownership", output);
+    prepReport(
+      "ownership",
+      output.map((s) => [s]),
+    );
   }
   defineHotkey(
     ";",
@@ -315,7 +348,10 @@ function NeptunesPrideAgent() {
       }
     }
     knownAlliances = alliances;
-    prepReport("fa", output);
+    prepReport(
+      "fa",
+      output.map((s) => [s]),
+    );
   }
   defineHotkey(
     "ctrl+7",
@@ -400,7 +436,7 @@ function NeptunesPrideAgent() {
       universe.player.cash +
       universe.player.tech.banking.level * 75;
     let { e, i, s } = buyAllTheThings(balance);
-    output.push(`No Tech|$${newIncome} ($${balance})|${e}/${i}/${s}`);
+    output.push([`No Tech|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
     count = buyAllTheHypotheticalEconomy("bank", "E");
@@ -410,9 +446,8 @@ function NeptunesPrideAgent() {
       universe.player.total_economy * 10 +
       universe.player.cash +
       universe.player.tech.banking.level * 75;
-    //output.push(`Bought ${count} economy for ${cost} using banking with ${universe.player.cash} left over.`)
     ({ e, i, s } = buyAllTheThings(balance));
-    output.push(`Banking|$${newIncome} ($${balance})|${e}/${i}/${s}`);
+    output.push([`Banking|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
     const bankCost = tradeCostForLevel(universe.player.tech.banking.level + 1);
     universe.player.cash = myCash - bankCost;
     universe.player.total_economy = preEcon;
@@ -423,11 +458,10 @@ function NeptunesPrideAgent() {
       universe.player.total_economy * 10 +
       universe.player.cash +
       universe.player.tech.banking.level * 75;
-    //output.push(`Bought ${count} economy for ${cost} using banking with ${universe.player.cash} left over.`)
     ({ e, i, s } = buyAllTheThings(balance));
-    output.push(
+    output.push([
       `Buy it ($${bankCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
-    );
+    ]);
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
     count = buyAllTheHypotheticalEconomy("terra", "E");
@@ -438,7 +472,7 @@ function NeptunesPrideAgent() {
       universe.player.cash +
       universe.player.tech.banking.level * 75;
     ({ e, i, s } = buyAllTheThings(balance));
-    output.push(`Terraforming|$${newIncome} ($${balance})|${e}/${i}/${s}`);
+    output.push([`Terraforming|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
     const terraCost = tradeCostForLevel(
       universe.player.tech.terraforming.level + 1,
     );
@@ -452,9 +486,9 @@ function NeptunesPrideAgent() {
       universe.player.cash +
       universe.player.tech.banking.level * 75;
     ({ e, i, s } = buyAllTheThings(balance));
-    output.push(
+    output.push([
       `Buy it ($${terraCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
-    );
+    ]);
     output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
     //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
     universe.player.cash = myCash;
@@ -529,7 +563,10 @@ function NeptunesPrideAgent() {
     }
     const endMillis = new Date().getTime();
     //output.push(`Time required ${endMillis - startMillis}ms`);
-    prepReport("activity", output);
+    prepReport(
+      "activity",
+      output.map((s) => [s]),
+    );
   }
   defineHotkey(
     "shift+;",
@@ -1218,7 +1255,7 @@ function NeptunesPrideAgent() {
     });
     prepReport(
       "fleets",
-      flights.map((x) => x[1]),
+      flights.map((x) => [x[1]]),
     );
   }
 
@@ -1259,7 +1296,10 @@ function NeptunesPrideAgent() {
         output.push("Player #{0} is [[{0}]] home unknown".format(i));
       }
     }
-    prepReport("planets", output);
+    prepReport(
+      "planets",
+      output.map((s) => [s]),
+    );
   };
   defineHotkey(
     "!",
@@ -2397,7 +2437,7 @@ function NeptunesPrideAgent() {
     };
     let npui = NeptunesPride.npui;
     NeptunesPride.templates["n_p_a"] = "NP Agent";
-    NeptunesPride.templates["npa_report_type"] = "Report Type:";
+    NeptunesPride.templates["npa_report_type"] = "Filter:";
     NeptunesPride.templates["npa_paste"] = "Intel";
     let superNewMessageCommentBox = npui.NewMessageCommentBox;
 
@@ -2458,6 +2498,9 @@ function NeptunesPrideAgent() {
       reportSelector = Crux.DropDown(lastReport, selections, "exec_report")
         .grid(15, 0, 15, 3)
         .roost(report);
+      filterInput = Crux.TextInput("single").grid(5, 0, 10, 3).roost(report);
+
+      filterInput.eventKind = "exec_report";
 
       let text = Crux.Text("", "pad12 rel txt_selectable").size(432).pos(48)
 
@@ -2468,6 +2511,9 @@ function NeptunesPrideAgent() {
       output.roost(reportScreen);
 
       let reportHook = async function (e: number, d: string) {
+        if (d === undefined) {
+          d = lastReport;
+        }
         if (d === "help") {
           npaHelp();
           return;
@@ -3051,7 +3097,7 @@ function NeptunesPrideAgent() {
     return level * NeptunesPride.gameConfig.tradeCost;
   };
   let techTable = function (
-    output: string[],
+    output: Stanzas,
     playerIndexes: number[],
     title: string,
   ) {
@@ -3128,9 +3174,9 @@ function NeptunesPrideAgent() {
           : "",
       ),
     ];
-    rows.forEach((r) => output.push(r));
-    output.push(payFooter.join("|"));
-    output.push(sendFooter.join("|"));
+    rows.forEach((r) => output.push([r]));
+    output.push([payFooter.join("|")]);
+    output.push([sendFooter.join("|")]);
     output.push(`--- ${title} ---`);
   };
   let tradingReport = async function () {
@@ -3293,7 +3339,7 @@ function NeptunesPrideAgent() {
   let researchReport = async function () {
     lastReport = "research";
     const { players, apiKeys, playerIndexes } = await getAlliedKeysAndIndexes();
-    let output: string[] = [];
+    let output: Stanzas = [];
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
     output.push("Empire|Tech|ETA|Progress|Sci|↑S");
@@ -3320,9 +3366,9 @@ function NeptunesPrideAgent() {
           }
         }
         const techName = translateTech(player.researching);
-        output.push(
+        output.push([
           `[[${pi}]]|${techName}|[[Tick #${tick}]]|${soFar}/${total}|${p.total_science}|${upgrade}`,
-        );
+        ]);
       }
     }
     output.push("--- Alliance Research Progress ---");
@@ -3338,8 +3384,8 @@ function NeptunesPrideAgent() {
   let npaLedger = async function () {
     lastReport = "accounting";
     const updated = await updateMessageCache("game_event");
-    const preput: string[] = [];
-    const output: string[] = [];
+    const preput: Stanzas = [];
+    const output: Stanzas = [];
     if (!updated) {
       console.error("Updating message cache failed");
       output.push("Message cache stale!");
@@ -3366,9 +3412,9 @@ function NeptunesPrideAgent() {
             balances[from] += credits;
           }
           if (from === NeptunesPride.universe.player.uid) {
-            output.push(`[[Tick #${tick}]]|Sent $${credits} → [[${to}]]`);
+            output.push([`[[Tick #${tick}]]|Sent $${credits} → [[${to}]]`]);
           } else {
-            output.push(`[[Tick #${tick}]]|[[${from}]] → $${credits}`);
+            output.push([`[[Tick #${tick}]]|[[${from}]] → $${credits}`]);
           }
         }
       }
@@ -3392,14 +3438,14 @@ function NeptunesPrideAgent() {
               balances[from] += credits;
             }
             const tick = m.payload.tick;
-            output.push(
+            output.push([
               `[[Tick #${tick}]]|Alliance Costs $${credits} → [[${to}]]`,
-            );
+            ]);
           } else {
             const from = m.payload.from_puid;
             peaceAccepted[from] = true;
             const tick = m.payload.tick;
-            output.push(`[[Tick #${tick}]]|Alliance accepted by [[${from}]]`);
+            output.push([`[[Tick #${tick}]]|Alliance accepted by [[${from}]]`]);
           }
         }
         if (m.payload.template === "shared_technology") {
@@ -3418,13 +3464,13 @@ function NeptunesPrideAgent() {
           const name = m.payload.name;
           const xlated = translateTech(name);
           if (from === NeptunesPride.universe.player.uid) {
-            output.push(
+            output.push([
               `[[Tick #${tick}]]|${xlated}${level} $${credits} → [[${to}]]`,
-            );
+            ]);
           } else {
-            output.push(
+            output.push([
               `[[Tick #${tick}]]|[[${from}]] → ${xlated}${level} $${credits}`,
-            );
+            ]);
           }
         }
       }
@@ -3436,11 +3482,11 @@ function NeptunesPrideAgent() {
       for (let p in balances) {
         if (balances[p] !== 0) {
           if (balances[p] > 0) {
-            preput.push(
+            preput.push([
               `[[${p}]]|${levels[p]}|[[sendcash:${p}:${balances[p]}:${balances[p]}]]`,
-            );
+            ]);
           } else {
-            preput.push(`[[${p}]]|${levels[p]}|[[good:${balances[p]}]]`);
+            preput.push([`[[${p}]]|${levels[p]}|[[good:${balances[p]}]]`]);
           }
         }
       }
@@ -3465,7 +3511,7 @@ function NeptunesPrideAgent() {
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
     const mergedCodes = [];
-    const output = [];
+    const output: Stanzas = [];
     output.push("--- Allied API Keys ---");
     output.push(":--|--:|--:");
     output.push("Empire|View|Merge");
@@ -3474,7 +3520,7 @@ function NeptunesPrideAgent() {
       const player = key.substring(4);
       const code = await store.get(key);
       mergedCodes.push(code);
-      output.push(`[[${player}]]|[[apiv:${code}]]|[[apim:${code}]]`);
+      output.push([`[[${player}]]|[[apiv:${code}]]|[[apim:${code}]]`]);
     }
     output.push("--- Allied API Keys ---");
     output.push("--- All Seen Keys ---");
@@ -3501,7 +3547,7 @@ function NeptunesPrideAgent() {
         owner = `[[${uid}]]`;
       }
       const merge = key.replace(":", "m:");
-      output.push(`${owner}|${merge}|${good}`);
+      output.push([`${owner}|${merge}|${good}`]);
     });
     output.push("--- All Seen Keys ---");
     prepReport("api", output);
@@ -3549,7 +3595,7 @@ function NeptunesPrideAgent() {
   defineHotkey("?", npaHelp, "Display this help screen.", "NPA Help");
 
   let npaControls = function () {
-    const output: string[] = [];
+    const output: Stanzas = [];
     output.push("--- Controls ---");
     output.push(":--|--|--:");
     output.push("Button||Hotkey");
@@ -3568,11 +3614,10 @@ function NeptunesPrideAgent() {
         key = div.innerHTML;
       }
       const partial = `${control}||${key}`;
-      output.push(partial);
+      output.push([partial]);
     });
     output.push("--- Controls ---");
     prepReport("controls", output);
-    window.setTimeout(() => Mousetrap.trigger("`"), 500);
   };
   defineHotkey("~", npaControls, "Generate NPA Buttons.", "Controls");
 

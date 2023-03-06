@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { describe, it } from "vitest";
-import { contains, makeReportContent } from "../src/reports";
+import { and, contains, makeReportContent } from "../src/reports";
 
 describe("reports and filtering", () => {
   it("can make a basic report", () => {
@@ -24,9 +24,28 @@ describe("reports and filtering", () => {
     ).to.equal("hello, world");
   });
 
+  it("can preprocess case away in a string filter", () => {
+    expect(
+      makeReportContent(
+        [["Hello, world"], ["on two lines"]],
+        contains("hello"),
+        (s) => s.toLowerCase(),
+      ),
+    ).to.equal("Hello, world");
+  });
+
   it("accepts an entire stanza if any line passes", () => {
     expect(
       makeReportContent([["hello, world", "on two lines"]], contains("hello")),
     ).to.equal("hello, world\non two lines");
+  });
+
+  it("can handle conjunctions", () => {
+    expect(
+      makeReportContent(
+        [["hello, world"], ["hello"], ["world"]],
+        and(contains("hello"), contains("world")),
+      ),
+    ).to.equal("hello, world");
   });
 });
