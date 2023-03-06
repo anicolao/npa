@@ -1596,10 +1596,18 @@ function NeptunesPrideAgent() {
       }
       const fudgeDown = 0.98;
       if (drawFleetRange) {
+        if (star.x < map.worldViewport.left - fleetRange) return false;
+        if (star.x > map.worldViewport.right + fleetRange) return false;
+        if (star.y < map.worldViewport.top - fleetRange) return false;
+        if (star.y > map.worldViewport.bottom + fleetRange) return false;
         const r = worldToPixels(fleetRange * fudgeDown);
         drawDisc(context, x, y, 1, r);
         return false;
       } else {
+        if (star.x < map.worldViewport.left - scanRange) return true;
+        if (star.x > map.worldViewport.right + scanRange) return true;
+        if (star.y < map.worldViewport.top - scanRange) return true;
+        if (star.y > map.worldViewport.bottom + scanRange) return true;
         const r = worldToPixels(scanRange * fudgeDown);
         drawDisc(context, x, y, 1, r);
         return true;
