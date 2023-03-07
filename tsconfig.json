@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noImplicitAny": true,
+    "lib": ["es2021", "dom"],
     "module": "es6",
     "target": "es5",
     "allowJs": true,
