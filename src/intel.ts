@@ -293,7 +293,7 @@ function NeptunesPrideAgent() {
       while (ki.hasNext()) {
         ki.next();
         const scan = ki.getScanData();
-        if (scan.fleets) {
+        if (scan?.fleets) {
           for (let k in scan.fleets) {
             const fleet = scan.fleets[k];
             if (fleet?.ouid !== undefined) {
