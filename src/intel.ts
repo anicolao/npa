@@ -230,9 +230,9 @@ function NeptunesPrideAgent() {
       if (scanData.tick < currentTick) continue;
       if (scanData.tick === currentTick) {
         let newStars = scanData.stars;
+        if (prior === null) prior = clone(newStars);
         let tick = scanData.tick;
-        prior = scanPatch.stars;
-        for (let k in prior) {
+        for (let k in scanPatch.stars) {
           const nameOwner = (uid: any) =>
             uid !== -1 && uid !== undefined ? `[[${uid}]]` : "Abandoned";
           const unowned = (uid: any) => uid === undefined || uid === -1;
@@ -255,6 +255,9 @@ function NeptunesPrideAgent() {
                 `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
               );
             }
+          }
+          if (prior[k]?.puid !== newStars[k]?.puid) {
+            prior[k] = { ...newStars[k] };
           }
         }
       }
