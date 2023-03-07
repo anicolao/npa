@@ -226,13 +226,12 @@ function NeptunesPrideAgent() {
     while (ticks.hasNext()) {
       ticks.next();
       const scanData = ticks.getScanData();
-      const scanPatch = ticks.getScanRecord().back;
       if (scanData.tick < currentTick) continue;
       if (scanData.tick === currentTick) {
         let newStars = scanData.stars;
         if (prior === null) prior = clone(newStars);
         let tick = scanData.tick;
-        for (let k in scanPatch.stars) {
+        for (let k in newStars) {
           const nameOwner = (uid: any) =>
             uid !== -1 && uid !== undefined ? `[[${uid}]]` : "Abandoned";
           const unowned = (uid: any) => uid === undefined || uid === -1;
