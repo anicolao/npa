@@ -32,7 +32,7 @@ import {
   scanInfo,
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
-import { Player, Star } from "./galaxy";
+import { Player, SpaceObject, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
 import {
@@ -279,6 +279,119 @@ function NeptunesPrideAgent() {
     "Generate a report changes in star ownership and copy to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "Star Ownership",
+  );
+
+  function tradeActivityReport() {
+    let output = [];
+    output.push("Trading Activity:");
+    const ticks = new TickIterator(getMyKeys());
+    while (ticks.hasNext()) {
+      ticks.next();
+      const scan = ticks.getScanData();
+      const seenCache: { [k: string]: { [k: string]: [string, string] } } = {};
+      let memoStars: any = null;
+      let memo: { [k: string]: boolean } = {};
+      const dist = (s1: SpaceObject, s2: SpaceObject) => {
+        return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
+      };
+      const sees = (sourceS: string, sinkS: string) => {
+        if (memoStars !== scan.stars) {
+          memoStars = scan.stars;
+          memo = {};
+        }
+        const key = `${sourceS}->${sinkS}`;
+        if (memo[key] !== undefined) {
+          return memo[key];
+        }
+        const source = parseInt(sourceS);
+        const sink = parseInt(sinkS);
+        let scanRange = scan.players[source].tech.scanning.value;
+        const inScanRange = (s0: Star, s1: Star) => {
+          if (s0.puid === source) {
+            if (s1.puid === sink) {
+              let distance = dist(s0, s1);
+              if (distance <= scanRange) {
+                return true;
+              }
+            }
+          }
+          return false;
+        };
+        if (seenCache?.[source]?.[sink]) {
+          const [star0, star1] = seenCache[source][sink];
+          const s0 = scan.stars[star0];
+          const s1 = scan.stars[star1];
+          if (inScanRange(s0, s1)) {
+            memo[key] = true;
+            return true;
+          }
+        }
+        for (let sk1 in scan.stars) {
+          const s1 = scan.stars[sk1];
+          if (s1.puid === source) {
+            for (let sk2 in scan.stars) {
+              const s2 = scan.stars[sk2];
+              if (s2.puid === sink) {
+                if (inScanRange(s1, s2)) {
+                  if (seenCache[source] === undefined) {
+                    seenCache[source] = {};
+                  }
+                  seenCache[source][sink] = [sk1, sk2];
+                  memo[key] = true;
+                  return true;
+                }
+              }
+            }
+          }
+        }
+        memo[key] = false;
+        return false;
+      };
+      const scanRecord = ticks.getScanRecord();
+      if (scanRecord.back !== undefined) {
+        if (scanRecord.back.tick === undefined) {
+          const changedPlayers = scanRecord.back.players;
+          for (let k in changedPlayers) {
+            let p = changedPlayers[k];
+            if (p.tech) {
+              for (let tk in p.tech) {
+                let tech = translateTech(tk);
+                let level = scan.players[k].tech[tk].level;
+                let sourceString = "";
+                for (let op in scan.players) {
+                  if (op !== k) {
+                    if (scan.players[op].tech[tk].level >= level) {
+                      if (
+                        !NeptunesPride.gameConfig.tradeScanned ||
+                        sees(op, k)
+                      ) {
+                        sourceString += ` [[#${op}]]`;
+                      }
+                    }
+                  }
+                }
+                output.push(
+                  `[[Tick #${scan.tick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+    if (output.length === 1) {
+      output.push("No trade activity data found");
+    }
+    prepReport(
+      "tradeactivity",
+      output.map((s) => [s]),
+    );
+  }
+  defineHotkey(
+    "ctrl+;",
+    tradeActivityReport,
+    "Generate a report on all definite trade activity between empires." +
+      "Trade Activity",
   );
 
   let knownAlliances: number[][] | undefined = undefined;
@@ -2473,6 +2586,7 @@ function NeptunesPrideAgent() {
         onlycombats: "All Combats",
         stars: "Stars",
         ownership: "Ownership",
+        tradeactivity: "Trade Activity",
         fa: "Formal Alliances",
         economists: "Economists",
         activity: "Activity",
@@ -2519,6 +2633,8 @@ function NeptunesPrideAgent() {
           starReport();
         } else if (d === "ownership") {
           ownershipReport();
+        } else if (d === "tradeactivity") {
+          tradeActivityReport();
         } else if (d === "fa") {
           faReport();
         } else if (d === "economists") {
