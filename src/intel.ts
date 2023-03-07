@@ -394,6 +394,55 @@ function NeptunesPrideAgent() {
       "Trade Activity",
   );
 
+  function combatActivityReport() {
+    let output = [];
+    output.push("Probable Combat Activity:");
+    const ticks = new TickIterator(getMyKeys());
+    while (ticks.hasNext()) {
+      ticks.next();
+      const scan = ticks.getScanData();
+      const scanRecord = ticks.getScanRecord();
+      if (scanRecord.back !== undefined) {
+        const changedPlayers = scanRecord.back.players;
+        let combatants = "";
+        let countCombatants = 0;
+        for (let k in changedPlayers) {
+          let p = changedPlayers[k];
+          if (p.total_strength) {
+            const oldSt = p.total_strength;
+            const newSt = scan.players[k].total_strength;
+            if (newSt < oldSt) {
+              combatants += `[[#${k}]] `;
+              countCombatants++;
+              //output.push(`[[Tick #${tick}]] [[${k}]] ${oldSt} -> ${newSt}`);
+            }
+          }
+        }
+        if (combatants) {
+          if (countCombatants <= 2) {
+            combatants = combatants
+              .replaceAll("#", "")
+              .replaceAll("] [", "] vs [");
+          }
+          output.push(`[[Tick #${scan.tick}]] ${combatants}`);
+        }
+      }
+    }
+    if (output.length === 1) {
+      output.push("No combat activity data found");
+    }
+    prepReport(
+      "combatactivity",
+      output.map((s) => [s]),
+    );
+  }
+  defineHotkey(
+    "ctrl+'",
+    combatActivityReport,
+    "Generate a report on all probable combat between empires." +
+      "Combat Activity",
+  );
+
   let knownAlliances: number[][] | undefined = undefined;
   function faReport() {
     let output = [];
@@ -2587,6 +2636,7 @@ function NeptunesPrideAgent() {
         stars: "Stars",
         ownership: "Ownership",
         tradeactivity: "Trade Activity",
+        combatactivity: "Combat Activity",
         fa: "Formal Alliances",
         economists: "Economists",
         activity: "Activity",
@@ -2635,6 +2685,8 @@ function NeptunesPrideAgent() {
           ownershipReport();
         } else if (d === "tradeactivity") {
           tradeActivityReport();
+        } else if (d === "combatactivity") {
+          combatActivityReport();
         } else if (d === "fa") {
           faReport();
         } else if (d === "economists") {
