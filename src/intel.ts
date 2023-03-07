@@ -490,7 +490,7 @@ function NeptunesPrideAgent() {
       : NeptunesPride.universe.galaxy.player_uid;
 
     return allSeenKeys.filter(
-      (k) => scanInfo[getCodeFromApiText(k)].puid === myId,
+      (k) => scanInfo[getCodeFromApiText(k)]?.puid === myId,
     );
   }
   function activityReport() {
