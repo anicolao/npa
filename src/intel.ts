@@ -43,6 +43,7 @@ import {
   and,
   or,
 } from "./reports";
+import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
 
 interface CruxLib {
   IconButton: any;
@@ -221,24 +222,20 @@ function NeptunesPrideAgent() {
     explorers.push("Exploration report:");
     const abandoned: { [k: string]: boolean } = {};
     let prior = null;
-    const myKeys = getMyKeys();
-    do {
-      const scanList = myKeys
-        .map((k) => getTimeTravelScanForTick(currentTick, k, "forwards"))
-        .filter((scan) => scan && scan.tick === currentTick);
-      if (scanList.length > 0) {
-        let myScan = scanList.filter((scan) => scan.player_uid === myId);
-        let scan = myScan.length > 0 ? myScan[0] : scanList[0];
-        if (prior === null) prior = { ...scan.stars };
-        let scanData = scan;
+    const ticks = new TickIterator(getMyKeys(), myId);
+    while (ticks.hasNext()) {
+      ticks.next();
+      const scanData = ticks.getScanData();
+      const scanPatch = ticks.getScanRecord().back;
+      if (scanData.tick < currentTick) continue;
+      if (scanData.tick === currentTick) {
         let newStars = scanData.stars;
         let tick = scanData.tick;
-        for (let k in newStars) {
+        prior = scanPatch.stars;
+        for (let k in prior) {
           const nameOwner = (uid: any) =>
             uid !== -1 && uid !== undefined ? `[[${uid}]]` : "Abandoned";
-          const unowned = (uid: any) => nameOwner(uid) === "Abandoned";
-          const oldOwner = nameOwner(prior[k]?.puid);
-          const newOwner = nameOwner(newStars[k]?.puid);
+          const unowned = (uid: any) => uid === undefined || uid === -1;
           if (
             prior[k]?.puid !== newStars[k]?.puid &&
             (!unowned(prior[k]?.puid) || abandoned[k])
@@ -246,21 +243,23 @@ function NeptunesPrideAgent() {
             if (newStars[k]?.puid === -1) {
               abandoned[k] = true;
             }
+            const oldOwner = nameOwner(prior[k]?.puid);
+            const newOwner = nameOwner(newStars[k]?.puid);
             output.push(
               `[[Tick #${tick}]] ${oldOwner} →  ${newOwner} [[${newStars[k].n}]]`,
             );
           } else if (prior[k]?.puid !== newStars[k]?.puid) {
+            const newOwner = nameOwner(newStars[k]?.puid);
             if (!unowned(newStars[k]?.puid)) {
               explorers.push(
                 `[[Tick #${tick}]]  ${newOwner} [[${newStars[k].n}]]`,
               );
             }
           }
-          prior[k] = { ...newStars[k] };
         }
       }
       currentTick++;
-    } while (currentTick < trueTick);
+    }
     if (output.length === 1 && explorers.length === 1) {
       output.push("No API data found");
     }
@@ -284,35 +283,13 @@ function NeptunesPrideAgent() {
   function faReport() {
     let output = [];
     output.push("Formal Alliances: ");
-    class ScanKeyIterator {
-      apikey;
-      currentScan;
-      constructor(apilink: string) {
-        this.apikey = getCodeFromApiText(apilink);
-        if (scanCache[this.apikey].length)
-          this.currentScan = scanCache[this.apikey][0];
-        else this.currentScan = undefined;
-      }
-      getScan() {
-        return this.currentScan;
-      }
-      hasNext() {
-        return this.currentScan.next !== undefined;
-      }
-      next() {
-        this.currentScan = this?.currentScan.next;
-      }
-      timestamp() {
-        return this?.currentScan?.timestamp;
-      }
-    }
     const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
     const alliances: number[][] = [];
     for (let i = 0; i < keyIterators.length; ++i) {
       const ki = keyIterators[i];
-      const scan = clone(ki.getScan().cached);
       while (ki.hasNext()) {
-        patch(scan, ki.getScan().forward);
+        ki.next();
+        const scan = ki.getScanData();
         if (scan.fleets) {
           for (let k in scan.fleets) {
             const fleet = scan.fleets[k];
@@ -337,7 +314,6 @@ function NeptunesPrideAgent() {
             }
           }
         }
-        ki.next();
       }
     }
     for (let i in alliances) {
@@ -3510,10 +3486,6 @@ function NeptunesPrideAgent() {
   );
 
   let allSeenKeys: string[] = [];
-  const getCodeFromApiText = (key: string) => {
-    const tokens = key.split(/[^\w]/);
-    return tokens[3];
-  };
   let apiKeys = async function () {
     lastReport = "api";
     const allkeys = (await store.keys()) as string[];
