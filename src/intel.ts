@@ -2636,6 +2636,7 @@ function NeptunesPrideAgent() {
 
       Crux.Text("npa_report_type", "pad12").roost(report);
       var selections = {
+        empires: "Empires",
         research: "Research",
         trading: "Trading",
         planets: "Home Planets",
@@ -2705,6 +2706,8 @@ function NeptunesPrideAgent() {
           activityReport();
         } else if (d === "trading") {
           await tradingReport();
+        } else if (d === "empires") {
+          await empireReport();
         } else if (d === "research") {
           await researchReport();
         } else if (d === "accounting") {
@@ -3374,6 +3377,95 @@ function NeptunesPrideAgent() {
     "The trading report lets you review where you are relative to others and " +
       "provides shortcuts to ease trading of tech as needed.",
     "Trading",
+  );
+
+  let empireTable = function (
+    output: Stanzas,
+    playerIndexes: number[],
+    title: string,
+  ) {
+    output.push(`--- ${title} ---`);
+    let cols = ":--";
+    for (let i = 0; i < playerIndexes.length; ++i) {
+      cols += "|--";
+    }
+    output.push(cols);
+    const me = NeptunesPride.universe.player.uid;
+    cols = `Stat|[[#${me}]]`;
+    const fields = [
+      ["total_stars", "Stars"],
+      ["total_strength", "Ships"],
+      ["shipsPerTick", "Ships/Tick"],
+      ["total_economy", "Economy"],
+      ["total_industry", "Industry"],
+      ["total_science", "Science"],
+    ];
+    const columns = [];
+    for (let i = 0; i < playerIndexes.length; ++i) {
+      const pi = playerIndexes[i];
+      if (pi === me) {
+        continue;
+      }
+      cols += `|[[#${pi}]]`;
+      columns.push(pi);
+    }
+    output.push(cols);
+    const rows: string[] = [];
+    const myP = NeptunesPride.universe.player;
+    columns.forEach((pi) => {
+      const player = NeptunesPride.universe.galaxy.players[pi];
+      const levels = player;
+      const keys = fields.map((x) => x[0]);
+      keys.map((t, i) => {
+        const myLevel = +myP[t];
+        if (!rows[i]) {
+          rows[i] = fields[i][1];
+          rows[i] += `|${myLevel}`;
+        }
+        const level = +levels[t];
+        if (level < myLevel) {
+          rows[i] += `|[[good:${level}]]`;
+        } else if (level > myLevel) {
+          rows[i] += `|[[bad:${level}]]`;
+        } else {
+          rows[i] += `|${level}`;
+        }
+      });
+    });
+    rows.forEach((r) => output.push([r]));
+    output.push(`--- ${title} ---`);
+  };
+  let empireReport = async function () {
+    lastReport = "empires";
+    const output: Stanzas = [];
+    const { players, playerIndexes } = await getAlliedKeysAndIndexes();
+    if (playerIndexes.length > 1) {
+      empireTable(output, playerIndexes, "Allied Empires");
+    }
+    let allPlayers = Object.keys(players);
+    const numPerTable = 8;
+    let subset = [];
+    let lastStart = 0;
+    for (let start = 0; start < allPlayers.length; start++) {
+      const p = players[allPlayers[start]];
+      if (p.stars || p.total_strength) {
+        subset.push(allPlayers[start]);
+      }
+      if (subset.length === numPerTable || start === allPlayers.length - 1) {
+        let indexes = subset.map((k) => players[k].uid);
+        empireTable(output, indexes, `Players ${lastStart} - ${start}`);
+        lastStart = start;
+        subset = [];
+      }
+    }
+    prepReport("empires", output);
+  };
+  defineHotkey(
+    "ctrl+l",
+    empireReport,
+    "The empires report summarizes all key empire stats. It's meant to be " +
+      "a better leaderboard for seeing how the individual empires are doing.",
+    "Empires",
   );
 
   NeptunesPride.sendTech = (recipient: number, tech: string) => {
