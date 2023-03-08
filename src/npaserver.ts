@@ -1,8 +1,11 @@
 import { initializeApp } from "firebase/app";
+import { isSafari } from "./useragent";
+
 import {
   addDoc,
   collection,
   getFirestore,
+  initializeFirestore,
   onSnapshot,
   orderBy,
   query,
@@ -63,7 +66,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const firestore = getFirestore();
+const firestore = initializeFirestore(app, {
+  experimentalForceLongPolling: isSafari(),
+});
 
 export async function restoreFromDB(gameId: number, apikey: string) {
   if (!scanCache[apikey] || scanCache[apikey].length === 0) {

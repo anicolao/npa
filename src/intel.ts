@@ -44,6 +44,7 @@ import {
   or,
 } from "./reports";
 import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
+import { isSafari } from "./useragent";
 
 interface CruxLib {
   IconButton: any;
@@ -2803,7 +2804,7 @@ function NeptunesPrideAgent() {
       Object.defineProperty(NeptunesPride.npui.map, "ignoreMouseEvents", {
         get: () => false,
       });
-    } else if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+    } else if (isSafari()) {
       // safari: trackpad is available and works on iPads
       Crux.crux.onTouchDown = () => {
         Crux.touchEnabled = false;
