@@ -126,6 +126,10 @@ function NeptunesPrideAgent() {
       let fleetLink = `<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"${fleet.uid}\")'>${fleet.n}</a>`;
       universe.hyperlinkedMessageInserts[fleet.n] = fleetLink;
     }
+    universe.hyperlinkedMessageInserts[":carrier:"] =
+      '<span class="icon-rocket"></span>';
+    universe.hyperlinkedMessageInserts[":star:"] =
+      '<span class="icon-star-1"></span>';
   };
   const linkPlayerSymbols = function () {
     let universe = NeptunesPride.universe;
@@ -3384,55 +3388,48 @@ function NeptunesPrideAgent() {
     playerIndexes: number[],
     title: string,
   ) {
+    const fields = [
+      ["total_stars", "[[:star:]]"],
+      ["total_strength", "[[:carrier:]]"],
+      ["shipsPerTick", "[[:carrier:]]/h"],
+      ["total_economy", "E"],
+      ["total_industry", "I"],
+      ["total_science", "S"],
+    ];
+    const sums = fields.map((x) => 0);
     output.push(`--- ${title} ---`);
     let cols = ":--";
-    for (let i = 0; i < playerIndexes.length; ++i) {
+    for (let i = 0; i < fields.length; ++i) {
       cols += "|--";
     }
     output.push(cols);
-    const me = NeptunesPride.universe.player.uid;
-    cols = `Stat|[[#${me}]]`;
-    const fields = [
-      ["total_stars", "Stars"],
-      ["total_strength", "Ships"],
-      ["shipsPerTick", "Ships/Tick"],
-      ["total_economy", "Economy"],
-      ["total_industry", "Industry"],
-      ["total_science", "Science"],
-    ];
-    const columns = [];
-    for (let i = 0; i < playerIndexes.length; ++i) {
-      const pi = playerIndexes[i];
-      if (pi === me) {
-        continue;
-      }
-      cols += `|[[#${pi}]]`;
-      columns.push(pi);
+    cols = "Empire";
+    for (let i = 0; i < fields.length; ++i) {
+      cols += `|${fields[i][1]}`;
     }
     output.push(cols);
-    const rows: string[] = [];
     const myP = NeptunesPride.universe.player;
-    columns.forEach((pi) => {
+    playerIndexes.forEach((pi) => {
+      const row: string[] = [`[[${pi}]]`];
       const player = NeptunesPride.universe.galaxy.players[pi];
       const levels = player;
-      const keys = fields.map((x) => x[0]);
-      keys.map((t, i) => {
-        const myLevel = +myP[t];
-        if (!rows[i]) {
-          rows[i] = fields[i][1];
-          rows[i] += `|${myLevel}`;
-        }
-        const level = +levels[t];
-        if (level < myLevel) {
-          rows[i] += `|[[good:${level}]]`;
-        } else if (level > myLevel) {
-          rows[i] += `|[[bad:${level}]]`;
-        } else {
-          rows[i] += `|${level}`;
-        }
-      });
+      fields
+        .map((f) => f[0])
+        .forEach((t, i) => {
+          const myLevel = +myP[t];
+          const level = +levels[t];
+          sums[i] += level;
+          if (level < myLevel) {
+            row.push(`[[good:${level}]]`);
+          } else if (level > myLevel) {
+            row.push(`[[bad:${level}]]`);
+          } else {
+            row.push(`${level}`);
+          }
+        });
+      output.push([row.join("|")]);
     });
-    rows.forEach((r) => output.push([r]));
+    output.push([["Total", ...sums.map((x) => Math.trunc(x))].join("|")]);
     output.push(`--- ${title} ---`);
   };
   let empireReport = async function () {
@@ -3443,7 +3440,7 @@ function NeptunesPrideAgent() {
       empireTable(output, playerIndexes, "Allied Empires");
     }
     let allPlayers = Object.keys(players);
-    const numPerTable = 8;
+    const numPerTable = 8 * 8;
     let subset = [];
     let lastStart = 0;
     for (let start = 0; start < allPlayers.length; start++) {
@@ -3453,7 +3450,7 @@ function NeptunesPrideAgent() {
       }
       if (subset.length === numPerTable || start === allPlayers.length - 1) {
         let indexes = subset.map((k) => players[k].uid);
-        empireTable(output, indexes, `Players ${lastStart} - ${start}`);
+        empireTable(output, indexes, `Empire Stats ${lastStart} - ${start}`);
         lastStart = start;
         subset = [];
       }
