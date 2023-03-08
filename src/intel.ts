@@ -108,6 +108,15 @@ function NeptunesPrideAgent() {
     };
   }
 
+  function onTrigger(trigger: string, fn: any) {
+    if (NeptunesPride?.np?.on) {
+      NeptunesPride.np.on(trigger, fn);
+    } else {
+      console.log(`NP not initialied yet, defer trigger for ${trigger}`);
+      window.setTimeout(() => onTrigger(trigger, fn), 100);
+    }
+  }
+
   const linkFleets = function () {
     let universe = NeptunesPride.universe;
     let fleets = NeptunesPride.universe.galaxy.fleets;
@@ -741,7 +750,7 @@ function NeptunesPrideAgent() {
     }
     timeTravelTick = -1;
   };
-  NeptunesPride.np.on("order:full_universe", recordTrueTick);
+  onTrigger("order:full_universe", recordTrueTick);
   if (NeptunesPride?.universe?.galaxy?.tick !== undefined) {
     recordTrueTick(null, NeptunesPride.universe.galaxy);
   }
@@ -2595,7 +2604,7 @@ function NeptunesPrideAgent() {
       inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + getClip();
       inbox.trigger("show_screen", "diplomacy_detail");
     };
-    NeptunesPride.np.on("paste_report", reportPasteHook);
+    onTrigger("paste_report", reportPasteHook);
     npui.NewMessageCommentBox = function () {
       let widget = superNewMessageCommentBox();
       let reportButton = Crux.Button("npa_paste", "paste_report", "intel").grid(
@@ -2729,12 +2738,9 @@ function NeptunesPrideAgent() {
       .roost(npui.sideMenu);
 
     const superNewFleetScreen = npui.NewFleetScreen;
-    NeptunesPride.np.on(
-      "show_screen",
-      (_event: any, name: any, screenConfig: any) => {
-        showingOurUI = name === "new_fleet" && screenConfig === undefined;
-      },
-    );
+    onTrigger("show_screen", (_event: any, name: any, screenConfig: any) => {
+      showingOurUI = name === "new_fleet" && screenConfig === undefined;
+    });
     npui.NewFleetScreen = (screenConfig: any) => {
       if (screenConfig === undefined) {
         return npaReports(screenConfig);
@@ -2839,7 +2845,7 @@ function NeptunesPrideAgent() {
       return true;
     };
     fixSubmitButton();
-    NeptunesPride.np.on("refresh_interface", fixSubmitButton);
+    onTrigger("refresh_interface", fixSubmitButton);
 
     hooksLoaded = true;
   };
@@ -3057,8 +3063,8 @@ function NeptunesPrideAgent() {
       "passes and you've reloaded, but you still want the merged scan data from two players onscreen.",
     "Merge User",
   );
-  NeptunesPride.np.on("switch_user_api", switchUser);
-  NeptunesPride.np.on("merge_user_api", mergeUser);
+  onTrigger("switch_user_api", switchUser);
+  onTrigger("merge_user_api", mergeUser);
 
   let timeTravelTick = -1;
   let timeTravelTickIndices: { [k: string]: number } = {};
@@ -3143,7 +3149,7 @@ function NeptunesPrideAgent() {
       timeTravel("forwards");
     }
   };
-  NeptunesPride.np.on("warp_time", warpTime);
+  onTrigger("warp_time", warpTime);
   let timeTravelBack = function () {
     if (timeTravelTick === -1) {
       timeTravelTick = NeptunesPride.universe.galaxy.tick;
@@ -3212,7 +3218,7 @@ function NeptunesPrideAgent() {
       registerForScans(myApiKey);
     }
   };
-  NeptunesPride.np.on("order:api_code", recordAPICode);
+  onTrigger("order:api_code", recordAPICode);
   let refreshScanData = async function () {
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
@@ -3232,7 +3238,7 @@ function NeptunesPrideAgent() {
       }
     }
   };
-  NeptunesPride.np.on("refresh_interface", refreshScanData);
+  onTrigger("refresh_interface", refreshScanData);
 
   const xlate: { [k: string]: string } = {
     bank: "Banking",
@@ -3435,7 +3441,7 @@ function NeptunesPrideAgent() {
     universe.selectPlayer(targetPlayer);
     np.trigger("refresh_interface");
   };
-  NeptunesPride.np.on("send_bulktech", sendBulkTech);
+  onTrigger("send_bulktech", sendBulkTech);
   NeptunesPride.sendCash = (recipient: number, credits: number) => {
     NeptunesPride.templates["confirm_send_cash"] =
       "Are you sure you want to send<br>[[alias]]<br>$[[amount]] credits?";
