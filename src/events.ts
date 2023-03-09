@@ -178,14 +178,14 @@ async function cacheEventResponseCallback(
   }
   try {
     store(incoming, group);
+    indexMessages(group, incoming);
+    messageCache[group] = incoming.concat(messageCache[group]);
+    console.log(
+      `Return full message set for ${group} of ${messageCache[group].length}`,
+    );
   } catch (err) {
     console.error(err);
   }
-  indexMessages(group, incoming);
-  messageCache[group] = incoming.concat(messageCache[group]);
-  console.log(
-    `Return full message set for ${group} of ${messageCache[group].length}`,
-  );
   return true;
 }
 
