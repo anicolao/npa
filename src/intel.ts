@@ -21,6 +21,7 @@ import {
   updateMessageCache,
   restoreFromDB,
   messageIndex,
+  type Message,
 } from "./events";
 import { GameStore } from "./gamestore";
 import { post } from "./network";
@@ -4043,7 +4044,39 @@ function NeptunesPrideAgent() {
     })
     .then(() => {
       const overrideOnNewMessages = (event: any, data: any) => {
-        updateMessageCache(data.group);
+        updateMessageCache(data.group).then(() => {
+          if (data.group === "game_event") {
+            console.log(`Validate events for ${data.group}`);
+            let remainingKeys = 0;
+            const keySet: { [k: string]: boolean } = {};
+            data.messages.forEach((m: Message) => {
+              keySet[m.key] = false;
+              remainingKeys++;
+            });
+            const cache = messageCache[data.group];
+            const len = cache.length;
+            for (let i = len - 1; i >= 0 && remainingKeys; --i) {
+              if (keySet[cache[i].key] === false) {
+                remainingKeys--;
+                keySet[cache[i].key] = true;
+              }
+            }
+            let foundAll = true;
+            for (let k in keySet) {
+              if (keySet[k] !== true) {
+                console.error(`Key not found ${k}`);
+                foundAll = false;
+              }
+            }
+            if (!foundAll) {
+              console.log("Recreating cache");
+              messageCache[data.group] = [];
+              updateMessageCache(data.group);
+            } else {
+              console.log(`Validated ${data.messages.length} events.`);
+            }
+          }
+        });
         return NeptunesPride.inbox.onNewMessages(event, data);
       };
       const handlers = NeptunesPride.inbox.handlers;

@@ -5,7 +5,7 @@ export const messageCache: { [k: string]: any[] } = {
   game_diplomacy: [],
 };
 
-interface Message {
+export interface Message {
   activity?: string;
   comment_count?: number;
   created: string;
@@ -149,6 +149,23 @@ async function cacheEventResponseCallback(
         latest = messageCache[group][0];
         i = 0;
       }
+    }
+    if (incoming.length > messageCache[group].length) {
+      console.log(`Incoming messages forced restore: ${incoming.length}`);
+      const knownKeys: { [k: string]: boolean } = {};
+      messageCache[group].forEach((m: Message) => {
+        knownKeys[m.key] = true;
+      });
+      let forceIncoming: Message[] = [];
+      incoming.forEach((m: Message, i: number) => {
+        if (!knownKeys[m.key]) {
+          forceIncoming.push(m);
+        }
+      });
+      forceIncoming = forceIncoming.slice(overlapOffset);
+      console.log(`Forcibly adding ${forceIncoming.length} missing keys`);
+      store(forceIncoming, group);
+      messageCache[group] = forceIncoming.concat(messageCache[group]);
     }
     if (overlapOffset >= 0) {
       console.log(`Incoming messages total: ${incoming.length}`);
