@@ -164,6 +164,7 @@ function NeptunesPrideAgent() {
           const player = players[pi];
           if (player.alias.toLowerCase().indexOf(s) !== -1) {
             filters.push(contains(`(${pi})`));
+            filters.push(contains(`(#${pi})`));
           }
         }
         return filters.reduce(or, () => false);
