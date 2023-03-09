@@ -47,3 +47,8 @@ div.screenshot:hover {
 
 .button:hover { background: #FF9000; }
 .button:active { background: #00AA00; }
+
+.equal_cols {
+	width: auto !important;
+	padding-right: 0.5em;
+}

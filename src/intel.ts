@@ -2433,6 +2433,74 @@ function NeptunesPrideAgent() {
         NeptunesPride.np.trigger("map_rebuild");
       }
     });
+    const sortTable = (_: any, sortspec: string) => {
+      const idCol = sortspec.split(",");
+      const id = idCol[0];
+      const col = parseInt(idCol[1]);
+      const header = document.getElementById(`${id}:${col}`);
+      const stripped = header.innerHTML.replaceAll(/[↑↓]/g, "");
+      const asc = "↑";
+      const desc = "↓";
+      let sort: "" | "↑" | "↓" = "";
+      if (header.innerHTML.indexOf(asc) !== -1) {
+        sort = desc;
+      } else if (header.innerHTML.indexOf(desc) !== -1) {
+        sort = "";
+      } else {
+        sort = asc;
+      }
+      for (let c = 0; ; c++) {
+        const h = document.getElementById(`${id}:${c}`);
+        if (!h) break;
+        h.innerHTML = h.innerHTML.replaceAll(/[↑↓]/g, "");
+      }
+
+      header.innerHTML = `${stripped}${sort}`;
+      const rows: HTMLTableRowElement[] = [];
+      for (let row = 0; ; ++row) {
+        const rowId = `${id}:row#${row}`;
+        const rowElement = document.getElementById(rowId);
+        if (!rowElement) break;
+        rows.push(rowElement as HTMLTableRowElement);
+      }
+      type Row = [any, number, any, HTMLTableRowElement];
+      const data: Row[] = rows.map((r) => {
+        const td: HTMLTableCellElement = r.getElementsByTagName("TD")[
+          col
+        ] as HTMLTableCellElement;
+        const rowNum = parseInt(r.id.split("#")[1]);
+        const d = td.innerText;
+        const nd = sort !== "" ? +d : rowNum;
+        return [d, nd, r.id, r];
+      });
+      if (data.length > 1) {
+        const first = data[0][3];
+        const allNumbers = data.filter((x) => isNaN(x[1])).length === 0;
+        if (!allNumbers) {
+          data.sort();
+          if (sort === desc) data.reverse();
+        } else {
+          if (sort === desc) {
+            data.sort((a, b) => b[1] - a[1]);
+          } else {
+            data.sort((a, b) => a[1] - b[1]);
+          }
+        }
+        const last = data[data.length - 1][3];
+        const p = data[0][3].parentNode;
+        p.insertBefore(last, first);
+        const insert = (n: Row, f: Row) => {
+          p.insertBefore(f[3], n[3]);
+          return n;
+        };
+        data.reduce(insert, data[data.length - 1]);
+      }
+    };
+    onTrigger("sort_table", sortTable);
+    function makeTableId(s: string) {
+      const symbols = /[^\w\d]/g;
+      return s.replaceAll(symbols, "_").toLowerCase();
+    }
     Crux.format = function (s: string, templateData: { [x: string]: any }) {
       let formatTime = Crux.formatTime;
       if (templateData?.linkTimes === false) {
@@ -2548,21 +2616,24 @@ function NeptunesPrideAgent() {
       // process markdown-like
       let lines = s.split(/<br ?\/?>/);
       const output = [];
+      let tableTitle = "";
+      let tableId = "";
       let inTable = false;
       let alignmentRow = false;
+      let headerRow = false;
+      let headerLine = 0;
       let alignments: string[] = [];
       for (let linen = 0; linen < lines.length; ++linen) {
         const line = lines[linen];
         if (line.indexOf("---") === 0 && line.indexOf("---", 3) !== -1) {
           inTable = !inTable;
           alignmentRow = inTable;
+          tableTitle = line.substring(4, line.length - 4);
+          tableId = makeTableId(tableTitle);
           if (inTable) {
-            output.push('<table class="combat_result">');
+            output.push(`<table id="${tableId}" class="combat_result">`);
             output.push(
-              `<tr><th style="padding: 12px" colspan="10">${line.substring(
-                4,
-                line.length - 4,
-              )}</th></tr>`,
+              `<tr><th style="padding: 12px" colspan="10">${tableTitle}</th></tr>`,
             );
           } else {
             output.push("</table>");
@@ -2581,13 +2652,33 @@ function NeptunesPrideAgent() {
               : "center",
           );
           alignmentRow = false;
+          headerRow = true;
         } else if (inTable) {
+          if (alignmentRow || headerRow) {
+            alignmentRow = false;
+            headerRow = true;
+            headerLine = linen + 1;
+          }
+          const rowNum = linen - headerLine;
+          let rowId = rowNum >= 0 ? `id='${tableId}:row#${rowNum}'` : "";
           const data = line.split("|");
-          output.push('<tr class="combat_result_teams_heading">');
-          data.forEach((d, i) =>
-            output.push(`<td style="text-align: ${alignments[i]}">${d}</td>`),
-          );
+          if (data.length && data[0].indexOf("<b>") !== -1) {
+            rowId = "";
+          }
+          output.push(`<tr ${rowId} class="combat_result_teams_heading">`);
+          data.forEach((d, i) => {
+            let sort = "";
+            let id = "";
+            if (headerRow) {
+              sort = `onclick='Crux.crux.trigger(\"sort_table\", \"${tableId},${i}\")'`;
+              id = `id='${tableId}:${i}'`;
+            }
+            output.push(
+              `<td ${sort} ${id} style="text-align: ${alignments[i]}" class="equal_cols">${d}</td>`,
+            );
+          });
           output.push("</tr>");
+          headerRow = false;
         } else {
           output.push(line);
           if (linen < lines.length - 1) {
@@ -3323,7 +3414,7 @@ function NeptunesPrideAgent() {
       });
     });
     let payFooter = [
-      "Pay for all",
+      "<b>Pay for all</b>",
       "",
       "",
       ...columns.map((pi: any) =>
@@ -3333,7 +3424,7 @@ function NeptunesPrideAgent() {
       ),
     ];
     let sendFooter = [
-      "Send all",
+      "<b>Send all</b>",
       "",
       "",
       ...Object.keys(allSendAmounts).map((pi: any) =>
@@ -3429,7 +3520,9 @@ function NeptunesPrideAgent() {
         });
       output.push([row.join("|")]);
     });
-    output.push([["Total", ...sums.map((x) => Math.trunc(x))].join("|")]);
+    output.push([
+      ["<b>Total</b>", ...sums.map((x) => Math.trunc(x))].join("|"),
+    ]);
     output.push(`--- ${title} ---`);
   };
   let empireReport = async function () {
@@ -3592,7 +3685,7 @@ function NeptunesPrideAgent() {
     let output: Stanzas = [];
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
-    output.push("Empire|Tech|ETA|Progress|Sci|↑S");
+    output.push("Empire|Tech|ETA|Progress|Sci|⬆S");
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
       const p = players[pi];
