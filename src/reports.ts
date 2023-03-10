@@ -4,7 +4,8 @@ export type Stanzas = (string | string[])[];
 export type Filter = (s: string) => boolean;
 export type MapString = (s: string) => string;
 
-export const contains = (content: string) => {
+export const contains = (c: string) => {
+  const content = c.toLowerCase();
   return (s: string) => s.indexOf(content) !== -1;
 };
 

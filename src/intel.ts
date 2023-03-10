@@ -1366,7 +1366,7 @@ function NeptunesPrideAgent() {
     if (find === undefined) {
       prepReport("filteredcombats", ["Select a fleet or star."]);
     } else {
-      find = `[[${find}]]`;
+      find = `(${find})`;
       prepReport("filteredcombats", combatOutcomes(), contains(find));
     }
   }
