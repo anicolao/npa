@@ -28,6 +28,7 @@ interface HotkeyMap {
   [k: string]: HotkeyCallback;
 }
 var hotkeys: HotkeyMap = {};
+var actionMap: { [k: string]: string } = {};
 export function defineHotkey(
   key: string,
   action: HotkeyCallback,
@@ -43,6 +44,7 @@ export function defineHotkey(
     action.button = key;
   }
   hotkeys[key] = action;
+  actionMap[button] = key;
   Mousetrap.bind(key, copy(action));
 }
 
@@ -52,4 +54,8 @@ export function getHotkeys() {
 
 export function getHotkeyCallback(key: string): HotkeyCallback {
   return hotkeys[key];
+}
+
+export function getHotkey(action: string): string {
+  return actionMap[action];
 }

@@ -14,6 +14,7 @@ import {
   defineHotkey,
   getClip,
   getHotkeys,
+  getHotkey,
   getHotkeyCallback,
 } from "./hotkey";
 import {
@@ -58,6 +59,7 @@ interface CruxLib {
   Widget: any;
   DropDown: any;
   TextInput: any;
+  Clickable: any;
 }
 interface NeptunesPrideData {
   sendAllTech: (recipient: number) => void;
@@ -152,6 +154,10 @@ function NeptunesPrideAgent() {
     stanzas: (string | string[])[],
     filter?: Filter,
   ) {
+    const showingMenu = NeptunesPride.npui.npaMenu.isShowing;
+    if (showingMenu) {
+      showUI();
+    }
     if (showingOurUI && reportName !== reportSelector.getValue()) {
       reportSelector.setValue(reportName);
       reportSelector.onChange();
@@ -223,7 +229,7 @@ function NeptunesPrideAgent() {
     starReport,
     "Generate a report on all stars in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Star Report",
+    "stars",
   );
 
   function ownershipReport() {
@@ -294,7 +300,7 @@ function NeptunesPrideAgent() {
     ownershipReport,
     "Generate a report changes in star ownership and copy to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Star Ownership",
+    "ownership",
   );
 
   function tradeActivityReport() {
@@ -406,8 +412,8 @@ function NeptunesPrideAgent() {
   defineHotkey(
     "ctrl+;",
     tradeActivityReport,
-    "Generate a report on all definite trade activity between empires." +
-      "Trade Activity",
+    "Generate a report on all definite trade activity between empires.",
+    "tradeactivity",
   );
 
   function combatActivityReport() {
@@ -455,8 +461,8 @@ function NeptunesPrideAgent() {
   defineHotkey(
     "ctrl+'",
     combatActivityReport,
-    "Generate a report on all probable combat between empires." +
-      "Combat Activity",
+    "Generate a report on all probable combat between empires.",
+    "combatactivity",
   );
 
   let knownAlliances: number[][] | undefined = undefined;
@@ -514,7 +520,7 @@ function NeptunesPrideAgent() {
     faReport,
     "Generate a report of observed Formal Alliance pairs." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Formal Alliances",
+    "fa",
   );
 
   function buyAllTheHypotheticalEconomy(
@@ -658,7 +664,7 @@ function NeptunesPrideAgent() {
     economistReport,
     "Your economists are keen to tell you about banking vs terraforming." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Economists",
+    "economists",
   );
 
   function getMyKeys() {
@@ -729,7 +735,7 @@ function NeptunesPrideAgent() {
     activityReport,
     "Generate a report of current player activity." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Activity Timestamps",
+    "activity",
   );
 
   let ampm = function (h: number, m: number | string) {
@@ -1352,7 +1358,7 @@ function NeptunesPrideAgent() {
     longFleetReport,
     "Generate a detailed fleet report on all carriers in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Fleets (long)",
+    "combats",
   );
 
   function filteredFleetReport() {
@@ -1369,7 +1375,7 @@ function NeptunesPrideAgent() {
     filteredFleetReport,
     "Generate a detailed report on fleet movements involving the selected fleet or star, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Fleets (filtered)",
+    "filteredcombats",
   );
 
   function combatReport() {
@@ -1380,7 +1386,7 @@ function NeptunesPrideAgent() {
     combatReport,
     "Generate a detailed combat report on all visible combats, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "All Combat",
+    "onlycombats",
   );
 
   function briefFleetReport() {
@@ -1420,7 +1426,7 @@ function NeptunesPrideAgent() {
     briefFleetReport,
     "Generate a summary fleet report on all carriers in your scanning range, and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
-    "Fleets (short)",
+    "fleets",
   );
 
   function screenshot() {
@@ -1463,7 +1469,7 @@ function NeptunesPrideAgent() {
     "Generate a player summary report and copy it to the clipboard." +
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " +
       "It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.",
-    "Homeworlds",
+    "planets",
   );
 
   let playerSheet = function () {
@@ -2574,7 +2580,10 @@ function NeptunesPrideAgent() {
           const splits = sub.split(":");
           const key = splits[1];
           const action = getHotkeyCallback(key);
-          const label = action?.button || `Trigger ${sub}`;
+          let label = action?.button || `Trigger ${sub}`;
+          if (npaReportNames[label]) {
+            label = npaReportNames[label];
+          }
           const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
@@ -2696,6 +2705,48 @@ function NeptunesPrideAgent() {
     NeptunesPride.templates["npa_paste"] = "Intel";
     let superNewMessageCommentBox = npui.NewMessageCommentBox;
 
+    var npaReportIcons: { [k: string]: string } = {
+      empires: "icon-users",
+      accounting: "icon-dollar",
+      trading: "icon-right-open",
+      research: "icon-beaker",
+      ownership: "icon-star-1",
+      tradeactivity: "icon-chart-line",
+      combatactivity: "icon-chart-line",
+      activity: "icon-chart-line",
+      planets: "icon-star-1",
+      fleets: "icon-rocket",
+      combats: "icon-rocket",
+      filteredcombats: "icon-rocket",
+      onlycombats: "icon-rocket",
+      stars: "icon-star-1",
+      economists: "icon-dollar",
+      fa: "icon-beaker",
+      api: "icon-flash",
+      controls: "icon-help",
+      help: "icon-help",
+    };
+    var npaReportNames: { [k: string]: string } = {
+      empires: "Empires",
+      accounting: "Accounting",
+      trading: "Trading",
+      research: "Research",
+      fleets: "Fleets (short)",
+      combats: "Fleets (long)",
+      filteredcombats: "Fleets (filtered)",
+      onlycombats: "All Combats",
+      planets: "Home Planets",
+      stars: "Stars",
+      ownership: "Ownership",
+      tradeactivity: "Trade Activity",
+      combatactivity: "Combat Activity",
+      activity: "Activity",
+      economists: "Economists",
+      api: "API Keys",
+      fa: "Formal Alliances",
+      controls: "Controls",
+      help: "Help",
+    };
     let reportPasteHook = function (_e: any, _d: any) {
       let inbox = NeptunesPride.inbox;
       inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + getClip();
@@ -2713,7 +2764,7 @@ function NeptunesPrideAgent() {
       reportButton.roost(widget);
       return widget;
     };
-    const npaReports = function (_screenConfig: any) {
+    const npaReports = function () {
       npui.onHideScreen(null, true);
       npui.onHideSelectionMenu();
 
@@ -2732,28 +2783,7 @@ function NeptunesPrideAgent() {
       var output = Crux.Widget("rel").nudge(-24, 0);
 
       Crux.Text("npa_report_type", "pad12").roost(report);
-      var selections = {
-        empires: "Empires",
-        research: "Research",
-        trading: "Trading",
-        planets: "Home Planets",
-        fleets: "Fleets (short)",
-        combats: "Fleets (long)",
-        filteredcombats: "Fleets (filtered)",
-        onlycombats: "All Combats",
-        stars: "Stars",
-        ownership: "Ownership",
-        tradeactivity: "Trade Activity",
-        combatactivity: "Combat Activity",
-        fa: "Formal Alliances",
-        economists: "Economists",
-        activity: "Activity",
-        accounting: "Accounting",
-        api: "API Keys",
-        controls: "Controls",
-        help: "Help",
-      };
-      reportSelector = Crux.DropDown(lastReport, selections, "exec_report")
+      reportSelector = Crux.DropDown(lastReport, npaReportNames, "exec_report")
         .grid(15, 0, 15, 3)
         .roost(report);
       filterInput = Crux.TextInput("single").grid(5, 0, 10, 3).roost(report);
@@ -2837,13 +2867,141 @@ function NeptunesPrideAgent() {
       .SideMenuItem("icon-left-open", "main_menu", "browse_to", "/")
       .roost(npui.sideMenu);
 
+    const npaMenuWidth = 292;
+    npui.NpaMenuItem = function (
+      icon: string,
+      label: string,
+      event: string,
+      data: string,
+    ) {
+      var smi = Crux.Clickable(event, data)
+        .addStyle("rel side_menu_item")
+        .configStyles(
+          "side_menu_item_up",
+          "side_menu_item_down",
+          "side_menu_item_hover",
+          "side_menu_item_disabled",
+        )
+        .size(npaMenuWidth, 40);
+
+      Crux.Text("", "pad12 txt_center")
+        .addStyle(icon)
+        .grid(0, -0.25, 3, 2.5)
+        .rawHTML("")
+        .roost(smi);
+
+      Crux.Text(label, "pad12").grid(2, -0.25, 18, 2.5).roost(smi);
+
+      const hotkey = getHotkey(data);
+      Crux.Text("", "pad12 txt_right")
+        .grid(0, -0.25, 18, 4)
+        .rawHTML(`<span float='right'>${hotkey}</span>`)
+        .roost(smi);
+
+      return smi;
+    };
+
+    const showReport = (_: any, reportName: string) => {
+      console.log(`SHOW: ${reportName}`);
+      lastReport = reportName;
+      npui.trigger("show_screen", "new_fleet");
+    };
+    npui.npaMenu = (() => {
+      var sideMenu = Crux.Widget("col_accent side_menu").size(npaMenuWidth, 0);
+
+      sideMenu.isShowing = false;
+      sideMenu.pinned = false;
+      sideMenu.rows = 11;
+      npui.sideMenuItemSize = 40;
+
+      sideMenu.spacer = Crux.Widget("rel").size(160, 48).roost(sideMenu);
+
+      sideMenu.showBtn = Crux.IconButton("icon-menu", "hide_side_menu")
+        .grid(0, 0, 3, 3)
+        .roost(sideMenu);
+      sideMenu.showBtn = Crux.IconButton("icon-eye", "hide_side_menu")
+        .grid(2.5, 0, 3, 3)
+        .roost(sideMenu);
+
+      Crux.Text("", "pad12 txt_right")
+        .grid(0, -0.25, 18, 4.5)
+        .rawHTML("<span float='right'>Hotkey</span>")
+        .roost(sideMenu);
+
+      for (let k in npaReportNames) {
+        const iconName = npaReportIcons[k];
+        const templateKey = `npa_key_${k}`;
+        NeptunesPride.templates[templateKey] = npaReportNames[k];
+
+        npui
+          .NpaMenuItem(iconName, templateKey, "show_report", k)
+          .roost(sideMenu);
+      }
+
+      sideMenu.pin = function () {
+        sideMenu.show();
+        sideMenu.showBtn.hide();
+        sideMenu.spacer.hide();
+        sideMenu.pinned = true;
+        sideMenu.addStyle("fixed");
+      };
+
+      sideMenu.unPin = function () {
+        sideMenu.pinned = false;
+        sideMenu.showBtn.show();
+        sideMenu.spacer.show();
+        sideMenu.removeStyle("fixed");
+        sideMenu.hide();
+      };
+
+      sideMenu.onPopUp = function () {
+        if (sideMenu.pinned) return;
+        npui.sideMenu.hide();
+        sideMenu.isShowing = true;
+        sideMenu.show();
+        sideMenu.trigger("play_sound", "selection_open");
+        sideMenu.trigger("hide_section_menu");
+        sideMenu.trigger("hide_screen");
+        sideMenu.trigger("cancel_fleet_orders");
+      };
+
+      sideMenu.onPopDown = function () {
+        if (sideMenu.pinned) return;
+        sideMenu.isShowing = false;
+        sideMenu.hide();
+      };
+
+      sideMenu.on("show_report", showReport);
+      sideMenu.on("show_npa_help", npaHelp);
+      sideMenu.on("show_npa_menu", sideMenu.onPopUp);
+      sideMenu.on("hide_side_menu", sideMenu.onPopDown);
+
+      return sideMenu;
+    })().roost(npui);
+
+    const toggleMenu = () => {
+      if (npui.npaMenu.isShowing) {
+        npui.npaMenu.onPopDown();
+      } else {
+        npui.npaMenu.onPopUp();
+      }
+    };
+    npui.status.npaMenuBtn = Crux.IconButton("icon-eye", "show_npa_menu")
+      .grid(2.5, 0, 3, 3)
+      .roost(npui.status);
+    defineHotkey(
+      "m",
+      toggleMenu,
+      "Toggle the display of the NPA menu.",
+      "NPA Menu",
+    );
     const superNewFleetScreen = npui.NewFleetScreen;
     onTrigger("show_screen", (_event: any, name: any, screenConfig: any) => {
       showingOurUI = name === "new_fleet" && screenConfig === undefined;
     });
     npui.NewFleetScreen = (screenConfig: any) => {
       if (screenConfig === undefined) {
-        return npaReports(screenConfig);
+        return npaReports();
       } else {
         return superNewFleetScreen(screenConfig);
       }
@@ -3473,7 +3631,7 @@ function NeptunesPrideAgent() {
     tradingReport,
     "The trading report lets you review where you are relative to others and " +
       "provides shortcuts to ease trading of tech as needed.",
-    "Trading",
+    "trading",
   );
 
   let empireTable = function (
@@ -3557,7 +3715,7 @@ function NeptunesPrideAgent() {
     empireReport,
     "The empires report summarizes all key empire stats. It's meant to be " +
       "a better leaderboard for seeing how the individual empires are doing.",
-    "Empires",
+    "empires",
   );
 
   NeptunesPride.sendTech = (recipient: number, tech: string) => {
@@ -3723,7 +3881,7 @@ function NeptunesPrideAgent() {
     "E",
     researchReport,
     "The research report shows you tech progress for allies. The ↑S column tells you how much science is needed to reduce delivery time by at least one tick.",
-    "Research",
+    "research",
   );
 
   let npaLedger = async function () {
@@ -3843,7 +4001,7 @@ function NeptunesPrideAgent() {
     "a",
     npaLedger,
     "Perform accounting and display status.",
-    "Accounting",
+    "accounting",
   );
 
   let allSeenKeys: string[] = [];
@@ -3893,7 +4051,7 @@ function NeptunesPrideAgent() {
     output.push("--- All Seen Keys ---");
     prepReport("api", output);
   };
-  defineHotkey("k", apiKeys, "Show known API keys.", "API Keys");
+  defineHotkey("k", apiKeys, "Show known API keys.", "api");
 
   let mergeAllKeys = async function () {
     const allkeys = (await store.keys()) as string[];
@@ -3933,7 +4091,7 @@ function NeptunesPrideAgent() {
     NeptunesPride.universe.helpHTML = help.join("");
     NeptunesPride.np.trigger("show_screen", "help");
   };
-  defineHotkey("?", npaHelp, "Display this help screen.", "NPA Help");
+  defineHotkey("?", npaHelp, "Display this help screen.", "help");
 
   let npaControls = function () {
     const output: Stanzas = [];
@@ -3960,7 +4118,7 @@ function NeptunesPrideAgent() {
     output.push("--- Controls ---");
     prepReport("controls", output);
   };
-  defineHotkey("~", npaControls, "Generate NPA Buttons.", "Controls");
+  defineHotkey("~", npaControls, "Generate NPA Buttons.", "controls");
 
   var autocompleteCaret = 0;
   let autocompleteTrigger = function (e: KeyboardEvent) {
