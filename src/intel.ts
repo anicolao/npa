@@ -889,7 +889,7 @@ function NeptunesPrideAgent() {
       if (fleet.orbiting) {
         let orbit: string = fleet.orbiting.uid;
         if (!starstate[orbit]) {
-          const ownerWeapons = players[stars[orbit].puid].tech.weapons.level;
+          const ownerWeapons = players[stars[orbit].puid]?.tech.weapons.level;
           const weapons = Math.max(
             ownerWeapons,
             ...stars[orbit]?.alliedDefenders.map(
