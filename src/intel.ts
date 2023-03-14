@@ -4179,15 +4179,25 @@ function NeptunesPrideAgent() {
     .then(() => updateMessageCache("game_event"))
     .then(() => updateMessageCache("game_diplomacy"))
     .then(() => {
-      window.setTimeout(() => {
-        allSeenKeys = messageIndex["api"]
-          .flatMap((m: any) => {
-            const body = m.message.body || m.message.payload?.body;
-            return body.match(/\[\[api:\w\w\w\w\w\w\]\]/);
-          })
-          .filter((k) => k)
-          .filter((v, i, a) => a.indexOf(v) === i);
+      window.setTimeout(async () => {
+        const allkeys = (await store.keys()) as string[];
+        const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
+        allSeenKeys =
+          messageIndex["api"]
+            ?.flatMap((m: any) => {
+              const body = m.message.body || m.message.payload?.body;
+              return body.match(/\[\[api:\w\w\w\w\w\w\]\]/);
+            })
+            .filter((k) => k)
+            .filter((v, i, a) => a.indexOf(v) === i) || [];
         console.log("Probable API Keys: ", allSeenKeys);
+        apiKeys.forEach(async (x) => {
+          const key = await store.get(x);
+          const check = `[[api:${key}]]`;
+          if (allSeenKeys.indexOf(check) === -1) {
+            allSeenKeys.push(check);
+          }
+        });
         allSeenKeys.forEach(async (key) => {
           const code = getCodeFromApiText(key);
           await getServerScans(code);
