@@ -2977,7 +2977,9 @@ function NeptunesPrideAgent() {
       sideMenu.on("hide_side_menu", sideMenu.onPopDown);
 
       return sideMenu;
-    })().roost(npui);
+    })()
+      .roost(npui)
+      .onPopDown();
 
     const toggleMenu = () => {
       if (npui.npaMenu.isShowing) {
