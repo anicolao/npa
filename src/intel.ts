@@ -3474,6 +3474,21 @@ function NeptunesPrideAgent() {
     } else {
       myApiKey = code;
       registerForScans(myApiKey);
+      const from_color = NeptunesPride.universe.player.color;
+      const to_uids = "";
+      const to_aliases = "";
+      const to_colors = "";
+      const subject = "API Key Generated";
+      const body = `Your new API key is ${code}.\n\n[[api:${code}]]`;
+      NeptunesPride.inbox.trigger("server_request", {
+        type: "create_game_message",
+        from_color,
+        to_uids,
+        to_aliases,
+        to_colors,
+        subject,
+        body,
+      });
     }
   };
   onTrigger("order:api_code", recordAPICode);
