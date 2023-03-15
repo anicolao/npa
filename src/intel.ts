@@ -154,7 +154,7 @@ function NeptunesPrideAgent() {
     stanzas: (string | string[])[],
     filter?: Filter,
   ) {
-    const showingMenu = NeptunesPride.npui.npaMenu.isShowing;
+    const showingMenu = NeptunesPride.npui.npaMenu?.isShowing;
     if (showingMenu) {
       showUI();
     }
@@ -2087,6 +2087,7 @@ function NeptunesPrideAgent() {
         }
         const yOffset = 2 * 9 * map.pixelRatio;
         if (attackersWon) {
+          defenderShips = Math.min(-1, defenderShips);
           drawString(
             `${-defenderShips} needed`,
             hudX,
@@ -2094,6 +2095,7 @@ function NeptunesPrideAgent() {
             "#00ff00",
           );
         } else {
+          enemyShips = Math.min(-1, enemyShips);
           drawString(`${-enemyShips} needed`, hudX, hudY + yOffset, "#00ff00");
         }
       }
