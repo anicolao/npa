@@ -1,5 +1,5 @@
 export type Value = boolean | number | string | undefined;
-type Patch = { [k: string]: any } | Value;
+type Patch = { [k: string]: any } | Value | null;
 
 export function clone(o: any) {
   if (typeof o === "object" && o !== null) {
