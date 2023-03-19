@@ -29,6 +29,7 @@ import { post } from "./network";
 import {
   getScan,
   getServerScans,
+  logError,
   registerForScans,
   scanCache,
   scanInfo,
@@ -74,6 +75,7 @@ interface NeptunesPrideData {
   npui: any;
   originalPlayer: any;
   gameConfig: any;
+  account: any;
   templates: { [k: string]: string };
 }
 declare global {
@@ -86,6 +88,9 @@ declare global {
 }
 
 function NeptunesPrideAgent() {
+  window.addEventListener("error", logError);
+  window.addEventListener("unhandledrejection", logError);
+
   let title = getVersion();
   let version = title.replace(/^.*v/, "v");
   console.log(title);

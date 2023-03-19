@@ -84,7 +84,8 @@ export async function restoreFromDB(gameId: number, apikey: string) {
 export function registerForScans(apikey: string) {
   const gameid = NeptunesPride.gameNumber;
   const store = collection(firestore, `newkey`);
-  addDoc(store, { game_id: gameid, api_key: apikey });
+  const notifications = NeptunesPride.account?.user_id;
+  addDoc(store, { game_id: gameid, api_key: apikey, notifications });
 }
 
 function trimInvalidEntries(apikey: string) {
@@ -347,4 +348,12 @@ export function getScan(scans: any[], index: number): ScanningData {
 
 export function getScanClone(scans: any[], index: number): ScanningData {
   return window.structuredClone(getScan(scans, index));
+}
+
+export function logError(e: any) {
+  const gameid = NeptunesPride.gameNumber;
+  const store = collection(firestore, `error`);
+  const stack = e?.error?.stack || "no stack trace";
+  const message = e?.error?.message || "no message";
+  addDoc(store, { gameid, stack, message });
 }
