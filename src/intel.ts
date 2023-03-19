@@ -2234,10 +2234,10 @@ function NeptunesPrideAgent() {
         map.viewportHeight - 16 * map.pixelRatio,
       );
       if (NeptunesPride.originalPlayer === undefined) {
-        NeptunesPride.originalPlayer = universe.player.uid;
+        NeptunesPride.originalPlayer = universe.player?.uid;
       }
       let unrealContextString = "";
-      if (NeptunesPride.originalPlayer !== universe.player.uid) {
+      if (NeptunesPride.originalPlayer !== universe.player?.uid) {
         unrealContextString =
           universe.galaxy.players[universe.player.uid].alias;
       }
