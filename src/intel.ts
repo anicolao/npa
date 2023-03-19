@@ -2978,10 +2978,10 @@ function NeptunesPrideAgent() {
       sideMenu.on("show_npa_menu", sideMenu.onPopUp);
       sideMenu.on("hide_side_menu", sideMenu.onPopDown);
 
+      sideMenu.onPopDown();
+
       return sideMenu;
-    })()
-      .roost(npui)
-      .onPopDown();
+    })().roost(npui);
 
     const toggleMenu = () => {
       if (npui.npaMenu.isShowing) {
