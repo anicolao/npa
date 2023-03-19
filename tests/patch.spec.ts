@@ -334,4 +334,23 @@ describe("diff/patch work as expected", () => {
       expect(d.a.k).to.equal(5);
     }
   });
+
+  it("correctly diffs nested arrays", () => {
+    const a = {
+      "55": {
+        n: "Garnet I",
+        o: [],
+      },
+    };
+    const b = {
+      "55": {
+        n: "Garnet I",
+        o: [[0, 349, 0, 0]],
+      },
+    };
+    const d = diff(a, b);
+    const bNew = patch(a, d);
+    const nullAnswer = diff(b, bNew);
+    expect(nullAnswer).to.equal(null);
+  });
 });
