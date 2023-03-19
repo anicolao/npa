@@ -336,10 +336,11 @@ describe("diff/patch work as expected", () => {
   });
 
   it("correctly diffs nested arrays", () => {
+    const emptyO: number[][] = [];
     const a = {
       "55": {
         n: "Garnet I",
-        o: [],
+        o: emptyO,
       },
     };
     const b = {
