@@ -1207,6 +1207,8 @@ function NeptunesPrideAgent() {
             };
           }
           starstate[starId].puid = biggestPlayerId;
+          starstate[starId].weapons =
+            players[biggestPlayerId].tech.weapons.level;
           starstate[starId].ships = 0;
           offense = newAggregate;
           for (let k in contribution) {
@@ -1215,6 +1217,12 @@ function NeptunesPrideAgent() {
             if (alliedFleet(biggestPlayerId, puid)) {
               offense -= contribution[k];
               starstate[starId].ships += contribution[k];
+              const arrivingWeapons = players[puid].tech.weapons.level;
+              const existingWeapons = starstate[starId].weapons;
+              starstate[starId].weapons = Math.max(
+                arrivingWeapons,
+                existingWeapons,
+              );
             }
           }
         } else {
