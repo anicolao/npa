@@ -14,6 +14,7 @@ import {
 import { openDB } from "idb";
 import { type ScanningData } from "./galaxy";
 import { diff, patch } from "./patch";
+import { getVersion } from "./version";
 
 export interface ApiInfo {
   firstTick: number;
@@ -353,7 +354,12 @@ export function getScanClone(scans: any[], index: number): ScanningData {
 export function logError(e: any) {
   const gameid = NeptunesPride.gameNumber;
   const store = collection(firestore, `error`);
-  const stack = e?.error?.stack || "no stack trace";
-  const message = e?.error?.message || "no message";
-  addDoc(store, { gameid, stack, message });
+  const stack = e?.error?.stack || e?.reason?.stack || "no stack trace";
+  const message = e?.error?.message || e?.reason?.message || "no message";
+  const version = getVersion();
+  const timestamp = new Date().getTime();
+  if (stack === "no stack trace") {
+    console.error("No stack", e);
+  }
+  addDoc(store, { gameid, stack, message, version, timestamp });
 }
