@@ -2020,7 +2020,8 @@ function NeptunesPrideAgent() {
         let defenderShips = star.totalDefenses;
         const players = NeptunesPride.universe.galaxy.players;
         let defenderWS = Math.max(
-          players[star.puid].tech.weapons.level,
+          1,
+          players[star.puid]?.tech.weapons.level,
           ...star?.alliedDefenders.map(
             (d: number) => players[d].tech.weapons.level,
           ),
