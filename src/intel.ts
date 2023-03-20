@@ -2239,8 +2239,10 @@ function NeptunesPrideAgent() {
       }
       let unrealContextString = "";
       if (NeptunesPride.originalPlayer !== universe.player?.uid) {
-        unrealContextString =
-          universe.galaxy.players[universe.player.uid].alias;
+        if (universe.player?.uid !== undefined) {
+          unrealContextString =
+            universe.galaxy.players[universe.player.uid].alias;
+        }
       }
       if (timeTravelTick > -1) {
         const gtick = NeptunesPride.universe.galaxy.tick;
