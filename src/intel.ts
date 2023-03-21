@@ -1878,7 +1878,7 @@ function NeptunesPrideAgent() {
       const universe = NeptunesPride.universe;
       const map = NeptunesPride.npui.map;
       if (
-        universe.selectedStar &&
+        universe.selectedStar?.alliedDefenders &&
         settings.autoRulerPower > 0 &&
         map.scale >= 200
       ) {
