@@ -8,6 +8,7 @@ case $? in
 	*) echo "Compile failed"; exit 1 ;;
 esac
 cd dist
+mv intel.js.map ../../versions/intel_${version}.map
 zip ../../versions/np${VERSION}.zip *
 cd -
 
