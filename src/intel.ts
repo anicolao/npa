@@ -1743,14 +1743,19 @@ function NeptunesPrideAgent() {
       return scaleFactor;
     }
 
+    function lyToMap() {
+      const player = NeptunesPride.universe.player;
+      return player.tech.scanning.value / (player.tech.scanning.level + 2);
+    }
+
     function getAdjustedScanRange(player: Player) {
       const sH = combatHandicap;
-      const scanRange = (player.tech.scanning.level + 2 + sH) * (1.0 / 8);
+      const scanRange = player.tech.scanning.value + sH * lyToMap();
       return scanRange;
     }
     function getAdjustedFleetRange(player: Player) {
       const pH = combatHandicap;
-      const scanRange = (player.tech.propulsion.level + 3 + pH) * (1.0 / 8);
+      const scanRange = player.tech.propulsion.value + pH * lyToMap();
       return scanRange;
     }
     function worldToPixels(dist: number) {
