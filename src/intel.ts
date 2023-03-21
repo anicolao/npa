@@ -763,9 +763,8 @@ function NeptunesPrideAgent() {
   };
 
   let trueTick = 0;
-  const recordTrueTick = function (_: any, galaxy: any) {
-    trueTick = galaxy.tick;
-    if (galaxy.players[0].shape !== undefined) {
+  const rebuildColorMap = function (galaxy: any) {
+    if (galaxy.players[0].shape !== undefined && colorMap) {
       colorMap = colorMap.map((_, uid) => {
         if (galaxy.players[uid] !== undefined) {
           return colors[galaxy.players[uid].color];
@@ -773,6 +772,10 @@ function NeptunesPrideAgent() {
         return colorMap[uid];
       });
     }
+  };
+  const recordTrueTick = function (_: any, galaxy: any) {
+    trueTick = galaxy.tick;
+    rebuildColorMap(galaxy);
     timeTravelTick = -1;
   };
   onTrigger("order:full_universe", recordTrueTick);
@@ -1609,6 +1612,9 @@ function NeptunesPrideAgent() {
     "#6000c0",
   ];
   let colorMap = colors.flatMap((x) => colors);
+  if (NeptunesPride?.universe?.galaxy) {
+    rebuildColorMap(NeptunesPride.universe.galaxy);
+  }
   const css = cssrules();
   let originalStarSrc: any = undefined;
   async function recolorPlayers() {
