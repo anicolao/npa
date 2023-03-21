@@ -473,48 +473,56 @@ function NeptunesPrideAgent() {
   let knownAlliances: number[][] | undefined = undefined;
   function faReport() {
     let output = [];
-    output.push("Formal Alliances: ");
-    const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
-    const alliances: number[][] = [];
-    for (let i = 0; i < keyIterators.length; ++i) {
-      const ki = keyIterators[i];
-      while (ki.hasNext()) {
-        ki.next();
-        const scan = ki.getScanData();
-        if (scan?.fleets) {
-          for (let k in scan.fleets) {
-            const fleet = scan.fleets[k];
-            if (fleet?.ouid !== undefined) {
-              const star = scan.stars[fleet.ouid];
-              if (star) {
-                if (star.puid !== fleet.puid && star.puid !== -1) {
-                  if (!alliances[star.puid]) {
-                    alliances[star.puid] = [];
+    if (allSeenKeys?.length && NeptunesPride.gameConfig.alliances != "0") {
+      output.push("Formal Alliances: ");
+      const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
+      const alliances: number[][] = [];
+      for (let i = 0; i < keyIterators.length; ++i) {
+        const ki = keyIterators[i];
+        while (ki.hasNext()) {
+          ki.next();
+          const scan = ki.getScanData();
+          if (scan?.fleets) {
+            for (let k in scan.fleets) {
+              const fleet = scan.fleets[k];
+              if (fleet?.ouid !== undefined) {
+                const star = scan.stars[fleet.ouid];
+                if (star) {
+                  if (star.puid !== fleet.puid && star.puid !== -1) {
+                    if (!alliances[star.puid]) {
+                      alliances[star.puid] = [];
+                    }
+                    if (!alliances[fleet.puid]) {
+                      alliances[fleet.puid] = [];
+                    }
+                    const seenTick = alliances[star.puid]?.[fleet.puid] || 0;
+                    const maxTick = Math.max(scan.tick, seenTick);
+                    alliances[star.puid][fleet.puid] = maxTick;
+                    alliances[fleet.puid][star.puid] = maxTick;
                   }
-                  if (!alliances[fleet.puid]) {
-                    alliances[fleet.puid] = [];
-                  }
-                  const seenTick = alliances[star.puid]?.[fleet.puid] || 0;
-                  const maxTick = Math.max(scan.tick, seenTick);
-                  alliances[star.puid][fleet.puid] = maxTick;
-                  alliances[fleet.puid][star.puid] = maxTick;
+                } else {
+                  console.error(`Orbit star missing for ${fleet.n}`);
                 }
-              } else {
-                console.error(`Orbit star missing for ${fleet.n}`);
               }
             }
           }
         }
       }
-    }
-    for (let i in alliances) {
-      for (let j in alliances[i]) {
-        if (i < j) {
-          output.push(`[[Tick #${alliances[i][j]}]] [[${i}]] ⇔ [[${j}]]`);
+      for (let i in alliances) {
+        for (let j in alliances[i]) {
+          if (i < j) {
+            output.push(`[[Tick #${alliances[i][j]}]] [[${i}]] ⇔ [[${j}]]`);
+          }
         }
       }
+      knownAlliances = alliances;
+    } else {
+      if (NeptunesPride.gameConfig.alliances != "0") {
+        output.push("No API keys to detect Formal Alliances.");
+      } else {
+        output.push("No formal alliances in this game");
+      }
     }
-    knownAlliances = alliances;
     prepReport(
       "fa",
       output.map((s) => [s]),
