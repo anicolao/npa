@@ -66,7 +66,7 @@ export class TickIterator {
   }
   getScanData() {
     const h = this.scanIteratorHeap;
-    return h.peek().getScanData();
+    return h.peek()?.getScanData();
   }
   hasNext() {
     const h = this.scanIteratorHeap;
