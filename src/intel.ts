@@ -844,8 +844,9 @@ function NeptunesPrideAgent() {
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
     const warMap = fOwner?.war || sOwner?.war || {};
+    if (fleetOwnerId == starOwnerId) return true;
+    if (warMap[fleetOwnerId] && warMap[starOwnerId]) return false;
     return (
-      fleetOwnerId == starOwnerId ||
       warMap[fleetOwnerId] == 0 ||
       warMap[starOwnerId] == 0 ||
       knownAlliances?.[fleetOwnerId]?.[starOwnerId]
