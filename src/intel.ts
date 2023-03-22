@@ -216,12 +216,13 @@ function NeptunesPrideAgent() {
         let star = stars[s];
         if (star.puid == p && star.shipsPerTick >= 0) {
           output.push([
-            "  [[{0}]] {1}/{2}/{3} {4} ships".format(
+            "  [[#{5}]] [[{0}]] {1}/{2}/{3} {4} ships".format(
               star.n,
               star.e,
               star.i,
               star.s,
               star.totalDefenses,
+              p,
             ),
           ]);
         }
