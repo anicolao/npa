@@ -2316,21 +2316,23 @@ function NeptunesPrideAgent() {
           offsety *= -1;
         }
         combatOutcomes();
-        let s = fleetOutcomes[universe.selectedFleet.uid].eta;
-        let o = fleetOutcomes[universe.selectedFleet.uid].outcome.split("\n");
-        let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
-        let y = map.worldToScreenY(universe.selectedFleet.y) + offsety;
-        if (offsetx < 0) {
-          map.context.textAlign = "right";
-        }
-        drawOverlayString(map.context, s, x, y);
-        for (let line = 0; line < o.length; ++line) {
-          drawOverlayString(
-            map.context,
-            o[line],
-            x,
-            y + (line + 1) * lineHeight,
-          );
+        if (fleetOutcomes[universe.selectedFleet.uid]?.eta) {
+          let s = fleetOutcomes[universe.selectedFleet.uid].eta;
+          let o = fleetOutcomes[universe.selectedFleet.uid].outcome.split("\n");
+          let x = map.worldToScreenX(universe.selectedFleet.x) + offsetx;
+          let y = map.worldToScreenY(universe.selectedFleet.y) + offsety;
+          if (offsetx < 0) {
+            map.context.textAlign = "right";
+          }
+          drawOverlayString(map.context, s, x, y);
+          for (let line = 0; line < o.length; ++line) {
+            drawOverlayString(
+              map.context,
+              o[line],
+              x,
+              y + (line + 1) * lineHeight,
+            );
+          }
         }
       }
       if (
