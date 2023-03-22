@@ -62,7 +62,7 @@ export class TickIterator {
   }
   getScanRecord() {
     const h = this.scanIteratorHeap;
-    return h.peek().getScanRecord();
+    return h.peek()?.getScanRecord();
   }
   getScanData() {
     const h = this.scanIteratorHeap;
@@ -73,13 +73,15 @@ export class TickIterator {
     return h.size() > 0 && h.peek().hasNext();
   }
   next() {
-    const h = this.scanIteratorHeap;
-    h.peek().next();
-    while (h.peek().getScanData() === undefined) {
-      h.extract();
+    if (this.hasNext()) {
+      const h = this.scanIteratorHeap;
+      h.peek().next();
+      while (this.getScanData() === undefined && h.size() > 0) {
+        h.extract();
+      }
+      return this.getScanData();
     }
-    h.heapify(0);
-    return h.peek().getScanData();
+    return undefined;
   }
   timestamp() {
     const h = this.scanIteratorHeap;
