@@ -142,6 +142,16 @@ async function cacheEventResponseCallback(
           return message?.comment_count === latest?.comment_count;
         };
         if (isUnchanged(message, latest) || first >= len) {
+          const keys: { [k: string]: boolean } = {};
+          messageCache[group].forEach((m) => (keys[m.key] = true));
+          while (i > 0 && incoming[i - 1].created === message.created) {
+            const outOfOrderCandidate = incoming[i - 1];
+            if (keys[outOfOrderCandidate.key]) {
+              i--;
+              continue;
+            }
+            break;
+          }
           overlapOffset = i;
           break;
         }
