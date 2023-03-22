@@ -2151,6 +2151,10 @@ function NeptunesPrideAgent() {
               territoryBrightness === 3
                 ? context
                 : bubbleLayer.getContext("2d");
+            if (bcontext === null || bcontext === undefined) {
+              console.error("Failed to create canvas context for territory");
+              break;
+            }
             territoryBrightness %= 3;
             let bubbles = () => {
               bcontext.beginPath();
