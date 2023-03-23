@@ -475,9 +475,36 @@ function NeptunesPrideAgent() {
     "combatactivity",
   );
 
+  interface WarRecord {
+    tick: number;
+    p0: number;
+    p1: number;
+    war: "peace" | "peace_agreement" | "war_declared" | "war";
+  }
+  const annalsOfWar = (): WarRecord[] => {
+    let warTicks: WarRecord[] = [];
+    for (let i = 0; i < messageCache.game_event.length; ++i) {
+      const m = messageCache.game_event[i];
+      if (m.payload.template === "war_declared") {
+        let tick = m.payload.tick;
+        const p0 = m.payload.attacker;
+        const p1 = m.payload.defender;
+        warTicks.push({ tick, p0, p1, war: "war_declared" });
+        tick += 24;
+        warTicks.push({ tick, p0, p1, war: "war" });
+      } else if (m.payload.template === "peace_accepted") {
+        let tick = m.payload.tick;
+        const p0 = m.payload.from_puid;
+        const p1 = m.payload.to_puid;
+        warTicks.push({ tick, p0, p1, war: "peace_agreement" });
+      }
+    }
+    return warTicks;
+  };
   let knownAlliances: number[][] | undefined = undefined;
   function faReport() {
     let output = [];
+
     if (allSeenKeys?.length && NeptunesPride.gameConfig.alliances != "0") {
       output.push("Formal Alliances: ");
       const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
@@ -500,10 +527,11 @@ function NeptunesPrideAgent() {
                     if (!alliances[fleet.puid]) {
                       alliances[fleet.puid] = [];
                     }
-                    const seenTick = alliances[star.puid]?.[fleet.puid] || 0;
-                    const maxTick = Math.max(scan.tick, seenTick);
-                    alliances[star.puid][fleet.puid] = maxTick;
-                    alliances[fleet.puid][star.puid] = maxTick;
+                    const seenTick =
+                      alliances[star.puid]?.[fleet.puid] || 100000;
+                    const minTick = Math.min(scan.tick, seenTick);
+                    alliances[star.puid][fleet.puid] = minTick;
+                    alliances[fleet.puid][star.puid] = minTick;
                   }
                 } else {
                   console.error(`Orbit star missing for ${fleet.n}`);
@@ -513,12 +541,43 @@ function NeptunesPrideAgent() {
           }
         }
       }
+      let annals = annalsOfWar();
       for (let i in alliances) {
         for (let j in alliances[i]) {
           if (i < j) {
-            output.push(`[[Tick #${alliances[i][j]}]] [[${i}]] ⇔ [[${j}]]`);
+            const p0 = +i;
+            const p1 = +j;
+            const tick = alliances[i][j];
+            annals.push({ tick, p0, p1, war: "peace" });
           }
         }
+      }
+      annals = annals.sort((a, b) => {
+        if (a.tick === b.tick) {
+          if (a.war < b.war) {
+            return -1;
+          }
+          if (b.war < a.war) {
+            return 1;
+          }
+        }
+        return a.tick - b.tick;
+      });
+      for (let i = 0; i < annals.length; ++i) {
+        const record = annals[i];
+        const { p0, p1, war } = record;
+        let d = "&#9774;&#65039;";
+        if (war === "war") {
+          if (alliances[p0] !== undefined) {
+            alliances[p0][p1] = undefined;
+          }
+          d = "&#129686;"; // 🪖
+        } else if (war === "war_declared") {
+          d = "&#9888;&#65039;";
+        } else if (war === "peace_agreement") {
+          d = "&#129309";
+        }
+        output.push(`[[Tick #${record.tick}]] ${d} [[${p0}]] ⇔ [[${p1}]]`);
       }
       knownAlliances = alliances;
     } else {
