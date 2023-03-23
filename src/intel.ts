@@ -772,6 +772,7 @@ function NeptunesPrideAgent() {
         ly: star.y,
         x: star.x,
         y: star.y,
+        ouid: star.uid,
         n: `Fake Enemy Fleet ${uid - base}`,
         o: [] as [number, number, number, number][],
         puid: star.puid,
