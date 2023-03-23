@@ -2491,6 +2491,7 @@ function NeptunesPrideAgent() {
       const id = idCol[0];
       const col = parseInt(idCol[1]);
       const header = document.getElementById(`${id}:${col}`);
+      if (!header) return;
       const stripped = header.innerHTML.replaceAll(/[↑↓]/g, "");
       const asc = "↑";
       const desc = "↓";
