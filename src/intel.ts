@@ -758,8 +758,9 @@ function NeptunesPrideAgent() {
   const routeEnemy = () => {
     const universe = NeptunesPride.universe;
     const npui = NeptunesPride.npui;
-    if (universe.selectedStar) {
+    if (universe.selectedStar && universe.selectedStar.puid !== -1) {
       const star = universe.selectedStar;
+      universe.player = universe.galaxy.players[star.puid];
       const base = 100000;
       let uid = base + 1;
       while (universe.galaxy.fleets[uid]) {
@@ -781,7 +782,9 @@ function NeptunesPrideAgent() {
       star.st = 0;
       NeptunesPride.np.onNewFleetResponse(null, fakeFleet);
     } else if (universe.selectedFleet) {
-      npui.trigger("start_edit_waypoints", { fleet: universe.selectedFleet });
+      const fleet = universe.selectedFleet;
+      universe.player = universe.galaxy.players[fleet.puid];
+      npui.trigger("start_edit_waypoints", { fleet });
     }
   };
   defineHotkey(
@@ -2303,11 +2306,15 @@ function NeptunesPrideAgent() {
         NeptunesPride.originalPlayer = universe.player?.uid;
       }
       let unrealContextString = "";
-      if (NeptunesPride.originalPlayer !== universe.player?.uid) {
-        if (universe.player?.uid !== undefined) {
+      if (NeptunesPride.originalPlayer !== universe.galaxy.player_uid) {
+        if (universe.galaxy.player_uid !== undefined) {
           unrealContextString =
-            universe.galaxy.players[universe.player.uid].alias;
+            universe.galaxy.players[universe.galaxy.player_uid].alias;
         }
+      }
+      if (universe.galaxy.player_uid != universe.player.uid) {
+        const alias = universe.player.alias;
+        unrealContextString += ` controlling ${alias}`;
       }
       if (timeTravelTick > -1) {
         const gtick = NeptunesPride.universe.galaxy.tick;
