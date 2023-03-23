@@ -3618,6 +3618,12 @@ function NeptunesPrideAgent() {
     }
     return level * NeptunesPride.gameConfig.tradeCost;
   };
+  const techCost = function (tech: { brr: number; level: number }) {
+    if (NeptunesPride.gameVersion !== "proteus") {
+      return tech.brr * tech.level;
+    }
+    return tech.brr * tech.level * tech.level * tech.level;
+  };
   let techTable = function (
     output: Stanzas,
     playerIndexes: number[],
@@ -3655,9 +3661,7 @@ function NeptunesPrideAgent() {
         if (!rows[i]) {
           rows[i] = translateTech(t);
           rows[i] += `|${myTech[t].level}`;
-          rows[i] += `|${myTech[t].research}/${
-            myTech[t].brr * myTech[t].level
-          }`;
+          rows[i] += `|${myTech[t].research}/${techCost(myTech[t])}`;
         }
         const level = levels[t].level;
         if (level < myTech[t].level) {
@@ -3958,14 +3962,20 @@ function NeptunesPrideAgent() {
         const player = scan.players[pi];
         const tech = player.tech[player.researching];
         const soFar = tech.research;
-        const total = tech.brr * tech.level;
+        const total = techCost(tech);
         const remaining = total - soFar;
         const science = p.total_science;
-        const tickIncr = Math.ceil(remaining / science);
+        const researchRate = (science: number) => {
+          if (NeptunesPride.gameVersion === "proteus") {
+            return science * player.tech.research.level;
+          }
+          return science;
+        };
+        const tickIncr = Math.ceil(remaining / researchRate(science));
         const tick = scan.tick + tickIncr;
         let upgrade = "";
         for (let i = 1; i < 10; ++i) {
-          const betterTick = Math.ceil(remaining / (science + i));
+          const betterTick = Math.ceil(remaining / researchRate(science + i));
           if (betterTick < tickIncr) {
             upgrade = `${i}`;
             break;
