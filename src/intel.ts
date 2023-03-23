@@ -209,13 +209,14 @@ function NeptunesPrideAgent() {
     let players = NeptunesPride.universe.galaxy.players;
     let stars = NeptunesPride.universe.galaxy.stars;
 
-    let output = [];
+    let output: Stanzas = [];
     for (const p in players) {
-      output.push(["[[{0}]]".format(p)]);
+      const playerOutput: Stanzas = [];
+      playerOutput.push(["[[{0}]]".format(p)]);
       for (const s in stars) {
         let star = stars[s];
-        if (star.puid == p && star.shipsPerTick >= 0) {
-          output.push([
+        if (star.puid == p && star.shipsPerTick >= 0 && star.v !== 0) {
+          playerOutput.push([
             "  [[#{5}]] [[{0}]] {1}/{2}/{3} {4} ships".format(
               star.n,
               star.e,
@@ -226,6 +227,9 @@ function NeptunesPrideAgent() {
             ),
           ]);
         }
+      }
+      if (playerOutput.length > 1) {
+        output = output.concat(playerOutput);
       }
     }
     prepReport("stars", output);
