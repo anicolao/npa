@@ -163,7 +163,11 @@ function NeptunesPrideAgent() {
     if (showingMenu) {
       showUI();
     }
-    if (showingOurUI && reportName !== reportSelector.getValue()) {
+    if (
+      showingOurUI &&
+      reportSelector &&
+      reportName !== reportSelector.getValue()
+    ) {
       reportSelector.setValue(reportName);
       reportSelector.onChange();
     }
