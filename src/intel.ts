@@ -755,6 +755,42 @@ function NeptunesPrideAgent() {
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "activity",
   );
+  const routeEnemy = () => {
+    const universe = NeptunesPride.universe;
+    const npui = NeptunesPride.npui;
+    if (universe.selectedStar) {
+      const star = universe.selectedStar;
+      const base = 100000;
+      let uid = base + 1;
+      while (universe.galaxy.fleets[uid]) {
+        uid++;
+      }
+      const fakeFleet = {
+        l: 0,
+        lx: star.x,
+        ly: star.y,
+        x: star.x,
+        y: star.y,
+        n: `Fake Enemy Fleet ${uid - base}`,
+        o: [] as [number, number, number, number][],
+        puid: star.puid,
+        st: star.st,
+        uid,
+        w: false,
+      };
+      star.st = 0;
+      NeptunesPride.np.onNewFleetResponse(null, fakeFleet);
+    } else if (universe.selectedFleet) {
+      npui.trigger("start_edit_waypoints", { fleet: universe.selectedFleet });
+    }
+  };
+  defineHotkey(
+    "x",
+    routeEnemy,
+    "Set fleet orders for an enemy fleet",
+    "These orders won't really happen but you can use them to explore " +
+      "attack or defense options your opponents have.",
+  );
 
   let ampm = function (h: number, m: number | string) {
     if (m < 10) m = `0${m}`;
