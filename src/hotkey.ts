@@ -10,16 +10,16 @@ export type HotkeyCallback = Callback & HelpText;
 
 export function setClip(text: string): void {
   lastClip = text;
+  navigator.clipboard.writeText(lastClip);
 }
 
 export function getClip(): string {
   return lastClip;
 }
 
-const copy = function (reportFn: HotkeyCallback) {
+const preventDefault = function (reportFn: HotkeyCallback) {
   return function () {
     reportFn();
-    navigator.clipboard.writeText(lastClip);
     return false;
   };
 };
@@ -45,7 +45,7 @@ export function defineHotkey(
   }
   hotkeys[key] = action;
   actionMap[button] = key;
-  Mousetrap.bind(key, copy(action));
+  Mousetrap.bind(key, preventDefault(action));
 }
 
 export function getHotkeys() {
