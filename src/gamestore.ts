@@ -1,8 +1,15 @@
 import { openDB } from "idb";
 
+export interface TypedProperty {
+  name: string;
+  displayName: string;
+  type: string;
+  allowableValues?: any[];
+}
 export class GameStore {
   dbPromise;
   storename: string;
+  properties: TypedProperty[] = [];
 
   constructor(storename: string) {
     this.storename = storename;
@@ -30,8 +37,10 @@ export class GameStore {
   }
 
   newSetting<L extends string, T>(
+    displayName: string,
     name: L,
     defaultValue: T,
+    allowableValues?: T[],
   ): asserts this is GameStore & Record<L, T> {
     let _cached: T | null = null;
     this.get(name).then((v) => {
@@ -52,5 +61,15 @@ export class GameStore {
       },
     };
     Object.defineProperty(this, name, propDesc);
+    this.properties.push({
+      name,
+      displayName,
+      type: typeof defaultValue,
+      allowableValues,
+    });
+  }
+
+  getProperties(): TypedProperty[] {
+    return this.properties;
   }
 }

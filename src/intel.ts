@@ -97,13 +97,24 @@ function NeptunesPrideAgent() {
 
   const settings: GameStore = new GameStore("global_settings");
 
+  settings.newSetting("IBB API Key", "ibbApiKey", "");
   type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
   const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
-  settings.newSetting("relativeTimes", timeOptions[0]);
-  settings.newSetting("autoRulerPower", 1);
-  settings.newSetting("territoryOn", true);
-  settings.newSetting("whitePlayer", false);
-  settings.newSetting("territoryBrightness", 1);
+  settings.newSetting(
+    "Time Base",
+    "relativeTimes",
+    timeOptions[0],
+    timeOptions,
+  );
+  settings.newSetting("Territory Display", "territoryOn", true, [true, false]);
+  settings.newSetting("Recolor me", "whitePlayer", false, [false, true]);
+  settings.newSetting(
+    "Territory Style",
+    "territoryBrightness",
+    1,
+    [0, 1, 2, 3],
+  );
+  settings.newSetting("Auto Ruler Power", "autoRulerPower", 1);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -151,9 +162,16 @@ function NeptunesPrideAgent() {
 
   let lastReport = "planets";
   let showingOurUI = false;
+  let showingOurOptions = false;
   let reportSelector: any = null;
   let filterInput: any = null;
   const showUI = () => NeptunesPride.npui.trigger("show_screen", "new_fleet");
+  const showOptions = (options?: any) => {
+    NeptunesPride.npui.trigger("show_screen", [
+      "new_fleet",
+      { kind: "npa_options", ...options },
+    ]);
+  };
   const prepReport = function (
     reportName: string,
     stanzas: (string | string[])[],
@@ -207,6 +225,15 @@ function NeptunesPrideAgent() {
     "Bring up the NP Agent UI." +
       "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
     "Open NPA UI",
+  );
+  defineHotkey(
+    "ctrl+`",
+    showOptions,
+    "Bring up the NP Agent Options." +
+      "<p>The Agent Options lets you customize advanced settings." +
+      "<p>In particular, if you want to upload screenshots, get an API " +
+      "key from api.imgbb.com and put it in the settings.",
+    "Open Options",
   );
 
   function starReport() {
@@ -1402,13 +1429,20 @@ function NeptunesPrideAgent() {
     return output;
   };
 
+  const mapRebuild = () => {
+    console.log("rebuild", { showingOurOptions, showingOurUI });
+    if (showingOurOptions) {
+      NeptunesPride.np.trigger("refresh_interface");
+    }
+    NeptunesPride.np.trigger("map_rebuild");
+  };
   const incTerritoryBrightness = () => {
     if (!settings.territoryOn) {
       toggleTerritory();
       return;
     }
     settings.territoryBrightness = (settings.territoryBrightness + 1) % 4;
-    NeptunesPride.np.trigger("map_rebuild");
+    mapRebuild();
   };
   const decTerritoryBrightness = () => {
     if (!settings.territoryOn) {
@@ -1418,7 +1452,7 @@ function NeptunesPrideAgent() {
     let nextPower = (settings.territoryBrightness - 1) % 4;
     if (nextPower < 0) nextPower = 2;
     settings.territoryBrightness = nextPower;
-    NeptunesPride.np.trigger("map_rebuild");
+    mapRebuild();
   };
   defineHotkey(
     "ctrl+8",
@@ -1434,13 +1468,13 @@ function NeptunesPrideAgent() {
   );
   const incAutoRuler = () => {
     settings.autoRulerPower += 1;
-    NeptunesPride.np.trigger("map_rebuild");
+    mapRebuild();
   };
   const decAutoRuler = () => {
     let nextPower = settings.autoRulerPower - 1;
     if (nextPower < 0) nextPower = 0;
     settings.autoRulerPower = nextPower;
-    NeptunesPride.np.trigger("map_rebuild");
+    mapRebuild();
   };
   defineHotkey(
     "8",
@@ -1562,9 +1596,90 @@ function NeptunesPrideAgent() {
     "fleets",
   );
 
-  function screenshot() {
+  const npaOptions = function (info?: any) {
+    const npui = NeptunesPride.npui;
+    NeptunesPride.templates["npa_options"] = `NPA Settings ${version.replaceAll(
+      / .*$/g,
+      "",
+    )}`;
+    var optionsScreen = npui.Screen("npa_options");
+    Crux.IconButton("icon-help", "show_screen", "help")
+      .grid(24.5, 0, 3, 3)
+      .roost(optionsScreen).onClick = npaHelp;
+
+    var options = Crux.Widget("rel").size(480, 288).roost(optionsScreen);
+
+    settings.getProperties().forEach(async (p, i) => {
+      const labelKey = `npa_${p.name}`;
+      NeptunesPride.templates[labelKey] = p.displayName;
+      const bad = info?.missingKey === p.name ? "txt_warn_bad" : "";
+      Crux.Text(labelKey, `pad12 ${bad}`)
+        .grid(0, 3 * i, 20, 3)
+        .roost(options);
+      const defaultValue = settings[p.name];
+      if (p.allowableValues) {
+        const values: { [k: number]: any } = {};
+        let defaultIndex = "0";
+        p.allowableValues.forEach((v, i) => {
+          values[i] = v;
+          if (v === defaultValue) {
+            defaultIndex = `${i}`;
+          }
+        });
+        const eventKey = `setting_change_${p.name}`;
+        const dd = Crux.DropDown(defaultIndex, values, eventKey)
+          .grid(15, 3 * i, 15, 3)
+          .roost(options);
+        optionsScreen.on(eventKey, (x: any, y: any) => {
+          settings[p.name] = values[y];
+          mapRebuild();
+        });
+      } else {
+        const field = Crux.TextInput("single")
+          .grid(15, 3 * i, 15, 3)
+          .roost(options);
+        field.setValue(defaultValue);
+        field.eventKind = "text_entry";
+        optionsScreen.on(field.eventKind, (x: any, y: any) => {
+          if (field.getValue() !== settings[p.name]) {
+            if (p.type === "number") {
+              settings[p.name] = +field.getValue() || settings[p.name];
+            } else if (p.type === "boolean") {
+              settings[p.name] = field.getValue() === "true";
+            } else {
+              settings[p.name] = field.getValue();
+            }
+            mapRebuild();
+          }
+        });
+      }
+    });
+
+    return optionsScreen;
+  };
+
+  function screenshot(): Promise<void> {
     let map = NeptunesPride.npui.map;
-    setClip(map.canvas[0].toDataURL("image/webp", 0.05));
+    const key = settings.ibbApiKey;
+    if (!key) {
+      showOptions({ missingKey: "ibbApiKey" });
+      return;
+    } else {
+      const params = {
+        expiration: 2592000,
+        key,
+        image: map.canvas[0].toDataURL("image/webp", 0.45).substring(23),
+      };
+      return fetch(`https://api.imgbb.com/1/upload`, {
+        method: "POST",
+        redirect: "follow",
+        body: new URLSearchParams(params as any),
+      }).then((resp) => {
+        return resp.json().then((r) => {
+          setClip(`[[${r.data.url}]]`);
+        });
+      });
+    }
   }
 
   defineHotkey(
@@ -1836,7 +1951,7 @@ function NeptunesPrideAgent() {
       }") -${x + 8}px -${y + 8}px`;
     }
     console.log("Recreating star and fleet sprites");
-    NeptunesPride.np.trigger("map_rebuild");
+    mapRebuild();
     // firefox workaround: a delayed repaint seems needed?
     window.setTimeout(() => NeptunesPride.np.trigger("map_rebuild"), 500);
   }
@@ -2860,6 +2975,7 @@ function NeptunesPrideAgent() {
     NeptunesPride.templates["n_p_a"] = "NP Agent";
     NeptunesPride.templates["npa_report_type"] = "Filter:";
     NeptunesPride.templates["npa_paste"] = "Intel";
+    NeptunesPride.templates["npa_screenshot"] = "Screenshot";
     let superNewMessageCommentBox = npui.NewMessageCommentBox;
 
     var npaReportIcons: { [k: string]: string } = {
@@ -2904,29 +3020,40 @@ function NeptunesPrideAgent() {
       controls: "Controls",
       help: "Help",
     };
-    let reportPasteHook = function (_e: any, _d: any) {
-      let inbox = NeptunesPride.inbox;
-      inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + getClip();
-      inbox.trigger("show_screen", "diplomacy_detail");
+    let reportPasteHook = function (_e: any, report: any) {
+      const pasteClip = () => {
+        let inbox = NeptunesPride.inbox;
+        inbox.commentDrafts[inbox.selectedMessage.key] += "\n" + getClip();
+        inbox.trigger("show_screen", "diplomacy_detail");
+      };
+      if (report === "screenshot") {
+        const maybePromise = screenshot();
+        if (maybePromise) {
+          maybePromise.then(pasteClip);
+        }
+      } else {
+        pasteClip();
+      }
     };
     onTrigger("paste_report", reportPasteHook);
     npui.NewMessageCommentBox = function () {
       let widget = superNewMessageCommentBox();
       let reportButton = Crux.Button("npa_paste", "paste_report", "intel").grid(
-        10,
+        9.5,
         12,
-        4,
+        4.5,
         3,
       );
       reportButton.roost(widget);
+      let screenShotButton = Crux.Button(
+        "npa_screenshot",
+        "paste_report",
+        "screenshot",
+      ).grid(13.5, 12, 7, 3);
+      screenShotButton.roost(widget);
       return widget;
     };
     const npaReports = function () {
-      npui.onHideScreen(null, true);
-      npui.onHideSelectionMenu();
-
-      npui.trigger("hide_side_menu");
-      npui.trigger("reset_edit_mode");
       var reportScreen = npui.Screen("n_p_a");
 
       Crux.Text("", "rel pad12 txt_center col_black  section_title")
@@ -3008,11 +3135,6 @@ function NeptunesPrideAgent() {
       reportHook(0, lastReport);
       reportScreen.on("exec_report", reportHook);
 
-      npui.activeScreen = reportScreen;
-      npui.showingScreen = "new_fleet";
-      npui.screenConfig = undefined;
-      reportScreen.roost(npui.screenContainer);
-      npui.layoutElement(reportScreen);
       return reportScreen;
     };
     const backMenu = npui.sideMenu.children[npui.sideMenu.children.length - 1];
@@ -3157,10 +3279,14 @@ function NeptunesPrideAgent() {
     const superNewFleetScreen = npui.NewFleetScreen;
     onTrigger("show_screen", (_event: any, name: any, screenConfig: any) => {
       showingOurUI = name === "new_fleet" && screenConfig === undefined;
+      showingOurOptions =
+        name === "new_fleet" && screenConfig?.kind === "npa_options";
     });
     npui.NewFleetScreen = (screenConfig: any) => {
       if (screenConfig === undefined) {
         return npaReports();
+      } else if (screenConfig?.kind === "npa_options") {
+        return npaOptions(screenConfig);
       } else {
         return superNewFleetScreen(screenConfig);
       }
@@ -3268,7 +3394,7 @@ function NeptunesPrideAgent() {
   };
   let toggleTerritory = function () {
     settings.territoryOn = !settings.territoryOn;
-    NeptunesPride.np.trigger("map_rebuild");
+    mapRebuild();
   };
   defineHotkey(
     ")",
