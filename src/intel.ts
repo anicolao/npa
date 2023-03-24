@@ -4047,7 +4047,8 @@ function NeptunesPrideAgent() {
       message: "confirm_send_bulktech",
       messageTemplateData: {
         techs: techs.map(translateTech).join(", "),
-        alias: player.colourBox + player.hyperlinkedRawAlias,
+        alias:
+          (player.colourBox || player.colorBox) + player.hyperlinkedRawAlias,
       },
       eventKind: "send_bulktech",
       eventData: {
@@ -4098,7 +4099,8 @@ function NeptunesPrideAgent() {
       message: "confirm_send_cash",
       messageTemplateData: {
         amount: credits,
-        alias: player.colourBox + player.hyperlinkedRawAlias,
+        alias:
+          (player.colourBox || player.colorBox) + player.hyperlinkedRawAlias,
       },
       eventKind: "send_money",
       eventData: {
