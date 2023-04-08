@@ -1619,7 +1619,8 @@ function NeptunesPrideAgent() {
       Crux.Text(labelKey, `pad12 ${bad}`)
         .grid(0, 3 * i, 20, 3)
         .roost(options);
-      const defaultValue = settings[p.name];
+      const rawSettings: { [k: string]: any } = settings;
+      const defaultValue = rawSettings[p.name];
       if (p.allowableValues) {
         const values: { [k: number]: any } = {};
         let defaultIndex = "0";
@@ -1634,7 +1635,7 @@ function NeptunesPrideAgent() {
           .grid(15, 3 * i, 15, 3)
           .roost(options);
         optionsScreen.on(eventKey, (x: any, y: any) => {
-          settings[p.name] = values[y];
+          rawSettings[p.name] = values[y];
           mapRebuild();
         });
       } else {
@@ -1644,13 +1645,13 @@ function NeptunesPrideAgent() {
         field.setValue(defaultValue);
         field.eventKind = "text_entry";
         optionsScreen.on(field.eventKind, (x: any, y: any) => {
-          if (field.getValue() !== settings[p.name]) {
+          if (field.getValue() !== rawSettings[p.name]) {
             if (p.type === "number") {
-              settings[p.name] = +field.getValue() || settings[p.name];
+              rawSettings[p.name] = +field.getValue() || rawSettings[p.name];
             } else if (p.type === "boolean") {
-              settings[p.name] = field.getValue() === "true";
+              rawSettings[p.name] = field.getValue() === "true";
             } else {
-              settings[p.name] = field.getValue();
+              rawSettings[p.name] = field.getValue();
             }
             mapRebuild();
           }
@@ -1661,7 +1662,7 @@ function NeptunesPrideAgent() {
     return optionsScreen;
   };
 
-  function screenshot(): Promise<void> {
+  const screenshot = function (): Promise<void> {
     let map = NeptunesPride.npui.map;
     const key = settings.ibbApiKey;
     if (!key) {
@@ -1683,7 +1684,7 @@ function NeptunesPrideAgent() {
         });
       });
     }
-  }
+  };
 
   defineHotkey(
     "#",
