@@ -154,8 +154,12 @@ function NeptunesPrideAgent() {
     let universe = NeptunesPride.universe;
     for (let i = 0; i < 64; ++i) {
       if (universe.hyperlinkedMessageInserts[i]) {
-        universe.hyperlinkedMessageInserts[`#${i}`] =
-          universe.hyperlinkedMessageInserts[i].replace(/><a.*<.a>/, ">");
+        const player = NeptunesPride.universe.galaxy.players[i];
+        universe.hyperlinkedMessageInserts[`${i}`] =
+          universe.hyperlinkedMessageInserts[i] =
+            player.hyperlinkedBox + player.hyperlinkedRawAlias;
+
+        universe.hyperlinkedMessageInserts[`#${i}`] = player.hyperlinkedBox;
       }
     }
   };
@@ -1839,6 +1843,17 @@ function NeptunesPrideAgent() {
     "#c000c0",
     "#6000c0",
   ];
+  const allianceColors = [
+    "#3b55ce",
+    "#79fffe",
+    "#13ca91",
+    "#fec763",
+    "#ff8b8b",
+    "#ffaa01",
+    "#fea0fe",
+    "#ce96fb",
+  ];
+
   let colorMap = colors.flatMap((x) => colors);
   if (NeptunesPride?.universe?.galaxy) {
     rebuildColorMap(NeptunesPride.universe.galaxy);
@@ -1954,7 +1969,33 @@ function NeptunesPrideAgent() {
         map.starSrc.src
       }") -${x + 8}px -${y + 8}px`;
     }
+    const universe = NeptunesPride.universe;
+    const getAlliance = (p: any) => {
+      if (colorMap[p.uid] == "#ffffff") {
+        return "alliance_white";
+      }
+      return "";
+    };
+    for (let i in universe.galaxy.players) {
+      const player = universe.galaxy.players[i];
+      universe.expandPlayerData(player);
+      const alliance = getAlliance(player) || "";
+      player.colourBox = `<span class='playericon_font pc_${player.colorIndex} ${alliance}'>${player.shapeIndex}</span>`;
+      player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
+    }
+    linkPlayerSymbols();
+
+    for (let i in universe.galaxy.stars) {
+      universe.expandStarData(universe.galaxy.stars[i]);
+    }
+    for (let i in universe.galaxy.fleets) {
+      universe.expandFleetData(universe.galaxy.fleets[i]);
+    }
+
     console.log("Recreating star and fleet sprites");
+    if (!showingOurOptions) {
+      NeptunesPride.np.trigger("refresh_interface");
+    }
     mapRebuild();
     // firefox workaround: a delayed repaint seems needed?
     window.setTimeout(() => NeptunesPride.np.trigger("map_rebuild"), 500);
