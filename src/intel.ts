@@ -1970,27 +1970,13 @@ function NeptunesPrideAgent() {
       }") -${x + 8}px -${y + 8}px`;
     }
     const universe = NeptunesPride.universe;
-    const getAlliance = (p: any) => {
-      if (colorMap[p.uid] == "#ffffff") {
-        return "alliance_white";
-      }
-      return "";
-    };
     for (let i in universe.galaxy.players) {
       const player = universe.galaxy.players[i];
-      universe.expandPlayerData(player);
-      const alliance = getAlliance(player) || "";
-      player.colourBox = `<span class='playericon_font pc_${player.colorIndex} ${alliance}'>${player.shapeIndex}</span>`;
+      const recolor = `style='color: ${colorMap[player.uid]};'`;
+      player.colourBox = `<span class='playericon_font pc_${player.colorIndex}' ${recolor}>${player.shapeIndex}</span>`;
       player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
     }
     linkPlayerSymbols();
-
-    for (let i in universe.galaxy.stars) {
-      universe.expandStarData(universe.galaxy.stars[i]);
-    }
-    for (let i in universe.galaxy.fleets) {
-      universe.expandFleetData(universe.galaxy.fleets[i]);
-    }
 
     console.log("Recreating star and fleet sprites");
     if (!showingOurOptions) {
@@ -3584,12 +3570,16 @@ function NeptunesPrideAgent() {
     }
     return true;
   };
-  const mergeScanData = (scan: any) => {
+  const resetAliases = () => {
     const universe = NeptunesPride.universe;
     for (let pk in universe.galaxy.players) {
       const player = universe.galaxy.players[pk];
       player.alias = player.rawAlias;
     }
+  };
+  const mergeScanData = (scan: any) => {
+    const universe = NeptunesPride.universe;
+    resetAliases();
     if (timeTravelTick === -1) {
       let uid = NeptunesPride.universe.galaxy.player_uid;
       if (NeptunesPride.originalPlayer) {

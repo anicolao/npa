@@ -52,32 +52,3 @@ div.screenshot:hover {
 	width: auto !important;
 	padding-right: 0.5em;
 }
-
-.alliance_0 {
- color: #3b55ce !important;
-}
-.alliance_1 {
-  color: #79fffe !important;
-}
-.alliance_2 {
-  color: #13ca91 !important;
-}
-.alliance_3 {
-  color: #fec763 !important;
-}
-.alliance_4 {
-  color: #ff8b8b !important;
-}
-.alliance_5 {
-  color: #ffaa01 !important;
-}
-.alliance_6 {
-  color: #fea0fe !important;
-}
-.alliance_7 {
-  color: #ce96fb !important;
-}
-
-.alliance_white {
-  color: #ffffff !important;
-}
