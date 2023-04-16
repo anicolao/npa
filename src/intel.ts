@@ -115,6 +115,11 @@ function NeptunesPrideAgent() {
     [0, 1, 2, 3],
   );
   settings.newSetting("Auto Ruler Power", "autoRulerPower", 1);
+  settings.newSetting(
+    "Custom Colors",
+    "customColors",
+    "#3b55ce #79fffe #13ca91 #fec763 #ff8b8b #ffaa01 #fea0fe #ce96fb",
+  );
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -888,9 +893,12 @@ function NeptunesPrideAgent() {
   defineHotkey(
     "x",
     routeEnemy,
-    "Set fleet orders for an enemy fleet",
-    "These orders won't really happen but you can use them to explore " +
-      "attack or defense options your opponents have.",
+    "Set fleet orders for an enemy fleet. " +
+      "These orders won't really happen but you can use them to explore " +
+      "attack or defense options your opponents have. First, select an " +
+      "enemy star, then press x to create and set orders for the fleet. You" +
+      "can then also route any other fleets that player controls.",
+    "Route Enemy",
   );
 
   let ampm = function (h: number, m: number | string) {
@@ -1614,7 +1622,10 @@ function NeptunesPrideAgent() {
       .grid(24.5, 0, 3, 3)
       .roost(optionsScreen).onClick = npaHelp;
 
-    var options = Crux.Widget("rel").size(480, 288).roost(optionsScreen);
+    const numSettings = settings.getProperties().length;
+    var options = Crux.Widget("rel")
+      .size(480, 50 * numSettings)
+      .roost(optionsScreen);
 
     settings.getProperties().forEach(async (p, i) => {
       const labelKey = `npa_${p.name}`;
@@ -1842,16 +1853,6 @@ function NeptunesPrideAgent() {
     "#c00000",
     "#c000c0",
     "#6000c0",
-  ];
-  const allianceColors = [
-    "#3b55ce",
-    "#79fffe",
-    "#13ca91",
-    "#fec763",
-    "#ff8b8b",
-    "#ffaa01",
-    "#fea0fe",
-    "#ce96fb",
   ];
 
   let colorMap = colors.flatMap((x) => colors);
