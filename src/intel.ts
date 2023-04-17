@@ -1832,7 +1832,11 @@ function NeptunesPrideAgent() {
         .grid(25, yOffset, 5, 3)
         .roost(colours);
       button.on(eventName, (x: any, y: any) => {
-        if (p.prevColor && field.getValue() !== p.originalColor) {
+        if (
+          p.prevColor &&
+          (field.getValue() !== p.originalColor ||
+            shapeField.getValue() != p.shapeIndex)
+        ) {
           field.setValue(p.originalColor);
           shapeField.setValue(p.shapeIndex);
           handleChange();
