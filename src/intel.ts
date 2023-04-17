@@ -181,6 +181,12 @@ function NeptunesPrideAgent() {
       { kind: "npa_options", ...options },
     ]);
   };
+  const configureColours = (options?: any) => {
+    NeptunesPride.npui.trigger("show_screen", [
+      "new_fleet",
+      { kind: "npa_colours", ...options },
+    ]);
+  };
   const prepReport = function (
     reportName: string,
     stanzas: (string | string[])[],
@@ -243,6 +249,17 @@ function NeptunesPrideAgent() {
       "<p>In particular, if you want to upload screenshots, get an API " +
       "key from api.imgbb.com and put it in the settings.",
     "Open Options",
+  );
+  defineHotkey(
+    "ctrl+a",
+    configureColours,
+    "Configure colours and alliances." +
+      "<p>You can set the colour of every player in the game to a " +
+      "different value than the default, and if you wish you can " +
+      "use the same colour for multiple players to configure who " +
+      "you think is allied with who in order to get better reports " +
+      "and a map that reflects the alliances in your game.",
+    "Colours",
   );
 
   function starReport() {
@@ -1676,6 +1693,151 @@ function NeptunesPrideAgent() {
 
     return optionsScreen;
   };
+  let currentCustomColor = 0;
+  let currentCustomShape = 0;
+  const npaColours = function (info?: any) {
+    const npui = NeptunesPride.npui;
+    NeptunesPride.templates["npa_colours"] = "Colours and Shapes";
+    var colourScreen = npui.Screen("npa_colours");
+    Crux.IconButton("icon-help", "show_screen", "help")
+      .grid(24.5, 0, 3, 3)
+      .roost(colourScreen).onClick = npaHelp;
+
+    const galaxy = NeptunesPride.universe.galaxy;
+    const players = Object.keys(galaxy.players).map((k) => galaxy.players[k]);
+    const numPlayers = players.length;
+    const customColors = settings.customColors.split(" ");
+    const swatchesPerRow = 10;
+    const colorSwatchRows = Math.ceil(customColors.length / swatchesPerRow);
+    const shapeRowHeight = 3;
+    var colours = Crux.Widget("rel")
+      .size(480, 50 * (numPlayers + colorSwatchRows) + shapeRowHeight * 16)
+      .roost(colourScreen);
+
+    customColors.forEach((c, i) => {
+      const xOffset = 3 * (i % swatchesPerRow);
+      const yOffset = 3 * Math.floor(i / swatchesPerRow);
+      const swatchSize = 28;
+      const style = `text-align: center; vertical-align: middle; border-radius: 5px; width: ${swatchSize}px; height: ${swatchSize}px; background-color: ${c}; display: inline-block`;
+      const tickMark = i === currentCustomColor ? "✓" : "";
+      Crux.Text("", "pad12")
+        .rawHTML(
+          `<span onClick=\"Crux.crux.trigger('set_cc', ${i})\" style='${style}'>${tickMark}</span>`,
+        )
+        .grid(xOffset, yOffset, 3, 3)
+        .roost(colours)
+        .on("set_cc", (x: any, y: any) => {
+          if (currentCustomColor !== y) {
+            currentCustomColor = y;
+            NeptunesPride.np.trigger("refresh_interface");
+          }
+        });
+    });
+    const customShapes = [0, 1, 2, 3, 4, 5, 6, 7];
+    customShapes.forEach((s, i) => {
+      const xOffset = 3 * i + 3;
+      const yOffset = 3 * colorSwatchRows - 1;
+      const map = NeptunesPride.npui.map;
+      const swatchSize = 48;
+      const offset = 8;
+      const x = 64 * i;
+      const y = 64;
+      const style = `text-align: center; vertical-align: middle; border-radius: 5px; width: ${swatchSize}px; height: ${swatchSize}px; background-image: #fff; display: inline-block; background: url("${
+        map.starSrc.src
+      }") -${x + offset}px -${y + offset}px;`;
+      const tickMark = i === currentCustomShape ? "✓" : "";
+      Crux.Text("", "pad12")
+        .rawHTML(
+          `<span onClick=\"Crux.crux.trigger('set_cs', ${i})\" style='${style}'>${tickMark}</span>`,
+        )
+        .grid(xOffset, yOffset, 3, 3)
+        .roost(colours)
+        .on("set_cs", (x: any, y: any) => {
+          if (currentCustomShape !== y) {
+            currentCustomShape = y;
+            NeptunesPride.np.trigger("refresh_interface");
+          }
+        });
+    });
+    players.forEach((p, i) => {
+      const name = p.alias;
+      const color = colorMap[p.uid];
+      const shape = shapeMap[p.uid];
+      const yOffset = 3 * i + 3 * colorSwatchRows + shapeRowHeight;
+      Crux.Text("", "pad12")
+        .rawHTML(name)
+        .grid(0, yOffset, 20, 3)
+        .roost(colours);
+      const shapeField = Crux.TextInput("single")
+        .grid(16, yOffset, 3, 3)
+        .roost(colours);
+      shapeField.node.addClass("playericon_font");
+      shapeField.node.css("color", color);
+      shapeField.setValue(shape);
+      const field = Crux.TextInput("single")
+        .grid(19, yOffset, 6, 3)
+        .roost(colours);
+      field.setValue(color);
+      field.eventKind = "text_entry";
+      const handleChange = () => {
+        let changed = false;
+        if (/^#[0-9a-fA-F]{6}$/.test(field.getValue())) {
+          if (field.getValue() != color) {
+            const newColor = field.getValue();
+            setPlayerColor(p.uid, newColor);
+            if (
+              customColors.indexOf(newColor) === -1 &&
+              colors.indexOf(newColor) === -1
+            ) {
+              currentCustomColor = customColors.length;
+              customColors.push(newColor);
+              settings.customColors = customColors.join(" ");
+            }
+            changed = true;
+          }
+        }
+        if (/^[0-7]$/.test(shapeField.getValue())) {
+          if (shapeField.getValue() != shape) {
+            const newShape = +shapeField.getValue();
+            console.log(`set ${p.uid} to shape ${newShape}`);
+            shapeMap[p.uid] = newShape;
+            changed = true;
+          }
+        }
+        if (changed) {
+          recolorPlayers();
+          NeptunesPride.np.trigger("refresh_interface");
+          mapRebuild();
+        }
+      };
+      field.node.on("focus", () => {
+        const newColor = customColors[currentCustomColor];
+        field.setValue(newColor);
+        handleChange();
+      });
+      shapeField.node.on("focus", () => {
+        const newShape = currentCustomShape;
+        shapeField.setValue(newShape);
+        handleChange();
+      });
+      colourScreen.on(field.eventKind, (x: any, y: any) => {
+        handleChange();
+      });
+      const eventName = `reset_cc_${p.uid}`;
+      const button = Crux.Button(eventName, eventName, p)
+        .rawHTML("Reset")
+        .grid(25, yOffset, 5, 3)
+        .roost(colours);
+      button.on(eventName, (x: any, y: any) => {
+        if (p.prevColor && field.getValue() !== p.originalColor) {
+          field.setValue(p.originalColor);
+          handleChange();
+        }
+      });
+    });
+
+    return colourScreen;
+  };
 
   const screenshot = function (): Promise<void> {
     let map = NeptunesPride.npui.map;
@@ -1856,6 +2018,7 @@ function NeptunesPrideAgent() {
   ];
 
   let colorMap = colors.flatMap((x) => colors);
+  let shapeMap = colorMap.map((x, i) => Math.floor(i / 8));
   if (NeptunesPride?.universe?.galaxy) {
     rebuildColorMap(NeptunesPride.universe.galaxy);
   }
@@ -1892,11 +2055,12 @@ function NeptunesPrideAgent() {
       playerSprite.width = playerSprite.height = 64 * 9;
       const playerContext: CanvasRenderingContext2D =
         playerSprite.getContext("2d");
-      playerContext.drawImage(originalStarSrc, 0, 0);
+      const shapeOffset = (player.shapeIndex - shapeMap[player.uid]) * 64;
+      playerContext.drawImage(originalStarSrc, shapeOffset, 0);
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
-      let col = Math.floor(uid / 8);
+      let col = player.shapeIndex;
       let row = Math.floor(uid % 8) + 1;
       if (player.shape !== undefined) {
         col = player.shape;
@@ -1922,7 +2086,7 @@ function NeptunesPrideAgent() {
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
-      let realcol = Math.floor(uid / 8);
+      let realcol = player.shapeIndex;
       let col = 8;
       let row = Math.floor(uid % 8) + 1;
       if (player.shape !== undefined) {
@@ -1957,7 +2121,7 @@ function NeptunesPrideAgent() {
     for (let pk in players) {
       const player = players[pk];
       const uid = player.uid;
-      let col = Math.floor(uid / 8);
+      let col = player.shapeIndex;
       let row = Math.floor(uid % 8) + 1;
       if (player.shape !== undefined) {
         col = player.shape;
@@ -1974,7 +2138,8 @@ function NeptunesPrideAgent() {
     for (let i in universe.galaxy.players) {
       const player = universe.galaxy.players[i];
       const recolor = `style='color: ${colorMap[player.uid]};'`;
-      player.colourBox = `<span class='playericon_font pc_${player.colorIndex}' ${recolor}>${player.shapeIndex}</span>`;
+      const shape = shapeMap[player.uid];
+      player.colourBox = `<span class='playericon_font pc_${player.colorIndex}' ${recolor}>${shape}</span>`;
       player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
     }
     linkPlayerSymbols();
@@ -3319,6 +3484,8 @@ function NeptunesPrideAgent() {
         return npaReports();
       } else if (screenConfig?.kind === "npa_options") {
         return npaOptions(screenConfig);
+      } else if (screenConfig?.kind === "npa_colours") {
+        return npaColours(screenConfig);
       } else {
         return superNewFleetScreen(screenConfig);
       }
@@ -3439,8 +3606,14 @@ function NeptunesPrideAgent() {
     const player = NeptunesPride.universe.galaxy.players[uid];
     colorMap[player.uid] = color;
     if (player.shape !== undefined) {
+      if (!player.originalColor) {
+        player.originalColor = player.colorStyle;
+      }
       player.colorStyle = colorMap[player.uid];
     } else {
+      if (!player.originalColor) {
+        player.originalColor = player.color;
+      }
       player.prevColor = player.color;
       player.color = colorMap[player.uid];
     }
