@@ -1736,19 +1736,20 @@ function NeptunesPrideAgent() {
     const customShapes = [0, 1, 2, 3, 4, 5, 6, 7];
     customShapes.forEach((s, i) => {
       const xOffset = 3 * i + 3;
-      const yOffset = 3 * colorSwatchRows - 1;
-      const map = NeptunesPride.npui.map;
+      const yOffset = 3 * colorSwatchRows;
       const swatchSize = 48;
-      const offset = 8;
-      const x = 64 * i;
-      const y = 64;
-      const style = `text-align: center; vertical-align: middle; border-radius: 5px; width: ${swatchSize}px; height: ${swatchSize}px; background-image: #fff; display: inline-block; background: url("${
-        map.starSrc.src
-      }") -${x + offset}px -${y + offset}px;`;
-      const tickMark = i === currentCustomShape ? "✓" : "";
+      const color = customColors[currentCustomColor];
+      let style = `text-align: center; vertical-align: middle; border-radius: 5px; width: ${swatchSize}px; height: ${swatchSize}px; color: ${color};`;
+      style += "padding: 4px; padding-top: 6px; padding-right: 5px;";
+      style += "background-color: black; ";
+      if (i === currentCustomShape) {
+        style += "border: 2px solid white; ";
+      } else {
+        style += "border: 2px solid grey; ";
+      }
       Crux.Text("", "pad12")
         .rawHTML(
-          `<span onClick=\"Crux.crux.trigger('set_cs', ${i})\" style='${style}'>${tickMark}</span>`,
+          `<span class='playericon_font' style='${style}' onClick=\"Crux.crux.trigger('set_cs', ${i})\">${s}</span>`,
         )
         .grid(xOffset, yOffset, 3, 3)
         .roost(colours)
@@ -1808,6 +1809,8 @@ function NeptunesPrideAgent() {
           recolorPlayers();
           NeptunesPride.np.trigger("refresh_interface");
           mapRebuild();
+          store.set("colorMap", colorMap.join(" "));
+          store.set("shapeMap", shapeMap.join(" "));
         }
       };
       field.node.on("focus", () => {
@@ -1831,6 +1834,7 @@ function NeptunesPrideAgent() {
       button.on(eventName, (x: any, y: any) => {
         if (p.prevColor && field.getValue() !== p.originalColor) {
           field.setValue(p.originalColor);
+          shapeField.setValue(p.shapeIndex);
           handleChange();
         }
       });
@@ -2019,9 +2023,6 @@ function NeptunesPrideAgent() {
 
   let colorMap = colors.flatMap((x) => colors);
   let shapeMap = colorMap.map((x, i) => Math.floor(i / 8));
-  if (NeptunesPride?.universe?.galaxy) {
-    rebuildColorMap(NeptunesPride.universe.galaxy);
-  }
   const css = cssrules();
   let originalStarSrc: any = undefined;
   async function recolorPlayers() {
@@ -2143,6 +2144,27 @@ function NeptunesPrideAgent() {
       player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
     }
     linkPlayerSymbols();
+    store
+      .get("colorMap")
+      .then((c) => {
+        const newColors = c.split(" ");
+        newColors.forEach((c: string, i: number) => {
+          if (NeptunesPride.universe.galaxy.players[i]) {
+            setPlayerColor(i, c);
+          }
+        });
+        store.get("shapeMap").then((s) => {
+          shapeMap = s.split(" ").map((x: string) => +x);
+          recolorPlayers();
+          NeptunesPride.np.trigger("refresh_interface");
+          mapRebuild();
+        });
+      })
+      .catch((err) => {
+        if (NeptunesPride?.universe?.galaxy) {
+          rebuildColorMap(NeptunesPride.universe.galaxy);
+        }
+      });
 
     console.log("Recreating star and fleet sprites");
     if (!showingOurOptions) {
