@@ -2144,27 +2144,6 @@ function NeptunesPrideAgent() {
       player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
     }
     linkPlayerSymbols();
-    store
-      .get("colorMap")
-      .then((c) => {
-        const newColors = c.split(" ");
-        newColors.forEach((c: string, i: number) => {
-          if (NeptunesPride.universe.galaxy.players[i]) {
-            setPlayerColor(i, c);
-          }
-        });
-        store.get("shapeMap").then((s) => {
-          shapeMap = s.split(" ").map((x: string) => +x);
-          recolorPlayers();
-          NeptunesPride.np.trigger("refresh_interface");
-          mapRebuild();
-        });
-      })
-      .catch((err) => {
-        if (NeptunesPride?.universe?.galaxy) {
-          rebuildColorMap(NeptunesPride.universe.galaxy);
-        }
-      });
 
     console.log("Recreating star and fleet sprites");
     if (!showingOurOptions) {
@@ -3681,7 +3660,27 @@ function NeptunesPrideAgent() {
       } else {
         console.log("HUD setup already done; skipping.");
       }
-      recolorPlayers();
+      store
+        .get("colorMap")
+        .then((c) => {
+          const newColors = c.split(" ");
+          newColors.forEach((c: string, i: number) => {
+            if (NeptunesPride.universe.galaxy.players[i]) {
+              setPlayerColor(i, c);
+            }
+          });
+          store.get("shapeMap").then((s) => {
+            shapeMap = s.split(" ").map((x: string) => +x);
+            recolorPlayers();
+            NeptunesPride.np.trigger("refresh_interface");
+            mapRebuild();
+          });
+        })
+        .catch((err) => {
+          if (NeptunesPride?.universe?.galaxy) {
+            rebuildColorMap(NeptunesPride.universe.galaxy);
+          }
+        });
       homePlanets();
     } else {
       console.log(
