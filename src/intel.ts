@@ -4283,6 +4283,10 @@ function NeptunesPrideAgent() {
       }
     }
     empireTable(output, unallied, `Unallied Empires`);
+    const survivors = allPlayers.filter((k) => {
+      return players[k].total_strength > 0;
+    });
+    empireTable(output, survivors, `All Surviving Empires`);
 
     prepReport("empires", output);
   };
