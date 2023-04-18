@@ -4258,7 +4258,6 @@ function NeptunesPrideAgent() {
     let subsets: { [k: string]: number[] } = {};
     alliancePairs.forEach((p) => {
       const player = players[p[1]];
-      console.log("Consider player ", player);
       if (player.total_stars || player.total_strength) {
         if (subsets[p[0]] === undefined) {
           subsets[p[0]] = [p[1]];
@@ -4283,9 +4282,11 @@ function NeptunesPrideAgent() {
       }
     }
     empireTable(output, unallied, `Unallied Empires`);
-    const survivors = allPlayers.filter((k) => {
-      return players[k].total_strength > 0;
-    });
+    const survivors = allPlayers
+      .filter((k) => {
+        return players[k].total_strength > 0;
+      })
+      .map((x) => +x);
     empireTable(output, survivors, `All Surviving Empires`);
 
     prepReport("empires", output);
