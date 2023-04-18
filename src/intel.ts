@@ -24,7 +24,7 @@ import {
   messageIndex,
   type Message,
 } from "./events";
-import { GameStore } from "./gamestore";
+import { GameStore, TypedProperty } from "./gamestore";
 import { post } from "./network";
 import {
   getScan,
@@ -98,6 +98,14 @@ function NeptunesPrideAgent() {
   const settings: GameStore = new GameStore("global_settings");
 
   settings.newSetting("IBB API Key", "ibbApiKey", "");
+  type AllianceOptionsT = "color" | "shape";
+  const allianceOptions: AllianceOptionsT[] = ["color", "shape"];
+  settings.newSetting(
+    "Alliances by:",
+    "allianceDiscriminator",
+    allianceOptions[0],
+    allianceOptions,
+  );
   type TimeOptionsT = "relative" | "eta" | "tick" | "tickrel";
   const timeOptions: TimeOptionsT[] = ["relative", "eta", "tickrel", "tick"];
   settings.newSetting(
@@ -1628,23 +1636,18 @@ function NeptunesPrideAgent() {
     "fleets",
   );
 
-  const npaOptions = function (info?: any) {
-    const npui = NeptunesPride.npui;
-    NeptunesPride.templates["npa_options"] = `NPA Settings ${version.replaceAll(
-      / .*$/g,
-      "",
-    )}`;
-    var optionsScreen = npui.Screen("npa_options");
-    Crux.IconButton("icon-help", "show_screen", "help")
-      .grid(24.5, 0, 3, 3)
-      .roost(optionsScreen).onClick = npaHelp;
-
-    const numSettings = settings.getProperties().length;
+  const optionsSubset = (
+    screen: any,
+    filter: (p: TypedProperty) => boolean,
+    info?: any,
+  ) => {
+    const props = settings.getProperties().filter(filter);
+    const numSettings = props.length;
     var options = Crux.Widget("rel")
       .size(480, 50 * numSettings)
-      .roost(optionsScreen);
+      .roost(screen);
 
-    settings.getProperties().forEach(async (p, i) => {
+    props.forEach(async (p, i) => {
       const labelKey = `npa_${p.name}`;
       NeptunesPride.templates[labelKey] = p.displayName;
       const bad = info?.missingKey === p.name ? "txt_warn_bad" : "";
@@ -1666,7 +1669,7 @@ function NeptunesPrideAgent() {
         const dd = Crux.DropDown(defaultIndex, values, eventKey)
           .grid(15, 3 * i, 15, 3)
           .roost(options);
-        optionsScreen.on(eventKey, (x: any, y: any) => {
+        screen.on(eventKey, (x: any, y: any) => {
           rawSettings[p.name] = values[y];
           mapRebuild();
         });
@@ -1676,7 +1679,7 @@ function NeptunesPrideAgent() {
           .roost(options);
         field.setValue(defaultValue);
         field.eventKind = "text_entry";
-        optionsScreen.on(field.eventKind, (x: any, y: any) => {
+        screen.on(field.eventKind, (x: any, y: any) => {
           if (field.getValue() !== rawSettings[p.name]) {
             if (p.type === "number") {
               rawSettings[p.name] = +field.getValue() || rawSettings[p.name];
@@ -1690,6 +1693,19 @@ function NeptunesPrideAgent() {
         });
       }
     });
+  };
+  const npaOptions = function (info?: any) {
+    const npui = NeptunesPride.npui;
+    NeptunesPride.templates["npa_options"] = `NPA Settings ${version.replaceAll(
+      / .*$/g,
+      "",
+    )}`;
+    var optionsScreen = npui.Screen("npa_options");
+    Crux.IconButton("icon-help", "show_screen", "help")
+      .grid(24.5, 0, 3, 3)
+      .roost(optionsScreen).onClick = npaHelp;
+
+    optionsSubset(optionsScreen, (p) => true, info);
 
     return optionsScreen;
   };
@@ -1702,6 +1718,8 @@ function NeptunesPrideAgent() {
     Crux.IconButton("icon-help", "show_screen", "help")
       .grid(24.5, 0, 3, 3)
       .roost(colourScreen).onClick = npaHelp;
+
+    optionsSubset(colourScreen, (p) => p.name === "allianceDiscriminator");
 
     const galaxy = NeptunesPride.universe.galaxy;
     const players = Object.keys(galaxy.players).map((k) => galaxy.players[k]);
@@ -1735,11 +1753,10 @@ function NeptunesPrideAgent() {
     });
     const customShapes = [0, 1, 2, 3, 4, 5, 6, 7];
     customShapes.forEach((s, i) => {
-      const xOffset = 3 * i + 3;
+      const xOffset = 3 * i;
       const yOffset = 3 * colorSwatchRows;
-      const swatchSize = 48;
       const color = customColors[currentCustomColor];
-      let style = `text-align: center; vertical-align: middle; border-radius: 5px; width: ${swatchSize}px; height: ${swatchSize}px; color: ${color};`;
+      let style = `text-align: center; vertical-align: middle; border-radius: 5px; color: ${color};`;
       style += "padding: 4px; padding-top: 6px; padding-right: 5px;";
       style += "background-color: black; ";
       if (i === currentCustomShape) {
@@ -4231,21 +4248,42 @@ function NeptunesPrideAgent() {
       empireTable(output, playerIndexes, "Allied Empires");
     }
     let allPlayers = Object.keys(players);
-    const numPerTable = 8 * 8;
-    let subset = [];
-    let lastStart = 0;
-    for (let start = 0; start < allPlayers.length; start++) {
-      const p = players[allPlayers[start]];
-      if (p.stars || p.total_strength) {
-        subset.push(allPlayers[start]);
+    let allianceMatch =
+      settings.allianceDiscriminator === "color"
+        ? colorMap.slice(0, allPlayers.length)
+        : shapeMap.slice(0, allPlayers.length);
+    let alliancePairs: [any, number][] = allianceMatch
+      .map((x, i): [any, number] => [x, i])
+      .sort();
+    let subsets: { [k: string]: number[] } = {};
+    alliancePairs.forEach((p) => {
+      const player = players[p[1]];
+      console.log("Consider player ", player);
+      if (player.total_stars || player.total_strength) {
+        if (subsets[p[0]] === undefined) {
+          subsets[p[0]] = [p[1]];
+        } else {
+          subsets[p[0]].push(p[1]);
+        }
       }
-      if (subset.length === numPerTable || start === allPlayers.length - 1) {
-        let indexes = subset.map((k) => players[k].uid);
-        empireTable(output, indexes, `Empire Stats ${lastStart} - ${start}`);
-        lastStart = start;
-        subset = [];
+    });
+    let unallied = [];
+    for (let k in subsets) {
+      const s = subsets[k];
+      if (s.length === 1) {
+        unallied.push(s[0]);
+      } else if (colors.indexOf(k) !== -1) {
+        unallied.push(...s);
+      } else {
+        empireTable(
+          output,
+          s,
+          `Alliance ${s.map((uid) => `[[#${uid}]]`).join("")}`,
+        );
       }
     }
+    empireTable(output, unallied, `Unallied Empires`);
+
     prepReport("empires", output);
   };
   defineHotkey(
