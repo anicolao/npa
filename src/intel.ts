@@ -3717,6 +3717,9 @@ function NeptunesPrideAgent() {
     "Reload NPA",
   );
 
+  var otherUserCode: string | undefined = undefined;
+  let game = NeptunesPride.gameNumber;
+  let store = new GameStore(game);
   if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
     console.log("Universe already loaded. Hyperlink fleets & load hooks.");
     init();
@@ -3739,9 +3742,6 @@ function NeptunesPrideAgent() {
     };
   }
 
-  var otherUserCode: string | undefined = undefined;
-  let game = NeptunesPride.gameNumber;
-  let store = new GameStore(game);
   let switchUser = async function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
