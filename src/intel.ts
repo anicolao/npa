@@ -4009,7 +4009,8 @@ function NeptunesPrideAgent() {
       myApiKey = "";
     } else {
       myApiKey = code;
-      registerForScans(myApiKey);
+      const notifications = NeptunesPride.account?.user_id;
+      registerForScans(myApiKey, notifications);
       const from_color = NeptunesPride.universe.player.color;
       const to_uids = "";
       const to_aliases = "";
