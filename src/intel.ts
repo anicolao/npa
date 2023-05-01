@@ -4253,6 +4253,10 @@ function NeptunesPrideAgent() {
       settings.allianceDiscriminator === "color"
         ? colorMap.slice(0, allPlayers.length)
         : shapeMap.slice(0, allPlayers.length);
+    if (settings.allianceDiscriminator === "color" && settings.whitePlayer) {
+      const p = NeptunesPride.universe.player;
+      allianceMatch[p.uid] = p.prevColor;
+    }
     let alliancePairs: [any, number][] = allianceMatch
       .map((x, i): [any, number] => [x, i])
       .sort();
