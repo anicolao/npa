@@ -3078,6 +3078,10 @@ function NeptunesPrideAgent() {
           const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
+        } else if (/^footer:-?[\w-\.][\w-\.]*$/.test(sub)) {
+          const splits = sub.split(":");
+          const text = splits[1];
+          s = s.replace(pattern, `<b>${text}</b>`);
         } else if (/^good:-?[\w-\.][\w-\.]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
@@ -4237,7 +4241,7 @@ function NeptunesPrideAgent() {
       output.push([row.join("|")]);
     });
     output.push([
-      ["<b>Total</b>", ...sums.map((x) => Math.trunc(x))].join("|"),
+      ["[[footer:Total]]", ...sums.map((x) => Math.trunc(x))].join("|"),
     ]);
     output.push(`--- ${title} ---`);
   };
