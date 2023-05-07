@@ -458,10 +458,7 @@ function NeptunesPrideAgent() {
                 for (let op in scan.players) {
                   if (op !== k) {
                     if (scan.players[op].tech[tk].level >= level) {
-                      if (
-                        !NeptunesPride.gameConfig.tradeScanned ||
-                        sees(op, k)
-                      ) {
+                      if (!tradeScanned() || sees(op, k)) {
                         sourceString += ` [[#${op}]]`;
                       }
                     }
@@ -4158,14 +4155,20 @@ function NeptunesPrideAgent() {
     output.push([sendFooter.join("|")]);
     output.push(`--- ${title} ---`);
   };
+  let tradeScanned = function () {
+    return (
+      NeptunesPride.gameConfig.tradeScanned ||
+      NeptunesPride.gameVersion === "proteus"
+    );
+  };
   let tradingReport = async function () {
     lastReport = "trading";
     const { players, playerIndexes } = await getAlliedKeysAndIndexes();
     let output: string[] = [];
     techTable(output, playerIndexes, "Allied Technology");
     let allPlayers = Object.keys(players);
-    let scanned = NeptunesPride.gameConfig.tradeScanned ? "Scanned " : "";
-    if (NeptunesPride.gameConfig.tradeScanned) {
+    let scanned = tradeScanned() ? "Scanned " : "";
+    if (tradeScanned()) {
       allPlayers = allPlayers.filter(
         (k) =>
           NeptunesPride.universe.player.scannedPlayers.indexOf(
