@@ -3703,7 +3703,6 @@ function NeptunesPrideAgent() {
             rebuildColorMap(NeptunesPride.universe.galaxy);
           }
         });
-      homePlanets();
     } else {
       console.log(
         "Game not fully initialized yet; wait.",
