@@ -821,11 +821,20 @@ function NeptunesPrideAgent() {
   function activityReport() {
     const output = [];
     output.push("Activity report:");
+    const playerBlock: {
+      [k: string]: string[];
+    } = {};
     let currentTick = 0;
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : NeptunesPride.universe.galaxy.player_uid;
     let prior = null;
+    const players = NeptunesPride.universe.galaxy.players;
+    for (const k in players) {
+      playerBlock[k] = [`--- [[${k}]] ---`];
+      playerBlock[k].push(":--|---|---|---|--:|--:");
+      playerBlock[k].push("Time|E|I|S|Fleets|Stars");
+    }
     const pk =
       NeptunesPride.universe.selectedSpaceObject?.puid >= 0
         ? NeptunesPride.universe.selectedSpaceObject?.puid
@@ -853,24 +862,37 @@ function NeptunesPrideAgent() {
             return true;
           return false;
         };
-        if (active(row[pk], prior[pk])) {
-          output.push(
-            `[[Tick #${scan.tick}]] [[${pk}]] ${row[pk].total_economy}/${row[pk].total_industry}/${row[pk].total_science} F${row[pk].total_fleets} S${row[pk].total_stars}`,
-          );
+        for (let p in players) {
+          if (active(row[p], prior[p])) {
+            playerBlock[p].push(
+              `[[Tick #${scan.tick}]]|${row[p].total_economy}|${row[p].total_industry}|${row[p].total_science}|${row[p].total_fleets}|${row[p].total_stars}`,
+            );
+          }
         }
         prior = row;
       }
       currentTick++;
     } while (currentTick < trueTick);
-    if (output.length === 1) {
-      output.push("No activity data found.");
+    for (const k in playerBlock) {
+      if (playerBlock[k].length === 3) {
+        playerBlock[k].push("No activity: AFK?");
+      }
+      if (playerBlock[k].length > 15) {
+        const lines = playerBlock[k];
+        const prefix = lines.slice(0, 3);
+        const end = lines.length;
+        const start = end - 5;
+        const suffix = lines.slice(start, end);
+        playerBlock[k] = [...prefix, ...suffix];
+      }
+      playerBlock[k].push(`--- [[${k}]] ---`);
+      if (players[k].conceded === 0 && pk !== k) {
+        output.push(playerBlock[k]);
+      }
     }
     const endMillis = new Date().getTime();
-    //output.push(`Time required ${endMillis - startMillis}ms`);
-    prepReport(
-      "activity",
-      output.map((s) => [s]),
-    );
+    output.push(`Time required ${endMillis - startMillis}ms`);
+    prepReport("activity", output);
   }
   defineHotkey(
     "shift+;",
