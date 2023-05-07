@@ -4905,7 +4905,7 @@ function NeptunesPrideAgent() {
     time?: number,
     ...args: any[]
   ): number => {
-    if (callback.toLocaleString().indexOf("autocompleteTrigger") !== -1) {
+    if (callback?.toLocaleString().indexOf("autocompleteTrigger") !== -1) {
       console.log("SAT duplicate code detected. Ignore it.");
       return 0;
     }
