@@ -359,6 +359,7 @@ export function logError(e: any) {
   const timestamp = new Date().getTime();
   if (stack === "no stack trace") {
     console.error("No stack", e);
+  } else {
+    addDoc(store, { gameid, stack, message, version, timestamp });
   }
-  addDoc(store, { gameid, stack, message, version, timestamp });
 }
