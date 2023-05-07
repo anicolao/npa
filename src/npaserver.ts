@@ -85,7 +85,11 @@ export async function restoreFromDB(gameId: number, apikey: string) {
 export function registerForScans(apikey: string, notifications?: string) {
   const gameid = NeptunesPride.gameNumber;
   const store = collection(firestore, `newkey`);
-  addDoc(store, { game_id: gameid, api_key: apikey, notifications });
+  if (notifications) {
+    addDoc(store, { game_id: gameid, api_key: apikey, notifications });
+  } else {
+    addDoc(store, { game_id: gameid, api_key: apikey });
+  }
 }
 
 function trimInvalidEntries(apikey: string) {
