@@ -849,13 +849,14 @@ function NeptunesPrideAgent() {
       if (scanList.length > 0) {
         let myScan = scanList.filter((scan) => scan.player_uid === myId);
         let scan = myScan.length > 0 ? myScan[0] : scanList[0];
-        if (prior === null) prior = scan.players;
-        let row = scan.players;
-        const active = (p: any, last: any) => {
+        let row = { ...scan.players, tick: scan.tick };
+        if (prior === null) {
+          prior = row;
+        }
+        const active = (p: any, last: any, manual: boolean) => {
           if (p.total_economy > last.total_economy) return true;
           if (p.total_fleets > last.total_fleets) return true;
-          const manualUpgrade =
-            p.total_stars === last.total_stars || p.tick === last.tick;
+          const manualUpgrade = p.total_stars === last.total_stars || manual;
           if (p.total_industry > last.total_industry && manualUpgrade)
             return true;
           if (p.total_science > last.total_science && manualUpgrade)
@@ -863,7 +864,7 @@ function NeptunesPrideAgent() {
           return false;
         };
         for (let p in players) {
-          if (active(row[p], prior[p])) {
+          if (active(row[p], prior[p], row.tick === prior.tick)) {
             playerBlock[p].push(
               `[[Tick #${scan.tick}]]|${row[p].total_economy}|${row[p].total_industry}|${row[p].total_science}|${row[p].total_fleets}|${row[p].total_stars}`,
             );
