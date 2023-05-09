@@ -1,5 +1,6 @@
 import { openDB } from "idb";
 import { post } from "./network";
+import { logCount } from "./npaserver";
 export const messageCache: { [k: string]: any[] } = {
   game_event: [],
   game_diplomacy: [],
@@ -230,6 +231,7 @@ export async function requestRecentMessages(
     version: NeptunesPride.version,
     game_number: NeptunesPride.gameNumber,
   };
+  logCount(group);
   return cacheEventResponseCallback(group, await post(url, data));
 }
 
