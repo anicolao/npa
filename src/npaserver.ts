@@ -4,11 +4,15 @@ import { isSafari } from "./useragent";
 import {
   addDoc,
   collection,
+  doc,
+  FieldValue,
   getFirestore,
+  increment,
   initializeFirestore,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { openDB } from "idb";
@@ -363,7 +367,18 @@ export function logError(e: any) {
   const timestamp = new Date().getTime();
   if (stack === "no stack trace") {
     console.error("No stack", e);
+    logCount(`${version}_${message}`);
   } else {
     addDoc(store, { gameid, stack, message, version, timestamp });
   }
+}
+
+export function logCount(c: any) {
+  const store = collection(firestore, `info`);
+  const d = doc(store, "counters");
+  const data: any = {};
+  const version = getVersion();
+  const key = `${version}_${c}`;
+  data[key] = increment(1);
+  setDoc(d, data, { merge: true });
 }

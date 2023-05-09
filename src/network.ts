@@ -1,3 +1,5 @@
+import { logCount } from "./npaserver";
+
 export async function post(url: string, data: any): Promise<any> {
   const response = await fetch(url, {
     method: "POST",
@@ -8,5 +10,6 @@ export async function post(url: string, data: any): Promise<any> {
     referrerPolicy: "no-referrer",
     body: new URLSearchParams(data).toString(),
   });
+  logCount(url);
   return response.json(); // parses JSON response into native JavaScript objects
 }
