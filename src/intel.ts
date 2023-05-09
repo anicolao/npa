@@ -3098,7 +3098,7 @@ function NeptunesPrideAgent() {
           const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
-        } else if (/^footer:-?[\w-\.][\w-\.]*$/.test(sub)) {
+        } else if (/^footer:-?[\w- \.][\w- \.]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
           s = s.replace(pattern, `<b>${text}</b>`);
@@ -4153,7 +4153,7 @@ function NeptunesPrideAgent() {
       });
     });
     let payFooter = [
-      "<b>Pay for all</b>",
+      "[[footer:Pay for all]]",
       "",
       "",
       ...columns.map((pi: any) =>
@@ -4163,10 +4163,10 @@ function NeptunesPrideAgent() {
       ),
     ];
     let sendFooter = [
-      "<b>Send all</b>",
+      "[[footer:Send all]]",
       "",
       "",
-      ...Object.keys(allSendAmounts).map((pi: any) =>
+      ...columns.map((pi: any) =>
         allSendAmounts[pi] > 0
           ? `[[sendalltech:${pi}:${allSendAmounts[pi]}]]`
           : "",
