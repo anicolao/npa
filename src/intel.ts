@@ -967,6 +967,14 @@ function NeptunesPrideAgent() {
         return colorMap[uid];
       });
     }
+    if (galaxy.players[0].shape !== undefined && shapeMap) {
+      shapeMap = shapeMap.map((_, uid) => {
+        if (galaxy.players[uid] !== undefined) {
+          return galaxy.players[uid].shape;
+        }
+        return shapeMap[uid];
+      });
+    }
   };
   const recordTrueTick = function (_: any, galaxy: any) {
     trueTick = galaxy.tick;
@@ -1869,13 +1877,14 @@ function NeptunesPrideAgent() {
         .grid(25, yOffset, 5, 3)
         .roost(colours);
       button.on(eventName, (x: any, y: any) => {
+        const shapeIndex = p.shapeIndex !== undefined ? p.shapeIndex : p.shape;
         if (
           p.prevColor &&
           (field.getValue() !== p.originalColor ||
-            shapeField.getValue() != p.shapeIndex)
+            shapeField.getValue() != shapeIndex)
         ) {
           field.setValue(p.originalColor);
-          shapeField.setValue(p.shapeIndex);
+          shapeField.setValue(shapeIndex);
           handleChange();
         }
       });
@@ -2097,12 +2106,14 @@ function NeptunesPrideAgent() {
       playerSprite.width = playerSprite.height = 64 * 9;
       const playerContext: CanvasRenderingContext2D =
         playerSprite.getContext("2d");
-      const shapeOffset = (player.shapeIndex - shapeMap[player.uid]) * 64;
+      const shapeIndex =
+        player.shapeIndex !== undefined ? player.shapeIndex : player.shape;
+      const shapeOffset = (shapeIndex - shapeMap[player.uid]) * 64;
       playerContext.drawImage(originalStarSrc, shapeOffset, 0);
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
-      let col = player.shapeIndex;
+      let col = shapeIndex;
       let row = Math.floor(uid % 8) + 1;
       if (player.shape !== undefined) {
         col = player.shape;
@@ -2128,7 +2139,9 @@ function NeptunesPrideAgent() {
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
       const uid = player.uid;
-      let realcol = player.shapeIndex;
+      const shapeIndex =
+        player.shapeIndex !== undefined ? player.shapeIndex : player.shape;
+      let realcol = shapeIndex;
       let col = 8;
       let row = Math.floor(uid % 8) + 1;
       if (player.shape !== undefined) {
@@ -2163,7 +2176,9 @@ function NeptunesPrideAgent() {
     for (let pk in players) {
       const player = players[pk];
       const uid = player.uid;
-      let col = player.shapeIndex;
+      const shapeIndex =
+        player.shapeIndex !== undefined ? player.shapeIndex : player.shape;
+      let col = shapeIndex;
       let row = Math.floor(uid % 8) + 1;
       if (player.shape !== undefined) {
         col = player.shape;
