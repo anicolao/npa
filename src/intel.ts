@@ -4052,7 +4052,14 @@ function NeptunesPrideAgent() {
     }
   };
   onTrigger("order:api_code", recordAPICode);
+  let lastRefreshTimestamp = 0;
   let refreshScanData = async function () {
+    const timestamp = new Date().getTime();
+    if (timestamp - lastRefreshTimestamp < 5 * 60 * 1000) {
+      console.log(`refreshScanData called too recently, STOP`);
+      return;
+    }
+    lastRefreshTimestamp = timestamp;
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
     const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
@@ -4441,7 +4448,7 @@ function NeptunesPrideAgent() {
       code: apiKey,
     };
     let api = await post("https://np.ironhelmet.com/api", params);
-    store.set(cacheKey, api.scanning_data);
+    await store.set(cacheKey, api.scanning_data);
     return api.scanning_data;
   };
   const getPlayerIndex = function (apikey: string) {
@@ -4895,9 +4902,6 @@ function NeptunesPrideAgent() {
   if (NeptunesPride.universe?.player?.uid !== undefined) {
     console.log("Universe already loaded, refresh scan data.");
     loadScanData();
-  } else {
-    console.log("Universe not loaded, hook full_universe for scan data.");
-    NeptunesPride.np.on("order:full_universe", loadScanData);
   }
 
   const wst = window.setTimeout;
