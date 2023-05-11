@@ -4822,7 +4822,6 @@ function NeptunesPrideAgent() {
 
   restoreFromDB("game_event")
     .then(() => updateMessageCache("game_event"))
-    .then(() => updateMessageCache("game_diplomacy"))
     .then(() => {
       window.setTimeout(async () => {
         const allkeys = (await store.keys()) as string[];
@@ -4836,13 +4835,14 @@ function NeptunesPrideAgent() {
             .filter((k) => k)
             .filter((v, i, a) => a.indexOf(v) === i) || [];
         console.log("Probable API Keys: ", allSeenKeys);
-        apiKeys.forEach(async (x) => {
+        for (const x of apiKeys) {
           const key = await store.get(x);
           const check = `[[api:${key}]]`;
           if (allSeenKeys.indexOf(check) === -1) {
             allSeenKeys.push(check);
           }
-        });
+        }
+        console.log("Probable API Keys II: ", allSeenKeys);
         allSeenKeys.forEach(async (key) => {
           const code = getCodeFromApiText(key);
           await getServerScans(code);
@@ -4854,55 +4854,6 @@ function NeptunesPrideAgent() {
           registerForScans(code);
         });
       }, 1000);
-    })
-    .then(() => {
-      const overrideOnNewMessages = (event: any, data: any) => {
-        updateMessageCache(data.group).then(() => {
-          if (data.group === "game_event") {
-            console.log(`Validate events for ${data.group}`);
-            let remainingKeys = 0;
-            const keySet: { [k: string]: boolean } = {};
-            data.messages.forEach((m: Message) => {
-              keySet[m.key] = false;
-              remainingKeys++;
-            });
-            const cache = messageCache[data.group];
-            const len = cache.length;
-            for (let i = len - 1; i >= 0 && remainingKeys; --i) {
-              if (keySet[cache[i].key] === false) {
-                remainingKeys--;
-                keySet[cache[i].key] = true;
-              }
-            }
-            let foundAll = true;
-            for (let k in keySet) {
-              if (keySet[k] !== true) {
-                console.error(`Key not found ${k}`);
-                foundAll = false;
-              }
-            }
-            if (!foundAll) {
-              console.log("Recreating cache");
-              messageCache[data.group] = [];
-              updateMessageCache(data.group);
-            } else {
-              console.log(`Validated ${data.messages.length} events.`);
-            }
-          }
-        });
-        return NeptunesPride.inbox.onNewMessages(event, data);
-      };
-      const handlers = NeptunesPride.inbox.handlers;
-      for (let h = 0; h < handlers.length; h++) {
-        const candidate = handlers[h];
-        if (candidate.name === "message:new_messages") {
-          const node = Crux.crux;
-          candidate.func = overrideOnNewMessages;
-          node.ui.off(candidate.name, NeptunesPride.inbox.onNewMessages);
-          node.ui.on(candidate.name, overrideOnNewMessages);
-          break;
-        }
-      }
     });
 
   const loadScanData = () =>
