@@ -217,12 +217,18 @@ async function cacheEventResponseCallback(
   return true;
 }
 
+const getRequestPath = () => {
+  if (NeptunesPride.gameVersion !== "proteus") {
+    return "trequest_osric";
+  }
+  return "prequest";
+};
 export async function requestRecentMessages(
   fetchSize: number,
   group: "game_event" | "game_diplomacy",
 ) {
   console.log("requestRecentMessages");
-  const url = "/trequest/fetch_game_messages";
+  const url = `/${getRequestPath()}/fetch_game_messages`;
   const data = {
     type: "fetch_game_messages",
     count: messageCache[group].length > 0 ? fetchSize : 100000,
@@ -240,7 +246,7 @@ export async function requestMessageComments(
   message_key: string,
 ) {
   console.log(`reqeustMessageComments ${fetchSize} for ${message_key}`);
-  const url = "/trequest/fetch_game_message_comments";
+  const url = `/${getRequestPath()}/fetch_game_message_comments`;
   const data = {
     type: "fetch_game_message_comments",
     count: fetchSize,
