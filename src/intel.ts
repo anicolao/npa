@@ -29,6 +29,7 @@ import { post } from "./network";
 import {
   getScan,
   getServerScans,
+  logCount,
   logError,
   registerForScans,
   scanCache,
@@ -3760,6 +3761,7 @@ function NeptunesPrideAgent() {
   let store = new GameStore(game);
   if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
     console.log("Universe already loaded. Hyperlink fleets & load hooks.");
+    logCount("loaded_init");
     init();
   } else {
     console.log("Universe not loaded. Hook onServerResponse.");
@@ -3768,13 +3770,16 @@ function NeptunesPrideAgent() {
       superOnServerResponse(response);
       if (response.event === "order:player_achievements") {
         console.log("Initial load complete. Reinstall.");
+        logCount("achievements_init");
         init();
       } else if (response.event === "order:full_universe") {
         console.log("Universe received. Reinstall.");
         NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
+        logCount("universe_init");
         init();
       } else if (!hooksLoaded && NeptunesPride.npui.map) {
         console.log("Hooks need loading and map is ready. Reinstall.");
+        logCount(`${response.event}_init`);
         init();
       }
     };
@@ -3795,6 +3800,7 @@ function NeptunesPrideAgent() {
         NeptunesPride.universe.player.uid,
         true,
       ]);
+      logCount("switchuser_init");
       init();
     }
   };
@@ -3878,6 +3884,7 @@ function NeptunesPrideAgent() {
       mergeScanData(scan);
       NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
       NeptunesPride.npui.onHideScreen(null, true);
+      logCount("mergeuser_init");
       init();
     }
   };
@@ -3970,6 +3977,7 @@ function NeptunesPrideAgent() {
       mergeScanData(scan);
     });
     NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
+    logCount("timetravel_init");
     init();
   };
   let warpTime = function (_event?: any, data?: string) {
