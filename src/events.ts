@@ -159,7 +159,7 @@ const getRequestPath = () => {
 };
 export async function requestRecentMessages(
   fetchSize: number,
-  group: "game_event" | "game_diplomacy",
+  group: "game_event" | "game_diplomacy" | string,
 ) {
   console.log("requestRecentMessages");
   logCount(`requestRecentMessages ${fetchSize} ${group}`);
