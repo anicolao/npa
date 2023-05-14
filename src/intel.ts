@@ -1103,6 +1103,7 @@ function NeptunesPrideAgent() {
       c: number;
       departures: { [k: number]: DepartureRecord };
       weapons: number;
+      production: number;
     }
     let starstate: { [k: string]: StarState } = {};
     for (const i in flights) {
@@ -1124,6 +1125,7 @@ function NeptunesPrideAgent() {
             c: stars[orbit].c || 0,
             departures: {},
             weapons,
+            production: stars[orbit].shipsPerTick,
           };
         }
         // This fleet is departing this tick; remove it from the origin star's totalDefenses
@@ -1180,6 +1182,7 @@ function NeptunesPrideAgent() {
           c: stars[starId].c || 0,
           departures: {},
           weapons,
+          production: stars[starId].shipsPerTick,
         };
       }
       if (starstate[starId].puid == -1) {
@@ -1236,10 +1239,10 @@ function NeptunesPrideAgent() {
           oldShips = starstate[starId].ships;
         }
         starstate[starId].last_updated = tick - 1;
-        if (stars[starId].shipsPerTick) {
+        if (starstate[starId].production) {
           let oldc = starstate[starId].c;
           starstate[starId].ships +=
-            stars[starId].shipsPerTick * tickDelta + oldc;
+            starstate[starId].production * tickDelta + oldc;
           starstate[starId].c =
             starstate[starId].ships - Math.trunc(starstate[starId].ships);
           starstate[starId].ships -= starstate[starId].c;
@@ -1247,7 +1250,7 @@ function NeptunesPrideAgent() {
             "  {0}+{3} + {2}/h = {1}+{4}".format(
               oldShips,
               starstate[starId].ships,
-              stars[starId].shipsPerTick,
+              starstate[starId].production,
               oldc,
               starstate[starId].c,
             ),
@@ -1426,6 +1429,12 @@ function NeptunesPrideAgent() {
               eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
               outcome: outcomeString,
             };
+          }
+          if (NeptunesPride.gameVersion === "proteus") {
+            if (starstate[starId].puid != biggestPlayerId) {
+              starstate[starId].c = 0;
+              starstate[starId].production = 0;
+            }
           }
           starstate[starId].puid = biggestPlayerId;
           starstate[starId].weapons =
