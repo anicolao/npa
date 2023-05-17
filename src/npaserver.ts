@@ -383,6 +383,7 @@ export function logCount(c: any) {
     fullVersion.match(/v[0-9]\.[^ ]*/) +
     (fullVersion.indexOf(caution) !== -1 ? "-dev" : "");
   const key = `${version}_${c}`;
+  console.log(`INCREMENT ${key}`);
   data[key] = increment(1);
   setDoc(d, data, { merge: true });
 }

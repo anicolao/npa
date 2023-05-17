@@ -82,6 +82,7 @@ async function restore(group: string) {
 function indexMessages(group: string, messages: any[]) {
   messages.forEach((message) => {
     if (message.body || message.payload?.body) {
+      logCount("building_ivf");
       const body = message.body || message.payload?.body;
       const tokens = body.split(/[^\w\d]+/);
       tokens.forEach((token: string) => {
@@ -105,49 +106,134 @@ export async function restoreFromDB(
   if (messageCache[group].length === 0) {
     try {
       messageCache[group] = await restore(group);
+      indexMessages(group, messageCache[group]);
       console.log(
         `Restored message cache for ${group} from db: ${messageCache[group].length}`,
       );
+      if (group === "game_diplomacy") {
+        logCount("loading_diplomacy_from_db");
+        messageCache[group].forEach((message) => restoreFromDB(message.key));
+      }
     } catch (err) {
       console.error(err);
     }
   }
 }
 async function cacheEventResponseCallback(
-  group: "game_event" | "game_diplomacy" | string,
+  group: "game_event" | "game_diplomacy",
   response: { report: { messages: any } },
 ): Promise<boolean> {
   let incoming = response.report.messages;
   await restoreFromDB(group);
   if (messageCache[group].length > 0) {
     let overlapOffset = -1;
+    let first = 0;
+    let len = messageCache[group].length;
+    let latest = messageCache[group][first];
     for (let i = 0; i < incoming.length; ++i) {
       const message = incoming[i];
-      if (message.key === messageCache[group][0].key) {
-        overlapOffset = i;
+      if (message.key === latest.key) {
+        first++;
+        const isUnchanged = (message: any, latest: any) => {
+          if (
+            message.group !== "game_event" &&
+            message?.status &&
+            message.status !== latest?.status
+          ) {
+            logCount("impossible_false");
+            return false;
+          }
+          const ret = message?.comment_count === latest?.comment_count;
+          logCount(`isUnchanged_${ret}`);
+          return ret;
+        };
+        const orig_i = i;
+        if (isUnchanged(message, latest) || first >= len) {
+          const keys: { [k: string]: boolean } = {};
+          messageCache[group].forEach((m) => (keys[m.key] = true));
+          while (i > 0 && incoming[i - 1].created === message.created) {
+            const outOfOrderCandidate = incoming[i - 1];
+            if (keys[outOfOrderCandidate.key]) {
+              i--;
+              logCount("decrement_i");
+              continue;
+            }
+            break;
+          }
+          overlapOffset = orig_i;
+          break;
+        }
+        logCount("impossible_slice");
+        overlapOffset = orig_i;
         break;
+        //messageCache[group] = messageCache[group].slice(1);
+        //latest = messageCache[group][0];
+        //i = 0;
       }
+    }
+    if (incoming.length > messageCache[group].length) {
+      logCount("would_force_restore");
+      /*
+      console.log(`Incoming messages forced restore: ${incoming.length}`);
+      const knownKeys: { [k: string]: boolean } = {};
+      messageCache[group].forEach((m: Message) => {
+        knownKeys[m.key] = true;
+      });
+      let forceIncoming: Message[] = [];
+      incoming.forEach((m: Message, i: number) => {
+        if (!knownKeys[m.key]) {
+          forceIncoming.push(m);
+        }
+      });
+      forceIncoming = forceIncoming.slice(overlapOffset);
+      console.log(`Forcibly adding ${forceIncoming.length} missing keys`);
+      store(forceIncoming, group);
+      messageCache[group] = forceIncoming.concat(messageCache[group]);
+      */
     }
     if (overlapOffset >= 0) {
       console.log(`Incoming messages total: ${incoming.length}`);
       incoming = incoming.slice(0, overlapOffset);
       console.log(`Incoming messages new: ${incoming.length}`);
+      if (group === "game_diplomacy") {
+        // possibly the incoming messages replace old ones with updates
+        logCount("impossible_incoming_diplomacy");
+        const incomingKeys = incoming.map((m: any) => m.key);
+        let indices: any[] = [];
+        messageCache[group].forEach((message, i) => {
+          if (incomingKeys.indexOf(message.key) !== -1) {
+            indices.push(i);
+          }
+        });
+        indices = indices.reverse();
+        console.log(`Removing ${indices.length} old messages`);
+        indices.forEach((i) => messageCache[group].splice(i, 1));
+      }
     } else if (overlapOffset < 0) {
       const size = incoming.length * 2;
       console.log(`Missing some events for ${group}, double fetch to ${size}`);
-      return requestRecentMessages(size, group);
+      if (group === "game_event" || group === "game_diplomacy") {
+        logCount("recursive_rrm");
+        return requestRecentMessages(size, group);
+      }
+      logCount("impossible_rmc");
+      return requestMessageComments(size, group);
     }
   }
   try {
+    logCount("prestore");
     store(incoming, group);
+    logCount("poststore");
+    indexMessages(group, incoming);
+    messageCache[group] = incoming.concat(messageCache[group]);
+    logCount("postcache");
     console.log(
       `Return full message set for ${group} of ${messageCache[group].length}`,
     );
   } catch (err) {
+    logCount(`ERROR ${err}`);
     console.error(err);
   }
-  messageCache[group] = incoming.concat(messageCache[group]);
-  console.log(`Return full message set of ${messageCache[group].length}`);
   return true;
 }
 
@@ -162,8 +248,8 @@ export async function requestRecentMessages(
   group: "game_event" | "game_diplomacy" | string,
 ) {
   console.log("requestRecentMessages");
-  logCount(`requestRecentMessages ${fetchSize} ${group}`);
   const url = `/${getRequestPath()}/fetch_game_messages`;
+  logCount(`requestRecentMessages ${fetchSize} ${group}`);
   const data = {
     type: "fetch_game_messages",
     count: messageCache[group].length > 0 ? fetchSize : 100000,
