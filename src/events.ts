@@ -120,7 +120,7 @@ export async function restoreFromDB(
   }
 }
 async function cacheEventResponseCallback(
-  group: "game_event" | "game_diplomacy",
+  group: "game_event" | "game_diplomacy" | string,
   response: { report: { messages: any } },
 ): Promise<boolean> {
   let incoming = response.report.messages;
