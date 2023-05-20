@@ -124,6 +124,11 @@ async function cacheEventResponseCallback(
   response: { report: { messages: any } },
 ): Promise<boolean> {
   let incoming = response.report.messages;
+  if (incoming === undefined) {
+    logCount("incoming_undefined");
+    logCount(JSON.stringify(response.report));
+    return false;
+  }
   await restoreFromDB(group);
   if (messageCache[group].length > 0) {
     let overlapOffset = -1;

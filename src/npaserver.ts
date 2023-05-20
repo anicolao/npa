@@ -362,12 +362,14 @@ export function logError(e: any) {
   const gameid = NeptunesPride.gameNumber;
   const store = collection(firestore, `error`);
   const stack = e?.error?.stack || e?.reason?.stack || "no stack trace";
-  const message = e?.error?.message || e?.reason?.message || "no message";
+  const message =
+    e?.error?.message || e?.reason?.message || e?.reason?.code || "no message";
   const version = getVersion();
   const timestamp = new Date().getTime();
   if (stack === "no stack trace") {
     console.error("No stack", e);
     logCount(`${message}`);
+    logCount(`${message}:${JSON.stringify(e?.reason)}`);
   } else {
     addDoc(store, { gameid, stack, message, version, timestamp });
   }
