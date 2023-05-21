@@ -1910,10 +1910,12 @@ function NeptunesPrideAgent() {
       showOptions({ missingKey: "ibbApiKey" });
       return;
     } else {
+      const dataUrl = map.canvas[0].toDataURL("image/webp", 0.45);
+      const split = dataUrl.indexOf(",") + 1;
       const params = {
         expiration: 2592000,
         key,
-        image: map.canvas[0].toDataURL("image/webp", 0.45).substring(23),
+        image: dataUrl.substring(split),
       };
       return fetch(`https://api.imgbb.com/1/upload`, {
         method: "POST",
@@ -1921,7 +1923,13 @@ function NeptunesPrideAgent() {
         body: new URLSearchParams(params as any),
       }).then((resp) => {
         return resp.json().then((r) => {
-          setClip(`[[${r.data.url}]]`);
+          if (r?.data?.url) {
+            setClip(`[[${r.data.url}]]`);
+          } else {
+            const message = `Error: ${JSON.stringify(r)}`;
+            logCount(message);
+            setClip(message);
+          }
         });
       });
     }
