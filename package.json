@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/chai": "^4.3.3",
     "@types/chrome": "^0.0.193",
+    "@types/jsdom": "^21.1.1",
     "@types/mousetrap": "^1.6.11",
     "c8": "^7.12.0",
     "chai": "^4.3.6",
@@ -23,6 +24,7 @@
     "dotenv-webpack": "^8.0.0",
     "execa": "^6.1.0",
     "husky": "^8.0.0",
+    "jsdom": "^22.0.0",
     "rome": "^11.0.0",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",

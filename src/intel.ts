@@ -36,6 +36,7 @@ import {
   scanInfo,
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
+import { setupAutocomplete } from "./autocomplete";
 import { Player, SpaceObject, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
@@ -63,7 +64,7 @@ interface CruxLib {
   TextInput: any;
   Clickable: any;
 }
-interface NeptunesPrideData {
+export interface NeptunesPrideData {
   sendAllTech: (recipient: number) => void;
   sendTech: (recipient: number, tech: string) => void;
   sendCash: (recipient: number, price: number) => void;
@@ -4782,60 +4783,9 @@ function NeptunesPrideAgent() {
   };
   defineHotkey("~", npaControls, "Generate NPA Buttons.", "controls");
 
-  var autocompleteCaret = 0;
-  let autocompleteTrigger = function (e: KeyboardEvent) {
-    const target: any = e.target;
-    if (target.type === "textarea") {
-      const key = e.key;
-      if (key === "]" || key === ":") {
-        if (autocompleteCaret <= 0) {
-          autocompleteCaret = target.value.lastIndexOf("[[") + 2;
-          if (autocompleteCaret <= 1) {
-            autocompleteCaret = 0;
-            return;
-          }
-          const completed = target.value.indexOf("]]", autocompleteCaret) > -1;
-          if (completed) {
-            autocompleteCaret = 0;
-            return;
-          }
-        }
-        let start = autocompleteCaret;
-        let endBracket = target.value.indexOf("]", start);
-        if (endBracket === -1) endBracket = target.value.length;
-        let autoString = target.value.substring(start, endBracket);
-        autocompleteCaret = 0;
-        let m = autoString.match(/^[0-9][0-9]*$/);
-        if (m?.length) {
-          let puid = Number(autoString);
-          let end = target.selectionEnd;
-          let auto = `${puid}]] ${NeptunesPride.universe.galaxy.players[puid].alias}`;
-          target.value =
-            target.value.substring(0, start) +
-            auto +
-            target.value.substring(end, target.value.length);
-          target.selectionStart = start + auto.length;
-          target.selectionEnd = start + auto.length;
-        }
-        m = autoString.match(/api:/);
-        if (m?.length && myApiKey) {
-          let auto = `api:${myApiKey}]]`;
-          let end = target.selectionEnd;
-          target.value =
-            target.value.substring(0, start) +
-            auto +
-            target.value.substring(end, target.value.length);
-          target.selectionStart = start + auto.length;
-          target.selectionEnd = start + auto.length;
-        }
-      } else if (target.selectionStart > 1) {
-        let start = target.selectionStart - 2;
-        let ss = target.value.substring(start, start + 2);
-        autocompleteCaret = ss === "[[" ? target.selectionStart : 0;
-      }
-    }
-  };
-  document.body.addEventListener("keyup", autocompleteTrigger);
+  setupAutocomplete(document.body, NeptunesPride, () => {
+    return myApiKey;
+  });
 
   restoreFromDB("game_event")
     .then(() => updateMessageCache("game_event"))
