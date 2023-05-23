@@ -4558,7 +4558,6 @@ function NeptunesPrideAgent() {
     }
     output.push("--- Alliance Research Progress ---");
     output.push("--- All Alliance Research ---");
-    output.push(":--|:--|--:|--:|--:|--");
     const techs = [
       "scanning",
       "propulsion",
@@ -4568,6 +4567,7 @@ function NeptunesPrideAgent() {
       "banking",
       "manufacturing",
     ];
+    output.push(`:--|${techs.map(() => "--:").join("|")}`);
     output.push(
       `Empire|${techs.map((key) => translateTechEmoji(key)).join("|")}`,
     );
