@@ -7,6 +7,7 @@ export function setupAutocomplete(
 ) {
   var autocompleteCaret = 0;
   type SearchCandidate = {
+    matchPriority: number;
     matchText: string;
     completion: string;
   };
@@ -67,6 +68,7 @@ export function setupAutocomplete(
               const star: any = neptunesPride.universe.galaxy.stars[key];
               if (!matches(star.n)) continue;
               candidates.push({
+                matchPriority: 1,
                 matchText: star.n,
                 completion: `[[${star.n}]]`,
               });
@@ -75,16 +77,20 @@ export function setupAutocomplete(
               const player = neptunesPride.universe.galaxy.players[key];
               if (!matches(player.alias)) continue;
               candidates.push({
+                matchPriority: 0,
                 matchText: player.alias,
                 completion: `[[${key}]] ${player.alias}`,
               });
             }
             candidates.sort((a, b) => {
-              return a.matchText < b.matchText
-                ? -1
-                : a.matchText > b.matchText
-                ? 1
-                : 0;
+              if (a.matchPriority === b.matchPriority) {
+                return a.matchText < b.matchText
+                  ? -1
+                  : a.matchText > b.matchText
+                  ? 1
+                  : 0;
+              }
+              return a.matchPriority - b.matchPriority;
             });
           }
           if (candidates.length > 0) {

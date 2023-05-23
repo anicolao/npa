@@ -123,6 +123,8 @@ describe("autocomplete tests", () => {
   it("autocompletes player names and star names", () => {
     setText("I am [[star|");
     type("]");
+    expect(getText()).to.equal("I am [[2]] Star Player|");
+    type("]");
     expect(getText()).to.equal("I am [[Star Name]]|");
     type("]");
     expect(getText()).to.equal("I am [[2]] Star Player|");
