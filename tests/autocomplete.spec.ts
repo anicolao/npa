@@ -15,6 +15,10 @@ describe("autocomplete tests", () => {
         players: {
           0: { alias: "Player One" },
           1: { alias: "Player Two" },
+          2: { alias: "Star Player" },
+        },
+        stars: {
+          1: { n: "Star Name" },
         },
       },
     },
@@ -86,13 +90,13 @@ describe("autocomplete tests", () => {
     )}|${elem.value.substring(elem.selectionStart)}`;
   }
 
-  it("autocompletes a player name", () => {
+  it("autocompletes a player id", () => {
     setText("[[0|");
     type("]");
     expect(getText()).to.equal("[[0]] Player One|");
   });
 
-  it("autocompletes a player name before another completed player name", () => {
+  it("autocompletes a player id before another completed player id", () => {
     setText("[[0| and [[1]] Player Two");
     type("]");
     expect(getText()).to.equal("[[0]] Player One| and [[1]] Player Two");
@@ -104,5 +108,25 @@ describe("autocomplete tests", () => {
     expect(getText()).to.equal(
       `My API key is [[api:${myApiKey}]]|. [[1]] Player Two is nearby.`,
     );
+  });
+
+  it("autocompletes player names in order", () => {
+    setText("I am [[Player|");
+    type("]");
+    expect(getText()).to.equal("I am [[0]] Player One|");
+    type("]");
+    expect(getText()).to.equal("I am [[1]] Player Two|");
+    type("]");
+    expect(getText()).to.equal("I am [[0]] Player One|");
+  });
+
+  it("autocompletes player names and star names", () => {
+    setText("I am [[star|");
+    type("]");
+    expect(getText()).to.equal("I am [[Star Name]]|");
+    type("]");
+    expect(getText()).to.equal("I am [[2]] Star Player|");
+    type("]");
+    expect(getText()).to.equal("I am [[Star Name]]|");
   });
 });
