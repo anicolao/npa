@@ -4558,15 +4558,8 @@ function NeptunesPrideAgent() {
     }
     output.push("--- Alliance Research Progress ---");
     output.push("--- All Alliance Research ---");
-    const techs = [
-      "scanning",
-      "propulsion",
-      "terraforming",
-      "research",
-      "weapons",
-      "banking",
-      "manufacturing",
-    ];
+    const player = NeptunesPride.universe.player;
+    const techs = Object.keys(player.tech);
     output.push(`:--|${techs.map(() => "--:").join("|")}`);
     output.push(
       `Empire|${techs.map((key) => translateTechEmoji(key)).join("|")}`,
