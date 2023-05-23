@@ -4616,7 +4616,9 @@ function NeptunesPrideAgent() {
         } else {
           soFar = `[[bad:${soFar}]]`;
         }
-        line += `|${soFar} (L${tech.level})`;
+        line += `|${soFar}${player.researching === key ? "*" : ""} (L${
+          tech.level
+        })`;
       }
       output.push([line]);
     }
