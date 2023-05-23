@@ -6,10 +6,21 @@ export function setupAutocomplete(
   getApiKey: () => string,
 ) {
   var autocompleteCaret = 0;
+  type SearchCandidate = {
+    matchText: string;
+    completion: string;
+  };
+  let candidates: SearchCandidate[] = null;
+  let resetCandidates = function () {
+    candidates = null;
+  };
   let autocompleteTrigger = function (e: KeyboardEvent) {
     const target: any = e.target;
     if (target.type === "textarea") {
       const key = e.key;
+      if (key != "]") {
+        resetCandidates();
+      }
       if (key === "]" || key === ":") {
         if (autocompleteCaret <= 0) {
           autocompleteCaret =
@@ -31,7 +42,6 @@ export function setupAutocomplete(
         let endBracket = target.selectionStart;
         if (key === "]") endBracket -= 1;
         let autoString = target.value.substring(start, endBracket);
-        autocompleteCaret = 0;
         let m = autoString.match(/^[0-9][0-9]*$/);
         if (m?.length) {
           let puid = Number(autoString);
@@ -43,7 +53,54 @@ export function setupAutocomplete(
             target.value.substring(end, target.value.length);
           target.selectionStart = start + auto.length;
           target.selectionEnd = start + auto.length;
+          autocompleteCaret = 0;
+        } else if (key === "]") {
+          if (candidates === null) {
+            candidates = [];
+            let matches = (s: string): boolean => {
+              return (
+                s.toLocaleLowerCase().substring(0, autoString.length) ==
+                autoString.toLocaleLowerCase()
+              );
+            };
+            for (const key in neptunesPride.universe.galaxy.stars) {
+              const star: any = neptunesPride.universe.galaxy.stars[key];
+              if (!matches(star.n)) continue;
+              candidates.push({
+                matchText: star.n,
+                completion: `[[${star.n}]]`,
+              });
+            }
+            for (const key in neptunesPride.universe.galaxy.players) {
+              const player = neptunesPride.universe.galaxy.players[key];
+              if (!matches(player.alias)) continue;
+              candidates.push({
+                matchText: player.alias,
+                completion: `[[${key}]] ${player.alias}`,
+              });
+            }
+            candidates.sort((a, b) => {
+              return a.matchText < b.matchText
+                ? -1
+                : a.matchText > b.matchText
+                ? 1
+                : 0;
+            });
+          }
+          if (candidates.length > 0) {
+            const candidate = candidates.shift();
+            const end = target.selectionEnd;
+            target.value =
+              target.value.substring(0, start - 2) +
+              candidate.completion +
+              target.value.substring(end, target.value.length);
+            target.selectionStart = start - 2 + candidate.completion.length;
+            target.selectionEnd = start - 2 + candidate.completion.length;
+            candidates.push(candidate);
+            return;
+          }
         }
+        autocompleteCaret = 0;
         m = autoString.match(/api:/);
         if (m?.length && getApiKey()) {
           let auto = `api:${getApiKey()}]]`;
@@ -63,4 +120,5 @@ export function setupAutocomplete(
     }
   };
   element.addEventListener("keyup", autocompleteTrigger);
+  element.addEventListener("blur", resetCandidates);
 }
