@@ -369,7 +369,7 @@ export function logError(e: any) {
   if (stack === "no stack trace") {
     console.error("No stack", e);
     logCount(`${message}`);
-    logCount(`${message}:${JSON.stringify(e?.reason)}`);
+    logCount(`${message}:${JSON.stringify(e)}`);
   } else {
     addDoc(store, { gameid, stack, message, version, timestamp });
   }

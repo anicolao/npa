@@ -160,12 +160,17 @@ async function cacheEventResponseCallback(
             const outOfOrderCandidate = incoming[i - 1];
             if (keys[outOfOrderCandidate.key]) {
               i--;
-              logCount("decrement_i");
+              logCount(`decrement_i_${orig_i - i}`);
               continue;
             }
             break;
           }
-          overlapOffset = orig_i;
+          overlapOffset = i;
+          let overlapsFound = true;
+          for (let j = i; j < incoming.length; ++j) {
+            overlapsFound &&= keys[incoming[j].key];
+          }
+          logCount(`overlaps_found_${overlapsFound}`);
           break;
         }
         logCount("impossible_slice");
@@ -216,6 +221,10 @@ async function cacheEventResponseCallback(
       }
     } else if (overlapOffset < 0) {
       const size = incoming.length * 2;
+      if (size > 4096 || size <= 0) {
+        logCount(`invalid_size_${size}`);
+        return false;
+      }
       console.log(`Missing some events for ${group}, double fetch to ${size}`);
       if (group === "game_event" || group === "game_diplomacy") {
         logCount("recursive_rrm");
