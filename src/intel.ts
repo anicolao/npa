@@ -4130,7 +4130,18 @@ function NeptunesPrideAgent() {
     terr: "Terra",
     weap: "Weapons",
   };
+  const xlateemoji: { [k: string]: string } = {
+    bank: "💰",
+    manu: "🔧",
+    prop: "🚀",
+    rese: "🧪",
+    scan: "📡",
+    terr: "🌎",
+    weap: "⚔️",
+  };
+
   let translateTech = (name: string) => xlate[name.substring(0, 4)];
+  let translateTechEmoji = (name: string) => xlateemoji[name.substring(0, 4)];
 
   const tradeCostForLevel = function (level: number) {
     if (NeptunesPride.gameVersion === "proteus") {
@@ -4546,6 +4557,37 @@ function NeptunesPrideAgent() {
       }
     }
     output.push("--- Alliance Research Progress ---");
+    output.push("--- All Alliance Research ---");
+    output.push(":--|:--|--:|--:|--:|--");
+    const techs = [
+      "scanning",
+      "propulsion",
+      "terraforming",
+      "research",
+      "weapons",
+      "banking",
+      "manufacturing",
+    ];
+    output.push(
+      `Empire|${techs.map((key) => translateTechEmoji(key)).join("|")}`,
+    );
+    for (let pii = 0; pii < playerIndexes.length; ++pii) {
+      const pi = playerIndexes[pii];
+      const p = players[pi];
+      const apiKey = await store.get(apiKeys[pii]);
+      const scan = await getUserScanData(apiKey);
+      if (scan) {
+        const player = scan.players[pi];
+        let line = `[[${pi}]]`;
+        for (const key of techs) {
+          const tech = player.tech[key];
+          const soFar = tech.research;
+          line += `|${soFar} (L${tech.level})`;
+        }
+        output.push([line]);
+      }
+    }
+    output.push("--- All Alliance Research ---");
     prepReport("research", output);
   };
   defineHotkey(
