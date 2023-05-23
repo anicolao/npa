@@ -4571,21 +4571,54 @@ function NeptunesPrideAgent() {
     output.push(
       `Empire|${techs.map((key) => translateTechEmoji(key)).join("|")}`,
     );
+    type BestProgress = {
+      [key: string]: {
+        level: number;
+        research: number;
+      };
+    };
+    let best: BestProgress = {};
+    for (const tech of techs) {
+      best[tech] = {
+        level: 1,
+        research: 0,
+      };
+    }
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
       const p = players[pi];
       const apiKey = await store.get(apiKeys[pii]);
       const scan = await getUserScanData(apiKey);
-      if (scan) {
-        const player = scan.players[pi];
-        let line = `[[${pi}]]`;
-        for (const key of techs) {
-          const tech = player.tech[key];
-          const soFar = tech.research;
-          line += `|${soFar} (L${tech.level})`;
-        }
-        output.push([line]);
+      if (!scan) continue;
+      const player = scan.players[pi];
+      let line = `[[${pi}]]`;
+      for (const key of techs) {
+        const tech = player.tech[key];
+        best[key].level = Math.max(best[key].level, tech.level);
+        best[key].research = Math.max(best[key].research, tech.research);
       }
+    }
+    for (let pii = 0; pii < playerIndexes.length; ++pii) {
+      const pi = playerIndexes[pii];
+      const p = players[pi];
+      const apiKey = await store.get(apiKeys[pii]);
+      const scan = await getUserScanData(apiKey);
+      if (!scan) continue;
+      const player = scan.players[pi];
+      let line = `[[${pi}]]`;
+      for (const key of techs) {
+        const tech = player.tech[key];
+        let soFar = tech.research;
+        if (tech.level === best[key].level) {
+          if (tech.research === best[key].research) {
+            soFar = `[[good:${soFar}]]`;
+          }
+        } else {
+          soFar = `[[bad:${soFar}]]`;
+        }
+        line += `|${soFar} (L${tech.level})`;
+      }
+      output.push([line]);
     }
     output.push("--- All Alliance Research ---");
     prepReport("research", output);
