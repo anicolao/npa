@@ -822,7 +822,8 @@ function NeptunesPrideAgent() {
   }
   function activityReport() {
     const output = [];
-    output.push("Activity report:");
+    let endTick = NeptunesPride.universe.galaxy.tick;
+    output.push(`Activity report up to [[Tick #${endTick}]]:`);
     const playerBlock: {
       [k: string]: string[];
     } = {};
@@ -846,8 +847,18 @@ function NeptunesPrideAgent() {
     const myKeys = getMyKeys();
     do {
       const scanList = myKeys
-        .map((k) => getTimeTravelScanForTick(currentTick, k, "forwards"))
+        .map((k) =>
+          getTimeTravelScanForTick(
+            currentTick,
+            k,
+            currentTick ? "forwards" : "back",
+          ),
+        )
         .filter((scan) => scan && scan.tick === currentTick);
+      console.log(
+        `Got ${scanList.length} scans for tick #${currentTick}`,
+        scanList,
+      );
       if (scanList.length > 0) {
         let myScan = scanList.filter((scan) => scan.player_uid === myId);
         let scan = myScan.length > 0 ? myScan[0] : scanList[0];
@@ -875,7 +886,7 @@ function NeptunesPrideAgent() {
         prior = row;
       }
       currentTick++;
-    } while (currentTick < trueTick);
+    } while (currentTick < endTick);
     for (const k in playerBlock) {
       if (playerBlock[k].length === 3) {
         playerBlock[k].push("No activity: AFK?");
