@@ -171,6 +171,11 @@ async function cacheEventResponseCallback(
             overlapsFound &&= keys[incoming[j].key];
           }
           logCount(`overlaps_found_${overlapsFound}`);
+          let collisionsFound = false;
+          for (let j = 0; j < i; ++j) {
+            collisionsFound ||= keys[incoming[j].key] === true;
+          }
+          logCount(`collisions_found_${collisionsFound}`);
           break;
         }
         logCount("impossible_slice");
@@ -183,7 +188,6 @@ async function cacheEventResponseCallback(
     }
     if (incoming.length > messageCache[group].length) {
       logCount("would_force_restore");
-      /*
       console.log(`Incoming messages forced restore: ${incoming.length}`);
       const knownKeys: { [k: string]: boolean } = {};
       messageCache[group].forEach((m: Message) => {
@@ -195,11 +199,13 @@ async function cacheEventResponseCallback(
           forceIncoming.push(m);
         }
       });
+      logCount(`Force slice ${forceIncoming.length} @ ${overlapOffset}`);
       forceIncoming = forceIncoming.slice(overlapOffset);
       console.log(`Forcibly adding ${forceIncoming.length} missing keys`);
+      logCount(`Force store ${forceIncoming.length}`);
       store(forceIncoming, group);
       messageCache[group] = forceIncoming.concat(messageCache[group]);
-      */
+      logCount(`Force messageCache len ${messageCache[group].length}`);
     }
     if (overlapOffset >= 0) {
       console.log(`Incoming messages total: ${incoming.length}`);
