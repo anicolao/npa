@@ -312,17 +312,25 @@ function NeptunesPrideAgent() {
   function ownershipReport() {
     let output = [];
     const explorers = [];
-    let currentTick = 0;
+    const endTick = NeptunesPride.universe.galaxy.tick;
+    let currentTick = Math.max(
+      endTick - NeptunesPride.gameConfig.productionTicks,
+      1,
+    );
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : NeptunesPride.universe.galaxy.player_uid;
     timeTravelTickIndices = {};
-    output.push("Star ownership changes:");
-    explorers.push("Exploration report:");
+    output.push(
+      `Star ownership changes from [[Tick #${currentTick}]] to [[Tick #${endTick}]]:`,
+    );
+    explorers.push(
+      `Exploration report from [[Tick #${currentTick}]] to [[Tick #${endTick}]]:`,
+    );
     const abandoned: { [k: string]: boolean } = {};
     let prior = null;
     const ticks = new TickIterator(getMyKeys(), myId);
-    while (ticks.hasNext()) {
+    while (ticks.hasNext() && currentTick <= endTick) {
       ticks.next();
       const scanData = ticks.getScanData();
       if (scanData.tick < currentTick) continue;
