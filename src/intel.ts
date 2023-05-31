@@ -894,7 +894,7 @@ function NeptunesPrideAgent() {
         prior = row;
       }
       currentTick++;
-    } while (currentTick < endTick);
+    } while (currentTick <= endTick);
     for (const k in playerBlock) {
       if (playerBlock[k].length === 3) {
         playerBlock[k].push("No activity: AFK?");
