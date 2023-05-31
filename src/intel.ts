@@ -1589,10 +1589,12 @@ function NeptunesPrideAgent() {
   function incCombatHandicap() {
     combatHandicap += 1;
     NeptunesPride.np.trigger("map_rebuild");
+    NeptunesPride.np.trigger("refresh_interface");
   }
   function decCombatHandicap() {
     combatHandicap -= 1;
     NeptunesPride.np.trigger("map_rebuild");
+    NeptunesPride.np.trigger("refresh_interface");
   }
   defineHotkey(
     ".",
