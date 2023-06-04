@@ -4587,8 +4587,10 @@ function NeptunesPrideAgent() {
       let line = `[[${pi}]]`;
       for (const key of techs) {
         const tech = player.tech[key];
-        best[key].level = Math.max(best[key].level, tech.level);
-        best[key].research = Math.max(best[key].research, tech.research);
+        if (tech.level >= best[key].level) {
+          best[key].level = tech.level;
+          best[key].research = Math.max(best[key].research, tech.research);
+        }
       }
     }
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
