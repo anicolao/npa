@@ -4303,7 +4303,7 @@ function NeptunesPrideAgent() {
     output: Stanzas,
     playerIndexes: number[],
     title: string,
-  ) {
+  ): any[] {
     const fields = [
       ["total_stars", "[[:star:]]"],
       ["total_strength", "[[:carrier:]]"],
@@ -4312,18 +4312,19 @@ function NeptunesPrideAgent() {
       ["total_industry", "I"],
       ["total_science", "S"],
     ];
+    const table: Stanzas = [];
     const sums = fields.map((x) => 0);
-    output.push(`--- ${title} ---`);
+    table.push(`--- ${title} ---`);
     let cols = ":--";
     for (let i = 0; i < fields.length; ++i) {
       cols += "|--";
     }
-    output.push(cols);
+    table.push(cols);
     cols = "Empire";
     for (let i = 0; i < fields.length; ++i) {
       cols += `|${fields[i][1]}`;
     }
-    output.push(cols);
+    table.push(cols);
     const myP = NeptunesPride.universe.player;
     playerIndexes.forEach((pi) => {
       const row: string[] = [`[[${pi}]]`];
@@ -4343,16 +4344,26 @@ function NeptunesPrideAgent() {
             row.push(`${level}`);
           }
         });
-      output.push([row.join("|")]);
+      table.push([row.join("|")]);
     });
-    output.push([
-      ["[[footer:Total]]", ...sums.map((x) => Math.trunc(x))].join("|"),
-    ]);
-    output.push(`--- ${title} ---`);
+    const summary = sums.map((x) => Math.trunc(x));
+    table.push([["[[footer:Total]]", ...summary].join("|")]);
+    table.push(`--- ${title} ---`);
+    output.push(table.flat());
+    return [`${title}`, ...summary];
   };
   let empireReport = async function () {
     lastReport = "empires";
     const output: Stanzas = [];
+    const summaryData: any[] = [];
+    const computeEmpireTable = (
+      output: Stanzas,
+      playerIndexes: number[],
+      title: string,
+    ) => {
+      const row = empireTable(output, playerIndexes, title);
+      summaryData.push(row);
+    };
     const { players, playerIndexes } = await getAlliedKeysAndIndexes();
     if (playerIndexes.length > 1) {
       empireTable(output, playerIndexes, "Allied Empires");
@@ -4388,7 +4399,7 @@ function NeptunesPrideAgent() {
       } else if (colors.indexOf(k) !== -1) {
         unallied.push(...s);
       } else {
-        empireTable(
+        computeEmpireTable(
           output,
           s,
           `Alliance ${s.map((uid) => `[[#${uid}]]`).join("")}`,
@@ -4401,6 +4412,31 @@ function NeptunesPrideAgent() {
         return players[k].total_strength > 0;
       })
       .map((x) => +x);
+    if (output.length > 0) {
+      const summary: string[] = ["--- All Alliances ---"];
+      summary.push(output[0][1]);
+      summary.push(output[0][2].replace("Empire", "Alliance"));
+      const p = NeptunesPride.universe.player;
+      const me = `[[#${p.uid}]]`;
+      const baseStats: any[] = [];
+      summaryData.forEach((row) => {
+        if (row[0].indexOf(me) !== -1) {
+          baseStats.push(...row);
+        }
+      });
+      summaryData.forEach((row) => {
+        let formatted = row[0];
+        for (let stat = 1; stat < row.length; ++stat) {
+          const v = row[stat];
+          const b = baseStats[stat];
+          const s = v < b ? `[[good:${v}]]` : v > b ? `[[bad:${v}]]` : `${v}`;
+          formatted += `|${s}`;
+        }
+        summary.push(formatted);
+      });
+      summary.push("--- All Alliances ---");
+      output.push(summary.map((x) => x.replace("Alliance ", "")));
+    }
     empireTable(output, survivors, `All Surviving Empires`);
 
     prepReport("empires", output);
