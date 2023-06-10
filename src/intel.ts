@@ -996,7 +996,7 @@ function NeptunesPrideAgent() {
         return shapeMap[uid];
       });
     }
-    colorMap.forEach((c: string, i: number) => {
+    colorMap?.forEach((c: string, i: number) => {
       if (NeptunesPride.universe.galaxy.players[i]) {
         setPlayerColor(i, c);
       }
