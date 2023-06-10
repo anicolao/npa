@@ -27,13 +27,13 @@ export function isWithinRange(
   star: Star,
   galaxy: ScanningData,
 ): boolean {
-  if (galaxy !== lastGalaxy) {
+  if (galaxy !== lastGalaxy || distanceMap[star.uid] === undefined) {
     rebuildDistanceMap(galaxy);
     lastGalaxy = galaxy;
   }
   const rangeSquared = range * range;
   const sortedStars = distanceMap[star.uid];
-  for (let i = 0; i < sortedStars.length; ++i) {
+  for (let i = 0; sortedStars && i < sortedStars.length; ++i) {
     const candidate = sortedStars[i];
     if (candidate.puid === puid) {
       const dist = distance(candidate, star);
