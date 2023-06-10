@@ -996,6 +996,11 @@ function NeptunesPrideAgent() {
         return shapeMap[uid];
       });
     }
+    colorMap.forEach((c: string, i: number) => {
+      if (NeptunesPride.universe.galaxy.players[i]) {
+        setPlayerColor(i, c);
+      }
+    });
   };
   const recordTrueTick = function (_: any, galaxy: any) {
     trueTick = galaxy.tick;
@@ -3706,7 +3711,7 @@ function NeptunesPrideAgent() {
   const setPlayerColor = function (uid: number, color: string) {
     const player = NeptunesPride.universe.galaxy.players[uid];
     colorMap[player.uid] = color;
-    if (player.shape !== undefined) {
+    if (NeptunesPride.gameVersion === "proteus") {
       if (!player.originalColor) {
         player.originalColor = player.colorStyle;
       }
@@ -3725,7 +3730,7 @@ function NeptunesPrideAgent() {
     if (settings.whitePlayer) {
       setPlayerColor(player.uid, "#ffffff");
     } else {
-      if (player.shape !== undefined) {
+      if (NeptunesPride.gameVersion === "proteus") {
         setPlayerColor(player.uid, colors[player.color]);
       } else {
         if (player.prevColor !== undefined) {
@@ -4119,6 +4124,7 @@ function NeptunesPrideAgent() {
     const timestamp = new Date().getTime();
     if (timestamp - lastRefreshTimestamp < 5 * 60 * 1000) {
       console.log(`refreshScanData called too recently, STOP`);
+      rebuildColorMap(NeptunesPride.universe.galaxy);
       return;
     }
     lastRefreshTimestamp = timestamp;
@@ -4139,6 +4145,7 @@ function NeptunesPrideAgent() {
         myApiKey = apiKey;
       }
     }
+    rebuildColorMap(NeptunesPride.universe.galaxy);
   };
   onTrigger("refresh_interface", refreshScanData);
 
