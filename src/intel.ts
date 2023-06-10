@@ -4610,7 +4610,9 @@ function NeptunesPrideAgent() {
         for (let i = 1; i < 10; ++i) {
           const betterTick = Math.ceil(remaining / researchRate(science + i));
           if (betterTick < tickIncr) {
-            upgrade = `${i}<sub style="font-size: 50%">${tickIncr - betterTick}</sub>`;
+            upgrade = `${i}<sub style="font-size: 50%">${
+              tickIncr - betterTick
+            }</sub>`;
             break;
           }
         }
