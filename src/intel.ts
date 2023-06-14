@@ -37,7 +37,7 @@ import {
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { setupAutocomplete } from "./autocomplete";
-import { Player, SpaceObject, Star } from "./galaxy";
+import { Player, ScannedStar, SpaceObject, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
 import {
@@ -672,19 +672,46 @@ function NeptunesPrideAgent() {
     "fa",
   );
 
-  function buyAllTheHypotheticalEconomy(
+  interface Costs {
+    originalStar: ScannedStar & Costs;
+    player: Player;
+    uce: number;
+    uci: number;
+    ucs: number;
+    ucg: number;
+    totaluce: number;
+    totaluci: number;
+    totalucs: number;
+    totalucg: number;
+  }
+  function buyAllTheInfra(
+    filteredStars: ScannedStar[],
     techType: "terra" | "bank" | "none",
     buy: "E" | "I" | "S",
   ) {
     const universe = NeptunesPride.universe;
-    const galaxy = universe.galaxy;
-    const me = { ...universe.player };
-    const myUid = me.uid;
-    let allMyStars = Object.keys(galaxy.stars)
-      .map((k) => {
-        return { ...galaxy.stars[k] };
-      })
-      .filter((s) => s.puid === myUid);
+    let allMyStars: (ScannedStar & Costs)[] = filteredStars.map((s) => {
+      let r: Star & Costs = {
+        ...s,
+        originalStar: s as ScannedStar & Costs,
+        player: universe.player,
+        uce: 0,
+        uci: 0,
+        ucs: 0,
+        ucg: 0,
+        totaluce: 0,
+        totaluci: 0,
+        totalucs: 0,
+        totalucg: 0,
+      };
+      r.originalStar.uce = r.uce = universe.calcUCE(r);
+      r.originalStar.uci = r.uci = universe.calcUCI(r);
+      r.originalStar.ucs = r.ucs = universe.calcUCS(r);
+      r.originalStar.ucg = r.ucg = universe.calcUCG(r);
+      if (r.uce === 0 || r.uci === 0 || r.ucs === 0)
+        throw `Cost unset on star ${r.n}`;
+      return r;
+    });
     const cc = (a: any, b: any) => {
       if (buy === "I") return a.uci - b.uci;
       if (buy === "S") return a.ucs - b.ucs;
@@ -706,18 +733,42 @@ function NeptunesPrideAgent() {
       allMyStars[HEAD].uce <= universe.player.cash &&
       HEAD < allMyStars.length
     ) {
-      if (buy === "E") universe.upgradeEconomy(allMyStars[HEAD]);
-      if (buy === "I") universe.upgradeIndustry(allMyStars[HEAD]);
-      if (buy === "S") universe.upgradeScience(allMyStars[HEAD]);
+      if (buy === "E") {
+        allMyStars[HEAD].totaluce += allMyStars[HEAD].uce;
+        universe.upgradeEconomy(allMyStars[HEAD]);
+      }
+      if (buy === "I") {
+        allMyStars[HEAD].totaluci += allMyStars[HEAD].uci;
+        universe.upgradeIndustry(allMyStars[HEAD]);
+      }
+      if (buy === "S") {
+        allMyStars[HEAD].totalucs += allMyStars[HEAD].ucs;
+        universe.upgradeScience(allMyStars[HEAD]);
+      }
       count++;
       allMyStars = allMyStars.sort(cc);
     }
     if (techType === "bank") {
       universe.player.cash += 75;
     }
-    return count;
+    return { count, allMyStars };
   }
-  function economistReport() {
+  function buyAllTheHypotheticalEconomy(
+    techType: "terra" | "bank" | "none",
+    buy: "E" | "I" | "S",
+  ) {
+    const universe = NeptunesPride.universe;
+    const galaxy = universe.galaxy;
+    const me = { ...universe.player };
+    const myUid = me.uid;
+    let allMyStars: ScannedStar[] = Object.keys(galaxy.stars)
+      .map((k) => {
+        return { ...galaxy.stars[k] };
+      })
+      .filter((s) => s.puid === myUid);
+    return buyAllTheInfra(allMyStars, techType, buy).count;
+  }
+  async function economistReport() {
     let output = [];
     const universe = NeptunesPride.universe;
     const me = { ...universe.player };
@@ -805,6 +856,79 @@ function NeptunesPrideAgent() {
     ]);
     output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
     //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
+
+    const { players, apiKeys, playerIndexes } = await getPrimaryAlliance();
+    let communalStars: ScannedStar[] = [];
+    let starowners: { [k: string]: StarState } = {};
+    // TODO: Use ally keys to determine combat outcomes.
+    combatOutcomes(starowners);
+    let communalMoney = 0;
+    let communalEmpires: { [k: number]: { cash: number; totaluce: number } } =
+      {};
+    for (let pii = 0; pii < playerIndexes.length; ++pii) {
+      const pi = playerIndexes[pii];
+      const apiKey = await store.get(apiKeys[pii]);
+      const scan = await getUserScanData(apiKey);
+      if (scan) {
+        const p = scan.players[pi];
+        communalEmpires[p.uid] = {
+          cash: p.cash,
+          totaluce: 0,
+        };
+        communalMoney += p.cash;
+        for (const s of Object.values(scan.stars) as ScannedStar[]) {
+          let starOwner = s.puid;
+          if (starowners[s.uid]?.puid !== undefined && starOwner === p.uid) {
+            starOwner = +starowners[s.uid]?.puid;
+          }
+          if (starOwner === p.uid) {
+            communalStars.push(s);
+          }
+        }
+      }
+    }
+
+    universe.player.cash = communalMoney;
+    const infra = buyAllTheInfra(communalStars, "none", "E");
+    const allMyStars = infra.allMyStars;
+    console.log("allMyStars", allMyStars, infra.count);
+
+    output.push("--- Communal Transfers ---");
+    output.push(":--|--:|--:|--:");
+    output.push("Empire|Current|Needed|Transfer");
+
+    allMyStars.forEach((s) => {
+      communalEmpires[s.originalStar.puid].totaluce += s.totaluce;
+    });
+    const reserve = communalEmpires[universe.player.uid].totaluce;
+    for (const uid in communalEmpires) {
+      const cash = communalEmpires[uid].cash;
+      const needed = communalEmpires[uid].totaluce;
+      output.push(
+        `[[${uid}]]|[[cash:${uid}:${cash}]]|${needed}|[[transfer:${uid}:${cash}:${needed}:${universe.player.uid}:${reserve}]]`,
+      );
+    }
+    output.push("--- Communal Transfers ---");
+
+    output.push("--- Communal Economy ---");
+    output.push(":--|:--|--:|--:|--:");
+    output.push("P|Star|E|+E|$E");
+    let upgradeAll: number[] = [];
+    allMyStars.forEach((s) => {
+      const upgrade = s.e - s.originalStar.e;
+      if (upgrade) {
+        const originalStar = s.originalStar as ScannedStar & Costs;
+        for (let i = 0; i < upgrade; i++) {
+          upgradeAll.push(s.uid);
+        }
+        output.push([
+          `[[#${s.originalStar.puid}]]|[[${s.n}]]|${s.originalStar.e}|${upgrade}|${s.totaluce}`,
+        ]);
+      }
+    });
+    output.push("--- Communal Economy ---");
+    output.push(`[[upgrade:e:${upgradeAll.join(":")}]]`);
+
     universe.player.cash = myCash;
     universe.player.total_economy = preEcon;
     universe.player.total_industry = preInd;
@@ -1080,9 +1204,22 @@ function NeptunesPrideAgent() {
       knownAlliances?.[fleetOwnerId]?.[starOwnerId]
     );
   };
+  interface DepartureRecord {
+    leaving: number;
+    origShips: number;
+  }
+  interface StarState {
+    last_updated: number;
+    ships: number;
+    puid: number;
+    c: number;
+    departures: { [k: number]: DepartureRecord };
+    weapons: number;
+    production: number;
+  }
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
-  const combatOutcomes = () => {
+  const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
     const universe = NeptunesPride.universe;
     const players = NeptunesPride.universe.galaxy.players;
     let fleets = NeptunesPride.universe.galaxy.fleets;
@@ -1117,20 +1254,8 @@ function NeptunesPrideAgent() {
     let arrivals: { [k: string]: any } = {};
     let output: Stanzas = [];
     let arrivalTimes = [];
-    interface DepartureRecord {
-      leaving: number;
-      origShips: number;
-    }
-    interface StarState {
-      last_updated: number;
-      ships: number;
-      puid: number;
-      c: number;
-      departures: { [k: number]: DepartureRecord };
-      weapons: number;
-      production: number;
-    }
-    let starstate: { [k: string]: StarState } = {};
+    let starstate: { [k: string]: StarState } =
+      staroutcomes === undefined ? {} : staroutcomes;
     for (const i in flights) {
       let fleet = flights[i][2];
       if (fleet.orbiting) {
@@ -3120,6 +3245,62 @@ function NeptunesPrideAgent() {
         pattern = `[[${sub}]]`;
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
+        } else if (/^upgrade:[eisg](:[0-9]+)+$/.test(sub)) {
+          // upgrade:type:star uid:star uid:...
+          const split = sub.split(":");
+          const type = split[1];
+          const stars = NeptunesPride.universe.galaxy.stars;
+          const myuid = NeptunesPride.universe.player.uid;
+          const upgrade = split
+            .slice(2)
+            .map((v) => stars[+v])
+            .filter((s) => s && s.puid === myuid);
+          const upgradeScript = upgrade
+            .map(
+              (star) =>
+                `Crux.crux.trigger('star_dir_upgrade_${type}', '${star.uid}')`,
+            )
+            .join(";");
+          const terms: { [key: string]: string } = {
+            e: "economy",
+            i: "industry",
+            s: "science",
+            g: "warp gates",
+          };
+          const value = `<span class="button button_up pad8" style="display: inline-block; margin: 3px 0;" onClick="event.preventDefault();${upgradeScript}"  >Buy ${upgrade.length} ${terms[type]}</span>`;
+          s = s.replace(pattern, value);
+        } else if (/^cash:[0-9]+:[0-9]+$/.test(sub)) {
+          // cash:uid:price
+          const split = sub.split(":");
+          const uid = +split[1];
+          const defaultCash = +split[2];
+          const player = NeptunesPride.universe.galaxy.players[uid];
+          const cash = player?.cash !== undefined ? player.cash : defaultCash;
+          const value = `${cash}`;
+          s = s.replace(pattern, value);
+        } else if (/^transfer(:[0-9]+){5}$/.test(sub)) {
+          const split = sub.split(":");
+          const uid = +split[1];
+          const defaultCash = +split[2];
+          const needed = +split[3];
+          const reserveUid = +split[4];
+          const reserve =
+            reserveUid === NeptunesPride.universe.player.uid ? +split[5] : 0;
+          const player = NeptunesPride.universe.galaxy.players[uid];
+          const cash = player?.cash !== undefined ? player.cash : defaultCash;
+          const excess = Math.max(
+            0,
+            NeptunesPride.universe.player.cash - reserve,
+          );
+          const diff = Math.min(excess, Math.max(0, needed - cash));
+          const value =
+            uid === NeptunesPride.universe.player.uid
+              ? needed - cash
+              : Crux.format(
+                  `[[sendcash:${uid}:${diff}:${diff}]]`,
+                  templateData,
+                );
+          s = s.replace(pattern, value);
         } else if (/^Tick #\d\d*(#a?)?$/.test(sub)) {
           const split = sub.split("#");
           const tick = parseInt(split[1]);
@@ -3423,7 +3604,7 @@ function NeptunesPrideAgent() {
         } else if (d === "fa") {
           faReport();
         } else if (d === "economists") {
-          economistReport();
+          await economistReport();
         } else if (d === "activity") {
           activityReport();
         } else if (d === "trading") {
@@ -3897,10 +4078,12 @@ function NeptunesPrideAgent() {
       if (NeptunesPride.originalPlayer) {
         uid = NeptunesPride.originalPlayer;
       }
-      if (scan.player_uid === uid) {
-        return;
-      }
     }
+    universe.galaxy.players[scan.player_uid] = {
+      ...scan.players[scan.player_uid],
+      ...universe.galaxy.players[scan.player_uid],
+    };
+
     universe.galaxy.stars = { ...scan.stars, ...universe.galaxy.stars };
     for (let s in scan.stars) {
       const star = scan.stars[s];
@@ -4367,23 +4550,9 @@ function NeptunesPrideAgent() {
     output.push(table.flat());
     return [`${title}`, ...summary];
   };
-  let empireReport = async function () {
-    lastReport = "empires";
-    const output: Stanzas = [];
-    const summaryData: any[] = [];
-    const computeEmpireTable = (
-      output: Stanzas,
-      playerIndexes: number[],
-      title: string,
-    ) => {
-      const row = empireTable(output, playerIndexes, title);
-      summaryData.push(row);
-    };
-    const { players, playerIndexes } = await getAlliedKeysAndIndexes();
-    if (playerIndexes.length > 1) {
-      empireTable(output, playerIndexes, "Allied Empires");
-    }
-    let allPlayers = Object.keys(players);
+  const getAllianceSubsets = function (): { [k: string]: number[] } {
+    const players = NeptunesPride.universe.galaxy.players;
+    let allPlayers = Object.keys(NeptunesPride.universe.galaxy.players);
     let allianceMatch =
       settings.allianceDiscriminator === "color"
         ? colorMap.slice(0, allPlayers.length)
@@ -4406,7 +4575,26 @@ function NeptunesPrideAgent() {
         }
       }
     });
+    return subsets;
+  };
+  let empireReport = async function () {
+    lastReport = "empires";
+    const output: Stanzas = [];
+    const summaryData: any[] = [];
+    const computeEmpireTable = (
+      output: Stanzas,
+      playerIndexes: number[],
+      title: string,
+    ) => {
+      const row = empireTable(output, playerIndexes, title);
+      summaryData.push(row);
+    };
+    const { players, playerIndexes } = await getAlliedKeysAndIndexes();
+    if (playerIndexes.length > 1) {
+      empireTable(output, playerIndexes, "Allied Empires");
+    }
     let unallied = [];
+    const subsets = getAllianceSubsets();
     for (let k in subsets) {
       const s = subsets[k];
       if (s.length === 1) {
@@ -4422,6 +4610,7 @@ function NeptunesPrideAgent() {
       }
     }
     empireTable(output, unallied, `Unallied Empires`);
+    let allPlayers = Object.keys(NeptunesPride.universe.galaxy.players);
     const survivors = allPlayers
       .filter((k) => {
         return players[k].total_strength > 0;
@@ -4586,6 +4775,36 @@ function NeptunesPrideAgent() {
     );
     const playerIndexes = apiKeys.map((k) => parseInt(k.substring(4)));
     return { players, apiKeys, playerIndexes };
+  };
+  const getPrimaryAlliance = async function () {
+    const galaxy = NeptunesPride.universe.galaxy;
+    const player = galaxy.players[galaxy.player_uid];
+    const subsets = getAllianceSubsets();
+    const alliedKeys = await getAlliedKeysAndIndexes();
+    for (const k in subsets) {
+      const candidate = subsets[k];
+      if (candidate.indexOf(player.uid) !== -1) {
+        console.log(`Alliance should be ${k}: `, candidate);
+        const players = NeptunesPride.universe.galaxy.players;
+        const returnedKeys = [];
+        const returnedUids = [];
+        for (let i = 0; i < alliedKeys.playerIndexes.length; ++i) {
+          const uid = alliedKeys.playerIndexes[i];
+          const key = alliedKeys.apiKeys[i];
+          if (candidate.indexOf(uid) !== -1) {
+            returnedUids.push(uid);
+            returnedKeys.push(key);
+          }
+        }
+        if (returnedUids.length !== candidate.length) {
+          // TODO: Include an error message in alliance report saying which keys are missing.
+          console.error("Missing API key for an alliance member.");
+          return alliedKeys;
+        }
+        return { players, apiKeys: returnedKeys, playerIndexes: returnedUids };
+      }
+    }
+    return alliedKeys;
   };
   let researchReport = async function () {
     lastReport = "research";
