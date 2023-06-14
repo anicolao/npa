@@ -3054,15 +3054,23 @@ function NeptunesPrideAgent() {
       });
       if (data.length > 1) {
         const first = data[0][3];
-        const allNumbers = data.filter((x) => isNaN(x[1])).length === 0;
+        const getValue = (x: any) => {
+          if (/^[0-9-]/.test(x)) {
+            const ret = x.match ? +x.match(/^([0-9-]*(\.[0-9]+)?)/)[0] : +x;
+            return ret;
+          }
+          return x;
+        };
+        const allNumbers =
+          data.filter((x) => isNaN(getValue(x[1]))).length === 0;
         if (!allNumbers) {
           data.sort();
           if (sort === desc) data.reverse();
         } else {
           if (sort === desc) {
-            data.sort((a, b) => b[1] - a[1]);
+            data.sort((a, b) => getValue(b[1]) - getValue(a[1]));
           } else {
-            data.sort((a, b) => a[1] - b[1]);
+            data.sort((a, b) => getValue(a[1]) - getValue(b[1]));
           }
         }
         const last = data[data.length - 1][3];
