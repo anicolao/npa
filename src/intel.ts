@@ -4850,13 +4850,8 @@ function NeptunesPrideAgent() {
       }
     }
     output.push("--- Alliance Research Progress ---");
-    output.push("--- All Alliance Research ---");
     const player = NeptunesPride.universe.player;
     const techs = Object.keys(player.tech);
-    output.push(`:--|${techs.map(() => "--:").join("|")}`);
-    output.push(
-      `Empire|${techs.map((key) => translateTechEmoji(key)).join("|")}`,
-    );
     type BestProgress = {
       [key: string]: {
         level: number;
@@ -4888,6 +4883,15 @@ function NeptunesPrideAgent() {
         }
       }
     }
+    output.push("--- All Alliance Research ---");
+    output.push(`:--|${techs.map(() => "--:").join("|")}`);
+    output.push(
+      `Empire|${techs
+        .map(
+          (key) => `<sub>L${best[key].level}</sub> ${translateTechEmoji(key)}`,
+        )
+        .join("|")}`,
+    );
     for (let pii = 0; pii < playerIndexes.length; ++pii) {
       const pi = playerIndexes[pii];
       const p = players[pi];
@@ -4906,9 +4910,19 @@ function NeptunesPrideAgent() {
         } else {
           soFar = `[[bad:${soFar}]]`;
         }
-        line += `|${soFar}${player.researching === key ? "*" : ""} (L${
-          tech.level
-        })`;
+        line += `| ${soFar}`;
+        const researchPriority =
+          player.researching === key
+            ? 1
+            : player.researching_next === key
+            ? 2
+            : null;
+        if (researchPriority !== null) {
+          line += `<sub style="font-size: 50%">${researchPriority}</sub>`;
+        }
+        if (tech.level < best[key].level) {
+          line += `<div><sub>(L${tech.level})</sub></div>`;
+        }
       }
       output.push([line]);
     }
