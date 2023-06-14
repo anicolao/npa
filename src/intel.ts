@@ -4911,14 +4911,17 @@ function NeptunesPrideAgent() {
           soFar = `[[bad:${soFar}]]`;
         }
         line += `| ${soFar}`;
-        const researchPriority =
-          player.researching === key
-            ? 1
-            : player.researching_next === key
-            ? 2
-            : null;
-        if (researchPriority !== null) {
-          line += `<sub style="font-size: 50%">${researchPriority}</sub>`;
+        let researchPriority = [];
+        if (player.researching === key) {
+          researchPriority.push(1);
+        }
+        if (player.researching_next === key) {
+          researchPriority.push(2);
+        }
+        if (researchPriority.length > 0) {
+          line += `<sub style="font-size: 50%">${researchPriority.join(
+            ",",
+          )}</sub>`;
         }
         if (tech.level < best[key].level) {
           line += `<div><sub>(L${tech.level})</sub></div>`;
