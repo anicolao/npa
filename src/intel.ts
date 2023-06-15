@@ -1122,6 +1122,9 @@ function NeptunesPrideAgent() {
     }
     colorMap?.forEach((c: string, i: number) => {
       if (NeptunesPride.universe.galaxy.players[i]) {
+        if (settings.whitePlayer && i === NeptunesPride.universe.player.uid) {
+          return;
+        }
         setPlayerColor(i, c);
       }
     });
