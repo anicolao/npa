@@ -1899,6 +1899,15 @@ function NeptunesPrideAgent() {
 
     return optionsScreen;
   };
+  const clipColorConfig = function () {
+    const p = NeptunesPride.universe.player;
+    setClip(
+      `[[colorscheme:${p.alias} Tick #${trueTick}:${colorMap.join(
+        " ",
+      )}:${shapeMap.join(" ")}]]`,
+    );
+    console.log("clip: ", getClip());
+  };
   let currentCustomColor = 0;
   let currentCustomShape = 0;
   const npaColours = function (info?: any) {
@@ -2018,6 +2027,7 @@ function NeptunesPrideAgent() {
           mapRebuild();
           store.set("colorMap", colorMap.join(" "));
           store.set("shapeMap", shapeMap.join(" "));
+          clipColorConfig();
         }
       };
       field.node.on("focus", () => {
@@ -2052,8 +2062,22 @@ function NeptunesPrideAgent() {
       });
     });
 
+    clipColorConfig();
+
     return colourScreen;
   };
+
+  const setColorScheme = function (_event?: any, data?: string) {
+    const split = data?.split(":");
+    if (split) {
+      const colorData = split[0];
+      const shapeData = split[1];
+      store.set("colorMap", colorData);
+      store.set("shapeMap", shapeData);
+      init();
+    }
+  };
+  onTrigger("set_colorscheme_api", setColorScheme);
 
   const screenshot = function (): Promise<void> {
     let map = NeptunesPride.npui.map;
@@ -3268,6 +3292,14 @@ function NeptunesPrideAgent() {
             g: "warp gates",
           };
           const value = `<span class="button button_up pad8" style="display: inline-block; margin: 3px 0;" onClick="event.preventDefault();${upgradeScript}"  >Buy ${upgrade.length} ${terms[type]}</span>`;
+          s = s.replace(pattern, value);
+        } else if (/^colorscheme(:[^:]+){3}$/.test(sub)) {
+          // colorscheme:name:colors:shapes
+          const split = sub.split(":");
+          const name = split[1];
+          const colors = split[2];
+          const shapes = split[3];
+          const value = `<span class="button button_up pad8" style="display: inline-block; margin: 3px 0;" onClick='event.preventDefault();Crux.crux.trigger("set_colorscheme_api", "${colors}:${shapes}")'"  >Import Color Scheme ${name}</span>`;
           s = s.replace(pattern, value);
         } else if (/^cash:[0-9]+:[0-9]+$/.test(sub)) {
           // cash:uid:price
