@@ -199,8 +199,6 @@ async function cacheEventResponseCallback(
           forceIncoming.push(m);
         }
       });
-      logCount(`Force slice ${forceIncoming.length} @ ${overlapOffset}`);
-      forceIncoming = forceIncoming.slice(overlapOffset);
       console.log(`Forcibly adding ${forceIncoming.length} missing keys`);
       logCount(`Force store ${forceIncoming.length}`);
       store(forceIncoming, group);
