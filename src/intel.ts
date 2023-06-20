@@ -23,6 +23,7 @@ import {
   restoreFromDB,
   messageIndex,
   type Message,
+  anyEventsNewerThan,
 } from "./events";
 import { GameStore, TypedProperty } from "./gamestore";
 import { post } from "./network";
@@ -773,6 +774,7 @@ function NeptunesPrideAgent() {
     const universe = NeptunesPride.universe;
     const me = { ...universe.player };
     const myUid = me.uid;
+    let originalCash = me?.cash;
     let myCash = me?.cash || 1000;
     universe.player.cash = myCash;
     const preEcon = universe.player.total_economy;
@@ -857,6 +859,7 @@ function NeptunesPrideAgent() {
     output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
     //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
 
+    universe.player.cash = originalCash;
     const { players, apiKeys, playerIndexes } = await getPrimaryAlliance();
     let communalStars: ScannedStar[] = [];
     let starowners: { [k: string]: StarState } = {};
@@ -929,7 +932,8 @@ function NeptunesPrideAgent() {
     output.push("--- Communal Economy ---");
     output.push(`[[upgrade:e:${upgradeAll.join(":")}]]`);
 
-    universe.player.cash = myCash;
+    console.log(`Reset player's cash to ${originalCash}`);
+    universe.player.cash = originalCash;
     universe.player.total_economy = preEcon;
     universe.player.total_industry = preInd;
     universe.player.total_science = preSci;
@@ -4786,7 +4790,11 @@ function NeptunesPrideAgent() {
       const freshness = new Date().getTime() - cachedScan.now;
       const tickness =
         (1 - cachedScan.tick_fragment) * cachedScan.tick_rate * 60 * 1000;
-      if (freshness < tickness && freshness < 60 * 5 * 1000) {
+      if (
+        freshness < tickness &&
+        freshness < 60 * 5 * 1000 &&
+        !(await anyEventsNewerThan(cachedScan.now))
+      ) {
         return cachedScan;
       }
     }

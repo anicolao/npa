@@ -42,27 +42,25 @@ async function store(incoming: any[], group: string) {
   await Promise.all([
     ...incoming.map((x) => {
       if (x?.comment_count === 0) {
-        return tx.store.add({ ...x, date: -Date.parse(x.created) });
+        return tx.store.add(x);
       }
-      return tx.store
-        .put({ ...x, date: -Date.parse(x?.activity || x.created) })
-        .then(async () => {
-          if (x.comment_count) {
-            if (x.status === "read") {
-              if (messageCache[x.key]?.length === undefined) {
-                requestMessageComments(x.comment_count, x.key);
-              } else {
-                const len = messageCache[x.key].length;
-                const delta = x.comment_count - len + 1;
-                requestMessageComments(delta, x.key);
-              }
+      return tx.store.put(x).then(async () => {
+        if (x.comment_count) {
+          if (x.status === "read") {
+            if (messageCache[x.key]?.length === undefined) {
+              requestMessageComments(x.comment_count, x.key);
             } else {
-              console.log(
-                `Avoid caching comments for ${x.key} since it is unread: ${x?.payload?.subject}`,
-              );
+              const len = messageCache[x.key].length;
+              const delta = x.comment_count - len + 1;
+              requestMessageComments(delta, x.key);
             }
+          } else {
+            console.log(
+              `Avoid caching comments for ${x.key} since it is unread: ${x?.payload?.subject}`,
+            );
           }
-        });
+        }
+      });
     }),
     tx.done,
   ]);
@@ -129,6 +127,12 @@ async function cacheEventResponseCallback(
     logCount(JSON.stringify(response.report));
     return false;
   }
+  incoming = incoming.map((message: Message) => {
+    return {
+      ...message,
+      date: -Date.parse(message?.activity || message.created),
+    };
+  });
   await restoreFromDB(group);
   if (messageCache[group].length > 0) {
     let overlapOffset = -1;
@@ -297,9 +301,24 @@ export async function requestMessageComments(
   return cacheEventResponseCallback(message_key, await post(url, data));
 }
 
-export function updateMessageCache(
+let lastMessageCacheUpdate = 0;
+export async function updateMessageCache(
   group: "game_event" | "game_diplomacy",
 ): Promise<boolean> {
+  const timestamp = new Date().getTime();
+  if (timestamp - lastMessageCacheUpdate < 10 * 1000) {
+    console.log("Skip updating message cache");
+    logCount("skip_update_message_cache");
+    return true;
+  }
+  lastMessageCacheUpdate = timestamp;
   console.log("updateMessageCache");
   return requestRecentMessages(4, group);
+}
+
+export async function anyEventsNewerThan(timestamp: number): Promise<boolean> {
+  await updateMessageCache("game_event");
+  return (
+    messageCache["game_event"].filter((x) => timestamp < -x.date).length > 0
+  );
 }
