@@ -4117,6 +4117,11 @@ function NeptunesPrideAgent() {
       if (NeptunesPride.originalPlayer) {
         uid = NeptunesPride.originalPlayer;
       }
+      if (NeptunesPride.originalPlayer === universe.galaxy.player_uid) {
+        if (scan.player_uid === universe.galaxy.player_uid) {
+          return;
+        }
+      }
     }
     universe.galaxy.players[scan.player_uid] = {
       ...scan.players[scan.player_uid],
