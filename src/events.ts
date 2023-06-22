@@ -301,17 +301,20 @@ export async function requestMessageComments(
   return cacheEventResponseCallback(message_key, await post(url, data));
 }
 
-let lastMessageCacheUpdate = 0;
+let lastMessageCacheUpdate: { [k: string]: number } = {
+  game_event: 0,
+  game_diplomacy: 0,
+};
 export async function updateMessageCache(
   group: "game_event" | "game_diplomacy",
 ): Promise<boolean> {
   const timestamp = new Date().getTime();
-  if (timestamp - lastMessageCacheUpdate < 10 * 1000) {
+  if (timestamp - lastMessageCacheUpdate[group] < 10 * 1000) {
     console.log("Skip updating message cache");
     logCount("skip_update_message_cache");
     return true;
   }
-  lastMessageCacheUpdate = timestamp;
+  lastMessageCacheUpdate[group] = timestamp;
   console.log("updateMessageCache");
   return requestRecentMessages(4, group);
 }

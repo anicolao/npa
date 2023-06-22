@@ -5224,6 +5224,7 @@ function NeptunesPrideAgent() {
 
   restoreFromDB("game_event")
     .then(() => updateMessageCache("game_event"))
+    .then(() => updateMessageCache("game_diplomacy"))
     .then(() => {
       window.setTimeout(async () => {
         const allkeys = (await store.keys()) as string[];
