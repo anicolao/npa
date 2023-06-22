@@ -149,7 +149,9 @@ async function cacheEventResponseCallback(
             message?.status &&
             message.status !== latest?.status
           ) {
-            logCount("impossible_false");
+            logCount(
+              `status_changed_from_${message.status}_to_${latest.status}`,
+            );
             return false;
           }
           const ret = message?.comment_count === latest?.comment_count;
@@ -182,12 +184,9 @@ async function cacheEventResponseCallback(
           logCount(`collisions_found_${collisionsFound}`);
           break;
         }
-        logCount("impossible_slice");
-        overlapOffset = orig_i;
-        break;
-        //messageCache[group] = messageCache[group].slice(1);
-        //latest = messageCache[group][0];
-        //i = 0;
+        messageCache[group] = messageCache[group].slice(1);
+        latest = messageCache[group][0];
+        i = 0;
       }
     }
     if (incoming.length > messageCache[group].length) {
@@ -215,7 +214,6 @@ async function cacheEventResponseCallback(
       console.log(`Incoming messages new: ${incoming.length}`);
       if (group === "game_diplomacy") {
         // possibly the incoming messages replace old ones with updates
-        logCount("impossible_incoming_diplomacy");
         const incomingKeys = incoming.map((m: any) => m.key);
         let indices: any[] = [];
         messageCache[group].forEach((message, i) => {
@@ -238,7 +236,7 @@ async function cacheEventResponseCallback(
         logCount("recursive_rrm");
         return requestRecentMessages(size, group);
       }
-      logCount("impossible_rmc");
+      logCount("call_rmc");
       return requestMessageComments(size, group);
     }
   }
