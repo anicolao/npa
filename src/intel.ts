@@ -165,6 +165,8 @@ function NeptunesPrideAgent() {
       '<span class="icon-rocket"></span>';
     universe.hyperlinkedMessageInserts[":star:"] =
       '<span class="icon-star-1"></span>';
+    universe.hyperlinkedMessageInserts[":mail:"] =
+      '<span class="icon-mail"></span>';
   };
   const linkPlayerSymbols = function () {
     let universe = NeptunesPride.universe;
@@ -3386,6 +3388,14 @@ function NeptunesPrideAgent() {
           const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
+        } else if (/^mail:([0-9]+:?)+$/.test(sub)) {
+          const splits = sub.split(":");
+          const mailScript = `NeptunesPride.inbox.clearDraft();${splits
+            .slice(1)
+            .map((uid) => `NeptunesPride.inbox.draft.to.push(${uid})`)
+            .join(";")}`;
+          const mailButton = `<span class="button button_up icon-button pad8" onClick='${mailScript};Crux.crux.trigger("show_screen", "compose")'><span class="icon-mail"/></span>`;
+          s = s.replace(pattern, mailButton);
         } else if (/^footer:-?[\w- \.][\w- \.]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
@@ -4649,7 +4659,9 @@ function NeptunesPrideAgent() {
         computeEmpireTable(
           output,
           s,
-          `Alliance ${s.map((uid) => `[[#${uid}]]`).join("")}`,
+          `[[mail:${s.join(":")}]] Alliance ${s
+            .map((uid) => `[[#${uid}]]`)
+            .join("")}`,
         );
       }
     }
@@ -4683,7 +4695,7 @@ function NeptunesPrideAgent() {
         summary.push(formatted);
       });
       summary.push("--- All Alliances ---");
-      output.push(summary.map((x) => x.replace("Alliance ", "")));
+      output.push(summary.map((x) => x.replace(/..mail.*]] Alliance /, "")));
     }
     empireTable(output, survivors, `All Surviving Empires`);
 
