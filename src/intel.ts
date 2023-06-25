@@ -4814,6 +4814,12 @@ function NeptunesPrideAgent() {
       ) {
         return cachedScan;
       }
+    } else {
+      console.log(`Cache miss! ${cacheKey}`);
+      if (apiKey === "badkey") {
+        return undefined;
+      }
+      logCount(`unexpected_cache_miss_${cacheKey}`);
     }
     let params = {
       game_number: game,

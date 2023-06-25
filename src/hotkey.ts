@@ -10,11 +10,9 @@ export type HotkeyCallback = Callback & HelpText;
 
 export function setClip(text: string): void {
   lastClip = text;
-  try {
-    navigator.clipboard.writeText(lastClip);
-  } catch (err) {
+  navigator.clipboard.writeText(lastClip).catch((err) => {
     console.log(`clipboard ${err}`);
-  }
+  });
 }
 
 export function getClip(): string {

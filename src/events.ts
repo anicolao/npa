@@ -308,8 +308,6 @@ export async function updateMessageCache(
 ): Promise<boolean> {
   const timestamp = new Date().getTime();
   if (timestamp - lastMessageCacheUpdate[group] < 10 * 1000) {
-    console.log("Skip updating message cache");
-    logCount("skip_update_message_cache");
     return true;
   }
   lastMessageCacheUpdate[group] = timestamp;
