@@ -4812,6 +4812,7 @@ function NeptunesPrideAgent() {
         freshness < 60 * 5 * 1000 &&
         !(await anyEventsNewerThan(cachedScan.now))
       ) {
+        console.log(`Cache hit! ${cacheKey}`);
         return cachedScan;
       }
     } else {
@@ -4864,7 +4865,11 @@ function NeptunesPrideAgent() {
         }
         if (returnedUids.length !== candidate.length) {
           // TODO: Include an error message in alliance report saying which keys are missing.
-          console.error("Missing API key for an alliance member.");
+          console.error(
+            "Missing API key for an alliance member.",
+            returnedUids,
+            alliedKeys,
+          );
           return alliedKeys;
         }
         return { players, apiKeys: returnedKeys, playerIndexes: returnedUids };
@@ -4874,7 +4879,7 @@ function NeptunesPrideAgent() {
   };
   let researchReport = async function () {
     lastReport = "research";
-    const { players, apiKeys, playerIndexes } = await getAlliedKeysAndIndexes();
+    const { players, apiKeys, playerIndexes } = await getPrimaryAlliance();
     let output: Stanzas = [];
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
