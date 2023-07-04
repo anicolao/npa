@@ -80,7 +80,6 @@ async function restore(group: string) {
 function indexMessages(group: string, messages: any[]) {
   messages.forEach((message) => {
     if (message.body || message.payload?.body) {
-      logCount("building_ivf");
       const body = message.body || message.payload?.body;
       const tokens = body.split(/[^\w\d]+/);
       tokens.forEach((token: string) => {
