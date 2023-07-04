@@ -4517,7 +4517,7 @@ function NeptunesPrideAgent() {
   };
   let tradingReport = async function () {
     lastReport = "trading";
-    const { players, playerIndexes } = await getAlliedKeysAndIndexes();
+    const { players, playerIndexes } = await getPrimaryAlliance();
     let output: string[] = [];
     techTable(output, playerIndexes, "Allied Technology");
     let allPlayers = Object.keys(players);
@@ -4643,7 +4643,7 @@ function NeptunesPrideAgent() {
       const row = empireTable(output, playerIndexes, title);
       summaryData.push(row);
     };
-    const { players, playerIndexes } = await getAlliedKeysAndIndexes();
+    const { players, playerIndexes } = await getPrimaryAlliance();
     if (playerIndexes.length > 1) {
       empireTable(output, playerIndexes, "Allied Empires");
     }
