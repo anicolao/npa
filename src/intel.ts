@@ -3246,6 +3246,7 @@ function NeptunesPrideAgent() {
       const symbols = /[^\w\d]/g;
       return s.replaceAll(symbols, "_").toLowerCase();
     }
+    const noGotoAddition: String[] = ["ctrl+a", "ctrl+`"];
     Crux.format = function (s: string, templateData: { [x: string]: any }) {
       let formatTime = Crux.formatTime;
       if (templateData?.linkTimes === false) {
@@ -3385,7 +3386,7 @@ function NeptunesPrideAgent() {
           if (npaReportNames[label]) {
             label = npaReportNames[label];
           }
-          const goto = splits[0] === "goto" ? ';Mousetrap.trigger("`")' : "";
+          const goto = splits[0] === "goto" && !noGotoAddition.includes(key) ? ';Mousetrap.trigger("`")' : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
         } else if (/^mail:([0-9]+:?)+$/.test(sub)) {
