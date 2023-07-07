@@ -175,7 +175,7 @@ function NeptunesPrideAgent() {
         const player = NeptunesPride.universe.galaxy.players[i];
         universe.hyperlinkedMessageInserts[`${i}`] =
           universe.hyperlinkedMessageInserts[i] =
-          player.hyperlinkedBox + player.hyperlinkedRawAlias;
+            player.hyperlinkedBox + player.hyperlinkedRawAlias;
 
         universe.hyperlinkedMessageInserts[`#${i}`] = player.hyperlinkedBox;
       }
@@ -251,27 +251,27 @@ function NeptunesPrideAgent() {
     "`",
     showUI,
     "Bring up the NP Agent UI." +
-    "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
+      "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
     "Open NPA UI",
   );
   defineHotkey(
     "ctrl+`",
     showOptions,
     "Bring up the NP Agent Options." +
-    "<p>The Agent Options lets you customize advanced settings." +
-    "<p>In particular, if you want to upload screenshots, get an API " +
-    "key from api.imgbb.com and put it in the settings.",
+      "<p>The Agent Options lets you customize advanced settings." +
+      "<p>In particular, if you want to upload screenshots, get an API " +
+      "key from api.imgbb.com and put it in the settings.",
     "Open Options",
   );
   defineHotkey(
     "ctrl+a",
     configureColours,
     "Configure colours and alliances." +
-    "<p>You can set the colour of every player in the game to a " +
-    "different value than the default, and if you wish you can " +
-    "use the same colour for multiple players to configure who " +
-    "you think is allied with who in order to get better reports " +
-    "and a map that reflects the alliances in your game.",
+      "<p>You can set the colour of every player in the game to a " +
+      "different value than the default, and if you wish you can " +
+      "use the same colour for multiple players to configure who " +
+      "you think is allied with who in order to get better reports " +
+      "and a map that reflects the alliances in your game.",
     "Colours",
   );
 
@@ -308,7 +308,7 @@ function NeptunesPrideAgent() {
     "*",
     starReport,
     "Generate a report on all stars in your scanning range, and copy it to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "stars",
   );
 
@@ -387,7 +387,7 @@ function NeptunesPrideAgent() {
     ";",
     ownershipReport,
     "Generate a report changes in star ownership and copy to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "ownership",
   );
 
@@ -671,7 +671,7 @@ function NeptunesPrideAgent() {
     "ctrl+7",
     faReport,
     "Generate a report of observed Formal Alliance pairs." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "fa",
   );
 
@@ -945,7 +945,7 @@ function NeptunesPrideAgent() {
     "ctrl+4",
     economistReport,
     "Your economists are keen to tell you about banking vs terraforming." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "economists",
   );
 
@@ -1050,7 +1050,7 @@ function NeptunesPrideAgent() {
     "shift+;",
     activityReport,
     "Generate a report of current player activity." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "activity",
   );
   const routeEnemy = () => {
@@ -1090,10 +1090,10 @@ function NeptunesPrideAgent() {
     "x",
     routeEnemy,
     "Set fleet orders for an enemy fleet. " +
-    "These orders won't really happen but you can use them to explore " +
-    "attack or defense options your opponents have. First, select an " +
-    "enemy star, then press x to create and set orders for the fleet. You" +
-    "can then also route any other fleets that player controls.",
+      "These orders won't really happen but you can use them to explore " +
+      "attack or defense options your opponents have. First, select an " +
+      "enemy star, then press x to create and set orders for the fleet. You" +
+      "can then also route any other fleets that player controls.",
     "Route Enemy",
   );
 
@@ -1739,20 +1739,20 @@ function NeptunesPrideAgent() {
     ".",
     incCombatHandicap,
     "Change combat calculation to credit your enemies with +1 weapons. Useful " +
-    "if you suspect they will have achieved the next level of tech before a battle you are investigating." +
-    "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. If the " +
-    "indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " +
-    "weapons to your opponent.",
+      "if you suspect they will have achieved the next level of tech before a battle you are investigating." +
+      "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. If the " +
+      "indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " +
+      "weapons to your opponent.",
     "+ Handicap",
   );
   defineHotkey(
     ",",
     decCombatHandicap,
     "Change combat calculation to credit yourself with +1 weapons. Useful " +
-    "when you will have achieved the next level of tech before a battle you are investigating." +
-    "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. When " +
-    "indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " +
-    "weapons to you.",
+      "when you will have achieved the next level of tech before a battle you are investigating." +
+      "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. When " +
+      "indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " +
+      "weapons to you.",
     "- Handicap",
   );
 
@@ -1763,7 +1763,7 @@ function NeptunesPrideAgent() {
     "&",
     longFleetReport,
     "Generate a detailed fleet report on all carriers in your scanning range, and copy it to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "combats",
   );
 
@@ -1780,7 +1780,7 @@ function NeptunesPrideAgent() {
     "D",
     filteredFleetReport,
     "Generate a detailed report on fleet movements involving the selected fleet or star, and copy it to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "filteredcombats",
   );
 
@@ -1791,7 +1791,7 @@ function NeptunesPrideAgent() {
     "d",
     combatReport,
     "Generate a detailed combat report on all visible combats, and copy it to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "onlycombats",
   );
 
@@ -1831,7 +1831,7 @@ function NeptunesPrideAgent() {
     "^",
     briefFleetReport,
     "Generate a summary fleet report on all carriers in your scanning range, and copy it to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "fleets",
   );
 
@@ -2153,8 +2153,8 @@ function NeptunesPrideAgent() {
     "!",
     homePlanets,
     "Generate a player summary report and copy it to the clipboard." +
-    "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " +
-    "It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.",
+      "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown. " +
+      "It is most useful for discovering player numbers so that you can write [[#]] to reference a player in mail.",
     "planets",
   );
 
@@ -2182,7 +2182,7 @@ function NeptunesPrideAgent() {
     "$",
     playerSheet,
     "Generate a player summary mean to be made into a spreadsheet." +
-    "<p>The clipboard should be pasted into a CSV and then imported.",
+      "<p>The clipboard should be pasted into a CSV and then imported.",
     "Summary CSV",
   );
 
@@ -2390,8 +2390,9 @@ function NeptunesPrideAgent() {
       const x = col * 64;
       const y = row * 64;
       // player overlay on avatar
-      css[`.pci_48_${player.uid}`].style.background = `url("${map.starSrc.src
-        }") -${x + 8}px -${y + 8}px`;
+      css[`.pci_48_${player.uid}`].style.background = `url("${
+        map.starSrc.src
+      }") -${x + 8}px -${y + 8}px`;
     }
     const universe = NeptunesPride.universe;
     for (let i in universe.galaxy.players) {
@@ -2698,7 +2699,8 @@ function NeptunesPrideAgent() {
               } else {
                 map.context.translate(0, 2 * 9 * map.pixelRatio);
                 drawString(
-                  `${other.v !== "0" ? other.totalDefenses : "?"} ship${other.totalDefenses !== 1 ? "s" : ""
+                  `${other.v !== "0" ? other.totalDefenses : "?"} ship${
+                    other.totalDefenses !== 1 ? "s" : ""
                   }`,
                   0,
                   0,
@@ -2975,8 +2977,9 @@ function NeptunesPrideAgent() {
 
       if (universe.selectedFleet && universe.selectedFleet.path.length > 0) {
         //console.log("Selected fleet", universe.selectedFleet);
-        map.context.font = `${14 * map.pixelRatio
-          }px OpenSansRegular, sans-serif`;
+        map.context.font = `${
+          14 * map.pixelRatio
+        }px OpenSansRegular, sans-serif`;
         map.context.fillStyle = "#FF0000";
         map.context.textAlign = "left";
         map.context.textBaseline = "middle";
@@ -3026,8 +3029,9 @@ function NeptunesPrideAgent() {
         universe.timeToTick(1).length < 3
       ) {
         let lineHeight = 16 * map.pixelRatio;
-        map.context.font = `${14 * map.pixelRatio
-          }px OpenSansRegular, sans-serif`;
+        map.context.font = `${
+          14 * map.pixelRatio
+        }px OpenSansRegular, sans-serif`;
         map.context.fillStyle = "#FF0000";
         map.context.textAlign = "left";
         map.context.textBaseline = "middle";
@@ -3105,8 +3109,8 @@ function NeptunesPrideAgent() {
                     ticks += 1;
                   } while (
                     distance >
-                    universe.galaxy.players[universe.selectedStar.puid].tech
-                      .scanning.value &&
+                      universe.galaxy.players[universe.selectedStar.puid].tech
+                        .scanning.value &&
                     ticks <= fleet.etaFirst + 1
                   );
                   ticks -= 1;
@@ -3335,9 +3339,9 @@ function NeptunesPrideAgent() {
             uid === NeptunesPride.universe.player.uid
               ? needed - cash
               : Crux.format(
-                `[[sendcash:${uid}:${diff}:${diff}]]`,
-                templateData,
-              );
+                  `[[sendcash:${uid}:${diff}:${diff}]]`,
+                  templateData,
+                );
           s = s.replace(pattern, value);
         } else if (/^Tick #\d\d*(#a?)?$/.test(sub)) {
           const split = sub.split("#");
@@ -3469,8 +3473,8 @@ function NeptunesPrideAgent() {
             x.startsWith(":")
               ? "left"
               : x.indexOf(":") !== -1
-                ? "right"
-                : "center",
+              ? "right"
+              : "center",
           );
           alignmentRow = false;
           headerRow = true;
@@ -3614,7 +3618,7 @@ function NeptunesPrideAgent() {
 
       let text = Crux.Text("", "pad12 rel txt_selectable").size(432).pos(48)
 
-        .rawHTML("Choose a report from the dropdown.");
+      .rawHTML("Choose a report from the dropdown.");
       text.roost(output);
 
       report.roost(reportScreen);
@@ -3883,8 +3887,8 @@ function NeptunesPrideAgent() {
       "%",
       toggleRelative,
       "Change the display of ETAs from relative times to absolute clock times. Makes predicting " +
-      "important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " +
-      "will need to refresh the display to see the different times.",
+        "important times of day to sign in and check much easier especially for multi-leg fleet movements. Sometimes you " +
+        "will need to refresh the display to see the different times.",
       "Timebase",
     );
 
@@ -4178,14 +4182,14 @@ function NeptunesPrideAgent() {
     ">",
     switchUser,
     "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " +
-    "it is not your own alias to help remind you that you aren't in control of this user.",
+      "it is not your own alias to help remind you that you aren't in control of this user.",
     "Next User",
   );
   defineHotkey(
     "|",
     mergeUser,
     "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " +
-    "passes and you've reloaded, but you still want the merged scan data from two players onscreen.",
+      "passes and you've reloaded, but you still want the merged scan data from two players onscreen.",
     "Merge User",
   );
   onTrigger("switch_user_api", switchUser);
@@ -4528,7 +4532,7 @@ function NeptunesPrideAgent() {
       );
     }
     const numPerTable = 5;
-    for (let start = 0; start < allPlayers.length;) {
+    for (let start = 0; start < allPlayers.length; ) {
       let subset = allPlayers.slice(start, start + numPerTable);
       let indexes = subset.map((k) => players[k].uid);
       techTable(
@@ -4544,7 +4548,7 @@ function NeptunesPrideAgent() {
     "e",
     tradingReport,
     "The trading report lets you review where you are relative to others and " +
-    "provides shortcuts to ease trading of tech as needed.",
+      "provides shortcuts to ease trading of tech as needed.",
     "trading",
   );
 
@@ -4702,7 +4706,7 @@ function NeptunesPrideAgent() {
     "ctrl+l",
     empireReport,
     "The empires report summarizes all key empire stats. It's meant to be " +
-    "a better leaderboard for seeing how the individual empires are doing.",
+      "a better leaderboard for seeing how the individual empires are doing.",
     "empires",
   );
 
@@ -4905,8 +4909,9 @@ function NeptunesPrideAgent() {
         for (let i = 1; i < 10; ++i) {
           const betterTick = Math.ceil(remaining / researchRate(science + i));
           if (betterTick < tickIncr) {
-            upgrade = `${i}<sub style="font-size: 50%">${tickIncr - betterTick
-              }</sub>`;
+            upgrade = `${i}<sub style="font-size: 50%">${
+              tickIncr - betterTick
+            }</sub>`;
             break;
           }
         }
