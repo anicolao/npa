@@ -3386,7 +3386,10 @@ function NeptunesPrideAgent() {
           if (npaReportNames[label]) {
             label = npaReportNames[label];
           }
-          const goto = splits[0] === "goto" && !noGotoAddition.includes(key) ? ';Mousetrap.trigger("`")' : "";
+          const goto =
+            splits[0] === "goto" && !noGotoAddition.includes(key)
+              ? ';Mousetrap.trigger("`")'
+              : "";
           let keyLink = `<span class="button button_up pad8" onClick='{Mousetrap.trigger(\"${key}\")${goto}}'>${label}</span>`;
           s = s.replace(pattern, keyLink);
         } else if (/^mail:([0-9]+:?)+$/.test(sub)) {
