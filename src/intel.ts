@@ -3378,7 +3378,7 @@ function NeptunesPrideAgent() {
         } else if (/^apim:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
-        } else if (/^hotkey:[^:]$/.test(sub) || /^goto:[^:]/.test(sub)) {
+        } else if (/^hotkey:[^:]+$/.test(sub) || /^goto:[^:]/.test(sub)) {
           const splits = sub.split(":");
           const key = splits[1];
           const action = getHotkeyCallback(key);
