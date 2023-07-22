@@ -4045,31 +4045,24 @@ function NeptunesPrideAgent() {
   var otherUserCode: string | undefined = undefined;
   let game = NeptunesPride.gameNumber;
   let store = new GameStore(game);
-  if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
-    console.log("Universe already loaded. Hyperlink fleets & load hooks.");
-    logCount("loaded_init");
-    init();
-  } else {
-    console.log("Universe not loaded. Hook onServerResponse.");
-    let superOnServerResponse = NeptunesPride.np.onServerResponse;
-    NeptunesPride.np.onServerResponse = function (response: { event: string }) {
-      superOnServerResponse(response);
-      if (response.event === "order:player_achievements") {
-        console.log("Initial load complete. Reinstall.");
-        logCount("achievements_init");
-        init();
-      } else if (response.event === "order:full_universe") {
-        console.log("Universe received. Reinstall.");
-        NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
-        logCount("universe_init");
-        init();
-      } else if (!hooksLoaded && NeptunesPride.npui.map) {
-        console.log("Hooks need loading and map is ready. Reinstall.");
-        logCount(`${response.event}_init`);
-        init();
-      }
-    };
-  }
+  let superOnServerResponse = NeptunesPride.np.onServerResponse;
+  NeptunesPride.np.onServerResponse = function (response: { event: string }) {
+    superOnServerResponse(response);
+    if (response.event === "order:player_achievements") {
+      console.log("Initial load complete. Reinstall.");
+      logCount("achievements_init");
+      init();
+    } else if (response.event === "order:full_universe") {
+      console.log("Universe received. Reinstall.");
+      NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
+      logCount("universe_init");
+      init();
+    } else if (!hooksLoaded && NeptunesPride.npui.map) {
+      console.log("Hooks need loading and map is ready. Reinstall.");
+      logCount(`${response.event}_init`);
+      init();
+    }
+  };
 
   let switchUser = async function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
@@ -5318,6 +5311,14 @@ function NeptunesPrideAgent() {
     return wst(callback, time, args);
   };
   window.setTimeout = timeoutCatcher as any;
+
+  if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
+    console.log("Universe already loaded. Hyperlink fleets & load hooks.");
+    logCount("loaded_init");
+    init();
+  } else {
+    console.log("Universe not loaded. Rely on onServerResponse.");
+  }
 
   console.log("Neptune's Pride Agent injection fini.");
 }
