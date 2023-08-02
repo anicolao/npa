@@ -3937,6 +3937,13 @@ function NeptunesPrideAgent() {
     fixSubmitButton();
     onTrigger("refresh_interface", fixSubmitButton);
 
+    const universe = NeptunesPride.universe;
+    const superTimeToTick = universe.timeToTick;
+    universe.timeToTick = function (tick: number, wholeTime: boolean) {
+      const whole = wholeTime && settings.relativeTimes !== "eta";
+      return superTimeToTick(tick, whole);
+    };
+
     hooksLoaded = true;
   };
   let toggleTerritory = function () {
