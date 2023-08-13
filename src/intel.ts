@@ -4261,7 +4261,7 @@ function NeptunesPrideAgent() {
         // we are in future time machine
         if (dir === "forwards") {
           const tickOffset = (timeTravelTick - NeptunesPride.universe.galaxy.tick);
-          NeptunesPride.universe.galaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
+          const newGalaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
           NeptunesPride.np.onFullUniverse(null, scan);
 
         } else if (dir === "back") {
