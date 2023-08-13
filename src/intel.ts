@@ -1769,11 +1769,6 @@ function NeptunesPrideAgent() {
   };
 
   let hooksLoaded = false;
-  let handicapString = function (prefix?: string) {
-    let p =
-      prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
-    return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
-  };
   type CSSRuleMap = { [k: string]: CSSStyleRule };
   function cssrules(): CSSRuleMap {
     var rules: { [k: string]: CSSStyleRule } = {};
