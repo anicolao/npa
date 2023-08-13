@@ -30,7 +30,7 @@ export function futureTime(
               const ticksPerDay = newState.production_rate;
               const industry = star.i;
               const manufacturing = players[star.puid].tech.manufacturing.level;
-              const production = (industry*(manufacturing+5))*tickOffset/ticksPerDay;
+              const production = (industry*(manufacturing+5))/ticksPerDay;
               const newStar = {...star};
               newStar.st += production + newStar.c;
               newStar.c = newStar.st - Math.floor(newStar.st);
