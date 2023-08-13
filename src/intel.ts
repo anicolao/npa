@@ -2955,7 +2955,10 @@ function NeptunesPrideAgent() {
       if (timeTravelTick > -1) {
         const gtick = NeptunesPride.universe.galaxy.tick;
         if (timeTravelTick === gtick) {
-          unrealContextString = `Time machine @ [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
+          const label = NeptunesPride.universe.galaxy.futureTime
+            ? "Future Time @ "
+            : "Time Machine @ ";
+          unrealContextString = `${label} [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
         } else {
           unrealContextString = `Time machine @ [[Tick #${gtick}#]] MISSING DATA for [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
         }
@@ -4256,7 +4259,16 @@ function NeptunesPrideAgent() {
       .map((k) => getTimeTravelScan(k, dir))
       .filter((scan) => scan && scan.tick === timeTravelTick);
     if (scans.length === 0) {
-      if (timeTravel) NeptunesPride.np.trigger("map_rebuild");
+      if (timeTravelTick > trueTick) {
+        // we are in future time machine
+        if (dir === "forwards") {
+          NeptunesPride.universe.galaxy.futureTime = true;
+          NeptunesPride.universe.galaxy.tick = timeTravelTick;
+        } else if (dir === "back") {
+          warpTime(null, `${trueTick}`);
+        }
+      }
+      NeptunesPride.np.trigger("map_rebuild");
       return false;
     }
     const myId = NeptunesPride.originalPlayer
