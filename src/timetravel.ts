@@ -48,7 +48,8 @@ export function futureTime(
 
         } else {
             newFleet.x = String(destX);
-            newFleet.y = String(parseFloat(newFleet.y) + parseFloat(newFleet.y) - parseFloat(newFleet.ly));
+            newFleet.y = String(destY);
+            // TODO: put us in orbit
         }
         newFleet.x = String(parseFloat(newFleet.x) + parseFloat(newFleet.x) - parseFloat(newFleet.lx));
         newFleet.y = String(parseFloat(newFleet.y) + parseFloat(newFleet.y) - parseFloat(newFleet.ly));
