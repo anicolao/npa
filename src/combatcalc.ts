@@ -325,7 +325,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
         }
       }
 
-      if (universe.galaxy.player_uid === starstate[starId].puid) {
+      if (galaxy.player_uid === starstate[starId].puid) {
         // truncate defense if we're defending to give the most
         // conservative estimate
         defense = Math.trunc(defense);
