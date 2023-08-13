@@ -16,6 +16,9 @@ export function futureTime(
     logCount("error_back_to_the_future");
     return newState;
   }
-  for (const sk in )
+  const stars = {...}
+  for (const sk in stars) {
+
+  }
   return newState;
 }
