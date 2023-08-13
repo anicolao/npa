@@ -52,7 +52,6 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
 }
 
 export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k: string]: StarState }) => {
-  const galaxy = NeptunesPride.universe.galaxy;
   const players = galaxy.players;
   let fleets = galaxy.fleets;
   let stars = galaxy.stars;
