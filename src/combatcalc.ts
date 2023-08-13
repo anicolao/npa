@@ -1,4 +1,8 @@
 
+  export interface DepartureRecord {
+    leaving: number;
+    origShips: number;
+  }
   export interface StarState {
     last_updated: number;
     ships: number;

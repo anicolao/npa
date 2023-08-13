@@ -1211,7 +1211,6 @@ function NeptunesPrideAgent() {
       knownAlliances?.[fleetOwnerId]?.[starOwnerId]
     );
   };
-  let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
 
   const mapRebuild = () => {
