@@ -306,25 +306,25 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
         dwt += 1;
       }
       if (starstate[starId].puid !== universe.galaxy.player_uid) {
-        if (combatHandicap > 0) {
-          dwt += combatHandicap;
+        if (combatInfo.combatHandicap > 0) {
+          dwt += combatInfo.combatHandicap;
           stanza.push(
             "    Defenders WS{0} = {1}".format(handicapString(""), dwt)
           );
-        } else if (combatHandicap < 0) {
-          awt -= combatHandicap;
+        } else if (combatInfo.combatHandicap < 0) {
+          awt -= combatInfo.combatHandicap;
           stanza.push(
             "    Attackers WS{0} = {1}".format(handicapString(""), awt)
           );
         }
       } else {
-        if (combatHandicap > 0) {
-          awt += combatHandicap;
+        if (combatInfo.combatHandicap > 0) {
+          awt += combatInfo.combatHandicap;
           stanza.push(
             "    Attackers WS{0} = {1}".format(handicapString(""), awt)
           );
-        } else if (combatHandicap < 0) {
-          dwt -= combatHandicap;
+        } else if (combatInfo.combatHandicap < 0) {
+          dwt -= combatInfo.combatHandicap;
           stanza.push(
             "    Defenders WS{0} = {1}".format(handicapString(""), dwt)
           );
