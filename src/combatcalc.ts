@@ -1,4 +1,5 @@
 
+  export let fleetOutcomes: { [k: number]: any } = {};
   export interface DepartureRecord {
     leaving: number;
     origShips: number;

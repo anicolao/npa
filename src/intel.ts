@@ -1195,23 +1195,6 @@ function NeptunesPrideAgent() {
     return NeptunesPride.universe.galaxy.tick + ticks;
   }
 
-  const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
-    if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
-      faReport();
-    }
-    const players = NeptunesPride.universe.galaxy.players;
-    const fOwner = players[fleetOwnerId];
-    const sOwner = players[starOwnerId];
-    const warMap = fOwner?.war || sOwner?.war || {};
-    if (fleetOwnerId == starOwnerId) return true;
-    if (warMap[fleetOwnerId] && warMap[starOwnerId]) return false;
-    return (
-      warMap[fleetOwnerId] == 0 ||
-      warMap[starOwnerId] == 0 ||
-      knownAlliances?.[fleetOwnerId]?.[starOwnerId]
-    );
-  };
-  let combatHandicap = 0;
 
   const mapRebuild = () => {
     console.log("rebuild", { showingOurOptions, showingOurUI });
