@@ -12,7 +12,7 @@ export const combatInfo: {
 export let handicapString = function (prefix?: string) {
   let p =
     prefix !== undefined ? prefix : combatInfo.combatHandicap > 0 ? "Enemy WS" : "My WS";
-  return p + (combatInfo.combatHandicap > 0 ? "+" : "") + combatHandicap;
+  return p + (combatInfo.combatHandicap > 0 ? "+" : "") + combatInfo.combatHandicap;
 };
 function absoluteTick(galaxy: ScanningData, offset: number) {
   return galaxy.tick + offset;
