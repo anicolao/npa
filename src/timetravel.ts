@@ -28,6 +28,7 @@ export function futureTime(
             const production = (industry*(manufacturing+5))*tickOffset/ticksPerDay;
             const newStar = {...star};
             newStar.st += production + newStar.c;
+            
             newStar.totalDefenses += production;
             stars[sk] = newStar;
         }
