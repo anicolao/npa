@@ -1261,7 +1261,7 @@ function NeptunesPrideAgent() {
     NeptunesPride.np.trigger("refresh_interface");
   }
   function decCombatHandicap() {
-    combatHandicap -= 1;
+    combatInfo.combatHandicap -= 1;
     NeptunesPride.np.trigger("map_rebuild");
     NeptunesPride.np.trigger("refresh_interface");
   }
