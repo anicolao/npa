@@ -109,6 +109,6 @@ export interface ScannedStar extends SpaceObject {
 }
 export type Star = UnscannedStar | ScannedStar;
 
-const dist = (s1: SpaceObject, s2: SpaceObject) => {
+export dist = (s1: SpaceObject, s2: SpaceObject) => {
   return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
 };
