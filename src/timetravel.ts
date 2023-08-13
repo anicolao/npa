@@ -45,7 +45,7 @@ export function futureTime(
         const [destX, destY] = [parseFloat(destination.x), parseFloat(destination.y)];
         const [lx, ly] = [newFleet.x, newFleet.y]
         if (newFleet.etaNext > 1) {
-
+            
         } else {
             newFleet.x = String(destX);
             newFleet.y = String(destY);
