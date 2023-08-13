@@ -7,7 +7,7 @@ export interface TimeMachineData {
 export function futureTime(
   galaxy: ScanningData,
   tickOffset: number
-): ScanningData & TimeMachineData {
+): ScanningData {
   const newState: ScanningData & TimeMachineData = {...galaxy, futureTime: true};
   newState.tick += tickOffset;
   return newState;
