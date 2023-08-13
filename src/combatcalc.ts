@@ -49,7 +49,7 @@ export interface StarState {
 export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
   const galaxy = NeptunesPride.universe.galaxy;
 
-export const computeCombatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
+export const computeCombatOutcomes = (galaxy: staroutcomes?: { [k: string]: StarState }) => {
   const galaxy = NeptunesPride.universe.galaxy;
   const players = galaxy.players;
   let fleets = galaxy.fleets;
