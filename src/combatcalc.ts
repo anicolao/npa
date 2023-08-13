@@ -26,7 +26,6 @@ export const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
     knownAlliances?.[fleetOwnerId]?.[starOwnerId]
   );
 };
-export let combatHandicap = 0;
 export let fleetOutcomes: { [k: number]: any } = {};
 export interface DepartureRecord {
   leaving: number;
