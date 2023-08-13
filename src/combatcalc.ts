@@ -411,7 +411,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
         for (let k in contribution) {
           let ka = k.split(",");
           const puid = parseInt(ka[0]);
-          if (alliedFleet(biggestPlayerId, puid)) {
+          if (alliedFleet(galaxy.players, biggestPlayerId, puid)) {
             offense -= contribution[k];
             starstate[starId].ships += contribution[k];
             const arrivingWeapons = players[puid].tech.weapons.level;
