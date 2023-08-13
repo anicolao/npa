@@ -400,7 +400,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           fleetOutcomes[fleet.uid] = {
             eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
             outcome: outcomeString,
-            strength: contributionl[]
+            strength: contribution[k]
           };
         }
         if (NeptunesPride.gameVersion === "proteus") {
