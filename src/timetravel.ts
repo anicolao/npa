@@ -9,7 +9,6 @@ export function futureTime(
   tickOffset: number
 ): ScanningData & TimeMachineData {
   const newState: ScanningData & TimeMachineData = {...galaxy, futureTime: true};
-  newState.futureTime = true;
   newState.tick += tickOffset;
   return newState;
 }
