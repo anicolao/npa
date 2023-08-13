@@ -36,6 +36,7 @@ export function futureTime(
     }
   }
   newState.stars = stars;
+  const fleets = {...newState.fleets};
   
   return newState;
 }
