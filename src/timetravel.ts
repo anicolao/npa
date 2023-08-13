@@ -1,4 +1,4 @@
-import { computeCombatOutcomes } from "./combatcalc";
+import { computeCombatOutcomes, StarState } from "./combatcalc";
 import { dist, ScanningData } from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
