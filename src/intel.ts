@@ -5294,7 +5294,7 @@ function NeptunesPrideAgent() {
   const loadScanData = () =>
     refreshScanData().then(() => {
       if (myApiKey) {
-        console.log(`Loading scan data for ${myApiKey}`);
+        console.log(`Loading scan data for key ${myApiKey}`);
         getServerScans(myApiKey);
       } else {
         console.log("API Key unknown. No scan history.");
