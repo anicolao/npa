@@ -39,43 +39,43 @@ export function futureTime(
   newState.stars = stars;
   const fleets = {...newState.fleets};
   for (let i = 0; i < tickOffset; ++i) {
-  for (const fk in fleets) {
-    if (fleets[fk].o.length > 0) {
-        const newFleet = {...fleets[fk]};
-        const [delay, destUid, action, argument] = fleets[fk].o[0];
-        const destination = stars[destUid];
-        const [destX, destY] = [parseFloat(destination.x), parseFloat(destination.y)];
-        const [lx, ly] = [newFleet.x, newFleet.y]
-        if (newFleet.etaFirst > 1) {
-            const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
-            const [dx, dy] = [destX - x, destY - y];
-            const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
-            const factor = tickOffset * speed / Math.sqrt(dx * dx + dy * dy);
-            const [sx, sy] = [dx * factor, dy * factor];
-            newFleet.x = String(x + sx);
-            newFleet.y = String(y + sy);
-            newFleet.etaFirst -= 1;    
-            newFleet.eta -= 1;
-        } else {
-            newFleet.x = String(destX);
-            newFleet.y = String(destY);
-            newFleet.o = newFleet.o.slice(1);
-            if (newFleet.o.length > 0) {
-              const nextDestUid = fleets[fk].o[0][1];
-              const nextDestination = stars[nextDestUid];
-              newFleet.warpSpeed = (nextDestination.ga === destination.ga) ? nextDestination.ga : 0;
+    for (const fk in fleets) {
+      if (fleets[fk].o.length > 0) {
+          const newFleet = {...fleets[fk]};
+          const [delay, destUid, action, argument] = fleets[fk].o[0];
+          const destination = stars[destUid];
+          const [destX, destY] = [parseFloat(destination.x), parseFloat(destination.y)];
+          const [lx, ly] = [newFleet.x, newFleet.y]
+          if (newFleet.etaFirst > 1) {
+              const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
+              const [dx, dy] = [destX - x, destY - y];
               const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
-              newFleet.etaFirst = Math.ceil(dist(destination, nextDestination) / speed);
+              const factor = tickOffset * speed / Math.sqrt(dx * dx + dy * dy);
+              const [sx, sy] = [dx * factor, dy * factor];
+              newFleet.x = String(x + sx);
+              newFleet.y = String(y + sy);
+              newFleet.etaFirst -= 1;    
+              newFleet.eta -= 1;
+          } else {
+              newFleet.x = String(destX);
+              newFleet.y = String(destY);
+              newFleet.o = newFleet.o.slice(1);
+              if (newFleet.o.length > 0) {
+                const nextDestUid = fleets[fk].o[0][1];
+                const nextDestination = stars[nextDestUid];
+                newFleet.warpSpeed = (nextDestination.ga === destination.ga) ? nextDestination.ga : 0;
+                const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
+                newFleet.etaFirst = Math.ceil(dist(destination, nextDestination) / speed);
 
-            } else {
-              newFleet.etaFirst = 0;
-            }
-            // TODO: put us in orbit
-        }
-        [newFleet.lx, newFleet.ly] = [lx, ly];
-        fleets[fk] = newFleet;
+              } else {
+                newFleet.etaFirst = 0;
+              }
+              // TODO: put us in orbit
+          }
+          [newFleet.lx, newFleet.ly] = [lx, ly];
+          fleets[fk] = newFleet;
+      }
     }
-  }
   }
   newState.fleets = fleets;
   return newState;
