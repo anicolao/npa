@@ -1,4 +1,4 @@
-import { dist, PlayerMap, ScanningData } from "./galaxy";
+import { dist, Fleet, PlayerMap, ScanningData } from "./galaxy";
 import { Stanzas } from "./reports";
 
 export const combatInfo: { 
