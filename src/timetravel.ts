@@ -29,7 +29,7 @@ export function futureTime(
             const newStar = {...star};
             newStar.st += production + newStar.c;
             newStar.c = newStar.st - Math.floor(newStar.st);
-            newStar.st = 
+            newStar.st = Math.floor(newStar.st);
             newStar.totalDefenses += production;
             stars[sk] = newStar;
         }
