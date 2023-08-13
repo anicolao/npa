@@ -55,7 +55,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
   const players = galaxy.players;
   let fleets = galaxy.fleets;
   let stars = galaxy.stars;
-  let flights: [number, string, Fleet] = [];
+  let flights: [number, string, Fleet][] = [];
   fleetOutcomes = {};
   for (const f in fleets) {
     let fleet = fleets[f];
