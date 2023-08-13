@@ -65,7 +65,7 @@ export function futureTime(
               newFleet.warpSpeed = (nextDestination.ga === destination.ga) ? nextDestination.ga : 0;
               const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
               newFleet.etaFirst = Math.ceil(dist(destination, nextDestination) / speed);
-
+              
             } else {
               newFleet.etaFirst = 0;
             }
