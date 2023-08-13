@@ -3,7 +3,7 @@ import { Stanzas } from "./reports";
 
 export const combatInfo: { 
     knownAlliances: number[][] | undefined;
-    combatHandicap:  0
+    combatHandicap:  number;
 } = {
     knownAlliances: number[][] | undefined = undefined,
     combatHandicap:  0
