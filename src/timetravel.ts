@@ -36,5 +36,6 @@ export function futureTime(
     }
   }
   newState.stars = stars;
+  
   return newState;
 }
