@@ -1969,12 +1969,12 @@ function NeptunesPrideAgent() {
     }
 
     function getAdjustedScanRange(player: Player) {
-      const sH = combatHandicap;
+      const sH = combatInfo.combatHandicap;
       const scanRange = player.tech.scanning.value + sH * lyToMap();
       return scanRange;
     }
     function getAdjustedFleetRange(player: Player) {
-      const pH = combatHandicap;
+      const pH = combatInfo.combatHandicap;
       const scanRange = player.tech.propulsion.value + pH * lyToMap();
       return scanRange;
     }
@@ -2115,7 +2115,7 @@ function NeptunesPrideAgent() {
           let rangeLevel = 0;
           if (other.puid !== -1) {
             const rangeRequired = (puid: number) => {
-              const origHandicap = combatHandicap;
+              const origHandicap = combatInfo.combatHandicap;
               const player = NeptunesPride.universe.galaxy.players[other.puid];
               let fleetRange = getAdjustedFleetRange(player);
               const flightDistance = universe.distance(
@@ -2126,12 +2126,12 @@ function NeptunesPrideAgent() {
               );
               while (
                 flightDistance > fleetRange &&
-                combatHandicap - origHandicap < 5
+                combatInfo.combatHandicap - origHandicap < 5
               ) {
-                combatHandicap++;
+                combatInfo.combatHandicap++;
                 fleetRange = getAdjustedFleetRange(player);
               }
-              let ret = combatHandicap - origHandicap;
+              let ret = combatInfo.combatHandicap - origHandicap;
               combatHandicap = origHandicap;
               return ret;
             };
