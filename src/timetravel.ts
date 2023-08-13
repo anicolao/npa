@@ -12,6 +12,11 @@ export function futureTime(
   tickOffset: number
 ): ScanningData {
   const newState: ScanningData & TimeMachineData = {...galaxy, futureTime: true};
+    if (tickOffset <= 0) {
+      console.error("Future time machine going backwards NIY")
+      logCount("error_back_to_the_future");
+      return newState;
+    }
   for (let i = 0; i < tickOffset; ++i) {
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes);
