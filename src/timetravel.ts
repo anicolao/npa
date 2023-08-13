@@ -73,7 +73,7 @@ export function futureTime(
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
         fleets[fk] = newFleet;
-        if (new)
+        if (newState.selectedFleet === fleets)
     }
   }
   newState.fleets = fleets;
