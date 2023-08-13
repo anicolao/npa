@@ -170,11 +170,6 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
       for (const i in arrival) {
         let fleet = arrival[i];
         let d = dist(stars[starId], fleet);
-          stars[starId].x,
-          stars[starId].y,
-          fleet.lx,
-          fleet.ly
-        );
         if (d < minDistance || owner == -1) {
           owner = fleet.puid;
           minDistance = d;
