@@ -59,9 +59,10 @@ export function futureTime(
             newFleet.y = String(destY);
             newFleet.o = newFleet.o.slice(1);
             if (newFleet.o.length > 0) {
-              
+
+            } else {
+              newFleet.etaFirst = 0;
             }
-            newFleet.etaFirst = 0;
             // TODO: put us in orbit
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
