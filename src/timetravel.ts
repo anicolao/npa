@@ -22,7 +22,7 @@ export function futureTime(
     if (star.v === "1") {
         const newStar = {...star};
         if (star.i > 0) {
-            
+
         }
     }
   }
