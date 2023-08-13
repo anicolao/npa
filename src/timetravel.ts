@@ -20,6 +20,7 @@ export function futureTime(
   for (const sk in stars) {
     const star = stars[sk];
     if (star.v === "1") {
+        
         if (star.i > 0) {
             
         }
