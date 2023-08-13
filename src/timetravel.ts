@@ -47,7 +47,7 @@ export function futureTime(
         if (newFleet.etaNext > 1) {
 
         } else {
-            newFleet.x = 
+            newFleet.x = String(destX);
             newFleet.y = String(parseFloat(newFleet.y) + parseFloat(newFleet.y) - parseFloat(newFleet.ly));
         }
         newFleet.x = String(parseFloat(newFleet.x) + parseFloat(newFleet.x) - parseFloat(newFleet.lx));
