@@ -299,7 +299,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
       if (NeptunesPride.gameVersion !== "proteus") {
         dwt += 1;
       }
-      if (starstate[starId].puid !== universe.galaxy.player_uid) {
+      if (starstate[starId].puid !== galaxy.player_uid) {
         if (combatInfo.combatHandicap > 0) {
           dwt += combatInfo.combatHandicap;
           stanza.push(
