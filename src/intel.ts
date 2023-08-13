@@ -2132,7 +2132,7 @@ function NeptunesPrideAgent() {
                 fleetRange = getAdjustedFleetRange(player);
               }
               let ret = combatInfo.combatHandicap - origHandicap;
-              combatHandicap = origHandicap;
+              combatInfo.combatHandicap = origHandicap;
               return ret;
             };
             rangeLevel = rangeRequired(other.puid);
