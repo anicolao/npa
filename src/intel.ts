@@ -2454,7 +2454,7 @@ function NeptunesPrideAgent() {
       map.context.textAlign = "right";
       map.context.textBaseline = "middle";
       let v = version;
-      if (combatHandicap !== 0) {
+      if (combatInfo.combatHandicap !== 0) {
         v = `${handicapString()} ${v}`;
       }
       drawOverlayString(
