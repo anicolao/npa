@@ -1,13 +1,11 @@
 import { ScanningData } from "./galaxy";
 import { Stanzas } from "./reports";
 
-
-
-  export let handicapString = function (prefix?: string) {
-    let p =
-      prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
-    return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
-  };
+export let handicapString = function (prefix?: string) {
+  let p =
+    prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
+  return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
+};
 function absoluteTick(galaxy: ScanningData, offset: number) {
   return galaxy.tick + offset;
 }
