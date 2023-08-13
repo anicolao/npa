@@ -269,7 +269,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
     let contribution: { [k: string]: any } = {};
     for (const i in arrival) {
       let fleet = arrival[i];
-      if (!alliedFleet(fleet.puid, starstate[starId].puid)) {
+      if (!alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
         let olda = offense;
         offense += fleet.st;
         stanza.push(
