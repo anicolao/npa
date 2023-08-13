@@ -57,7 +57,7 @@ export function futureTime(
         } else {
             newFleet.x = String(destX);
             newFleet.y = String(destY);
-            newFleet.o
+            newFleet.o.
             newFleet.etaFirst = 0;
             // TODO: put us in orbit
         }
