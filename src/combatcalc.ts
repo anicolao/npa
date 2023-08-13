@@ -2,7 +2,7 @@ import { ScanningData } from "./galaxy";
 import { Stanzas } from "./reports";
 
 export const combatInfo { 
-export let knownAlliances: number[][] | undefined = undefined;
+knownAlliances: number[][] | undefined = undefined;
 export let combatHandicap = 0;
 };
 
