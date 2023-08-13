@@ -16,5 +16,6 @@ export function futureTime(
     logCount("error_back_to_the_future");
     return newState;
   }
+  
   return newState;
 }
