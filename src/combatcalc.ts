@@ -5,6 +5,7 @@ export const combatInfo: {
     knownAlliances: number[][] | undefined;
     combatHandicap:  number;
 } = {
+    knownAlliances: undefined,
     combatHandicap:  0
 };
 
