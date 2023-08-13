@@ -72,7 +72,7 @@ export function futureTime(
             // TODO: put us in orbit
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
-        if (newState.selectedFleet === fleets)
+        if (newState.selectedFleet === fleets[])
         fleets[fk] = newFleet;
     }
   }
