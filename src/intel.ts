@@ -652,7 +652,7 @@ function NeptunesPrideAgent() {
         }
         output.push(`[[Tick #${record.tick}]] ${d} [[${p0}]] ⇔ [[${p1}]]`);
       }
-      knownAlliances = alliances;
+      combatInfo.knownAlliances = alliances;
     } else {
       if (NeptunesPride.gameConfig.alliances != "0") {
         output.push("No API keys to detect Formal Alliances.");
