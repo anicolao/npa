@@ -38,7 +38,7 @@ import {
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { setupAutocomplete } from "./autocomplete";
-import { Player, ScannedStar, SpaceObject, Star } from "./galaxy";
+import { dist, Player, ScannedStar, SpaceObject, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
 import {
