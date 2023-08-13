@@ -76,6 +76,7 @@ export function futureTime(
         fleets[fk] = newFleet;
     }
   }
+  }
   newState.fleets = fleets;
   return newState;
 }
