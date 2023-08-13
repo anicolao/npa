@@ -6,7 +6,6 @@ export const combatInfo: {
     combatHandicap:  number;
 } = {
     combatHandicap:  0
-    
 };
 
 export let handicapString = function (prefix?: string) {
