@@ -63,6 +63,7 @@ export function futureTime(
               newFleet.x = String(destX);
               newFleet.y = String(destY);
               newFleet.o = newFleet.o.slice(1);
+              
               if (newFleet.o.length > 0) {
                 const nextDestUid = fleets[fk].o[0][1];
                 const nextDestination = stars[nextDestUid];
