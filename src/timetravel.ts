@@ -47,7 +47,8 @@ export function futureTime(
         if (newFleet.etaNext > 1) {
             const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
             const [dx, dy] = [destX - x, destY - y];
-            const distance = Math.sqrt()
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const []
         } else {
             newFleet.x = String(destX);
             newFleet.y = String(destY);
