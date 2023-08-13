@@ -50,7 +50,7 @@ export function futureTime(
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
             const [sx, sy] = [dx * factor, dy * factor];
-            newFleet.x = String(parseFloat(newFleet.x) + parseFloat(newFleet.x) - parseFloat(newFleet.lx));
+            newFleet.x = String(parseFloat(newFleet.x) + );
             newFleet.y = String(parseFloat(newFleet.y) + parseFloat(newFleet.y) - parseFloat(newFleet.ly));
     
         } else {
