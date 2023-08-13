@@ -1215,15 +1215,6 @@ function NeptunesPrideAgent() {
     leaving: number;
     origShips: number;
   }
-  interface StarState {
-    last_updated: number;
-    ships: number;
-    puid: number;
-    c: number;
-    departures: { [k: number]: DepartureRecord };
-    weapons: number;
-    production: number;
-  }
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
 
