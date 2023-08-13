@@ -1,3 +1,6 @@
+export interface PlayerMap {
+  
+}
 export interface ScanningData {
   admin: number;
   fleet_speed: number;
