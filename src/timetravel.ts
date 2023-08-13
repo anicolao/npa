@@ -16,11 +16,6 @@ export function futureTime(
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes);
     newState.tick += 1;
-    if (tickOffset <= 0) {
-      console.error("Future time machine going backwards NIY")
-      logCount("error_back_to_the_future");
-      return newState;
-    }
     const players = newState.players;
     const stars = {...newState.stars};
     for (const sk in stars) {
