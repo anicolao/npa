@@ -24,7 +24,7 @@ export function futureTime(
         if (star.i > 0) {
             const ticksPerDay = NeptunesPride.universe.galaxy.production_rate;
             const industry = star.i;
-            const manufacturing = 
+            const manufacturing = players[star.puid].tech
             const production = industry*(manufacturing+5); //  X -> industry, Y -> manu level
             const newStar = {...star};
             newStar.st += 10;
