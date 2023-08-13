@@ -40,7 +40,7 @@ export function futureTime(
   for (const fk in fleets) {
     if (fleets[fk].o.length > 0) {
         const newFleet = {...fleets[fk]};
-        newFleet.x += String(parseFloat(newFleet.x) - parseFloat(newFleet.lx));
+        newFleet.x = String(parseFloat(newFleet.x) - parseFloat(newFleet.lx));
         newFleet.y = String(parseFloat(newFleet.y) - parseFloat(newFleet.ly));
         fleets[fk] = newFleet;
     }
