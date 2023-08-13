@@ -12,6 +12,8 @@ export function futureTime(
   tickOffset: number
 ): ScanningData {
   const newState: ScanningData & TimeMachineData = {...galaxy, futureTime: true};
+  for (let i = 0; i < tickOffset; ++i) {
+
   newState.tick += tickOffset;
   if (tickOffset <= 0) {
     console.error("Future time machine going backwards NIY")
