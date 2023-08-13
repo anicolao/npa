@@ -18,7 +18,6 @@ export function futureTime(
   }
   const stars = {...newState.stars};
   for (const sk in stars) {
-
   }
   return newState;
 }
