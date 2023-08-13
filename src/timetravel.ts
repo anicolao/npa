@@ -37,6 +37,9 @@ export function futureTime(
   }
   newState.stars = stars;
   const fleets = {...newState.fleets};
-  
+  for (const fk in fleets) {
+    
+  }
+  newState.fleets = fleets;
   return newState;
 }
