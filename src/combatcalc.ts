@@ -4,7 +4,7 @@ import { Stanzas } from "./reports";
 export const combatInfo: { 
     knownAlliances: number[][] | undefined = undefined,
     combatHandicap:  0
-};
+} = ;
 
 export let handicapString = function (prefix?: string) {
   let p =
