@@ -52,7 +52,7 @@ import {
 import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
 import { isSafari } from "./useragent";
 import { futureTime } from "./timetravel";
-import { alliedFleet, combatHandicap, combatInfo, combatOutcomes, fleetOutcomes, handicapString, knownAlliances, StarState } from "./combatcalc.js";
+import { alliedFleet, combatInfo, combatOutcomes, fleetOutcomes, handicapString, knownAlliances, StarState } from "./combatcalc.js";
 
 interface CruxLib {
   IconButton: any;
