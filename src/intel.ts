@@ -4256,7 +4256,7 @@ function NeptunesPrideAgent() {
       .map((k) => getTimeTravelScan(k, dir))
       .filter((scan) => scan && scan.tick === timeTravelTick);
     if (scans.length === 0) {
-      NeptunesPride.np.trigger("map_rebuild");
+      if (timeTravel) NeptunesPride.np.trigger("map_rebuild");
       return false;
     }
     const myId = NeptunesPride.originalPlayer
