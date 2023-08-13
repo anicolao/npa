@@ -1,6 +1,8 @@
 import { ScanningData } from "./galaxy";
 import { Stanzas } from "./reports";
 
+export let knownAlliances: number[][] | undefined = undefined;
+export let combatHandicap = 0;
 export let handicapString = function (prefix?: string) {
   let p =
     prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
