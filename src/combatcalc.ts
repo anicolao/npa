@@ -51,7 +51,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
   const galaxy = NeptunesPride.universe.galaxy;
   const players = galaxy.players;
   let fleets = galaxy.fleets;
-  let stars = NeptunesPride.universe.galaxy.stars;
+  let stars = galaxy.stars;
   let flights = [];
   fleetOutcomes = {};
   for (const f in fleets) {
