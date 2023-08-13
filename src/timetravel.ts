@@ -1,6 +1,7 @@
 import { ScanningData } from "./galaxy";
 import { clone } from "./patch";
 
+
 export function futureTime(
   galaxy: ScanningData,
   tickOffset: number
