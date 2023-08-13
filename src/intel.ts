@@ -2058,7 +2058,7 @@ function NeptunesPrideAgent() {
       do {
         i -= 1;
         const candidate = sortedByDistanceSquared[i];
-        const allied = alliedFleet(candidate.puid, star.puid);
+        const allied = alliedFleet(NeptunesPride.universe.galaxy.players, candidate.puid, star.puid);
         if (!allied && (closest === star || stepsOut > 0)) {
           closest = candidate;
           stepsOut--;
