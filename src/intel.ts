@@ -402,9 +402,6 @@ function NeptunesPrideAgent() {
       const seenCache: { [k: string]: { [k: string]: [string, string] } } = {};
       let memoStars: any = null;
       let memo: { [k: string]: boolean } = {};
-      const dist = (s1: SpaceObject, s2: SpaceObject) => {
-        return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
-      };
       const sees = (sourceS: string, sinkS: string) => {
         if (memoStars !== scan.stars) {
           memoStars = scan.stars;
