@@ -21,7 +21,6 @@ export const alliedFleet = (players: PlayerMap, fleetOwnerId: number, starOwnerI
   if (combatInfo.knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
     // TODO - do we need to call this here? faReport();
   }
-  const players = NeptunesPride.universe.galaxy.players;
   const fOwner = players[fleetOwnerId];
   const sOwner = players[starOwnerId];
   const warMap = fOwner?.war || sOwner?.war || {};
