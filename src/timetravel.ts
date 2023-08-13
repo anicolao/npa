@@ -51,7 +51,7 @@ export function futureTime(
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
             const [sx, sy] = [dx * factor, dy * factor];
             newFleet.x = String(x + sx);
-            newFleet.y = String(parseFloat(newFleet.y) + sy);
+            newFleet.y = String(y + sy);
     
         } else {
             newFleet.x = String(destX);
