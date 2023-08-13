@@ -5,6 +5,7 @@ import { clone } from "./patch";
 export interface TimeMachineData {
     futureTime: boolean;
 };
+
 export function futureTime(
   galaxy: ScanningData,
   tickOffset: number
