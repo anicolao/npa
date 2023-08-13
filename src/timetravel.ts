@@ -40,7 +40,7 @@ export function futureTime(
   for (const fk in fleets) {
     if (fleets[fk].o.length > 0) {
         const newFleet = {...fleets[fk]};
-        const destUid = newFleet.o[1];
+        const destUid = newFleet.o[0];
         const destination = stars[destUid];
         const [destX, destY] = [parseFloat(destination.x), parseFloat(destination.y)];
         const [lx, ly] = [newFleet.x, newFleet.y]
