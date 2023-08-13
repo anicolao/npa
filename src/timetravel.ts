@@ -39,7 +39,8 @@ export function futureTime(
   const fleets = {...newState.fleets};
   for (const fk in fleets) {
     if (fleets[fk].o.length > 0) {
-        const newFleet = {...fleets[fk]}
+        const newFleet = {...fleets[fk]};
+        
         fleets[fk] = newFleet;
     }
   }
