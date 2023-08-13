@@ -433,7 +433,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
         starstate[starId].ships = defense;
         for (const i in arrival) {
           let fleet = arrival[i];
-          if (alliedFleet(galaxy.players,  fleet.puid, starstate[starId].puid)) {
+          if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
             let outcomeString = "{0} ships on {1}".format(
               Math.floor(starstate[starId].ships),
               stars[starId].n
