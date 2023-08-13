@@ -46,7 +46,7 @@ export function futureTime(
         const [lx, ly] = [newFleet.x, newFleet.y]
         if (newFleet.etaNext > 1) {
             const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
-            const [destx, dy] = [destX - x, destY - y];
+            const [dx, dy] = [destX - x, destY - y];
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
             const [nx, ny] = [dx * factor, dy * factor];
