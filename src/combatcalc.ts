@@ -232,7 +232,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
     for (const i in arrival) {
       let fleet = arrival[i];
       if (
-        alliedFleet(galaxy.players,fleet.puid, starstate[starId].puid) ||
+        alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid) ||
         starstate[starId].puid == -1
       ) {
         let oldShips = starstate[starId].ships;
