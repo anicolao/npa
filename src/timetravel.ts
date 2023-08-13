@@ -52,6 +52,7 @@ export function futureTime(
             const [sx, sy] = [dx * factor, dy * factor];
             newFleet.x = String(x + sx);
             newFleet.y = String(y + sy);
+            newFleet.etaFirst -= 1;
     
         } else {
             newFleet.x = String(destX);
