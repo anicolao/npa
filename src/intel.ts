@@ -52,6 +52,7 @@ import {
 import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
 import { isSafari } from "./useragent";
 import { futureTime } from "./timetravel";
+import { knownAlliances } from "./combatcalc.js";
 
 interface CruxLib {
   IconButton: any;
