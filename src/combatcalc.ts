@@ -1,4 +1,27 @@
+import { ScanningData } from "./galaxy";
+import { Stanzas } from "./reports";
 
+
+function absoluteTick(galaxy: ScanningData, offset: number) {
+    return galaxy.tick + offset;
+}
+  const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
+    if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
+      faReport();
+    }
+    const players = NeptunesPride.universe.galaxy.players;
+    const fOwner = players[fleetOwnerId];
+    const sOwner = players[starOwnerId];
+    const warMap = fOwner?.war || sOwner?.war || {};
+    if (fleetOwnerId == starOwnerId) return true;
+    if (warMap[fleetOwnerId] && warMap[starOwnerId]) return false;
+    return (
+      warMap[fleetOwnerId] == 0 ||
+      warMap[starOwnerId] == 0 ||
+      knownAlliances?.[fleetOwnerId]?.[starOwnerId]
+    );
+  };
+  export let combatHandicap = 0;
   export let fleetOutcomes: { [k: number]: any } = {};
   export interface DepartureRecord {
     leaving: number;
@@ -15,6 +38,7 @@
   }
   const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
     const universe = NeptunesPride.universe;
+    const galaxy = NeptunesPride.universe.galaxy;
     const players = NeptunesPride.universe.galaxy.players;
     let fleets = NeptunesPride.universe.galaxy.fleets;
     let stars = NeptunesPride.universe.galaxy.stars;
@@ -36,7 +60,7 @@
             fleet.n,
             fleet.st,
             starname,
-            tickNumber(ticks),
+            absoluteTick(galaxy, ticks),
           ),
           fleet,
         ]);
@@ -160,7 +184,7 @@
       }
       stanza.push(
         "[[Tick #{0}]]: [[{1}]] [[{2}]] {3} ships".format(
-          tickNumber(tick),
+          absoluteTick(galaxy, tick),
           starstate[starId].puid,
           stars[starId].n,
           starstate[starId].ships,
@@ -231,7 +255,7 @@
             stars[starId].n,
           );
           fleetOutcomes[fleet.uid] = {
-            eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
+            eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
             outcome: outcomeString,
           };
         }
@@ -370,7 +394,7 @@
               -defense,
             );
             fleetOutcomes[fleet.uid] = {
-              eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
+              eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
               outcome: outcomeString,
             };
           }
@@ -416,7 +440,7 @@
                 stars[starId].n,
               );
               fleetOutcomes[fleet.uid] = {
-                eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
+                eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
                 outcome: outcomeString,
               };
             }
@@ -432,7 +456,7 @@
               outcomeString = "Wins! {0} land.".format(defense);
             }
             fleetOutcomes[fleet.uid] = {
-              eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
+              eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
               outcome: outcomeString,
             };
           }
