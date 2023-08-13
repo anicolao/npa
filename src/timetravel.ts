@@ -41,7 +41,7 @@ export function futureTime(
     if (fleets[fk].o.length > 0) {
         const newFleet = {...fleets[fk]};
         newFleet.x += (newFleet.x - newFleet.lx);
-        newFleet.x += (newFleet.x - newFleet.lx);
+        newFleet.y += (newFleet.x - newFleet.lx);
         fleets[fk] = newFleet;
     }
   }
