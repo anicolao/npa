@@ -60,7 +60,7 @@ export function futureTime(
             newFleet.o = newFleet.o.slice(1);
             if (newFleet.o.length > 0) {
               const nextDestUid = fleets[fk].o[0][1];
-              
+              const nextDestination = stars[nextDestUid];
               newFleet.warpSpeed = 
             } else {
               newFleet.etaFirst = 0;
