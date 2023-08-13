@@ -178,7 +178,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
     }
     for (const i in arrival) {
       let fleet = arrival[i];
-      if (alliedFleet(fleet.puid, starstate[starId].puid)) {
+      if (alliedFleet(galaxy, fleet.puid, starstate[starId].puid)) {
         const weapons = Math.max(
           starstate[starId].weapons,
           players[fleet.puid].tech.weapons.level
