@@ -51,6 +51,7 @@ import {
 } from "./reports";
 import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
 import { isSafari } from "./useragent";
+import { futureTime } from "./timetravel.js";
 
 interface CruxLib {
   IconButton: any;
@@ -4262,10 +4263,8 @@ function NeptunesPrideAgent() {
       if (timeTravelTick > trueTick) {
         // we are in future time machine
         if (dir === "forwards") {
-          const tickOffset = NeptunesPride.universe.galaxy.tick(
-            (NeptunesPride.universe.galaxy.futureTime = true),
-          );
-          NeptunesPride.universe.galaxy.tick = timeTravelTick;
+          const tickOffset = (timeTravelTick - NeptunesPride.universe.galaxy.tick);
+          NeptunesPride.universe.galaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
         } else if (dir === "back") {
           warpTime(null, `${trueTick}`);
         }

@@ -56,5 +56,5 @@ cat <<EOF > dist/manifest.json
 EOF
   
 #scp dist/intel.js cloudshell:dist
-npm run format && git add src && git commit --no-verify -m "WIP on future time machine" && git push
+git add src && git commit --no-verify -m "WIP on future time machine" && git push
 exit 0
