@@ -5,6 +5,7 @@ import { Stanzas } from "./reports";
 function absoluteTick(galaxy: ScanningData, offset: number) {
     return galaxy.tick + offset;
 }
+  let knownAlliances: number[][] | undefined = undefined;
   const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
     if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
       faReport();
