@@ -13,6 +13,7 @@ export function futureTime(
 ): ScanningData {
   const newState: ScanningData & TimeMachineData = {...galaxy, futureTime: true};
   for (let i = 0; i < tickOffset; ++i) {
+    const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes);
   newState.tick += 1;
   if (tickOffset <= 0) {
