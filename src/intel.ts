@@ -1211,10 +1211,6 @@ function NeptunesPrideAgent() {
       knownAlliances?.[fleetOwnerId]?.[starOwnerId]
     );
   };
-  interface DepartureRecord {
-    leaving: number;
-    origShips: number;
-  }
   let fleetOutcomes: { [k: number]: any } = {};
   let combatHandicap = 0;
 

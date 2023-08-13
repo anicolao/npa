@@ -1,4 +1,13 @@
 
+  export interface StarState {
+    last_updated: number;
+    ships: number;
+    puid: number;
+    c: number;
+    departures: { [k: number]: DepartureRecord };
+    weapons: number;
+    production: number;
+  }
   const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
     const universe = NeptunesPride.universe;
     const players = NeptunesPride.universe.galaxy.players;
