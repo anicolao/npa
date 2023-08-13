@@ -1,7 +1,7 @@
 import { ScanningData } from "./galaxy";
 import { Stanzas } from "./reports";
 
-export const 
+export const global
 export let knownAlliances: number[][] | undefined = undefined;
 export let combatHandicap = 0;
 
