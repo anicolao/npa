@@ -1,3 +1,4 @@
+import { computeCombatOutcomes } from "./combatcalc";
 import { dist, ScanningData } from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
@@ -39,7 +40,7 @@ export function futureTime(
   newState.stars = stars;
   const fleets = {...newState.fleets};
   for (let i = 0; i < tickOffset; ++i) {
-    calculateCombatOutcomes(newState, )
+    computeCombatOutcomes(newState, )
     for (const fk in fleets) {
       if (fleets[fk].o.length > 0) {
           const newFleet = {...fleets[fk]};
