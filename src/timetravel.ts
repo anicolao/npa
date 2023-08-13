@@ -19,7 +19,7 @@ export function futureTime(
   const stars = {...newState.stars};
   for (const sk in stars) {
     const star = stars[sk];
-    if (star.v) {
+    if (star.v === "1") {
         const scannedStar: k
     }
   }
