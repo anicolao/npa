@@ -53,6 +53,7 @@ export function futureTime(
             newFleet.x = String(x + sx);
             newFleet.y = String(y + sy);
             newFleet.etaFirst -= 1;    
+            newFleet.eta -= 1;
         } else {
             newFleet.x = String(destX);
             newFleet.y = String(destY);
