@@ -1,9 +1,11 @@
 import { ScanningData } from "./galaxy";
 import { Stanzas } from "./reports";
 
-export const combat
+export const combatInfo { 
 export let knownAlliances: number[][] | undefined = undefined;
 export let combatHandicap = 0;
+
+}
 
 export let handicapString = function (prefix?: string) {
   let p =
