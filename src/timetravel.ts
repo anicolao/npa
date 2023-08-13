@@ -30,7 +30,7 @@ export function futureTime(
             newStar.st += production + newStar.c;
             newStar.c = newStar.st - Math.floor(newStar.st);
             newStar.st = Math.floor(newStar.st);
-            newStar.totalDefenses += production;
+            newStar.totalDefenses += ;
             stars[sk] = newStar;
         }
     }
