@@ -1256,7 +1256,7 @@ function NeptunesPrideAgent() {
     "+ Rulers",
   );
   function incCombatHandicap() {
-    combatHandicap += 1;
+    combatInfo.combatHandicap += 1;
     NeptunesPride.np.trigger("map_rebuild");
     NeptunesPride.np.trigger("refresh_interface");
   }
