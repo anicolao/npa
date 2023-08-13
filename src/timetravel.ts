@@ -16,7 +16,7 @@ export function futureTime(
     logCount("error_back_to_the_future");
     return newState;
   }
-  const players = NeptunesPride.universe.galaxy.players;
+  const players = newState.galaxy.players;
   const stars = {...newState.stars};
   for (const sk in stars) {
     const star = stars[sk];
