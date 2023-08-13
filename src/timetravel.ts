@@ -27,7 +27,7 @@ export function futureTime(
             const manufacturing = players[star.puid].tech.manufacturing.level;
             const production = (industry*(manufacturing+5))*tickOffset/ticksPerDay;
             const newStar = {...star};
-            newStar.st += production + ;
+            newStar.st += production + newStar.c;
             newStar.totalDefenses += production;
             stars[sk] = newStar;
         }
