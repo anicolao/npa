@@ -5,8 +5,6 @@ import {
   addDoc,
   collection,
   doc,
-  FieldValue,
-  getFirestore,
   increment,
   initializeFirestore,
   onSnapshot,
@@ -256,6 +254,23 @@ export async function getServerScans(apikey: string) {
   }
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   trimInvalidEntries(apikey);
+  const diffskey = `scandiffs/${gameid}/${apikey}`;
+  const unsubDiffs = onSnapshot(
+    query(
+      collection(firestore, diffskey),
+      where("latest", ">", timestamp),
+      orderBy("latest"),
+    ),
+    (querySnapshot) => {
+      querySnapshot.docChanges().forEach((change) => {
+        console.log("Diff update", change);
+      });
+    },
+    (error) => {
+      console.log(`scandiffs query ${diffskey} failing: `);
+      console.error(error);
+    },
+  );
   const gamekey = `scans/${gameid}/${gameid}:${apikey}`;
   const scans = collection(firestore, gamekey);
   return onSnapshot(
@@ -289,7 +304,7 @@ export async function getServerScans(apikey: string) {
       trimInvalidEntries(apikey);
     },
     (error) => {
-      console.log("scans query failing: ");
+      console.log(`scans query ${gameid}:${apikey} failing: `);
       console.error(error);
     },
   );
