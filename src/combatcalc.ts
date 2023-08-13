@@ -30,7 +30,7 @@ export const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
   return (
     warMap[fleetOwnerId] == 0 ||
     warMap[starOwnerId] == 0 ||
-    knownAlliances?.[fleetOwnerId]?.[starOwnerId]
+    combatInfo.knownAlliances?.[fleetOwnerId]?.[starOwnerId]
   );
 };
 export let fleetOutcomes: { [k: number]: any } = {};
