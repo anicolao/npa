@@ -59,7 +59,7 @@ export function futureTime(
             newFleet.y = String(destY);
             newFleet.o = newFleet.o.slice(1);
             if (newFleet.o.length > 0) {
-              const [nextDelay, nextDestUid, nextAction, nextArgument] = fleets[fk].o[0];
+              const nextDestUid, nextAction, nextArgument] = fleets[fk].o[0];
               newFleet.warpSpeed = 
             } else {
               newFleet.etaFirst = 0;
