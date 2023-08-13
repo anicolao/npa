@@ -10,6 +10,7 @@ function absoluteTick(galaxy: ScanningData, offset: number) {
   return galaxy.tick + offset;
 }
 export let knownAlliances: number[][] | undefined = undefined;
+export let combatHandicap = 0;
 export const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
   if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
     // TODO - do we need to call this here? faReport();
