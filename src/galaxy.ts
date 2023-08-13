@@ -54,6 +54,7 @@ export interface Fleet extends SpaceObject {
   uid: number; // unique id
   w: number; // flying at warp?
   etaFirst: number;
+  
 }
 export interface Player {
   ai: number;
