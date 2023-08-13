@@ -65,7 +65,7 @@ export function futureTime(
               newFleet.o = newFleet.o.slice(1);
               if (destination.puid !== staroutcomes[destUid].puid) {
                 const newStar = {...destination, puid: staroutcomes[destUid].puid};
-                stars[]
+                stars[destUid] = newStar;
               }
               if (newFleet.o.length > 0) {
                 const nextDestUid = fleets[fk].o[0][1];
