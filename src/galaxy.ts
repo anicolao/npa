@@ -1,5 +1,5 @@
 export interface PlayerMap {
-  
+  [puid: string]: Player
 }
 export interface ScanningData {
   admin: number;
