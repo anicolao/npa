@@ -17,7 +17,7 @@ export let handicapString = function (prefix?: string) {
 function absoluteTick(galaxy: ScanningData, offset: number) {
   return galaxy.tick + offset;
 }
-export const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
+export const alliedFleet = (players: fleetOwnerId: number, starOwnerId: number) => {
   if (combatInfo.knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
     // TODO - do we need to call this here? faReport();
   }
