@@ -12,6 +12,7 @@ export function futureTime(
   newState.tick += tickOffset;
   if (tickOffset <= 0) {
     console.error("Future time machine going backwards NIY")
+    
     return newState;
   }
   return newState;
