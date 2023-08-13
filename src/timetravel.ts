@@ -21,6 +21,7 @@ export function futureTime(
     const star = stars[sk];
     if (star.v === "1") {
         if (star.i > 0) {
+            const ticksPerDay = NeptunesPride.universe.galaxy.production_rate;
             const newStar = {...star};
             newStar.st += 10;
             newStar.totalDefenses += 10;
