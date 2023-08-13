@@ -61,7 +61,7 @@ export function futureTime(
             if (newFleet.o.length > 0) {
               const nextDestUid = fleets[fk].o[0][1];
               const nextDestination = stars[nextDestUid];
-              newFleet.warpSpeed = (nextDestination.ga === destination.ga) ? nextDestination.ga : 0 && destination.ga ? 1 : 0;
+              newFleet.warpSpeed = (nextDestination.ga === destination.ga) ? nextDestination.ga : 0;
             } else {
               newFleet.etaFirst = 0;
             }
