@@ -48,7 +48,7 @@ export interface StarState {
 }
 export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
   const galaxy = NeptunesPride.universe.galaxy;
-  return computeCombatOutcomes(galaxy, )
+  return computeCombatOutcomes(galaxy, staroutcomes)
 }
 
 export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k: string]: StarState }) => {
