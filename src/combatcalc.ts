@@ -451,7 +451,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
             defense,
             -offense
           );
-          if (alliedFleet(fleet.puid, starstate[starId].puid)) {
+          if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
             outcomeString = "Wins! {0} land.".format(defense);
           }
           fleetOutcomes[fleet.uid] = {
