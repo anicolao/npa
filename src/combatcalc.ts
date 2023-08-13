@@ -169,7 +169,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
       let owner = -1;
       for (const i in arrival) {
         let fleet = arrival[i];
-        let d = universe.distance(
+        let d = dist(stars[starId], fleet);
           stars[starId].x,
           stars[starId].y,
           fleet.lx,
