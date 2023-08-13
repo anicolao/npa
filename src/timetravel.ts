@@ -58,7 +58,7 @@ export function futureTime(
             newFleet.y = String(destY);
             // TODO: put us in orbit
         }
-        
+        newFleet.etaFirst -= 1;
         [newFleet.lx, newFleet.ly] = [lx, ly];
         fleets[fk] = newFleet;
     }
