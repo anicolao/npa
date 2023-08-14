@@ -26,7 +26,9 @@ export class ScanKeyIterator {
   }
   hasNext() {
     const ret = this.currentScanRecord?.next !== undefined;
-    console.log(`hasNext for ${this.apikey} is ${ret} @ ${this.currentScanData.tick}`)
+    console.log(
+      `hasNext for ${this.apikey} is ${ret} @ ${this.currentScanData.tick}`
+    );
     return ret;
   }
   next() {
@@ -72,9 +74,9 @@ export class TickIterator {
   }
   hasNext() {
     const h = this.scanIteratorHeap;
-      while (h.peek()?.hasNext() === false && h.size() > 0) {
-        h.extract();
-      }
+    while (h.peek()?.hasNext() === false && h.size() > 0) {
+      h.extract();
+    }
     return h.size() > 0 && h.peek().hasNext();
   }
   next() {
