@@ -396,6 +396,7 @@ function NeptunesPrideAgent() {
   function tradeActivityReport() {
     let output = [];
     output.push("Trading Activity:");
+    console.log()
     const ticks = new TickIterator(getMyKeys());
     while (ticks.hasNext()) {
       ticks.next();
