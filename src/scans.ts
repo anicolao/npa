@@ -75,7 +75,6 @@ export class TickIterator {
       while (h.peek()?.hasNext() === false && h.size() > 0) {
         h.extract();
       }
-    console.log(`hasNext size post...: ${h.size()}`)
     const ret = h.size() > 0 && h.peek().hasNext();
     console.log(`hasNext size: ${h.size()} is ${ret}`)
     return ret;
