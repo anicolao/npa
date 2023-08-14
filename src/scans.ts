@@ -72,6 +72,7 @@ export class TickIterator {
   }
   hasNext() {
     const h = this.scanIteratorHeap;
+    console.log(`hasNext size: ${h.size()} is ${ret}`)
       while (this.getScanData() === undefined && h.size() > 0) {
         h.extract();
       }
