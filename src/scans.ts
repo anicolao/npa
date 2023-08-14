@@ -25,7 +25,9 @@ export class ScanKeyIterator {
     return this.currentScanData;
   }
   hasNext() {
-    return this.currentScanRecord?.next !== undefined;
+    const ret = this.currentScanRecord?.next !== undefined;
+    console.log(`hasNext for ${this.apikey} is ${ret} `)
+    return ret;
   }
   next() {
     const p = patch(this.currentScanData, this.currentScanRecord?.forward);
