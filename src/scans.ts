@@ -76,8 +76,6 @@ export class TickIterator {
         h.extract();
       }
     return h.size() > 0 && h.peek().hasNext();
-    console.log(`hasNext size: ${h.size()} is ${ret}`)
-    return ret;
   }
   next() {
     if (this.hasNext()) {
