@@ -400,7 +400,7 @@ function NeptunesPrideAgent() {
     while (ticks.hasNext()) {
       ticks.next();
       const scan = ticks.getScanData();
-      console.log(`Scan ${scan.tick}`, scan)
+      console.log(`Scan ${scan.tick}`, scan);
       const seenCache: { [k: string]: { [k: string]: [string, string] } } = {};
       let memoStars: any = null;
       let memo: { [k: string]: boolean } = {};
