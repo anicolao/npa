@@ -26,7 +26,7 @@ export class ScanKeyIterator {
   }
   hasNext() {
     const ret = this.currentScanRecord?.next !== undefined;
-    console.log(`hasNext for ${this.apikey} is ${ret} `)
+    console.log(`hasNext for ${this.apikey} is ${ret} @ ${this.currentScanData.tick}`)
     return ret;
   }
   next() {
