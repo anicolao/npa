@@ -74,7 +74,7 @@ export class TickIterator {
     //while (h.peek()?.hasNext() === false && h.size() > 0) {
       //h.extract();
     //}
-    if (h.size() > 1)
+    if (h.size() > 1) return true;
     return h.size() > 0 && h.peek().hasNext();
   }
   next() {
