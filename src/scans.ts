@@ -41,7 +41,7 @@ export class ScanKeyIterator {
 export class TickIterator {
   scanIteratorHeap: Heap<any>;
   constructor(apilinks: string[], preferredUser?: number) {
-    const iterators = apilinks.map((link) => new ScanKeyIterator(link)).filter();
+    const iterators = apilinks.map((link) => new ScanKeyIterator(link)).filter(i => i.hasNext());
     this.scanIteratorHeap = new Heap(iterators, (a, b) => {
       const aScan = a.getScanData();
       const bScan = b.getScanData();
