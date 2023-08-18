@@ -110,7 +110,7 @@ export function futureTime(
             case FleetOrder.DropAllBut:
               transferred = Math.max(0, newFleet.st - argument);
               break;
-            case FleetOrder.
+            case FleetOrder.Garrison
             default:
               break;
           }
