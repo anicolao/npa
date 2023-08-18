@@ -26,7 +26,6 @@ export function futureTime(
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
     const players = newState.players;
-    const stars = { ...newState.stars };
     for (const sk in stars) {
       const star = stars[sk];
       if (star.v === "1") {
