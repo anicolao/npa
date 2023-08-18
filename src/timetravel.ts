@@ -91,7 +91,7 @@ export function futureTime(
             case FleetOrder.Nothing:
               break;
             case FleetOrder.CollectAll:
-              newFleet.st += stars[destUid].st;
+              newFleet.st += newStar.st;
               newStar.st = 0;
               break;
 
