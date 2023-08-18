@@ -77,6 +77,7 @@ export function futureTime(
               */
           // Update fleet as a result of battle
           
+          
           // Process next order
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
@@ -90,7 +91,6 @@ export function futureTime(
           } else {
             newFleet.etaFirst = 0;
           }
-          // TODO: put us in orbit
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
         fleets[fk] = newFleet;
