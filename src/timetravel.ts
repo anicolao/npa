@@ -112,6 +112,7 @@ export function futureTime(
         let starstate = staroutcomes[fleets[fk].ouid];
         if (starstate?.fleetStrength[newFleet.uid] !== undefined) {
           newFleet.st = starstate.fleetStrength[newFleet.uid];
+          fleets[fk] = newFleet;
         }
 
       }
