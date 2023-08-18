@@ -111,7 +111,7 @@ export function futureTime(
         // apply star combat outcome if any
         let starstate = staroutcomes[fleets[fk].ouid];
         if (starstate?.fleetStrength[newFleet.uid] !== undefined) {
-          if (starstate.fleetStrength[newFleet.uid];)
+          if (starstate.fleetStrength[newFleet.uid])
           newFleet.st = starstate.fleetStrength[newFleet.uid];
           fleets[fk] = newFleet;
         }
