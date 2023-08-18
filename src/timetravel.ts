@@ -74,7 +74,7 @@ export function futureTime(
           newFleet.eta -= 1;
           newFleet.ouid = undefined;
         } else {
-          const star = stars[sk];
+          const star = stars[destUid];
           const newStar = { ...star };
     
           newFleet.x = String(destX);
