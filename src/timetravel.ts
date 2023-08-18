@@ -99,7 +99,7 @@ export function futureTime(
             default:
               break;
           }
-          newFleet.st += transfered;
+          newFleet.st -= transfered;
           newStar.st -= transfered;
       
           // Process next order
