@@ -66,7 +66,6 @@ export function futureTime(
           if (delay > 0) {
             newFleet.o = [...newFleet.o];
             newFleet.o[0] = [...newFleet.o[0]];
-            newFleet.o[0][]
           } else {
             const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
             const [dx, dy] = [destX - x, destY - y];
