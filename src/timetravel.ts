@@ -38,7 +38,7 @@ export function futureTime(
         newStar.puid = starstate.puid;
         stars[sk] = newStar;
       }
-      if (star.v === "1") {
+      if (newStar.v === "1") {
         if (star.i > 0) {
           const ticksPerDay = newState.production_rate;
           const industry = star.i;
