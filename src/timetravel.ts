@@ -89,7 +89,7 @@ export function futureTime(
             case FleetOrder.Nothing:
               break;
             case FleetOrder.CollectAll:
-              
+              newFleet.st 
           }
           
           // Process next order
