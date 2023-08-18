@@ -124,7 +124,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       );
       let totalDefense = stars[starId].st;
       const fleetStrength: {[k:string]: number} = {};
-      // TODO: Remove fleets departing this tick or before maxTick.
       const departures: { [k: number]: DepartureRecord } = {};
       let origShips = stars[starId].st;
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
