@@ -44,7 +44,6 @@ export function futureTime(
         }
       }
     }
-    newState.stars = stars;
     for (const fk in fleets) {
       if (fleets[fk].o.length > 0) {
         const newFleet = { ...fleets[fk] };
