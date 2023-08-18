@@ -497,7 +497,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             -offense
           );
           if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
-          fleetOutcomes[fleet.uid] = {
+            if (fleetOutcomes[fleet.uid] = {
             outcomeString = "Wins! {0} land.".format(defense);
           }
           fleetOutcomes[fleet.uid] = {
