@@ -84,7 +84,7 @@ export function futureTime(
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.ouid = destUid;
-          
+          // Process current action
           
           // Process next order
           if (newFleet.o.length > 0) {
