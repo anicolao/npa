@@ -170,7 +170,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         fleetStrength[fleet.uid] = fleet.st;
         totalDefense += fleet.st;
       }
-      
       starstate[starId] = {
         last_updated: 0,
         ships: stars[starId].totalDefenses,
