@@ -384,7 +384,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           if (playerContribution[playerId]) {
             playerContribution[playerId] += starstate[starId].fleetStrength[k];
           } else {
-            playerContribution[playerId] = fleetStrength[k];
+            playerContribution[playerId] = starstate[starId].fleetStrength[k];
           }
           if (playerContribution[playerId] > biggestPlayer) {
             biggestPlayer = playerContribution[playerId];
