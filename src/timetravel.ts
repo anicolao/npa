@@ -116,7 +116,7 @@ export function futureTime(
         }
       }
       if (fleets[fk].st === 0) {
-        
+        delete fleets[fk];
       }
     }
   }
