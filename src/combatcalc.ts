@@ -398,7 +398,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             )
           );
           let outcomeString = "Wins! {0} land\n+{1} to defend".format(
-            fleetStrength[k],
+            starstate[starId].fleetStrength[k],
             -defense
           );
           fleetOutcomes[fleet.uid] = {
