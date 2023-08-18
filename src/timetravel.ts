@@ -28,8 +28,8 @@ export function futureTime(
     newState.tick += 1;
     const players = newState.players;
     for (const sk in stars) {
-      const newStar = { ...star };
       const star = stars[sk];
+      const newStar = { ...star };
       const starstate = staroutcomes[sk];
       if (starstate !== undefined) {
         
