@@ -93,6 +93,49 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
     staroutcomes === undefined ? {} : staroutcomes;
   for (const i in flights) {
     let fleet = flights[i][2];
+    if (fleet.orbiting) {
+      let orbit: string = fleet.orbiting.uid;
+      if (!starstate[orbit]) {
+        const ownerWeapons = players[stars[orbit].puid]?.tech.weapons.level;
+        const weapons = Math.max(
+          ownerWeapons,
+          ...stars[orbit]?.alliedDefenders.map(
+            (d: number) => players[d].tech.weapons.level
+          )
+        );
+        const fleetStrength: { [k: string]: number } = {};
+        fleetStrength[fleet.uid] = fleet.st;
+        starstate[orbit] = {
+          last_updated: 0,
+          ships: stars[orbit].totalDefenses,
+          puid: stars[orbit].puid,
+          c: stars[orbit].c || 0,
+          departures: {},
+          weapons,
+          production: stars[orbit].shipsPerTick,
+          fleetStrength,
+        };
+      }
+      // This fleet is departing this tick; remove it from the origin star's totalDefenses
+      if (fleet.o.length > 0) {
+        const tick = fleet.o[0][0] - 1;
+        if (tick >= 0) {
+          const origShips = starstate[orbit].ships;
+          if (starstate[orbit].departures[tick] === undefined) {
+            starstate[orbit].departures[tick] = {
+              leaving: fleet.st,
+              origShips,
+            };
+          } else {
+            const leaving =
+              starstate[orbit].departures[tick].leaving + fleet.st;
+            starstate[orbit].departures[tick] = { leaving, origShips };
+          }
+        } else {
+          starstate[orbit].ships -= fleet.st;
+        }
+      }
+    }
     if (
       arrivalTimes.length === 0 ||
       arrivalTimes[arrivalTimes.length - 1] !== flights[i][0]
