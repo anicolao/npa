@@ -87,7 +87,7 @@ export function futureTime(
           }
           newFleet.ouid = destUid;
           // Process current action
-          
+          let transfered = 0;
           switch (action) {
             case FleetOrder.Nothing:
               break;
