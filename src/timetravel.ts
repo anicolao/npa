@@ -104,7 +104,8 @@ export function futureTime(
             case FleetOrder.DropAll:
               transferred = newFleet.st;
               break;
-            case FleetOrder.DropAll
+            case FleetOrder.Drop:
+              transferred = 
             default:
               break;
           }
