@@ -74,6 +74,9 @@ export function futureTime(
           newFleet.eta -= 1;
           newFleet.ouid = undefined;
         } else {
+          const star = stars[sk];
+          const newStar = { ...star };
+    
           newFleet.x = String(destX);
           newFleet.y = String(destY);
           newFleet.o = newFleet.o.slice(1);
@@ -92,7 +95,7 @@ export function futureTime(
               newFleet.st += stars[destUid].st;
               stars[destUid].st = 0;
               break;
-              
+
           }
           
           // Process next order
