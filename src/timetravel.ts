@@ -33,13 +33,7 @@ export function futureTime(
       const starstate = staroutcomes[sk];
       if (starstate !== undefined) {
         if (newStar.v === "1") {
-          newStar.st = starstate.st;
-          if (starstate.puid !== newStar.puid) {
-            newStar.st = 0;
-          } else {
-            // TODO: Update computeCombatOutcomes to compute star strength.
-          }
-          
+          newStar.st = starstate.st;          
         }
         newStar.puid = starstate.puid;
         stars[sk] = newStar;
