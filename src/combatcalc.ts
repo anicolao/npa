@@ -178,7 +178,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             fleetStrength[fleet.uid] = fleet.st;
             totalDefense += fleet.st;
             const leaving =
-              starstate[orbit].departures[delay - 1].leaving + fleet.st;
+              starstate[starId].departures[delay - 1].leaving + fleet.st;
             starstate[orbit].departures[delay - 1] = { leaving, origShips };
           }
         }
