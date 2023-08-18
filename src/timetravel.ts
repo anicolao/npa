@@ -96,7 +96,7 @@ export function futureTime(
               newFleet.st += amount;
               newStar.st -= amount;
               break;
-            case FleetO
+            
 
           }
           
