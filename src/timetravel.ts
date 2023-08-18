@@ -53,7 +53,7 @@ export function futureTime(
       }
     }
     for (const fk in fleets) {
-      const newFleet = { ...fleets[fk], l:  };
+      const newFleet = { ...fleets[fk], l: fleets[fk].loop };
       if (fleets[fk].o.length > 0) {
         const [delay, destUid, action, argument] = fleets[fk].o[0];
         const destination = stars[destUid];
