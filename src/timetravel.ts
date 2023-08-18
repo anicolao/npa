@@ -111,6 +111,7 @@ export function futureTime(
           } else {
             newFleet.etaFirst = 0;
           }
+          
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
         fleets[fk] = newFleet;
