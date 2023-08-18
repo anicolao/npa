@@ -501,7 +501,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             if (fleetOutcomes[fleet.uid]?.outcomeString) {
                 prefix = fleetOutcomes[fleet.uid].outcomeString + "\n";
             }
-            outcomeString = `Wins! {0} land.".format(defense);
+            outcomeString = `${prefix} Wins! {0} land.".format(defense);
           }
           fleetOutcomes[fleet.uid] = {
             eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
