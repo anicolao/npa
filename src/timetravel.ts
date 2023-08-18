@@ -94,7 +94,7 @@ export function futureTime(
             case FleetOrder.Collect:
               const amount = action === FleetOrder.CollectAll ? newStar.st : argument;
               newFleet.st += amount;
-              newStar.st -= 0;
+              newStar.st -= amount;
               break;
               
 
