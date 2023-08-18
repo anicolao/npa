@@ -361,7 +361,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         stanza.push(
           "  +{1} defenders needed to survive".format(offense, -defense)
         );
-        const pairs: [string, number][] = Object.keys(fleetStrength).map((k) => [
+        const pairs: [string, number][] = Object.keys(starstate[starId].fleetStrength).map((k) => [
           k,
           fleetStrength[k],
         ]);
