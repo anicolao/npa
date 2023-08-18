@@ -100,7 +100,7 @@ export function futureTime(
               break;
           }
           newFleet.st -= transfered;
-          newStar.st -= transfered;
+          newStar.st += transfered;
       
           // Process next order
           if (newFleet.o.length > 0) {
