@@ -263,6 +263,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         } else {
           starstate[starId].ships += fleet.st;
         }
+        
         let landingString = "  {0} + {2} on [[{3}]] = {1}".format(
           oldShips,
           starstate[starId].ships,
