@@ -76,7 +76,7 @@ export function futureTime(
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.orbiting = destUid;
-          console.log(`update `)
+          console.log(`update ${newFleet.}`)
           
           // Process next order
           if (newFleet.o.length > 0) {
