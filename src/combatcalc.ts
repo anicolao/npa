@@ -363,7 +363,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         );
         const pairs: [string, number][] = Object.keys(starstate[starId].fleetStrength).map((k) => [
           k,
-          fleetStrength[k],
+          starstate[starId].fleetStrength[k],
         ]);
         pairs.sort((a, b) => b[1] - a[1]);
         let roundOffDebt = 0;
