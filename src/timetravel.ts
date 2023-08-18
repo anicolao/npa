@@ -88,7 +88,7 @@ export function futureTime(
           newFleet.ouid = destUid;
           // Process current action
           // Number of ships transfered from carrier to star.
-          let transfered = 0;
+          let transferred = 0;
           switch (action) {
             case FleetOrder.Nothing:
               break;
@@ -100,8 +100,8 @@ export function futureTime(
             default:
               break;
           }
-          newFleet.st -= transfered;
-          newStar.st += transfered;
+          newFleet.st -= transferred;
+          newStar.st += transferred;
       
           // Process next order
           if (newFleet.o.length > 0) {
