@@ -115,7 +115,8 @@ export function futureTime(
 
           } else {
             newFleet.st = starstate.fleetStrength[newFleet.uid];
-          fleets[fk] = newFleet;
+            fleets[fk] = newFleet;
+          }
         }
       }
     }
