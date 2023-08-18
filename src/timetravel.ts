@@ -23,7 +23,7 @@ export function futureTime(
   const fleets = { ...newState.fleets };
   for (let i = 0; i < tickOffset; ++i) {
     const staroutcomes: { [k: string]: StarState } = {};
-    computeCombatOutcomes(newState, staroutcomes, );
+    computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
     const players = newState.players;
     const stars = { ...newState.stars };
