@@ -115,7 +115,7 @@ export function futureTime(
               break;
           }
           transferred = Math.max(-newStar.st, transferred);
-          transferred = Math.min(newFleet.st, transferred);
+          transferred = Math.min(newFleet.st - 1, transferred);
           newFleet.st -= transferred;
           newStar.st += transferred;
       
