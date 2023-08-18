@@ -475,7 +475,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           if (!alliedFleet(galaxy.players, fleetOrStar.puid, starstate[starId].puid)) {
             starstate[starId].fleetStrength[fleetOrStar.uid] = 0;
           } else {
-            let st = k === "star" ? starstate[starId].st : 
+            let st = k === "star" ? starstate[starId].st : starstate[starId].fleetStrength[k];
             let c = (defense * st) / defendersAggregate;
             let intPart = Math.floor(c);
             let roundOff = c - intPart;
