@@ -52,8 +52,6 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
   return computeCombatOutcomes(galaxy, staroutcomes);
 }
 
-
-
 export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k: string]: StarState }, maxTick?: number) => {
   console.log("NEW ComputeCombatOutcomes called")
   const players = galaxy.players;
