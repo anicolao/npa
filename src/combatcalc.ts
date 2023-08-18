@@ -387,42 +387,42 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
 
           } else {
-          let playerId = fleet.puid;
-          let c = (offense * starstate[starId].fleetStrength[k]) / attackersAggregate;
-          let intPart = Math.floor(c);
-          let roundOff = c - intPart;
-          roundOffDebt += roundOff;
-          if (roundOffDebt > 0.0) {
-            roundOffDebt -= 1.0;
-            intPart++;
-          }
-          starstate[starId].fleetStrength[k] = intPart;
-          newAggregate += starstate[starId].fleetStrength[k];
-          if (playerContribution[playerId]) {
-            playerContribution[playerId] += starstate[starId].fleetStrength[k];
-          } else {
-            playerContribution[playerId] = starstate[starId].fleetStrength[k];
-          }
-          if (playerContribution[playerId] > biggestPlayer) {
-            biggestPlayer = playerContribution[playerId];
-            biggestPlayerId = playerId;
-          }
-          stanza.push(
-            "    [[{0}]] has {1} on [[{2}]]".format(
-              fleet.puid,
+            let playerId = fleet.puid;
+            let c = (offense * starstate[starId].fleetStrength[k]) / attackersAggregate;
+            let intPart = Math.floor(c);
+            let roundOff = c - intPart;
+            roundOffDebt += roundOff;
+            if (roundOffDebt > 0.0) {
+              roundOffDebt -= 1.0;
+              intPart++;
+            }
+            starstate[starId].fleetStrength[k] = intPart;
+            newAggregate += starstate[starId].fleetStrength[k];
+            if (playerContribution[playerId]) {
+              playerContribution[playerId] += starstate[starId].fleetStrength[k];
+            } else {
+              playerContribution[playerId] = starstate[starId].fleetStrength[k];
+            }
+            if (playerContribution[playerId] > biggestPlayer) {
+              biggestPlayer = playerContribution[playerId];
+              biggestPlayerId = playerId;
+            }
+            stanza.push(
+              "    [[{0}]] has {1} on [[{2}]]".format(
+                fleet.puid,
+                starstate[starId].fleetStrength[k],
+                fleet.n
+              )
+            );
+            let outcomeString = "Wins! {0} land\n+{1} to defend".format(
               starstate[starId].fleetStrength[k],
-              fleet.n
-            )
-          );
-          let outcomeString = "Wins! {0} land\n+{1} to defend".format(
-            starstate[starId].fleetStrength[k],
-            -defense
-          );
-          fleetOutcomes[fleet.uid] = {
-            eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
-            outcome: outcomeString,
-            strength: starstate[starId].fleetStrength[k]
-          };
+              -defense
+            );
+            fleetOutcomes[fleet.uid] = {
+              eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
+              outcome: outcomeString,
+              strength: starstate[starId].fleetStrength[k]
+            };
           }
         }
         if (NeptunesPride.gameVersion === "proteus") {
