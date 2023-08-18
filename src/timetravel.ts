@@ -96,7 +96,7 @@ export function futureTime(
               transferred = -newStar.st;
               break;
             case FleetOrder.Collect:
-              transferred = -newStar.st;
+              transferred = -argument;
               const amount = action === FleetOrder.CollectAll ? newStar.st : Math.min(newStar.st, argument);
               break;
             default:
