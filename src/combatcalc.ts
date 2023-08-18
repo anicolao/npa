@@ -173,7 +173,9 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
         if (fleet.o.length > 0) {
           const delay = fleet.o[0][0];
-          if (delay < tick) {}
+          if (delay < tick) {
+            
+          }
         }
         fleetStrength[fleet.uid] = fleet.st;
         totalDefense += fleet.st;
