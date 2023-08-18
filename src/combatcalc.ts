@@ -424,6 +424,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             strength: starstate[starId].fleetStrength[k]
           };
         }
+        }
         if (NeptunesPride.gameVersion === "proteus") {
           if (starstate[starId].puid != biggestPlayerId) {
             starstate[starId].c = 0;
