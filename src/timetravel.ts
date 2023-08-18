@@ -72,7 +72,7 @@ export function futureTime(
 
           // Update fleet as a result of battle
           let starstate = staroutcomes[destUid];
-          
+          newFleet.st = starstate.fleetStrength[]
           
           // Process next order
           if (newFleet.o.length > 0) {
