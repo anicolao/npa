@@ -471,9 +471,9 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         let roundOffDebt = 0;
         for (let i = 0; i < pairs.length; ++i) {
           let k = pairs[i][0];
-          let fleet = k !== "star" ? fleets[k] : null;
-          if (!alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
-            starstate[starId].fleetStrength[fleet.uid] = 0;
+          let fleetOrStar = k !== "star" ? fleets[k] : null;
+          if (!alliedFleet(galaxy.players, fleetOrStar.puid, starstate[starId].puid)) {
+            starstate[starId].fleetStrength[fleetOrStar.uid] = 0;
           } else {
             let c = (defense * starstate[starId].fleetStrength[k]) / defendersAggregate;
             let intPart = Math.floor(c);
@@ -486,9 +486,9 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             starstate[starId].fleetStrength[k] = intPart;
             stanza.push(
               "    [[{0}]] has {1} on [[{2}]]".format(
-                fleet.puid,
+                fleetOrStar.puid,
                 starstate[starId].fleetStrength[k],
-                fleet.n
+                fleetOrStar.n
               )
             );
           }
