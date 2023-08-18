@@ -72,7 +72,7 @@ export function futureTime(
 
           // Update fleet as a result of battle
           let starstate = staroutcomes[destUid];
-          if (starstate && starstate?.fleetStrength[newFleet.uid] !== undefined) {
+          if (starstate?.fleetStrength[newFleet.uid] !== undefined) {
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.orbiting = destUid;
