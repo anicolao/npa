@@ -393,7 +393,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           stanza.push(
             "    [[{0}]] has {1} on [[{2}]]".format(
               fleet.puid,
-              fleetStrength[k],
+              starstate[starId].fleetStrength[k],
               fleet.n
             )
           );
