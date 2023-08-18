@@ -100,7 +100,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             (d: number) => players[d].tech.weapons.level
           )
         );
-        const fleetStrength = {};
+        const fleetStrength: { [k: string]: number } = {};
         fleetStrength[fleet.uid] = fleet.st;
         starstate[orbit] = {
           last_updated: 0,
