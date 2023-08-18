@@ -85,7 +85,7 @@ export function futureTime(
           newFleet.y = String(destY);
           const firstOrder = newFleet.o[0];
           newFleet.o = newFleet.o.slice(1);
-          if (newFleet.loop === 1) {
+          if (newFleet.l === 1) {
             newFleet.o.push(firstOrder);
           }
 
