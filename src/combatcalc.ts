@@ -481,7 +481,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
               intPart++;
             }
             starstate[starId].fleetStrength[k] = intPart;
-            newAggregate += starstate[starId].fleetStrength[k];
             if (playerContribution[playerId]) {
               playerContribution[playerId] += starstate[starId].fleetStrength[k];
             } else {
