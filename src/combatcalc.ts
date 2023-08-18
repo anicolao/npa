@@ -108,6 +108,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           departures: {},
           weapons,
           production: stars[orbit].shipsPerTick,
+          fleetStrength,
         };
       }
       // This fleet is departing this tick; remove it from the origin star's totalDefenses
