@@ -85,6 +85,7 @@ export function futureTime(
           }
           newFleet.ouid = destUid;
           // Process current action
+          switch ()
           
           // Process next order
           if (newFleet.o.length > 0) {
