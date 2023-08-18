@@ -36,7 +36,7 @@ export function futureTime(
           if (starstate.puid !== newStar.puid) {
             newStar.st = 0;
           } else {
-            // TODO: Update 
+            // TODO: Update computeCombatOutcomes to compute star strength.
           }
           
         }
