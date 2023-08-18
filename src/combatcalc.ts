@@ -471,7 +471,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         let roundOffDebt = 0;
         for (let i = 0; i < pairs.length; ++i) {
           let k = pairs[i][0];
-          let fleetOrStar = k !== "star" ? fleets[k] : null;
+          let fleetOrStar = k !== "star" ? fleets[k] : ;
           if (!alliedFleet(galaxy.players, fleetOrStar.puid, starstate[starId].puid)) {
             starstate[starId].fleetStrength[fleetOrStar.uid] = 0;
           } else {
