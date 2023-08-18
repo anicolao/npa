@@ -114,7 +114,7 @@ export function futureTime(
           if (starstate.fleetStrength[newFleet.uid] === 0) {
 
           } else {
-          newFleet.st = starstate.fleetStrength[newFleet.uid];
+            newFleet.st = starstate.fleetStrength[newFleet.uid];
           fleets[fk] = newFleet;
         }
       }
