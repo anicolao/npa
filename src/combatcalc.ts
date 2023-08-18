@@ -172,7 +172,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         departures: {},
         weapons,
         production: stars[starId].shipsPerTick,
-        fleetStrength: {}
+        fleetStrength
       };
     }
     if (starstate[starId].puid == -1) {
