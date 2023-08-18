@@ -1,5 +1,5 @@
 import { computeCombatOutcomes, StarState } from "./combatcalc";
-import { dist, ScanningData } from "./galaxy";
+import { dist, FleetOrder, ScanningData } from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
 
