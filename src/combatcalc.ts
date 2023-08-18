@@ -271,7 +271,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
     }
     let awt = 0;
     let offense = 0;
-    let contribution: { [k: string]: number } = {};
+    let fleetStrength: { [k: string]: number } = {};
     for (const i in arrival) {
       let fleet = arrival[i];
       if (!alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
@@ -286,7 +286,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             fleet.puid
           )
         );
-        contribution[[fleet.puid, fleet.uid].toString()] = fleet.st;
+        fleetStrength[[fleet.puid, fleet.uid].toString()] = fleet.st;
         let wt = players[fleet.puid].tech.weapons.level;
         if (wt > awt) {
           awt = wt;
@@ -357,9 +357,9 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         stanza.push(
           "  +{1} defenders needed to survive".format(offense, -defense)
         );
-        const pairs: [string, number][] = Object.keys(contribution).map((k) => [
+        const pairs: [string, number][] = Object.keys(fleetStrength).map((k) => [
           k,
-          contribution[k],
+          fleetStrength[k],
         ]);
         pairs.sort((a, b) => b[1] - a[1]);
         let roundOffDebt = 0;
@@ -368,7 +368,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           let ka = k.split(",");
           let fleet = fleets[ka[1]];
           let playerId = parseInt(ka[0]);
-          let c = (offense * contribution[k]) / attackersAggregate;
+          let c = (offense * fleetStrength[k]) / attackersAggregate;
           let intPart = Math.floor(c);
           let roundOff = c - intPart;
           roundOffDebt += roundOff;
@@ -376,12 +376,12 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             roundOffDebt -= 1.0;
             intPart++;
           }
-          contribution[k] = intPart;
-          newAggregate += contribution[k];
+          fleetStrength[k] = intPart;
+          newAggregate += fleetStrength[k];
           if (playerContribution[playerId]) {
-            playerContribution[playerId] += contribution[k];
+            playerContribution[playerId] += fleetStrength[k];
           } else {
-            playerContribution[playerId] = contribution[k];
+            playerContribution[playerId] = fleetStrength[k];
           }
           if (playerContribution[playerId] > biggestPlayer) {
             biggestPlayer = playerContribution[playerId];
@@ -390,18 +390,18 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           stanza.push(
             "    [[{0}]] has {1} on [[{2}]]".format(
               fleet.puid,
-              contribution[k],
+              fleetStrength[k],
               fleet.n
             )
           );
           let outcomeString = "Wins! {0} land\n+{1} to defend".format(
-            contribution[k],
+            fleetStrength[k],
             -defense
           );
           fleetOutcomes[fleet.uid] = {
             eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
             outcome: outcomeString,
-            strength: contribution[k]
+            strength: fleetStrength[k]
           };
         }
         if (NeptunesPride.gameVersion === "proteus") {
@@ -414,12 +414,12 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         starstate[starId].weapons = players[biggestPlayerId].tech.weapons.level;
         starstate[starId].ships = 0;
         offense = newAggregate;
-        for (let k in contribution) {
+        for (let k in fleetStrength) {
           let ka = k.split(",");
           const puid = parseInt(ka[0]);
           if (alliedFleet(galaxy.players, biggestPlayerId, puid)) {
-            offense -= contribution[k];
-            starstate[starId].ships += contribution[k];
+            offense -= fleetStrength[k];
+            starstate[starId].ships += fleetStrength[k];
             const arrivingWeapons = players[puid].tech.weapons.level;
             const existingWeapons = starstate[starId].weapons;
             starstate[starId].weapons = Math.max(
@@ -451,7 +451,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             };
           }
         }
-        for (const k in contribution) {
+        for (const k in fleetStrength) {
           let ka = k.split(",");
           let fleet = fleets[ka[1]];
           let outcomeString = "Loses! {0} live\n+{1} to win".format(
