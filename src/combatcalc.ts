@@ -128,7 +128,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       const departures: { [k: number]: DepartureRecord } = {};
       let origShips = 0;
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
-
+        origShips += 
       }
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
         if (fleet.o.length > 0) {
