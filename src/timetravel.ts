@@ -111,7 +111,7 @@ export function futureTime(
           } else {
             newFleet.etaFirst = 0;
           }
-          
+          stars[destUid] = newStar;
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
         fleets[fk] = newFleet;
