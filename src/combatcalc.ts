@@ -177,7 +177,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           if (delay >= tick) {
             fleetStrength[fleet.uid] = fleet.st;
             totalDefense += fleet.st;
-            if (departures[])
+            if (departures[delay - 1])
             const leaving =
               starstate[starId].departures[delay - 1].leaving + fleet.st;
             starstate[starId].departures[delay - 1] = { leaving, origShips };
