@@ -94,6 +94,7 @@ export function futureTime(
               newFleet.st += newStar.st;
               newStar.st = 0;
               break;
+            
 
           }
           
