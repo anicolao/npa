@@ -108,7 +108,7 @@ export function futureTime(
               transferred = argument;
               break;
             case FleetOrder.DropAllBut:
-              transferred = Math.
+              transferred = Math.max(0, )
               break;
             default:
               break;
