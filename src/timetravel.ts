@@ -87,6 +87,7 @@ export function futureTime(
           }
           newFleet.ouid = destUid;
           // Process current action
+          // Number of ships transfered from carrier to star.
           let transfered = 0;
           switch (action) {
             case FleetOrder.Nothing:
