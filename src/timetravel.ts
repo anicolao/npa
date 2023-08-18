@@ -95,12 +95,12 @@ export function futureTime(
               let amount = newStar.st;
             case FleetOrder.Collect:
               const amount = action === FleetOrder.CollectAll ? newStar.st : Math.min(newStar.st, argument);
-              newFleet.st += amount;
-              newStar.st -= amount;
               break;
             default:
               break;
           }
+              newFleet.st += amount;
+              newStar.st -= amount;
           
           // Process next order
           if (newFleet.o.length > 0) {
