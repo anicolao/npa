@@ -163,7 +163,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           (d: number) => players[d].tech.weapons.level
         )
       );
-      let totalDefense = 
+      let totalDefense = stars[starId].st;
       const fleetStrength: {[k:string]: number} = {};
       // TODO: Remove fleets departing this tick.
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
