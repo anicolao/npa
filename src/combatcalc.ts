@@ -290,7 +290,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
             fleet.puid
           )
         );
-        starstate[starId].fleetStrength[[fleet.puid, fleet.uid].toString()] = fleet.st;
+        starstate[starId].fleetStrength[fleet.uid].toString()] = fleet.st;
         let wt = players[fleet.puid].tech.weapons.level;
         if (wt > awt) {
           awt = wt;
