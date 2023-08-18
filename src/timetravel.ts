@@ -83,7 +83,7 @@ export function futureTime(
     
           newFleet.x = String(destX);
           newFleet.y = String(destY);
-          const 
+          const p
           newFleet.o = newFleet.o.slice(1);
 
           // Update fleet as a result of battle
