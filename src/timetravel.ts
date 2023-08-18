@@ -106,6 +106,7 @@ export function futureTime(
           }
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
+        fleets[fk] = newFleet;
       } else if (fleets[fk].orbiting) {
         // apply star combat outcome if any
         let starstate = staroutcomes[fleets[fk].ouid];
