@@ -77,6 +77,7 @@ export function futureTime(
               */
           // Update fleet as a result of battle
           
+          // Process next order
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
             const nextDestination = stars[nextDestUid];
