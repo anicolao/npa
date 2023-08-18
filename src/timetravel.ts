@@ -29,7 +29,7 @@ export function futureTime(
     const players = newState.players;
     for (const sk in stars) {
       const star = stars[sk];
-      const stars
+      const starstate = 
       if (star.v === "1") {
         if (star.i > 0) {
           const ticksPerDay = newState.production_rate;
