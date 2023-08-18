@@ -458,7 +458,57 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         } while (defeatedDefense > 0);
         stanza.push("  +{0} more attackers needed".format(-offense));
         starstate[starId].ships = defense;
-        
+        const pairs: [string, number][] = Object.keys(starstate[starId].fleetStrength).map((k) => [
+          k,
+          starstate[starId].fleetStrength[k],
+        ]);
+        pairs.sort((a, b) => b[1] - a[1]);
+        let roundOffDebt = 0;
+        for (let i = 0; i < pairs.length; ++i) {
+          let k = pairs[i][0];
+          let fleet = fleets[k];
+          if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
+            starstate[starId].fleetStrength[fleet.uid] = 0;
+          } else {
+            let playerId = fleet.puid;
+            let c = (offense * starstate[starId].fleetStrength[k]) / attackersAggregate;
+            let intPart = Math.floor(c);
+            let roundOff = c - intPart;
+            roundOffDebt += roundOff;
+            if (roundOffDebt > 0.0) {
+              roundOffDebt -= 1.0;
+              intPart++;
+            }
+            starstate[starId].fleetStrength[k] = intPart;
+            newAggregate += starstate[starId].fleetStrength[k];
+            if (playerContribution[playerId]) {
+              playerContribution[playerId] += starstate[starId].fleetStrength[k];
+            } else {
+              playerContribution[playerId] = starstate[starId].fleetStrength[k];
+            }
+            if (playerContribution[playerId] > biggestPlayer) {
+              biggestPlayer = playerContribution[playerId];
+              biggestPlayerId = playerId;
+            }
+            stanza.push(
+              "    [[{0}]] has {1} on [[{2}]]".format(
+                fleet.puid,
+                starstate[starId].fleetStrength[k],
+                fleet.n
+              )
+            );
+            let outcomeString = "Wins! {0} land\n+{1} to defend".format(
+              starstate[starId].fleetStrength[k],
+              -defense
+            );
+            fleetOutcomes[fleet.uid] = {
+              eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
+              outcome: outcomeString,
+              strength: starstate[starId].fleetStrength[k]
+            };
+          }
+        }
+
         for (const i in arrival) {
           let fleet = arrival[i];
           if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
