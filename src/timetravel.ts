@@ -77,6 +77,7 @@ export function futureTime(
             newFleet.eta -= 1;
             newFleet.ouid = undefined;
           }
+          newFleet.etaFirst -= 1;
         } else {
           const newStar = { ...destination };
     
