@@ -99,6 +99,7 @@ export function futureTime(
       }
     }
   }
+  newState.stars = stars;
   newState.fleets = fleets;
   return newState;
 }
