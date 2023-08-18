@@ -203,7 +203,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         departures: {},
         weapons,
         production: stars[starId].shipsPerTick,
-        departures,
         fleetStrength
       };
     }
