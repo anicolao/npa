@@ -165,7 +165,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       );
       const fleetStrength = {};
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
-        
+        fleetStrength[fleet.uid] = fleet.
       }
       starstate[starId] = {
         last_updated: 0,
