@@ -168,6 +168,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       // TODO: Remove fleets departing this tick.
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
         fleetStrength[fleet.uid] = fleet.st;
+        totalDefense += fleet.st;
       }
       starstate[starId] = {
         last_updated: 0,
