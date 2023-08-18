@@ -39,7 +39,7 @@ export function futureTime(
         stars[sk] = newStar;
       }
       if (newStar.v === "1") {
-        if (star.i > 0) {
+        if (newStar.i > 0) {
           const ticksPerDay = newState.production_rate;
           const industry = star.i;
           const manufacturing = players[star.puid].tech.manufacturing.level;
