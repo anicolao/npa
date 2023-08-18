@@ -457,6 +457,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           defeatedDefense -= awt;
         } while (defeatedDefense > 0);
         stanza.push("  +{0} more attackers needed".format(-offense));
+        
         starstate[starId].ships = defense;
         for (const i in arrival) {
           let fleet = arrival[i];
