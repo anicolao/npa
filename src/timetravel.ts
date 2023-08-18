@@ -30,14 +30,6 @@ export function futureTime(
     for (const sk in stars) {
       const star = stars[sk];
       const newStar = { ...star };
-      const starstate = staroutcomes[sk];
-      if (starstate !== undefined) {
-        if (newStar.v === "1") {
-          newStar.st = starstate.st;
-        }
-        newStar.puid = starstate.puid;
-        stars[sk] = newStar;
-      }
       if (newStar.v === "1" && star.v === "1") {
         if (newStar.i > 0) {
           const ticksPerDay = newState.production_rate;
