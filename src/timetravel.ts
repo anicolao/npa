@@ -115,6 +115,9 @@ export function futureTime(
           fleets[fk] = newFleet;
         }
       }
+      if (fleets[fk].st === 0) {
+        
+      }
     }
   }
   newState.stars = stars;
