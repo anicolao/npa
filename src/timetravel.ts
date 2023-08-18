@@ -20,6 +20,7 @@ export function futureTime(
     logCount("error_back_to_the_future");
     return newState;
   }
+  const fleets = { ...newState.fleets };
   for (let i = 0; i < tickOffset; ++i) {
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes);
