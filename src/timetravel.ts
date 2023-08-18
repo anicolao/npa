@@ -28,6 +28,7 @@ export function futureTime(
     newState.tick += 1;
     const players = newState.players;
     for (const sk in stars) {
+      const newStar = { ...star };
       const star = stars[sk];
       const starstate = staroutcomes[sk];
       if (starstate !== undefined) {
@@ -39,7 +40,6 @@ export function futureTime(
           const industry = star.i;
           const manufacturing = players[star.puid].tech.manufacturing.level;
           const production = (industry * (manufacturing + 5)) / ticksPerDay;
-          const newStar = { ...star };
           newStar.st += production + newStar.c;
           newStar.c = newStar.st - Math.floor(newStar.st);
           newStar.st = Math.floor(newStar.st);
