@@ -172,7 +172,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       // TODO: Remove fleets departing this tick or before maxTick.
       for (const fleet of galaxy.stars[starId].fleetsInOrbit) {
         if (fleet.o.length > 0) {
-          
+          const 
         }
         fleetStrength[fleet.uid] = fleet.st;
         totalDefense += fleet.st;
