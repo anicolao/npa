@@ -3837,6 +3837,7 @@ function NeptunesPrideAgent() {
     if (NeptunesPride.gameConfig.turnBased) {
       timeTravelTick += NeptunesPride.gameConfig.turnJumpTicks;
     } else {
+      if (timeTravelTick === -1)
       timeTravelTick += 1;
     }
     timeTravel("forwards");
