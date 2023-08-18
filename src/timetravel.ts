@@ -99,7 +99,7 @@ export function futureTime(
               transferred = -argument;
               break;
             case FleetOrder.CollectAllBut:
-              transferred = -newStar.st + argument
+              transferred = Math.min(0, -newStar.st + argument);
               break;
             default:
               break;
