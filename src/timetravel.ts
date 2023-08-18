@@ -75,7 +75,7 @@ export function futureTime(
                 stars[destUid] = newStar;
               }
               */
-
+          // Update fleet 
           
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
