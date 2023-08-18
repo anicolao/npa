@@ -94,6 +94,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
   for (const i in flights) {
     let fleet = flights[i][2];
     /*
+    
     if (fleet.orbiting) {
       let orbit: string = fleet.orbiting.uid;
       if (!starstate[orbit]) {
