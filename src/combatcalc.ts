@@ -369,7 +369,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         let roundOffDebt = 0;
         for (let i = 0; i < pairs.length; ++i) {
           let k = pairs[i][0];
-          let ka = k.split(",");
           let fleet = fleets[ka[1]];
           let playerId = parseInt(ka[0]);
           let c = (offense * fleetStrength[k]) / attackersAggregate;
