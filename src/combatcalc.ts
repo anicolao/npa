@@ -312,7 +312,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       }
     }
     let attackersAggregate = offense;
-    let attackersAggregate = d;
+    let attackersAggregate = defense;
     while (offense > 0) {
       let dwt = starstate[starId].weapons;
       let defense = starstate[starId].ships;
