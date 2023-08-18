@@ -65,6 +65,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
       let stop = fleet.o[0][1];
       let ticks = fleet.etaFirst;
       if (maxTick !== undefined && ticks > maxTick)
+        continue;
       let starname = stars[stop]?.n;
       if (!starname) {
         continue;
