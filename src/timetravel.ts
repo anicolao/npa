@@ -85,7 +85,9 @@ export function futureTime(
           newFleet.y = String(destY);
           const firstOrder = newFleet.o[0];
           newFleet.o = newFleet.o.slice(1);
-          if (newFleet.loop === 1)
+          if (newFleet.loop === 1) {
+            
+          }
 
           // Update fleet as a result of battle
           let starstate = staroutcomes[destUid];
