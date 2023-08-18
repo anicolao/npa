@@ -239,6 +239,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         let oldc = starstate[starId].c;
         starstate[starId].ships +=
           starstate[starId].production * tickDelta + oldc;
+        starstate[starId].st += 
         starstate[starId].c =
           starstate[starId].ships - Math.trunc(starstate[starId].ships);
         starstate[starId].ships -= starstate[starId].c;
