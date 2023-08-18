@@ -419,7 +419,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         offense = newAggregate;
         for (let k in starstate[starId].fleetStrength) {
           const fleet = fleets[k];
-          const puid = 
+          const puid = fleet.puid;
           if (alliedFleet(galaxy.players, biggestPlayerId, puid)) {
             offense -= fleetStrength[k];
             starstate[starId].ships += fleetStrength[k];
