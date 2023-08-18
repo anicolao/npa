@@ -27,6 +27,24 @@ export function futureTime(
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
     const players = newState.players;
+    for (const sk in stars) {
+      const star = stars[sk];
+      if (star.v === "1") {
+        if (star.i > 0) {
+          const ticksPerDay = newState.production_rate;
+          const industry = star.i;
+          const manufacturing = players[star.puid].tech.manufacturing.level;
+          const production = (industry * (manufacturing + 5)) / ticksPerDay;
+          const newStar = { ...star };
+          newStar.st += production + newStar.c;
+          newStar.c = newStar.st - Math.floor(newStar.st);
+          newStar.st = Math.floor(newStar.st);
+          newStar.totalDefenses += newStar.st - star.st;
+          stars[sk] = newStar;
+        }
+      }
+    }
+
     for (const fk in fleets) {
       if (fleets[fk].o.length > 0) {
         const newFleet = { ...fleets[fk] };
