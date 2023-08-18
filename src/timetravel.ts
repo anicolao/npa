@@ -35,6 +35,8 @@ export function futureTime(
         if (newStar.v === "1") {
           if (starstate.puid !== newStar.puid) {
             newStar.st = 0;
+          } else {
+            // TODO: Update 
           }
           
         }
