@@ -86,7 +86,7 @@ export function futureTime(
           const firstOrder = newFleet.o[0];
           newFleet.o = newFleet.o.slice(1);
           if (newFleet.loop === 1) {
-            newFleet.o.push()
+            newFleet.o.push(firstOrder);
           }
 
           // Update fleet as a result of battle
