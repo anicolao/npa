@@ -3838,7 +3838,7 @@ function NeptunesPrideAgent() {
       timeTravelTick += NeptunesPride.gameConfig.turnJumpTicks;
     } else {
       if (timeTravelTick === -1) {
-        timeTravelTick = 
+        timeTravelTick = Neptunes
       }
       timeTravelTick += 1;
     }
