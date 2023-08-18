@@ -75,6 +75,8 @@ export function futureTime(
                 stars[destUid] = newStar;
               }
               */
+
+          
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
             const nextDestination = stars[nextDestUid];
@@ -93,7 +95,7 @@ export function futureTime(
         fleets[fk] = newFleet;
       } else if (fleets[fk].orbiting) {
         // apply star combat outcome if any
-        
+
       }
     }
   }
