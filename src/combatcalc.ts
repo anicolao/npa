@@ -484,7 +484,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
               intPart++;
             }
             if (k === "star") {
-
+              starstate[starId].st = intPart;
             } else {
               starstate[starId].fleetStrength[k] = intPart;
             }
