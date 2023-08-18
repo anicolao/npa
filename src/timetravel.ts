@@ -33,7 +33,7 @@ export function futureTime(
       const starstate = staroutcomes[sk];
       if (starstate !== undefined) {
         if (newStar.v === "1") {
-          newStar.st = 
+          newStar.st = star
           if (starstate.puid !== newStar.puid) {
             newStar.st = 0;
           } else {
