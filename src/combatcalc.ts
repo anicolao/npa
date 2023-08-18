@@ -422,7 +422,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
           const puid = fleet.puid;
           if (alliedFleet(galaxy.players, biggestPlayerId, puid)) {
             offense -= starstate[starId].fleetStrength[k];
-            starstate[starId].ships += fleetStrength[k];
+            starstate[starId].ships += starstate[starId].fleetStrength[k];
             const arrivingWeapons = players[puid].tech.weapons.level;
             const existingWeapons = starstate[starId].weapons;
             starstate[starId].weapons = Math.max(
