@@ -36,7 +36,7 @@ export interface SpaceObject {
   x: string;
   y: string;
 }
-enum FleetOrder {
+export enum FleetOrder {
   Nothing = 0,
   CollectAll,
   DropAll,
