@@ -462,6 +462,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         } while (defeatedDefense > 0);
         stanza.push("  +{0} more attackers needed".format(-offense));
         starstate[starId].ships = defense;
+        
         const pairs: [string, number][] = Object.keys(starstate[starId].fleetStrength).map((k) => [
           k,
           starstate[starId].fleetStrength[k],
