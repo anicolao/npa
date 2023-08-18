@@ -90,6 +90,8 @@ export function futureTime(
               break;
             case FleetOrder.CollectAll:
               newFleet.st += stars[destUid].st;
+              stars[destUid].st = 0;
+              break;
               
           }
           
