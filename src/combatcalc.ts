@@ -40,6 +40,7 @@ export interface DepartureRecord {
 export interface StarState {
   last_updated: number;
   ships: number;
+  st: number;
   puid: number;
   c: number;
   departures: { [k: number]: DepartureRecord };
