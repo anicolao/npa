@@ -75,6 +75,7 @@ export function futureTime(
           if (starstate) {
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
+          newFleet.orbiting = destUid;
           
           // Process next order
           if (newFleet.o.length > 0) {
