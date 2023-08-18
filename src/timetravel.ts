@@ -98,7 +98,9 @@ export function futureTime(
             case FleetOrder.Collect:
               transferred = -argument;
               break;
-            case FleetOrder.CollectAllBut
+            case FleetOrder.CollectAllBut:
+              transferred = 
+              break;
             default:
               break;
           }
