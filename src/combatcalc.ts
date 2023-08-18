@@ -488,15 +488,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
                 fleet.n
               )
             );
-            let outcomeString = "Wins! {0} land\n+{1} to defend".format(
-              starstate[starId].fleetStrength[k],
-              -defense
-            );
-            fleetOutcomes[fleet.uid] = {
-              eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
-              outcome: outcomeString,
-              strength: starstate[starId].fleetStrength[k]
-            };
           }
         }
         for (const i in arrival) {
