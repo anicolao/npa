@@ -185,8 +185,8 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
               };
             } else {
               const leaving =
-              starstate[orbit].departures[tick].leaving + fleet.st;
-              starstate[orbit].departures[tick] = { leaving, origShips };
+              starstate[starId].departures[tick].leaving + fleet.st;
+              starstate[starId].departures[tick] = { leaving, origShips };
             }
             const leaving =
               starstate[starId].departures[delay - 1].leaving + fleet.st;
