@@ -99,9 +99,9 @@ export function futureTime(
             default:
               break;
           }
-              newFleet.st += amount;
-              newStar.st -= amount;
-          
+          newFleet.st += amount;
+          newStar.st -= amount;
+      
           // Process next order
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
