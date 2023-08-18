@@ -77,6 +77,7 @@ export function futureTime(
           newFleet.y = String(y + sy);
           newFleet.etaFirst -= 1;
           newFleet.eta -= 1;
+          newFleet.ouid = 
         } else {
           newFleet.x = String(destX);
           newFleet.y = String(destY);
