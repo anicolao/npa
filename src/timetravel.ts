@@ -111,7 +111,7 @@ export function futureTime(
               transferred = Math.max(0, newFleet.st - argument);
               break;
             case FleetOrder.Garrison:
-              transferred = -newStar.st + argument
+              transferred = -newStar.st + argument;
               break;
             default:
               break;
