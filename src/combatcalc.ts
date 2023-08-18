@@ -483,6 +483,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
               roundOffDebt -= 1.0;
               intPart++;
             }
+            if (k === "star")
             starstate[starId].fleetStrength[k] = intPart;
             stanza.push(
               "    [[{0}]] has {1} on [[{2}]]".format(
