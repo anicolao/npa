@@ -44,7 +44,6 @@ export function futureTime(
           newStar.c = newStar.st - Math.floor(newStar.st);
           newStar.st = Math.floor(newStar.st);
           newStar.totalDefenses += newStar.st - star.st;
-          stars[sk] = newStar;
         }
       }
     }
