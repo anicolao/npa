@@ -45,7 +45,6 @@ export interface StarState {
   departures: { [k: number]: DepartureRecord };
   weapons: number;
   production: number;
-  contribution: { [k: string]: number };
 }
 export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
   const galaxy = NeptunesPride.universe.galaxy;
@@ -272,6 +271,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
     }
     let awt = 0;
     let offense = 0;
+    let contribution: { [k: string]: number } = {};
     for (const i in arrival) {
       let fleet = arrival[i];
       if (!alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
