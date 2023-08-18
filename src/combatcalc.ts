@@ -137,6 +137,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         }
       }
     }
+    */
     if (
       arrivalTimes.length === 0 ||
       arrivalTimes[arrivalTimes.length - 1] !== flights[i][0]
