@@ -75,7 +75,7 @@ export function futureTime(
           newFleet.ouid = undefined;
         } else {
           const star = stars[destUid];
-          const newStar = { ...star };
+          const newStar = { ...destination };
     
           newFleet.x = String(destX);
           newFleet.y = String(destY);
