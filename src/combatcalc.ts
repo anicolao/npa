@@ -271,7 +271,6 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
     }
     let awt = 0;
     let offense = 0;
-    let contribution: { [k: string]: number } = {};
     for (const i in arrival) {
       let fleet = arrival[i];
       if (!alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
