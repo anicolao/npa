@@ -43,6 +43,14 @@ export function futureTime(
           stars[sk] = newStar;
         }
       }
+      const starstate = staroutcomes[sk];
+      if (starstate !== undefined) {
+        if (newStar.v === "1") {
+          newStar.st = starstate.st;
+        }
+        newStar.puid = starstate.puid;
+        stars[sk] = newStar;
+      }
     }
     for (const fk in fleets) {
       const newFleet = { ...fleets[fk] };
