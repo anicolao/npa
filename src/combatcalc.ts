@@ -53,6 +53,7 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
 }
 
 export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k: string]: StarState }) => {
+  console.log("NEW ComputeCombatOutcomes called")
   const players = galaxy.players;
   let fleets = galaxy.fleets;
   let stars = galaxy.stars;
