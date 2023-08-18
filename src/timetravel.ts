@@ -91,8 +91,7 @@ export function futureTime(
         }
         [newFleet.lx, newFleet.ly] = [lx, ly];
         fleets[fk] = newFleet;
-      }
-      if (fleets[fk].orbiting) { 
+      } else if (fleets[fk].orbiting) { 
         // apply star combat outcome if any
       }
     }
