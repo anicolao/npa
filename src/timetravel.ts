@@ -80,7 +80,7 @@ export function futureTime(
           newFleet.eta -= 1;
         } else {
           const newStar = { ...destination };
-    
+
           newFleet.x = String(destX);
           newFleet.y = String(destY);
           const firstOrder = newFleet.o[0];
@@ -95,32 +95,32 @@ export function futureTime(
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.ouid = destUid;
-            if (newFleet.st > 0) {
+          if (newFleet.st > 0) {
             // Process current action
             // Number of ships transfered from carrier to star.
             let transferred = 0;
             switch (action) {
-                case FleetOrder.Nothing:
+              case FleetOrder.Nothing:
                 break;
-                case FleetOrder.CollectAll:
+              case FleetOrder.CollectAll:
                 transferred = -newStar.st;
                 break;
-                case FleetOrder.Collect:
+              case FleetOrder.Collect:
                 transferred = -argument;
                 break;
-                case FleetOrder.CollectAllBut:
+              case FleetOrder.CollectAllBut:
                 transferred = Math.min(0, -newStar.st + argument);
                 break;
-                case FleetOrder.DropAll:
+              case FleetOrder.DropAll:
                 transferred = newFleet.st;
                 break;
-                case FleetOrder.Drop:
+              case FleetOrder.Drop:
                 transferred = argument;
                 break;
-                case FleetOrder.DropAllBut:
+              case FleetOrder.DropAllBut:
                 transferred = Math.max(0, newFleet.st - argument);
                 break;
-                case FleetOrder.Garrison:
+              case FleetOrder.Garrison:
                 transferred = -newStar.st + argument;
                 break;
             }
@@ -128,8 +128,8 @@ export function futureTime(
             transferred = Math.min(newFleet.st - 1, transferred);
             newFleet.st -= transferred;
             newStar.st += transferred;
-            }
-      
+          }
+
           // Process next order
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
@@ -137,9 +137,8 @@ export function futureTime(
             newFleet.warpSpeed =
               nextDestination.ga === destination.ga ? nextDestination.ga : 0;
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
-            newFleet.etaFirst = delay + Math.ceil(
-              dist(destination, nextDestination) / speed
-            );
+            newFleet.etaFirst =
+              delay + Math.ceil(dist(destination, nextDestination) / speed);
           } else {
             newFleet.etaFirst = 0;
           }
