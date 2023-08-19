@@ -95,40 +95,40 @@ export function futureTime(
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.ouid = destUid;
-          if (newFleet.st > 0) {
-          // Process current action
-          // Number of ships transfered from carrier to star.
-          let transferred = 0;
-          switch (action) {
-            case FleetOrder.Nothing:
-              break;
-            case FleetOrder.CollectAll:
-              transferred = -newStar.st;
-              break;
-            case FleetOrder.Collect:
-              transferred = -argument;
-              break;
-            case FleetOrder.CollectAllBut:
-              transferred = Math.min(0, -newStar.st + argument);
-              break;
-            case FleetOrder.DropAll:
-              transferred = newFleet.st;
-              break;
-            case FleetOrder.Drop:
-              transferred = argument;
-              break;
-            case FleetOrder.DropAllBut:
-              transferred = Math.max(0, newFleet.st - argument);
-              break;
-            case FleetOrder.Garrison:
-              transferred = -newStar.st + argument;
-              break;
-          }
-          transferred = Math.max(-newStar.st, transferred);
-          transferred = Math.min(newFleet.st - 1, transferred);
-          newFleet.st -= transferred;
-          newStar.st += transferred;
-        }
+        if (newFleet.st > 0) {
+            // Process current action
+            // Number of ships transfered from carrier to star.
+            let transferred = 0;
+            switch (action) {
+                case FleetOrder.Nothing:
+                break;
+                case FleetOrder.CollectAll:
+                transferred = -newStar.st;
+                break;
+                case FleetOrder.Collect:
+                transferred = -argument;
+                break;
+                case FleetOrder.CollectAllBut:
+                transferred = Math.min(0, -newStar.st + argument);
+                break;
+                case FleetOrder.DropAll:
+                transferred = newFleet.st;
+                break;
+                case FleetOrder.Drop:
+                transferred = argument;
+                break;
+                case FleetOrder.DropAllBut:
+                transferred = Math.max(0, newFleet.st - argument);
+                break;
+                case FleetOrder.Garrison:
+                transferred = -newStar.st + argument;
+                break;
+            }
+            transferred = Math.max(-newStar.st, transferred);
+            transferred = Math.min(newFleet.st - 1, transferred);
+            newFleet.st -= transferred;
+            newStar.st += transferred;
+            }
       
           // Process next order
           if (newFleet.o.length > 0) {
