@@ -128,6 +128,7 @@ export function futureTime(
           transferred = Math.min(newFleet.st - 1, transferred);
           newFleet.st -= transferred;
           newStar.st += transferred;
+        }
       
           // Process next order
           if (newFleet.o.length > 0) {
