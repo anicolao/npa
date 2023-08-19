@@ -95,6 +95,7 @@ export function futureTime(
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.ouid = destUid;
+          if (newFleet.st > 0) {
           // Process current action
           // Number of ships transfered from carrier to star.
           let transferred = 0;
