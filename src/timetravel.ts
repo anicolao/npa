@@ -1,5 +1,5 @@
 import { computeCombatOutcomes, StarState } from "./combatcalc";
-import { dist, FleetOrder, ScanningData } from "./galaxy";
+import { dist, FleetOrder, ScanningData, techCost } from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
 
@@ -43,7 +43,8 @@ export function futureTime(
         player.tech = {...player.tech};
         const tech = player.tech[player.researching] = {...player.tech[player.researching]};
         tech.research += player.total_science;
-        // TODO: Finish research.
+        const cost = techCost(tech, tech.level + 1);
+        console.log(`${player.researching} costs ${cost}`);
       }
     }
     newState.now += galaxy.tick_rate * 60 * 1000;
