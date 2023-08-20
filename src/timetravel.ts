@@ -39,7 +39,6 @@ export function futureTime(
       newState.production_counter = 0;
     }
     newState.now += galaxy.tick_rate * 60 * 1000;
-    const players = newState.players;
     for (const sk in stars) {
       const star = stars[sk];
       const newStar = { ...star };
