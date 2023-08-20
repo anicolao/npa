@@ -27,6 +27,10 @@ export function futureTime(
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
     newState.production_counter += 1;
+    if (newState.production_counter >= newState.production_rate) {
+      // TODO: Production.
+      newState.production_counter = 0;
+    }
     newState.now += galaxy.tick_rate * 60 * 1000;
     const players = newState.players;
     for (const sk in stars) {
