@@ -115,3 +115,10 @@ export type Star = UnscannedStar | ScannedStar;
 export function dist(s1: SpaceObject, s2: SpaceObject) {
   return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
 };
+
+export function techCost(tech: { brr: number; level: number }) {
+  if (NeptunesPride.gameVersion !== "proteus") {
+    return tech.brr * tech.level;
+  }
+  return tech.brr * tech.level * tech.level * tech.level;
+};
