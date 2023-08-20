@@ -47,6 +47,7 @@ export function futureTime(
         if (tech.research >= cost) {
           tech.research -= cost;
           tech.level += 1;
+          player.researching = player.researching_next;
         }
       }
     }
