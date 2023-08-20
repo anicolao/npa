@@ -25,18 +25,7 @@ export function futureTime(
   const players = { ...newState.players };
   for (let i = 0; i < tickOffset; ++i) {
     const staroutcomes: { [k: string]: StarState } = {};
-    computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
-    newState.tick += 1;
-    newState.production_counter += 1;
-    if (newState.production_counter >= newState.production_rate) {
-      for (let pind in players) {
-        if (players[pind].cash !== undefined) {
-          const player = players[pind] = {...players[pind]};
-          player.cash += player.total_economy * 10;
-        }
-      }
-      newState.production_counter = 0;
-    }
+    // Research before computing combat outcomes.
     for (let pind in players) {
       if (players[pind].researching !== undefined) {
         const player = players[pind] = {...players[pind]};
@@ -50,6 +39,18 @@ export function futureTime(
           player.researching = player.researching_next;
         }
       }
+    }
+    computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
+    newState.tick += 1;
+    newState.production_counter += 1;
+    if (newState.production_counter >= newState.production_rate) {
+      for (let pind in players) {
+        if (players[pind].cash !== undefined) {
+          const player = players[pind] = {...players[pind]};
+          player.cash += player.total_economy * 10;
+        }
+      }
+      newState.production_counter = 0;
     }
     newState.now += galaxy.tick_rate * 60 * 1000;
     for (const sk in stars) {
