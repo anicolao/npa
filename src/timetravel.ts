@@ -29,7 +29,6 @@ export function futureTime(
     newState.tick += 1;
     newState.production_counter += 1;
     if (newState.production_counter >= newState.production_rate) {
-      // TODO: Production.
       for (let pind in players) {
         if (players[pind].cash !== undefined) {
           const player = players[pind] = {...players[pind]};
@@ -37,6 +36,15 @@ export function futureTime(
         }
       }
       newState.production_counter = 0;
+    }
+    for (let pind in players) {
+      if (players[pind].researching !== undefined) {
+        const player = players[pind] = {...players[pind]};
+        player.tech = {...player.tech};
+        const tech = player.tech[player.researching] = {...player.tech[player.researching]};
+        tech.research += player.total_science;
+        // TODO: Finish research.
+      }
     }
     newState.now += galaxy.tick_rate * 60 * 1000;
     for (const sk in stars) {
