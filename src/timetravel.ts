@@ -44,7 +44,10 @@ export function futureTime(
         const tech = player.tech[player.researching] = {...player.tech[player.researching]};
         tech.research += player.total_science;
         const cost = techCost(tech, tech.level + 1);
-        console.log(`${player.researching} costs ${cost}`);
+        if (tech.research >= cost) {
+          tech.research -= cost;
+          tech.level += 1;
+        }
       }
     }
     newState.now += galaxy.tick_rate * 60 * 1000;
