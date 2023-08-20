@@ -26,6 +26,7 @@ export function futureTime(
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
+    newState.now += galaxy.tick_rate * 60 * 1000;
     const players = newState.players;
     for (const sk in stars) {
       const star = stars[sk];
