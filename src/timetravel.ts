@@ -98,8 +98,8 @@ export function futureTime(
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
           newFleet.ouid = destUid;
-          if (newFleet.st > 0) {
-            // Process current action
+          // Process current action if this player owns the star
+          if (newFleet.st > 0 && newFleet.puid === newStar.puid) {
             // Number of ships transfered from carrier to star.
             let transferred = 0;
             switch (action) {
