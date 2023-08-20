@@ -38,7 +38,7 @@ import {
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { setupAutocomplete } from "./autocomplete";
-import { dist, Player, ScannedStar, SpaceObject, Star } from "./galaxy";
+import { dist, techCost, Player, ScannedStar, SpaceObject, Star } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
 import {
@@ -3966,12 +3966,6 @@ function NeptunesPrideAgent() {
       return level * level * 5;
     }
     return level * NeptunesPride.gameConfig.tradeCost;
-  };
-  const techCost = function (tech: { brr: number; level: number }) {
-    if (NeptunesPride.gameVersion !== "proteus") {
-      return tech.brr * tech.level;
-    }
-    return tech.brr * tech.level * tech.level * tech.level;
   };
   let techTable = function (
     output: Stanzas,
