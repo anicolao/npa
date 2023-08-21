@@ -47,7 +47,7 @@ export function futureTime(
       for (let pind in players) {
         if (players[pind].cash !== undefined) {
           const player = players[pind] = {...players[pind]};
-          player.cash += player.total_economy * 10;
+          player.cash += player.total_economy * 10 + 75 * player.tech.banking.level;
         }
       }
       newState.production_counter = 0;
