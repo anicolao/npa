@@ -493,7 +493,7 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         for (const k in starstate[starId].fleetStrength) {
           let fleet = fleets[k];
           if (fleet === undefined) {
-            console.error(`failed to find fleet `)
+            console.error(`failed to find fleet ${k}`)
           }
           let outcomeString = "Loses! {0} live\n+{1} to win".format(
             defense,
