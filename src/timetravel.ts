@@ -49,7 +49,7 @@ export function futureTime(
       if (starstate !== undefined) {
         if (newStar.v === "1") {
           // TODO: check this more carefully
-          if (starstate.st > newStar.st || starstate.puid !== newStar.puid) {
+          if (starstate.st > newStar.st || starstate.puid != newStar.puid) {
             newStar.st = starstate.st;
           }
         }
