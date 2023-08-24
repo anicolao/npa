@@ -365,6 +365,10 @@ export const computeCombatOutcomes = (galaxy: ScanningData, staroutcomes?: { [k:
         for (let i = 0; i < pairs.length; ++i) {
           let k = pairs[i][0];
           let fleet = fleets[k];
+          if (fleet === undefined) {
+            console.error(`failed to find fleet ${k}`);
+            continue;
+          }
           if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid)) {
             starstate[starId].fleetStrength[fleet.uid] = 0;
           } else {
