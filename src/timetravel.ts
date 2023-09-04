@@ -59,10 +59,6 @@ export function futureTime(
     }
     for (const fk in fleets) {
       const newFleet = { ...fleets[fk], l: fleets[fk].loop };
-        if (newFleet.orbiting) {
-            newFleet.warpSpeed =
-              orbiting.ga === destination.ga ? destination.ga : 0;
-        }
       if (fleets[fk].o.length > 0 && stars[fleets[fk].o[0][1]] !== undefined) {
         const [delay, destUid, action, argument] = fleets[fk].o[0];
         const destination = stars[destUid];
