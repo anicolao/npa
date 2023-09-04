@@ -64,7 +64,7 @@ export function futureTime(
         const destination = stars[destUid];
         if (newFleet?.orbiting) {
             newFleet.warpSpeed =
-              orbiting.ga === destination.ga ? destination.ga : 0;
+              newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
         }
         const [destX, destY] = [
           parseFloat(destination.x),
