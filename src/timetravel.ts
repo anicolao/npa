@@ -65,7 +65,7 @@ export function futureTime(
         if (newFleet?.orbiting) {
             newFleet.warpSpeed =
               newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
-              newFleet.w = newFleet.console.warn();
+            newFleet.w = newFleet.warpSpeed;
               
         }
         const [destX, destY] = [
