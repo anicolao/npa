@@ -147,6 +147,7 @@ export function futureTime(
             const nextDestination = stars[nextDestUid];
             newFleet.warpSpeed =
               nextDestination.ga === destination.ga ? nextDestination.ga : 0;
+            newFleet.w = newFleet.warpSpeed;
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             newFleet.etaFirst =
               delay + Math.ceil(dist(destination, nextDestination) / speed);
