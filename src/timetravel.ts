@@ -157,7 +157,7 @@ export function futureTime(
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             newFleet.etaFirst =
               delay + Math.ceil(dist(destination, nextDestination) / speed);
-            if (newFleet.uid === NeptunesPride.universe.selectedFleet.uid) {
+            if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`)
             }
           } else {
