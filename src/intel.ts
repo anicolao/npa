@@ -2784,7 +2784,7 @@ function NeptunesPrideAgent() {
       if (!s) {
         return "error";
       }
-    console.log("hi", NeptunesPride.templates["status"]);
+    console.log(s)
       var i;
       var fp;
       var sp;
