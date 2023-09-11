@@ -66,7 +66,7 @@ export function futureTime(
             newFleet.warpSpeed =
               newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
             newFleet.w = newFleet.warpSpeed;
-            if (newFleet.uid === NeptunesPride.universe.selectedFleet.uid) {
+            if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`)
             }
         }
