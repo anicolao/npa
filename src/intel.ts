@@ -2775,7 +2775,7 @@ function NeptunesPrideAgent() {
       return s.replaceAll(symbols, "_").toLowerCase();
     }
     const noGotoAddition: String[] = ["ctrl+a", "ctrl+`"];
-    NeptunesPride.templates["confirm_send_bulktech"] =
+    NeptunesPride.templates["status"] =
     Crux.format = function (s: string, templateData: { [x: string]: any }) {
       let formatTime = Crux.formatTime;
       if (templateData?.linkTimes === false) {
