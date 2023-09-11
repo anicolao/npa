@@ -2787,7 +2787,7 @@ function NeptunesPrideAgent() {
 
     if (s.startsWith("Credits")) {
       console.log(s)
-      NeptunesPride.templates["inspector_info_player"] = 'Credits: $[[cash]] &nbsp;&nbsp;&nbsp;&nbsp; Production: [[nextProduction]]'
+      NeptunesPride.templates["inspector_info_player"] = '$[[cash]] &nbsp;&nbsp;&nbsp;&nbsp; Production: [[nextProduction]]'
     }
       var i;
       var fp;
