@@ -2781,6 +2781,7 @@ function NeptunesPrideAgent() {
         formatTime = timeText;
         templateData.linkTimes = undefined;
       }
+    NeptunesPride.templates["status"];
       if (!s) {
         return "error";
       }
