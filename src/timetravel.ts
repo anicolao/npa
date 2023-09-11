@@ -59,6 +59,7 @@ export function futureTime(
     }
     for (const fk in fleets) {
       const newFleet = { ...fleets[fk], l: fleets[fk].loop };
+              console.log(`Processing Fleet ${newFleet.n} `)
       if (fleets[fk].o.length > 0 && stars[fleets[fk].o[0][1]] !== undefined) {
         const [delay, destUid, action, argument] = fleets[fk].o[0];
         const destination = stars[destUid];
@@ -66,6 +67,7 @@ export function futureTime(
             newFleet.warpSpeed =
               newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
             newFleet.w = newFleet.warpSpeed;
+              console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w}`)
         }
         const [destX, destY] = [
           parseFloat(destination.x),
@@ -148,6 +150,9 @@ export function futureTime(
             newFleet.warpSpeed =
               nextDestination.ga === destination.ga ? nextDestination.ga : 0;
             newFleet.w = newFleet.warpSpeed;
+            //if (newFleet.uid === NeptunesPride.universe.selectedFleet.uid) {
+              console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w}`)
+            //}
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             newFleet.etaFirst =
               delay + Math.ceil(dist(destination, nextDestination) / speed);
