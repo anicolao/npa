@@ -68,9 +68,7 @@ export function futureTime(
             newFleet.w = newFleet.warpSpeed;
             if (newFleet.uid === NeptunesPride.universe.selectedFleet.uid) {
               console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w}`)
-            if (newFleet.uid === NeptunesPride.universe.selectedFleet.uid) {
               console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestUid}`)
-            }
             }
         }
         const [destX, destY] = [
