@@ -2785,6 +2785,7 @@ function NeptunesPrideAgent() {
         return "error";
       }
 
+    if (s.startsWith("Credits"))
     console.log(s)
       var i;
       var fp;
