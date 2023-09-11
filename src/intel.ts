@@ -2785,10 +2785,6 @@ function NeptunesPrideAgent() {
         return "error";
       }
 
-    if (s.startsWith("Credits")) {
-      console.log(s)
-      NeptunesPride.templates["inspector_info_player"] = '$[[cash]] &nbsp; Prod: [[nextProduction]]'
-    }
       var i;
       var fp;
       var sp;
