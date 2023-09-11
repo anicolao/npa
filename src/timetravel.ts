@@ -82,6 +82,8 @@ export function futureTime(
           } else {
             const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
             const [dx, dy] = [destX - x, destY - y];
+            if (newFleet.uid === NeptunesPride.universe.selectedFleet.uid) {
+              console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`)
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
             const [sx, sy] = [dx * factor, dy * factor];
