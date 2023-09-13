@@ -51,7 +51,7 @@ import {
 } from "./reports";
 import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
 import { isSafari } from "./useragent";
-import { futureTime } from "./timetravel";
+import { futureTime, resetAliases } from "./timetravel";
 import { alliedFleet, combatInfo, combatOutcomes, fleetOutcomes, handicapString, StarState } from "./combatcalc";
 
 interface CruxLib {
