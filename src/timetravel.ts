@@ -7,6 +7,14 @@ export interface TimeMachineData {
   futureTime: boolean;
 }
 
+  const resetAliases = () => {
+    const universe = NeptunesPride.universe;
+    for (let pk in universe.galaxy.players) {
+      const player = universe.galaxy.players[pk];
+      player.alias = player.rawAlias;
+    }
+  };
+
 export function futureTime(
   galaxy: ScanningData,
   tickOffset: number
