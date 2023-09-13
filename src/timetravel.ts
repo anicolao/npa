@@ -7,7 +7,7 @@ export interface TimeMachineData {
   futureTime: boolean;
 }
 
-  const resetAliases = () => {
+  export function resetAliases = () => {
     const universe = NeptunesPride.universe;
     for (let pk in universe.galaxy.players) {
       const player = universe.galaxy.players[pk];
