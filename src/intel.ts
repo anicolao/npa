@@ -3783,6 +3783,7 @@ function NeptunesPrideAgent() {
         if (dir === "forwards") {
           const tickOffset = (timeTravelTick - NeptunesPride.universe.galaxy.tick);
           const newGalaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
+          resetAliases();
           NeptunesPride.np.onFullUniverse(null, newGalaxy);
         } else if (dir === "back") {
           warpTime(null, `${trueTick}`);
