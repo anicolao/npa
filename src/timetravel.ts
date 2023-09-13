@@ -7,13 +7,13 @@ export interface TimeMachineData {
   futureTime: boolean;
 }
 
-  export function resetAliases() {
-    const universe = NeptunesPride.universe;
-    for (let pk in universe.galaxy.players) {
-      const player = universe.galaxy.players[pk];
-      player.alias = player.rawAlias;
-    }
-  };
+export function resetAliases() {
+  const universe = NeptunesPride.universe;
+  for (let pk in universe.galaxy.players) {
+    const player = universe.galaxy.players[pk];
+    player.alias = player.rawAlias;
+  }
+}
 
 export function futureTime(
   galaxy: ScanningData,
@@ -71,12 +71,14 @@ export function futureTime(
         const [delay, destUid, action, argument] = fleets[fk].o[0];
         const destination = stars[destUid];
         if (newFleet?.orbiting) {
-            newFleet.warpSpeed =
-              newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
-            newFleet.w = newFleet.warpSpeed;
-            if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
-              console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`)
-            }
+          newFleet.warpSpeed =
+            newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
+          newFleet.w = newFleet.warpSpeed;
+          if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
+            console.log(
+              `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`
+            );
+          }
         }
         const [destX, destY] = [
           parseFloat(destination.x),
@@ -91,7 +93,9 @@ export function futureTime(
             const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
             const [dx, dy] = [destX - x, destY - y];
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
-              console.log(`Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n}`)
+              console.log(
+                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n}`
+              );
             }
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
@@ -166,7 +170,9 @@ export function futureTime(
             newFleet.etaFirst =
               delay + Math.ceil(dist(destination, nextDestination) / speed);
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
-              console.log(`Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`)
+              console.log(
+                `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`
+              );
             }
           } else {
             newFleet.etaFirst = 0;
@@ -189,9 +195,11 @@ export function futureTime(
     }
     for (let pind in players) {
       if (players[pind].researching !== undefined) {
-        const player = players[pind] = {...players[pind]};
-        player.tech = {...player.tech};
-        const tech = player.tech[player.researching] = {...player.tech[player.researching]};
+        const player = (players[pind] = { ...players[pind] });
+        player.tech = { ...player.tech };
+        const tech = (player.tech[player.researching] = {
+          ...player.tech[player.researching],
+        });
         tech.research += player.total_science;
         const cost = techCost(tech, tech.level + 1);
         if (tech.research >= cost) {
@@ -204,8 +212,9 @@ export function futureTime(
     if (newState.production_counter >= newState.production_rate) {
       for (let pind in players) {
         if (players[pind].cash !== undefined) {
-          const player = players[pind] = {...players[pind]};
-          player.cash += player.total_economy * 10 + 75 * player.tech.banking.level;
+          const player = (players[pind] = { ...players[pind] });
+          player.cash +=
+            player.total_economy * 10 + 75 * player.tech.banking.level;
         }
       }
       newState.production_counter = 0;
