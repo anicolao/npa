@@ -3645,13 +3645,6 @@ function NeptunesPrideAgent() {
     }
     return true;
   };
-  const resetAliases = () => {
-    const universe = NeptunesPride.universe;
-    for (let pk in universe.galaxy.players) {
-      const player = universe.galaxy.players[pk];
-      player.alias = player.rawAlias;
-    }
-  };
   const mergeScanData = (scan: any) => {
     const universe = NeptunesPride.universe;
     resetAliases();
