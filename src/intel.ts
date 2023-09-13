@@ -3774,6 +3774,7 @@ function NeptunesPrideAgent() {
     return clone(scan);
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
+    resetAliases();
     const scans = allSeenKeys
       .map((k) => getTimeTravelScan(k, dir))
       .filter((scan) => scan && scan.tick === timeTravelTick);
