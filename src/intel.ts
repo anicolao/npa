@@ -3774,7 +3774,6 @@ function NeptunesPrideAgent() {
     return clone(scan);
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
-    resetAliases();
     const scans = allSeenKeys
       .map((k) => getTimeTravelScan(k, dir))
       .filter((scan) => scan && scan.tick === timeTravelTick);
@@ -3783,6 +3782,7 @@ function NeptunesPrideAgent() {
         // we are in future time machine
         if (dir === "forwards") {
           const tickOffset = (timeTravelTick - NeptunesPride.universe.galaxy.tick);
+          resetAliases();
           const newGalaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
           NeptunesPride.np.onFullUniverse(null, newGalaxy);
         } else if (dir === "back") {
