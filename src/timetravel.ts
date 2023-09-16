@@ -58,6 +58,7 @@ export function futureTime(
         if (newStar.v === "1") {
           // TODO: check this more carefully
           // This definitely caused a bug; I can't remember now what it was meant to fix?
+          // The bug it caused was 
           //if (starstate.st > newStar.st || starstate.puid != newStar.puid) {
             newStar.st = starstate.st;
           //}
