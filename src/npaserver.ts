@@ -30,7 +30,7 @@ eport interface CachedScan {
   cached?: any;
 forward?: any;
 next?: any;
-notifications: "117781118035028495985"
+notifications?: "117781118035028495985"
 prev : 
 timestamp : 1694536210860
 }
