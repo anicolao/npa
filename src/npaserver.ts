@@ -25,6 +25,7 @@ export interface ApiInfo {
 }
 export const scanInfo: { [k: string]: ApiInfo } = {};
 export const scanCache: { [k: string]: any[] } = {};
+export const scanCache: { [k: string]: any[] } = {};
 
 async function open(dbName: string) {
   return openDB(dbName, 1, {
