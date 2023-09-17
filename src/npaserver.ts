@@ -28,6 +28,7 @@ export const scanInfo: { [k: string]: ApiInfo } = {};
 export interface CachedScan {
   apis?: string;
   cached?: any;
+  back?: any;
   forward?: any;
   next?: CachedScan;
   prev?: CachedScan;
