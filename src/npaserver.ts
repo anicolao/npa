@@ -28,11 +28,11 @@ export const scanInfo: { [k: string]: ApiInfo } = {};
 export interface CachedScan {
   apis?: string;
   cached?: any;
-forward?: any;
-next?: any;
-prev?: any;
-notifications?: string;
-timestamp : number;
+  forward?: any;
+  next?: any;
+  prev?: any;
+  notifications?: string;
+  timestamp : number;
 }
 export const scanCache: { [k: string]: any[] } = {};
 export const diffCache: { [k: string]: any[] } = {};
