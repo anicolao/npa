@@ -25,7 +25,7 @@ export interface ApiInfo {
 }
 export const scanInfo: { [k: string]: ApiInfo } = {};
 
-apis
+apis: string;
 : 
 undefined
 cached
