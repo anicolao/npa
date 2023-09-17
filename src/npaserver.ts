@@ -35,8 +35,7 @@ forward
 next
 : 
 notifications : "117781118035028495985"
-prev
-: 
+prev : 
 undefined
 timestamp
 : 
