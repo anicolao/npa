@@ -36,9 +36,7 @@ next
 : 
 notifications : "117781118035028495985"
 prev : 
-timestamp
-: 
-1694536210860
+timestamp : 1694536210860
 export const scanCache: { [k: string]: any[] } = {};
 export const diffCache: { [k: string]: any[] } = {};
 
