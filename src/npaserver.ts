@@ -29,7 +29,7 @@ export interface CachedScan {
   apis?: string;
   cached?: any;
   forward?: any;
-  next?: any;
+  next?: CachedScan;
   prev?: CachedScan;
   notifications?: string;
   timestamp : number;
