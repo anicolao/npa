@@ -34,9 +34,7 @@ forward
 : 
 next
 : 
-notifications
-: 
-"117781118035028495985"
+notifications : "117781118035028495985"
 prev
 : 
 undefined
