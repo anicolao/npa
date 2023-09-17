@@ -25,7 +25,7 @@ export interface ApiInfo {
 }
 export const scanInfo: { [k: string]: ApiInfo } = {};
 
-eport interface CachedScan {
+export interface CachedScan {
   apis?: string;
   cached?: any;
 forward?: any;
