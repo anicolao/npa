@@ -32,7 +32,7 @@ forward?: any;
 next?: any;
 prev?: any;
 notifications?: string;
-timestamp : 1694536210860
+timestamp : number;
 }
 export const scanCache: { [k: string]: any[] } = {};
 export const diffCache: { [k: string]: any[] } = {};
