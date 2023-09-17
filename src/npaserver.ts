@@ -28,7 +28,7 @@ export const scanInfo: { [k: string]: ApiInfo } = {};
 eport interface CachedScan {
   apis?: string;
   cached?: any;
-forward
+forward?: any;
 next
 notifications : "117781118035028495985"
 prev : 
