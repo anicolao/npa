@@ -24,27 +24,7 @@ export interface ApiInfo {
   puid: number;
 }
 export const scanInfo: { [k: string]: ApiInfo } = {};
-apis
-: 
-undefined
-cached
-: 
-{fleets: {…}, fleet_speed: 0.041666666666666664, paused: false, productions: 0, tick_fragment: 0.28367333333333333, …}
-forward
-: 
-{fleets: {…}, tick_fragment: 0.28499555555555556, now: 1694538012882, stars: {…}, production_counter: 1, …}
-next
-: 
-{apis: undefined, notifications: '117781118035028495985', timestamp: 1694538013066, cached: {…}, prev: {…}, …}
-notifications
-: 
-"117781118035028495985"
-prev
-: 
-undefined
-timestamp
-: 
-1694536210860
+
 export const scanCache: { [k: string]: any[] } = {};
 export const diffCache: { [k: string]: any[] } = {};
 
