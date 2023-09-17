@@ -30,7 +30,7 @@ export interface CachedScan {
   cached?: any;
   forward?: any;
   next?: any;
-  prev?: any;
+  prev?: CachedScan;
   notifications?: string;
   timestamp : number;
 }
