@@ -263,7 +263,7 @@ export async function getServerScans(apikey: string) {
     ),
     (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
-        console.log("Diff update", change);
+        console.log("Diff update received: ", change);
       });
     },
     (error) => {
