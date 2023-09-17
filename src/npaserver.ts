@@ -32,10 +32,8 @@ cached
 : 
 forward
 : 
-{fleets: {…}, tick_fragment: 0.28499555555555556, now: 1694538012882, stars: {…}, production_counter: 1, …}
 next
 : 
-{apis: undefined, notifications: '117781118035028495985', timestamp: 1694538013066, cached: {…}, prev: {…}, …}
 notifications
 : 
 "117781118035028495985"
