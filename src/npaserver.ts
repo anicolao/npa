@@ -32,7 +32,6 @@ forward?: any;
 next?: any;
 prev?: any;
 notifications?: string;
-prev : 
 timestamp : 1694536210860
 }
 export const scanCache: { [k: string]: any[] } = {};
