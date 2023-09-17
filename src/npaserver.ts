@@ -27,9 +27,7 @@ export const scanInfo: { [k: string]: ApiInfo } = {};
 
 apis: string;
 cached:
-: 
 forward
-: 
 next
 : 
 notifications : "117781118035028495985"
