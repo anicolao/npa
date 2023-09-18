@@ -280,12 +280,12 @@ export async function getServerScans(apikey: string) {
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         const cached = JSON.parse(patches["initial_scan"].stringValue);
         if (diffCache[apikey] === undefined) {
-        diffCache[apikey] = [
-          {
-            cached
-          }
-        ];
-      }
+          diffCache[apikey] = [
+            {
+              cached
+            }
+          ];
+        }
         timestamps.forEach(timestamp => {
           const forward = JSON.parse(patches[timestamp].stringValue);
           if (diffCache[apikey] === undefined) {
