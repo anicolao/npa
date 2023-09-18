@@ -452,7 +452,6 @@ function walkToScan(apikey: string, index: number) {
       logCount(`error_undefined_forward`);
     }
     diffCache[apikey][++last].cached = patch(scanContent, forward);
-    
   }
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
