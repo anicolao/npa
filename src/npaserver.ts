@@ -476,15 +476,15 @@ function walkToScan(apikey: string, index: number) {
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
   const oldRet = parseScan(scans[index]);
-try {
-  const newRet = walkToScan(apikey, index);
-  const nullDiff = diff(oldRet, newRet);
-  if (nullDiff !== null) {
-    console.error(`getScan return values won't match `, oldRet, newRet);
-  } else {
-    console.log(`Success on ${apikey} @ ${index}!`)
-  }
-} catch (err) {
+  try {
+    const newRet = walkToScan(apikey, index);
+    const nullDiff = diff(oldRet, newRet);
+    if (nullDiff !== null) {
+      console.error(`getScan return values won't match `, oldRet, newRet);
+    } else {
+      console.log(`Success on ${apikey} @ ${index}!`)
+    }
+  } catch (err) {
 
 }
   return oldRet;
