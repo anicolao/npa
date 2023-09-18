@@ -214,6 +214,7 @@ export async function getServerScans(apikey: string) {
             if (i < len) {
               scanCache[apikey][i].next = scanCache[apikey][i + 1];
             }
+            const scanExists = getScan(apikey, i);
             const scanExists = scanCache[apikey][i];
             if (!scanExists || scanExists?.tick === undefined) {
               console.error(
