@@ -300,8 +300,8 @@ export async function getServerScans(apikey: string) {
           const scanCacheEntry = scanCache[apikey][i];
           const nullDiff = diff(entry, scanCacheEntry);
           if (nullDiff !== null) {
+            
           }
-
         })
       });
     },
