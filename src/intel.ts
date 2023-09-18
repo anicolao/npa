@@ -1202,7 +1202,7 @@ function NeptunesPrideAgent() {
     if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
       faReport();
     }
-    if (NeptunesPride.gameConfig.alliances && relativeTick) {
+    if (NeptunesPride.gameConfig.alliances) {
       if (relativeTick > 0) {
         annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
         const currentTick = tickNumber(0);
