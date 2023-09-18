@@ -33,7 +33,7 @@ export interface CachedScan {
   next?: CachedScan;
   prev?: CachedScan;
   notifications?: string;
-  timestamp : number;
+  timestamp: number;
 }
 export const scanCache: { [k: string]: any[] } = {};
 export const diffCache: { [k: string]: any[] } = {};
