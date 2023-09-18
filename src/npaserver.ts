@@ -306,7 +306,6 @@ export async function getServerScans(apikey: string) {
           diffCache[apikey].push({
             cached, back, timestamp
           });
-          incoming.push(diffCache[apikey][last+1]);
           if (last > 0) {
             diffCache[apikey][last].cached = undefined;
           }
