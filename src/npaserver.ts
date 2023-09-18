@@ -288,7 +288,6 @@ export async function getServerScans(apikey: string) {
         let patches = doc.data() as any;
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         const originalLength = diffCache[apikey] ? diffCache[apikey].length : 0;
-        const incoming: any[] = [];
         if (diffCache[apikey] === undefined) {
           const cached = JSON.parse(patches["initial_scan"]).scanning_data;
           diffCache[apikey] = [
