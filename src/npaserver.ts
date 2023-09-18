@@ -276,7 +276,7 @@ export async function getServerScans(apikey: string) {
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   trimInvalidEntries(apikey);
   const diffskey = `scandiffs/${gameid}/${apikey}`;
-  const diffTimestamp = diffCache[apikey] ? [offset].timestamp;
+  const diffTimestamp = diffCache[apikey] ? diffCache[apikey]
   const unsubDiffs = onSnapshot(
     query(
       collection(firestore, diffskey),
