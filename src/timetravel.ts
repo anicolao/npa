@@ -13,8 +13,7 @@ export function resetAliases() {
     const player = universe.galaxy.players[pk];
     player.alias = player.rawAlias;
     if (player.conceded === 1 || player.conceded === 2) {
-      
-
+      player.alias += 
     }
   }
 }
