@@ -1216,7 +1216,7 @@ function NeptunesPrideAgent() {
             console.log(`Stop checking @ ${annal.tick} v ${currentTick}`)
             break;
           }
-          if (annal.tick > tick) {
+          if (annal.tick > ) {
             console.log(`Skip future tick ${annal.tick}`)
             continue;
           }
