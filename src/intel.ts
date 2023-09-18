@@ -1243,7 +1243,7 @@ function NeptunesPrideAgent() {
       warMap[fleetOwnerId] == 0 ||
       warMap[starOwnerId] == 0 ||
       knownAlliances?.[fleetOwnerId]?.[starOwnerId]
-    ) && starOwnerId === fleetOwnerId;
+    );
   };
   interface DepartureRecord {
     leaving: number;
