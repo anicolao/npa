@@ -298,6 +298,7 @@ export async function getServerScans(apikey: string) {
           diffCache[apikey].push({
             cached, back
           });
+          if (last > 0) 
           diffCache[apikey][last].cached = undefined;
         });
         console.log("Diff update received: ", change, diffCache, scanCache);
