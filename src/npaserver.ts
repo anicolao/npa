@@ -435,7 +435,7 @@ function parseScan(scan: any) {
   }
   return scan.cached;
 }
-export function getScan(apikey: string, index: number): ScanningData {
+export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
   return parseScan(scans[index]);
 }
