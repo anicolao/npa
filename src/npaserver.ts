@@ -345,7 +345,8 @@ export async function getServerScans(apikey: string) {
               console.error(`Index ${i} matches on cached!`);
             }
           }
-        })
+        }
+        )
       });
     },
     (error) => {
