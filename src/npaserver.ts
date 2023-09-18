@@ -37,35 +37,35 @@ export interface CachedScan {
 }
 const scanCache: { [k: string]: any[] } = {};
 const diffCache: { [k: string]: any[] } = {};
-  function validateDiffCache(apikey: string) {
-    function validateEntry(entry: any, i: number, skipCached?: boolean): void {
-      const scanCacheEntry = scanCache[apikey][i];
-      if (entry.timestamp !== scanCacheEntry.timestamp) {
-        console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
-      }
-      if (entry.forward) {
-        const nullDiff = diff(entry.forward, scanCacheEntry.forward);
-        if (nullDiff !== null) {
-          console.error(`Index ${i} doesn't match`, nullDiff);
-        }
-      }
-      if (entry.back) {
-        const nullDiff = diff(entry.back, scanCacheEntry.back);
-        if (nullDiff !== null) {
-          console.error(`Index ${i} doesn't match on back`, nullDiff);
-        } 
-      }
-      if (entry.cached && !skipCached) {
-        const nullDiff = diff(entry.cached, scanCacheEntry.cached);
-        if (nullDiff !== null) {
-          console.error(`Index ${i} doesn't match on cached`, nullDiff);
-        } else {
-          console.error(`Index ${i} matches on cached!`);
-        }
+function validateDiffCache(apikey: string) {
+  function validateEntry(entry: any, i: number, skipCached?: boolean): void {
+    const scanCacheEntry = scanCache[apikey][i];
+    if (entry.timestamp !== scanCacheEntry.timestamp) {
+      console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
+    }
+    if (entry.forward) {
+      const nullDiff = diff(entry.forward, scanCacheEntry.forward);
+      if (nullDiff !== null) {
+        console.error(`Index ${i} doesn't match`, nullDiff);
       }
     }
-    diffCache[apikey].forEach((entry, i) => validateEntry(entry, i));
+    if (entry.back) {
+      const nullDiff = diff(entry.back, scanCacheEntry.back);
+      if (nullDiff !== null) {
+        console.error(`Index ${i} doesn't match on back`, nullDiff);
+      } 
+    }
+    if (entry.cached && !skipCached) {
+      const nullDiff = diff(entry.cached, scanCacheEntry.cached);
+      if (nullDiff !== null) {
+        console.error(`Index ${i} doesn't match on cached`, nullDiff);
+      } else {
+        console.error(`Index ${i} matches on cached!`);
+      }
+    }
   }
+  diffCache[apikey].forEach((entry, i) => validateEntry(entry, i));
+}
 
 export function countScans(apikey: string) {
   if (scanCache[apikey] && diffCache[apikey])
