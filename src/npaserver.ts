@@ -440,6 +440,16 @@ let lastScan: { [k: string]: number } = {};
 function walkToScan(apikey: string, index: number) {
   let last = lastScan[apikey] || 0;
   while (index > last) {
+        let scanContent = scan.prev.cached;
+        if (scan.prev.prev) {
+          scan.prev.cached = undefined;
+        } else {
+          scanContent = window.structuredClone(scanContent);
+        }
+        if (scan.prev.forward === undefined) {
+          console.error("Patching with undefined forward");
+        }
+        scan.cached = patch(scanContent, scan.prev.forward);
     
   }
 }
