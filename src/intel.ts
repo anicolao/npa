@@ -5162,7 +5162,7 @@ function NeptunesPrideAgent() {
       const code = getCodeFromApiText(key);
       if (countScans(code) > 0) {
         let last = countScans(code) - 1;
-        let eof = getScan(code,last)?.eof;
+        let eof = getScan(code, last)?.eof;
         let scan = getScan(code, last);
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
