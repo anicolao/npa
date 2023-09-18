@@ -1205,7 +1205,7 @@ function NeptunesPrideAgent() {
         annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
         for (let a = 0; i < annals.length; ++a) {
           const annal = annals[a];
-          if (annal.)
+          if (annal.tick )
         }
         console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
       }
