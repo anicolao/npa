@@ -467,7 +467,6 @@ function walkToScan(apikey: string, index: number) {
     }
     diffCache[apikey][--last].cached = patch(scanContent, back);
   }
-  lastScan[apiKey] = last;
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
