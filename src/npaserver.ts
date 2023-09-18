@@ -46,7 +46,7 @@ function validateDiffCache(apikey: string) {
     if (entry.forward) {
       const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       if (nullDiff !== null) {
-        console.error(`Index ${i} doesn't match on forward`, { nullDiff);
+        console.error(`Index ${i} doesn't match on forward`, { nullDiff, );
       }
     }
     if (entry.back) {
