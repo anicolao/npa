@@ -12,7 +12,7 @@ export function resetAliases() {
   const universe = NeptunesPride.universe;
   for (let i = 0; i < messageCache.game_event.length; ++i) {
     if (messageCache.game_event.payload.template === 'goodbye_to_player') {
-    console.log(messageCache.game_event[i]);
+      console.log(messageCache.game_event[i]);
     }
   }
   for (let pk in universe.galaxy.players) {
