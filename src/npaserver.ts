@@ -462,7 +462,7 @@ function walkToScan(apikey: string, index: number) {
       diffCache[apikey][last].cached = undefined;
     }
     if (!back) {
-      console.error("Patching with undefined vack");
+      console.error("Patching with undefined back");
       logCount(`error_undefined_back`);
     }
     diffCache[apikey][++last].cached = patch(scanContent, forward);
