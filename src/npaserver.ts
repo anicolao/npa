@@ -97,7 +97,7 @@ export async function restoreFromDB(gameId: number, apikey: string) {
   if (!scanCache[apikey] || scanCache[apikey].length === 0) {
     try {
       diffCache[apikey] = await restore(gameId, apikey, "diffCache");
-      console.log(`Restored diff cache from db: ${scanCache[apikey].length}`);
+      console.log(`Restored diff cache from db: ${dif[apikey].length}`);
       scanCache[apikey] = await restore(gameId, apikey, "scanCache");
       console.log(`Restored scan cache from db: ${scanCache[apikey].length}`);
     } catch (err) {
