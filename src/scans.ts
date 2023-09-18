@@ -15,7 +15,7 @@ export class ScanKeyIterator {
     this.apikey = getCodeFromApiText(apilink);
     if (countScans(this.apikey) > 0) {
       this.currentScanRecord =
-      this.currentScanData =  getScan(this.apikey,0);clone(this.currentScanRecord.cached);
+      this.currentScanData =  getScan(this.apikey,0);
     } else this.currentScanRecord = undefined;
   }
   getScanRecord() {
