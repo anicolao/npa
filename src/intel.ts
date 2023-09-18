@@ -1419,6 +1419,8 @@ function NeptunesPrideAgent() {
         }
       }
       for (const i in arrival) {
+        let ka = i.split(",");
+        let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (
           alliedFleet(fleet.puid, starstate[starId].puid) ||
