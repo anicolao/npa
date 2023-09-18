@@ -290,7 +290,7 @@ export async function getServerScans(apikey: string) {
         timestamps.forEach(timestamp => {
           const forward = JSON.parse(patches[timestamp]).scanning_data;
           const last = diffCache[apikey].length - 1;
-          diffCache[apikey][last] = { ...diffCache[apikey][last], forward, timestamp: "foo" };
+          diffCache[apikey][last] = { ...diffCache[apikey][last], forward, timestamp };
           const priorCache = window.structuredClone(diffCache[apikey][last].cached);
           console.log({priorCache, forward })
           const cached = patch(priorCache, forward);
