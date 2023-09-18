@@ -292,7 +292,7 @@ export async function getServerScans(apikey: string) {
           const last = diffCache[apikey].length - 1;
           diffCache[apikey][last] = { ...diffCache[apikey][last], forward };
           diffCache[apikey].push({
-            cached
+            cached, back
           });
           } else {
             diffCache[apikey].push({ forward });
