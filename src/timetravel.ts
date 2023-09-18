@@ -22,7 +22,8 @@ export function resetAliases() {
       }
     }
   }
-  const modSymbols = [ "&#128161;&#x1F4A1;", "👁", "⏳", "⏳"];
+  const modSymbols = [ "&#128161;&#x1F4A1;", "&#128065;
+  &#x1F441;", "⏳", "⏳"];
   for (let pk in universe.galaxy.players) {
     const player = universe.galaxy.players[pk];
     player.alias = player.rawAlias;
