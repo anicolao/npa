@@ -95,7 +95,7 @@ export async function restoreFromDB(gameId: number, apikey: string, newDB: boole
   if (!scanCache[apikey] || scanCache[apikey].length === 0) {
     try {
       if (newDB) {
-        diffCache[apikey] = scanCache[apikey] = await restore(gameId, apikey);
+        diffCache[apikey] = await restore(gameId, apikey);
       } else {
         diffCache[apikey] = scanCache[apikey] = await restore(gameId, apikey);
       }
