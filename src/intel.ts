@@ -4216,6 +4216,7 @@ function NeptunesPrideAgent() {
     dir: "back" | "forwards",
   ) {
     const scans = scanCache[getCodeFromApiText(apikey)];
+    const scans = scanCache[getCodeFromApiText(apikey)];
     if (!scans || scans.length === 0) return null;
     let timeTravelTickIndex = dir === "back" ? scans.length - 1 : 0;
     if (timeTravelTickIndices[apikey] !== undefined) {
