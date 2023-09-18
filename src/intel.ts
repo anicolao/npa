@@ -3062,7 +3062,7 @@ function NeptunesPrideAgent() {
         let fleets = NeptunesPride.universe.galaxy.fleets;
         for (const f in fleets) {
           let fleet = fleets[f];
-          if (alliedFleet(fleet.puid, universe.player.uid)) {
+          if (alliedFleet(fleet.puid, universe.player.uid, 0)) {
             let dx = universe.selectedStar.x - fleet.x;
             let dy = universe.selectedStar.y - fleet.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
