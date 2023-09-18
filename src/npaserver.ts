@@ -440,7 +440,6 @@ let lastScan: { [k: string]: number } = {};
 function walkToScan(apikey: string, index: number) {
   const last = lastScan[apikey] || 0;
   while (index > last) {
-
   }
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
