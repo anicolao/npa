@@ -64,6 +64,7 @@ const diffCache: { [k: string]: any[] } = {};
             }
           }
         }
+        }
         diffCache[apikey].forEach((entry, i) => validateEntry(entry, i));
 
 export function countScans(apikey: string) {
