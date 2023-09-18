@@ -447,9 +447,8 @@ function walkToScan(apikey: string, index: number) {
     } else {
       diffCache[apikey][last].cached = undefined;
     }
-    if (!forward) {}
-        if (scan.prev.forward === undefined) {
-          console.error("Patching with undefined forward");
+    if (!forward) {
+        console.error("Patching with undefined forward");
         }
         scan.cached = patch(scanContent, scan.prev.forward);
     
