@@ -16,7 +16,7 @@ export function resetAliases() {
     if (payload.template === 'goodbye_to_player' && universe.galaxy.tick >= payload.tick) {
       players[payload.uid].exitTick = payload.tick;
       players[payload.uid].modTick = (universe.galaxy.tick - payload.tick) % 4;
-    } else if (payload.uid && players[payload.uid].ai === 1)
+    } else if (payload.uid && players[payload.uid].ai === 1) {}
       console.log(messageCache.game_event[i]);
   }
   for (let pk in universe.galaxy.players) {
