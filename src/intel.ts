@@ -1202,6 +1202,17 @@ function NeptunesPrideAgent() {
     if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
       faReport();
     }
+      if (relativeTick > 0) {
+        annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
+        const currentTick = tickNumber(0);
+        for (let a = 0; i < annals.length; ++a) {
+          const annal = annals[a];
+          if (annal.tick <= currentTick) break;
+          if (annal.p1 == fleetOwnerId && annal.p0 == starOwnerId && annal.war === "war") return false;
+          if (annal.p0 == fleetOwnerId && annal.p1 == starOwnerId && annal.war === "war") return false;
+        }
+        console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
+      }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
