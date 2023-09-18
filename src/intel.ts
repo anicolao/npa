@@ -1214,6 +1214,7 @@ function NeptunesPrideAgent() {
         }
         console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
       }
+    }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
