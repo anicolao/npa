@@ -1206,6 +1206,7 @@ function NeptunesPrideAgent() {
       if (relativeTick > 0) {
         annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
         const currentTick = tickNumber(0);
+        con
         for (let a = 0; a < annals.length; ++a) {
           const annal = annals[a];
           if (annal.tick <= currentTick) break;
