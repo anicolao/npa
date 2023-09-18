@@ -280,7 +280,7 @@ export async function getServerScans(apikey: string) {
   const unsubDiffs = onSnapshot(
     query(
       collection(firestore, diffskey),
-      where("latest", ">", timestamp * 0),
+      where("latest", ">", diffTtimestamp * 0),
       orderBy("latest"),
     ),
     (querySnapshot) => {
