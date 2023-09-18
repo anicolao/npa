@@ -215,6 +215,7 @@ export async function getServerScans(apikey: string) {
               scanCache[apikey][i].next = scanCache[apikey][i + 1];
             }
             const scanExists = getScan(apikey, i);
+            const scanExists = scanCache[apikey][i];
             if (!scanExists || scanExists?.tick === undefined) {
               console.error(
                 `Invalid: cannot find good scan data @ index ${i} for ${apikey}`,
