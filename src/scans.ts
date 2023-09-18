@@ -1,5 +1,5 @@
 import { Heap } from "./heap";
-import { countScans } from "./npaserver";
+import { countScans, getScan } from "./npaserver";
 import { clone, patch } from "./patch";
 
 export const getCodeFromApiText = (key: string) => {
