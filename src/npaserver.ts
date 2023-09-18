@@ -39,7 +39,7 @@ const scanCache: { [k: string]: any[] } = {};
 const diffCache: { [k: string]: any[] } = {};
 
 export function countScans(apikey: string) {
-  return scanCache[apikey] && scanCache[apikey].length > 0;
+  if (scanCache[apikey] && scanCache[apikey].length > 0;
 }
 
 async function open(dbName: string) {
