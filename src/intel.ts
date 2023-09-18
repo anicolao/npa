@@ -1611,7 +1611,7 @@ function NeptunesPrideAgent() {
           for (let k in contribution) {
             let ka = k.split(",");
             const puid = parseInt(ka[0]);
-            if (alliedFleet(biggestPlayerId, puid)) {
+            if (alliedFleet(biggestPlayerId, puid, tick)) {
               offense -= contribution[k];
               starstate[starId].ships += contribution[k];
               const arrivingWeapons = players[puid].tech.weapons.level;
