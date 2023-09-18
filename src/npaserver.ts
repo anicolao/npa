@@ -280,7 +280,7 @@ export async function getServerScans(apikey: string) {
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         diffCache[apiKey] = [
           {
-            
+            cached
           }
         ]
         timestamps.forEach(timestamp => {
