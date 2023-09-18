@@ -2541,7 +2541,7 @@ function NeptunesPrideAgent() {
       do {
         i -= 1;
         const candidate = sortedByDistanceSquared[i];
-        const allied = alliedFleet(candidate.puid, star.puid);
+        const allied = alliedFleet(candidate.puid, star.puid, 0);
         if (!allied && (closest === star || stepsOut > 0)) {
           closest = candidate;
           stepsOut--;
