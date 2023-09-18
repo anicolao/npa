@@ -305,7 +305,9 @@ export async function getServerScans(apikey: string) {
         console.log("Diff update received: ", change, diffCache, scanCache);
         diffCache[apikey].forEach((entry, i) => {
           const scanCacheEntry = scanCache[apikey][i];
-          if (entry.timestamp !== scanC)
+          if (entry.timestamp !== scanCacheEntry.timestamp) {
+            console.error(`Timestamp mismatch for ${i}: ${entry.timestamp}`)
+          }
           if (entry.forward) {
             const nullDiff = diff(entry.forward, scanCacheEntry.forward);
             if (nullDiff !== null) {
