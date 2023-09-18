@@ -39,7 +39,7 @@ const scanCache: { [k: string]: any[] } = {};
 const diffCache: { [k: string]: any[] } = {};
 
 export function countScans(apikey: string) {
-  if (scanCache[apikey])
+  if (scanCache[apikey] && diffCache[apikey])
     return scanCache[apikey].length;
   return 0;
 }
