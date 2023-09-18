@@ -1,5 +1,5 @@
 import { Heap } from "./heap";
-import { countScans, getScan } from "./npaserver";
+import { countScans } from "./npaserver";
 import { clone, patch } from "./patch";
 
 export const getCodeFromApiText = (key: string) => {
@@ -14,8 +14,8 @@ export class ScanKeyIterator {
   constructor(apilink: string) {
     this.apikey = getCodeFromApiText(apilink);
     if (countScans(this.apikey) > 0) {
-      this.currentScanRecord = 0;
-      this.currentScanData =  getScan(this.apikey,0);
+      this.currentScanRecord = scanCache[this.apikey][0];
+      this.currentScanData = clone(this.currentScanRecord.cached);
     } else this.currentScanRecord = undefined;
   }
   getScanRecord() {
