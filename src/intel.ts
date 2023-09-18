@@ -3785,7 +3785,6 @@ function NeptunesPrideAgent() {
           resetAliases();
           const newGalaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
           NeptunesPride.np.onFullUniverse(null, newGalaxy);
-          console.log(NeptunesPride.universe.galaxy.players[42].alias)
         } else if (dir === "back") {
           warpTime(null, `${trueTick}`);
         }
