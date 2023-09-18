@@ -14,9 +14,6 @@ export function resetAliases() {
     const player = universe.galaxy.players[pk];
     player.alias = player.rawAlias;
     if (player.ai === 1 || player.ready === 1) {
-      for (let i = 0; i < messageCache.game_event.length; ++i) {
-        console.log(messageCache.game_event[i]);
-      }
       player.alias += `${player.ready} `
     }
   }
