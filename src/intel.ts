@@ -4243,7 +4243,7 @@ function NeptunesPrideAgent() {
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = getScan(scans, timeTravelTickIndex);
+        scan = getScan(api, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     }
