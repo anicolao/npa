@@ -433,7 +433,6 @@ export function getScan(scans: any[], index: number): ScanningData {
   return parseScan(scans[index]);
 }
 
-
 export function logError(e: any) {
   const gameid = NeptunesPride.gameNumber;
   const store = collection(firestore, `error`);
