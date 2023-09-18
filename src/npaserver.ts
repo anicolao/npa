@@ -473,7 +473,8 @@ function walkToScan(apikey: string, index: number) {
   }
   return diffCache[apikey][index].cached;
 }
-export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
+export function makeScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
+}
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
   const oldRet = parseScan(scans[index]);
