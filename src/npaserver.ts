@@ -56,6 +56,8 @@ async function open(dbName: string) {
 }
 
 async function store(incoming: any[], gameId: number, apikey: string, version: "diffCache" | "scanCache") {
+  const suffix = version === "diffCache" ? ":diffs" : "";
+  const dbName = `${gameId}:${apikey}${suffix}`;
   const dbName = `${gameId}:${apikey}`;
   const db = await open(dbName);
 
