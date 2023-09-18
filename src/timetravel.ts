@@ -26,7 +26,7 @@ export function resetAliases() {
   const modSymbols = [ "\uD83D\uDCA1", "\uD83D\uDC41", "\u23F3", "\u23F3"];
   for (const pk in universe.galaxy.players) {
     const player = universe.galaxy.players[pk];
-    player.alias = player.rawAlias;
+    player.alias = player.rawAlias.split(space)[0];
     if (player.ai === 1 || player.ready === 1) {
       player.alias += `${space}${modSymbols[player.modTick]} `
     }
