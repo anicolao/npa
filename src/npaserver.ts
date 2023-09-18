@@ -441,7 +441,7 @@ function walkToScan(apikey: string, index: number) {
   let last = lastScan[apikey] || 0;
   lastScan[apikey] = last;
   if (diffCache[apikey][index].cached) {
-    return diffCache[apikey]
+    return diffCache[apikey][index].cached;
   }
   while (index > last) {
     let scanContent = diffCache[apikey][last].cached;
