@@ -436,6 +436,7 @@ function parseScan(scan: any) {
   return scan.cached;
 }
 
+
 function walkToScan(apikey: string, index: number) {
 
 }
