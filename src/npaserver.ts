@@ -279,7 +279,7 @@ export async function getServerScans(apikey: string) {
         let patches = doc.data() as any;
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         const cached = JSON.parse(patches["initial_scan"].stringValue);
-        diffCache[apiKey] = [
+        diffCache[apikey] = [
           {
             cached
           }
