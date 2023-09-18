@@ -4222,7 +4222,7 @@ function NeptunesPrideAgent() {
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
-    let scan = getScan(scans, timeTravelTickIndex);
+    let scan = getScan(api, timeTravelTickIndex);
     scan = adjustNow(scan);
     if (scan.tick < targetTick) {
       while (scan.tick < targetTick && dir === "forwards") {
