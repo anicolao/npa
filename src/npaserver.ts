@@ -486,7 +486,7 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
     }
   } catch (err) {
     console.error(err);
-    
+    logCount(err);
   }
   return oldRet;
 }
