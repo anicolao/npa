@@ -312,7 +312,7 @@ export async function getServerScans(apikey: string) {
         });
 
         const incoming = diffCache[apikey].slice(Math.max(originalLength - 1, 0))
-        store(scanCache[apikey].slice(-1), gameid, apikey, "scanCache");
+        store(incoming, gameid, apikey, "scanCache");
         
         console.log("Diff update received: ", change, diffCache, scanCache);
         diffCache[apikey].forEach((entry, i) => {
