@@ -312,7 +312,7 @@ export async function getServerScans(apikey: string) {
             }
           }
           if (entry.back) {
-            const nullDiff = diff(entry.back, scanCacheEntry.forward);
+            const nullDiff = diff(entry.back, scanCacheEntry.back);
             if (nullDiff !== null) {
               console.error(`Index ${i} doesn't match`, nullDiff);
             }
