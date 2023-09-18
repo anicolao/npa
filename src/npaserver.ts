@@ -486,7 +486,8 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
         console.log(`Success on ${apikey} @ ${index}!`)
       }
     } else {
-      console.error(``)
+      debugger;
+      console.error(`No diffcache yet fetching ${apikey} @ ${index}`)
     }
   } catch (err) {
     console.error(err);
