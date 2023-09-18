@@ -439,7 +439,7 @@ function parseScan(scan: any) {
 let lastScan: { [k: string]: number } = {};
 function walkToScan(apikey: string, index: number) {
   let last = lastScan[apikey] || 0;
-  lastScan[apikey] = last;
+  lastScan[apikey] = index;
   if (diffCache[apikey][index].cached) {
     return diffCache[apikey][index].cached;
   }
