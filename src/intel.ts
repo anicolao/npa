@@ -1197,7 +1197,7 @@ function NeptunesPrideAgent() {
     return NeptunesPride.universe.galaxy.tick + ticks;
   }
 
-  const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
+  const alliedFleet = (fleetOwnerId: number, starOwnerId: number, relativeTick: number) => {
     if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
       faReport();
     }
