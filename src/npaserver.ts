@@ -300,7 +300,7 @@ export async function getServerScans(apikey: string) {
             }
           ];
         }
-        function validateEntry(entry: any, i: number): void {
+        function validateEntry(entry: any, i: number, checkCached?: boolean): void {
           const scanCacheEntry = scanCache[apikey][i];
           if (entry.timestamp !== scanCacheEntry.timestamp) {
             console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
