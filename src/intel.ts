@@ -5163,7 +5163,7 @@ function NeptunesPrideAgent() {
       if (scanCache[code]?.length > 0) {
         let last = scanCache[code].length - 1;
         let eof = scanCache[code][last]?.eof;
-        let scan = getScan(scanCache[code], last);
+        let scan = getScan(code], last);
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
