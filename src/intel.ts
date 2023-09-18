@@ -5161,7 +5161,7 @@ function NeptunesPrideAgent() {
       let good = "❌";
       const code = getCodeFromApiText(key);
       if (countScans(code) > 0) {
-        let last = scanCache[code].length - 1;
+        let last = countScans(code)- 1;
         let eof = scanCache[code][last]?.eof;
         let scan = getScan(code, last);
         let uid = scan?.player_uid;
