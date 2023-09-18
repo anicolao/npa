@@ -330,7 +330,7 @@ export async function getServerScans(apikey: string) {
           const forward = JSON.parse(patches[timestamp]).scanning_data;
           const last = diffCache[apikey].length - 1;
           diffCache[apikey][last] = { ...diffCache[apikey][last], forward };
-          validateEntry(diffCache[apikey][last], last, true);
+          //validateEntry(diffCache[apikey][last], last, true);
           const priorCache = window.structuredClone(diffCache[apikey][last].cached);
           const cached = patch(priorCache, forward);
           const back = diff(cached, diffCache[apikey][last].cached);
