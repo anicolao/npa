@@ -299,7 +299,7 @@ export async function getServerScans(apikey: string) {
         diffCache[apikey].forEach((entry, i) => {
           const scanCacheEntry = scanCache[apikey][i];
           const nullDiff = diff(entry, scanCacheEntry);
-          
+
         })
       });
     },
