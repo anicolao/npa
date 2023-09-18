@@ -487,6 +487,7 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
       const nullDiff = diff(oldRet, newRet);
       if (nullDiff !== null) {
         console.error(`getScan return values won't match `, oldRet, newRet);
+        logCount()
       } else {
         console.log(`Success on ${apikey} @ ${index}!`)
       }
