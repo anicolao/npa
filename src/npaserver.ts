@@ -280,6 +280,7 @@ export async function getServerScans(apikey: string) {
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         timestamps.forEach(key => {
           const pForward = JSON.parse(patches[key].stringValue);
+          diffCache[]
         })
         console.log("Diff update received: ", change);
       });
