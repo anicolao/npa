@@ -1207,6 +1207,7 @@ function NeptunesPrideAgent() {
         for (let a = 0; i < annals.length; ++a) {
           const annal = annals[a];
           if (annal.tick <= currentTick) break;
+          
         }
         console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
       }
