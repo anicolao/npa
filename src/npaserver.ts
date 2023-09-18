@@ -453,7 +453,7 @@ function walkToScan(apikey: string, index: number) {
     }
     diffCache[apikey][++last].cached = patch(scanContent, forward);
   }
-  while (index > last) {
+  while (index < last) {
     let scanContent = diffCache[apikey][last].cached;
     let forward = diffCache[apikey][last].forward;
     if (last === 0) {
