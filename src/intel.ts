@@ -5160,7 +5160,7 @@ function NeptunesPrideAgent() {
       let owner = "Unknown";
       let good = "❌";
       const code = getCodeFromApiText(key);
-      if (scanCache[code]?.length > 0) {
+      if (countScans(code)scanCache[code]?.length > 0) {
         let last = scanCache[code].length - 1;
         let eof = scanCache[code][last]?.eof;
         let scan = getScan(code, last);
