@@ -478,14 +478,14 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
   const oldRet = parseScan(scans[index]);
   try {
     if (diffCache[apikey]) {
-    const newRet = walkToScan(apikey, index);
-    const nullDiff = diff(oldRet, newRet);
-    if (nullDiff !== null) {
-      console.error(`getScan return values won't match `, oldRet, newRet);
-    } else {
-      console.log(`Success on ${apikey} @ ${index}!`)
+      const newRet = walkToScan(apikey, index);
+      const nullDiff = diff(oldRet, newRet);
+      if (nullDiff !== null) {
+        console.error(`getScan return values won't match `, oldRet, newRet);
+      } else {
+        console.log(`Success on ${apikey} @ ${index}!`)
+      }
     }
-  }
   } catch (err) {
     console.error(err);
     logCount(err);
