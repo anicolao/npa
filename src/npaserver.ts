@@ -35,7 +35,7 @@ export interface CachedScan {
   notifications?: string;
   timestamp: number;
 }
-const scanCache: { [k: string]: any[] } = {};
+export const scanCache: { [k: string]: any[] } = {};
 const diffCache: { [k: string]: any[] } = {};
 function validateDiffCache(apikey: string) {
   function validateEntry(entry: any, i: number, skipCached?: boolean): void {
