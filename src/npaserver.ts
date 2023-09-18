@@ -296,7 +296,9 @@ export async function getServerScans(apikey: string) {
           }
         });
         console.log("Diff update received: ", change, diffCache, scanCache);
-        diffCache[apikey].forEach(())
+        diffCache[apikey].forEach((entry, i) => {
+          
+        })
       });
     },
     (error) => {
