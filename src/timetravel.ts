@@ -14,6 +14,7 @@ export function resetAliases() {
   for (let i = 0; i < messageCache.game_event.length; ++i) {
     if (messageCache.game_event[i].payload.template === 'goodbye_to_player') {
       console.log(messageCache.game_event[i]);
+      players[]
     }
   }
   for (let pk in universe.galaxy.players) {
