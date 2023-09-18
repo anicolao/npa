@@ -446,7 +446,6 @@ function walkToScan(apikey: string, index: number) {
     } else {
       diffCache[apikey][last].cached = undefined;
     }
-    let scanContent = diffCache[apikey][last].cached;
           scanContent = window.structuredClone(scanContent);
         }
         if (scan.prev.forward === undefined) {
