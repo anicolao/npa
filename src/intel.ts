@@ -1219,7 +1219,7 @@ function NeptunesPrideAgent() {
           console.log("Check: ", JSON.stringify(annal))
           if (annal.p1 == fleetOwnerId && annal.p0 == starOwnerId && annal.war === "war") {
             console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
-            return false;
+            return true;
           }
           if (annal.p0 == fleetOwnerId && annal.p1 == starOwnerId && annal.war === "war") {
             console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
