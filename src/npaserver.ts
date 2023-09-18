@@ -294,7 +294,7 @@ export async function getServerScans(apikey: string) {
             diffCache[apikey].push({ forward });
           }
         });
-        console.log("Diff update received: ", change);
+        console.log("Diff update received: ", change, diffCache, scanCache);
       });
     },
     (error) => {
