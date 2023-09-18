@@ -33,7 +33,6 @@ import {
   logCount,
   logError,
   registerForScans,
-  scanCache,
   scanInfo,
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
