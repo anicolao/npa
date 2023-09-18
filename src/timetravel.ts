@@ -13,7 +13,7 @@ export function resetAliases() {
   const players = NeptunesPride.universe.galaxy.players;
   for (let i = 0; i < messageCache.game_event.length; ++i) {
     const payload = messageCache.game_event[i].payload;
-    if (messageCache.game_event[i].payload.template === 'goodbye_to_player') {
+    if (payload.template === 'goodbye_to_player') {
       console.log(messageCache.game_event[i]);
       players[messageCache.game_event[i].payload.uid]
     }
