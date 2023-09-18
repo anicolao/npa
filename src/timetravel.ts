@@ -32,7 +32,7 @@ export function resetAliases() {
       player.alias += `${space}${modSymbols[player.modTick]} `
     }
   }
-          console.log("NeptunesPride.universe.galaxy.players[42].alias)
+          console.log("ra: ", NeptunesPride.universe.galaxy.players[42].alias)
 }
 
 export function futureTime(
