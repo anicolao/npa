@@ -438,7 +438,7 @@ function parseScan(scan: any) {
 
 let lastScan: { [k: string]: number } = {};
 function walkToScan(apikey: string, index: number) {
-  const last = lastScan[apikey] || 0;
+  letllast = lastScan[apikey] || 0;
   while (index > last) {
   }
 }
