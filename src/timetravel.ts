@@ -14,13 +14,13 @@ export function resetAliases() {
   for (let i = 0; i < messageCache.game_event.length; ++i) {
     const payload = messageCache.game_event[i].payload;
     if (universe.galaxy.tick >= payload.tick) {
-    if (payload.template === 'goodbye_to_player' && universe.galaxy.tick >= payload.tick) {
-      players[payload.uid].exitTick = payload.tick;
-      players[payload.uid].modTick = (universe.galaxy.tick - payload.tick) % 4;
-    } else if (payload.uid && players[payload.uid].ai === 1) {
-      console.log(messageCache.game_event[i]);
+      if (payload.template === 'goodbye_to_player' && universe.galaxy.tick >= payload.tick) {
+        players[payload.uid].exitTick = payload.tick;
+        players[payload.uid].modTick = (universe.galaxy.tick - payload.tick) % 4;
+      } else if (payload.uid && players[payload.uid].ai === 1) {
+        console.log(messageCache.game_event[i]);
+      }
     }
-  }
   }
   for (let pk in universe.galaxy.players) {
     const player = universe.galaxy.players[pk];
