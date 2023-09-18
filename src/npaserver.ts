@@ -451,7 +451,7 @@ function walkToScan(apikey: string, index: number) {
       console.error("Patching with undefined forward");
       logCount(`error_undefined_forward`);
     }
-    diffCache[apikey].cached = patch(scanContent, forward);
+    diffCache[apikey][].cached = patch(scanContent, forward);
     
   }
 }
