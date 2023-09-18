@@ -28,6 +28,7 @@ import {
 import { GameStore, TypedProperty } from "./gamestore";
 import { post } from "./network";
 import {
+  countScans,
   getScan,
   getServerScans,
   logCount,
