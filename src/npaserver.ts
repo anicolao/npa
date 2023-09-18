@@ -437,7 +437,7 @@ function parseScan(scan: any) {
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
-  return parseScan(scans[index]);
+  const old parseScan(scans[index]);
 }
 
 export function logError(e: any) {
