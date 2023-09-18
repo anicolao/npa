@@ -35,7 +35,6 @@ import {
   logError,
   registerForScans,
   scanInfo,
-  scansExist,
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { setupAutocomplete } from "./autocomplete";
