@@ -320,6 +320,7 @@ export async function getServerScans(apikey: string) {
       querySnapshot.docChanges().forEach((change) => {
         let doc = change.doc;
         let patches = doc.data() as any;
+  const diffTimestamp = diffCache[apikey]?.slice(-1)[0]?.timestamp || 0;
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         const originalLength = diffCache[apikey] ? diffCache[apikey].length : 0;
         if (diffCache[apikey] === undefined || diffCache[apikey].length === 0) {
