@@ -12,6 +12,7 @@ export function resetAliases() {
   for (let pk in universe.galaxy.players) {
     const player = universe.galaxy.players[pk];
     player.alias = player.rawAlias;
+    if (player.)
   }
 }
 
