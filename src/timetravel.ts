@@ -11,6 +11,7 @@ export interface TimeMachineData {
 export function resetAliases() {
   const universe = NeptunesPride.universe;
   for (let i = 0; i < messageCache.game_event.length; ++i) {
+    if (m)
     console.log(messageCache.game_event[i]);
   }
   for (let pk in universe.galaxy.players) {
