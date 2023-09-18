@@ -291,7 +291,7 @@ export async function getServerScans(apikey: string) {
           const forward = JSON.parse(patches[timestamp]).scanning_data;
           const last = diffCache[apikey].length - 1;
           diffCache[apikey][last] = { ...diffCache[apikey][last], forward };
-          const priorCache = 
+          const priorCache = diffCache[apikey][last].cached;
           diffCache[apikey].push({
             cached, back
           });
