@@ -436,7 +436,9 @@ function parseScan(scan: any) {
   return scan.cached;
 }
 
-function walkToScan(apikey: string, index: )
+function walkToScan(apikey: string, index: number) {
+
+}
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
   const oldRet = parseScan(scans[index]);
