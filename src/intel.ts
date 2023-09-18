@@ -1364,8 +1364,8 @@ function NeptunesPrideAgent() {
         starstate[starId].puid = owner;
       }
       for (const i in arrival) {
-      let ka = i.split(",");
-      let tick = parseInt(ka[0]);
+        let ka = i.split(",");
+        let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (alliedFleet(fleet.puid, starstate[starId].puid)) {
           const weapons = Math.max(
