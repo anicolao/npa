@@ -42,6 +42,7 @@ export function countScans(apikey: string) {
   if (scanCache[apikey] && scanCache[apikey].length > 0) {
     return 
   };
+  return 0;
 }
 
 async function open(dbName: string) {
