@@ -346,7 +346,7 @@ export async function getServerScans(apikey: string) {
         store(incoming, gameid, apikey, "diffCache");
         
         console.log("Diff update received: ", change, diffCache, scanCache);
-        diffCache[apikey].forEach((entry, i) => validateEntry);
+        diffCache[apikey].forEach((entry, i) => validateEntry(entry, i));
       });
     },
     (error) => {
