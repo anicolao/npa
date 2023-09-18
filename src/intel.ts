@@ -1218,6 +1218,7 @@ function NeptunesPrideAgent() {
             return false;
           }
           if (annal.p0 == fleetOwnerId && annal.p1 == starOwnerId && annal.war === "war") {
+            console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
             return false;
           }
         }
