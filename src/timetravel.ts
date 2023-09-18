@@ -14,6 +14,7 @@ export function resetAliases() {
     player.alias = player.rawAlias;
     if (player.ai === 1 || player.ready === 1) {
       player.alias += `${player.ready} `
+      for (let i = 0; i < messageCache.game_event.length; ++i) {
     }
   }
 }
