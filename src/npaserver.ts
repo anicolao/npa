@@ -311,6 +311,12 @@ export async function getServerScans(apikey: string) {
               console.error(`Index ${i} doesn't match`, nullDiff);
             }
           }
+          if (entry.forward) {
+            const nullDiff = diff(entry.forward, scanCacheEntry.forward);
+            if (nullDiff !== null) {
+              console.error(`Index ${i} doesn't match`, nullDiff);
+            }
+          }
           if (entry.cached) {
             const nullDiff = diff(entry.cached, scanCacheEntry.cached);
             if (nullDiff !== null) {
