@@ -1208,29 +1208,29 @@ function NeptunesPrideAgent() {
         const currentTick = tickNumber(0);
         const tick = tickNumber(relativeTick);
         //if (fleetOwnerId == 5 || starOwnerId == 5) {
-          console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
+          //console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
         //}
         for (let a = 0; a < annals.length; ++a) {
           const annal = annals[a];
           if (annal.tick <= currentTick) {
-            console.log(`Stop checking @ ${annal.tick} v ${currentTick}`)
+            //console.log(`Stop checking @ ${annal.tick} v ${currentTick}`)
             break;
           }
-          if (annal.tick > tick) {
-            console.log(`Skip future tick ${annal.tick}`)
+          if (annal.tick >= tick) {
+            //console.log(`Skip future tick ${annal.tick}; annal applies at end of tick`)
             continue;
           }
-          console.log("Check: ", JSON.stringify(annal))
+          //console.log("Check: ", JSON.stringify(annal))
           if (annal.p1 == fleetOwnerId && annal.p0 == starOwnerId && annal.war === "war") {
-            console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
+            //console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
             return false;
           }
           if (annal.p0 == fleetOwnerId && annal.p1 == starOwnerId && annal.war === "war") {
-            console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
+            //console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
             return false;
           }
         }
-      }
+      } 
     }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
@@ -1395,8 +1395,9 @@ function NeptunesPrideAgent() {
         starstate[starId].puid = owner;
       }
       for (const i in arrival) {
-        let ka = i.split(",");
-        let tick = parseInt(ka[0]);
+        // TODO: revisit this loop
+        //let ka = i.split(",");
+        //let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (alliedFleet(fleet.puid, starstate[starId].puid, tick)) {
           const weapons = Math.max(
@@ -1450,8 +1451,6 @@ function NeptunesPrideAgent() {
         }
       }
       for (const i in arrival) {
-        let ka = i.split(",");
-        let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (
           alliedFleet(fleet.puid, starstate[starId].puid, tick) ||
@@ -1475,7 +1474,7 @@ function NeptunesPrideAgent() {
       }
       for (const i in arrival) {
         let ka = i.split(",");
-        let tick = parseInt(ka[0]);
+        //let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (alliedFleet(fleet.puid, starstate[starId].puid, tick)) {
           let outcomeString = "{0} ships on {1}".format(
@@ -1492,8 +1491,6 @@ function NeptunesPrideAgent() {
       let offense = 0;
       let contribution: { [k: string]: any } = {};
       for (const i in arrival) {
-        let ka = i.split(",");
-        let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (!alliedFleet(fleet.puid, starstate[starId].puid, tick)) {
           let olda = offense;
