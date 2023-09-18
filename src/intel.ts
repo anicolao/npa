@@ -1423,7 +1423,7 @@ function NeptunesPrideAgent() {
         let tick = parseInt(ka[0]);
         let fleet = arrival[i];
         if (
-          alliedFleet(fleet.puid, starstate[starId].puid) ||
+          alliedFleet(fleet.puid, starstate[starId].puid, tick) ||
           starstate[starId].puid == -1
         ) {
           let oldShips = starstate[starId].ships;
