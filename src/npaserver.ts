@@ -475,7 +475,8 @@ function walkToScan(apikey: string, index: number) {
 }
 export function makeScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
-  return parseScan(scans[index]);
+  //return parseScan(scans[index]);
+  return getScan()
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
