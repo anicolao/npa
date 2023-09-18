@@ -2757,7 +2757,7 @@ function NeptunesPrideAgent() {
 
         for (let i = 0; showAll && i < closerStars.length; ++i) {
           const o = closerStars[i];
-          if (alliedFleet(o.puid, star.puid)) {
+          if (alliedFleet(o.puid, star.puid, 0)) {
             const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
             if (enemyTicks - visTicks >= ticks) {
               drawHUDRuler(star, o, effectiveSupportColor);
