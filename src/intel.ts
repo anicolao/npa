@@ -1230,7 +1230,7 @@ function NeptunesPrideAgent() {
             return false;
           }
         }
-        return ;
+        return starOwnerId === fleetOwnerId;
       }
     }
     const players = NeptunesPride.universe.galaxy.players;
