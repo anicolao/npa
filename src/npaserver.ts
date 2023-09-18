@@ -278,9 +278,9 @@ export async function getServerScans(apikey: string) {
         let doc = change.doc;
         let patches = doc.data() as any;
         const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
-        timestamps.forEach(key => {
-          const forward = JSON.parse(patches[key].stringValue);
-          diffCache[apikey].push({ forward, key });
+        timestamps.forEach(timestamp => {
+          const forward = JSON.parse(patches[timestamp].stringValue);
+          diffCache[apikey].push({ forward, key: timestamp });
         })
         console.log("Diff update received: ", change);
       });
