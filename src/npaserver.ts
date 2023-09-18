@@ -443,6 +443,8 @@ function walkToScan(apikey: string, index: number) {
     let scanContent = diffCache[apikey][last].cached;
     if (last === 0) {
       scanContent = window.structuredClone(scanContent);
+    } else {
+      
     }
     let scanContent = diffCache[apikey][last].cached;
           scanContent = window.structuredClone(scanContent);
