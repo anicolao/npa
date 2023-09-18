@@ -316,7 +316,7 @@ export async function getServerScans(apikey: string) {
             if (nullDiff !== null) {
               console.error(`Index ${i} doesn't match on back`, nullDiff);
             } else {
-              console.log()
+              console.log(`Back matches for ${i}!`)
             }
           }
           if (entry.cached) {
