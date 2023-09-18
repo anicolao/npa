@@ -345,7 +345,7 @@ export async function getServerScans(apikey: string) {
             }
           }
         }
-        diffCache[apikey].forEach(
+        diffCache[apikey].forEach(validateEntry)
         )
       });
     },
