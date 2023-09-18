@@ -300,7 +300,7 @@ export async function getServerScans(apikey: string) {
           const scanCacheEntry = scanCache[apikey][i];
           const nullDiff = diff(entry, scanCacheEntry);
           if (nullDiff !== null) {
-            console.error(`Index ${i} doesn't match ${nullDiff}`, nullDiff)
+            console.error(`Index ${i} doesn't match ${nullDiff}`, nullDiff);
           } else {
             console.log
           }
