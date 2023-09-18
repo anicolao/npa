@@ -436,7 +436,7 @@ function parseScan(scan: any) {
   return scan.cached;
 }
 
-let lastScan = 0
+let lastScan: { [k: string]: number }
 function walkToScan(apikey: string, index: number) {
 
 }
