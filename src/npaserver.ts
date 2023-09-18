@@ -271,7 +271,7 @@ export async function getServerScans(apikey: string) {
   });
   if (computedDiffs.length) {
     console.log(`Storing ${computedDiffs.length} freshly computed diffs`);
-    store(computedDiffs, gameid, apikey);
+    store(computedDiffs, gameid, apikey, "scanCache");
   }
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   trimInvalidEntries(apikey);
