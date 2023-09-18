@@ -4227,7 +4227,7 @@ function NeptunesPrideAgent() {
     if (scan.tick < targetTick) {
       while (scan.tick < targetTick && dir === "forwards") {
         timeTravelTickIndex++;
-        if (timeTravelTickIndex === scans.length) {
+        if (timeTravelTickIndex === countScans(scans.length) {
           timeTravelTickIndices[apikey] = undefined;
           return null;
         }
