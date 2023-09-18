@@ -1201,6 +1201,7 @@ function NeptunesPrideAgent() {
     let annals = [];
     if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
       faReport();
+    }
       if (relativeTick > 0) {
         annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
         const currentTick = tickNumber(0);
@@ -1211,7 +1212,6 @@ function NeptunesPrideAgent() {
           if (annal.p0 == fleetOwnerId && annal.p1 == starOwnerId && annal.war === "war") return false;
         }
       }
-    }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
