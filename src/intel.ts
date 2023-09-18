@@ -1217,7 +1217,7 @@ function NeptunesPrideAgent() {
             break;
           }
           if (annal.tick > tick) {
-            console.log(`Skip future tick ${}`)
+            console.log(`Skip future tick ${annal.tick}`)
           }
           console.log("Check: ", JSON.stringify(annal))
           if (annal.p1 == fleetOwnerId && annal.p0 == starOwnerId && annal.war === "war") {
