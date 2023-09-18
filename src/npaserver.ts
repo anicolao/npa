@@ -303,11 +303,11 @@ export async function getServerScans(apikey: string) {
         diffCache[apikey].forEach((entry, i) => {
           const scanCacheEntry = scanCache[apikey][i];
           if (entry.forward) {
-          const nullDiff = diff(entry.forward, scanCacheEntry.forward);
-          if (nullDiff !== null) {
-            console.error(`Index ${i} doesn't match`, nullDiff);
+            const nullDiff = diff(entry.forward, scanCacheEntry.forward);
+            if (nullDiff !== null) {
+              console.error(`Index ${i} doesn't match`, nullDiff);
+            }
           }
-        }
         })
       });
     },
