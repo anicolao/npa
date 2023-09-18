@@ -289,7 +289,7 @@ export async function getServerScans(apikey: string) {
         timestamps.forEach(timestamp => {
           const forward = JSON.parse(patches[timestamp].stringValue);
           if (diffCache[apikey].length === 1) {
-            diffCache[apikey][0] = .push({ forward, timestamp, cached });
+            diffCache[apikey][0] = { forward, timestamp, cached });
           } else {
             diffCache[apikey].push({ forward, timestamp });
           }
