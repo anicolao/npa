@@ -277,7 +277,7 @@ export async function getServerScans(apikey: string) {
       querySnapshot.docChanges().forEach((change) => {
         let doc = change.doc;
         let patches = doc.data() as any;
-        const timestamps: number[] = Object.keys(change).filter(x => +x > 0).map(x => +x).sort();
+        const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         timestamps.forEach(key => {
           const pForward = JSON.parse(change[key].stringValue);
         })
