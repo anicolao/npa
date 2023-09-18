@@ -484,6 +484,9 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
   } else {
     console.log(`Success on ${apikey} @ ${index}!`)
   }
+} catch (err) {
+
+}
   return oldRet;
 }
 
