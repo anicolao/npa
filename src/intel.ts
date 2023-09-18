@@ -1230,6 +1230,7 @@ function NeptunesPrideAgent() {
             return false;
           }
         }
+        returnfalse;
       }
     }
     const players = NeptunesPride.universe.galaxy.players;
