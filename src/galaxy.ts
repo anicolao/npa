@@ -10,7 +10,7 @@ export interface ScanningData {
   players: { [puid: string]: Player };
   production_counter: number;
   production_rate: number;
-  productions: number;
+  productions: numbe;
   stars: { [suid: string]: Star };
   stars_for_victory: number;
   start_time: number;
