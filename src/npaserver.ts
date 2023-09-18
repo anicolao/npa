@@ -38,6 +38,10 @@ export interface CachedScan {
 const scanCache: { [k: string]: any[] } = {};
 const diffCache: { [k: string]: any[] } = {};
 
+export function scansExist(apikey: string) {
+  return scanCache[apikey] && scanCache[apikey].length > 0;
+}
+
 async function open(dbName: string) {
   return openDB(dbName, 1, {
     upgrade(db) {
