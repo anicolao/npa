@@ -46,7 +46,7 @@ function validateDiffCache(apikey: string) {
     if (entry.forward) {
       const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       if (nullDiff !== null) {
-        console.error(`Index ${i} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
+        console.error(`Index ${i} doesn't match on forward`, { nullDiff, df: entryforward, sf: scanCacheEntry.forward });
       }
     }
     if (entry.back) {
@@ -320,7 +320,7 @@ export async function getServerScans(apikey: string) {
       querySnapshot.docChanges().forEach((change) => {
         let doc = change.doc;
         let patches = doc.data() as any;
-        const timestamps: number[] = Object.keys(patches).filter(x => +x > ).map(x => +x).sort();
+        const timestamps: number[] = Object.keys(patches).filter(x => +x > 0).map(x => +x).sort();
         const originalLength = diffCache[apikey] ? diffCache[apikey].length : 0;
         if (diffCache[apikey] === undefined || diffCache[apikey].length === 0) {
           const cached = JSON.parse(patches["initial_scan"]).scanning_data;
