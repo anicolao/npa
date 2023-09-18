@@ -281,7 +281,7 @@ export async function getServerScans(apikey: string) {
         timestamps.forEach(timestamp => {
           const forward = JSON.parse(patches[timestamp].stringValue);
           if (diffCache[apikey] === undefined) {
-            const cached = JSON.parse(patches[timestamp].)
+            const cached = JSON.parse(patches[timestamp].stringValue)
             diffCache[apikey].push({ forward, timestamp, cached });
           } else {
             diffCache[apikey].push({ forward, timestamp });
