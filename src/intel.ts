@@ -1231,7 +1231,6 @@ function NeptunesPrideAgent() {
           }
         }
       }
-      return starOwnerId === fleetOwnerId;
     }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
