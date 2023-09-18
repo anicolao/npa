@@ -277,7 +277,7 @@ export async function getServerScans(apikey: string) {
       querySnapshot.docChanges().forEach((change) => {
         const timestamps: number[] = Object.keys(change).filter(x => +x > 0).map(x => +x).sort();
         timestamps.forEach(key => {
-          const pForward = change[]
+          const pForward = change[key]
         })
         console.log("Diff update received: ", change);
       });
