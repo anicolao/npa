@@ -5168,7 +5168,7 @@ function NeptunesPrideAgent() {
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
           eof = scanCache[code][last]?.eof;
-          let scan = getScan(scanCache[code], last);
+          let scan = getScan(code, last);
           uid = scan?.player_uid;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;
