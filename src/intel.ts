@@ -1213,6 +1213,7 @@ function NeptunesPrideAgent() {
           if (annal.p0 == fleetOwnerId && annal.p1 == starOwnerId && annal.war === "war") return false;
         }
       }
+    }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
     const sOwner = players[starOwnerId];
