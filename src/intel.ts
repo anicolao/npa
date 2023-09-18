@@ -1446,7 +1446,7 @@ function NeptunesPrideAgent() {
         let ka = i.split(",");
         let tick = parseInt(ka[0]);
         let fleet = arrival[i];
-        if (alliedFleet(fleet.puid, starstate[starId].puid)) {
+        if (alliedFleet(fleet.puid, starstate[starId].puid, tick)) {
           let outcomeString = "{0} ships on {1}".format(
             Math.floor(starstate[starId].ships),
             stars[starId].n,
