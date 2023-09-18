@@ -343,6 +343,7 @@ export async function getServerScans(apikey: string) {
             diffCache[apikey][last].cached = undefined;
           }
         });
+        validate
 
         const incoming = diffCache[apikey].slice(Math.max(originalLength - 1, 0));
         store(incoming, gameid, apikey, "diffCache");
