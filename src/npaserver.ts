@@ -479,7 +479,7 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
   const newRet = walkToScan(apikey, index);
   const nullDiff = diff(oldRet, newRet);
   if (nullDiff !== null) {
-    
+    console.error()
   }
   return oldRet;
 }
