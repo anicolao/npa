@@ -305,9 +305,11 @@ export async function getServerScans(apikey: string) {
         console.log("Diff update received: ", change, diffCache, scanCache);
         diffCache[apikey].forEach((entry, i) => {
           const scanCacheEntry = scanCache[apikey][i];
-          const nullDiff = diff(entry, scanCacheEntry);
-          if (nullDiff !== null) {
-            console.error(`Index ${i} doesn't match`, nullDiff);
+          if (entry.forward) {
+            const nullDiff = diff(entry.forward, scanCacheEntry.forward);
+            if (nullDiff !== null) {
+              console.error(`Index ${i} doesn't match`, nullDiff);
+            }
           }
           if (entry.back) {
             const nullDiff = diff(entry.back, scanCacheEntry.back);
