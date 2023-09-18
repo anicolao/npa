@@ -316,7 +316,7 @@ export async function getServerScans(apikey: string) {
             if (nullDiff !== null) {
               console.error(`Index ${i} doesn't match on cached`, nullDiff);
             } else {
-              console.error(`Index ${i} match on cached`, nullDiff);
+              console.error(`Index ${i} matches on cached`, nullDiff);
             }
           }
         })
