@@ -1204,7 +1204,7 @@ function NeptunesPrideAgent() {
     }
     if (NeptunesPride.gameConfig.alliances) {
       if (relativeTick > 0) {
-        relativeTick += 1;
+        relativeTick += 100;
         annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
         const currentTick = tickNumber(0);
         //if (fleetOwnerId == 5 || starOwnerId == 5) {
