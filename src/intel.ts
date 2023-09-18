@@ -1202,7 +1202,7 @@ function NeptunesPrideAgent() {
     if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
       faReport();
       annals = annalsOfWar();
-      console.log({knownAlliances, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
+      console.log({annals, relativeTick, tick: tickNumber(relativeTick), fleetOwnerId, starOwnerId});
     }
     const players = NeptunesPride.universe.galaxy.players;
     const fOwner = players[fleetOwnerId];
