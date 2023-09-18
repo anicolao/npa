@@ -477,6 +477,10 @@ export function getScan(apikey: string, index: number): ScanningData & { eof?: b
   const scans = scanCache[apikey];
   const oldRet = parseScan(scans[index]);
   const newRet = walkToScan(apikey, index);
+  const nullDiff = diff(oldRet, newRet);
+  if (nullDiff !== null) {
+    
+  }
   return oldRet;
 }
 
