@@ -71,7 +71,7 @@ async function store(incoming: any[], gameId: number, apikey: string) {
   ]);
 }
 
-async function restore(gameId: number, apikey: string, version: ) {
+async function restore(gameId: number, apikey: string, version: "diffCache" | "scanCache") {
   const dbName = `${gameId}:${apikey}`;
   const db = await open(dbName);
   return db.getAllFromIndex(dbName, "timestamp");
