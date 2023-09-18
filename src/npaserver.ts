@@ -371,7 +371,7 @@ export async function getServerScans(apikey: string) {
           }
         }
       });
-      store(incoming, gameid, apikey);
+      store(incoming, gameid, apikey, "");
       console.log(`Added ${incoming.length} scans for ${gameid}:${apikey}`);
       scanCache[apikey] = scanCache[apikey].concat(incoming);
       trimInvalidEntries(apikey);
