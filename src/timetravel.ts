@@ -18,8 +18,6 @@ export function resetAliases() {
         players[payload.uid].exitTick = payload.tick;
         players[payload.uid].modTick = (universe.galaxy.tick - payload.tick) % 4;
       } 
-        console.log(messageCache.game_event[i]);
-      }
     }
   }
   const space = "\u00A0";
