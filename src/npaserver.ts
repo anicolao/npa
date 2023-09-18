@@ -366,7 +366,7 @@ export async function getServerScans(apikey: string) {
             const cachedLast = scanCache[apikey].length - 1;
             if (cachedLast >= 0) {
               compressDeltas(scanCache[apikey][cachedLast], scan);
-              store(scanCache[apikey].slice(-1), gameid, apikey, "scanCach");
+              store(scanCache[apikey].slice(-1), gameid, apikey, "scanCache");
             }
           }
         }
