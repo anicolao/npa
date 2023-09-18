@@ -35,8 +35,8 @@ export interface CachedScan {
   notifications?: string;
   timestamp: number;
 }
-export const scanCache: { [k: string]: any[] } = {};
-export const diffCache: { [k: string]: any[] } = {};
+const scanCache: { [k: string]: any[] } = {};
+const diffCache: { [k: string]: any[] } = {};
 
 async function open(dbName: string) {
   return openDB(dbName, 1, {
