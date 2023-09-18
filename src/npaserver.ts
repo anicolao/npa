@@ -440,7 +440,7 @@ let lastScan: { [k: string]: number } = {};
 function walkToScan(apikey: string, index: number) {
   let last = lastScan[apikey] || 0;
   while (index > last) {
-    let scanContent = scan.prev.cached;
+    let scanContent = 
         if (scan.prev.prev) {
           scan.prev.cached = undefined;
         } else {
