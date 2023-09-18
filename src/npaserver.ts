@@ -94,7 +94,7 @@ const firestore = initializeFirestore(app, {
 export async function restoreFromDB(gameId: number, apikey: string) {
   if (!scanCache[apikey] || scanCache[apikey].length === 0) {
     try {
-      diffCache[apikey] = await restore(gameId, apikey, "");
+      diffCache[apikey] = await restore(gameId, apikey, "diffCache");
       scanCache[apikey] = await restore(gameId, apikey, false);
       console.log(`Restored scan cache from db: ${scanCache[apikey].length}`);
     } catch (err) {
