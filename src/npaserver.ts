@@ -38,7 +38,7 @@ export interface CachedScan {
 const scanCache: { [k: string]: any[] } = {};
 const diffCache: { [k: string]: any[] } = {};
 
-export function scansExist(apikey: string) {
+export function countScans(apikey: string) {
   return scanCache[apikey] && scanCache[apikey].length > 0;
 }
 
