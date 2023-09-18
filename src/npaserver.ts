@@ -429,7 +429,7 @@ function parseScan(scan: any) {
   }
   return scan.cached;
 }
-export function getScan(, index: number): ScanningData {
+export function getScan(apikey: string, index: number): ScanningData {
   return parseScan(scans[index]);
 }
 
