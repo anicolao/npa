@@ -13,7 +13,7 @@ export function resetAliases() {
   const players = NeptunesPride.universe.galaxy.players;
   for (let i = 0; i < messageCache.game_event.length; ++i) {
     const payload = messageCache.game_event[i].payload;
-    if (payload.template === 'goodbye_to_player' && universe.galaxy.tick >= payload.tick) {
+    if (universe.galaxy.tick >= payload.tick) {
     if (payload.template === 'goodbye_to_player' && universe.galaxy.tick >= payload.tick) {
       players[payload.uid].exitTick = payload.tick;
       players[payload.uid].modTick = (universe.galaxy.tick - payload.tick) % 4;
