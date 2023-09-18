@@ -91,7 +91,7 @@ const firestore = initializeFirestore(app, {
   experimentalForceLongPolling: isSafari(),
 });
 
-export async function restoreFromDB(gameId: number, apikey: string, newDB: ) {
+export async function restoreFromDB(gameId: number, apikey: string, newDB: boolean) {
   if (!scanCache[apikey] || scanCache[apikey].length === 0) {
     try {
       diffCache[apikey] = scanCache[apikey] = await restore(gameId, apikey);
