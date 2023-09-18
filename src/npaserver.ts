@@ -291,7 +291,7 @@ export async function getServerScans(apikey: string) {
           if (diffCache[apikey].length === 1) {
             diffCache[apikey][0] = { ...diffCache[apikey][0], forward };
           } else {
-            diffCache[apikey].push({ forward, timestamp });
+            diffCache[apikey].push({ forward });
           }
         });
         console.log("Diff update received: ", change);
