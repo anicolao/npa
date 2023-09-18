@@ -1651,7 +1651,7 @@ function NeptunesPrideAgent() {
               defense,
               -offense,
             );
-            if (alliedFleet(fleet.puid, starstate[starId].puid)) {
+            if (alliedFleet(fleet.puid, starstate[starId].puid, tick)) {
               outcomeString = "Wins! {0} land.".format(defense);
             }
             fleetOutcomes[fleet.uid] = {
