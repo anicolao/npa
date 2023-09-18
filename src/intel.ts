@@ -5282,7 +5282,7 @@ function NeptunesPrideAgent() {
         allSeenKeys.forEach(async (key) => {
           const code = getCodeFromApiText(key);
           await getServerScans(code);
-          if (scanCache[code]?.length > 0) {
+          if (scanCount(code) > 0) {
             console.log(`Scans for ${code} cached`);
             return;
           }
