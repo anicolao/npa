@@ -453,6 +453,20 @@ function walkToScan(apikey: string, index: number) {
     }
     diffCache[apikey][++last].cached = patch(scanContent, forward);
   }
+  while (index > last) {
+    let scanContent = diffCache[apikey][last].cached;
+    let forward = diffCache[apikey][last].forward;
+    if (last === 0) {
+      scanContent = window.structuredClone(scanContent);
+    } else {
+      diffCache[apikey][last].cached = undefined;
+    }
+    if (!forward) {
+      console.error("Patching with undefined forward");
+      logCount(`error_undefined_forward`);
+    }
+    diffCache[apikey][++last].cached = patch(scanContent, forward);
+  }
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
