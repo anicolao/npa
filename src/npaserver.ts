@@ -302,7 +302,7 @@ export async function getServerScans(apikey: string) {
           if (nullDiff !== null) {
             console.error(`Index ${i} doesn't match`, nullDiff);
           } else {
-            console.log(`Match on ${i}! `)
+            console.log(`Match on ${i}!`)
           }
         })
       });
