@@ -120,7 +120,7 @@ export function registerForScans(apikey: string, notifications?: string) {
 function trimInvalidEntries(apikey: string) {
   const len = scanCache[apikey].length;
   let trim = len - 1;
-  while (trim >= 0 && getScan(apikey, trim)?.tick === undefined) {
+  while (trim >= 0 && makeScan(apikey, trim)?.tick === undefined) {
     trim--;
   }
   if (trim + 1 < len) {
