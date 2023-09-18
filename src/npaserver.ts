@@ -465,7 +465,7 @@ function walkToScan(apikey: string, index: number) {
       console.error("Patching with undefined back");
       logCount(`error_undefined_back`);
     }
-    diffCache[apikey][--last].cached = patch(scanContent, forward);
+    diffCache[apikey][--last].cached = patch(scanContent, back);
   }
 }
 export function getScan(apikey: string, index: number): ScanningData & { eof?: boolean } {
