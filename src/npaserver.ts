@@ -433,9 +433,6 @@ export function getScan(scans: any[], index: number): ScanningData {
   return parseScan(scans[index]);
 }
 
-export function getScanClone(scans: any[], index: number): ScanningData {
-  return window.structuredClone(getScan(scans, index));
-}
 
 export function logError(e: any) {
   const gameid = NeptunesPride.gameNumber;
