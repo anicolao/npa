@@ -1212,7 +1212,9 @@ function NeptunesPrideAgent() {
         //}
         for (let a = 0; a < annals.length; ++a) {
           const annal = annals[a];
-          if (annal.tick <= currentTick) break;
+          if (annal.tick <= currentTick) {
+            break;
+          }
           if (annal.p1 == fleetOwnerId && annal.p0 == starOwnerId && annal.war === "war") {
             console.log(`At war ${fleetOwnerId} v ${starOwnerId}`)
             return false;
