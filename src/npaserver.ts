@@ -349,7 +349,7 @@ export async function getServerScans(apikey: string) {
       console.log(`inproc timestamp match for ${last}`)
     }
     if (entry.forward) {
-      try {
+      //try {
       const a = JSON.parse(JSON.stringify(entry.forward));
       const b = JSON.parse(JSON.stringify(scanCacheEntry.forward));
       //const nullDiff = diff(entry.forward, scanCacheEntry.forward);
