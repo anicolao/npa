@@ -349,7 +349,7 @@ export async function getServerScans(apikey: string) {
     if (entry.forward) {
       const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       if (nullDiff !== null) {
-        console.error(`Index ${i} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
+        console.error(`inproc Index ${i} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
       }
     }
           const priorCache = window.structuredClone(diffCache[apikey][last].cached);
