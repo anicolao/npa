@@ -350,8 +350,8 @@ export async function getServerScans(apikey: string) {
     }
     if (entry.forward) {
       //try {
-      const a = JSON.parse(JSON.stringify(entry.forward));
-      const b = JSON.parse(JSON.stringify(scanCacheEntry.forward));
+      const a = JSON.stringify(entry.forward);
+      const b = JSON.stringify(scanCacheEntry.forward);
       //const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       const nullDiff = diff(a, b);
       if (nullDiff !== null) {
