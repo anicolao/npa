@@ -349,6 +349,7 @@ export async function getServerScans(apikey: string) {
       console.log(`inproc timestamp match for ${last}`)
     }
     if (entry.forward) {
+      try {
       const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       if (nullDiff !== null) {
         console.error(`inproc Index ${last} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
