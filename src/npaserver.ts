@@ -354,6 +354,7 @@ export async function getServerScans(apikey: string) {
         console.error(`inproc Index ${last} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
       } else {
         console.log(`inproc timestamp match for ${last}`)
+      }
     }
           const priorCache = window.structuredClone(diffCache[apikey][last].cached);
           const cached = patch(priorCache, forward);
