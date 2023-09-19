@@ -350,6 +350,7 @@ export async function getServerScans(apikey: string) {
     }
     if (entry.forward) {
       try {
+      const a = JSON.parse(JSON.stringify(entry.forward))
       const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       if (nullDiff !== null) {
         console.error(`inproc Index ${last} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
