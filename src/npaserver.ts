@@ -321,7 +321,7 @@ export async function getServerScans(apikey: string) {
       changedBlocks.forEach((change, i) => {
         let doc = change.doc;
         let patches = doc.data() as any;
-        console.log(i, patches.latest, diffTimestamp, truth: patches.latest > diffTi) ;
+        console.log(i, patches.latest, diffTimestamp, truth: patches.latest > diffTimestamp}) ;
       });
       changedBlocks.forEach((change) => {
         let doc = change.doc;
