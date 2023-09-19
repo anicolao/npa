@@ -345,7 +345,7 @@ export async function getServerScans(apikey: string) {
     const entry = diffCache[apikey][last];
     if (entry.timestamp !== scanCacheEntry.timestamp) {
       console.error(`inproc TS mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
-    }
+    } 
     if (entry.forward) {
       const nullDiff = diff(entry.forward, scanCacheEntry.forward);
       if (nullDiff !== null) {
