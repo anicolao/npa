@@ -356,6 +356,8 @@ export async function getServerScans(apikey: string) {
       } else {
         console.log(`inproc forward match for ${last}`)
       }
+    } catch (err) {
+      
     }
     }
           const priorCache = window.structuredClone(diffCache[apikey][last].cached);
