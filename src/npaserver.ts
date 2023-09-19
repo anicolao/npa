@@ -342,6 +342,7 @@ export async function getServerScans(apikey: string) {
           const last = diffCache[apikey].length - 1;
           diffCache[apikey][last] = { ...diffCache[apikey][last], forward };
     const scanCacheEntry = scanCache[apikey][last];
+    const entry = 
     if (entry.timestamp !== scanCacheEntry.timestamp) {
       console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
     }
