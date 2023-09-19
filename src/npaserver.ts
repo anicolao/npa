@@ -341,6 +341,16 @@ export async function getServerScans(apikey: string) {
           const forward = JSON.parse(patches[timestamp]).scanning_data;
           const last = diffCache[apikey].length - 1;
           diffCache[apikey][last] = { ...diffCache[apikey][last], forward };
+    const scanCacheEntry = scanCache[apikey][i];
+    if (entry.timestamp !== scanCacheEntry.timestamp) {
+      console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
+    }
+    if (entry.forward) {
+      const nullDiff = diff(entry.forward, scanCacheEntry.forward);
+      if (nullDiff !== null) {
+        console.error(`Index ${i} doesn't match on forward`, { nullDiff, df: entry.forward, sf: scanCacheEntry.forward });
+      }
+    }
           const priorCache = window.structuredClone(diffCache[apikey][last].cached);
           const cached = patch(priorCache, forward);
           const back = diff(cached, diffCache[apikey][last].cached);
