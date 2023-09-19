@@ -318,7 +318,7 @@ export async function getServerScans(apikey: string) {
     ),
     (querySnapshot) => {
       const changedBlocks = querySnapshot.docChanges();
-      changedBlocks.forEach((change) => {
+      changedBlocks.forEach((change, i) => {
         let doc = change.doc;
         let patches = doc.data() as any;
         console.log(patches.latest);
