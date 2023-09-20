@@ -333,7 +333,7 @@ export async function getServerScans(apikey: string) {
       changedBlocks.forEach((change, i) => {
         let doc = change.doc;
         let patches = doc.data() as any;
-        console.log(`Block ${i}: `{i, latest: patches.latest, diffTimestamp, truth: patches.latest > diffTimestamp}) ;
+        console.log(`Block ${i}: ` {i, latest: patches.latest, diffTimestamp, truth: patches.latest > diffTimestamp}) ;
       });
       changedBlocks.forEach((change, i) => {
         console.log(`Processing block #${i}`)
