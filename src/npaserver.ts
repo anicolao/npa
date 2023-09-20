@@ -64,7 +64,7 @@ function validateDiffCache(apikey: string) {
       if (scanCachedOrComputed === undefined) {
         scanCachedOrComputed = window.structuredClone(scanCache[apikey][0].cached);
         for (let index = 0; index < i; ++index) {
-          scanCachedOrComputed = patch(scan, forward);
+          scanCachedOrComputed = patch(scanCachedOrComputed, forward);
         }
       }
       const nullDiff = diff(entry.cached, scanCacheEntry.cached);
