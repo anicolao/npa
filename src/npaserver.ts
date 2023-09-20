@@ -62,7 +62,7 @@ function validateDiffCache(apikey: string) {
     if (entry.cached && !skipCached) {
       let scanCachedOrComputed = scanCacheEntry.cached;
       if (scanCachedOrComputed === undefined) {
-        scanCachedOrComputed = scanCache[apikey][0];
+        scanCachedOrComputed = scanCache[apikey][0].cached;
       }
       const nullDiff = diff(entry.cached, scanCacheEntry.cached);
       if (nullDiff !== null) {
