@@ -336,7 +336,7 @@ export async function getServerScans(apikey: string) {
         console.log({i, latest: patches.latest, diffTimestamp, truth: patches.latest > diffTimestamp}) ;
       });
       changedBlocks.forEach((change) => {
-        console.log(`Processing block #${}`)
+        console.log(`Processing block #${i}`)
         let doc = change.doc;
         let patches = doc.data() as any;
         const latestDiff = diffCache[apikey]?.slice(-1)[0]?.timestamp || 0;
