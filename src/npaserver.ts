@@ -60,7 +60,7 @@ function validateDiffCache(apikey: string) {
       } 
     }
     if (entry.cached && !skipCached) {
-      
+      let scanCacheEntry = 
       const nullDiff = diff(entry.cached, scanCacheEntry.cached);
       if (nullDiff !== null) {
         console.error(`Index ${i} doesn't match on cached`, nullDiff);
