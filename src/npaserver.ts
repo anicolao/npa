@@ -356,6 +356,7 @@ export async function getServerScans(apikey: string) {
     const scanCacheEntry = scanCache[apikey][last];
     const entry = diffCache[apikey][last];
     if (scanCache[apikey].length > last) {
+      const nextEntry = scanCache[apikey][last+1];
       
     }
     if (entry.timestamp !== scanCacheEntry.timestamp && last !== 0) {
