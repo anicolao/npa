@@ -76,7 +76,7 @@ function validateDiffCache(apikey: string) {
       }
     }
   }
-  diffCache[apikey].forEach((entry, i) => validateEntry(entry, i));
+  diffCache[apikey]?.forEach((entry, i) => validateEntry(entry, i));
 }
 
 export function countScans(apikey: string) {
