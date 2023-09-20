@@ -64,7 +64,7 @@ function validateDiffCache(apikey: string) {
       if (nullDiff !== null) {
         console.error(`Index ${i} doesn't match on cached`, nullDiff);
       } else {
-        console.error(`Index ${i} matches on cached!`);
+        console.log(`Index ${i} matches on cached!`);
       }
     }
   }
