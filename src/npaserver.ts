@@ -358,7 +358,7 @@ export async function getServerScans(apikey: string) {
     if (entry.timestamp !== scanCacheEntry.timestamp && last !== 0) {
       console.error(`inproc TS mismatch for ${apikey}:${last}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
     } else {
-      console.log(`inproc timestamp match for ${apikey}:${last}`)
+      //console.log(`inproc timestamp match for ${apikey}:${last}`)
     }
     if (entry.forward) {
       //try {
