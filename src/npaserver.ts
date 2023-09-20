@@ -43,7 +43,6 @@ function validateDiffCache(apikey: string) {
     if (entry.timestamp !== scanCacheEntry.timestamp) {
        if (i === 0) {
         console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
-
        } else {
         console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
        }
