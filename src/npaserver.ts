@@ -356,7 +356,7 @@ export async function getServerScans(apikey: string) {
     const scanCacheEntry = scanCache[apikey][last];
     const entry = diffCache[apikey][last];
     if (entry.timestamp !== timestamp) {
-      console.error(`Unepected timestamp ${entry.timestamp} instead of ${timestam}`)
+      console.error(`Unepected timestamp ${entry.timestamp} instead of ${timestamp}`)
     }
     if (entry.timestamp !== scanCacheEntry.timestamp && last !== 0) {
       console.error(`inproc TS mismatch for ${apikey}:${last}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
