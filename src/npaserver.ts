@@ -41,6 +41,9 @@ function validateDiffCache(apikey: string) {
   function validateEntry(entry: any, i: number, skipCached?: boolean): void {
     const scanCacheEntry = scanCache[apikey][i];
     if (entry.timestamp !== scanCacheEntry.timestamp) {
+       if (i === 0) {
+
+       }
       console.error(`Timestamp mismatch for ${i}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
     }
     if (entry.forward) {
