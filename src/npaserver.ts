@@ -359,7 +359,7 @@ export async function getServerScans(apikey: string) {
             if (timestamp <= nextEntry.timestamp) {
               break;
             }
-            const forward = forward;
+            const forward = nextEntry.forward;
             diffCache[apikey][last] = { ...diffCache[apikey][last], forward: forward };
             const priorCache = window.structuredClone(diffCache[apikey][last].cached);
             const cached = patch(priorCache, forward);
