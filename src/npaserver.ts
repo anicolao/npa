@@ -356,13 +356,6 @@ export async function getServerScans(apikey: string) {
           let entry = { ...diffCache[apikey][last], forward };
 
           diffCache[apikey][last] = entry;
-    const scanCacheEntry = scanCache[apikey][last];
-    if (scanCache[apikey].length > last) {
-      const nextEntry = scanCache[apikey][last+1];
-      if (timestamp !== nextEntry.timestamp) {
-        console.error(`Unexpected forward timestamp ${timestamp} vs ${nextEntry.timestamp}`, timestamps)
-      }
-    }
     if (entry.timestamp !== scanCacheEntry.timestamp && last !== 0) {
       console.error(`inproc TS mismatch for ${apikey}:${last}: ${entry.timestamp} vs ${scanCacheEntry.timestamp}`, entry, scanCacheEntry)
     } else {
