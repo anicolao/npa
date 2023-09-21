@@ -346,7 +346,7 @@ export async function getServerScans(apikey: string) {
           const cached = JSON.parse(patches["initial_scan"]).scanning_data;
           diffCache[apikey] = [
             {
-              cached, timestamp: patchescached.start_time
+              cached, timestamp: patches?.cached.start_time
             }
           ];
         }
