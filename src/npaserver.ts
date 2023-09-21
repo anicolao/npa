@@ -360,6 +360,7 @@ export async function getServerScans(apikey: string) {
             if (timestamp <= nextEntry.timestamp) {
               break;
             }
+            holeFound = true;
             const forward = scanCache[apikey][last].forward;
             diffCache[apikey][last] = { ...diffCache[apikey][last], forward: forward };
             const priorCache = window.structuredClone(diffCache[apikey][last].cached);
