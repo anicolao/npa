@@ -353,6 +353,7 @@ export async function getServerScans(apikey: string) {
         timestamps.forEach(timestamp => {
           const forward = JSON.parse(patches[timestamp]).scanning_data;
           let last = diffCache[apikey].length - 1;
+          let holeFound = false;
 
           while (scanCache[apikey].length > last) {
             const nextEntry = scanCache[apikey][last+1];
