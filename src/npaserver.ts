@@ -374,7 +374,7 @@ export async function getServerScans(apikey: string) {
             }
             last++;
           }
-          if (holeF)
+          if (holeFound)
 
           let entry = { ...diffCache[apikey][last], forward };
           diffCache[apikey][last] = entry;
