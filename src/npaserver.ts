@@ -359,14 +359,14 @@ export async function getServerScans(apikey: string) {
             if (timestamp <= nextEntry.timestamp) {
               break;
             }
-            const forward = nextEntry.forward;
+            const forward = scanCache[apikey][last].forward;
             diffCache[apikey][last] = { ...diffCache[apikey][last], forward: forward };
             const priorCache = window.structuredClone(diffCache[apikey][last].cached);
             const cached = patch(priorCache, forward);
             console.error(`Patching hole at ${last} for tick ${cached.tick}`)
             const back = diff(cached, diffCache[apikey][last].cached);
             diffCache[apikey].push({
-              cached, back, timestamp: nextEntry.timestamp
+              cached, back, timestamp: scanCache[apikey][last].timestamp
             });
             if (last > 0) {
               diffCache[apikey][last].cached = undefined;
