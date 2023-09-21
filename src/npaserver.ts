@@ -372,9 +372,6 @@ export async function getServerScans(apikey: string) {
               diffCache[apikey][last].cached = undefined;
             }
             last++;
-            if (timestamp !== nextEntry.timestamp) {
-              console.error(`Unexpected forward timestamp ${timestamp} vs ${nextEntry.timestamp}`, timestamps)
-            }
           }
 
           diffCache[apikey][last] = entry;
