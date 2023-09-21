@@ -355,7 +355,7 @@ export async function getServerScans(apikey: string) {
           const last = diffCache[apikey].length - 1;
           let entry = { ...diffCache[apikey][last], forward };
 
-          diffCache[apikey][last] = { ...diffCache[apikey][last], forward };
+          diffCache[apikey][last] = entry;
     const scanCacheEntry = scanCache[apikey][last];
     if (scanCache[apikey].length > last) {
       const nextEntry = scanCache[apikey][last+1];
