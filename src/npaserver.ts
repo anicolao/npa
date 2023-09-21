@@ -361,6 +361,7 @@ export async function getServerScans(apikey: string) {
             if (timestamp === nextEntry.timestamp) {
               break;
             }
+            
             if (timestamp !== nextEntry.timestamp) {
               console.error(`Unexpected forward timestamp ${timestamp} vs ${nextEntry.timestamp}`, timestamps)
             }
