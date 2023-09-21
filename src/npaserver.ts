@@ -364,6 +364,7 @@ export async function getServerScans(apikey: string) {
             diffCache[apikey][last] = { ...diffCache[apikey][last], forward: nextEntry.forward };
             const priorCache = window.structuredClone(diffCache[apikey][last].cached);
             const cached = patch(priorCache, forward);
+            console.error(`Patching hole at ${last} `)
             const back = diff(cached, diffCache[apikey][last].cached);
             diffCache[apikey].push({
               cached, back, timestamp
