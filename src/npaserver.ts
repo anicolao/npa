@@ -377,7 +377,7 @@ export async function getServerScans(apikey: string) {
           }
           if (holeFound) {
             console.error(`Patched hole of size ${last - origLast}`)
-            logCount(`error_patch_holesized`);
+            logCount(`error_patch_holesize_${last - origLast}`);
           }
 
           let entry = { ...diffCache[apikey][last], forward };
