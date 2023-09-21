@@ -366,7 +366,7 @@ export async function getServerScans(apikey: string) {
             console.error(`Patching hole at ${last} for tick ${cached.tick}`)
             const back = diff(cached, diffCache[apikey][last].cached);
             diffCache[apikey].push({
-              cached, back, timestamp
+              cached, back, scanCache[apikey][last]
             });
             if (last > 0) {
               diffCache[apikey][last].cached = undefined;
