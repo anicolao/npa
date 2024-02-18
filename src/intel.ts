@@ -1212,27 +1212,29 @@ function NeptunesPrideAgent() {
   let trueTick = 0;
   const rebuildColorMap = function (galaxy: any) {
     if (galaxy.players[1].shape !== undefined && colorMap) {
-      console.log("rebuild color map before ", JSON.stringify(colorMap));
+      //console.log("rebuild color map before ", JSON.stringify(colorMap));
       colorMap = colorMap.map((_, uid) => {
         if (galaxy.players[uid] !== undefined) {
           let c = galaxy.players[uid].color;
           if (c === undefined || galaxy.players[uid].colorStyle) {
+            /*
             console.log(
               `use colorstyle for ${uid} ${galaxy.players[uid].colorStyle}`,
               galaxy.players[uid]
             );
+            */
             return (
               galaxy.players[uid].colorStyle ||
               galaxy.players[uid].originalColor
             );
           }
-          console.log(`${uid} -> ${c} (${colors[c]}) GP`);
+          //console.log(`${uid} -> ${c} (${colors[c]}) GP`);
           return colors[c];
         }
-        console.log(`${uid} -> ${colorMap[uid]} CM`);
+        //console.log(`${uid} -> ${colorMap[uid]} CM`);
         return colorMap[uid];
       });
-      console.log("rebuild color map after ", JSON.stringify(colorMap));
+      //console.log("rebuild color map after ", JSON.stringify(colorMap));
     }
     if (galaxy.players[1].shape !== undefined && shapeMap) {
       shapeMap = shapeMap.map((_, uid) => {
@@ -3705,7 +3707,7 @@ function NeptunesPrideAgent() {
       if (name !== newName) {
         //console.log(`Alias ${n}.${name} -> ${newName}`);
         if (name === "colorStyle") {
-          console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
+          //console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
           //newName = "color";
         }
         Object.defineProperty(p, newName, {
@@ -4395,15 +4397,15 @@ function NeptunesPrideAgent() {
   const getAllianceSubsets = function (): { [k: string]: number[] } {
     const players = NeptunesPride.universe.galaxy.players;
     let allPlayers = Object.keys(NeptunesPride.universe.galaxy.players);
+    const offset = players[0] !== undefined ? 0 : 1;
     let allianceMatch =
       settings.allianceDiscriminator === "color"
-        ? colorMap.slice(0, allPlayers.length)
-        : shapeMap.slice(0, allPlayers.length);
+        ? colorMap.slice(offset, allPlayers.length)
+        : shapeMap.slice(offset, allPlayers.length);
     if (settings.allianceDiscriminator === "color" && settings.whitePlayer) {
       const p = NeptunesPride.universe.player;
       allianceMatch[p.uid] = p.prevColor;
     }
-    const offset = players[0] !== undefined ? 0 : 1;
     let alliancePairs: [any, number][] = allianceMatch
       .map((x, i): [any, number] => [x, i + offset])
       .sort();
