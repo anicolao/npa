@@ -256,7 +256,14 @@ async function cacheEventResponseCallback(
   return true;
 }
 
+export function isNP4() {
+  return (NeptunesPride.gameVersion === "" && NeptunesPride.templates.NP4 === "NP4");
+}
+
 const getRequestPath = () => {
+  if (isNP4()) {
+    return "game_api";
+  }
   if (NeptunesPride.gameVersion !== "proteus") {
     return "trequest_osric";
   }
@@ -266,6 +273,10 @@ export async function requestRecentMessages(
   fetchSize: number,
   group: "game_event" | "game_diplomacy" | string,
 ) {
+  if (isNP4()) {
+    console.error("requestRecentMessages NIY for NP4");
+    return;
+  }
   console.log("requestRecentMessages");
   const url = `/${getRequestPath()}/fetch_game_messages`;
   logCount(`requestRecentMessages ${fetchSize} ${group}`);
