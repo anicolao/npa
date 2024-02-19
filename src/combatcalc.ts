@@ -1,5 +1,5 @@
 import { isNP4, messageCache } from "./events";
-import { dist, Fleet, Player, PlayerMap, ScannedStar, ScanningData, TechKey } from "./galaxy";
+import { dist, Fleet, getTech, Player, PlayerMap, ScannedStar, ScanningData, TechKey } from "./galaxy";
 import { Stanzas } from "./reports";
 
 export const combatInfo: {
@@ -136,12 +136,6 @@ export const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
   return computeCombatOutcomes(galaxy, staroutcomes);
 };
 
-export function getTech(player: Player, tech: TechKey) {
-  if (isNP4()) {
-    return player.tech[5];
-  }
-  return player.tech[tech];
-}
 export function getWeaponsLevel(player: Player) {
   return getTech(player, "weapons").level;
 }

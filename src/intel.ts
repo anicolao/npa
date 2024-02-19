@@ -4188,6 +4188,13 @@ function NeptunesPrideAgent() {
     scan: "Scan",
     terr: "Terra",
     weap: "Weapons",
+    "0": "Banking",
+    "1": "Exp",
+    "2": "Manu",
+    "3": "Range",
+    "4": "Scan",
+    "5": "Weapons",
+    "6": "Terra",
   };
   const xlateemoji: { [k: string]: string } = {
     bank: "💰",
@@ -4216,7 +4223,7 @@ function NeptunesPrideAgent() {
     if (NeptunesPride.gameVersion === "proteus") {
       return level * level * 5;
     }
-    return level * NeptunesPride.gameConfig.tradeCost;
+    return level * (NeptunesPride.gameConfig.tradeCost || NeptunesPride.universe.galaxy.config.tradeCost);
   };
   let techTable = function (
     output: Stanzas,
@@ -4302,7 +4309,8 @@ function NeptunesPrideAgent() {
   let tradeScanned = function () {
     return (
       NeptunesPride.gameConfig.tradeScanned ||
-      NeptunesPride.gameVersion === "proteus"
+      NeptunesPride.gameVersion === "proteus" ||
+      NeptunesPride.universe.galaxy?.config?.tradeScanned
     );
   };
   let tradingReport = async function () {
@@ -4315,6 +4323,8 @@ function NeptunesPrideAgent() {
     if (tradeScanned()) {
       allPlayers = allPlayers.filter(
         (k) =>
+          isNP4() ? 
+          NeptunesPride.universe.player.scannedPlayers[players[k].uid] :
           NeptunesPride.universe.player.scannedPlayers.indexOf(
             players[k].uid
           ) >= 0
