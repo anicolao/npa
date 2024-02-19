@@ -51,6 +51,7 @@ import {
   getScanValue,
   getRangeValue,
   getTech,
+  addAccessors,
 } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
@@ -3700,27 +3701,6 @@ function NeptunesPrideAgent() {
   };
   window.setTimeout(checkRecolor, 1000);
 
-  function addAccessors(n: string, p: any) {
-    const props = Object.getOwnPropertyNames(p);
-    for (const name of props) {
-      let newName = `${name.replace(/[A-Z]/g, "_$&").toLowerCase()}`;
-      if (name !== newName) {
-        //console.log(`Alias ${n}.${name} -> ${newName}`);
-        if (name === "colorStyle") {
-          //console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
-          //newName = "color";
-        }
-        Object.defineProperty(p, newName, {
-          get: function () {
-            return this[name];
-          },
-          set: function (v) {
-            return (this[name] = v);
-          },
-        });
-      }
-    }
-  }
   function allAccessors() {
     if (!NeptunesPride.universe.galaxy.tick_rate) {
       console.log("REDEFINE PROPERTIES");

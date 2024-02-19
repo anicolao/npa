@@ -173,3 +173,25 @@ export function techCost(tech: { brr: number; level: number; cost: number }) {
   }
   return tech.brr * tech.level * tech.level * tech.level;
 }
+
+  export function addAccessors(n: string, p: any) {
+    const props = Object.getOwnPropertyNames(p);
+    for (const name of props) {
+      let newName = `${name.replace(/[A-Z]/g, "_$&").toLowerCase()}`;
+      if (name !== newName) {
+        //console.log(`Alias ${n}.${name} -> ${newName}`);
+        if (name === "colorStyle") {
+          //console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
+          //newName = "color";
+        }
+        Object.defineProperty(p, newName, {
+          get: function () {
+            return this[name];
+          },
+          set: function (v) {
+            return (this[name] = v);
+          },
+        });
+      }
+    }
+  }
