@@ -1,5 +1,5 @@
 export type Value = boolean | number | string | undefined;
-type Patch = { [k: string]: any } | Value | null;
+export type Patch = { [k: string]: any } | Value | null;
 
 export function clone(o: any) {
   if (typeof o === "object" && o !== null) {
@@ -64,7 +64,7 @@ export function patch(a: Patch, p: Patch): Patch {
     }
   });
   if (Array.isArray(newA)) {
-    return newA.filter((x: any) => x !== undefined);
+    return newA.filter((x: any) => x !== undefined && x !== null);
   }
   return newA;
 }
