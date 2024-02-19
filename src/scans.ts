@@ -1,5 +1,5 @@
 import { Heap } from "./heap";
-import { scanCache } from "./npaserver";
+import { countScans, scanCache } from "./npaserver";
 import { clone, patch } from "./patch";
 
 export const getCodeFromApiText = (key: string) => {
@@ -13,7 +13,7 @@ export class ScanKeyIterator {
   currentScanData;
   constructor(apilink: string) {
     this.apikey = getCodeFromApiText(apilink);
-    if (scanCache[this.apikey]?.length) {
+    if (countScans(this.apikey) > 0) {
       this.currentScanRecord = scanCache[this.apikey][0];
       this.currentScanData = clone(this.currentScanRecord.cached);
     } else this.currentScanRecord = undefined;
@@ -25,7 +25,8 @@ export class ScanKeyIterator {
     return this.currentScanData;
   }
   hasNext() {
-    return this.currentScanRecord?.next !== undefined;
+    const ret = this.currentScanRecord?.next !== undefined;
+    return ret;
   }
   next() {
     const p = patch(this.currentScanData, this.currentScanRecord?.forward);
@@ -40,7 +41,9 @@ export class ScanKeyIterator {
 export class TickIterator {
   scanIteratorHeap: Heap<any>;
   constructor(apilinks: string[], preferredUser?: number) {
-    const iterators = apilinks.map((link) => new ScanKeyIterator(link));
+    const iterators = apilinks
+      .map((link) => new ScanKeyIterator(link))
+      .filter((i) => i.hasNext());
     this.scanIteratorHeap = new Heap(iterators, (a, b) => {
       const aScan = a.getScanData();
       const bScan = b.getScanData();
@@ -70,6 +73,7 @@ export class TickIterator {
   }
   hasNext() {
     const h = this.scanIteratorHeap;
+    if (h.size() > 1) return true;
     return h.size() > 0 && h.peek().hasNext();
   }
   next() {
