@@ -1,3 +1,5 @@
+import { isNP4 } from "./events";
+
 export interface PlayerMap {
   [puid: string]: Player;
 }
@@ -103,6 +105,7 @@ export type TechKey =
   | "scanning"
   | "terraforming"
   | "weapons";
+
 export interface Tech {
   banking: TechInfo;
   manufacturing: TechInfo;
@@ -111,6 +114,14 @@ export interface Tech {
   scanning: TechInfo;
   terraforming: TechInfo;
   weapons: TechInfo;
+}
+
+export function getTech(player: Player, tech: TechKey) {
+  if (isNP4()) {
+    const t = player.tech as any;
+    return t[NeptunesPride.universe.techNames.indexOf(tech)];
+  }
+  return player.tech[tech];
 }
 export interface UnscannedStar extends SpaceObject {
   v: "0"; // unscanned (!visible)
@@ -137,7 +148,10 @@ export function dist(s1: SpaceObject, s2: SpaceObject) {
   return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
 }
 
-export function techCost(tech: { brr: number; level: number }) {
+export function techCost(tech: { brr: number; level: number; cost: number }) {
+  if (isNP4()) {
+    return tech.level * tech.cost;
+  }
   if (NeptunesPride.gameVersion !== "proteus") {
     return tech.brr * tech.level;
   }
