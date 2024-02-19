@@ -6,8 +6,8 @@
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
     "npa": "webpack --config webpack.npa.js",
-    "lint": "npx rome check src",
-    "format": "npx rome format --write src tests",
+    "lint": "npx biome check src",
+    "format": "npx biome format --write src tests",
     "test": "vitest run --coverage",
     "prepare": "husky install .husky",
     "postversion": "./bin/packagedist"
@@ -18,6 +18,7 @@
     "@types/chrome": "^0.0.193",
     "@types/jsdom": "^21.1.1",
     "@types/mousetrap": "^1.6.11",
+    "biome": "^0.3.3",
     "c8": "^7.12.0",
     "chai": "^4.3.6",
     "copy-webpack-plugin": "^11.0.0",
