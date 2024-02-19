@@ -29,13 +29,15 @@ import {
 import { GameStore, TypedProperty } from "./gamestore";
 import { post } from "./network";
 import {
+  countScans,
+  getLastRecord,
   getScan,
   getServerScans,
   logCount,
   logError,
   registerForScans,
-  scanCache,
   scanInfo,
+  unloadServerScans,
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { setupAutocomplete } from "./autocomplete";
@@ -3817,6 +3819,7 @@ function NeptunesPrideAgent() {
     if (otherUserCode) {
       let scan = await getUserScanData(code);
       if (!cacheApiKey(code, scan)) return;
+      console.log("SCAN: ", { scan });
       NeptunesPride.np.onFullUniverse(null, scan);
       NeptunesPride.npui.onHideScreen(null, true);
       NeptunesPride.np.trigger("select_player", [
@@ -3974,23 +3977,23 @@ function NeptunesPrideAgent() {
     apikey: string,
     dir: "back" | "forwards"
   ) {
-    const scans = scanCache[getCodeFromApiText(apikey)];
-    if (!scans || scans.length === 0) return null;
-    let timeTravelTickIndex = dir === "back" ? scans.length - 1 : 0;
+    const api = getCodeFromApiText(apikey);
+    if (!countScans(api)) return null;
+    let timeTravelTickIndex = dir === "back" ? countScans(api) - 1 : 0;
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
     }
-    let scan = getScan(scans, timeTravelTickIndex);
+    let scan = getScan(api, timeTravelTickIndex);
     scan = adjustNow(scan);
     if (scan.tick < targetTick) {
       while (scan.tick < targetTick && dir === "forwards") {
         timeTravelTickIndex++;
-        if (timeTravelTickIndex === scans.length) {
+        if (timeTravelTickIndex === countScans(api)) {
           timeTravelTickIndices[apikey] = undefined;
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, targetTick });
-        scan = getScan(scans, timeTravelTickIndex);
+        scan = getScan(api, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     } else if (scan.tick > targetTick) {
@@ -4001,7 +4004,7 @@ function NeptunesPrideAgent() {
           return null;
         }
         //console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = getScan(scans, timeTravelTickIndex);
+        scan = getScan(api, timeTravelTickIndex);
         scan = adjustNow(scan);
       }
     }
@@ -5050,15 +5053,15 @@ function NeptunesPrideAgent() {
       let owner = "Unknown";
       let good = "❌";
       const code = getCodeFromApiText(key);
-      if (scanCache[code]?.length > 0) {
-        let last = scanCache[code].length - 1;
-        let eof = scanCache[code][last]?.eof;
-        let scan = getScan(scanCache[code], last);
+      if (countScans(code) > 0) {
+        let last = countScans(code) - 1;
+        let scan = getScan(code, last);
+        let eof = scan?.eof;
         let uid = scan?.player_uid;
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
-          eof = scanCache[code][last]?.eof;
-          let scan = getScan(scanCache[code], last);
+          let scan = getScan(code, last);
+          eof = scan?.eof;
           uid = scan?.player_uid;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;
@@ -5208,7 +5211,7 @@ function NeptunesPrideAgent() {
         allSeenKeys.forEach(async (key) => {
           const code = getCodeFromApiText(key);
           await getServerScans(code);
-          if (scanCache[code]?.length > 0) {
+          if (countScans(code) > 0) {
             console.log(`Scans for ${code} cached`);
             return;
           }
