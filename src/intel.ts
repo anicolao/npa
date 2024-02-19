@@ -4346,14 +4346,18 @@ function NeptunesPrideAgent() {
     playerIndexes: number[],
     title: string
   ): any[] {
-    const fields = [
+    let fields = [
       ["total_stars", "[[:star:]]"],
       ["total_strength", "[[:carrier:]]"],
       ["shipsPerTick", "[[:carrier:]]/h"],
+      ["cashPerDay", "$"],
       ["total_economy", "E"],
       ["total_industry", "I"],
       ["total_science", "S"],
     ];
+    if (!isNP4()) {
+      fields = fields.filter(x => x[0] !== "cashPerDay");
+    }
     const table: Stanzas = [];
     const sums = fields.map((x) => 0);
     table.push(`--- ${title} ---`);
