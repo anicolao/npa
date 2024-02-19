@@ -1,6 +1,13 @@
 import { computeCombatOutcomes, StarState } from "./combatcalc";
 import { isNP4, messageCache } from "./events";
-import { addAccessors, dist, FleetOrder, ScanningData, techCost, getTech } from "./galaxy";
+import {
+  addAccessors,
+  dist,
+  FleetOrder,
+  ScanningData,
+  techCost,
+  getTech,
+} from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
 
@@ -39,15 +46,12 @@ function isVisible(star: any) {
 }
 export function futureTime(
   galaxy: ScanningData,
-  tickOffset: number,
+  tickOffset: number
 ): ScanningData {
   const newState: ScanningData & TimeMachineData = {
     ...galaxy,
     futureTime: true,
   };
-  if (isNP4()) {
-    addAccessors("galaxy", newState);
-  }
   if (tickOffset <= 0) {
     console.error("Future time machine going backwards NIY");
     logCount("error_back_to_the_future");
@@ -56,6 +60,9 @@ export function futureTime(
   const stars = { ...newState.stars };
   const fleets = { ...newState.fleets };
   const players = { ...newState.players };
+  if (isNP4()) {
+    addAccessors("galaxy", newState);
+  }
   for (let i = 0; i < tickOffset; ++i) {
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
@@ -69,7 +76,10 @@ export function futureTime(
         if (newStar.i > 0) {
           const ticksPerDay = newState.production_rate;
           const industry = newStar.i;
-          const manufacturing = getTech(players[star.puid],"manufacturing").level;
+          const manufacturing = getTech(
+            players[star.puid],
+            "manufacturing"
+          ).level;
           const production = (industry * (manufacturing + 5)) / ticksPerDay;
           const partial = newStar.c !== undefined ? newStar.c : newStar.yard;
           newStar.st += production + partial;
@@ -107,7 +117,7 @@ export function futureTime(
           newFleet.w = newFleet.warpSpeed;
           if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
             console.log(
-              `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`,
+              `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`
             );
           }
         }
@@ -125,7 +135,7 @@ export function futureTime(
             const [dx, dy] = [destX - x, destY - y];
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(
-                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n} @ ${dx},${dy} ${newState.fleet_speed}`,
+                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n} @ ${dx},${dy} ${newState.fleet_speed}`
               );
             }
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
@@ -208,7 +218,7 @@ export function futureTime(
               delay + Math.ceil(dist(destination, nextDestination) / speed);
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(
-                `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`,
+                `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`
               );
             }
           } else {
@@ -234,11 +244,16 @@ export function futureTime(
       if (players[pind].researching !== undefined) {
         const player = (players[pind] = { ...players[pind] });
         player.tech = { ...player.tech };
+        addAccessors(player.alias, player);
         const tech = (player.tech[player.researching] = {
           ...player.tech[player.researching],
         });
         tech.research += player.total_science;
-        const cost = techCost({ ...tech, brr: tech.brr, level: tech.level + 1 });
+        const cost = techCost({
+          ...tech,
+          brr: tech.brr,
+          level: tech.level + (isNP4() ? 0 : 1),
+        });
         if (tech.research >= cost) {
           tech.research -= cost;
           tech.level += 1;
@@ -250,8 +265,12 @@ export function futureTime(
       for (let pind in players) {
         if (players[pind].cash !== undefined) {
           const player = (players[pind] = { ...players[pind] });
-          player.cash +=
-            player.total_economy * 10 + 75 * getTech(player, "banking").level;
+          if (!player.cashPerDay) {
+            player.cash +=
+              player.total_economy * 10 + 75 * getTech(player, "banking").level;
+          } else {
+            player.cash += player.cashPerDay;
+          }
         }
       }
       newState.production_counter = 0;
