@@ -116,12 +116,28 @@ export interface Tech {
   weapons: TechInfo;
 }
 
-export function getTech(player: Player, tech: TechKey) {
+export function getTech(player: Player, tech: TechKey): TechInfo {
   if (isNP4()) {
     const t = player.tech as any;
+    if (tech === "scanning" && NeptunesPride.universe.galaxy.config.noScn) {
+      return getTech(player, "propulsion");
+    }
     return t[NeptunesPride.universe.techNames.indexOf(tech)];
   }
   return player.tech[tech];
+}
+
+export function getScanValue(player: Player) {
+  if (isNP4()) {
+    return NeptunesPride.universe.calcScanValue(player);
+  }
+  return player.tech.scanning.value;
+}
+export function getRangeValue(player: Player) {
+  if (isNP4()) {
+    return NeptunesPride.universe.calcRangeValue(player);
+  }
+  return player.tech.propulsion.value;
 }
 export interface UnscannedStar extends SpaceObject {
   v: "0"; // unscanned (!visible)

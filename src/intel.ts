@@ -48,6 +48,9 @@ import {
   ScannedStar,
   SpaceObject,
   Star,
+  getScanValue,
+  getRangeValue,
+  getTech,
 } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
@@ -433,7 +436,7 @@ function NeptunesPrideAgent() {
         }
         const source = parseInt(sourceS);
         const sink = parseInt(sinkS);
-        let scanRange = scan.players[source].tech.scanning.value;
+        let scanRange = getScanValue(scan.players[source]);
         const inScanRange = (s0: Star, s1: Star) => {
           if (s0.puid === source) {
             if (s1.puid === sink) {
@@ -1879,7 +1882,7 @@ function NeptunesPrideAgent() {
   ) {
     let stars = NeptunesPride.universe.galaxy.stars;
     let universe = NeptunesPride.universe;
-    let scanRange = universe.galaxy.players[owner].tech.scanning.value;
+    let scanRange = getScanValue(universe.galaxy.players[owner]);
     for (const s in stars) {
       let star = stars[s];
       if (star.puid == owner) {
@@ -2090,17 +2093,17 @@ function NeptunesPrideAgent() {
 
     function lyToMap() {
       const player = NeptunesPride.universe.player;
-      return player.tech.scanning.value / (player.tech.scanning.level + 2);
+      return getScanValue(player) / (getTech(player, "scanning").level + 2);
     }
 
     function getAdjustedScanRange(player: Player) {
       const sH = combatInfo.combatHandicap;
-      const scanRange = player.tech.scanning.value + sH * lyToMap();
+      const scanRange = getScanValue(player) + sH * lyToMap();
       return scanRange;
     }
     function getAdjustedFleetRange(player: Player) {
       const pH = combatInfo.combatHandicap;
-      const scanRange = player.tech.propulsion.value + pH * lyToMap();
+      const scanRange = getRangeValue(player) + pH * lyToMap();
       return scanRange;
     }
     function worldToPixels(dist: number) {
@@ -2481,7 +2484,7 @@ function NeptunesPrideAgent() {
     const bubbleLayer = document.createElement("canvas");
     map.drawStars = function () {
       const universe = NeptunesPride.universe;
-      if (universe.selectedStar?.player && settings.territoryOn && !isNP4()) {
+      if (universe.selectedStar?.player && settings.territoryOn) {
         const context: CanvasRenderingContext2D = map.context;
         let p = universe.selectedStar.player.uid;
         {
@@ -2737,8 +2740,7 @@ function NeptunesPrideAgent() {
             let y = map.worldToScreenY(fleet.y) + offsety;
             if (
               distance >
-              universe.galaxy.players[universe.selectedStar.puid].tech.scanning
-                .value
+              getScanValue(universe.galaxy.players[universe.selectedStar.puid])
             ) {
               if (fleet.path && fleet.path.length > 0) {
                 dx = fleet.path[0].x - universe.selectedStar.x;
@@ -2746,8 +2748,7 @@ function NeptunesPrideAgent() {
                 distance = Math.sqrt(dx * dx + dy * dy);
                 if (
                   distance <
-                  universe.galaxy.players[universe.selectedStar.puid].tech
-                    .scanning.value
+                  getScanValue(universe.galaxy.players[universe.selectedStar.puid])
                 ) {
                   let stepRadius = NeptunesPride.universe.galaxy.fleet_speed;
                   if (fleet.warpSpeed) stepRadius *= 3;
@@ -2782,8 +2783,7 @@ function NeptunesPrideAgent() {
                     ticks += 1;
                   } while (
                     distance >
-                      universe.galaxy.players[universe.selectedStar.puid].tech
-                        .scanning.value &&
+                      getScanValue(universe.galaxy.players[universe.selectedStar.puid]) &&
                     ticks <= fleet.etaFirst + 1
                   );
                   ticks -= 1;
