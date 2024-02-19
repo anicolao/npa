@@ -1,6 +1,6 @@
 import { computeCombatOutcomes, StarState } from "./combatcalc";
-import { messageCache } from "./events";
-import { dist, FleetOrder, ScanningData, techCost } from "./galaxy";
+import { isNP4, messageCache } from "./events";
+import { addAccessors, dist, FleetOrder, ScanningData, techCost, getTech } from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
 
@@ -34,6 +34,9 @@ export function resetAliases() {
   }
 }
 
+function isVisible(star: any) {
+  return star.v === "1" || star.v === 1;
+}
 export function futureTime(
   galaxy: ScanningData,
   tickOffset: number,
@@ -42,6 +45,9 @@ export function futureTime(
     ...galaxy,
     futureTime: true,
   };
+  if (isNP4()) {
+    addAccessors("galaxy", newState);
+  }
   if (tickOffset <= 0) {
     console.error("Future time machine going backwards NIY");
     logCount("error_back_to_the_future");
@@ -59,13 +65,14 @@ export function futureTime(
     for (const sk in stars) {
       const star = stars[sk];
       const newStar = { ...star };
-      if (newStar.v === "1" && star.v === "1") {
+      if (isVisible(newStar)) {
         if (newStar.i > 0) {
           const ticksPerDay = newState.production_rate;
           const industry = newStar.i;
-          const manufacturing = players[star.puid].tech.manufacturing.level;
+          const manufacturing = getTech(players[star.puid],"manufacturing").level;
           const production = (industry * (manufacturing + 5)) / ticksPerDay;
-          newStar.st += production + newStar.c;
+          const partial = newStar.c !== undefined ? newStar.c : newStar.yard;
+          newStar.st += production + partial;
           newStar.c = newStar.st - Math.floor(newStar.st);
           newStar.st = Math.floor(newStar.st);
           newStar.totalDefenses += newStar.st - star.st;
@@ -74,7 +81,7 @@ export function futureTime(
       }
       const starstate = staroutcomes[sk];
       if (starstate !== undefined) {
-        if (newStar.v === "1") {
+        if (isVisible(newStar)) {
           // TODO: check this more carefully
           // This definitely caused a bug; I can't remember now what it was meant to fix?
           // The bug it caused was combat wouldn't weaken a succesfully defended star, but of
@@ -93,7 +100,7 @@ export function futureTime(
         const [delay, destUid, action, argument] = fleets[fk].o[0];
         const destination = stars[destUid];
         if (newFleet?.orbiting) {
-          if (newFleet.orbiting.v === "1" && destination.v === "1") {
+          if (isVisible(newFleet.orbiting) && isVisible(destination)) {
             newFleet.warpSpeed =
               newFleet.orbiting.ga === destination.ga ? destination.ga : 0;
           }
@@ -118,7 +125,7 @@ export function futureTime(
             const [dx, dy] = [destX - x, destY - y];
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(
-                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n}`,
+                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n} @ ${dx},${dy} ${newState.fleet_speed}`,
               );
             }
             const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
@@ -152,7 +159,7 @@ export function futureTime(
           if (
             newFleet.puid === newStar.puid &&
             newFleet.st > 0 &&
-            newStar.v === "1"
+            isVisible(newStar)
           ) {
             // Number of ships transfered from carrier to star.
             let transferred = 0;
@@ -191,7 +198,7 @@ export function futureTime(
           if (newFleet.o.length > 0) {
             const nextDestUid = fleets[fk].o[0][1];
             const nextDestination = stars[nextDestUid];
-            if (nextDestination.v === "1" && destination.v === "1") {
+            if (isVisible(nextDestination) && isVisible(destination)) {
               newFleet.warpSpeed =
                 nextDestination.ga === destination.ga ? nextDestination.ga : 0;
             }
@@ -231,7 +238,7 @@ export function futureTime(
           ...player.tech[player.researching],
         });
         tech.research += player.total_science;
-        const cost = techCost({ brr: tech.brr, level: tech.level + 1 });
+        const cost = techCost({ ...tech, brr: tech.brr, level: tech.level + 1 });
         if (tech.research >= cost) {
           tech.research -= cost;
           tech.level += 1;
@@ -244,7 +251,7 @@ export function futureTime(
         if (players[pind].cash !== undefined) {
           const player = (players[pind] = { ...players[pind] });
           player.cash +=
-            player.total_economy * 10 + 75 * player.tech.banking.level;
+            player.total_economy * 10 + 75 * getTech(player, "banking").level;
         }
       }
       newState.production_counter = 0;
