@@ -72,6 +72,7 @@ import {
   combatInfo,
   combatOutcomes,
   fleetOutcomes,
+  getWeaponsLevel,
   handicapString,
   StarState,
   tickNumber,
@@ -2226,8 +2227,7 @@ function NeptunesPrideAgent() {
       if (
         universe.selectedStar?.alliedDefenders &&
         settings.autoRulerPower > 0 &&
-        map.scale >= 200 &&
-        !isNP4()
+        map.scale >= 200
       ) {
         const visTicks = NeptunesPride.gameConfig.turnBased
           ? NeptunesPride.gameConfig.turnJumpTicks
@@ -2381,16 +2381,16 @@ function NeptunesPrideAgent() {
         const players = NeptunesPride.universe.galaxy.players;
         let defenderWS = Math.max(
           1,
-          players[star.puid]?.tech.weapons.level,
+          players[star.puid]?.tech ? getWeaponsLevel(players[star.puid]) : 0,
           ...star?.alliedDefenders.map(
-            (d: number) => players[d].tech.weapons.level
+            (d: number) => getWeaponsLevel(players[d])
           )
         );
         let allVisible = true;
         if (other.puid !== -1) {
           allVisible = allVisible && other.v === "1";
           enemyShips += other.totalDefenses;
-          enemyWS = Math.max(enemyWS, players[other.puid].tech.weapons.level);
+          enemyWS = Math.max(enemyWS, getWeaponsLevel(players[other.puid]));
         }
 
         if (enemyTicks - visTicks >= ticks) {
@@ -2400,7 +2400,7 @@ function NeptunesPrideAgent() {
             defenderShips += support.totalDefenses;
             defenderWS = Math.max(
               defenderWS,
-              players[support.puid].tech.weapons.level
+              getWeaponsLevel(players[support.puid])
             );
           }
         } else {
@@ -2425,7 +2425,7 @@ function NeptunesPrideAgent() {
                 defenderShips += o.totalDefenses;
                 defenderWS = Math.max(
                   defenderWS,
-                  players[o.puid].tech.weapons.level
+                  getWeaponsLevel(players[o.puid])
                 );
               }
             } else {
@@ -2436,7 +2436,7 @@ function NeptunesPrideAgent() {
             if (o.puid !== -1) {
               allVisible = allVisible && o.v === "1";
               enemyShips += o.totalDefenses;
-              enemyWS = Math.max(enemyWS, players[o.puid].tech.weapons.level);
+              enemyWS = Math.max(enemyWS, getWeaponsLevel(players[o.puid]));
             }
           }
         }
@@ -2814,9 +2814,7 @@ function NeptunesPrideAgent() {
         }
       }
 
-      if (!isNP4()) {
-        drawAutoRuler();
-      }
+      drawAutoRuler();
     };
     let base = -1;
     let wasBatched = false;
