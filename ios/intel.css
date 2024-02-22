@@ -1,0 +1,54 @@
+/* ==UserStyle==
+@name        Neptune's Pride Agent CSS
+@description CSS fixups for NP UI
+@match       https://neptunespride4.appspot.com/*
+@version     2.2.10
+@updateURL   https://raw.githubusercontent.com/anicolao/npa/futuresquish/ios/intel.css
+==/UserStyle== */
+
+.no_overflow {
+	overflow: visible !important;
+}
+
+div.no_overflow:first-of-type>div:first-of-type {
+	position: sticky;
+	top: 0px;
+	background-color: #1a1d44;
+	z-index: 100;
+	border-bottom: 1px solid #2C3273;
+}
+
+.button {
+	z-index: 150;
+}
+
+.screenshot {
+	max-width: 128px;
+	overflow: scroll;
+	transition: max-width 2s, top 2s, left 2s, width 2s, height 2s;
+}
+
+img.screenshot:hover {
+	z-index: 10000;
+	max-width: none;
+	background-color: #000000;
+}
+div.screenshot:hover {
+	max-width: none;
+	margin-right: 10%;
+	width: 90vw;
+	height: 100vh;
+	position:fixed;
+	top:0;
+	left:0;
+	border: 5px solid #00ff00;
+	z-index: 10000;
+}
+
+.button:hover { background: #FF9000; }
+.button:active { background: #00AA00; }
+
+.equal_cols {
+	width: auto !important;
+	padding-right: 0.5em;
+}
