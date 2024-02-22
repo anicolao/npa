@@ -100,6 +100,7 @@ export interface NeptunesPrideData {
   inbox: any;
   universe: any;
   gameNumber: any;
+  gameId?: any;
   np: any;
   npui: any;
   originalPlayer: any;

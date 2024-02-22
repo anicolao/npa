@@ -7,6 +7,7 @@ import {
   ScanningData,
   techCost,
   getTech,
+  ScannedStar,
 } from "./galaxy";
 import { logCount } from "./npaserver";
 import { clone } from "./patch";
@@ -41,7 +42,7 @@ export function resetAliases() {
   }
 }
 
-function isVisible(star: any) {
+function isVisible(star: any): star is ScannedStar {
   return star.v === "1" || star.v === 1;
 }
 export function futureTime(
@@ -72,7 +73,7 @@ export function futureTime(
     for (const sk in stars) {
       const star = stars[sk];
       const newStar = { ...star };
-      if (isVisible(newStar)) {
+      if (isVisible(newStar) && isVisible(star)) {
         if (newStar.i > 0) {
           const ticksPerDay = newState.production_rate;
           const industry = newStar.i;

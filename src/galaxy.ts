@@ -87,6 +87,7 @@ export interface Player {
   researching?: TechKey;
   researching_next?: TechKey;
   cash?: number;
+  cashPerDay?: number;
 }
 export interface TechInfo {
   sv?: number; // starting value
@@ -95,6 +96,7 @@ export interface TechInfo {
   value: number; // value = sv + level*bv -> start value + level * base value
   brr?: number; // base research rate
   research?: number; // research points so far
+  cost?: number; // NP4 cost
 }
 
 export type TechKey =
@@ -145,6 +147,7 @@ export interface UnscannedStar extends SpaceObject {
 export interface ScannedStar extends SpaceObject {
   v: "1"; // scanned (visible)
   c: number; // fractional ship count
+  yard: number; // NP4 fractional ship count
   e: number; // economy
   ga: number; // stargate present?
   i: number; // industry
@@ -164,7 +167,7 @@ export function dist(s1: SpaceObject, s2: SpaceObject) {
   return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
 }
 
-export function techCost(tech: { brr: number; level: number; cost: number }) {
+export function techCost(tech: TechInfo) {
   if (isNP4()) {
     return tech.level * tech.cost;
   }
