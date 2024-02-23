@@ -17,6 +17,7 @@ import { openDB } from "idb";
 import { type ScanningData } from "./galaxy";
 import { clone, diff, patch as patchR, type Patch }  from "./patch";
 import { getVersion } from "./version";
+import { getGameNumber } from "./intel";
 
 function containsNulls(a: Patch) {
   if (typeof a !== "object") return false;
@@ -258,7 +259,7 @@ export async function restoreFromDB(gameId: number, apikey: string) {
 }
 
 export function registerForScans(apikey: string, notifications?: string) {
-  const gameid = NeptunesPride.gameNumber;
+  const gameid = getGameNumber();
   const store = collection(firestore, `newkey`);
   if (notifications) {
     addDoc(store, { game_id: gameid, api_key: apikey, notifications });
@@ -295,7 +296,7 @@ export async function getServerScans(apikey: string) {
     console.log(`Already watching ${apikey}`);
     return;
   }
-  const gameid = NeptunesPride.gameNumber;
+  const gameid = getGameNumber();
   await restoreFromDB(gameid, apikey);
   const len = scanCache[apikey]?.length || 0;
   console.log(`Fetched ${len} entries from ${apikey}`);
@@ -870,7 +871,7 @@ export function getScan(
 }
 
 export function logError(e: any) {
-  const gameid = NeptunesPride.gameNumber || NeptunesPride.gameId;
+  const gameid = getGameNumber();
   const store = collection(firestore, `error`);
   const stack = e?.error?.stack || e?.reason?.stack || "no stack trace";
   const message =

@@ -1,4 +1,5 @@
 import { openDB } from "idb";
+import { getGameNumber } from "./intel";
 import { post } from "./network";
 import { logCount } from "./npaserver";
 export const messageCache: { [k: string]: any[] } = {
@@ -26,7 +27,7 @@ interface TypedMessage {
 export const messageIndex: { [word: string]: TypedMessage[] } = {};
 
 function dbName(group: string) {
-  return `${NeptunesPride.gameNumber}:${group}`;
+  return `${getGameNumber()}:${group}`;
 }
 async function store(incoming: any[], group: string) {
   const db = await openDB(dbName(group), 1, {
@@ -286,7 +287,7 @@ export async function requestRecentMessages(
     offset: 0,
     group,
     version: NeptunesPride.version,
-    game_number: NeptunesPride.gameNumber,
+    game_number: getGameNumber(),
   };
   logCount(group);
   return cacheEventResponseCallback(group, await post(url, data));
@@ -304,7 +305,7 @@ export async function requestMessageComments(
     offset: 0,
     message_key,
     version: NeptunesPride.version,
-    game_number: NeptunesPride.gameNumber,
+    game_number: getGameNumber(),
   };
   return cacheEventResponseCallback(message_key, await post(url, data));
 }

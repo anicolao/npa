@@ -27,7 +27,7 @@ import {
   isNP4,
 } from "./events";
 import { GameStore, TypedProperty } from "./gamestore";
-import { post } from "./network";
+import { get, post } from "./network";
 import {
   countScans,
   getLastRecord,
@@ -107,6 +107,10 @@ export interface NeptunesPrideData {
   gameConfig: any;
   account: any;
   templates: { [k: string]: string };
+}
+
+export function getGameNumber() {
+  return NeptunesPride.gameNumber || NeptunesPride.gameId; 
 }
 declare global {
   var jQuery: any;
@@ -197,7 +201,8 @@ function NeptunesPrideAgent() {
   };
   const linkPlayerSymbols = function () {
     let universe = NeptunesPride.universe;
-    for (let i = 0; i < 64; ++i) {
+    const offset = isNP4() ? 1 : 0;
+    for (let i = 0 + offset; i < 64 + offset; ++i) {
       if (universe.hyperlinkedMessageInserts[i]) {
         const player = NeptunesPride.universe.galaxy.players[i];
         universe.hyperlinkedMessageInserts[`${i}`] =
@@ -1219,7 +1224,8 @@ function NeptunesPrideAgent() {
   const rebuildColorMap = function (galaxy: any) {
     if (galaxy.players[1].shape !== undefined && colorMap) {
       //console.log("rebuild color map before ", JSON.stringify(colorMap));
-      colorMap = colorMap.map((_, uid) => {
+      colorMap = colorMap.map((_, i) => {
+        const uid = i + (isNP4() ? 1 : 0);
         if (galaxy.players[uid] !== undefined) {
           let c = galaxy.players[uid].color;
           if (c === undefined || galaxy.players[uid].colorStyle) {
@@ -1238,24 +1244,26 @@ function NeptunesPrideAgent() {
           return colors[c];
         }
         //console.log(`${uid} -> ${colorMap[uid]} CM`);
-        return colorMap[uid];
+        return colorMap[i];
       });
       //console.log("rebuild color map after ", JSON.stringify(colorMap));
     }
     if (galaxy.players[1].shape !== undefined && shapeMap) {
-      shapeMap = shapeMap.map((_, uid) => {
+      shapeMap = shapeMap.map((_, i) => {
+        const uid = i + (isNP4() ? 1 : 0);
         if (galaxy.players[uid] !== undefined) {
           return galaxy.players[uid].shape;
         }
-        return shapeMap[uid];
+        return shapeMap[i];
       });
     }
     colorMap?.forEach((c: string, i: number) => {
-      if (NeptunesPride.universe.galaxy.players[i]) {
-        if (settings.whitePlayer && i === NeptunesPride.universe.player.uid) {
+      const uid = i + (isNP4() ? 1 : 0);
+      if (NeptunesPride.universe.galaxy.players[uid]) {
+        if (settings.whitePlayer && uid === NeptunesPride.universe.player.uid) {
           return;
         }
-        setPlayerColor(i, c);
+        setPlayerColor(uid, c);
       }
     });
   };
@@ -1646,8 +1654,8 @@ function NeptunesPrideAgent() {
     });
     players.forEach((p, i) => {
       const name = p.alias;
-      const color = colorMap[p.uid];
-      const shape = shapeMap[p.uid];
+      const color = playerToColorMap(p);
+      const shape = playerToShapeMap(p);
       const yOffset = 3 * i + 3 * colorSwatchRows + shapeRowHeight;
       Crux.Text("", "pad12")
         .rawHTML(name)
@@ -1685,7 +1693,7 @@ function NeptunesPrideAgent() {
           if (shapeField.getValue() != shape) {
             const newShape = +shapeField.getValue();
             console.log(`set ${p.uid} to shape ${newShape}`);
-            shapeMap[p.uid] = newShape;
+            shapeMap[p.uid + (isNP4() ? -1 : 0)] = newShape;
             changed = true;
           }
         }
@@ -1930,6 +1938,12 @@ function NeptunesPrideAgent() {
 
   let colorMap = colors.flatMap((x) => colors);
   let shapeMap = colorMap.map((x, i) => Math.floor(i / 8));
+  function playerToColorMap(player: Player) {
+    return colorMap[player.uid - (isNP4() ? 1 : 0)];
+  }
+  function playerToShapeMap(player: Player) {
+    return shapeMap[player.uid - (isNP4() ? 1 : 0)];
+  }
   const css = cssrules();
   let originalStarSrc: any = undefined;
   async function recolorPlayers() {
@@ -1949,7 +1963,7 @@ function NeptunesPrideAgent() {
     const players = NeptunesPride.universe.galaxy.players;
     for (let pk in players) {
       const player = players[pk];
-      const color = colorMap[player.uid];
+      const color = playerToColorMap(player);
       // player underbar in player list, but these only exist
       // for the first 8 players.
       if (parseInt(pk) < 8) {
@@ -1965,7 +1979,7 @@ function NeptunesPrideAgent() {
         playerSprite.getContext("2d");
       const shapeIndex =
         player.shapeIndex !== undefined ? player.shapeIndex : player.shape;
-      const shapeOffset = (shapeIndex - shapeMap[player.uid]) * 64;
+      const shapeOffset = (shapeIndex - playerToShapeMap(player)) * 64;
       playerContext.drawImage(originalStarSrc, shapeOffset, 0);
       playerContext.globalCompositeOperation = "source-in";
       playerContext.fillStyle = color;
@@ -1987,7 +2001,7 @@ function NeptunesPrideAgent() {
     // draw stargate glows
     for (let pk in players) {
       const player = players[pk];
-      const color = colorMap[player.uid];
+      const color = playerToColorMap(player);
       const playerSprite = document.createElement("canvas");
       playerSprite.width = playerSprite.height = 64 * 9;
       const playerContext: CanvasRenderingContext2D =
@@ -2053,8 +2067,8 @@ function NeptunesPrideAgent() {
     const universe = NeptunesPride.universe;
     for (let i in universe.galaxy.players) {
       const player = universe.galaxy.players[i];
-      const recolor = `style='color: ${colorMap[player.uid]};'`;
-      const shape = shapeMap[player.uid];
+      const recolor = `style='color: ${playerToColorMap(player)};'`;
+      const shape = playerToShapeMap(player);
       player.colourBox = `<span class='playericon_font pc_${player.colorIndex}' ${recolor}>${shape}</span>`;
       player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
     }
@@ -2383,8 +2397,8 @@ function NeptunesPrideAgent() {
         let defenderWS = Math.max(
           1,
           players[star.puid]?.tech ? getWeaponsLevel(players[star.puid]) : 0,
-          ...star?.alliedDefenders.map(
-            (d: number) => getWeaponsLevel(players[d])
+          ...star?.alliedDefenders.map((d: number) =>
+            getWeaponsLevel(players[d])
           )
         );
         let allVisible = true;
@@ -2529,7 +2543,7 @@ function NeptunesPrideAgent() {
                 }
               }
               const player = universe.galaxy.players[p];
-              const color = colorMap[player.uid];
+              const color = playerToColorMap(player);
               const r =
                 parseInt(color.substring(1, 3).toUpperCase(), 16) / 255.0;
               const g =
@@ -2750,7 +2764,9 @@ function NeptunesPrideAgent() {
                 distance = Math.sqrt(dx * dx + dy * dy);
                 if (
                   distance <
-                  getScanValue(universe.galaxy.players[universe.selectedStar.puid])
+                  getScanValue(
+                    universe.galaxy.players[universe.selectedStar.puid]
+                  )
                 ) {
                   let stepRadius = NeptunesPride.universe.galaxy.fleet_speed;
                   if (fleet.warpSpeed) stepRadius *= 3;
@@ -2785,7 +2801,9 @@ function NeptunesPrideAgent() {
                     ticks += 1;
                   } while (
                     distance >
-                      getScanValue(universe.galaxy.players[universe.selectedStar.puid]) &&
+                      getScanValue(
+                        universe.galaxy.players[universe.selectedStar.puid]
+                      ) &&
                     ticks <= fleet.etaFirst + 1
                   );
                   ticks -= 1;
@@ -2953,6 +2971,7 @@ function NeptunesPrideAgent() {
         if (fp === -1) break;
         sub = s.slice(fp + 2, sp);
         pattern = `[[${sub}]]`;
+        sub = sub.replaceAll("&#x3A;", ":");
         if (templateData[sub] !== undefined) {
           s = s.replace(pattern, templateData[sub]);
         } else if (/^upgrade:[eisg](:[0-9]+)+$/.test(sub)) {
@@ -3044,14 +3063,17 @@ function NeptunesPrideAgent() {
             pattern,
             `<p align="center"><iframe width="280" height="158" src="${embedURL}" title="YouTube video player" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; web-share" allowfullscreen></iframe><br/><a href=${sub} target="_blank">Open Youtube in a new tab</a></p>`
           );
-        } else if (/^api:\w{6}$/.test(sub)) {
+        } else if (
+          /^api:\w{6}$/.test(sub) ||
+          /^api(:|&#x3A;)\w{12}$/.test(sub)
+        ) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
           apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
           s = s.replace(pattern, apiLink);
-        } else if (/^apiv:\w{6}$/.test(sub)) {
+        } else if (/^apiv:\w{6}$/.test(sub) || /^apiv:\w{12}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
-        } else if (/^apim:\w{6}$/.test(sub)) {
+        } else if (/^apim:\w{6}$/.test(sub) || /^apim:\w{12}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
         } else if (/^viewgame:[0-9]+:.+$/.test(sub)) {
@@ -3653,21 +3675,21 @@ function NeptunesPrideAgent() {
   const setPlayerColor = function (uid: number, color: string) {
     //console.log(`Set player color to ${color} for ${uid}`);
     const player = NeptunesPride.universe.galaxy.players[uid];
-    colorMap[player.uid] = color;
+    colorMap[player.uid + (isNP4() ? -1 : 0)] = color;
     if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
       if (!player.originalColor) {
         player.originalColor = player.colorStyle;
         //console.log(`Record original color as ${player.originalColor}`);
       }
       //console.log(`original color was ${player.originalColor}`);
-      player.colorStyle = colorMap[player.uid];
+      player.colorStyle = playerToColorMap(player);
       //console.log(`colorStyle is ${player.colorStyle}`);
     } else {
       if (!player.originalColor) {
         player.originalColor = player.color;
       }
       player.prevColor = player.color;
-      player.color = colorMap[player.uid];
+      player.color = playerToColorMap(player);
     }
   };
   let toggleWhitePlayer = function () {
@@ -3735,8 +3757,9 @@ function NeptunesPrideAgent() {
         .then((c) => {
           const newColors = c.split(" ");
           newColors.forEach((c: string, i: number) => {
-            if (NeptunesPride.universe.galaxy.players[i]) {
-              setPlayerColor(i, c);
+            const uid = i + (isNP4() ? 1 : 0);
+            if (NeptunesPride.universe.galaxy.players[uid]) {
+              setPlayerColor(uid, c);
             }
           });
           store.get("shapeMap").then((s) => {
@@ -3770,7 +3793,7 @@ function NeptunesPrideAgent() {
   );
 
   var otherUserCode: string | undefined = undefined;
-  let game = NeptunesPride.gameNumber;
+  let game = getGameNumber();
   let store = new GameStore(game);
   let superOnServerResponse = NeptunesPride.np.onServerResponse;
   NeptunesPride.np.onServerResponse = function (response: { event: string }) {
@@ -4202,7 +4225,11 @@ function NeptunesPrideAgent() {
     if (NeptunesPride.gameVersion === "proteus") {
       return level * level * 5;
     }
-    return level * (NeptunesPride.gameConfig.tradeCost || NeptunesPride.universe.galaxy.config.tradeCost);
+    return (
+      level *
+      (NeptunesPride.gameConfig.tradeCost ||
+        NeptunesPride.universe.galaxy.config.tradeCost)
+    );
   };
   let techTable = function (
     output: Stanzas,
@@ -4300,13 +4327,12 @@ function NeptunesPrideAgent() {
     let allPlayers = Object.keys(players);
     let scanned = tradeScanned() ? "Scanned " : "";
     if (tradeScanned()) {
-      allPlayers = allPlayers.filter(
-        (k) =>
-          isNP4() ? 
-          NeptunesPride.universe.player.scannedPlayers[players[k].uid] :
-          NeptunesPride.universe.player.scannedPlayers.indexOf(
-            players[k].uid
-          ) >= 0
+      allPlayers = allPlayers.filter((k) =>
+        isNP4()
+          ? NeptunesPride.universe.player.scannedPlayers[players[k].uid]
+          : NeptunesPride.universe.player.scannedPlayers.indexOf(
+              players[k].uid
+            ) >= 0
       );
     }
     const numPerTable = 5;
@@ -4345,7 +4371,7 @@ function NeptunesPrideAgent() {
       ["total_science", "S"],
     ];
     if (!isNP4()) {
-      fields = fields.filter(x => x[0] !== "cashPerDay");
+      fields = fields.filter((x) => x[0] !== "cashPerDay");
     }
     const table: Stanzas = [];
     const sums = fields.map((x) => 0);
@@ -4393,8 +4419,8 @@ function NeptunesPrideAgent() {
     const offset = players[0] !== undefined ? 0 : 1;
     let allianceMatch =
       settings.allianceDiscriminator === "color"
-        ? colorMap.slice(offset, allPlayers.length)
-        : shapeMap.slice(offset, allPlayers.length);
+        ? colorMap.slice(0, allPlayers.length)
+        : shapeMap.slice(0, allPlayers.length);
     if (settings.allianceDiscriminator === "color" && settings.whitePlayer) {
       const p = NeptunesPride.universe.player;
       allianceMatch[p.uid] = p.prevColor;
@@ -4706,6 +4732,7 @@ function NeptunesPrideAgent() {
         !(await anyEventsNewerThan(cachedScan.now))
       ) {
         console.log(`Cache hit! ${cacheKey}`);
+        addAccessors("galaxy", cachedScan);
         return cachedScan;
       }
     } else {
@@ -4720,8 +4747,11 @@ function NeptunesPrideAgent() {
       api_version: "0.1",
       code: apiKey,
     };
-    let api = await post("https://np.ironhelmet.com/api", params);
+    let api = isNP4()
+      ? await get("https://neptunespride4.appspot.com/api", params)
+      : await post("https://np.ironhelmet.com/api", params);
     await store.set(cacheKey, api.scanning_data);
+    addAccessors("galaxy", api.scanning_data);
     return api.scanning_data;
   };
   const getPlayerIndex = function (apikey: string) {
