@@ -3106,6 +3106,10 @@ function NeptunesPrideAgent() {
           const splits = sub.split(":");
           const text = splits[1];
           s = s.replace(pattern, `<b>${text}</b>`);
+        } else if (/^sub:-?[\w-\.,][\w-\.,]*$/.test(sub)) {
+          const splits = sub.split(":");
+          const text = splits[1];
+          s = s.replace(pattern, `<sub style="font-size: 50%">${text}</sub>`);
         } else if (/^good:-?[\w-\.][\w-\.]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
@@ -4215,7 +4219,7 @@ function NeptunesPrideAgent() {
     "6": "🌎",
   };
 
-  let translateTech = (name: string) => xlate[name.substring(0, 4)];
+  let translateTech = (name: string) => xlate[name.substring !== undefined ? name.substring(0, 4) : name];
   let translateTechEmoji = (name: string) => {
     console.log(`name key [${name}]`);
     return xlateemoji[name.substring(0, 4)];
@@ -4831,9 +4835,7 @@ function NeptunesPrideAgent() {
         for (let i = 1; i < 10; ++i) {
           const betterTick = Math.ceil(remaining / researchRate(science + i));
           if (betterTick < tickIncr) {
-            upgrade = `${i}<sub style="font-size: 50%">${
-              tickIncr - betterTick
-            }</sub>`;
+            upgrade = `${i}[[sub:${tickIncr - betterTick}]]`;
             break;
           }
         }
@@ -4906,16 +4908,16 @@ function NeptunesPrideAgent() {
         }
         line += `| ${soFar}`;
         let researchPriority = [];
-        if (player.researching === key) {
+        if (player.researching == key) {
           researchPriority.push(1);
         }
-        if (player.researching_next === key) {
+        if (player.researching_next == key || player.researchingNext == key) {
           researchPriority.push(2);
         }
         if (researchPriority.length > 0) {
-          line += `<sub style="font-size: 50%">${researchPriority.join(
+          line += `[[sub:${researchPriority.join(
             ","
-          )}</sub>`;
+          )}]]`;
         }
         if (tech.level < best[key].level) {
           line += `<div><sub>(L${tech.level})</sub></div>`;
