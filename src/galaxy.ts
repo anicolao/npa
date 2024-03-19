@@ -163,6 +163,10 @@ export interface ScannedStar extends SpaceObject {
 }
 export type Star = UnscannedStar | ScannedStar;
 
+export function isVisible(star: any) {
+  return star.v === "1" || star.v === 1;
+}
+
 export function dist(s1: SpaceObject, s2: SpaceObject) {
   return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
 }

@@ -58,6 +58,7 @@ export interface CachedScan {
   timestamp: number;
 }
 export const scanCache: { [k: string]: any[] } = {};
+/*
 const diffCache: { [k: string]: any[] } = {};
 function validateDiffCache(gameid: number, apikey: string) {
   function match(a: any, b: any) {
@@ -155,6 +156,7 @@ function validateDiffCache(gameid: number, apikey: string) {
   diffCache[apikey]?.forEach((entry, i) => validateEntry(entry, i));
   console.log(`Validating diff cache for ${apikey}...completed`)
 }
+*/
 
 export function countScans(apikey: string) {
   //if (scanCache[apikey] && diffCache[apikey]) {
@@ -245,8 +247,8 @@ const firestore = initializeFirestore(app, {
 export async function restoreFromDB(gameId: number, apikey: string) {
   if (!scanCache[apikey] || scanCache[apikey].length === 0) {
     try {
-      diffCache[apikey] = await restore(gameId, apikey, "diffCache");
-      console.log(`Restored diff cache from db: ${diffCache[apikey]?.length}`);
+      //diffCache[apikey] = await restore(gameId, apikey, "diffCache");
+      //console.log(`Restored diff cache from db: ${diffCache[apikey]?.length}`);
       scanCache[apikey] = await restore(gameId, apikey, "scanCache");
       console.log(`Restored scan cache from db: ${scanCache[apikey].length}`);
       //validateDiffCache(gameId, apikey);
@@ -287,9 +289,11 @@ export function unloadServerScans() {
   for (const k in scanCache) {
     delete scanCache[k];
   }
+  /*
   for (const k in diffCache) {
     delete diffCache[k];
   }
+  */
 }
 export async function getServerScans(apikey: string) {
   if (scanCache[apikey] !== undefined) {
@@ -437,6 +441,7 @@ export async function getServerScans(apikey: string) {
   }
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   trimInvalidEntries(apikey);
+  /*
   const diffskey = `scandiffblocks/${gameid}/${apikey}`;
   const diffTimestamp = diffCache[apikey]?.slice(-1)[0]?.timestamp || 0;
   console.log(
@@ -614,7 +619,7 @@ export async function getServerScans(apikey: string) {
             if (last > 0) {
               diffCache[apikey][last].cached = undefined;
             }
-            */
+            *
             last++;
           }
           if (holeFound) {
@@ -685,6 +690,7 @@ export async function getServerScans(apikey: string) {
       console.error(error);
     },
   );
+  */
   const gamekey = `scans/${gameid}/${gameid}:${apikey}`;
   const scans = collection(firestore, gamekey);
   return onSnapshot(
@@ -785,6 +791,7 @@ function parseScan(scan: any) {
 }
 
 let lastScan: { [k: string]: number } = {};
+/*
 function walkToScan(apikey: string, index: number) {
   let last = lastScan[apikey] || 0;
   lastScan[apikey] = index;
@@ -821,6 +828,7 @@ function walkToScan(apikey: string, index: number) {
   }
   return diffCache[apikey][index].cached;
 }
+*/
 export function makeScan(
   apikey: string,
   index: number,
@@ -835,6 +843,7 @@ export function getScan(
 ): ScanningData & { eof?: boolean } {
   const scans = scanCache[apikey];
   const oldRet = parseScan(scans[index]);
+  /**
   try {
     if (diffCache[apikey]) {
       if (diffCache[apikey].length > index) {
@@ -867,6 +876,7 @@ export function getScan(
     console.error(err);
     logCount(err);
   }
+  */
   return oldRet;
 }
 
