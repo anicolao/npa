@@ -258,7 +258,7 @@ async function cacheEventResponseCallback(
 }
 
 export function isNP4() {
-  return (NeptunesPride.gameVersion === "") && Crux.templates.NP4 === "NP4");
+  return (NeptunesPride.gameVersion === "") && Crux.templates.NP4 === "NP4";
 }
 
 const getRequestPath = () => {

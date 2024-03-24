@@ -91,6 +91,7 @@ interface CruxLib {
   DropDown: any;
   TextInput: any;
   Clickable: any;
+  templates: { [k: string]: string };
 }
 export interface NeptunesPrideData {
   sendAllTech: (recipient: number) => void;
@@ -107,7 +108,6 @@ export interface NeptunesPrideData {
   originalPlayer: any;
   gameConfig: any;
   account: any;
-  templates: { [k: string]: string };
 }
 
 export function getGameNumber() {
