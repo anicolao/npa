@@ -40,7 +40,6 @@ describe("autocomplete tests", () => {
     originalPlayer: undefined,
     gameConfig: undefined,
     account: undefined,
-    templates: {},
   };
   beforeEach(() => {
     dom = new JSDOM(
