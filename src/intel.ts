@@ -311,18 +311,19 @@ function NeptunesPrideAgent() {
   function starReport() {
     let players = NeptunesPride.universe.galaxy.players;
     let stars = NeptunesPride.universe.galaxy.stars;
-        const fleets = NeptunesPride.universe.galaxy.fleets;
-        const shipCounts: { [k: string]: number } = {};
-        Object.keys(NeptunesPride.universe.galaxy.players).forEach(
-          (k) => (shipCounts[k] = 0)
-        );
-        for (const f in fleets) {
-          let fleet = fleets[f];
-          const orbiting = fleet?.ouid === undefined || (isNP4() && fleet?.ouid === 0);
-          if (fleet.o && fleet.o.length > 0 && orbiting) {
-            shipCounts[fleet.puid] += fleet.st;
-          }
-        }
+    const fleets = NeptunesPride.universe.galaxy.fleets;
+    const shipCounts: { [k: string]: number } = {};
+    Object.keys(NeptunesPride.universe.galaxy.players).forEach(
+      (k) => (shipCounts[k] = 0)
+    );
+    for (const f in fleets) {
+      let fleet = fleets[f];
+      const orbiting =
+        fleet?.ouid === undefined || (isNP4() && fleet?.ouid === 0);
+      if (fleet.o && fleet.o.length > 0 && orbiting) {
+        shipCounts[fleet.puid] += fleet.st;
+      }
+    }
 
     let output: Stanzas = [];
     for (const p in players) {
@@ -1729,16 +1730,16 @@ function NeptunesPrideAgent() {
           }
         }
         if (changed) {
-          console.log(`before: ${shapeMap.join(",")}`)
+          console.log(`before: ${shapeMap.join(",")}`);
           recolorPlayers();
-          console.log(`set: ${shapeMap.join(",")}`)
+          console.log(`set: ${shapeMap.join(",")}`);
           store.set("colorMap", colorMap.join(" "));
           store.set("shapeMap", shapeMap.join(" "));
-          console.log(`recolor: ${shapeMap.join(",")}`)
+          console.log(`recolor: ${shapeMap.join(",")}`);
           NeptunesPride.np.trigger("refresh_interface");
-          console.log(`mapre: ${shapeMap.join(",")}`)
+          console.log(`mapre: ${shapeMap.join(",")}`);
           mapRebuild();
-          console.log(`preclip: ${shapeMap.join(",")}`)
+          console.log(`preclip: ${shapeMap.join(",")}`);
           clipColorConfig();
         }
       };
@@ -3180,6 +3181,7 @@ function NeptunesPrideAgent() {
             `<div width="100%" class="screenshot"><img class="screenshot" src="${sub}"/></div>`
           );
         } else {
+          console.error(`failed substitution ${sub}`)
           s = s.replace(pattern, `(${sub})`);
         }
       }
@@ -3919,8 +3921,8 @@ function NeptunesPrideAgent() {
       ...universe.galaxy.players[scan.player_uid],
     };
 
-    const scanStars = {...scan.stars};
-    const scanFleets = {...scan.fleets};
+    const scanStars = { ...scan.stars };
+    const scanFleets = { ...scan.fleets };
     if (isNP4()) {
       for (const k in scanStars) {
         if (universe.galaxy.stars[k] !== undefined) {
@@ -4005,7 +4007,7 @@ function NeptunesPrideAgent() {
     NeptunesPride.gameNumber = gameId;
     const games = await buildGameMap();
     unloadServerScans();
-    const keys = games[gameId] !== undefined ? games[gameId] : [ splits[2] ];
+    const keys = games[gameId] !== undefined ? games[gameId] : [splits[2]];
     allSeenKeys = keys.map((x) => `[[api:${x}]]`);
     let maxTick = 0;
     keys.forEach(async (code) => {
@@ -4820,7 +4822,7 @@ function NeptunesPrideAgent() {
     if (api.scanning_data) {
       addAccessors("galaxy", api.scanning_data);
     } else {
-      console.error(`failed to get scanning data for ${params.code}`)
+      console.error(`failed to get scanning data for ${params.code}`);
     }
     return api.scanning_data;
   };
@@ -4873,6 +4875,7 @@ function NeptunesPrideAgent() {
   let researchReport = async function () {
     lastReport = "research";
     const { players, apiKeys, playerIndexes } = await getPrimaryAlliance();
+    const processedUids: { [k: string]: Player } = {};
     let output: Stanzas = [];
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
@@ -4883,32 +4886,37 @@ function NeptunesPrideAgent() {
       const apiKey = await store.get(apiKeys[pii]);
       const scan = await getUserScanData(apiKey);
       if (scan) {
-        const player = scan.players[pi];
-        const tech = player.tech[player.researching];
-        const soFar = tech.research;
-        const total = techCost(tech);
-        const remaining = total - soFar;
-        const science = p.total_science;
-        const researchRate = (science: number) => {
-          if (NeptunesPride.gameVersion === "proteus") {
-            return science * player.tech.research.level;
+        for (const suid of Object.keys(scan.players)) {
+          const player = scan.players[suid];
+          if (player.researching === undefined) continue;
+          if (processedUids[suid] !== undefined) continue;
+          processedUids[suid] = player;
+          const tech = player.tech[player.researching];
+          const soFar = tech.research;
+          const total = techCost(tech);
+          const remaining = total - soFar;
+          const science = player.total_science || player.totalScience;
+          const researchRate = (science: number) => {
+            if (NeptunesPride.gameVersion === "proteus") {
+              return science * player.tech.research.level;
+            }
+            return science;
+          };
+          const tickIncr = Math.ceil(remaining / researchRate(science));
+          const tick = scan.tick + tickIncr;
+          let upgrade = "";
+          for (let i = 1; i < 10; ++i) {
+            const betterTick = Math.ceil(remaining / researchRate(science + i));
+            if (betterTick < tickIncr) {
+              upgrade = `${i}[[sub:${tickIncr - betterTick}]]`;
+              break;
+            }
           }
-          return science;
-        };
-        const tickIncr = Math.ceil(remaining / researchRate(science));
-        const tick = scan.tick + tickIncr;
-        let upgrade = "";
-        for (let i = 1; i < 10; ++i) {
-          const betterTick = Math.ceil(remaining / researchRate(science + i));
-          if (betterTick < tickIncr) {
-            upgrade = `${i}[[sub:${tickIncr - betterTick}]]`;
-            break;
-          }
+          const techName = translateTech(player.researching);
+          output.push([
+            `[[${suid}]]|${techName}|[[Tick #${tick}]]|${soFar}/${total}|${science}|${upgrade}`,
+          ]);
         }
-        const techName = translateTech(player.researching);
-        output.push([
-          `[[${pi}]]|${techName}|[[Tick #${tick}]]|${soFar}/${total}|${p.total_science}|${upgrade}`,
-        ]);
       }
     }
     output.push("--- Alliance Research Progress ---");
@@ -4927,14 +4935,8 @@ function NeptunesPrideAgent() {
         research: 0,
       };
     }
-    for (let pii = 0; pii < playerIndexes.length; ++pii) {
-      const pi = playerIndexes[pii];
-      const p = players[pi];
-      const apiKey = await store.get(apiKeys[pii]);
-      const scan = await getUserScanData(apiKey);
-      if (!scan) continue;
-      const player = scan.players[pi];
-      let line = `[[${pi}]]`;
+    for (const pk in processedUids) {
+      const player = processedUids[pk];
       for (const key of techs) {
         const tech = player.tech[key];
         if (tech.level === best[key].level) {
@@ -4952,14 +4954,9 @@ function NeptunesPrideAgent() {
         .map((key) => `[[sub:L${best[key].level}]] ${translateTechEmoji(key)}`)
         .join("|")}`
     );
-    for (let pii = 0; pii < playerIndexes.length; ++pii) {
-      const pi = playerIndexes[pii];
-      const p = players[pi];
-      const apiKey = await store.get(apiKeys[pii]);
-      const scan = await getUserScanData(apiKey);
-      if (!scan) continue;
-      const player = scan.players[pi];
-      let line = `[[${pi}]]`;
+    for (const pk in processedUids) {
+      const player = processedUids[pk];
+      let line = `[[${pk}]]`;
       for (const key of techs) {
         const tech = player.tech[key];
         let soFar = tech.research;
