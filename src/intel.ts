@@ -46,8 +46,8 @@ import {
   techCost,
   Player,
   ScannedStar,
-  SpaceObject,
   Star,
+  type TechKey,
   getScanValue,
   getRangeValue,
   getTech,
@@ -4938,7 +4938,7 @@ function NeptunesPrideAgent() {
     for (const pk in processedUids) {
       const player = processedUids[pk];
       for (const key of techs) {
-        const tech = player.tech[key];
+        const tech = player.tech[key as TechKey];
         if (tech.level === best[key].level) {
           best[key].research = Math.max(best[key].research, tech.research);
         } else if (tech.level > best[key].level) {
@@ -4958,8 +4958,8 @@ function NeptunesPrideAgent() {
       const player = processedUids[pk];
       let line = `[[${pk}]]`;
       for (const key of techs) {
-        const tech = player.tech[key];
-        let soFar = tech.research;
+        const tech = player.tech[key as TechKey];
+        let soFar: string = `${tech.research}`;
         if (tech.level === best[key].level) {
           if (tech.research === best[key].research) {
             soFar = `[[good:${soFar}]]`;
