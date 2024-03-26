@@ -203,3 +203,7 @@ export function techCost(tech: TechInfo) {
       }
     }
   }
+
+  export function productionTicks() {
+    return NeptunesPride?.gameConfig?.productionTicks || NeptunesPride?.universe?.galaxy?.config?.prodTicks;
+  }

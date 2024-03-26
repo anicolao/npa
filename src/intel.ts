@@ -53,6 +53,7 @@ import {
   getTech,
   addAccessors,
   isVisible,
+  productionTicks,
 } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
@@ -369,12 +370,13 @@ function NeptunesPrideAgent() {
     const explorers = [];
     const endTick = NeptunesPride.universe.galaxy.tick;
     let currentTick = Math.max(
-      endTick - NeptunesPride.gameConfig.productionTicks,
+      endTick - productionTicks(),
       1
     );
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : NeptunesPride.universe.galaxy.player_uid;
+
     timeTravelTickIndices = {};
     output.push(
       `Star ownership changes from [[Tick #${currentTick}]] to [[Tick #${endTick}]]:`
@@ -1086,12 +1088,16 @@ function NeptunesPrideAgent() {
   );
 
   function getMyKeys() {
+    const playerUidFromScan = (scan: any) => scan?.puid;
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : NeptunesPride.universe.galaxy.player_uid;
 
     return allSeenKeys.filter(
-      (k) => scanInfo[getCodeFromApiText(k)]?.puid === myId
+      (k) => {
+        console.log(`check ${k} for ${myId} == ${playerUidFromScan(scanInfo[getCodeFromApiText(k)])}`, scanInfo[getCodeFromApiText(k)])
+        return playerUidFromScan(scanInfo[getCodeFromApiText(k)]) === myId
+      }
     );
   }
   function activityReport() {
@@ -3428,7 +3434,7 @@ function NeptunesPrideAgent() {
         } else if (d === "games") {
           await pastGames();
         } else if (d === "api") {
-          await apiKeys();
+          await apiKeyReport();
         }
         let html = getClip().replace(/\n/g, "<br>");
         html = NeptunesPride.inbox.hyperlinkMessage(html);
@@ -4170,25 +4176,25 @@ function NeptunesPrideAgent() {
     if (timeTravelTick === -1) {
       timeTravelTick = NeptunesPride.universe.galaxy.tick;
     }
-    timeTravelTick -= NeptunesPride.gameConfig.productionTicks;
+    timeTravelTick -= productionTicks();
     if (timeTravelTick < 0) timeTravelTick = 0;
     timeTravel("back");
   };
   let timeTravelForwardCycle = function () {
-    timeTravelTick += NeptunesPride.gameConfig.productionTicks;
+    timeTravelTick += productionTicks();
     timeTravel("forwards");
   };
   defineHotkey(
     "ctrl+m",
     timeTravelBackCycle,
-    `Go back in time a full cycle (${NeptunesPride.gameConfig.productionTicks} ticks).`,
-    `Time Machine: -${NeptunesPride.gameConfig.productionTicks} ticks`
+    `Go back in time a full cycle (${productionTicks()} ticks).`,
+    `Time Machine: -${productionTicks()} ticks`
   );
   defineHotkey(
     "ctrl+/",
     timeTravelForwardCycle,
-    `Go forward a full cycle (${NeptunesPride.gameConfig.productionTicks} ticks).`,
-    `Time Machine: +${NeptunesPride.gameConfig.productionTicks} ticks`
+    `Go forward a full cycle (${productionTicks()} ticks).`,
+    `Time Machine: +${productionTicks()} ticks`
   );
 
   let myApiKey = "";
@@ -5115,7 +5121,7 @@ function NeptunesPrideAgent() {
   );
 
   let allSeenKeys: string[] = [];
-  let apiKeys = async function () {
+  let apiKeyReport = async function () {
     lastReport = "api";
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
@@ -5161,7 +5167,7 @@ function NeptunesPrideAgent() {
     output.push("--- All Seen Keys ---");
     prepReport("api", output);
   };
-  defineHotkey("k", apiKeys, "Show known API keys.", "api");
+  defineHotkey("k", apiKeyReport, "Show known API keys.", "api");
 
   const buildGameMap = async function () {
     const databases = await indexedDB.databases();

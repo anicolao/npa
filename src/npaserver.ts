@@ -392,8 +392,9 @@ export async function getServerScans(apikey: string) {
             }
             if (i === 0) {
               firstTick = scanExists?.tick;
+              const puid =  scanExists?.player_uid !== undefined ? scanExists.player_uid : scanExists.playerUid;
               scanInfo[apikey] = {
-                puid: scanExists.player_uid,
+                puid,
                 firstTick: firstTick,
                 lastTick: lastTick,
               };
