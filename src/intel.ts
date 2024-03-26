@@ -3181,7 +3181,7 @@ function NeptunesPrideAgent() {
             `<div width="100%" class="screenshot"><img class="screenshot" src="${sub}"/></div>`
           );
         } else {
-          console.error(`failed substitution ${sub}`)
+          console.error(`failed substitution ${sub}`);
           s = s.replace(pattern, `(${sub})`);
         }
       }
@@ -3906,19 +3906,19 @@ function NeptunesPrideAgent() {
     const universe = NeptunesPride.universe;
     resetAliases();
     if (timeTravelTick === -1) {
-      let uid = NeptunesPride.universe.galaxy.player_uid;
-      if (NeptunesPride.originalPlayer) {
-        uid = NeptunesPride.originalPlayer;
-      }
       if (NeptunesPride.originalPlayer === universe.galaxy.player_uid) {
         if (scan.player_uid === universe.galaxy.player_uid) {
           return;
         }
       }
     }
-    universe.galaxy.players[scan.player_uid] = {
-      ...scan.players[scan.player_uid],
-      ...universe.galaxy.players[scan.player_uid],
+    let uid =
+      NeptunesPride.universe.galaxy.player_uid !== undefined
+        ? NeptunesPride.universe.galaxy.player_uid
+        : NeptunesPride.universe.galaxy.playerUid;
+    universe.galaxy.players[uid] = {
+      ...scan.players[uid],
+      ...universe.galaxy.players[uid],
     };
 
     const scanStars = { ...scan.stars };
