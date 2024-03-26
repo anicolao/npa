@@ -86,6 +86,7 @@ export interface Player {
   war?: any;
   researching?: TechKey;
   researching_next?: TechKey;
+  researchingNext?: TechKey;
   cash?: number;
   cashPerDay?: number;
 }
