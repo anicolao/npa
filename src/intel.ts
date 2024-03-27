@@ -566,6 +566,12 @@ function NeptunesPrideAgent() {
         let countCombatants = 0;
         for (let k in changedPlayers) {
           let p = changedPlayers[k];
+          if (isNP4()) {
+            addAccessors(p.alias, p);
+            if (scan.players[k].total_stars === undefined) {
+              addAccessors(scan.players[k].alias, scan.players[k]);
+            }
+          }
           if (p.total_strength) {
             const oldSt = p.total_strength;
             const newSt = scan.players[k].total_strength;
@@ -1140,9 +1146,15 @@ function NeptunesPrideAgent() {
         scanList
       );
       if (scanList.length > 0) {
-        let myScan = scanList.filter((scan) => scan.player_uid === myId);
+        let myScan = scanList.filter((scan) => scan.player_uid === myId || scan.playerUid === myId);
         let scan = myScan.length > 0 ? myScan[0] : scanList[0];
         let row = { ...scan.players, tick: scan.tick };
+        if (isNP4()) {
+          for (const pk in row) {
+            const player = row[pk];
+            addAccessors(player.alias, player);
+          }
+        }
         if (prior === null) {
           prior = row;
         }
