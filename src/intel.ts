@@ -3093,6 +3093,8 @@ function NeptunesPrideAgent() {
                   templateData
                 );
           s = s.replace(pattern, value);
+        } else if (/^Tick #[iI]nfinity$/.test(sub)) {
+            s = s.replace(pattern, "∞");
         } else if (/^Tick #\d\d*(#a?)?$/.test(sub)) {
           const split = sub.split("#");
           const tick = parseInt(split[1]);
@@ -3161,6 +3163,8 @@ function NeptunesPrideAgent() {
           const splits = sub.split(":");
           const text = splits[1];
           s = s.replace(pattern, `<b>${text}</b>`);
+        } else if (/^sub:[Ii]nfinity$/.test(sub)) {
+          s = s.replace(pattern, `<sub style="font-size: 50%">∞</sub>`);
         } else if (/^sub:-?[\w-\.,()][\w-\.,()]*$/.test(sub)) {
           const splits = sub.split(":");
           const text = splits[1];
@@ -4303,7 +4307,6 @@ function NeptunesPrideAgent() {
   let translateTech = (name: string) =>
     xlate[name.substring !== undefined ? name.substring(0, 4) : name];
   let translateTechEmoji = (name: string) => {
-    console.log(`name key [${name}]`);
     return xlateemoji[name.substring(0, 4)];
   };
 
