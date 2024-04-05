@@ -208,3 +208,10 @@ export function techCost(tech: TechInfo) {
   export function productionTicks() {
     return NeptunesPride?.gameConfig?.productionTicks || NeptunesPride?.universe?.galaxy?.config?.prodTicks;
   }
+
+  export function getPlayerUid(galaxy: ScanningData): number {
+    if (galaxy.player_uid !== undefined) {
+      return galaxy.player_uid;
+    }
+    return galaxy.playerUid;
+  }

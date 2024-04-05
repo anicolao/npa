@@ -54,6 +54,7 @@ import {
   addAccessors,
   isVisible,
   productionTicks,
+  getPlayerUid,
 } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
@@ -375,7 +376,7 @@ function NeptunesPrideAgent() {
     );
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
-      : NeptunesPride.universe.galaxy.player_uid;
+      : getPlayerUid(NeptunesPride.universe.galaxy);
 
     timeTravelTickIndices = {};
     output.push(
@@ -1006,7 +1007,7 @@ function NeptunesPrideAgent() {
       output.push(`Tick|[[:star:]]|[[:carrier:]]|Kills|Losses|$|E`);
       const myId = NeptunesPride.originalPlayer
         ? NeptunesPride.originalPlayer
-        : NeptunesPride.universe.galaxy.player_uid;
+        : getPlayerUid(NeptunesPride.universe.galaxy);
       for (let i = 0; i < messageCache.game_event.length; ++i) {
         const m = messageCache.game_event[i];
         if (m.payload.template === "combat_mk_ii") {
@@ -1097,7 +1098,7 @@ function NeptunesPrideAgent() {
     const playerUidFromScan = (scan: any) => scan?.puid;
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
-      : NeptunesPride.universe.galaxy.player_uid;
+      : getPlayerUid(NeptunesPride.universe.galaxy);
 
     return allSeenKeys.filter(
       (k) => {
@@ -1116,7 +1117,7 @@ function NeptunesPrideAgent() {
     let currentTick = 0;
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
-      : NeptunesPride.universe.galaxy.player_uid;
+      : getPlayerUid(NeptunesPride.universe.galaxy);
     let prior = null;
     const players = NeptunesPride.universe.galaxy.players;
     for (const k in players) {
@@ -1146,7 +1147,7 @@ function NeptunesPrideAgent() {
         scanList
       );
       if (scanList.length > 0) {
-        let myScan = scanList.filter((scan) => scan.player_uid === myId || scan.playerUid === myId);
+        let myScan = scanList.filter((scan) => getPlayerUid(scan) === myId);
         let scan = myScan.length > 0 ? myScan[0] : scanList[0];
         let row = { ...scan.players, tick: scan.tick };
         if (isNP4()) {
@@ -2679,13 +2680,14 @@ function NeptunesPrideAgent() {
         NeptunesPride.originalPlayer = universe.player?.uid;
       }
       let unrealContextString = "";
-      if (NeptunesPride.originalPlayer !== universe.galaxy.player_uid) {
-        if (universe.galaxy.player_uid !== undefined) {
+      const puid = getPlayerUid(universe.galaxy);
+      if (NeptunesPride.originalPlayer !== puid) {
+        if (puid !== undefined) {
           unrealContextString =
-            universe.galaxy.players[universe.galaxy.player_uid].alias;
+            universe.galaxy.players[puid].alias;
         }
       }
-      if (universe.galaxy.player_uid != universe.player.uid) {
+      if (puid != universe.player.uid) {
         const alias = universe.player.alias;
         unrealContextString += ` controlling ${alias}`;
       }
@@ -3900,8 +3902,8 @@ function NeptunesPrideAgent() {
   };
 
   let cacheApiKey = function (code: string, scan: any) {
-    if (scan?.player_uid >= 0) {
-      let key = `API:${scan.player_uid}`;
+    if (getPlayerUid(scan) >= 0) {
+      let key = `API:${getPlayerUid(scan)}`;
       store.get(key).then((apiCode) => {
         if (!apiCode || apiCode !== otherUserCode) {
           store.set(key, code);
@@ -3928,16 +3930,13 @@ function NeptunesPrideAgent() {
     const universe = NeptunesPride.universe;
     resetAliases();
     if (timeTravelTick === -1) {
-      if (NeptunesPride.originalPlayer === universe.galaxy.player_uid) {
-        if (scan.player_uid === universe.galaxy.player_uid) {
+      if (NeptunesPride.originalPlayer === getPlayerUid(universe.galaxy)) {
+        if (getPlayerUid(scan) === getPlayerUid(universe.galaxy)) {
           return;
         }
       }
     }
-    let uid =
-      NeptunesPride.universe.galaxy.player_uid !== undefined
-        ? NeptunesPride.universe.galaxy.player_uid
-        : NeptunesPride.universe.galaxy.playerUid;
+    let uid = getPlayerUid(universe.galaxy);
     universe.galaxy.players[uid] = {
       ...scan.players[uid],
       ...universe.galaxy.players[uid],
@@ -3971,7 +3970,7 @@ function NeptunesPrideAgent() {
       const star = scanStars[s];
       if (
         (isVisible(star) && !isVisible(universe.galaxy.stars[s])) ||
-        star.puid === scan.player_uid
+        star.puid === getPlayerUid(scan)
       ) {
         universe.galaxy.stars[s] = { ...universe.galaxy.stars[s], ...star };
       }
@@ -3979,7 +3978,7 @@ function NeptunesPrideAgent() {
     universe.galaxy.fleets = { ...scanFleets, ...universe.galaxy.fleets };
     for (let f in scanFleets) {
       const fleet = scanFleets[f];
-      if (fleet.puid == scan.player_uid) {
+      if (fleet.puid == getPlayerUid(scan)) {
         universe.galaxy.fleets[f] = {
           ...universe.galaxy.fleets[f],
           ...fleet,
@@ -4129,8 +4128,8 @@ function NeptunesPrideAgent() {
     }
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
-      : NeptunesPride.universe.galaxy.player_uid;
-    const myScan = scans.filter((scan) => scan.player_uid === myId);
+      : getPlayerUid(NeptunesPride.universe.galaxy);
+    const myScan = scans.filter((scan) => getPlayerUid(scan) === myId);
     const first = myScan.length > 0 ? myScan[0] : scans[0];
     NeptunesPride.np.onFullUniverse(null, first);
     NeptunesPride.gameConfig.name = NeptunesPride.universe.galaxy.name;
@@ -4861,7 +4860,7 @@ function NeptunesPrideAgent() {
   };
   const getPrimaryAlliance = async function () {
     const galaxy = NeptunesPride.universe.galaxy;
-    const player = galaxy.players[galaxy.player_uid];
+    const player = galaxy.players[getPlayerUid(galaxy)];
     const subsets = getAllianceSubsets();
     const alliedKeys = await getAlliedKeysAndIndexes();
     for (const k in subsets) {
@@ -5164,12 +5163,12 @@ function NeptunesPrideAgent() {
         let last = countScans(code) - 1;
         let scan = getScan(code, last);
         let eof = scan?.eof;
-        let uid = scan?.player_uid;
+        let uid = scan ? getPlayerUid(scan) : undefined;
         good = `[[Tick #${scan?.tick}]]`;
         while ((uid === undefined || eof) && --last > 0) {
           let scan = getScan(code, last);
           eof = scan?.eof;
-          uid = scan?.player_uid;
+          uid = scan ? getPlayerUid(scan) : undefined;
           if (uid !== undefined) {
             good = `Dead @ [[Tick #${scan.tick}]]`;
           }
@@ -5188,19 +5187,21 @@ function NeptunesPrideAgent() {
     const databases = await indexedDB.databases();
     const games: { [k: string]: string[] & { name?: string } } = {};
     databases.forEach((d) => {
-      if (/^[0-9]+:[0-9A-Za-z]{6}$/.test(d.name)) {
+      if (/^[0-9]+:[0-9A-Za-z]+$/.test(d.name)) {
         const gameId = d.name.match(/^[0-9]+/)[0];
         const apiKey = d.name.match(/[0-9A-Za-z]+$/)[0];
         if (!games[gameId]) {
           games[gameId] = [];
         }
+        console.log(`Record ${gameId} : ${apiKey}`)
         games[gameId].push(apiKey);
       }
     });
     for (const gameId in games) {
       for (const apikey of games[gameId]) {
         if (games[gameId].name === undefined) {
-          const lastScan = await getLastRecord(+gameId, apikey, "scanCache");
+          const lastScan = await getLastRecord(+gameId, apikey, "diffCache");
+          console.log({lastScan});
           games[gameId].name = lastScan?.cached?.name;
         }
       }
@@ -5275,7 +5276,6 @@ function NeptunesPrideAgent() {
       else if (key.length === 1) {
         key = `&#${key.charCodeAt(0)};`;
       } else {
-        console.log({ key });
         div.innerText = key;
         key = div.innerHTML;
       }
