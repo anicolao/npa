@@ -12,6 +12,7 @@ export interface ScanningData {
   now: number;
   paused: boolean;
   player_uid: number;
+  playerUid?: number;
   players: PlayerMap;
   production_counter: number;
   production_rate: number;
