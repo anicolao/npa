@@ -623,7 +623,7 @@ function NeptunesPrideAgent() {
           if (scan?.fleets) {
             for (let k in scan.fleets) {
               const fleet = scan.fleets[k];
-              if (fleet?.ouid !== undefined) {
+              if (fleet?.ouid !== undefined && (!isNP4() || fleet.ouid > 0)) {
                 const star = scan.stars[fleet.ouid];
                 if (star) {
                   if (star.puid !== fleet.puid && star.puid !== -1) {
@@ -640,7 +640,7 @@ function NeptunesPrideAgent() {
                     alliances[fleet.puid][star.puid] = minTick;
                   }
                 } else {
-                  console.error(`Orbit star missing for ${fleet.n}`);
+                  console.error(`Orbit star missing for ${fleet.n}`, fleet);
                 }
               }
             }

@@ -144,7 +144,7 @@ export function futureTime(
             const [sx, sy] = [dx * factor, dy * factor];
             newFleet.x = String(x + sx);
             newFleet.y = String(y + sy);
-            newFleet.ouid = undefined;
+            newFleet.ouid = isNP4() ? 0 : undefined;
           }
           newFleet.etaFirst -= 1;
           newFleet.eta -= 1;

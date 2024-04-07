@@ -43,7 +43,7 @@ export const annalsOfWar = (): WarRecord[] => {
       const p0 = m.payload.attacker;
       const p1 = m.payload.defender;
       warTicks.push({ tick, p0, p1, war: "war_declared" });
-      tick += 24;
+      tick += isNP4() ? 1 : 24;
       warTicks.push({ tick, p0, p1, war: "war" });
     } else if (m.payload.template === "peace_accepted") {
       let tick = m.payload.tick;
