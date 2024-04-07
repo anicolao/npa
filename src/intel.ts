@@ -5094,7 +5094,7 @@ function NeptunesPrideAgent() {
             balances[from] += credits;
             levels[from] += level;
           }
-          const name = m.payload.name;
+          const name = m.payload.name || m.payload.tech;
           const xlated = translateTech(name);
           if (from === NeptunesPride.universe.player.uid) {
             output.push([

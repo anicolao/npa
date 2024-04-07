@@ -274,10 +274,6 @@ export async function requestRecentMessages(
   fetchSize: number,
   group: "game_event" | "game_diplomacy" | string,
 ) {
-  if (isNP4()) {
-    console.error("requestRecentMessages NIY for NP4");
-    return;
-  }
   console.log("requestRecentMessages");
   const url = `/${getRequestPath()}/fetch_game_messages`;
   logCount(`requestRecentMessages ${fetchSize} ${group}`);
@@ -288,9 +284,14 @@ export async function requestRecentMessages(
     group,
     version: NeptunesPride.version,
     game_number: getGameNumber(),
+    gameId: getGameNumber(),
   };
   logCount(group);
-  return cacheEventResponseCallback(group, await post(url, data));
+  const response = await post(url, data);
+  if (!response.report) {
+    response.report = response[1];
+  }
+  return cacheEventResponseCallback(group, response);
 }
 
 export async function requestMessageComments(
@@ -306,8 +307,13 @@ export async function requestMessageComments(
     message_key,
     version: NeptunesPride.version,
     game_number: getGameNumber(),
+    gameId: getGameNumber(),
   };
-  return cacheEventResponseCallback(message_key, await post(url, data));
+  const response = await post(url, data);
+  if (!response.report) {
+    response.report = response[1];
+  }
+  return cacheEventResponseCallback(message_key, response);
 }
 
 let lastMessageCacheUpdate: { [k: string]: number } = {
