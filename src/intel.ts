@@ -4234,6 +4234,10 @@ function NeptunesPrideAgent() {
         to_uids,
         to_aliases,
         to_colors,
+        fromColor: from_color,
+        toUids: to_uids,
+        toAliases: to_aliases,
+        toColors: to_colors,
         subject,
         body,
       });
