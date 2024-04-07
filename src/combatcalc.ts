@@ -144,15 +144,18 @@ export const computeCombatOutcomes = (
   staroutcomes?: { [k: string]: StarState },
   maxTick?: number,
 ) => {
-  console.log("NEW ComputeCombatOutcomes called");
   const players = galaxy.players;
-  let fleets = galaxy.fleets;
-  let stars = galaxy.stars;
+  const fleets = galaxy.fleets;
+  const stars = galaxy.stars;
   let flights: [number, string, Fleet][] = [];
   fleetOutcomes = {};
   for (const f in fleets) {
     let fleet = fleets[f];
-    if (fleet.o && fleet.o.length > 0) {
+    let orders = fleet.o;
+    if (fleet !== NeptunesPride.universe.selectedFleet) {
+      orders = (fleet as any).orders;
+    }
+    if (orders && orders.length > 0) {
       let stop = fleet.o[0][1];
       let ticks = fleet.etaFirst;
       if (maxTick !== undefined && galaxy.tick + ticks > maxTick) continue;
