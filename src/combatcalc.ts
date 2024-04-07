@@ -1,5 +1,14 @@
 import { isNP4, messageCache } from "./events";
-import { dist, Fleet, getTech, Player, PlayerMap, ScannedStar, ScanningData, TechKey } from "./galaxy";
+import {
+  dist,
+  Fleet,
+  getTech,
+  Player,
+  PlayerMap,
+  ScannedStar,
+  ScanningData,
+  TechKey,
+} from "./galaxy";
 import { Stanzas } from "./reports";
 
 export const combatInfo: {
@@ -43,7 +52,19 @@ export const annalsOfWar = (): WarRecord[] => {
       const p0 = m.payload.attacker;
       const p1 = m.payload.defender;
       warTicks.push({ tick, p0, p1, war: "war_declared" });
-      tick += isNP4() ? 1 : 24;
+      let warning = 24;
+      if (isNP4()) {
+        const config = NeptunesPride.universe.galaxy.config;
+        warning = 1;
+        if (config.alliances === 2) {
+          warning = 24;
+        }
+        if (config.alliances === 3) {
+          warning = 48;
+        }
+      }
+
+      tick += warning;
       warTicks.push({ tick, p0, p1, war: "war" });
     } else if (m.payload.template === "peace_accepted") {
       let tick = m.payload.tick;
@@ -58,7 +79,7 @@ export const alliedFleet = (
   players: PlayerMap,
   fleetOwnerId: number,
   starOwnerId: number,
-  relativeTick: number,
+  relativeTick: number
 ) => {
   if (
     combatInfo.knownAlliances === undefined &&
@@ -142,7 +163,7 @@ export function getWeaponsLevel(player: Player) {
 export const computeCombatOutcomes = (
   galaxy: ScanningData,
   staroutcomes?: { [k: string]: StarState },
-  maxTick?: number,
+  maxTick?: number
 ) => {
   const players = galaxy.players;
   const fleets = galaxy.fleets;
@@ -170,7 +191,7 @@ export const computeCombatOutcomes = (
           fleet.n,
           fleet.st,
           starname,
-          absoluteTick(galaxy, ticks),
+          absoluteTick(galaxy, ticks)
         ),
         fleet,
       ]);
@@ -214,9 +235,9 @@ export const computeCombatOutcomes = (
       if (stars[starId].v === "1") {
         weapons = Math.max(
           weapons,
-          ...vstar?.alliedDefenders.map(
-            (d: number) => getWeaponsLevel(players[d]),
-          ),
+          ...vstar?.alliedDefenders.map((d: number) =>
+            getWeaponsLevel(players[d])
+          )
         );
       }
       let totalDefense = vstar.st;
@@ -278,7 +299,7 @@ export const computeCombatOutcomes = (
       if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid, 0)) {
         const weapons = Math.max(
           starstate[starId].weapons,
-          getWeaponsLevel(players[fleet.puid]),
+          getWeaponsLevel(players[fleet.puid])
         );
         starstate[starId].weapons = weapons;
       }
@@ -288,8 +309,8 @@ export const computeCombatOutcomes = (
         absoluteTick(galaxy, tick),
         starstate[starId].puid,
         stars[starId].n,
-        starstate[starId].ships,
-      ),
+        starstate[starId].ships
+      )
     );
     let tickDelta = tick - starstate[starId].last_updated - 1;
     if (tickDelta > 0) {
@@ -313,7 +334,7 @@ export const computeCombatOutcomes = (
         starstate[starId].ships +=
           starstate[starId].production * tickDelta + oldc;
         starstate[starId].st += Math.trunc(
-          starstate[starId].production * tickDelta + oldc,
+          starstate[starId].production * tickDelta + oldc
         );
         starstate[starId].c =
           starstate[starId].ships - Math.trunc(starstate[starId].ships);
@@ -324,8 +345,8 @@ export const computeCombatOutcomes = (
             starstate[starId].ships,
             starstate[starId].production,
             oldc,
-            starstate[starId].c,
-          ),
+            starstate[starId].c
+          )
         );
       }
     }
@@ -346,7 +367,7 @@ export const computeCombatOutcomes = (
           oldShips,
           starstate[starId].ships,
           fleet.st,
-          fleet.n,
+          fleet.n
         );
         stanza.push(landingString);
         landingString = landingString.substring(2);
@@ -357,7 +378,7 @@ export const computeCombatOutcomes = (
       if (alliedFleet(galaxy.players, fleet.puid, starstate[starId].puid, 0)) {
         let outcomeString = "{0} ships on {1}".format(
           Math.floor(starstate[starId].ships),
-          stars[starId].n,
+          stars[starId].n
         );
         fleetOutcomes[fleet.uid] = {
           eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
@@ -379,8 +400,8 @@ export const computeCombatOutcomes = (
             offense,
             fleet.st,
             fleet.n,
-            fleet.puid,
-          ),
+            fleet.puid
+          )
         );
         starstate[starId].fleetStrength[fleet.uid] = fleet.st;
         let wt = getWeaponsLevel(players[fleet.puid]);
@@ -404,24 +425,24 @@ export const computeCombatOutcomes = (
         if (combatInfo.combatHandicap > 0) {
           dwt += combatInfo.combatHandicap;
           stanza.push(
-            "    Defenders WS{0} = {1}".format(handicapString(""), dwt),
+            "    Defenders WS{0} = {1}".format(handicapString(""), dwt)
           );
         } else if (combatInfo.combatHandicap < 0) {
           awt -= combatInfo.combatHandicap;
           stanza.push(
-            "    Attackers WS{0} = {1}".format(handicapString(""), awt),
+            "    Attackers WS{0} = {1}".format(handicapString(""), awt)
           );
         }
       } else {
         if (combatInfo.combatHandicap > 0) {
           awt += combatInfo.combatHandicap;
           stanza.push(
-            "    Attackers WS{0} = {1}".format(handicapString(""), awt),
+            "    Attackers WS{0} = {1}".format(handicapString(""), awt)
           );
         } else if (combatInfo.combatHandicap < 0) {
           dwt -= combatInfo.combatHandicap;
           stanza.push(
-            "    Defenders WS{0} = {1}".format(handicapString(""), dwt),
+            "    Defenders WS{0} = {1}".format(handicapString(""), dwt)
           );
         }
       }
@@ -449,13 +470,13 @@ export const computeCombatOutcomes = (
           defeatedOffense -= dwt;
         } while (defeatedOffense > 0);
         stanza.push(
-          "  Attackers win with {0} ships remaining".format(offense, -defense),
+          "  Attackers win with {0} ships remaining".format(offense, -defense)
         );
         stanza.push(
-          "  +{1} defenders needed to survive".format(offense, -defense),
+          "  +{1} defenders needed to survive".format(offense, -defense)
         );
         const pairs: [string, number][] = Object.keys(
-          starstate[starId].fleetStrength,
+          starstate[starId].fleetStrength
         ).map((k) => [k, starstate[starId].fleetStrength[k]]);
         pairs.sort((a, b) => b[1] - a[1]);
         let roundOffDebt = 0;
@@ -471,7 +492,7 @@ export const computeCombatOutcomes = (
               galaxy.players,
               fleet.puid,
               starstate[starId].puid,
-              tick,
+              tick
             )
           ) {
             starstate[starId].fleetStrength[fleet.uid] = 0;
@@ -503,8 +524,8 @@ export const computeCombatOutcomes = (
               "    [[{0}]] has {1} on [[{2}]]".format(
                 fleet.puid,
                 starstate[starId].fleetStrength[k],
-                fleet.n,
-              ),
+                fleet.n
+              )
             );
             if (starstate[starId].fleetStrength[k]) {
               let prefix = "";
@@ -514,7 +535,7 @@ export const computeCombatOutcomes = (
               let outcomeString =
                 `${prefix}Wins! {0} land\n+{1} to defend`.format(
                   starstate[starId].fleetStrength[k],
-                  -defense,
+                  -defense
                 );
               fleetOutcomes[fleet.uid] = {
                 eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
@@ -549,7 +570,7 @@ export const computeCombatOutcomes = (
             const existingWeapons = starstate[starId].weapons;
             starstate[starId].weapons = Math.max(
               arrivingWeapons,
-              existingWeapons,
+              existingWeapons
             );
           }
         }
@@ -563,7 +584,7 @@ export const computeCombatOutcomes = (
         stanza.push("  +{0} more attackers needed".format(-offense));
         starstate[starId].ships = defense;
         const pairs: [string, number][] = Object.keys(
-          starstate[starId].fleetStrength,
+          starstate[starId].fleetStrength
         ).map((k) => [k, starstate[starId].fleetStrength[k]]);
         pairs.push(["star", starstate[starId].st]);
         pairs.sort((a, b) => b[1] - a[1]);
@@ -580,7 +601,7 @@ export const computeCombatOutcomes = (
               galaxy.players,
               fleetOrStar.puid,
               starstate[starId].puid,
-              tick,
+              tick
             )
           ) {
             starstate[starId].fleetStrength[fleetOrStar.uid] = 0;
@@ -606,8 +627,8 @@ export const computeCombatOutcomes = (
               "    [[{0}]] has {1} on [[{2}]]".format(
                 fleetOrStar.puid,
                 intPart,
-                fleetOrStar.n,
-              ),
+                fleetOrStar.n
+              )
             );
           }
         }
@@ -618,12 +639,12 @@ export const computeCombatOutcomes = (
               galaxy.players,
               fleet.puid,
               starstate[starId].puid,
-              tick,
+              tick
             )
           ) {
             let outcomeString = "{0} ships on {1}".format(
               Math.floor(starstate[starId].ships),
-              stars[starId].n,
+              stars[starId].n
             );
             fleetOutcomes[fleet.uid] = {
               eta: `[[Tick #${absoluteTick(galaxy, fleet.etaFirst)}]]`,
@@ -644,14 +665,14 @@ export const computeCombatOutcomes = (
           }
           let outcomeString = `${prefix}Loses! {0} live\n+{1} to win`.format(
             defense,
-            -offense,
+            -offense
           );
           if (
             alliedFleet(
               galaxy.players,
               fleet?.puid,
               starstate[starId]?.puid,
-              tick,
+              tick
             )
           ) {
             outcomeString = `${prefix}Wins! ${defense} remain`;
@@ -671,8 +692,8 @@ export const computeCombatOutcomes = (
       "  [[{0}]] [[{1}]] {2} ships".format(
         starstate[starId].puid,
         stars[starId].n,
-        starstate[starId].ships,
-      ),
+        starstate[starId].ships
+      )
     );
     output.push(stanza);
   }
