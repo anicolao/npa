@@ -1,3 +1,6 @@
+export interface PlayerMap {
+  [puid: string]: Player;
+}
 export interface ScanningData {
   admin: number;
   fleet_speed: number;
@@ -7,7 +10,7 @@ export interface ScanningData {
   now: number;
   paused: boolean;
   player_uid: number;
-  players: { [puid: string]: Player };
+  players: PlayerMap;
   production_counter: number;
   production_rate: number;
   productions: number;
@@ -33,7 +36,7 @@ export interface SpaceObject {
   x: string;
   y: string;
 }
-enum FleetOrder {
+export enum FleetOrder {
   Nothing = 0,
   CollectAll,
   DropAll,
@@ -53,6 +56,12 @@ export interface Fleet extends SpaceObject {
   st: number; // strength (ship count)
   uid: number; // unique id
   w: number; // flying at warp?
+  etaFirst: number;
+  eta: number;
+  loop?: number;
+  orbiting?: Star;
+  warpSpeed?: number;
+  ouid?: number;
 }
 export interface Player {
   ai: number;
@@ -72,6 +81,10 @@ export interface Player {
   total_stars: number;
   total_strength: number;
   uid: number;
+  war?: any;
+  researching?: TechKey;
+  researching_next?: TechKey;
+  cash?: number;
 }
 export interface TechInfo {
   sv?: number; // starting value
@@ -81,6 +94,15 @@ export interface TechInfo {
   brr?: number; // base research rate
   research?: number; // research points so far
 }
+
+export type TechKey =
+  | "banking"
+  | "manufacturing"
+  | "propulsion"
+  | "research"
+  | "scanning"
+  | "terraforming"
+  | "weapons";
 export interface Tech {
   banking: TechInfo;
   manufacturing: TechInfo;
@@ -104,5 +126,20 @@ export interface ScannedStar extends SpaceObject {
   r: number; // terraformed resources
   s: number; // science
   st: number; // strength (ship count)
+  totalDefenses?: number;
+  alliedDefenders?: number[];
+  fleetsInOrbit?: Fleet[];
+  shipsPerTick?: number;
 }
 export type Star = UnscannedStar | ScannedStar;
+
+export function dist(s1: SpaceObject, s2: SpaceObject) {
+  return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
+}
+
+export function techCost(tech: { brr: number; level: number }) {
+  if (NeptunesPride.gameVersion !== "proteus") {
+    return tech.brr * tech.level;
+  }
+  return tech.brr * tech.level * tech.level * tech.level;
+}

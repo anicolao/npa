@@ -38,7 +38,14 @@ import {
 } from "./npaserver";
 import { isWithinRange } from "./visibility";
 import { setupAutocomplete } from "./autocomplete";
-import { Player, ScannedStar, SpaceObject, Star } from "./galaxy";
+import {
+  dist,
+  techCost,
+  Player,
+  ScannedStar,
+  SpaceObject,
+  Star,
+} from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
 import {
@@ -106,7 +113,7 @@ function NeptunesPrideAgent() {
   window.addEventListener("unhandledrejection", logError);
 
   let title = getVersion();
-  let version = title.replace(/^.*v/, "v");
+  let version = title.replace(/^.*v2/, "v2");
   console.log(title);
 
   const settings: GameStore = new GameStore("global_settings");
@@ -412,9 +419,6 @@ function NeptunesPrideAgent() {
       const seenCache: { [k: string]: { [k: string]: [string, string] } } = {};
       let memoStars: any = null;
       let memo: { [k: string]: boolean } = {};
-      const dist = (s1: SpaceObject, s2: SpaceObject) => {
-        return NeptunesPride.universe.distance(s1.x, s1.y, s2.x, s2.y);
-      };
       const sees = (sourceS: string, sinkS: string) => {
         if (memoStars !== scan.stars) {
           memoStars = scan.stars;
@@ -2473,7 +2477,10 @@ function NeptunesPrideAgent() {
       if (timeTravelTick > -1) {
         const gtick = NeptunesPride.universe.galaxy.tick;
         if (timeTravelTick === gtick) {
-          unrealContextString = `Time machine @ [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
+          const label = NeptunesPride.universe.galaxy.futureTime
+            ? "Future Time @ "
+            : "Time Machine @ ";
+          unrealContextString = `${label} [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
         } else {
           unrealContextString = `Time machine @ [[Tick #${gtick}#]] MISSING DATA for [[Tick #${timeTravelTick}#]] ${unrealContextString}`;
         }
@@ -2781,6 +2788,7 @@ function NeptunesPrideAgent() {
       if (!s) {
         return "error";
       }
+
       var i;
       var fp;
       var sp;
@@ -3643,13 +3651,6 @@ function NeptunesPrideAgent() {
     }
     return true;
   };
-  const resetAliases = () => {
-    const universe = NeptunesPride.universe;
-    for (let pk in universe.galaxy.players) {
-      const player = universe.galaxy.players[pk];
-      player.alias = player.rawAlias;
-    }
-  };
   const mergeScanData = (scan: any) => {
     const universe = NeptunesPride.universe;
     resetAliases();
@@ -3779,6 +3780,19 @@ function NeptunesPrideAgent() {
     return clone(scan);
   };
   let timeTravel = function (dir: "back" | "forwards"): boolean {
+    if (timeTravelTick > trueTick) {
+      // we are in future time machine
+      if (dir === "forwards") {
+        const tickOffset = timeTravelTick - NeptunesPride.universe.galaxy.tick;
+        resetAliases();
+        const newGalaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
+        NeptunesPride.np.onFullUniverse(null, newGalaxy);
+      } else if (dir === "back") {
+        warpTime(null, `${trueTick}`);
+      }
+      NeptunesPride.np.trigger("map_rebuild");
+      return false;
+    }
     const scans = allSeenKeys
       .map((k) => getTimeTravelScan(k, dir))
       .filter((scan) => scan && scan.tick === timeTravelTick);
@@ -3826,6 +3840,9 @@ function NeptunesPrideAgent() {
     if (NeptunesPride.gameConfig.turnBased) {
       timeTravelTick += NeptunesPride.gameConfig.turnJumpTicks;
     } else {
+      if (timeTravelTick === -1) {
+        timeTravelTick = NeptunesPride.universe.galaxy.tick;
+      }
       timeTravelTick += 1;
     }
     timeTravel("forwards");
@@ -3952,12 +3969,6 @@ function NeptunesPrideAgent() {
       return level * level * 5;
     }
     return level * NeptunesPride.gameConfig.tradeCost;
-  };
-  const techCost = function (tech: { brr: number; level: number }) {
-    if (NeptunesPride.gameVersion !== "proteus") {
-      return tech.brr * tech.level;
-    }
-    return tech.brr * tech.level * tech.level * tech.level;
   };
   let techTable = function (
     output: Stanzas,
