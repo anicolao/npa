@@ -10,7 +10,7 @@ async function loadNPA() {
   }
 
   registered = await browser.userScripts.register({
-    matches: ["https://np*.ironhelmet.com/*"],
+		matches: ["https://np.ironhelmet.com/*", "https://np4.ironhelmet.com/*"],
     js: [{code: `
       const script = document.createElement('script');
       script.src = '${dataurl}';

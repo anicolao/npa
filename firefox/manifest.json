@@ -10,7 +10,8 @@
   },
 
   "permissions": [
-    "https://np*.ironhelmet.com/*"
+    "https://np.ironhelmet.com/*",
+    "https://np4.ironhelmet.com/*"
   ],
 
   "background": {
