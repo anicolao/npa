@@ -936,6 +936,116 @@ function NeptunesPrideAgent() {
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "economists"
   );
+  const generalsReport = async function () {
+    lastReport = "generals";
+
+    const updated = await updateMessageCache("game_event");
+    const preput: Stanzas = [];
+    const output: Stanzas = [];
+    if (!updated) {
+      console.error("Updating message cache failed");
+      output.push("Message cache stale!");
+    } else {
+      const losses: { [k: number]: number } = {};
+      const looted: { [k: number]: number } = {};
+      const trashed: { [k: number]: number } = {};
+      for (let puid in NeptunesPride.universe.galaxy.players) {
+        const uid = puid as unknown as number;
+        losses[uid] = 0;
+        looted[uid] = 0;
+        trashed[uid] = 0;
+      }
+      output.push("--- Combat history ---");
+      output.push(":--|:--|:--|--:|--:|--:|--:");
+      output.push(`Tick|[[:star:]]|[[:carrier:]]|Kills|Losses|$|E`);
+      const myId = NeptunesPride.originalPlayer
+        ? NeptunesPride.originalPlayer
+        : NeptunesPride.universe.galaxy.player_uid;
+      for (let i = 0; i < messageCache.game_event.length; ++i) {
+        const m = messageCache.game_event[i];
+        if (m.payload.template === "combat_mk_ii") {
+          const tick = m.payload.tick;
+          const starOwner = m.payload.star.puid;
+          const star = m.payload.star.name;
+          const looter = +m.payload.looter;
+          let ploot = 0;
+          let ptrashed = 0;
+          let pkills = 0;
+          let plosses = 0;
+          const myStar = m.payload.star.puid === myId;
+          if (m.payload.loot > 0) {
+            looted[looter] += m.payload.loot;
+            if (looter === myId) {
+              ploot += m.payload.loot;
+            }
+          }
+          const tallyDefenderLosses = () => {
+            let ret = 0;
+            const defenderKeys = Object.keys(m.payload.defenders);
+            defenderKeys.forEach((k) => {
+              const loss =
+                m.payload.defenders[k].ss - m.payload.defenders[k].es;
+              losses[m.payload.defenders[k].puid] += loss;
+              ret += loss;
+            });
+            return ret;
+          };
+          if (myStar) {
+            ptrashed += m.payload.loot / 10;
+            plosses += m.payload.star.ss - m.payload.star.es;
+            plosses += tallyDefenderLosses();
+          } else {
+            pkills += m.payload.star.ss - m.payload.star.es;
+            pkills += tallyDefenderLosses();
+          }
+          if (m.payload.star.puid !== undefined) {
+            losses[+m.payload.star.puid] += m.payload.star.ss =
+              m.payload.star.es;
+          }
+          trashed[+m.payload.star.puid] += m.payload.loot / 10;
+          const attackerKeys = Object.keys(m.payload.attackers);
+          const forcesMap: { [k: string]: number } = {};
+          attackerKeys.forEach((k) => {
+            const key = `[[#${m.payload.attackers[k].puid}]]`;
+            if (forcesMap[key] === undefined) {
+              forcesMap[key] = 0;
+            }
+            forcesMap[key] += m.payload.attackers[k].ss;
+            const delta = m.payload.attackers[k].ss - m.payload.attackers[k].es;
+            losses[+m.payload.attackers[k].puid] += delta;
+            if (myStar) {
+              pkills += delta;
+            } else if (m.payload.attackers[k].puid === myId) {
+              plosses += delta;
+            }
+          });
+          const a = Object.keys(forcesMap)
+            .map((k) => `${k}`)
+            .join("");
+          output.push([
+            `[[Tick #${tick}]]|[[#${starOwner}]][[${star}]]|${a}|${pkills}|${plosses}|${ploot}|${ptrashed}`,
+          ]);
+        }
+      }
+      output.push("--- Combat history ---");
+
+      preput.push("--- Combat Summary ---");
+      preput.push(":--|--:|--:");
+      preput.push(`Empire|Losses|$|E`);
+      for (let p in losses) {
+        preput.push([`[[${p}]]|${losses[p]}|${looted[p]}|${trashed[p]}`]);
+      }
+      preput.push("--- Combat Summary ---\n");
+    }
+    prepReport("generals", [...preput, ...output]);
+  };
+  defineHotkey(
+    "ctrl+w",
+    generalsReport,
+    "The generals report summarizes the state of your military operations. " +
+      "Use it to assess how you're faring against your enemies.",
+    "generals"
+  );
 
   function getMyKeys() {
     const myId = NeptunesPride.originalPlayer
@@ -2911,6 +3021,10 @@ function NeptunesPrideAgent() {
         } else if (/^apim:\w{6}$/.test(sub)) {
           let apiLink = `<a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
+        } else if (/^viewgame:[0-9]+:.+$/.test(sub)) {
+          const splits = sub.split(":");
+          let gameLink = `<a onClick='Crux.crux.trigger(\"view_game\", \"${sub}\")'>${splits[1]} ${splits[2]}</a>`;
+          s = s.replace(pattern, gameLink);
         } else if (/^hotkey:[^:]+$/.test(sub) || /^goto:[^:]/.test(sub)) {
           const splits = sub.split(":");
           const key = splits[1];
@@ -3058,6 +3172,7 @@ function NeptunesPrideAgent() {
 
     var npaReportIcons: { [k: string]: string } = {
       empires: "icon-users",
+      signatures: "icon-users",
       accounting: "icon-dollar",
       trading: "icon-right-open",
       research: "icon-beaker",
@@ -3072,6 +3187,7 @@ function NeptunesPrideAgent() {
       onlycombats: "icon-rocket",
       stars: "icon-star-1",
       economists: "icon-dollar",
+      generals: "icon-rocket",
       fa: "icon-beaker",
       api: "icon-flash",
       controls: "icon-help",
@@ -3079,6 +3195,7 @@ function NeptunesPrideAgent() {
     };
     var npaReportNames: { [k: string]: string } = {
       empires: "Empires",
+      signatures: "Tech by Empire",
       accounting: "Accounting",
       trading: "Trading",
       research: "Research",
@@ -3093,7 +3210,9 @@ function NeptunesPrideAgent() {
       combatactivity: "Combat Activity",
       activity: "Activity",
       economists: "Economists",
+      generals: "Generals",
       api: "API Keys",
+      games: "Past Games",
       fa: "Formal Alliances",
       controls: "Controls",
       help: "Help",
@@ -3199,12 +3318,18 @@ function NeptunesPrideAgent() {
           await tradingReport();
         } else if (d === "empires") {
           await empireReport();
+        } else if (d === "signatures") {
+          await techSignatureReport();
+        } else if (d === "generals") {
+          await generalsReport();
         } else if (d === "research") {
           await researchReport();
         } else if (d === "accounting") {
           await npaLedger();
         } else if (d === "controls") {
           npaControls();
+        } else if (d === "games") {
+          await pastGames();
         } else if (d === "api") {
           await apiKeys();
         }
@@ -3806,6 +3931,8 @@ function NeptunesPrideAgent() {
     const myScan = scans.filter((scan) => scan.player_uid === myId);
     const first = myScan.length > 0 ? myScan[0] : scans[0];
     NeptunesPride.np.onFullUniverse(null, first);
+    NeptunesPride.gameConfig.name = NeptunesPride.universe.galaxy.name;
+    console.log(`RESET game name to ${NeptunesPride.gameConfig.name}`);
 
     scans.forEach((scan) => {
       mergeScanData(scan);
@@ -4198,13 +4325,12 @@ function NeptunesPrideAgent() {
       } else if (colors.indexOf(k) !== -1) {
         unallied.push(...s);
       } else {
-        computeEmpireTable(
-          output,
-          s,
-          `[[mail:${s.join(":")}]] Alliance ${s
-            .map((uid) => `[[#${uid}]]`)
-            .join("")}`
-        );
+        const nonAI = s.filter((pk) => players[pk].ai !== 1);
+        const humans = `[[mail:${s.join(":")}]] Alliance ${s
+          .map((uid) => `[[#${uid}]]`)
+          .join("")}`;
+        const title = nonAI.length > 0 ? humans : "AI";
+        computeEmpireTable(output, s, title);
       }
     }
     empireTable(output, unallied, `Unallied Empires`);
@@ -4215,7 +4341,8 @@ function NeptunesPrideAgent() {
       })
       .map((x) => +x);
     if (output.length > 0) {
-      const summary: string[] = ["--- All Alliances ---"];
+      const allAlliances = `--- All Alliances [[Tick #${NeptunesPride.universe.galaxy.tick}]] ---`;
+      const summary: string[] = [allAlliances];
       summary.push(output[0][1]);
       summary.push(output[0][2].replace("Empire", "Alliance"));
       const p = NeptunesPride.universe.player;
@@ -4236,7 +4363,7 @@ function NeptunesPrideAgent() {
         }
         summary.push(formatted);
       });
-      summary.push("--- All Alliances ---");
+      summary.push(allAlliances);
       output.push(summary.map((x) => x.replace(/..mail.*]] Alliance /, "")));
     }
     empireTable(output, survivors, `All Surviving Empires`);
@@ -4249,6 +4376,116 @@ function NeptunesPrideAgent() {
     "The empires report summarizes all key empire stats. It's meant to be " +
       "a better leaderboard for seeing how the individual empires are doing.",
     "empires"
+  );
+
+  const techSignatureReport = async function () {
+    lastReport = "signatures";
+    const output: Stanzas = [];
+    const techSignatures = (
+      output: Stanzas,
+      playerIndexes: number[],
+      title: string
+    ) => {
+      const player = NeptunesPride.universe.player;
+      const techs = Object.keys(player.tech);
+      const fields = techs.map((x) => [x, translateTechEmoji(x)]);
+      const table: Stanzas = [];
+      table.push(`--- ${title} ---`);
+      let cols = ":--";
+      for (let i = 0; i < fields.length; ++i) {
+        cols += "|--";
+      }
+      table.push(cols);
+      cols = "Empire";
+      for (let i = 0; i < fields.length; ++i) {
+        cols += `|${fields[i][1]}`;
+      }
+      table.push(cols);
+      interface TechStats {
+        levels: { [k: string]: number[] };
+        medians: { [k: string]: number };
+        summary: number[];
+      }
+      const myP: TechStats = { levels: {}, medians: {}, summary: [] };
+      fields.map((f) => f[0]).forEach((t) => (myP.levels[t] = []));
+      // biome-ignore lint/complexity/noForEach: <explanation>
+      playerIndexes.forEach((pi) => {
+        const player = NeptunesPride.universe.galaxy.players[pi];
+        const levels = player.tech;
+        // biome-ignore lint/complexity/noForEach: <explanation>
+        fields
+          .map((f) => f[0])
+          .forEach((t) => {
+            myP.levels[t].push(levels[t].level);
+          });
+      });
+      // biome-ignore lint/complexity/noForEach: <explanation>
+      fields
+        .map((f) => f[0])
+        .forEach((t) => {
+          myP.levels[t].sort((a, b) => +a - +b);
+          const medianHi = Math.ceil(myP.levels[t].length / 2);
+          myP.medians[t] = myP.levels[t][medianHi];
+          myP.summary.push(myP.medians[t]);
+        });
+      playerIndexes.forEach((pi) => {
+        const row: string[] = [`[[${pi}]]`];
+        const player = NeptunesPride.universe.galaxy.players[pi];
+        const levels = player.tech;
+        // biome-ignore lint/complexity/noForEach: <explanation>
+        fields
+          .map((f) => f[0])
+          .forEach((t, i) => {
+            const myLevel = myP.medians[t];
+            const level = levels[t].level;
+            if (level < myLevel) {
+              row.push(`[[bad:${level}]]`);
+            } else if (level > myLevel) {
+              row.push(`[[good:${level}]]`);
+            } else {
+              row.push(`${level}`);
+            }
+          });
+        table.push([row.join("|")]);
+      });
+      table.push([["[[footer:Signature]]", ...myP.summary].join("|")]);
+      table.push(`--- ${title} ---`);
+      output.push(table.flat());
+    };
+    const { players } = await getPrimaryAlliance();
+    let unallied = [];
+    const subsets = getAllianceSubsets();
+    for (let k in subsets) {
+      const s = subsets[k];
+      if (s.length === 1) {
+        unallied.push(s[0]);
+      } else if (colors.indexOf(k) !== -1) {
+        unallied.push(...s);
+      } else {
+        const nonAI = s.filter((pk) => players[pk].ai !== 1);
+        const humans = `[[mail:${s.join(":")}]] Alliance ${s
+          .map((uid) => `[[#${uid}]]`)
+          .join("")}`;
+        const title = nonAI.length > 0 ? humans : "AI";
+        techSignatures(output, s, title);
+      }
+    }
+    let allPlayers = Object.keys(NeptunesPride.universe.galaxy.players);
+    const survivors = allPlayers
+      .filter((k) => {
+        return players[k].total_strength > 0;
+      })
+      .map((x) => +x);
+    techSignatures(output, survivors, `All Empires`);
+
+    prepReport("signatures", output);
+  };
+  defineHotkey(
+    "ctrl+g",
+    techSignatureReport,
+    "The group tech report summarizes the technology levels of all empires. " +
+      "Use it to double check alliaces or look for trading partners.",
+    "signatures"
   );
 
   NeptunesPride.sendTech = (recipient: number, tech: string) => {
@@ -4721,6 +4958,42 @@ function NeptunesPrideAgent() {
   };
   defineHotkey("k", apiKeys, "Show known API keys.", "api");
 
+  const buildGameMap = async function () {
+    const databases = await indexedDB.databases();
+    const games: { [k: string]: string[] & { name?: string } } = {};
+    databases.forEach((d) => {
+      if (/^[0-9]+:[0-9A-Za-z]{6}$/.test(d.name)) {
+        const gameId = d.name.match(/^[0-9]+/)[0];
+        const apiKey = d.name.match(/[0-9A-Za-z]+$/)[0];
+        if (!games[gameId]) {
+          games[gameId] = [];
+        }
+        games[gameId].push(apiKey);
+      }
+    });
+    for (const gameId in games) {
+      for (const apikey of games[gameId]) {
+        if (games[gameId].name === undefined) {
+          const lastScan = await getLastRecord(+gameId, apikey, "scanCache");
+          games[gameId].name = lastScan?.cached?.name;
+        }
+      }
+    }
+    return games;
+  };
+  let pastGames = async function () {
+    lastReport = "games";
+    const output: Stanzas = [];
+    output.push("Past Games: ");
+    const games = await buildGameMap();
+    for (let k in games) {
+      const name = games[k].name;
+      output.push(`[[viewgame:${k}:${name}]]`);
+    }
+    prepReport("games", output);
+  };
+  defineHotkey("ctrl+g", pastGames, "Show past games.", "games");
+
   let mergeAllKeys = async function () {
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
@@ -4832,7 +5105,7 @@ function NeptunesPrideAgent() {
   const loadScanData = () =>
     refreshScanData().then(() => {
       if (myApiKey) {
-        console.log(`Loading scan data for ${myApiKey}`);
+        console.log(`Loading scan data for key ${myApiKey}`);
         getServerScans(myApiKey);
       } else {
         console.log("API Key unknown. No scan history.");
