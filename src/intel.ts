@@ -24,6 +24,7 @@ import {
   messageIndex,
   type Message,
   anyEventsNewerThan,
+  isNP4,
 } from "./events";
 import { GameStore, TypedProperty } from "./gamestore";
 import { post } from "./network";
@@ -1208,15 +1209,30 @@ function NeptunesPrideAgent() {
 
   let trueTick = 0;
   const rebuildColorMap = function (galaxy: any) {
-    if (galaxy.players[0].shape !== undefined && colorMap) {
+    if (galaxy.players[1].shape !== undefined && colorMap) {
+      console.log("rebuild color map before ", JSON.stringify(colorMap));
       colorMap = colorMap.map((_, uid) => {
         if (galaxy.players[uid] !== undefined) {
-          return colors[galaxy.players[uid].color];
+          let c = galaxy.players[uid].color;
+          if (c === undefined || galaxy.players[uid].colorStyle) {
+            console.log(
+              `use colorstyle for ${uid} ${galaxy.players[uid].colorStyle}`,
+              galaxy.players[uid]
+            );
+            return (
+              galaxy.players[uid].colorStyle ||
+              galaxy.players[uid].originalColor
+            );
+          }
+          console.log(`${uid} -> ${c} (${colors[c]}) GP`);
+          return colors[c];
         }
+        console.log(`${uid} -> ${colorMap[uid]} CM`);
         return colorMap[uid];
       });
+      console.log("rebuild color map after ", JSON.stringify(colorMap));
     }
-    if (galaxy.players[0].shape !== undefined && shapeMap) {
+    if (galaxy.players[1].shape !== undefined && shapeMap) {
       shapeMap = shapeMap.map((_, uid) => {
         if (galaxy.players[uid] !== undefined) {
           return galaxy.players[uid].shape;
@@ -1242,10 +1258,18 @@ function NeptunesPrideAgent() {
   if (NeptunesPride?.universe?.galaxy?.tick !== undefined) {
     recordTrueTick(null, NeptunesPride.universe.galaxy);
   }
+  function tickRate() {
+    const galaxy = NeptunesPride.universe.galaxy;
+    return galaxy.tick_rate || galaxy.tickRate;
+  }
+  function tickFragment(scan?: any) {
+    const galaxy = scan !== undefined ? scan : NeptunesPride.universe.galaxy;
+    return galaxy.tick_fragment || galaxy.tickFragment;
+  }
   let msToTick = function (tick: number, wholeTime?: boolean) {
     let universe = NeptunesPride.universe;
     var ms_since_data = 0;
-    var tf = universe.galaxy.tick_fragment;
+    var tf = tickFragment();
     var ltc = universe.locTimeCorrection;
 
     if (!universe.galaxy.paused) {
@@ -1259,8 +1283,8 @@ function NeptunesPrideAgent() {
     }
 
     var ms_remaining =
-      tick * 1000 * 60 * universe.galaxy.tick_rate -
-      tf * 1000 * 60 * universe.galaxy.tick_rate -
+      tick * 1000 * 60 * tickRate() -
+      tf * 1000 * 60 * tickRate() -
       ms_since_data -
       ltc;
     return ms_remaining;
@@ -1268,7 +1292,7 @@ function NeptunesPrideAgent() {
 
   let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   let msToTurnString = function (ms: number, prefix: string) {
-    const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+    const rate = tickRate() * 60 * 1000;
     const tick = ms / rate;
     const turn = Math.ceil(tick / NeptunesPride.gameConfig.turnJumpTicks);
     return `${turn} turn${turn !== 1 ? "s" : ""}`;
@@ -2010,9 +2034,11 @@ function NeptunesPrideAgent() {
       const x = col * 64;
       const y = row * 64;
       // player overlay on avatar
-      css[`.pci_48_${player.uid}`].style.background = `url("${
-        map.starSrc.src
-      }") -${x + 8}px -${y + 8}px`;
+      if (!isNP4()) {
+        css[`.pci_48_${player.uid}`].style.background = `url("${
+          map.starSrc.src
+        }") -${x + 8}px -${y + 8}px`;
+      }
     }
     const universe = NeptunesPride.universe;
     for (let i in universe.galaxy.players) {
@@ -2126,7 +2152,7 @@ function NeptunesPrideAgent() {
       const xoff = star1.x - star2.x;
       const yoff = star1.y - star2.y;
       const gatefactor = star1?.ga * star2?.ga * 9 || 1;
-      if (NeptunesPride.gameVersion === "proteus") {
+      if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
         if (gatefactor > 1) {
           const actualDistanceSquared = xoff * xoff + yoff * yoff;
           const twelveTickDistance =
@@ -2192,7 +2218,8 @@ function NeptunesPrideAgent() {
       if (
         universe.selectedStar?.alliedDefenders &&
         settings.autoRulerPower > 0 &&
-        map.scale >= 200
+        map.scale >= 200 &&
+        !isNP4()
       ) {
         const visTicks = NeptunesPride.gameConfig.turnBased
           ? NeptunesPride.gameConfig.turnJumpTicks
@@ -2450,7 +2477,7 @@ function NeptunesPrideAgent() {
     const bubbleLayer = document.createElement("canvas");
     map.drawStars = function () {
       const universe = NeptunesPride.universe;
-      if (universe.selectedStar?.player && settings.territoryOn) {
+      if (universe.selectedStar?.player && settings.territoryOn && !isNP4()) {
         const context: CanvasRenderingContext2D = map.context;
         let p = universe.selectedStar.player.uid;
         {
@@ -2782,7 +2809,9 @@ function NeptunesPrideAgent() {
         }
       }
 
-      drawAutoRuler();
+      if (!isNP4()) {
+        drawAutoRuler();
+      }
     };
     let base = -1;
     let wasBatched = false;
@@ -3516,11 +3545,11 @@ function NeptunesPrideAgent() {
         }
         return msToEtaString(ms, "");
       } else if (settings.relativeTimes === "tick") {
-        const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+        const rate = tickRate() * 60 * 1000;
         const tick = ms / rate;
         return `Tick #${Math.ceil(tick) + NeptunesPride.universe.galaxy.tick}`;
       } else if (settings.relativeTimes === "tickrel") {
-        const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+        const rate = tickRate() * 60 * 1000;
         const tick = ms / rate;
         return `${Math.ceil(tick)} ticks`;
       }
@@ -3531,7 +3560,7 @@ function NeptunesPrideAgent() {
       showSeconds: boolean
     ) {
       const text = timeText(ms, showMinutes, showSeconds);
-      const rate = NeptunesPride.universe.galaxy.tick_rate * 60 * 1000;
+      const rate = tickRate() * 60 * 1000;
       const relTick = ms / rate;
       const absTick = Math.ceil(relTick) + NeptunesPride.universe.galaxy.tick;
       return `<a onClick='Crux.crux.trigger(\"warp_time\", \"${absTick}\")'>${text}</a>`;
@@ -3618,13 +3647,17 @@ function NeptunesPrideAgent() {
   );
 
   const setPlayerColor = function (uid: number, color: string) {
+    //console.log(`Set player color to ${color} for ${uid}`);
     const player = NeptunesPride.universe.galaxy.players[uid];
     colorMap[player.uid] = color;
-    if (NeptunesPride.gameVersion === "proteus") {
+    if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
       if (!player.originalColor) {
         player.originalColor = player.colorStyle;
+        //console.log(`Record original color as ${player.originalColor}`);
       }
+      //console.log(`original color was ${player.originalColor}`);
       player.colorStyle = colorMap[player.uid];
+      //console.log(`colorStyle is ${player.colorStyle}`);
     } else {
       if (!player.originalColor) {
         player.originalColor = player.color;
@@ -3639,7 +3672,7 @@ function NeptunesPrideAgent() {
     if (settings.whitePlayer) {
       setPlayerColor(player.uid, "#ffffff");
     } else {
-      if (NeptunesPride.gameVersion === "proteus") {
+      if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
         setPlayerColor(player.uid, colors[player.color]);
       } else {
         if (player.prevColor !== undefined) {
@@ -3663,6 +3696,46 @@ function NeptunesPrideAgent() {
   };
   window.setTimeout(checkRecolor, 1000);
 
+  function addAccessors(n: string, p: any) {
+    const props = Object.getOwnPropertyNames(p);
+    for (const name of props) {
+      let newName = `${name.replace(/[A-Z]/g, "_$&").toLowerCase()}`;
+      if (name !== newName) {
+        //console.log(`Alias ${n}.${name} -> ${newName}`);
+        if (name === "colorStyle") {
+          console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
+          //newName = "color";
+        }
+        Object.defineProperty(p, newName, {
+          get: function () {
+            return this[name];
+          },
+          set: function (v) {
+            return (this[name] = v);
+          },
+        });
+      }
+    }
+  }
+  function allAccessors() {
+    if (!NeptunesPride.universe.galaxy.tick_rate) {
+      console.log("REDEFINE PROPERTIES");
+      for (const pk in NeptunesPride.universe.galaxy.players) {
+        const p = NeptunesPride.universe.galaxy.players[pk];
+        if (p.total_stars !== undefined) {
+          console.log("skip inside for ${p.alias}");
+          continue;
+        }
+        addAccessors(p.alias, p);
+      }
+      addAccessors("galaxy", NeptunesPride.universe.galaxy);
+      if (NeptunesPride.universe.player_achievements === undefined) {
+        addAccessors("universe", NeptunesPride.universe);
+      }
+    } else {
+      console.log("*skip REDEFINE PROPERTIES");
+    }
+  }
   let init = function () {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
       linkFleets();
@@ -3695,6 +3768,10 @@ function NeptunesPrideAgent() {
             rebuildColorMap(NeptunesPride.universe.galaxy);
           }
         });
+
+      allAccessors();
+      console.log("hook for all accessors");
+      onTrigger("order:full_universe", allAccessors);
     } else {
       console.log(
         "Game not fully initialized yet; wait.",
@@ -3815,8 +3892,9 @@ function NeptunesPrideAgent() {
         };
       }
     }
-    const tf = 1 - msToTick(1) / (scan.tick_rate * 60 * 1000);
+    const tf = 1 - msToTick(1) / (tickRate() * 60 * 1000);
     universe.galaxy.tick_fragment = tf;
+    universe.galaxy.tickFragment = tf;
   };
   let mergeUser = async function (_event?: any, data?: string) {
     if (NeptunesPride.originalPlayer === undefined) {
@@ -3851,14 +3929,42 @@ function NeptunesPrideAgent() {
   onTrigger("switch_user_api", switchUser);
   onTrigger("merge_user_api", mergeUser);
 
+  let viewGame = async function (_event?: any, data?: string) {
+    const gameId = data?.split(":")[1];
+    NeptunesPride.gameNumber = gameId;
+    const games = await buildGameMap();
+    unloadServerScans();
+    allSeenKeys = games[gameId].map((x) => `[[api:${x}]]`);
+    let maxTick = 0;
+    games[gameId].forEach(async (code) => {
+      await getServerScans(code);
+      const numScans = countScans(code);
+      if (numScans > 0) {
+        console.log(`${numScans} scans for ${code} cached`);
+        const last = numScans - 1;
+        const lastScan = getScan(code, last);
+        console.log({ lastScan });
+        if (lastScan?.tick > maxTick) {
+          maxTick = lastScan.tick;
+          console.log(`New maxtick found: ${maxTick}`);
+          trueTick = maxTick;
+        }
+      } else {
+        console.log(`No scans found for ${code}`);
+      }
+    });
+    warpTime(null, "0");
+  };
+  onTrigger("view_game", viewGame);
+
   let timeTravelTick = -1;
   let timeTravelTickIndices: { [k: string]: number } = {};
   const adjustNow = function (scan: any) {
-    const wholeTick = scan.tick_rate * 60 * 1000;
-    const fragment = scan.tick_fragment * wholeTick;
+    const wholeTick = tickRate() * 60 * 1000;
+    const fragment = tickFragment(scan) * wholeTick;
     const now = scan.now - fragment;
     const tick_fragment = 0; //((new Date().getTime() - now) % wholeTick)/ wholeTick;
-    return { ...scan, now, tick_fragment };
+    return { ...scan, now, tick_fragment, tickFragment: tick_fragment };
   };
   let getTimeTravelScan = function (apikey: string, dir: "back" | "forwards") {
     return getTimeTravelScanForTick(timeTravelTick, apikey, dir);
@@ -4086,10 +4192,20 @@ function NeptunesPrideAgent() {
     scan: "📡",
     terr: "🌎",
     weap: "⚔️",
+    "0": "💰",
+    "1": "🧪",
+    "2": "🔧",
+    "3": "🚀",
+    "4": "📡",
+    "5": "⚔️",
+    "6": "🌎",
   };
 
   let translateTech = (name: string) => xlate[name.substring(0, 4)];
-  let translateTechEmoji = (name: string) => xlateemoji[name.substring(0, 4)];
+  let translateTechEmoji = (name: string) => {
+    console.log(`name key [${name}]`);
+    return xlateemoji[name.substring(0, 4)];
+  };
 
   const tradeCostForLevel = function (level: number) {
     if (NeptunesPride.gameVersion === "proteus") {
@@ -4284,8 +4400,9 @@ function NeptunesPrideAgent() {
       const p = NeptunesPride.universe.player;
       allianceMatch[p.uid] = p.prevColor;
     }
+    const offset = players[0] !== undefined ? 0 : 1;
     let alliancePairs: [any, number][] = allianceMatch
-      .map((x, i): [any, number] => [x, i])
+      .map((x, i): [any, number] => [x, i + offset])
       .sort();
     let subsets: { [k: string]: number[] } = {};
     alliancePairs.forEach((p) => {
@@ -4584,8 +4701,7 @@ function NeptunesPrideAgent() {
     const cachedScan = await store.get(cacheKey);
     if (cachedScan) {
       const freshness = new Date().getTime() - cachedScan.now;
-      const tickness =
-        (1 - cachedScan.tick_fragment) * cachedScan.tick_rate * 60 * 1000;
+      const tickness = (1 - tickFragment(cachedScan)) * tickRate() * 60 * 1000;
       if (
         freshness < tickness &&
         freshness < 60 * 5 * 1000 &&
