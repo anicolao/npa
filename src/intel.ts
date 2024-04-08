@@ -4840,7 +4840,7 @@ function NeptunesPrideAgent() {
       code: apiKey,
     };
     let api = isNP4()
-      ? await get("https://neptunespride4.appspot.com/api", params)
+      ? await get("https://np4.ironhelmet.com/api", params)
       : await post("https://np.ironhelmet.com/api", params);
     await store.set(cacheKey, api.scanning_data);
     if (api.scanning_data) {

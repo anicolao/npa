@@ -25,7 +25,7 @@ cat <<EOF > dist/manifest.json
     ],
     "host_permissions": [
       "https://np.ironhelmet.com/*",
-      "https://neptunespride4.appspot.com/*"
+      "https://np4.ironhelmet.com/*"
     ],
     "action": {},
     "web_accessible_resources": [
@@ -40,7 +40,7 @@ cat <<EOF > dist/manifest.json
     ],
     "content_scripts": [
       {
-        "matches": [ "https://np.ironhelmet.com/*", "https://neptunespride4.appspot.com/*" ],
+        "matches": [ "https://np.ironhelmet.com/*", "https://np4.ironhelmet.com/*" ],
         "css": [ "intel.css" ]
       }
     ],
