@@ -10,21 +10,9 @@ export type HotkeyCallback = Callback & HelpText;
 
 export function setClip(text: string): void {
   lastClip = text;
-  /*
   navigator.clipboard.writeText(lastClip).catch((err) => {
     console.log(`clipboard ${err}`);
   });
-  */
-  navigator.clipboard.write([
-    new ClipboardItem({
-      'text/plain': new Blob([lastClip], {
-        type: 'text/plain',
-      }),
-      'text/html': new Blob([Crux.format(lastClip.replaceAll("\n", "<br/>"), NeptunesPride.universe.hyperlinkedMessageInserts)], {
-        type: 'text/html',
-      }),
-    }),
-  ]);
 }
 
 export function getClip(): string {
