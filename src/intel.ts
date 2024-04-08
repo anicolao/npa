@@ -51,6 +51,17 @@ import {
 } from "./reports";
 import { getCodeFromApiText, ScanKeyIterator, TickIterator } from "./scans";
 import { isSafari } from "./useragent";
+import { futureTime, resetAliases } from "./timetravel";
+import {
+  alliedFleet,
+  annalsOfWar,
+  combatInfo,
+  combatOutcomes,
+  fleetOutcomes,
+  handicapString,
+  StarState,
+  tickNumber,
+} from "./combatcalc";
 
 interface CruxLib {
   IconButton: any;
@@ -550,33 +561,6 @@ function NeptunesPrideAgent() {
     "combatactivity"
   );
 
-  interface WarRecord {
-    tick: number;
-    p0: number;
-    p1: number;
-    war: "peace" | "peace_agreement" | "war_declared" | "war";
-  }
-  const annalsOfWar = (): WarRecord[] => {
-    let warTicks: WarRecord[] = [];
-    for (let i = 0; i < messageCache.game_event.length; ++i) {
-      const m = messageCache.game_event[i];
-      if (m.payload.template === "war_declared") {
-        let tick = m.payload.tick;
-        const p0 = m.payload.attacker;
-        const p1 = m.payload.defender;
-        warTicks.push({ tick, p0, p1, war: "war_declared" });
-        tick += 24;
-        warTicks.push({ tick, p0, p1, war: "war" });
-      } else if (m.payload.template === "peace_accepted") {
-        let tick = m.payload.tick;
-        const p0 = m.payload.from_puid;
-        const p1 = m.payload.to_puid;
-        warTicks.push({ tick, p0, p1, war: "peace_agreement" });
-      }
-    }
-    return warTicks;
-  };
-  let knownAlliances: number[][] | undefined = undefined;
   function faReport() {
     let output = [];
 
@@ -654,7 +638,7 @@ function NeptunesPrideAgent() {
         }
         output.push(`[[Tick #${record.tick}]] ${d} [[${p0}]] ⇔ [[${p1}]]`);
       }
-      knownAlliances = alliances;
+      combatInfo.knownAlliances = alliances;
     } else {
       if (NeptunesPride.gameConfig.alliances != "0") {
         output.push("No API keys to detect Formal Alliances.");
@@ -1193,476 +1177,6 @@ function NeptunesPrideAgent() {
     return msToEtaString(msplus, prefix);
   };
 
-  function tickNumber(ticks: number) {
-    return NeptunesPride.universe.galaxy.tick + ticks;
-  }
-
-  const alliedFleet = (fleetOwnerId: number, starOwnerId: number) => {
-    if (knownAlliances === undefined && NeptunesPride.gameConfig.alliances) {
-      faReport();
-    }
-    const players = NeptunesPride.universe.galaxy.players;
-    const fOwner = players[fleetOwnerId];
-    const sOwner = players[starOwnerId];
-    const warMap = fOwner?.war || sOwner?.war || {};
-    if (fleetOwnerId == starOwnerId) return true;
-    if (warMap[fleetOwnerId] && warMap[starOwnerId]) return false;
-    return (
-      warMap[fleetOwnerId] == 0 ||
-      warMap[starOwnerId] == 0 ||
-      knownAlliances?.[fleetOwnerId]?.[starOwnerId]
-    );
-  };
-  interface DepartureRecord {
-    leaving: number;
-    origShips: number;
-  }
-  interface StarState {
-    last_updated: number;
-    ships: number;
-    puid: number;
-    c: number;
-    departures: { [k: number]: DepartureRecord };
-    weapons: number;
-    production: number;
-  }
-  let fleetOutcomes: { [k: number]: any } = {};
-  let combatHandicap = 0;
-  const combatOutcomes = (staroutcomes?: { [k: string]: StarState }) => {
-    const universe = NeptunesPride.universe;
-    const players = NeptunesPride.universe.galaxy.players;
-    let fleets = NeptunesPride.universe.galaxy.fleets;
-    let stars = NeptunesPride.universe.galaxy.stars;
-    let flights = [];
-    fleetOutcomes = {};
-    for (const f in fleets) {
-      let fleet = fleets[f];
-      if (fleet.o && fleet.o.length > 0) {
-        let stop = fleet.o[0][1];
-        let ticks = fleet.etaFirst;
-        let starname = stars[stop]?.n;
-        if (!starname) {
-          continue;
-        }
-        flights.push([
-          ticks,
-          "[[{0}]] [[{1}]] {2} → [[{3}]] [[Tick #{4}]]".format(
-            fleet.puid,
-            fleet.n,
-            fleet.st,
-            starname,
-            tickNumber(ticks)
-          ),
-          fleet,
-        ]);
-      }
-    }
-    flights = flights.sort(function (a, b) {
-      return a[0] - b[0];
-    });
-    let arrivals: { [k: string]: any } = {};
-    let output: Stanzas = [];
-    let arrivalTimes = [];
-    let starstate: { [k: string]: StarState } =
-      staroutcomes === undefined ? {} : staroutcomes;
-    for (const i in flights) {
-      let fleet = flights[i][2];
-      if (fleet.orbiting) {
-        let orbit: string = fleet.orbiting.uid;
-        if (!starstate[orbit]) {
-          const ownerWeapons = players[stars[orbit].puid]?.tech.weapons.level;
-          const weapons = Math.max(
-            ownerWeapons,
-            ...stars[orbit]?.alliedDefenders.map(
-              (d: number) => players[d].tech.weapons.level
-            )
-          );
-          starstate[orbit] = {
-            last_updated: 0,
-            ships: stars[orbit].totalDefenses,
-            puid: stars[orbit].puid,
-            c: stars[orbit].c || 0,
-            departures: {},
-            weapons,
-            production: stars[orbit].shipsPerTick,
-          };
-        }
-        // This fleet is departing this tick; remove it from the origin star's totalDefenses
-        if (fleet.o.length > 0) {
-          const tick = fleet.o[0][0] - 1;
-          if (tick >= 0) {
-            const origShips = starstate[orbit].ships;
-            if (starstate[orbit].departures[tick] === undefined) {
-              starstate[orbit].departures[tick] = {
-                leaving: fleet.st,
-                origShips,
-              };
-            } else {
-              const leaving =
-                starstate[orbit].departures[tick].leaving + fleet.st;
-              starstate[orbit].departures[tick] = { leaving, origShips };
-            }
-          } else {
-            starstate[orbit].ships -= fleet.st;
-          }
-        }
-      }
-      if (
-        arrivalTimes.length === 0 ||
-        arrivalTimes[arrivalTimes.length - 1] !== flights[i][0]
-      ) {
-        arrivalTimes.push(flights[i][0]);
-      }
-      const arrivalKey = [flights[i][0], fleet.o[0][1]].toString();
-      if (arrivals[arrivalKey] !== undefined) {
-        arrivals[arrivalKey].push(fleet);
-      } else {
-        arrivals[arrivalKey] = [fleet];
-      }
-    }
-    for (const k in arrivals) {
-      const stanza = [];
-      let arrival = arrivals[k];
-      let ka = k.split(",");
-      let tick = parseInt(ka[0]);
-      let starId = ka[1];
-      if (!starstate[starId]) {
-        const ownerWeapons = players[stars[starId].puid]?.tech.weapons.level;
-        const weapons = Math.max(
-          ownerWeapons || 0,
-          ...stars[starId]?.alliedDefenders.map(
-            (d: number) => players[d].tech.weapons.level
-          )
-        );
-        starstate[starId] = {
-          last_updated: 0,
-          ships: stars[starId].totalDefenses,
-          puid: stars[starId].puid,
-          c: stars[starId].c || 0,
-          departures: {},
-          weapons,
-          production: stars[starId].shipsPerTick,
-        };
-      }
-      if (starstate[starId].puid == -1) {
-        // assign ownership of the star to the player whose fleet has traveled the least distance
-        let minDistance = 10000;
-        let owner = -1;
-        for (const i in arrival) {
-          let fleet = arrival[i];
-          let d = universe.distance(
-            stars[starId].x,
-            stars[starId].y,
-            fleet.lx,
-            fleet.ly
-          );
-          if (d < minDistance || owner == -1) {
-            owner = fleet.puid;
-            minDistance = d;
-          }
-        }
-        starstate[starId].puid = owner;
-      }
-      for (const i in arrival) {
-        let fleet = arrival[i];
-        if (alliedFleet(fleet.puid, starstate[starId].puid)) {
-          const weapons = Math.max(
-            starstate[starId].weapons,
-            players[fleet.puid].tech.weapons.level
-          );
-          starstate[starId].weapons = weapons;
-        }
-      }
-      stanza.push(
-        "[[Tick #{0}]]: [[{1}]] [[{2}]] {3} ships".format(
-          tickNumber(tick),
-          starstate[starId].puid,
-          stars[starId].n,
-          starstate[starId].ships
-        )
-      );
-      let tickDelta = tick - starstate[starId].last_updated - 1;
-      if (tickDelta > 0) {
-        let oldShips = starstate[starId].ships;
-        const start = starstate[starId].last_updated;
-        const departures = starstate[starId].departures;
-        for (let i = start; i < start + tickDelta; ++i) {
-          if (departures[i]) {
-            const ratio = oldShips / departures[i].origShips;
-            const departing = Math.ceil(departures[i].leaving * ratio);
-            starstate[starId].ships -= departing;
-            stanza.push("  {0} depart".format(departing));
-          }
-        }
-        if (starstate[starId].ships < oldShips) {
-          oldShips = starstate[starId].ships;
-        }
-        starstate[starId].last_updated = tick - 1;
-        if (starstate[starId].production) {
-          let oldc = starstate[starId].c;
-          starstate[starId].ships +=
-            starstate[starId].production * tickDelta + oldc;
-          starstate[starId].c =
-            starstate[starId].ships - Math.trunc(starstate[starId].ships);
-          starstate[starId].ships -= starstate[starId].c;
-          stanza.push(
-            "  {0}+{3} + {2}/h = {1}+{4}".format(
-              oldShips,
-              starstate[starId].ships,
-              starstate[starId].production,
-              oldc,
-              starstate[starId].c
-            )
-          );
-        }
-      }
-      for (const i in arrival) {
-        let fleet = arrival[i];
-        if (
-          alliedFleet(fleet.puid, starstate[starId].puid) ||
-          starstate[starId].puid == -1
-        ) {
-          let oldShips = starstate[starId].ships;
-          if (starstate[starId].puid == -1) {
-            starstate[starId].ships = fleet.st;
-          } else {
-            starstate[starId].ships += fleet.st;
-          }
-          let landingString = "  {0} + {2} on [[{3}]] = {1}".format(
-            oldShips,
-            starstate[starId].ships,
-            fleet.st,
-            fleet.n
-          );
-          stanza.push(landingString);
-          landingString = landingString.substring(2);
-        }
-      }
-      for (const i in arrival) {
-        let fleet = arrival[i];
-        if (alliedFleet(fleet.puid, starstate[starId].puid)) {
-          let outcomeString = "{0} ships on {1}".format(
-            Math.floor(starstate[starId].ships),
-            stars[starId].n
-          );
-          fleetOutcomes[fleet.uid] = {
-            eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
-            outcome: outcomeString,
-          };
-        }
-      }
-      let awt = 0;
-      let offense = 0;
-      let contribution: { [k: string]: any } = {};
-      for (const i in arrival) {
-        let fleet = arrival[i];
-        if (!alliedFleet(fleet.puid, starstate[starId].puid)) {
-          let olda = offense;
-          offense += fleet.st;
-          stanza.push(
-            "  [[{4}]]! {0} + {2} on [[{3}]] = {1}".format(
-              olda,
-              offense,
-              fleet.st,
-              fleet.n,
-              fleet.puid
-            )
-          );
-          contribution[[fleet.puid, fleet.uid].toString()] = fleet.st;
-          let wt = players[fleet.puid].tech.weapons.level;
-          if (wt > awt) {
-            awt = wt;
-          }
-        }
-      }
-      let attackersAggregate = offense;
-      while (offense > 0) {
-        let dwt = starstate[starId].weapons;
-        let defense = starstate[starId].ships;
-        stanza.push(
-          "  Combat! [[{0}]] defending".format(starstate[starId].puid)
-        );
-        stanza.push("    Defenders {0} ships, WS {1}".format(defense, dwt));
-        stanza.push("    Attackers {0} ships, WS {1}".format(offense, awt));
-        if (NeptunesPride.gameVersion !== "proteus") {
-          dwt += 1;
-        }
-        if (starstate[starId].puid !== universe.galaxy.player_uid) {
-          if (combatHandicap > 0) {
-            dwt += combatHandicap;
-            stanza.push(
-              "    Defenders WS{0} = {1}".format(handicapString(""), dwt)
-            );
-          } else if (combatHandicap < 0) {
-            awt -= combatHandicap;
-            stanza.push(
-              "    Attackers WS{0} = {1}".format(handicapString(""), awt)
-            );
-          }
-        } else {
-          if (combatHandicap > 0) {
-            awt += combatHandicap;
-            stanza.push(
-              "    Attackers WS{0} = {1}".format(handicapString(""), awt)
-            );
-          } else if (combatHandicap < 0) {
-            dwt -= combatHandicap;
-            stanza.push(
-              "    Defenders WS{0} = {1}".format(handicapString(""), dwt)
-            );
-          }
-        }
-
-        if (universe.galaxy.player_uid === starstate[starId].puid) {
-          // truncate defense if we're defending to give the most
-          // conservative estimate
-          defense = Math.trunc(defense);
-        }
-        while (defense > 0 && offense > 0) {
-          offense -= dwt;
-          if (offense <= 0) break;
-          defense -= awt;
-        }
-
-        let newAggregate = 0;
-        let playerContribution: { [k: number]: number } = {};
-        let biggestPlayer = -1;
-        let biggestPlayerId = starstate[starId].puid;
-        if (offense > 0) {
-          let defeatedOffense = offense;
-          defense += awt - 1;
-          do {
-            defense -= awt;
-            defeatedOffense -= dwt;
-          } while (defeatedOffense > 0);
-          stanza.push(
-            "  Attackers win with {0} ships remaining".format(offense, -defense)
-          );
-          stanza.push(
-            "  +{1} defenders needed to survive".format(offense, -defense)
-          );
-          const pairs: [string, number][] = Object.keys(contribution).map(
-            (k) => [k, contribution[k]]
-          );
-          pairs.sort((a, b) => b[1] - a[1]);
-          let roundOffDebt = 0;
-          for (let i = 0; i < pairs.length; ++i) {
-            let k = pairs[i][0];
-            let ka = k.split(",");
-            let fleet = fleets[ka[1]];
-            let playerId = parseInt(ka[0]);
-            let c = (offense * contribution[k]) / attackersAggregate;
-            let intPart = Math.floor(c);
-            let roundOff = c - intPart;
-            roundOffDebt += roundOff;
-            if (roundOffDebt > 0.0) {
-              roundOffDebt -= 1.0;
-              intPart++;
-            }
-            contribution[k] = intPart;
-            newAggregate += contribution[k];
-            if (playerContribution[playerId]) {
-              playerContribution[playerId] += contribution[k];
-            } else {
-              playerContribution[playerId] = contribution[k];
-            }
-            if (playerContribution[playerId] > biggestPlayer) {
-              biggestPlayer = playerContribution[playerId];
-              biggestPlayerId = playerId;
-            }
-            stanza.push(
-              "    [[{0}]] has {1} on [[{2}]]".format(
-                fleet.puid,
-                contribution[k],
-                fleet.n
-              )
-            );
-            let outcomeString = "Wins! {0} land\n+{1} to defend".format(
-              contribution[k],
-              -defense
-            );
-            fleetOutcomes[fleet.uid] = {
-              eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
-              outcome: outcomeString,
-            };
-          }
-          if (NeptunesPride.gameVersion === "proteus") {
-            if (starstate[starId].puid != biggestPlayerId) {
-              starstate[starId].c = 0;
-              starstate[starId].production = 0;
-            }
-          }
-          starstate[starId].puid = biggestPlayerId;
-          starstate[starId].weapons =
-            players[biggestPlayerId].tech.weapons.level;
-          starstate[starId].ships = 0;
-          offense = newAggregate;
-          for (let k in contribution) {
-            let ka = k.split(",");
-            const puid = parseInt(ka[0]);
-            if (alliedFleet(biggestPlayerId, puid)) {
-              offense -= contribution[k];
-              starstate[starId].ships += contribution[k];
-              const arrivingWeapons = players[puid].tech.weapons.level;
-              const existingWeapons = starstate[starId].weapons;
-              starstate[starId].weapons = Math.max(
-                arrivingWeapons,
-                existingWeapons
-              );
-            }
-          }
-        } else {
-          let defeatedDefense = defense;
-          offense += dwt - 1;
-          do {
-            offense -= dwt;
-            defeatedDefense -= awt;
-          } while (defeatedDefense > 0);
-          stanza.push("  +{0} more attackers needed".format(-offense));
-          starstate[starId].ships = defense;
-          for (const i in arrival) {
-            let fleet = arrival[i];
-            if (alliedFleet(fleet.puid, starstate[starId].puid)) {
-              let outcomeString = "{0} ships on {1}".format(
-                Math.floor(starstate[starId].ships),
-                stars[starId].n
-              );
-              fleetOutcomes[fleet.uid] = {
-                eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
-                outcome: outcomeString,
-              };
-            }
-          }
-          for (const k in contribution) {
-            let ka = k.split(",");
-            let fleet = fleets[ka[1]];
-            let outcomeString = "Loses! {0} live\n+{1} to win".format(
-              defense,
-              -offense
-            );
-            if (alliedFleet(fleet.puid, starstate[starId].puid)) {
-              outcomeString = "Wins! {0} land.".format(defense);
-            }
-            fleetOutcomes[fleet.uid] = {
-              eta: `[[Tick #${tickNumber(fleet.etaFirst)}]]`,
-              outcome: outcomeString,
-            };
-          }
-        }
-        attackersAggregate = offense;
-      }
-      stanza.push(
-        "  [[{0}]] [[{1}]] {2} ships".format(
-          starstate[starId].puid,
-          stars[starId].n,
-          starstate[starId].ships
-        )
-      );
-      output.push(stanza);
-    }
-    return output;
-  };
-
   const mapRebuild = () => {
     console.log("rebuild", { showingOurOptions, showingOurUI });
     if (showingOurOptions) {
@@ -1723,12 +1237,12 @@ function NeptunesPrideAgent() {
     "+ Rulers"
   );
   function incCombatHandicap() {
-    combatHandicap += 1;
+    combatInfo.combatHandicap += 1;
     NeptunesPride.np.trigger("map_rebuild");
     NeptunesPride.np.trigger("refresh_interface");
   }
   function decCombatHandicap() {
-    combatHandicap -= 1;
+    combatInfo.combatHandicap -= 1;
     NeptunesPride.np.trigger("map_rebuild");
     NeptunesPride.np.trigger("refresh_interface");
   }
@@ -2237,11 +1751,6 @@ function NeptunesPrideAgent() {
   };
 
   let hooksLoaded = false;
-  let handicapString = function (prefix?: string) {
-    let p =
-      prefix !== undefined ? prefix : combatHandicap > 0 ? "Enemy WS" : "My WS";
-    return p + (combatHandicap > 0 ? "+" : "") + combatHandicap;
-  };
   type CSSRuleMap = { [k: string]: CSSStyleRule };
   function cssrules(): CSSRuleMap {
     var rules: { [k: string]: CSSStyleRule } = {};
@@ -2441,12 +1950,12 @@ function NeptunesPrideAgent() {
     }
 
     function getAdjustedScanRange(player: Player) {
-      const sH = combatHandicap;
+      const sH = combatInfo.combatHandicap;
       const scanRange = player.tech.scanning.value + sH * lyToMap();
       return scanRange;
     }
     function getAdjustedFleetRange(player: Player) {
-      const pH = combatHandicap;
+      const pH = combatInfo.combatHandicap;
       const scanRange = player.tech.propulsion.value + pH * lyToMap();
       return scanRange;
     }
@@ -2530,7 +2039,12 @@ function NeptunesPrideAgent() {
       do {
         i -= 1;
         const candidate = sortedByDistanceSquared[i];
-        const allied = alliedFleet(candidate.puid, star.puid);
+        const allied = alliedFleet(
+          NeptunesPride.universe.galaxy.players,
+          candidate.puid,
+          star.puid,
+          0
+        );
         if (!allied && (closest === star || stepsOut > 0)) {
           closest = candidate;
           stepsOut--;
@@ -2587,7 +2101,7 @@ function NeptunesPrideAgent() {
           let rangeLevel = 0;
           if (other.puid !== -1) {
             const rangeRequired = (puid: number) => {
-              const origHandicap = combatHandicap;
+              const origHandicap = combatInfo.combatHandicap;
               const player = NeptunesPride.universe.galaxy.players[other.puid];
               let fleetRange = getAdjustedFleetRange(player);
               const flightDistance = universe.distance(
@@ -2598,13 +2112,13 @@ function NeptunesPrideAgent() {
               );
               while (
                 flightDistance > fleetRange &&
-                combatHandicap - origHandicap < 5
+                combatInfo.combatHandicap - origHandicap < 5
               ) {
-                combatHandicap++;
+                combatInfo.combatHandicap++;
                 fleetRange = getAdjustedFleetRange(player);
               }
-              let ret = combatHandicap - origHandicap;
-              combatHandicap = origHandicap;
+              let ret = combatInfo.combatHandicap - origHandicap;
+              combatInfo.combatHandicap = origHandicap;
               return ret;
             };
             rangeLevel = rangeRequired(other.puid);
@@ -2746,7 +2260,14 @@ function NeptunesPrideAgent() {
 
         for (let i = 0; showAll && i < closerStars.length; ++i) {
           const o = closerStars[i];
-          if (alliedFleet(o.puid, star.puid)) {
+          if (
+            alliedFleet(
+              NeptunesPride.universe.galaxy.players,
+              o.puid,
+              star.puid,
+              0
+            )
+          ) {
             const ticks = Math.ceil(Math.sqrt(distance(star, o) / speedSq));
             if (enemyTicks - visTicks >= ticks) {
               drawHUDRuler(star, o, effectiveSupportColor);
@@ -2926,7 +2447,7 @@ function NeptunesPrideAgent() {
       map.context.textAlign = "right";
       map.context.textBaseline = "middle";
       let v = version;
-      if (combatHandicap !== 0) {
+      if (combatInfo.combatHandicap !== 0) {
         v = `${handicapString()} ${v}`;
       }
       drawOverlayString(
@@ -3051,7 +2572,14 @@ function NeptunesPrideAgent() {
         let fleets = NeptunesPride.universe.galaxy.fleets;
         for (const f in fleets) {
           let fleet = fleets[f];
-          if (alliedFleet(fleet.puid, universe.player.uid)) {
+          if (
+            alliedFleet(
+              NeptunesPride.universe.galaxy.players,
+              fleet.puid,
+              universe.player.uid,
+              0
+            )
+          ) {
             let dx = universe.selectedStar.x - fleet.x;
             let dy = universe.selectedStar.y - fleet.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
