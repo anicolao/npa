@@ -3025,7 +3025,7 @@ function NeptunesPrideAgent() {
         i = i + 1;
         fp = s.indexOf("[[");
         sp = s.indexOf("]]");
-        if (fp === -1) break;
+        if (fp === -1 || sp === -1) break;
         sub = s.slice(fp + 2, sp);
         pattern = `[[${sub}]]`;
         sub = sub.replaceAll("&#x3A;", ":");
