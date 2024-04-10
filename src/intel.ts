@@ -3862,20 +3862,22 @@ function NeptunesPrideAgent() {
   let game = getGameNumber();
   let store = new GameStore(game);
   let superOnServerResponse = NeptunesPride.np.onServerResponse;
-  NeptunesPride.np.onServerResponse = function (response: { event: string }) {
+  NeptunesPride.np.onServerResponse = function (response: { event: string } | any[]) {
     superOnServerResponse(response);
-    if (response.event === "order:player_achievements") {
+    // TODO: replace this with normal event handling
+    const event = Array.isArray(response) ? response[0] : response.event;
+    if (event === "order:player_achievements") {
       console.log("Initial load complete. Reinstall.");
       logCount("achievements_init");
       init();
-    } else if (response.event === "order:full_universe") {
+    } else if (event === "order:full_universe") {
       console.log("Universe received. Reinstall.");
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
       logCount("universe_init");
       init();
     } else if (!hooksLoaded && NeptunesPride.npui.map) {
       console.log("Hooks need loading and map is ready. Reinstall.");
-      logCount(`${response.event}_init`);
+      logCount(`${event}_init`);
       init();
     }
   };
