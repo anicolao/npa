@@ -213,7 +213,7 @@ export async function getServerScans(apikey: string) {
   return onSnapshot(
     query(
       collection(firestore, diffskey),
-      where("last_timestamp", ">", diffTimestamp),
+      where("last_timestamp", ">", 0*diffTimestamp),
       orderBy("last_timestamp")
     ),
     (querySnapshot) => {
