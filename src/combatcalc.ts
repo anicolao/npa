@@ -246,6 +246,9 @@ export const computeCombatOutcomes = (
       let origShips = vstar.st;
       for (const fleet of vstar.fleetsInOrbit) {
         origShips += fleet.st;
+        if (fleets[fleet.uid] === undefined) {
+          console.error(`${fleet.uid} orbiting ${vstar.n} doesn't exist.`)
+        }
       }
       for (const fleet of vstar.fleetsInOrbit) {
         if (fleet.o.length > 0) {
@@ -363,6 +366,9 @@ export const computeCombatOutcomes = (
           starstate[starId].ships += fleet.st;
         }
         starstate[starId].fleetStrength[fleet.uid] = fleet.st;
+        if (fleets[fleet.uid] === undefined) {
+          console.error(`${fleet.uid} on ${stars[starId].n} doesn't exist.`)
+        }
         let landingString = "  {0} + {2} on [[{3}]] = {1}".format(
           oldShips,
           starstate[starId].ships,
@@ -404,6 +410,9 @@ export const computeCombatOutcomes = (
           )
         );
         starstate[starId].fleetStrength[fleet.uid] = fleet.st;
+        if (fleets[fleet.uid] === undefined) {
+          console.error(`${fleet.uid} on ${stars[starId].n} doesn't exist.`)
+        }
         let wt = getWeaponsLevel(players[fleet.puid]);
         if (wt > awt) {
           awt = wt;
@@ -484,7 +493,7 @@ export const computeCombatOutcomes = (
           let k = pairs[i][0];
           let fleet = fleets[k];
           if (fleet === undefined) {
-            console.error(`Failed to find fleet ${k}`);
+            console.error(`Failed to find fleet ${k} near star ${stars[starId].n}`);
             continue;
           }
           if (
@@ -559,7 +568,7 @@ export const computeCombatOutcomes = (
         for (let k in starstate[starId].fleetStrength) {
           const fleet = fleets[k];
           if (fleet === undefined) {
-            console.error(`failed to find fleet ${k}`);
+            console.error(`failed to find fleet ${k} near ${stars[starId].n}`);
             continue;
           }
           const puid = fleet.puid;
@@ -604,7 +613,9 @@ export const computeCombatOutcomes = (
               tick
             )
           ) {
-            starstate[starId].fleetStrength[fleetOrStar.uid] = 0;
+            if (fleets[fleetOrStar.uid] !== undefined) {
+              starstate[starId].fleetStrength[fleetOrStar.uid] = 0;
+            }
           } else {
             let st =
               k === "star"
@@ -656,7 +667,7 @@ export const computeCombatOutcomes = (
         for (const k in starstate[starId].fleetStrength) {
           let fleet = fleets[k];
           if (fleet === undefined) {
-            console.error(`failed to find fleet ${k}`);
+            console.error(`failed to find fleet ${k} near star ${stars[starId].n}`);
             continue;
           }
           let prefix = "";
