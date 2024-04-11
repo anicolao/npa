@@ -23,7 +23,10 @@ function containsNulls(a: Patch) {
   if (typeof a !== "object") return false;
   if (a === null) return true;
   for (const k in a) {
-    if (containsNulls(a[k])) return true;
+    if (containsNulls(a[k])) {
+      console.log(`k: ${k}`);
+      return true;
+    }
   }
   return false;
 }
@@ -34,7 +37,7 @@ export function patch(a: Patch, p: Patch): Patch {
   }
   const ret = patchR(a, p);
   if (containsNulls(ret)) {
-    console.error(`nulls after`, before);
+    console.error(`nulls after`, before, ret);
     throw "nulls";
   }
   return ret;
@@ -197,7 +200,9 @@ export async function getServerScans(apikey: string) {
       firstTick,
       lastTick,
     };
-    console.log(`Ticks for ${apikey}:${puid}: ${firstTick} - ${lastTick} (${diffCache[apikey].length})`);
+    console.log(
+      `Ticks for ${apikey}:${puid}: ${firstTick} - ${lastTick} (${diffCache[apikey].length})`
+    );
   }
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   const diffskey = `scandiffblocks/${gameid}/${apikey}`;
@@ -226,51 +231,52 @@ export async function getServerScans(apikey: string) {
           size,
         });
       });
-      const validatedAlready: { [k: string]: boolean } = {};
       const lastValidationBlock: { [k: string]: any } = {};
-      function validateBlock(patches: any) {
+      function validateBlock(patches: any, initial_scan: any) {
         const timestamps: number[] = Object.keys(patches)
           .map((x) => +x)
           .filter((x) => !!x)
           .sort();
-        console.log(`${timestamps.length} patches found`);
-        const denudedPatch = { ...patches };
         if (lastValidationBlock[apikey] === undefined) {
           lastValidationBlock[apikey] = {};
         }
-        let last = lastValidationBlock[apikey];
-        timestamps.forEach((t, i) => {
-          delete denudedPatch[t];
-          last = patch(last, JSON.parse(patches[t]));
-          if (i === 0 && !validatedAlready[patches.initial_scan]) {
-            validatedAlready[patches.initial_scan] = true;
-            let nullDiff = diff(JSON.parse(patches.initial_scan), last);
+        let scan = lastValidationBlock[apikey];
+        for (let i = 0; i < timestamps.length; ++i) {
+          const timestamp = timestamps[i];
+          scan = patch(scan, JSON.parse(patches[timestamp]));
+          if (i === 0) {
+            const initial = JSON.parse(initial_scan);
+            let nullDiff = diff(scan, initial);
             if (nullDiff !== null) {
-              console.error(`First patch mismatch ${apikey}: `, nullDiff);
-              console.error(`Last was ${apikey}: `, last);
-              console.log("First patch INvalid: ", patches.initial_scan);
+              console.error("Initial scan mismatch");
+              scan = window.structuredClone(initial);
             } else {
-              console.log("First patch valid");
+              console.log("Initial scan good");
+            }
+          } else if (i === timestamps.length - 1) {
+            if (timestamp !== patches.last_timestamp) {
+              console.error(`last timestamp mismatch`)
+            } else {
+              console.log(`last timestamp good`)
+            }
+            const last = JSON.parse(patches.last_scan);
+            let nullDiff = diff(scan, last);
+            if (nullDiff !== null) {
+              console.error("Last scan mismatch: ", {scan, last: patches.last_scan, nullDiff});
+              lastValidationBlock[apikey] = last;
+            } else {
+              console.log("Last Scan good");
+              lastValidationBlock[apikey] = scan;
             }
           }
-        });
-        if (patches.last_scan) {
-          let nullDiff = diff(JSON.parse(patches.last_scan), last);
-          if (nullDiff !== null) {
-            console.error("Last patch mismatch", nullDiff);
-          } else {
-            console.log("Last patch valid");
-          }
-          lastValidationBlock[apikey] = last;
-        } else {
-          console.error("latest scan missing");
         }
-        console.log("Denuded: ", denudedPatch);
       }
       changedBlocks.forEach((change, i) => {
-        console.log(`Processing block #${i} for ${apikey}`);
         let doc = change.doc;
+        console.log(`Processing ${i} (${doc.id}) for ${apikey}`);
         let patches = doc.data() as any;
+        validateBlock(patches, patches.initial_scan);
+        console.log(`Validated ${i} (${doc.id}) for ${apikey}`);
         const knownKeys: { [k: string]: boolean } = {};
         diffCache[apikey]?.forEach(
           (diff) => (knownKeys[diff.timestamp] = true)
@@ -282,11 +288,16 @@ export async function getServerScans(apikey: string) {
           .filter((x) => !knownKeys[x] && +x)
           .map((x) => +x)
           .sort();
-        console.log(`Missing count: ${missing.length} vs ${all.length}`);
+        console.log(
+          `Missing count: ${missing.length} vs ${all.length} (vs ${
+            diffCache[apikey].length
+          } == ${Object.keys(knownKeys).length})`
+        );
         let mi = 0;
         let ai = 0;
         while (mi < missing.length && ai < all.length) {
           if (missing[mi] === all[ai]) {
+            console.log(`match: ${mi} == ${ai}`);
             mi++;
             ai++;
             continue;
@@ -297,17 +308,16 @@ export async function getServerScans(apikey: string) {
             continue;
           }
           if (missing[mi] > all[ai]) {
-            ai++;
             console.log(`skip all @ ${ai}`);
+            ai++;
             continue;
           }
           console.error("not reached");
         }
         console.log(`remaining in missing: ${missing.length - mi}`);
         console.log(`remaining in all: ${all.length - ai}`);
-        const latestDiff = missing[0] || 0;
         let last = diffCache[apikey]?.length - 1;
-        const latestCachedTime = diffCache[apikey][last]?.timestamp || 0;
+        const latestDiff = missing[0] || diffCache[apikey][last].timestamp;
         while (last > 0 && diffCache[apikey][last].timestamp > latestDiff) {
           last--;
           console.error(`Discarding gap-making diff @ ${last}`);
@@ -317,15 +327,21 @@ export async function getServerScans(apikey: string) {
           console.error(
             `After discarding gap-making diff len ${diffCache[apikey].length} => ${last}`
           );
+          console.log({ apikey: diffCache[apikey] });
+          lastScan[apikey] = 0;
+          walkToScan(apikey, last - 1);
           diffCache[apikey] = diffCache[apikey].slice(0, last);
+          console.log({
+            apikey: diffCache[apikey],
+            cached: diffCache[apikey][last - 1].cached,
+          });
         }
+        const latestCachedTime = diffCache[apikey][last - 1]?.timestamp || 0;
         const timestamps: number[] = Object.keys(patches)
           .filter((x) => +x > latestCachedTime)
           .map((x) => +x)
           .sort();
-        console.log(
-          `Timestamp count ${timestamps.length} vs missing ${missing.length}`
-        );
+        console.log(`Timestamp count ${timestamps.length}`);
         const originalLength = diffCache[apikey] ? diffCache[apikey].length : 0;
         if (diffCache[apikey] === undefined || diffCache[apikey].length === 0) {
           const cached = JSON.parse(patches["initial_scan"]).scanning_data;
@@ -337,27 +353,43 @@ export async function getServerScans(apikey: string) {
           ];
         }
         timestamps.forEach((timestamp, i) => {
-          if (diffCache[apikey].length === 1 && i === 0) {
-            console.log("Skip initial {} -> state patch");
+          const forward = JSON.parse(patches[timestamp]).scanning_data;
+          if (
+            diffCache[apikey].length === 1 &&
+            i === 0 &&
+            forward.now === diffCache[apikey][0].cached.now
+          ) {
+            let check = {};
+            const checkPatch = patchR(forward, check);
+            console.log("Skip initial {} -> state patch", {
+              cached: diffCache[apikey][0].cached,
+              forward,
+              checkPatch,
+            });
+            let nullDiff = diff(checkPatch, diffCache[apikey][0].cached);
+            if (nullDiff !== null) {
+              console.error(`bad skip?!`);
+            } else {
+              console.error("...checks out");
+            }
             return;
           }
-          const forward = JSON.parse(patches[timestamp]).scanning_data;
           let last = diffCache[apikey].length - 1;
-
 
           const priorCache = window.structuredClone(
             diffCache[apikey][last].cached
           );
+          console.log({ priorCache });
           const cached = patch(priorCache, forward);
           const back = diff(cached, diffCache[apikey][last].cached);
-          const prev = diffCache[apikey][last-1];
+          const prev = diffCache[apikey][last - 1];
           diffCache[apikey].push({
             cached,
             back,
             prev,
             timestamp,
           });
-          const next = diffCache[apikey][last+1];
+          const next = diffCache[apikey][last + 1];
           let entry = { ...diffCache[apikey][last], forward, next };
           diffCache[apikey][last] = entry;
           if (last > 0) {
