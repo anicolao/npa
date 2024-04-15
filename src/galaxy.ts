@@ -65,6 +65,8 @@ export interface Fleet extends SpaceObject {
   orbiting?: Star;
   warpSpeed?: number;
   ouid?: number;
+  speed?: number;
+  lsuid?: number;
 }
 export interface Player {
   ai: number;

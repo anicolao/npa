@@ -139,12 +139,20 @@ export function futureTime(
                 `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n} @ ${dx},${dy} ${newState.fleet_speed}`
               );
             }
-            const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
+            let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
+            if (isNP4()) {
+              if (newFleet.speed) {
+                speed = newFleet.speed;
+              } else {
+                speed = calcSpeedBetweenStars(newFleet.ouid, newFleet.o[0][1], newFleet.puid);
+              }
+            }
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
             const [sx, sy] = [dx * factor, dy * factor];
             newFleet.x = String(x + sx);
             newFleet.y = String(y + sy);
             newFleet.ouid = isNP4() ? 0 : undefined;
+            newFleet.speed = speed;
           }
           newFleet.etaFirst -= 1;
           newFleet.eta -= 1;
@@ -214,7 +222,11 @@ export function futureTime(
                 nextDestination.ga === destination.ga ? nextDestination.ga : 0;
             }
             newFleet.w = newFleet.warpSpeed;
-            const speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
+            let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
+            if (isNP4()) {
+              speed = calcSpeedBetweenStars(destination.uid, nextDestination.uid, newFleet.puid);
+            	newFleet.speed = speed;
+            }
             newFleet.etaFirst =
               delay + Math.ceil(dist(destination, nextDestination) / speed);
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
@@ -281,4 +293,30 @@ export function futureTime(
   newState.fleets = fleets;
   newState.players = players;
   return newState;
+}
+
+export function calcSpeedBetweenStars(
+  starA: number,
+  starB: number,
+  puid: number
+) {
+  const universe = NeptunesPride.universe;
+  const players = universe.galaxy.players;
+  const rangeTechLevel = getTech(players[puid], "manufacturing").level;
+  let dist = universe.starDistance(starA, starB);
+  let normalSpeed = universe.galaxy.fleetSpeed;
+  let wormholeSpeed = 0;
+  let gateSpeed = 0;
+  if (universe.starsWormholed(starA, starB)) {
+    wormholeSpeed = dist / 24;
+  }
+  if (universe.starsGated(starA, starB)) {
+    if (universe.galaxy.config.newRng === 1) {
+      gateSpeed = normalSpeed * (rangeTechLevel / 2);
+    } else {
+      gateSpeed = normalSpeed * 3;
+    }
+  }
+
+  return Math.max(normalSpeed, wormholeSpeed, gateSpeed);
 }
