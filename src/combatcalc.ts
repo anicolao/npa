@@ -2,6 +2,7 @@ import { isNP4, messageCache } from "./events";
 import {
   dist,
   Fleet,
+  FleetOrder,
   getTech,
   Player,
   PlayerMap,
@@ -173,8 +174,9 @@ export const computeCombatOutcomes = (
   for (const f in fleets) {
     let fleet = fleets[f];
     let orders = fleet.o;
-    if (fleet !== NeptunesPride.universe.selectedFleet) {
-      orders = (fleet as any).orders;
+    const lo: [number, number, FleetOrder, number][] | undefined = (fleet as any).orders;
+    if (fleet !== NeptunesPride.universe.selectedFleet || (lo?.length)) {
+      orders = lo;
     }
     if (orders && orders.length > 0) {
       let stop = fleet.o[0][1];

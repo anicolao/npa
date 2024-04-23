@@ -141,7 +141,7 @@ export function futureTime(
             }
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             if (isNP4()) {
-              if (newFleet.speed) {
+              if (newFleet.speed && !Number.isNaN(newFleet.speed)) {
                 speed = newFleet.speed;
               } else {
                 speed = calcSpeedBetweenStars(newFleet.ouid, newFleet.o[0][1], newFleet.puid);
@@ -215,7 +215,7 @@ export function futureTime(
 
           // Process next order
           if (newFleet.o.length > 0) {
-            const nextDestUid = fleets[fk].o[0][1];
+            const nextDestUid = newFleet.o[0][1];
             const nextDestination = stars[nextDestUid];
             if (isVisible(nextDestination) && isVisible(destination)) {
               newFleet.warpSpeed =
@@ -224,6 +224,7 @@ export function futureTime(
             newFleet.w = newFleet.warpSpeed;
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             if (isNP4()) {
+              console.log({nextDestUid, nextDestination, dest: destination.uid, f: fleets[fk], newFleet})
               speed = calcSpeedBetweenStars(destination.uid, nextDestination.uid, newFleet.puid);
             	newFleet.speed = speed;
             }
@@ -303,14 +304,16 @@ export function calcSpeedBetweenStars(
   const universe = NeptunesPride.universe;
   const players = universe.galaxy.players;
   const rangeTechLevel = getTech(players[puid], "manufacturing").level;
-  let dist = universe.starDistance(starA, starB);
+  const a = universe.galaxy.stars[starA];
+  const b = universe.galaxy.stars[starB];
+  let whDist = universe.starDistance(a, b);
   let normalSpeed = universe.galaxy.fleetSpeed;
   let wormholeSpeed = 0;
   let gateSpeed = 0;
-  if (universe.starsWormholed(starA, starB)) {
-    wormholeSpeed = dist / 24;
+  if (universe.starsWormholed(a, b)) {
+    wormholeSpeed = whDist / 24;
   }
-  if (universe.starsGated(starA, starB)) {
+  if (universe.starsGated(a, b)) {
     if (universe.galaxy.config.newRng === 1) {
       gateSpeed = normalSpeed * (rangeTechLevel / 2);
     } else {
@@ -318,5 +321,6 @@ export function calcSpeedBetweenStars(
     }
   }
 
+  console.log("CALC: ", {normalSpeed, wormholeSpeed, gateSpeed, dist: whDist, starA, starB});
   return Math.max(normalSpeed, wormholeSpeed, gateSpeed);
 }
