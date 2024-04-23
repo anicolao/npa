@@ -370,10 +370,7 @@ function NeptunesPrideAgent() {
     let output = [];
     const explorers = [];
     const endTick = NeptunesPride.universe.galaxy.tick;
-    let currentTick = Math.max(
-      endTick - productionTicks(),
-      1
-    );
+    let currentTick = Math.max(endTick - productionTicks(), 1);
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : getPlayerUid(NeptunesPride.universe.galaxy);
@@ -1100,12 +1097,15 @@ function NeptunesPrideAgent() {
       ? NeptunesPride.originalPlayer
       : getPlayerUid(NeptunesPride.universe.galaxy);
 
-    return allSeenKeys.filter(
-      (k) => {
-        console.log(`check ${k} for ${myId} == ${playerUidFromScan(scanInfo[getCodeFromApiText(k)])}`, scanInfo[getCodeFromApiText(k)])
-        return playerUidFromScan(scanInfo[getCodeFromApiText(k)]) === myId
-      }
-    );
+    return allSeenKeys.filter((k) => {
+      console.log(
+        `check ${k} for ${myId} == ${playerUidFromScan(
+          scanInfo[getCodeFromApiText(k)]
+        )}`,
+        scanInfo[getCodeFromApiText(k)]
+      );
+      return playerUidFromScan(scanInfo[getCodeFromApiText(k)]) === myId;
+    });
   }
   function activityReport() {
     const output = [];
@@ -2683,8 +2683,7 @@ function NeptunesPrideAgent() {
       const puid = getPlayerUid(universe.galaxy);
       if (NeptunesPride.originalPlayer !== puid) {
         if (puid !== undefined) {
-          unrealContextString =
-            universe.galaxy.players[puid].alias;
+          unrealContextString = universe.galaxy.players[puid].alias;
         }
       }
       if (puid != universe.player.uid) {
@@ -3096,7 +3095,7 @@ function NeptunesPrideAgent() {
                 );
           s = s.replace(pattern, value);
         } else if (/^Tick #[iI]nfinity$/.test(sub)) {
-            s = s.replace(pattern, "∞");
+          s = s.replace(pattern, "∞");
         } else if (/^Tick #\d\d*(#a?)?$/.test(sub)) {
           const split = sub.split("#");
           const tick = parseInt(split[1]);
@@ -3862,7 +3861,9 @@ function NeptunesPrideAgent() {
   let game = getGameNumber();
   let store = new GameStore(game);
   let superOnServerResponse = NeptunesPride.np.onServerResponse;
-  NeptunesPride.np.onServerResponse = function (response: { event: string } | any[]) {
+  NeptunesPride.np.onServerResponse = function (
+    response: { event: string } | any[]
+  ) {
     superOnServerResponse(response);
     // TODO: replace this with normal event handling
     const event = Array.isArray(response) ? response[0] : response.event;
@@ -4465,7 +4466,7 @@ function NeptunesPrideAgent() {
       ["total_science", "S"],
     ];
     if (!isNP4()) {
-      fields = fields.filter((x) => x[0] !== "cashPerDay");
+      //fields = fields.filter((x) => x[0] !== "cashPerDay");
     }
     const table: Stanzas = [];
     const sums = fields.map((x) => 0);
@@ -4488,8 +4489,16 @@ function NeptunesPrideAgent() {
       fields
         .map((f) => f[0])
         .forEach((t, i) => {
-          const myLevel = +myP[t];
-          const level = +levels[t];
+          let myLevel = +myP[t];
+          if (Number.isNaN(myLevel) && !isNP4() && t === "cashPerDay") {
+            myLevel =
+              myP.total_economy * 10 + getTech(myP, "banking").level * 75;
+          }
+          let level = +levels[t];
+          if (Number.isNaN(level) && !isNP4() && t === "cashPerDay") {
+            level =
+              levels.total_economy * 10 + getTech(levels, "banking").level * 75;
+          }
           sums[i] += level;
           if (level < myLevel) {
             row.push(`[[good:${level}]]`);
@@ -5199,7 +5208,7 @@ function NeptunesPrideAgent() {
         if (!games[gameId]) {
           games[gameId] = [];
         }
-        console.log(`Record ${gameId} : ${apiKey}`)
+        console.log(`Record ${gameId} : ${apiKey}`);
         games[gameId].push(apiKey);
       }
     });
@@ -5207,7 +5216,7 @@ function NeptunesPrideAgent() {
       for (const apikey of games[gameId]) {
         if (games[gameId].name === undefined) {
           const lastScan = await getLastRecord(+gameId, apikey, "diffCache");
-          console.log({lastScan});
+          console.log({ lastScan });
           games[gameId].name = lastScan?.cached?.name;
         }
       }
