@@ -1291,7 +1291,7 @@ function NeptunesPrideAgent() {
       });
       //console.log("rebuild color map after ", JSON.stringify(colorMap));
     }
-    if (galaxy.players[1].shape !== undefined && shapeMap) {
+    if (galaxy.players[1].shape !== undefined && shapeMap && NeptunesPride.gameVersion === "proteus") {
       shapeMap = shapeMap.map((_, i) => {
         const uid = i + (isNP4() ? 1 : 0);
         if (galaxy.players[uid] !== undefined) {
@@ -1749,16 +1749,16 @@ function NeptunesPrideAgent() {
           }
         }
         if (changed) {
-          console.log(`before: ${shapeMap.join(",")}`);
+          //console.log(`before: ${shapeMap.join(",")}`);
           recolorPlayers();
-          console.log(`set: ${shapeMap.join(",")}`);
+          //console.log(`set: ${shapeMap.join(",")}`);
           store.set("colorMap", colorMap.join(" "));
           store.set("shapeMap", shapeMap.join(" "));
-          console.log(`recolor: ${shapeMap.join(",")}`);
+          //console.log(`recolor: ${shapeMap.join(",")}`);
           NeptunesPride.np.trigger("refresh_interface");
-          console.log(`mapre: ${shapeMap.join(",")}`);
+          //console.log(`mapre: ${shapeMap.join(",")}`);
           mapRebuild();
-          console.log(`preclip: ${shapeMap.join(",")}`);
+          //console.log(`preclip: ${shapeMap.join(",")}`);
           clipColorConfig();
         }
       };
