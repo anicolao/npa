@@ -3724,6 +3724,133 @@ function NeptunesPrideAgent() {
       return superTimeToTick(tick, whole);
     };
 
+    const superEmpireDirectory = npui.EmpireDirectory;
+    npui.EmpireDirectory = function () {
+      console.log("Empires page hooked");
+      let starDir = npui.Screen("galaxy")
+        .size(480)
+  
+      npui.DirectoryTabs("emp")
+        .roost(starDir)
+  
+      let header = Crux.Widget("rel col_accent")
+        .size(480, 48)
+        .roost(starDir)
+  
+      let pageHTML = `
+        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf')">Infrastructure</a> |
+        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'col')">Colors</a>
+      `
+      Crux.Text("", "pad12 col_accent")
+         .rawHTML(pageHTML)
+        .roost(header)
+  
+      const universe = NeptunesPride.universe;
+      if (universe.empireDirectory.page === "col") {
+        Crux.IconButton("icon-loop", "player_color_shape_reset_all")
+          .grid(27, 0, 3, 3)
+          .roost(header)
+        Crux.IconButton("icon-light-up", "player_color_shape_zero_all")
+          .grid(24.5, 0, 3, 3)
+          .roost(header)
+      }
+  
+  
+      let sortedEmpires = Object.values(universe.galaxy.players)
+  
+      if (universe.empireDirectory.sortBy === "name") {
+        sortedEmpires.sort(function (a, b) {
+          let result = -1
+          if (a.n < b.n) {
+            result = 1
+          }
+          result *= universe.empireDirectory.invert
+          return result
+        })
+      } else {
+        sortedEmpires.sort(function (a, b) {
+          let result = b[universe.empireDirectory.sortBy] - a[universe.empireDirectory.sortBy]
+          if (result === 0) {
+            result = 1
+            if (a.n < b.n) {
+              result = -1
+            }
+          }
+          result *= universe.empireDirectory.invert
+          return result
+        })
+      }
+  
+      let html = ""
+      if (universe.empireDirectory.page === "inf") {
+        const fields = [
+          { title: '<span class="icon-star-1"></span>', field: "totalStars" },
+          { title: '<span class="icon-rocket"></span>', field: "totalStrength" },
+          { title: '<span class="icon-rocket"></span>/h', field: "shipsPerTick" },
+          { title: '$', field: "cashPerDay" },
+          { title: "E", field: "totalEconomy" },
+          { title: "I", field: "totalIndustry" },
+          { title: "S", field: "totalScience" },
+        ];
+        html = `<table class='star_directory'>
+        <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'uid')">P</a></td>
+        <td class='star_directory_name'><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
+        <td></td>
+        ${fields.map(column => `<td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', '${column.field}')">${column.title}</a></td>`).join('')}
+        </tr>`
+  
+        for (let empire of sortedEmpires) {
+          html += `
+            <tr>
+            <td> ${empire.hyperlinkedBox} </td>
+            <td style='max-width: 5em; overflow: hidden; text-overflow: ellipsis'> ${empire.hyperlinkedAlias} </td>
+            <td> <a onPointerUp="Crux.crux.trigger('show_player_home_uid', ${empire.uid})" class="ic-eye">&#59146;</a></td>
+            ${fields.map(column => `<td> ${empire[column.field]} </td>`).join('')}
+            </tr>
+          `
+        }
+        html += "</table>"
+  
+      }
+  
+          if (universe.empireDirectory.page === "col") {
+        html = `<table class='star_directory'>
+        <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'puid')">P</a></td>
+        <td class='star_directory_name'><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
+        <td></td>
+        <td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'totalStars')">Stars</a></td>
+        <td>Color</td>
+        <td>Shape</td>
+        </tr>`
+  
+        for (let empire of sortedEmpires) {
+          html += `
+            <tr>
+            <td> ${empire.hyperlinkedBox} </td>
+            <td> ${empire.hyperlinkedAlias} </td>
+            <td> <a onPointerUp="Crux.crux.trigger('show_player_home_uid', ${empire.uid})" class="ic-eye">&#59146;</a></td>
+            <td> ${empire.totalStars} </td>
+            <td> 	<a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: 1})' class="fontello"> &#59229;</a>
+                <a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: -1})' class="fontello"> &#59230;</a> </td>
+            <td> 	<a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: 1})' class="fontello"> &#59229;</a>
+                <a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: -1})' class="fontello"> &#59230;</a> </td>
+  
+            </tr>
+          `
+        }
+        html += "</table>"
+      }
+  
+  
+      Crux.Text("", "rel")
+        .rawHTML(html)
+        .roost(starDir)
+  
+  
+      return starDir
+    }
+
+
     hooksLoaded = true;
   };
   let toggleTerritory = function () {
