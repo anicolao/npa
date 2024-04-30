@@ -3738,7 +3738,8 @@ function NeptunesPrideAgent() {
         .roost(starDir)
   
       let pageHTML = `
-        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf')">Infrastructure</a> |
+        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:raw')">Infrastructure</a> |
+        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:prod')">Production</a> |
         <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'col')">Colors</a>
       `
       Crux.Text("", "pad12 col_accent")
@@ -3782,16 +3783,24 @@ function NeptunesPrideAgent() {
       }
   
       let html = ""
-      if (universe.empireDirectory.page === "inf") {
-        const fields = [
+      if (universe.empireDirectory.page.startsWith("inf")) {
+        const raw = [
           { title: '<span class="icon-star-1"></span>', field: "totalStars" },
           { title: '<span class="icon-rocket"></span>', field: "totalStrength" },
-          { title: '<span class="icon-rocket"></span>/h', field: "shipsPerTick" },
-          { title: '$', field: "cashPerDay" },
           { title: "E", field: "totalEconomy" },
           { title: "I", field: "totalIndustry" },
           { title: "S", field: "totalScience" },
         ];
+        const prod = [
+          { title: '<span class="icon-star-1"></span>', field: "totalStars" },
+          { title: '<span class="icon-rocket"></span>', field: "totalStrength" },
+          { title: '<span class="icon-rocket"></span>/h', field: "shipsPerTick" },
+          { title: '$', field: "cashPerDay" },
+          { title: "S", field: "totalScience" },
+        ];
+        const selector = universe.empireDirectory.page.split(":")[1];
+        let fields = { raw, prod }[selector];
+        if (fields === undefined) fields = raw;
         html = `<table class='star_directory'>
         <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'uid')">P</a></td>
         <td class='star_directory_name'><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
@@ -3803,7 +3812,7 @@ function NeptunesPrideAgent() {
           html += `
             <tr>
             <td> ${empire.hyperlinkedBox} </td>
-            <td style='max-width: 5em; overflow: hidden; text-overflow: ellipsis'> ${empire.hyperlinkedAlias} </td>
+            <td> ${empire.hyperlinkedAlias} </td>
             <td> <a onPointerUp="Crux.crux.trigger('show_player_home_uid', ${empire.uid})" class="ic-eye">&#59146;</a></td>
             ${fields.map(column => `<td> ${empire[column.field]} </td>`).join('')}
             </tr>
