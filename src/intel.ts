@@ -3740,6 +3740,7 @@ function NeptunesPrideAgent() {
       let pageHTML = `
         <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:raw')">Infrastructure</a> |
         <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:prod')">Production</a> |
+        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:tech')">Technology</a> |
         <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'col')">Colors</a>
       `
       Crux.Text("", "pad12 col_accent")
@@ -3757,7 +3758,14 @@ function NeptunesPrideAgent() {
       }
   
   
-      let sortedEmpires = Object.values(universe.galaxy.players)
+      let sortedEmpires = Object.values(universe.galaxy.players).map(decorate => {
+        const ret = {...decorate};
+        const techs = Object.keys(decorate.tech);
+        for (const k of techs) {
+          ret[`tech_${k}`] = decorate.tech[k].level;
+        }
+        return ret;
+      })
   
       if (universe.empireDirectory.sortBy === "name") {
         sortedEmpires.sort(function (a, b) {
@@ -3798,8 +3806,10 @@ function NeptunesPrideAgent() {
           { title: '$', field: "cashPerDay" },
           { title: "S", field: "totalScience" },
         ];
+        const techs = Object.keys(NeptunesPride.universe.player.tech);
+        const tech = techs.map((x) => { return { title: translateTechEmoji(x), field: `tech_${x}` } });
         const selector = universe.empireDirectory.page.split(":")[1];
-        let fields = { raw, prod }[selector];
+        let fields = { raw, prod, tech }[selector];
         if (fields === undefined) fields = raw;
         html = `<table class='star_directory'>
         <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'uid')">P</a></td>
