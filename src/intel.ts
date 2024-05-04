@@ -181,7 +181,7 @@ function NeptunesPrideAgent() {
     if (NeptunesPride?.np?.on) {
       NeptunesPride.np.on(trigger, fn);
     } else {
-      if (NeptunesPride.MetaGame) {
+      if ((NeptunesPride as any).MetaGame) {
         console.log(`In metagame screen, stop; trigger ${trigger}`);
         return;
       }
@@ -3760,7 +3760,7 @@ function NeptunesPrideAgent() {
       }
 
       let sortedEmpires = Object.values(universe.galaxy.players).map(
-        (decorate) => {
+        (decorate: any) => {
           const ret = { ...decorate };
           const techs = Object.keys(decorate.tech);
           for (const k of techs) {
@@ -3825,7 +3825,7 @@ function NeptunesPrideAgent() {
           return { title: translateTechEmoji(x), field: `tech_${x}` };
         });
         const selector = universe.empireDirectory.page.split(":")[1];
-        let fields = { raw, prod, tech }[selector];
+        let fields = { raw, prod, tech }[selector as ("raw"|"prod"|"tech")];
         if (fields === undefined) fields = raw;
         html = `<table class='star_directory'>
         <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'uid')">P</a></td>
