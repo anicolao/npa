@@ -1,3 +1,4 @@
+import { alliancesEnabled, computeAlliances } from "./alliances";
 import { isNP4, messageCache } from "./events";
 import {
   dist,
@@ -10,6 +11,7 @@ import {
   ScanningData,
   TechKey,
 } from "./galaxy";
+import { allSeenKeys } from "./intel";
 import { Stanzas } from "./reports";
 
 export const combatInfo: {
@@ -83,12 +85,11 @@ export const alliedFleet = (
   relativeTick: number
 ) => {
   if (
-    combatInfo.knownAlliances === undefined &&
-    NeptunesPride.gameConfig.alliances
+    combatInfo.knownAlliances === undefined && alliancesEnabled()
   ) {
-    // TODO - do we need to call this here? faReport();
+    computeAlliances(allSeenKeys);
   }
-  if (NeptunesPride.gameConfig.alliances) {
+  if (alliancesEnabled()) {
     if (relativeTick > 0) {
       let annals = annalsOfWar().sort((a, b) => b.tick - a.tick);
       const currentTick = tickNumber(0);
