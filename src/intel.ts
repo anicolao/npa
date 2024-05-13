@@ -3651,7 +3651,7 @@ function NeptunesPrideAgent() {
     };
 
     const superEmpireDirectory = npui.EmpireDirectory;
-    npui.EmpireDirectory = function () {
+    const alternateEmpireDirectory = function () {
       console.log("Empires page hooked");
       let starDir = npui.Screen("galaxy").size(480);
 
@@ -3806,6 +3806,10 @@ function NeptunesPrideAgent() {
 
       return starDir;
     };
+    const hookEmpireDirectory = function () {
+      npui.EmpireDirectory = alternateEmpireDirectory;
+    }
+    defineHotkey("ctrl+shift+e", hookEmpireDirectory, "Replace empire directory with NPA's version.", "Hook Empires")
 
     hooksLoaded = true;
   };
