@@ -310,7 +310,7 @@ export function calcSpeedBetweenStars(
   }
   if (universe.starsGated(a, b)) {
     if (universe.galaxy.config.newRng === 1) {
-      gateSpeed = normalSpeed * (rangeTechLevel / 2);
+      gateSpeed = normalSpeed * Math.sqrt(rangeTechLevel + 3);
     } else {
       gateSpeed = normalSpeed * 3;
     }
