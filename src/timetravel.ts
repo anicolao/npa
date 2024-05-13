@@ -73,12 +73,21 @@ export function futureTime(
     for (const sk in stars) {
       const star = stars[sk];
       const newStar = { ...star };
+      const starstate = staroutcomes[sk];
+      if (starstate !== undefined) {
+        if (isVisible(newStar)) {
+          // combat outcomes happen first, then production.
+          newStar.st = starstate.st;
+        }
+        newStar.puid = starstate.puid;
+        stars[sk] = newStar;
+      }
       if (isVisible(newStar) && isVisible(star)) {
         if (newStar.i > 0) {
           const ticksPerDay = newState.production_rate;
           const industry = newStar.i;
           const manufacturing = getTech(
-            players[star.puid],
+            players[newStar.puid],
             "manufacturing"
           ).level;
           const production = (industry * (manufacturing + 5)) / ticksPerDay;
@@ -89,20 +98,6 @@ export function futureTime(
           newStar.totalDefenses += newStar.st - star.st;
           stars[sk] = newStar;
         }
-      }
-      const starstate = staroutcomes[sk];
-      if (starstate !== undefined) {
-        if (isVisible(newStar)) {
-          // TODO: check this more carefully
-          // This definitely caused a bug; I can't remember now what it was meant to fix?
-          // The bug it caused was combat wouldn't weaken a succesfully defended star, but of
-          // course it should.
-          //if (starstate.st > newStar.st || starstate.puid != newStar.puid) {
-          newStar.st = starstate.st;
-          //}
-        }
-        newStar.puid = starstate.puid;
-        stars[sk] = newStar;
       }
     }
     for (const fk in fleets) {
