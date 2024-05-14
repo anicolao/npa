@@ -8,7 +8,7 @@ export const alliancesEnabled = () =>
 export function computeAlliances(allSeenKeys: string[]) {
   let output = [];
 
-  if (allSeenKeys?.length && NeptunesPride.gameConfig.alliances != "0") {
+  if (allSeenKeys?.length && alliancesEnabled()) {
     output.push("Formal Alliances: ");
     const keyIterators = allSeenKeys.map((k) => new ScanKeyIterator(k));
     const alliances: number[][] = [];
@@ -73,6 +73,9 @@ export function computeAlliances(allSeenKeys: string[]) {
         if (alliances[p0] !== undefined) {
           alliances[p0][p1] = undefined;
         }
+        if (alliances[p1] !== undefined) {
+          alliances[p1][p0] = undefined;
+        }
         d = "&#129686;"; // 🪖
       } else if (war === "war_declared") {
         d = "&#9888;&#65039;";
@@ -82,8 +85,9 @@ export function computeAlliances(allSeenKeys: string[]) {
       output.push(`[[Tick #${record.tick}]] ${d} [[${p0}]] ⇔ [[${p1}]]`);
     }
     combatInfo.knownAlliances = alliances;
+    console.log({alliances})
   } else {
-    if (NeptunesPride.gameConfig.alliances != "0") {
+    if (alliancesEnabled()) {
       output.push("No API keys to detect Formal Alliances.");
     } else {
       output.push("No formal alliances in this game");
