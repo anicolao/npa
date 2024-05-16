@@ -4,7 +4,7 @@ import { ScanKeyIterator } from "./scans";
 
 export const alliancesEnabled = () =>
   NeptunesPride.gameConfig.alliances ||
-  NeptunesPride.universe.galaxy.config.alliances;
+  NeptunesPride.universe.galaxy?.config?.alliances;
 export function computeAlliances(allSeenKeys: string[]) {
   let output = [];
 
