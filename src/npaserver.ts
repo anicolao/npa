@@ -484,8 +484,10 @@ export function logError(e: any) {
   const timestamp = new Date().getTime();
   if (stack === "no stack trace") {
     console.error("No stack", e);
-    logCount(`${message}`);
-    logCount(`${message}:${JSON.stringify(e)}`);
+    if (e?.isTrusted !== true) {
+      logCount(`${message}`);
+      logCount(`${message}:${JSON.stringify(e)}`);
+    }
   } else {
     addDoc(store, { gameid, stack, message, version, timestamp }).catch((e) => {
       console.error(`Failed to write error for game ${gameid}`);
