@@ -19,7 +19,7 @@ div.no_overflow:first-of-type>div:first-of-type {
 }
 
 .button {
-	z-index: 150;
+	z-index: auto;
 }
 
 .screenshot {
