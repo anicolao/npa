@@ -3146,7 +3146,7 @@ function NeptunesPrideAgent() {
       let headerLine = 0;
       let alignments: string[] = [];
       for (let linen = 0; linen < lines.length; ++linen) {
-        const line = lines[linen];
+        const line = lines[linen].replaceAll("&#x3A;", ":");
         if (line.indexOf("---") === 0 && line.indexOf("---", 3) !== -1) {
           inTable = !inTable;
           alignmentRow = inTable;
