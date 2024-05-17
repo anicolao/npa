@@ -55,6 +55,7 @@ import {
   isVisible,
   productionTicks,
   getPlayerUid,
+  turnJumpTicks,
 } from "./galaxy";
 import * as Mousetrap from "mousetrap";
 import { clone, patch } from "./patch";
@@ -1281,7 +1282,7 @@ function NeptunesPrideAgent() {
   let msToTurnString = function (ms: number, prefix: string) {
     const rate = tickRate() * 60 * 1000;
     const tick = ms / rate;
-    const turn = Math.ceil(tick / NeptunesPride.gameConfig.turnJumpTicks);
+    const turn = Math.ceil(tick / turnJumpTicks());
     return `${turn} turn${turn !== 1 ? "s" : ""}`;
   };
   let msToEtaString = function (msplus: number, prefix: string) {
@@ -2226,8 +2227,8 @@ function NeptunesPrideAgent() {
         settings.autoRulerPower > 0 &&
         map.scale >= 200
       ) {
-        const visTicks = NeptunesPride.gameConfig.turnBased
-          ? NeptunesPride.gameConfig.turnJumpTicks
+        const visTicks = NeptunesPride.universe.galaxy.turn_based
+          ? turnJumpTicks()
           : 1;
         const speed = NeptunesPride.universe.galaxy.fleet_speed;
         const speedSq = speed * speed;
@@ -2692,7 +2693,7 @@ function NeptunesPrideAgent() {
         }
       }
       if (
-        !NeptunesPride.gameConfig.turnBased &&
+        !NeptunesPride.universe.galaxy.turn_based &&
         universe.timeToTick(1).length < 3
       ) {
         let lineHeight = 16 * map.pixelRatio;
@@ -3557,7 +3558,7 @@ function NeptunesPrideAgent() {
         }
         return superFormatTime(ms, showMinutes, showSeconds);
       } else if (settings.relativeTimes === "eta") {
-        if (NeptunesPride.gameConfig.turnBased) {
+        if (NeptunesPride.universe.galaxy.turn_based) {
           return msToTurnString(ms, "");
         }
         return msToEtaString(ms, "");
@@ -3615,7 +3616,7 @@ function NeptunesPrideAgent() {
     }
 
     const fixSubmitButton = () => {
-      if (NeptunesPride.gameConfig.turnBased) {
+      if (NeptunesPride.universe.galaxy.turn_based) {
         let submitButton: any[] = jQuery(':contains("Submit Turn")');
         if (submitButton.length !== 9 && submitButton.length !== 11) {
           submitButton = jQuery(':contains("Submitted")');
@@ -4248,8 +4249,8 @@ function NeptunesPrideAgent() {
     if (timeTravelTick === -1) {
       timeTravelTick = NeptunesPride.universe.galaxy.tick;
     }
-    if (NeptunesPride.gameConfig.turnBased) {
-      timeTravelTick -= NeptunesPride.gameConfig.turnJumpTicks;
+    if (NeptunesPride.universe.galaxy.turn_based) {
+      timeTravelTick -= turnJumpTicks();
     } else {
       timeTravelTick -= 1;
     }
@@ -4257,8 +4258,8 @@ function NeptunesPrideAgent() {
     timeTravel("back");
   };
   let timeTravelForward = function () {
-    if (NeptunesPride.gameConfig.turnBased) {
-      timeTravelTick += NeptunesPride.gameConfig.turnJumpTicks;
+    if (NeptunesPride.universe.galaxy.turn_based) {
+      timeTravelTick += turnJumpTicks();
     } else {
       if (timeTravelTick === -1) {
         timeTravelTick = NeptunesPride.universe.galaxy.tick;

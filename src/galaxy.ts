@@ -217,3 +217,6 @@ export function techCost(tech: TechInfo) {
     }
     return galaxy.playerUid;
   }
+  export function turnJumpTicks() {
+    return NeptunesPride.gameConfig?.turnJumpTicks || NeptunesPride.universe.galaxy?.config?.turnJumpTicks;
+  }
