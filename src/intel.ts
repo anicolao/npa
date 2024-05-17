@@ -3615,35 +3615,6 @@ function NeptunesPrideAgent() {
       Crux.crux.one("touchstart", Crux.crux.onTouchDown);
     }
 
-    const fixSubmitButton = () => {
-      if (NeptunesPride.universe.galaxy.turn_based) {
-        let submitButton: any[] = jQuery(':contains("Submit Turn")');
-        if (submitButton.length !== 9 && submitButton.length !== 11) {
-          submitButton = jQuery(':contains("Submitted")');
-        }
-        if (
-          submitButton.length === 9 &&
-          submitButton[7] &&
-          submitButton[7].style
-        ) {
-          submitButton[7].style.zIndex = 0;
-          return true;
-        }
-        if (
-          submitButton.length === 11 &&
-          submitButton[9] &&
-          submitButton[9].style
-        ) {
-          submitButton[9].style.zIndex = 0;
-          return true;
-        }
-        return false;
-      }
-      return true;
-    };
-    fixSubmitButton();
-    onTrigger("refresh_interface", fixSubmitButton);
-
     const universe = NeptunesPride.universe;
     const superTimeToTick = universe.timeToTick;
     universe.timeToTick = function (tick: number, wholeTime: boolean) {
