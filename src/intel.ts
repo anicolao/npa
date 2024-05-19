@@ -376,7 +376,8 @@ function NeptunesPrideAgent() {
     let output = [];
     const explorers = [];
     const endTick = NeptunesPride.universe.galaxy.tick;
-    let currentTick = Math.max(endTick - productionTicks(), 1);
+    const scale = filterInput !== null ? 5 : 1;
+    let currentTick = Math.max(endTick - scale*productionTicks(), 1);
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : getPlayerUid(NeptunesPride.universe.galaxy);
