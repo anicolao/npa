@@ -2480,13 +2480,13 @@ function NeptunesPrideAgent() {
         }
       }
     };
-    const superDrawStars = map.drawStars;
+    const superDrawSelectionRing = map.drawSelectionRing;
     const bubbleLayer = document.createElement("canvas");
-    map.drawStars = function () {
+    map.drawSelectionRing = function () {
       const universe = NeptunesPride.universe;
-      if (universe.selectedStar?.player && settings.territoryOn) {
+      if (universe.selectedSpaceObject?.player && settings.territoryOn) {
         const context: CanvasRenderingContext2D = map.context;
-        let p = universe.selectedStar.player.uid;
+        let p = universe.selectedSpaceObject.player.uid;
         {
           let outer = false;
           do {
@@ -2507,10 +2507,10 @@ function NeptunesPrideAgent() {
               bcontext.beginPath();
               let scanning = false;
               const scanRange = getAdjustedScanRange(
-                universe.selectedStar.player
+                universe.selectedSpaceObject.player
               );
               const fleetRange = getAdjustedFleetRange(
-                universe.selectedStar.player
+                universe.selectedSpaceObject.player
               );
               for (let key in universe.galaxy.stars) {
                 const star = universe.galaxy.stars[key];
@@ -2573,7 +2573,7 @@ function NeptunesPrideAgent() {
         }
       }
 
-      superDrawStars();
+      superDrawSelectionRing();
     };
     let superDrawText = NeptunesPride.npui.map.drawText;
     NeptunesPride.npui.map.drawText = function () {
