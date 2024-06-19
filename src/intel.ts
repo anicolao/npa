@@ -2484,6 +2484,11 @@ function NeptunesPrideAgent() {
     const bubbleLayer = document.createElement("canvas");
     map.drawSelectionRing = function () {
       const universe = NeptunesPride.universe;
+      const galaxy = universe.galaxy;
+      if (universe.selectedFleet?.uid) {
+      	universe.selectedFleet = galaxy.fleets[universe.selectedFleet.uid];
+      	universe.selectedSpaceObject = galaxy.fleets[universe.selectedFleet.uid];
+			}
       if (universe.selectedSpaceObject?.player && settings.territoryOn) {
         const context: CanvasRenderingContext2D = map.context;
         let p = universe.selectedSpaceObject.player.uid;
