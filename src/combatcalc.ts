@@ -279,7 +279,7 @@ export const computeCombatOutcomes = (
         ships: totalDefense,
         st: vstar.st,
         puid: vstar.puid,
-        c: vstar.c || 0,
+        c: vstar.c || vstar.yard || 0,
         departures,
         weapons,
         production: vstar.shipsPerTick,
