@@ -90,10 +90,15 @@ export function futureTime(
             players[newStar.puid],
             "manufacturing"
           ).level;
-          const production = (industry * (manufacturing + 5)) / ticksPerDay;
+          const manuPlus = isNP4() ? 4 : 5;
+          const production = (industry * (manufacturing + manuPlus)) / ticksPerDay;
           const partial = newStar.c !== undefined ? newStar.c : newStar.yard;
           newStar.st += production + partial;
-          newStar.c = newStar.st - Math.floor(newStar.st);
+          if (isNP4()) {
+            newStar.yard = newStar.st - Math.floor(newStar.st);
+          } else {
+            newStar.c = newStar.st - Math.floor(newStar.st);
+          }
           newStar.st = Math.floor(newStar.st);
           newStar.totalDefenses += newStar.st - star.st;
           stars[sk] = newStar;
