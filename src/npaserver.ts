@@ -14,10 +14,10 @@ import {
   where,
 } from "firebase/firestore";
 import { openDB } from "idb";
-import { getPlayerUid, type ScanningData } from "./galaxy";
-import { clone, diff, patch as patchR, type Patch } from "./patch";
-import { getVersion } from "./version";
+import { type ScanningData, getPlayerUid } from "./galaxy";
 import { getGameNumber } from "./intel";
+import { type Patch, clone, diff, patch as patchR } from "./patch";
+import { getVersion } from "./version";
 
 function containsNulls(a: Patch) {
   if (typeof a !== "object") return false;
@@ -85,7 +85,7 @@ async function store(
   incoming: any[],
   gameId: number,
   apikey: string,
-  version: "diffCache" | "scanCache"
+  version: "diffCache" | "scanCache",
 ) {
   const suffix = version === "diffCache" ? ":diffcache" : "";
   const dbName = `${gameId}:${apikey}${suffix}`;
@@ -106,7 +106,7 @@ async function store(
 async function restore(
   gameId: number,
   apikey: string,
-  version: "diffCache" | "scanCache"
+  version: "diffCache" | "scanCache",
 ) {
   const suffix = version === "diffCache" ? ":diffcache" : "";
   const dbName = `${gameId}:${apikey}${suffix}`;
@@ -117,7 +117,7 @@ async function restore(
 export async function getLastRecord(
   gameId: number,
   apikey: string,
-  version: "diffCache" | "scanCache"
+  version: "diffCache" | "scanCache",
 ) {
   const suffix = version === "diffCache" ? ":diffcache" : "";
   const dbName = `${gameId}:${apikey}${suffix}`;
@@ -181,7 +181,7 @@ export async function getServerScans(apikey: string) {
   await restoreFromDB(gameid, apikey);
   const len = diffCache[apikey]?.length || 0;
   console.log(`Fetched ${len} entries from ${apikey}`);
-  let timestamp = 0;
+  const timestamp = 0;
   if (len > 0) {
     const first = 0;
     const last = len - 1;
@@ -201,26 +201,26 @@ export async function getServerScans(apikey: string) {
       lastTick,
     };
     console.log(
-      `Ticks for ${apikey}:${puid}: ${firstTick} - ${lastTick} (${diffCache[apikey].length})`
+      `Ticks for ${apikey}:${puid}: ${firstTick} - ${lastTick} (${diffCache[apikey].length})`,
     );
   }
   console.log(`getServerScans: ${timestamp} ${apikey} ${len}`);
   const diffskey = `scandiffblocks/${gameid}/${apikey}`;
   const diffTimestamp = diffCache[apikey]?.slice(-1)[0]?.timestamp || 0;
   console.log(
-    `Reading diff database for ${gameid}:${apikey} from time ${diffTimestamp}`
+    `Reading diff database for ${gameid}:${apikey} from time ${diffTimestamp}`,
   );
   return onSnapshot(
     query(
       collection(firestore, diffskey),
-      where("last_timestamp", ">", 0*diffTimestamp),
-      orderBy("last_timestamp")
+      where("last_timestamp", ">", 0 * diffTimestamp),
+      orderBy("last_timestamp"),
     ),
     (querySnapshot) => {
       const changedBlocks = querySnapshot.docChanges();
       changedBlocks.forEach((change, i) => {
-        let doc = change.doc;
-        let patches = doc.data() as any;
+        const doc = change.doc;
+        const patches = doc.data() as any;
         const size = Math.round(JSON.stringify(doc.data()).length / 1024);
         console.log(`Block ${i}: `, {
           i,
@@ -246,7 +246,7 @@ export async function getServerScans(apikey: string) {
           scan = patch(scan, JSON.parse(patches[timestamp]));
           if (i === 0) {
             const initial = JSON.parse(initial_scan);
-            let nullDiff = diff(scan, initial);
+            const nullDiff = diff(scan, initial);
             if (nullDiff !== null) {
               console.error("Initial scan mismatch");
               scan = window.structuredClone(initial);
@@ -255,14 +255,18 @@ export async function getServerScans(apikey: string) {
             }
           } else if (i === timestamps.length - 1) {
             if (timestamp !== patches.last_timestamp) {
-              console.error(`last timestamp mismatch`)
+              console.error(`last timestamp mismatch`);
             } else {
-              console.log(`last timestamp good`)
+              console.log(`last timestamp good`);
             }
             const last = JSON.parse(patches.last_scan);
-            let nullDiff = diff(scan, last);
+            const nullDiff = diff(scan, last);
             if (nullDiff !== null) {
-              console.error("Last scan mismatch: ", {scan, last: patches.last_scan, nullDiff});
+              console.error("Last scan mismatch: ", {
+                scan,
+                last: patches.last_scan,
+                nullDiff,
+              });
               lastValidationBlock[apikey] = last;
             } else {
               console.log("Last Scan good");
@@ -272,15 +276,15 @@ export async function getServerScans(apikey: string) {
         }
       }
       changedBlocks.forEach((change, i) => {
-        let doc = change.doc;
+        const doc = change.doc;
         console.log(`Processing ${i} (${doc.id}) for ${apikey}`);
-        let patches = doc.data() as any;
+        const patches = doc.data() as any;
         validateBlock(patches, patches.initial_scan);
         console.log(`Validated ${i} (${doc.id}) for ${apikey}`);
         const knownKeys: { [k: string]: boolean } = {};
-        diffCache[apikey]?.forEach(
-          (diff) => (knownKeys[diff.timestamp] = true)
-        );
+        for (const diff of diffCache[apikey]) {
+          knownKeys[diff.timestamp] = true;
+        }
         const all: number[] = Object.keys(patches)
           .map((x) => +x)
           .sort();
@@ -291,7 +295,7 @@ export async function getServerScans(apikey: string) {
         console.log(
           `Missing count: ${missing.length} vs ${all.length} (vs ${
             diffCache[apikey].length
-          } == ${Object.keys(knownKeys).length})`
+          } == ${Object.keys(knownKeys).length})`,
         );
         let mi = 0;
         let ai = 0;
@@ -325,7 +329,7 @@ export async function getServerScans(apikey: string) {
         last++;
         if (last !== diffCache[apikey]?.length) {
           console.error(
-            `After discarding gap-making diff len ${diffCache[apikey].length} => ${last}`
+            `After discarding gap-making diff len ${diffCache[apikey].length} => ${last}`,
           );
           console.log({ apikey: diffCache[apikey] });
           lastScan[apikey] = 0;
@@ -344,7 +348,7 @@ export async function getServerScans(apikey: string) {
         console.log(`Timestamp count ${timestamps.length}`);
         const originalLength = diffCache[apikey] ? diffCache[apikey].length : 0;
         if (diffCache[apikey] === undefined || diffCache[apikey].length === 0) {
-          const cached = JSON.parse(patches["initial_scan"]).scanning_data;
+          const cached = JSON.parse(patches.initial_scan).scanning_data;
           diffCache[apikey] = [
             {
               cached,
@@ -359,14 +363,14 @@ export async function getServerScans(apikey: string) {
             i === 0 &&
             forward.now === diffCache[apikey][0].cached.now
           ) {
-            let check = {};
+            const check = {};
             const checkPatch = patchR(forward, check);
             console.log("Skip initial {} -> state patch", {
               cached: diffCache[apikey][0].cached,
               forward,
               checkPatch,
             });
-            let nullDiff = diff(checkPatch, diffCache[apikey][0].cached);
+            const nullDiff = diff(checkPatch, diffCache[apikey][0].cached);
             if (nullDiff !== null) {
               console.error(`bad skip?!`);
             } else {
@@ -374,10 +378,10 @@ export async function getServerScans(apikey: string) {
             }
             return;
           }
-          let last = diffCache[apikey].length - 1;
+          const last = diffCache[apikey].length - 1;
 
           const priorCache = window.structuredClone(
-            diffCache[apikey][last].cached
+            diffCache[apikey][last].cached,
           );
           console.log({ priorCache });
           const cached = patch(priorCache, forward);
@@ -390,7 +394,7 @@ export async function getServerScans(apikey: string) {
             timestamp,
           });
           const next = diffCache[apikey][last + 1];
-          let entry = { ...diffCache[apikey][last], forward, next };
+          const entry = { ...diffCache[apikey][last], forward, next };
           diffCache[apikey][last] = entry;
           if (last > 0) {
             diffCache[apikey][last].cached = undefined;
@@ -398,7 +402,7 @@ export async function getServerScans(apikey: string) {
         });
 
         const incoming = diffCache[apikey].slice(
-          Math.max(originalLength - 1, 0)
+          Math.max(originalLength - 1, 0),
         );
         store(incoming, gameid, apikey, "diffCache");
 
@@ -409,11 +413,11 @@ export async function getServerScans(apikey: string) {
       logCount(`error_scandiffs_query_${gameid}:${apikey} ${error}`);
       console.log(`scandiffs query ${diffskey} failing: `);
       console.error(error);
-    }
+    },
   );
 }
 
-let lastScan: { [k: string]: number } = {};
+const lastScan: { [k: string]: number } = {};
 function walkToScan(apikey: string, index: number) {
   let last = lastScan[apikey] || 0;
   lastScan[apikey] = index;
@@ -422,7 +426,7 @@ function walkToScan(apikey: string, index: number) {
   }
   while (index > last) {
     let scanContent = diffCache[apikey][last].cached;
-    let forward = diffCache[apikey][last].forward;
+    const forward = diffCache[apikey][last].forward;
     if (last === 0) {
       scanContent = window.structuredClone(scanContent);
     } else {
@@ -436,7 +440,7 @@ function walkToScan(apikey: string, index: number) {
   }
   while (index < last) {
     let scanContent = diffCache[apikey][last].cached;
-    let back = diffCache[apikey][last].back;
+    const back = diffCache[apikey][last].back;
     if (last === diffCache[apikey].length - 1) {
       scanContent = window.structuredClone(scanContent);
     } else {
@@ -453,17 +457,16 @@ function walkToScan(apikey: string, index: number) {
 
 export function getScan(
   apikey: string,
-  index: number
+  index: number,
 ): ScanningData & { eof?: boolean } {
   try {
     if (diffCache[apikey]) {
       if (diffCache[apikey].length > index) {
         return walkToScan(apikey, index);
-      } else {
-        console.error(
-          `Position ${index} is off the end of diffCache ${diffCache[apikey].length}`
-        );
       }
+      console.error(
+        `Position ${index} is off the end of diffCache ${diffCache[apikey].length}`,
+      );
     } else {
       logCount(`error_missing_diffcache_${apikey}`);
       console.error(`No diffcache yet fetching ${apikey} @ ${index}`);
@@ -489,9 +492,11 @@ export function logError(e: any) {
       logCount(`${message}:${JSON.stringify(e)}`);
     }
   } else {
-    addDoc(store, { gameid, stack, message, version, timestamp }).catch((e) => {
-      console.error(`Failed to write error for game ${gameid}`);
-    });
+    addDoc(store, { gameid, stack, message, version, timestamp }).catch(
+      (_e) => {
+        console.error(`Failed to write error for game ${gameid}`);
+      },
+    );
   }
 }
 

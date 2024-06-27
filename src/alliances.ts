@@ -6,7 +6,7 @@ export const alliancesEnabled = () =>
   NeptunesPride.gameConfig.alliances ||
   NeptunesPride.universe.galaxy?.config?.alliances;
 export function computeAlliances(allSeenKeys: string[]) {
-  let output = [];
+  const output = [];
 
   if (allSeenKeys?.length && alliancesEnabled()) {
     output.push("Formal Alliances: ");
@@ -18,7 +18,7 @@ export function computeAlliances(allSeenKeys: string[]) {
         ki.next();
         const scan = ki.getScanData();
         if (scan?.fleets) {
-          for (let k in scan.fleets) {
+          for (const k in scan.fleets) {
             const fleet = scan.fleets[k];
             if (fleet?.ouid !== undefined && (!isNP4() || fleet.ouid > 0)) {
               const star = scan.stars[fleet.ouid];
@@ -44,8 +44,8 @@ export function computeAlliances(allSeenKeys: string[]) {
       }
     }
     let annals = annalsOfWar();
-    for (let i in alliances) {
-      for (let j in alliances[i]) {
+    for (const i in alliances) {
+      for (const j in alliances[i]) {
         if (i < j) {
           const p0 = +i;
           const p1 = +j;
@@ -85,7 +85,7 @@ export function computeAlliances(allSeenKeys: string[]) {
       output.push(`[[Tick #${record.tick}]] ${d} [[${p0}]] ⇔ [[${p1}]]`);
     }
     combatInfo.knownAlliances = alliances;
-    console.log({alliances})
+    console.log({ alliances });
   } else {
     if (alliancesEnabled()) {
       output.push("No API keys to detect Formal Alliances.");

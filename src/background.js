@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 function intelDump() {
-  var s = document.createElement("script");
+  const s = document.createElement("script");
   s.src = chrome.runtime.getURL("intel.js");
   s.id = "intel";
   s.title = `Neptune's Pride Agent v${chrome.runtime.getManifest().version}`;
@@ -16,7 +16,7 @@ function intelDump() {
   console.log(`${s.title} background page.`);
 }
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener((_tabId, changeInfo, tab) => {
   if (changeInfo.status == "complete") {
     chrome.scripting.executeScript({
       target: { tabId: tab.id },

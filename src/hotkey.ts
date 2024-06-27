@@ -1,6 +1,6 @@
 import * as Mousetrap from "mousetrap";
 
-var lastClip = "Error";
+let lastClip = "Error";
 interface HelpText {
   help?: string;
   button?: string;
@@ -19,18 +19,16 @@ export function getClip(): string {
   return lastClip;
 }
 
-const preventDefault = function (reportFn: HotkeyCallback) {
-  return function () {
-    reportFn();
-    return false;
-  };
+const preventDefault = (reportFn: HotkeyCallback) => () => {
+  reportFn();
+  return false;
 };
 
 interface HotkeyMap {
   [k: string]: HotkeyCallback;
 }
-var hotkeys: HotkeyMap = {};
-var actionMap: { [k: string]: string } = {};
+const hotkeys: HotkeyMap = {};
+const actionMap: { [k: string]: string } = {};
 export function defineHotkey(
   key: string,
   action: HotkeyCallback,

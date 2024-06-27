@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "lib": ["es2021", "dom"],
     "module": "es6",
     "target": "es5",

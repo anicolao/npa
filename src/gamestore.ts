@@ -48,7 +48,7 @@ export class GameStore {
       else _cached = defaultValue;
     });
     const propDesc = {
-      get: function (): T {
+      get: (): T => {
         if (_cached === null) {
           console.error(`Getter retuning ${_cached} for ${name}`);
         }

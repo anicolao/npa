@@ -1,16 +1,15 @@
-import { computeCombatOutcomes, StarState } from "./combatcalc";
+import { type StarState, computeCombatOutcomes } from "./combatcalc";
 import { isNP4, messageCache } from "./events";
 import {
+  FleetOrder,
+  type ScannedStar,
+  type ScanningData,
   addAccessors,
   dist,
-  FleetOrder,
-  ScanningData,
-  techCost,
   getTech,
-  ScannedStar,
+  techCost,
 } from "./galaxy";
 import { logCount } from "./npaserver";
-import { clone } from "./patch";
 
 export interface TimeMachineData {
   futureTime: boolean;
@@ -47,7 +46,7 @@ function isVisible(star: any): star is ScannedStar {
 }
 export function futureTime(
   galaxy: ScanningData,
-  tickOffset: number
+  tickOffset: number,
 ): ScanningData {
   const newState: ScanningData & TimeMachineData = {
     ...galaxy,
@@ -88,10 +87,11 @@ export function futureTime(
           const industry = newStar.i;
           const manufacturing = getTech(
             players[newStar.puid],
-            "manufacturing"
+            "manufacturing",
           ).level;
           const manuPlus = isNP4() ? 4 : 5;
-          const production = (industry * (manufacturing + manuPlus)) / ticksPerDay;
+          const production =
+            (industry * (manufacturing + manuPlus)) / ticksPerDay;
           const partial = newStar.c !== undefined ? newStar.c : newStar.yard;
           newStar.st += production + partial;
           if (isNP4()) {
@@ -118,13 +118,13 @@ export function futureTime(
           newFleet.w = newFleet.warpSpeed;
           if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
             console.log(
-              `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`
+              `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destUid}`,
             );
           }
         }
         const [destX, destY] = [
-          parseFloat(destination.x),
-          parseFloat(destination.y),
+          Number.parseFloat(destination.x),
+          Number.parseFloat(destination.y),
         ];
         const [lx, ly] = [newFleet.x, newFleet.y];
         if (newFleet.etaFirst > 1) {
@@ -132,11 +132,14 @@ export function futureTime(
             newFleet.o = [...newFleet.o];
             newFleet.o[0] = [delay - 1, destUid, action, argument];
           } else {
-            const [x, y] = [parseFloat(newFleet.x), parseFloat(newFleet.y)];
+            const [x, y] = [
+              Number.parseFloat(newFleet.x),
+              Number.parseFloat(newFleet.y),
+            ];
             const [dx, dy] = [destX - x, destY - y];
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(
-                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n} @ ${dx},${dy} ${newState.fleet_speed}`
+                `Fleet ${newFleet.n} flying @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${destination.n} @ ${dx},${dy} ${newState.fleet_speed}`,
               );
             }
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
@@ -144,7 +147,11 @@ export function futureTime(
               if (newFleet.speed && !Number.isNaN(newFleet.speed)) {
                 speed = newFleet.speed;
               } else {
-                speed = calcSpeedBetweenStars(newFleet.ouid, newFleet.o[0][1], newFleet.puid);
+                speed = calcSpeedBetweenStars(
+                  newFleet.ouid,
+                  newFleet.o[0][1],
+                  newFleet.puid,
+                );
               }
             }
             const factor = speed / Math.sqrt(dx * dx + dy * dy);
@@ -168,7 +175,7 @@ export function futureTime(
           }
 
           // Update fleet as a result of battle
-          let starstate = staroutcomes[destUid];
+          const starstate = staroutcomes[destUid];
           if (starstate?.fleetStrength[newFleet.uid] !== undefined) {
             newFleet.st = starstate.fleetStrength[newFleet.uid];
           }
@@ -224,15 +231,25 @@ export function futureTime(
             newFleet.w = newFleet.warpSpeed;
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             if (isNP4()) {
-              console.log({nextDestUid, nextDestination, dest: destination.uid, f: fleets[fk], newFleet})
-              speed = calcSpeedBetweenStars(destination.uid, nextDestination.uid, newFleet.puid);
-            	newFleet.speed = speed;
+              console.log({
+                nextDestUid,
+                nextDestination,
+                dest: destination.uid,
+                f: fleets[fk],
+                newFleet,
+              });
+              speed = calcSpeedBetweenStars(
+                destination.uid,
+                nextDestination.uid,
+                newFleet.puid,
+              );
+              newFleet.speed = speed;
             }
             newFleet.etaFirst =
               delay + Math.ceil(dist(destination, nextDestination) / speed);
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(
-                `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`
+                `Fleet ${newFleet.n} @ warp ${newFleet.w} ETA ${newFleet.etaFirst} to ${nextDestination.n}`,
               );
             }
           } else {
@@ -244,7 +261,7 @@ export function futureTime(
         fleets[fk] = newFleet;
       } else if (fleets[fk].orbiting) {
         // apply star combat outcome if any
-        let starstate = staroutcomes[fleets[fk].ouid];
+        const starstate = staroutcomes[fleets[fk].ouid];
         if (starstate?.fleetStrength[newFleet.uid] !== undefined) {
           newFleet.st = starstate.fleetStrength[newFleet.uid];
           fleets[fk] = newFleet;
@@ -254,14 +271,16 @@ export function futureTime(
         delete fleets[fk];
       }
     }
-    for (let pind in players) {
+    for (const pind in players) {
       if (players[pind].researching !== undefined) {
-        const player = (players[pind] = { ...players[pind] });
+        players[pind] = { ...players[pind] };
+        const player = players[pind];
         player.tech = { ...player.tech };
         addAccessors(player.alias, player);
-        const tech = (player.tech[player.researching] = {
+        player.tech[player.researching] = {
           ...player.tech[player.researching],
-        });
+        };
+        const tech = player.tech[player.researching];
         tech.research += player.total_science;
         const cost = techCost({
           ...tech,
@@ -276,9 +295,10 @@ export function futureTime(
       }
     }
     if (newState.production_counter >= newState.production_rate) {
-      for (let pind in players) {
+      for (const pind in players) {
         if (players[pind].cash !== undefined) {
-          const player = (players[pind] = { ...players[pind] });
+          players[pind] = { ...players[pind] };
+          const player = players[pind];
           if (!player.cashPerDay) {
             player.cash +=
               player.total_economy * 10 + 75 * getTech(player, "banking").level;
@@ -299,15 +319,15 @@ export function futureTime(
 export function calcSpeedBetweenStars(
   starA: number,
   starB: number,
-  puid: number
+  puid: number,
 ) {
   const universe = NeptunesPride.universe;
   const players = universe.galaxy.players;
   const rangeTechLevel = getTech(players[puid], "manufacturing").level;
   const a = universe.galaxy.stars[starA];
   const b = universe.galaxy.stars[starB];
-  let whDist = universe.starDistance(a, b);
-  let normalSpeed = universe.galaxy.fleetSpeed;
+  const whDist = universe.starDistance(a, b);
+  const normalSpeed = universe.galaxy.fleetSpeed;
   let wormholeSpeed = 0;
   let gateSpeed = 0;
   if (universe.starsWormholed(a, b)) {
@@ -321,6 +341,13 @@ export function calcSpeedBetweenStars(
     }
   }
 
-  console.log("CALC: ", {normalSpeed, wormholeSpeed, gateSpeed, dist: whDist, starA, starB});
+  console.log("CALC: ", {
+    normalSpeed,
+    wormholeSpeed,
+    gateSpeed,
+    dist: whDist,
+    starA,
+    starB,
+  });
   return Math.max(normalSpeed, wormholeSpeed, gateSpeed);
 }

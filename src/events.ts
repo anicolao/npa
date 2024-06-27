@@ -41,27 +41,26 @@ async function store(incoming: any[], group: string) {
 
   const tx = db.transaction(group, "readwrite");
   await Promise.all([
-    ...incoming.map((x) => {
+    ...incoming.map(async (x) => {
       if (x?.comment_count === 0) {
         return tx.store.add(x);
       }
-      return tx.store.put(x).then(async () => {
-        if (x.comment_count) {
-          if (x.status === "read") {
-            if (messageCache[x.key]?.length === undefined) {
-              requestMessageComments(x.comment_count, x.key);
-            } else {
-              const len = messageCache[x.key].length;
-              const delta = x.comment_count - len + 1;
-              requestMessageComments(delta, x.key);
-            }
+      await tx.store.put(x);
+      if (x.comment_count) {
+        if (x.status === "read") {
+          if (messageCache[x.key]?.length === undefined) {
+            requestMessageComments(x.comment_count, x.key);
           } else {
-            console.log(
-              `Avoid caching comments for ${x.key} since it is unread: ${x?.payload?.subject}`,
-            );
+            const len = messageCache[x.key].length;
+            const delta = x.comment_count - len + 1;
+            requestMessageComments(delta, x.key);
           }
+        } else {
+          console.log(
+            `Avoid caching comments for ${x.key} since it is unread: ${x?.payload?.subject}`,
+          );
         }
-      });
+      }
     }),
     tx.done,
   ]);
@@ -79,20 +78,20 @@ async function restore(group: string) {
 }
 
 function indexMessages(group: string, messages: any[]) {
-  messages.forEach((message) => {
+  for (const message of messages) {
     if (message.body || message.payload?.body) {
       const body = message.body || message.payload?.body;
       const tokens = body.split(/[^\w\d]+/);
-      tokens.forEach((token: string) => {
+      for (const token of tokens) {
         if (token) {
           if (messageIndex[token] === undefined) {
             messageIndex[token] = [];
           }
           messageIndex[token].push({ group, message });
         }
-      });
+      }
     }
-  });
+  }
 }
 
 export async function restoreFromDB(
@@ -110,7 +109,9 @@ export async function restoreFromDB(
       );
       if (group === "game_diplomacy") {
         logCount("loading_diplomacy_from_db");
-        messageCache[group].forEach((message) => restoreFromDB(message.key));
+        for (const message of messageCache[group]) {
+          restoreFromDB(message.key);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -137,7 +138,7 @@ async function cacheEventResponseCallback(
   if (messageCache[group].length > 0) {
     let overlapOffset = -1;
     let first = 0;
-    let len = messageCache[group].length;
+    const len = messageCache[group].length;
     let latest = messageCache[group][first];
     for (let i = 0; i < incoming.length; ++i) {
       const message = incoming[i];
@@ -161,7 +162,9 @@ async function cacheEventResponseCallback(
         const orig_i = i;
         if (isUnchanged(message, latest) || first >= len) {
           const keys: { [k: string]: boolean } = {};
-          messageCache[group].forEach((m) => (keys[m.key] = true));
+          for (const m of messageCache[group]) {
+            keys[m.key] = true;
+          }
           while (i > 0 && incoming[i - 1].created === message.created) {
             const outOfOrderCandidate = incoming[i - 1];
             if (keys[outOfOrderCandidate.key]) {
@@ -193,15 +196,15 @@ async function cacheEventResponseCallback(
       logCount("would_force_restore");
       console.log(`Incoming messages forced restore: ${incoming.length}`);
       const knownKeys: { [k: string]: boolean } = {};
-      messageCache[group].forEach((m: Message) => {
+      for (const m of messageCache[group]) {
         knownKeys[m.key] = true;
-      });
-      let forceIncoming: Message[] = [];
-      incoming.forEach((m: Message, i: number) => {
+      }
+      const forceIncoming: Message[] = [];
+      for (const m of incoming) {
         if (!knownKeys[m.key]) {
           forceIncoming.push(m);
         }
-      });
+      }
       console.log(`Forcibly adding ${forceIncoming.length} missing keys`);
       logCount(`Force store ${forceIncoming.length}`);
       store(forceIncoming, group);
@@ -223,7 +226,9 @@ async function cacheEventResponseCallback(
         });
         indices = indices.reverse();
         console.log(`Removing ${indices.length} old messages`);
-        indices.forEach((i) => messageCache[group].splice(i, 1));
+        for (const i of indices) {
+          messageCache[group].splice(i, 1);
+        }
       }
     } else if (overlapOffset < 0) {
       const size = incoming.length * 2;
@@ -258,7 +263,7 @@ async function cacheEventResponseCallback(
 }
 
 export function isNP4() {
-  return (NeptunesPride.gameVersion === "") && Crux.templates.NP4 === "NP4";
+  return NeptunesPride.gameVersion === "" && Crux.templates.NP4 === "NP4";
 }
 
 const getRequestPath = () => {
@@ -316,7 +321,7 @@ export async function requestMessageComments(
   return cacheEventResponseCallback(message_key, response);
 }
 
-let lastMessageCacheUpdate: { [k: string]: number } = {
+const lastMessageCacheUpdate: { [k: string]: number } = {
   game_event: 0,
   game_diplomacy: 0,
 };
@@ -334,7 +339,5 @@ export async function updateMessageCache(
 
 export async function anyEventsNewerThan(timestamp: number): Promise<boolean> {
   await updateMessageCache("game_event");
-  return (
-    messageCache["game_event"].filter((x) => timestamp < -x.date).length > 0
-  );
+  return messageCache.game_event.filter((x) => timestamp < -x.date).length > 0;
 }

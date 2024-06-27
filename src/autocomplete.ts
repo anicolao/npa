@@ -1,21 +1,21 @@
-import { NeptunesPrideData } from "./intel";
+import type { NeptunesPrideData } from "./intel";
 
 export function setupAutocomplete(
   element: Element,
   neptunesPride: NeptunesPrideData,
   getApiKey: () => string,
 ) {
-  var autocompleteCaret = 0;
+  let autocompleteCaret = 0;
   type SearchCandidate = {
     matchPriority: number;
     matchText: string;
     completion: string;
   };
   let candidates: SearchCandidate[] = null;
-  let resetCandidates = function () {
+  const resetCandidates = () => {
     candidates = null;
   };
-  let autocompleteTrigger = function (e: KeyboardEvent) {
+  const autocompleteTrigger = (e: KeyboardEvent) => {
     const target: any = e.target;
     if (target.type === "textarea") {
       const key = e.key;
@@ -39,15 +39,15 @@ export function setupAutocomplete(
             return;
           }
         }
-        let start = autocompleteCaret;
+        const start = autocompleteCaret;
         let endBracket = target.selectionStart;
         if (key === "]") endBracket -= 1;
-        let autoString = target.value.substring(start, endBracket);
+        const autoString = target.value.substring(start, endBracket);
         let m = autoString.match(/^[0-9][0-9]*$/);
         if (m?.length) {
-          let puid = Number(autoString);
-          let end = target.selectionEnd;
-          let auto = `${puid}]] ${neptunesPride.universe.galaxy.players[puid].alias}`;
+          const puid = Number(autoString);
+          const end = target.selectionEnd;
+          const auto = `${puid}]] ${neptunesPride.universe.galaxy.players[puid].alias}`;
           target.value =
             target.value.substring(0, start) +
             auto +
@@ -58,7 +58,7 @@ export function setupAutocomplete(
         } else if (key === "]") {
           if (candidates === null) {
             candidates = [];
-            let matches = (s: string): boolean => {
+            const matches = (s: string): boolean => {
               return (
                 s.toLocaleLowerCase().substring(0, autoString.length) ==
                 autoString.toLocaleLowerCase()
@@ -87,8 +87,8 @@ export function setupAutocomplete(
                 return a.matchText < b.matchText
                   ? -1
                   : a.matchText > b.matchText
-                  ? 1
-                  : 0;
+                    ? 1
+                    : 0;
               }
               return a.matchPriority - b.matchPriority;
             });
@@ -109,8 +109,8 @@ export function setupAutocomplete(
         autocompleteCaret = 0;
         m = autoString.match(/api:/);
         if (m?.length && getApiKey()) {
-          let auto = `api:${getApiKey()}]]`;
-          let end = target.selectionEnd;
+          const auto = `api:${getApiKey()}]]`;
+          const end = target.selectionEnd;
           target.value =
             target.value.substring(0, start) +
             auto +
@@ -119,8 +119,8 @@ export function setupAutocomplete(
           target.selectionEnd = start + auto.length;
         }
       } else if (target.selectionStart > 1) {
-        let start = target.selectionStart - 2;
-        let ss = target.value.substring(start, start + 2);
+        const start = target.selectionStart - 2;
+        const ss = target.value.substring(start, start + 2);
         autocompleteCaret = ss === "[[" ? target.selectionStart : 0;
       }
     }

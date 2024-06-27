@@ -41,13 +41,13 @@ export interface SpaceObject {
 }
 export enum FleetOrder {
   Nothing = 0,
-  CollectAll,
-  DropAll,
-  Collect,
-  Drop,
-  CollectAllBut,
-  DropAllBut,
-  Garrison,
+  CollectAll = 1,
+  DropAll = 2,
+  Collect = 3,
+  Drop = 4,
+  CollectAllBut = 5,
+  DropAllBut = 6,
+  Garrison = 7,
 }
 export interface Fleet extends SpaceObject {
   l: number;
@@ -185,38 +185,45 @@ export function techCost(tech: TechInfo) {
   return tech.brr * tech.level * tech.level * tech.level;
 }
 
-  export function addAccessors(n: string, p: any) {
-    const props = Object.getOwnPropertyNames(p);
-    for (const name of props) {
-      let newName = `${name.replace(/[A-Z]/g, "_$&").toLowerCase()}`;
-      if (name !== newName) {
-        //console.log(`Alias ${n}.${name} -> ${newName}`);
-        if (name === "colorStyle") {
-          //console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
-          //newName = "color";
-        }
-        Object.defineProperty(p, newName, {
-          get: function () {
-            return this[name];
-          },
-          set: function (v) {
-            return (this[name] = v);
-          },
-        });
+export function addAccessors(_n: string, p: any) {
+  const props = Object.getOwnPropertyNames(p);
+  for (const name of props) {
+    const newName = `${name.replace(/[A-Z]/g, "_$&").toLowerCase()}`;
+    if (name !== newName) {
+      //console.log(`Alias ${n}.${name} -> ${newName}`);
+      if (name === "colorStyle") {
+        //console.log(`COLOR Alias ${n}.${name} -> ${newName}`);
+        //newName = "color";
       }
+      Object.defineProperty(p, newName, {
+        get: function () {
+          return this[name];
+        },
+        set: function (v) {
+          this[name] = v;
+          return this[name];
+        },
+      });
     }
   }
+}
 
-  export function productionTicks() {
-    return NeptunesPride?.gameConfig?.productionTicks || NeptunesPride?.universe?.galaxy?.config?.prodTicks;
-  }
+export function productionTicks() {
+  return (
+    NeptunesPride?.gameConfig?.productionTicks ||
+    NeptunesPride?.universe?.galaxy?.config?.prodTicks
+  );
+}
 
-  export function getPlayerUid(galaxy: ScanningData): number {
-    if (galaxy.player_uid !== undefined) {
-      return galaxy.player_uid;
-    }
-    return galaxy.playerUid;
+export function getPlayerUid(galaxy: ScanningData): number {
+  if (galaxy.player_uid !== undefined) {
+    return galaxy.player_uid;
   }
-  export function turnJumpTicks() {
-    return NeptunesPride.gameConfig?.turnJumpTicks || NeptunesPride.universe.galaxy?.config?.turnJumpTicks;
-  }
+  return galaxy.playerUid;
+}
+export function turnJumpTicks() {
+  return (
+    NeptunesPride.gameConfig?.turnJumpTicks ||
+    NeptunesPride.universe.galaxy?.config?.turnJumpTicks
+  );
+}

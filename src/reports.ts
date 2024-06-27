@@ -1,5 +1,3 @@
-import { setClip } from "./hotkey";
-
 export type Stanzas = (string | string[])[];
 export type Filter = (s: string) => boolean;
 export type MapString = (s: string) => string;
@@ -17,12 +15,13 @@ export const or = (f1: Filter, f2: Filter) => {
   return (s: string) => f1(s) || f2(s);
 };
 
-export const makeReportContent = function (
-  stanzas: Stanzas,
+export const makeReportContent = (
+  input: Stanzas,
   filter?: Filter,
   preprocess?: MapString,
-) {
-  stanzas = stanzas.filter((x) => {
+) => {
+  const stanzas = input.filter((ix) => {
+    let x = ix;
     if (Array.isArray(x) && filter !== undefined) {
       if (preprocess !== undefined) {
         x = x.map(preprocess);
