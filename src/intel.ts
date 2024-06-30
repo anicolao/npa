@@ -210,7 +210,10 @@ function NeptunesPrideAgent() {
     const universe = NeptunesPride.universe;
     const offset = isNP4() ? 1 : 0;
     for (let i = 0 + offset; i < 64 + offset; ++i) {
-      if (universe.hyperlinkedMessageInserts[i]) {
+      if (
+        universe.hyperlinkedMessageInserts[i] ||
+        universe.galaxy.players[i] !== undefined
+      ) {
         const player = NeptunesPride.universe.galaxy.players[i];
         universe.hyperlinkedMessageInserts[`${i}`] =
           universe.hyperlinkedMessageInserts[i] =
