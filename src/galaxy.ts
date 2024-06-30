@@ -128,7 +128,16 @@ export function getTech(player: Player, tech: TechKey): TechInfo {
     if (tech === "scanning" && NeptunesPride.universe.galaxy.config.noScn) {
       return getTech(player, "propulsion");
     }
-    return t[NeptunesPride.universe.techNames.indexOf(tech)];
+    const techNames = [
+      "banking",
+      "research",
+      "manufacturing",
+      "propulsion",
+      "scanning",
+      "weapons",
+      "terraforming",
+    ];
+    return t[techNames.indexOf(tech)];
   }
   return player.tech[tech];
 }
