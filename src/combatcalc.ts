@@ -232,7 +232,7 @@ export const computeCombatOutcomes = (
       const ownerWeapons = owner ? getWeaponsLevel(owner) : 0;
       const vstar = stars[starId] as ScannedStar;
       let weapons = ownerWeapons || 0;
-      if (stars[starId].v === "1") {
+      if (+stars[starId].v === 1) {
         weapons = Math.max(
           weapons,
           ...vstar.alliedDefenders.map((d: number) =>
@@ -420,8 +420,8 @@ export const computeCombatOutcomes = (
       }
     }
     let attackersAggregate = offense;
-    const defendersAggregate = starstate[starId].ships;
     while (offense > 0) {
+      const defendersAggregate = starstate[starId].ships;
       let dwt = starstate[starId].weapons;
       let defense = starstate[starId].ships;
       stanza.push("  Combat! [[{0}]] defending".format(starstate[starId].puid));
