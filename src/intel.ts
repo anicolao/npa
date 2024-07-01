@@ -1512,6 +1512,9 @@ function NeptunesPrideAgent() {
           }
         });
         const eventKey = `setting_change_${p.name}`;
+        Crux.DropDown(defaultIndex, values, eventKey)
+          .grid(15, 3 * i, 15, 3)
+          .roost(options);
         screen.on(eventKey, (_x: any, y: any) => {
           rawSettings[p.name] = values[y];
           mapRebuild();
