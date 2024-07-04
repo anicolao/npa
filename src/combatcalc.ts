@@ -179,7 +179,7 @@ export const computeCombatOutcomes = (
       orders = lo;
     }
     if (orders && orders.length > 0) {
-      const stop = fleet.o[0][1];
+      const stop = orders[0][1];
       const ticks = fleet.etaFirst;
       if (maxTick !== undefined && galaxy.tick + ticks > maxTick) continue;
       const starname = stars[stop]?.n;
