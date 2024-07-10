@@ -214,7 +214,14 @@ export const computeCombatOutcomes = (
     ) {
       arrivalTimes.push(flights[i][0]);
     }
-    const arrivalKey = [flights[i][0], fleet.o[0][1]].toString();
+    let orders = fleet.o;
+    const lo: [number, number, FleetOrder, number][] | undefined = (
+      fleet as any
+    ).orders;
+    if (fleet !== NeptunesPride.universe.selectedFleet || lo?.length) {
+      orders = lo;
+    }
+    const arrivalKey = [flights[i][0], orders[0][1]].toString();
     if (arrivals[arrivalKey] !== undefined) {
       arrivals[arrivalKey].push(fleet);
     } else {
