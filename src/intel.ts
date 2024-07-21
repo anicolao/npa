@@ -5394,7 +5394,7 @@ function NeptunesPrideAgent() {
             await getServerScans(code);
             if (countScans(code) > 0) {
               console.log(`Scans for ${code} cached`);
-              return;
+              continue;
             }
             console.log(`Scans for ${code} not cached yet, register for them`);
             registerForScans(code);
