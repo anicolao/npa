@@ -970,8 +970,8 @@ function NeptunesPrideAgent() {
             pkills += tallyDefenderLosses();
           }
           if (m.payload.star.puid !== undefined) {
-            losses[+m.payload.star.puid] += m.payload.star.ss =
-              m.payload.star.es;
+            losses[+m.payload.star.puid] +=
+              m.payload.star.ss - m.payload.star.es;
           }
           trashed[+m.payload.star.puid] += m.payload.loot / 10;
           const attackerKeys = Object.keys(m.payload.attackers);
