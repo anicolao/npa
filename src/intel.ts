@@ -229,16 +229,16 @@ function NeptunesPrideAgent() {
   let showingOurOptions = false;
   let reportSelector: any = null;
   let filterInput: any = null;
-  const showUI = () => NeptunesPride.npui.trigger("show_screen", "new_fleet");
+  const showUI = () => NeptunesPride.npui.trigger("show_npa", "npa_ui_screen");
   const showOptions = (options?: any) => {
-    NeptunesPride.npui.trigger("show_screen", [
-      "new_fleet",
+    NeptunesPride.npui.trigger("show_npa", [
+      "npa_ui_screen",
       { kind: "npa_options", ...options },
     ]);
   };
   const configureColours = (options?: any) => {
-    NeptunesPride.npui.trigger("show_screen", [
-      "new_fleet",
+    NeptunesPride.npui.trigger("show_npa", [
+      "npa_ui_screen",
       { kind: "npa_colours", ...options },
     ]);
   };
@@ -1540,6 +1540,32 @@ function NeptunesPrideAgent() {
       }
     });
   };
+  NeptunesPride.npui.Screen = () => {
+    const ret = Crux.Widget("rel col_base no_overflow");
+
+    ret.screenTop = 52;
+
+    ret.size(480, 0);
+    ret.yOffset = ret.screenTop;
+    ret.footerRequired = true;
+
+    ret.header = Crux.Widget("rel").size(480, 48).roost(ret);
+
+    ret.heading = Crux.Text("n_p_a", "screen_title txt_ellipsis")
+      .size(360, 48)
+      .roost(ret.header);
+
+    ret.closeButton = Crux.IconButton("icon-cancel", "hide_screen")
+      .grid(27, 0, 3, 3)
+      .roost(ret.header);
+
+    Crux.Widget("rel col_black").size(480, 4).roost(ret);
+
+    ret.body = Crux.Widget("rel").size(480, 0).roost(ret);
+
+    Crux.Widget("rel col_black").size(480, 4).roost(ret);
+    return ret;
+  };
   const npaOptions = (info?: any) => {
     const npui = NeptunesPride.npui;
     Crux.templates.npa_options = `NPA Settings ${version.replaceAll(
@@ -2822,7 +2848,7 @@ function NeptunesPrideAgent() {
     };
     let base = -1;
     let wasBatched = false;
-    NeptunesPride.npui.status.on("one_second_tick", () => {
+    NeptunesPride.npui.map.on("one_second_tick", () => {
       if (base === -1) {
         const msplus = msToTick(1);
         const parts = superFormatTime(msplus, true, true, true).split(" ");
@@ -3386,14 +3412,6 @@ function NeptunesPrideAgent() {
 
       return reportScreen;
     };
-    const backMenu = npui.sideMenu.children[npui.sideMenu.children.length - 1];
-    npui.sideMenu.removeChild(backMenu);
-    npui
-      .SideMenuItem("icon-eye", "n_p_a", "show_screen", "new_fleet")
-      .roost(npui.sideMenu);
-    npui
-      .SideMenuItem("icon-left-open", "main_menu", "browse_to", "/")
-      .roost(npui.sideMenu);
 
     const npaMenuWidth = 292;
     npui.NpaMenuItem = (
@@ -3432,7 +3450,7 @@ function NeptunesPrideAgent() {
     const showReport = (_: any, reportName: string) => {
       console.log(`SHOW: ${reportName}`);
       lastReport = reportName;
-      npui.trigger("show_screen", "new_fleet");
+      npui.trigger("show_npa", "npa_ui_screen");
     };
     npui.npaMenu = (() => {
       const sideMenu = Crux.Widget("col_accent side_menu").size(
@@ -3528,24 +3546,39 @@ function NeptunesPrideAgent() {
       "Toggle the display of the NPA menu.",
       "NPA Menu",
     );
-    const superNewFleetScreen = npui.NewFleetScreen;
     onTrigger("show_screen", (_event: any, name: any, screenConfig: any) => {
-      showingOurUI = name === "new_fleet" && screenConfig === undefined;
+      showingOurUI = name === "npa_ui_screen" && screenConfig === undefined;
       showingOurOptions =
-        name === "new_fleet" && screenConfig?.kind === "npa_options";
+        name === "npa_ui_screen" && screenConfig?.kind === "npa_options";
     });
-    npui.NewFleetScreen = (screenConfig: any) => {
-      if (screenConfig === undefined) {
-        return npaReports();
+    onTrigger("show_npa", (_event: any, name: any, screenConfig: any) => {
+      const getScreen = () => {
+        if (screenConfig === undefined) {
+          return npaReports();
+        }
+        if (screenConfig?.kind === "npa_options") {
+          return npaOptions(screenConfig);
+        }
+        if (screenConfig?.kind === "npa_colours") {
+          return npaColours(screenConfig);
+        }
+        return undefined;
+      };
+      const npui = NeptunesPride.npui;
+      npui.onHideScreen(null, true);
+      npui.onHideSelectionMenu();
+
+      npui.trigger("hide_side_menu");
+      npui.trigger("reset_edit_mode");
+      npui.activeScreen = getScreen();
+
+      if (npui.activeScreen) {
+        npui.activeScreen.roost(npui.screenContainer);
+        npui.layoutElement(npui.activeScreen);
       }
-      if (screenConfig?.kind === "npa_options") {
-        return npaOptions(screenConfig);
-      }
-      if (screenConfig?.kind === "npa_colours") {
-        return npaColours(screenConfig);
-      }
-      return superNewFleetScreen(screenConfig);
-    };
+
+      jQuery(window).scrollTop(scroll);
+    });
 
     const superFormatTime = Crux.formatTime;
     const timeText = (
