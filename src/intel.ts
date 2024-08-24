@@ -94,6 +94,7 @@ interface CruxLib {
   TextInput: any;
   Clickable: any;
   templates: { [k: string]: string };
+  tickCallbacks: any[];
 }
 export interface NeptunesPrideData {
   sendAllTech: (recipient: number) => void;
@@ -456,6 +457,7 @@ function NeptunesPrideAgent() {
     const output = [];
     output.push("Trading Activity:");
     const ticks = new TickIterator(getMyKeys());
+    let lastScan = undefined;
     while (ticks.hasNext()) {
       ticks.next();
       const scan = ticks.getScanData();
@@ -525,24 +527,30 @@ function NeptunesPrideAgent() {
               for (const tk in p.tech) {
                 const tech = translateTech(tk);
                 const level = scan.players[k].tech[tk].level;
-                let sourceString = "";
-                for (const op in scan.players) {
-                  if (op !== k) {
-                    if (scan.players[op].tech[tk].level >= level) {
-                      if (!tradeScanned() || sees(op, k)) {
-                        sourceString += ` [[#${op}]]`;
+                if (
+                  lastScan === undefined ||
+                  level > lastScan.players[k].tech[tk].level
+                ) {
+                  let sourceString = "";
+                  for (const op in scan.players) {
+                    if (op !== k) {
+                      if (scan.players[op].tech[tk].level >= level) {
+                        if (!tradeScanned() || sees(op, k)) {
+                          sourceString += ` [[#${op}]]`;
+                        }
                       }
                     }
                   }
+                  output.push(
+                    `[[Tick #${scan.tick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
+                  );
                 }
-                output.push(
-                  `[[Tick #${scan.tick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
-                );
               }
             }
           }
         }
       }
+      lastScan = clone(scan);
     }
     if (output.length === 1) {
       output.push("No trade activity data found");
@@ -2030,7 +2038,8 @@ function NeptunesPrideAgent() {
     // Override sprite positioning for stars with gates, so
     // that every player can have a uniquely coloured gate
     // glow that matches their own colour.
-    const superCreateSpritesStars = NeptunesPride.npui.map.createSpritesStars;
+    const npmap = NeptunesPride.npui.map;
+    const superCreateSpritesStars = npmap.createSpritesStars.bind(npmap);
     NeptunesPride.npui.map.createSpritesStars = () => {
       superCreateSpritesStars();
       for (const sss of NeptunesPride.npui.map.sortedStarSprites) {
@@ -2497,7 +2506,7 @@ function NeptunesPrideAgent() {
         }
       }
     };
-    const superDrawSelectionRing = map.drawSelectionRing;
+    const superDrawSelectionRing = map.drawSelectionRing.bind(map);
     const bubbleLayer = document.createElement("canvas");
     map.drawSelectionRing = () => {
       const universe = NeptunesPride.universe;
@@ -2601,7 +2610,8 @@ function NeptunesPrideAgent() {
 
       superDrawSelectionRing();
     };
-    const superDrawText = NeptunesPride.npui.map.drawText;
+    const npmap = NeptunesPride.npui.map;
+    const superDrawText = npmap.drawText.bind(npmap);
     NeptunesPride.npui.map.drawText = () => {
       const universe = NeptunesPride.universe;
       const map = NeptunesPride.npui.map;
@@ -2848,7 +2858,7 @@ function NeptunesPrideAgent() {
     };
     let base = -1;
     let wasBatched = false;
-    NeptunesPride.npui.map.on("one_second_tick", () => {
+    Crux.tickCallbacks.push(() => {
       if (base === -1) {
         const msplus = msToTick(1);
         const parts = superFormatTime(msplus, true, true, true).split(" ");
