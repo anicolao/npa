@@ -3561,7 +3561,7 @@ function NeptunesPrideAgent() {
       showingOurOptions =
         name === "npa_ui_screen" && screenConfig?.kind === "npa_options";
     });
-    onTrigger("show_npa", (_event: any, name: any, screenConfig: any) => {
+    onTrigger("show_npa", (_event: any, _: any, screenConfig: any) => {
       const getScreen = () => {
         if (screenConfig === undefined) {
           return npaReports();
@@ -3583,11 +3583,15 @@ function NeptunesPrideAgent() {
       npui.activeScreen = getScreen();
 
       if (npui.activeScreen) {
+        npui.screenConfig = screenConfig;
         npui.activeScreen.roost(npui.screenContainer);
         npui.layoutElement(npui.activeScreen);
       }
 
       jQuery(window).scrollTop(scroll);
+    });
+    onTrigger("refresh_interface", () => {
+      npui.trigger("show_npa", ["npa_ui_screen", npui.screenConfig]);
     });
 
     const superFormatTime = Crux.formatTime;
