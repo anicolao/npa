@@ -227,6 +227,7 @@ function NeptunesPrideAgent() {
 
   let lastReport = "planets";
   let showingOurUI = false;
+  let showingNPA = false;
   let showingOurOptions = false;
   let reportSelector: any = null;
   let filterInput: any = null;
@@ -3556,11 +3557,14 @@ function NeptunesPrideAgent() {
       "Toggle the display of the NPA menu.",
       "NPA Menu",
     );
-    onTrigger("show_screen", (_event: any, name: any, screenConfig: any) => {
-      showingOurUI = name === "npa_ui_screen" && screenConfig === undefined;
-      showingOurOptions =
-        name === "npa_ui_screen" && screenConfig?.kind === "npa_options";
-    });
+    const screenChanged = (_event: any, name: any, screenConfig: any) => {
+      console.log(`show_screen ${name} ${screenConfig}`);
+      showingNPA = name === "npa_ui_screen";
+      showingOurUI = showingNPA && screenConfig === undefined;
+      showingOurOptions = showingNPA && screenConfig?.kind === "npa_options";
+    };
+    onTrigger("show_npa", screenChanged);
+    onTrigger("show_screen", screenChanged);
     onTrigger("show_npa", (_event: any, _: any, screenConfig: any) => {
       const getScreen = () => {
         if (screenConfig === undefined) {
@@ -3591,7 +3595,9 @@ function NeptunesPrideAgent() {
       jQuery(window).scrollTop(scroll);
     });
     onTrigger("refresh_interface", () => {
-      npui.trigger("show_npa", ["npa_ui_screen", npui.screenConfig]);
+      if (showingNPA) {
+        npui.trigger("show_npa", ["npa_ui_screen", npui.screenConfig]);
+      }
     });
 
     const superFormatTime = Crux.formatTime;
