@@ -111,6 +111,7 @@ export interface NeptunesPrideData {
   originalPlayer: any;
   gameConfig: any;
   account: any;
+  crux: any;
 }
 
 export function getGameNumber() {
@@ -180,8 +181,9 @@ function NeptunesPrideAgent() {
 
   function onTrigger(trigger: string, fn: any) {
     if (NeptunesPride?.np?.ui?.on && NeptunesPride.universe?.galaxy?.players) {
-      NeptunesPride.npui.ui.on(trigger, fn);
-      NeptunesPride.np.ui.on(trigger, fn);
+      NeptunesPride.crux.ui.on(trigger, fn);
+      //NeptunesPride.npui.ui.on(trigger, fn);
+      //NeptunesPride.np.ui.on(trigger, fn);
     } else {
       if ((NeptunesPride as any).MetaGame) {
         console.log(`In metagame screen, stop; trigger ${trigger}`);
@@ -198,7 +200,7 @@ function NeptunesPrideAgent() {
 
     for (const f in fleets) {
       const fleet = fleets[f];
-      const fleetLink = `<a onClick='Crux.crux.trigger(\"show_fleet_uid\", \"${fleet.uid}\")'>${fleet.n}</a>`;
+      const fleetLink = `<a onClick='NeptunesPride.crux.trigger(\"show_fleet_uid\", \"${fleet.uid}\")'>${fleet.n}</a>`;
       universe.hyperlinkedMessageInserts[fleet.n] = fleetLink;
     }
     universe.hyperlinkedMessageInserts[":carrier:"] =
@@ -1631,7 +1633,7 @@ function NeptunesPrideAgent() {
       const tickMark = i === currentCustomColor ? "✓" : "";
       Crux.Text("", "pad12")
         .rawHTML(
-          `<span onClick=\"Crux.crux.trigger('set_cc', ${i})\" style='${style}'>${tickMark}</span>`,
+          `<span onClick=\"NeptunesPride.crux.trigger('set_cc', ${i})\" style='${style}'>${tickMark}</span>`,
         )
         .grid(xOffset, yOffset, 3, 3)
         .roost(colours)
@@ -1657,7 +1659,7 @@ function NeptunesPrideAgent() {
       }
       Crux.Text("", "pad12")
         .rawHTML(
-          `<span class='playericon_font' style='${style}' onClick=\"Crux.crux.trigger('set_cs', ${i})\">${s}</span>`,
+          `<span class='playericon_font' style='${style}' onClick=\"NeptunesPride.crux.trigger('set_cs', ${i})\">${s}</span>`,
         )
         .grid(xOffset, yOffset, 3, 3)
         .roost(colours)
@@ -2081,7 +2083,7 @@ function NeptunesPrideAgent() {
       const recolor = `style='color: ${playerToColorMap(player)};'`;
       const shape = playerToShapeMap(player);
       player.colourBox = `<span class='playericon_font pc_${player.colorIndex}' ${recolor}>${shape}</span>`;
-      player.hyperlinkedBox = `<a onClick=\"Crux.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
+      player.hyperlinkedBox = `<a onClick=\"NeptunesPride.crux.trigger('show_player_uid', '${player.uid}' )\">${player.colourBox}</a>`;
     }
     linkPlayerSymbols();
 
@@ -3005,7 +3007,7 @@ function NeptunesPrideAgent() {
           const upgradeScript = upgrade
             .map(
               (star) =>
-                `Crux.crux.trigger('star_dir_upgrade_${type}', '${star.uid}')`,
+                `NeptunesPride.crux.trigger('star_dir_upgrade_${type}', '${star.uid}')`,
             )
             .join(";");
           const terms: { [key: string]: string } = {
@@ -3022,7 +3024,7 @@ function NeptunesPrideAgent() {
           const name = split[1];
           const colors = split[2];
           const shapes = split[3];
-          const value = `<span class="button button_up pad8" style="display: inline-block; margin: 3px 0;" onClick='event.preventDefault();Crux.crux.trigger("set_colorscheme_api", "${colors}:${shapes}")'"  >Import Color Scheme ${name}</span>`;
+          const value = `<span class="button button_up pad8" style="display: inline-block; margin: 3px 0;" onClick='event.preventDefault();NeptunesPride.crux.trigger("set_colorscheme_api", "${colors}:${shapes}")'"  >Import Color Scheme ${name}</span>`;
           s = s.replace(pattern, value);
         } else if (/^cash:[0-9]+:[0-9]+$/.test(sub)) {
           // cash:uid:price
@@ -3087,18 +3089,18 @@ function NeptunesPrideAgent() {
           /^api:\w{6}$/.test(sub) ||
           /^api(:|&#x3A;)\w{12}$/.test(sub)
         ) {
-          let apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
-          apiLink += ` or <a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
+          let apiLink = `<a onClick='NeptunesPride.crux.trigger(\"switch_user_api\", \"${sub}\")'> View as ${sub}</a>`;
+          apiLink += ` or <a onClick='NeptunesPride.crux.trigger(\"merge_user_api\", \"${sub}\")'> Merge ${sub}</a>`;
           s = s.replace(pattern, apiLink);
         } else if (/^apiv:\w{6}$/.test(sub) || /^apiv:\w{12}$/.test(sub)) {
-          const apiLink = `<a onClick='Crux.crux.trigger(\"switch_user_api\", \"${sub}\")'>${sub}</a>`;
+          const apiLink = `<a onClick='NeptunesPride.crux.trigger(\"switch_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
         } else if (/^apim:\w{6}$/.test(sub) || /^apim:\w{12}$/.test(sub)) {
-          const apiLink = `<a onClick='Crux.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
+          const apiLink = `<a onClick='NeptunesPride.crux.trigger(\"merge_user_api\", \"${sub}\")'>${sub}</a>`;
           s = s.replace(pattern, apiLink);
         } else if (/^viewgame:[0-9]+:.+$/.test(sub)) {
           const splits = sub.split(":");
-          const gameLink = `<a onClick='Crux.crux.trigger(\"view_game\", \"${sub}\")'>${splits[1]} ${splits[2]}</a>`;
+          const gameLink = `<a onClick='NeptunesPride.crux.trigger(\"view_game\", \"${sub}\")'>${splits[1]} ${splits[2]}</a>`;
           s = s.replace(pattern, gameLink);
         } else if (/^hotkey:[^:]+$/.test(sub) || /^goto:[^:]/.test(sub)) {
           const splits = sub.split(":");
@@ -3120,7 +3122,7 @@ function NeptunesPrideAgent() {
             .slice(1)
             .map((uid) => `NeptunesPride.inbox.draft.to.push(${uid})`)
             .join(";")}`;
-          const mailButton = `<span class="button button_up icon-button pad8" onClick='${mailScript};Crux.crux.trigger("show_screen", "compose")'><span class="icon-mail"/></span>`;
+          const mailButton = `<span class="button button_up icon-button pad8" onClick='${mailScript};NeptunesPride.crux.trigger("show_screen", "compose")'><span class="icon-mail"/></span>`;
           s = s.replace(pattern, mailButton);
         } else if (/^footer:-?[\w- \.][\w- \.]*$/.test(sub)) {
           const splits = sub.split(":");
@@ -3227,7 +3229,7 @@ function NeptunesPrideAgent() {
             let sort = "";
             let id = "";
             if (headerRow) {
-              sort = `onclick='Crux.crux.trigger(\"sort_table\", \"${tableId},${i}\")'`;
+              sort = `onclick='NeptunesPride.crux.trigger(\"sort_table\", \"${tableId},${i}\")'`;
               id = `id='${tableId}:${i}'`;
             }
             output.push(
@@ -3639,7 +3641,7 @@ function NeptunesPrideAgent() {
       const rate = tickRate() * 60 * 1000;
       const relTick = ms / rate;
       const absTick = Math.ceil(relTick) + NeptunesPride.universe.galaxy.tick;
-      return `<a onClick='Crux.crux.trigger(\"warp_time\", \"${absTick}\")'>${text}</a>`;
+      return `<a onClick='NeptunesPride.crux.trigger(\"warp_time\", \"${absTick}\")'>${text}</a>`;
     };
     const toggleRelative = () => {
       const i =
@@ -3667,10 +3669,10 @@ function NeptunesPrideAgent() {
       });
     } else if (isSafari()) {
       // safari: trackpad is available and works on iPads
-      Crux.crux.onTouchDown = () => {
+      NeptunesPride.crux.onTouchDown = () => {
         Crux.touchEnabled = false;
       };
-      Crux.crux.one("touchstart", Crux.crux.onTouchDown);
+      NeptunesPride.crux.one("touchstart", NeptunesPride.crux.onTouchDown);
     }
 
     const universe = NeptunesPride.universe;
@@ -3689,10 +3691,10 @@ function NeptunesPrideAgent() {
       const header = Crux.Widget("rel col_accent").size(480, 48).roost(starDir);
 
       const pageHTML = `
-        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:raw')">Infrastructure</a> |
-        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:prod')">Production</a> |
-        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'inf:tech')">Technology</a> |
-        <a onPointerUp="Crux.crux.trigger('emp_dir_page', 'col')">Colors</a>
+        <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'inf:raw')">Infrastructure</a> |
+        <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'inf:prod')">Production</a> |
+        <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'inf:tech')">Technology</a> |
+        <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'col')">Colors</a>
       `;
       Crux.Text("", "pad12 col_accent").rawHTML(pageHTML).roost(header);
 
@@ -3775,13 +3777,13 @@ function NeptunesPrideAgent() {
         let fields = { raw, prod, tech }[selector as "raw" | "prod" | "tech"];
         if (fields === undefined) fields = raw;
         html = `<table class='star_directory'>
-        <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'uid')">P</a></td>
-        <td class='star_directory_name'><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
+        <tr><td><a onPointerUp="NeptunesPride.crux.trigger('emp_dir_sort', 'uid')">P</a></td>
+        <td class='star_directory_name'><a onPointerUp="NeptunesPride.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
         <td></td>
         ${fields
           .map(
             (column) =>
-              `<td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', '${column.field}')">${column.title}</a></td>`,
+              `<td><a onPointerUp="NeptunesPride.crux.trigger('emp_dir_sort', '${column.field}')">${column.title}</a></td>`,
           )
           .join("")}
         </tr>`;
@@ -3791,7 +3793,7 @@ function NeptunesPrideAgent() {
             <tr>
             <td> ${empire.hyperlinkedBox} </td>
             <td> ${empire.hyperlinkedAlias} </td>
-            <td> <a onPointerUp="Crux.crux.trigger('show_player_home_uid', ${
+            <td> <a onPointerUp="NeptunesPride.crux.trigger('show_player_home_uid', ${
               empire.uid
             })" class="ic-eye">&#59146;</a></td>
             ${fields
@@ -3805,10 +3807,10 @@ function NeptunesPrideAgent() {
 
       if (universe.empireDirectory.page === "col") {
         html = `<table class='star_directory'>
-        <tr><td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'puid')">P</a></td>
-        <td class='star_directory_name'><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
+        <tr><td><a onPointerUp="NeptunesPride.crux.trigger('emp_dir_sort', 'puid')">P</a></td>
+        <td class='star_directory_name'><a onPointerUp="NeptunesPride.crux.trigger('emp_dir_sort', 'name')">Name</a></td>
         <td></td>
-        <td><a onPointerUp="Crux.crux.trigger('emp_dir_sort', 'totalStars')">Stars</a></td>
+        <td><a onPointerUp="NeptunesPride.crux.trigger('emp_dir_sort', 'totalStars')">Stars</a></td>
         <td>Color</td>
         <td>Shape</td>
         </tr>`;
@@ -3818,12 +3820,12 @@ function NeptunesPrideAgent() {
             <tr>
             <td> ${empire.hyperlinkedBox} </td>
             <td> ${empire.hyperlinkedAlias} </td>
-            <td> <a onPointerUp="Crux.crux.trigger('show_player_home_uid', ${empire.uid})" class="ic-eye">&#59146;</a></td>
+            <td> <a onPointerUp="NeptunesPride.crux.trigger('show_player_home_uid', ${empire.uid})" class="ic-eye">&#59146;</a></td>
             <td> ${empire.totalStars} </td>
-            <td> 	<a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: 1})' class="fontello"> &#59229;</a>
-                <a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: -1})' class="fontello"> &#59230;</a> </td>
-            <td> 	<a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: 1})' class="fontello"> &#59229;</a>
-                <a onPointerUp='Crux.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: -1})' class="fontello"> &#59230;</a> </td>
+            <td> 	<a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: 1})' class="fontello"> &#59229;</a>
+                <a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: -1})' class="fontello"> &#59230;</a> </td>
+            <td> 	<a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: 1})' class="fontello"> &#59229;</a>
+                <a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: -1})' class="fontello"> &#59230;</a> </td>
   
             </tr>
           `;
