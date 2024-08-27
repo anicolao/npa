@@ -179,8 +179,9 @@ function NeptunesPrideAgent() {
   }
 
   function onTrigger(trigger: string, fn: any) {
-    if (NeptunesPride?.np?.on) {
-      NeptunesPride.np.on(trigger, fn);
+    if (NeptunesPride?.np?.ui?.on && NeptunesPride.universe?.galaxy?.players) {
+      NeptunesPride.npui.ui.on(trigger, fn);
+      NeptunesPride.np.ui.on(trigger, fn);
     } else {
       if ((NeptunesPride as any).MetaGame) {
         console.log(`In metagame screen, stop; trigger ${trigger}`);
@@ -3673,7 +3674,7 @@ function NeptunesPrideAgent() {
     }
 
     const universe = NeptunesPride.universe;
-    const superTimeToTick = universe.timeToTick;
+    const superTimeToTick = universe.timeToTick.bind(universe);
     universe.timeToTick = (tick: number, wholeTime: boolean) => {
       const whole = wholeTime && settings.relativeTimes !== "eta";
       return superTimeToTick(tick, whole);
@@ -3980,7 +3981,9 @@ function NeptunesPrideAgent() {
   let otherUserCode: string | undefined = undefined;
   const game = getGameNumber();
   const store = new GameStore(game);
-  const superOnServerResponse = NeptunesPride.np?.onServerResponse;
+  const superOnServerResponse = NeptunesPride.np.onServerResponse.bind(
+    NeptunesPride.np,
+  );
   if (superOnServerResponse !== undefined) {
     NeptunesPride.np.onServerResponse = (
       response: { event: string } | any[],
@@ -4003,6 +4006,8 @@ function NeptunesPrideAgent() {
         init();
       }
     };
+  } else {
+    console.error("onServerResponse undefined.");
   }
 
   const switchUser = async (_event?: any, data?: string) => {
