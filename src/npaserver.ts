@@ -66,7 +66,7 @@ export function countScans(apikey: string) {
   if (apikey === undefined) {
     console.error("Count scans: undefined key");
   }
-  console.log(`Count scans for key ${apikey} ${diffCache[apikey]?.length}`);
+  //console.log(`Count scans for key ${apikey} ${diffCache[apikey]?.length}`);
   return diffCache[apikey]?.length || 0;
 }
 

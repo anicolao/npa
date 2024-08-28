@@ -1081,10 +1081,12 @@ function NeptunesPrideAgent() {
           ),
         )
         .filter((scan) => scan && scan.tick === currentTick);
-      console.log(
+      /*
+       * console.log(
         `Got ${scanList.length} scans for tick #${currentTick}`,
         scanList,
       );
+      */
       if (scanList.length > 0) {
         const myScan = scanList.filter((scan) => getPlayerUid(scan) === myId);
         const scan = myScan.length > 0 ? myScan[0] : scanList[0];
