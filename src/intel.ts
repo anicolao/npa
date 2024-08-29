@@ -4625,6 +4625,7 @@ function NeptunesPrideAgent() {
               levels.total_economy * 10 + getTech(levels, "banking").level * 75;
           }
           sums[i] += level;
+          level = Math.round(level * 1000) / 1000;
           if (level < myLevel) {
             row.push(`[[good:${level}]]`);
           } else if (level > myLevel) {
