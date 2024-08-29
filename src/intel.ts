@@ -4975,9 +4975,8 @@ function NeptunesPrideAgent() {
       api_version: "0.1",
       code: apiKey,
     };
-    const api = isNP4()
-      ? await get("https://np4.ironhelmet.com/api", params)
-      : await post("https://np.ironhelmet.com/api", params);
+    const apiurl = `https://${window.location.host}/api`;
+    const api = await get(apiurl, params);
     await store.set(cacheKey, api.scanning_data);
     if (api.scanning_data) {
       addAccessors("galaxy", api.scanning_data);
