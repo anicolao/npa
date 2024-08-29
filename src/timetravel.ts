@@ -144,7 +144,11 @@ export function futureTime(
             }
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             if (isNP4()) {
-              if (newFleet.speed && !Number.isNaN(newFleet.speed)) {
+              if (
+                newFleet.speed &&
+                !Number.isNaN(newFleet.speed) &&
+                (newFleet.speed > 0.042 || !newFleet.ouid)
+              ) {
                 speed = newFleet.speed;
               } else {
                 speed = calcSpeedBetweenStars(
