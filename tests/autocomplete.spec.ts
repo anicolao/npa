@@ -10,6 +10,7 @@ describe("autocomplete tests", () => {
   let myApiKey = "MYKEY";
   let elem: HTMLTextAreaElement = null;
   let NeptunesPride: NeptunesPrideData = {
+    crux: {},
     universe: {
       galaxy: {
         players: {
