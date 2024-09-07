@@ -14,6 +14,7 @@ export function getVersion() {
 }
 EOF
 mkdir -p dist
+cp static/* dist
 cat <<EOF > dist/manifest.json
 {
 		"name": "Neptune's Pride Agent$(grep '"version"' package.json | awk -F\. '{print $NF}' | sed -re 's/[1-9][0-9]*/  άλφα Edition/' | sed -re 's/(0-[0-9]*)?[^1-9][0-9]*//')
