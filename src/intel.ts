@@ -167,6 +167,10 @@ function NeptunesPrideAgent() {
     "customColors",
     "#3b55ce #79fffe #13ca91 #fec763 #ff8b8b #ffaa01 #fea0fe #ce96fb",
   );
+  settings.newSetting("Route Planner Display", "routePlanOn", false, [
+    true,
+    false,
+  ]);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -2186,6 +2190,11 @@ function NeptunesPrideAgent() {
 
       drawDisc(context, x, y, scaleFactor, r);
     }
+    const rawDistanceSquared = (star1: any, star2: any) => {
+      const xoff = star1.x - star2.x;
+      const yoff = star1.y - star2.y;
+      return xoff * xoff + yoff * yoff;
+    };
     const distance = (star1: any, star2: any) => {
       const xoff = star1.x - star2.x;
       const yoff = star1.y - star2.y;
@@ -2250,6 +2259,149 @@ function NeptunesPrideAgent() {
       }
 
       return [closest, closestSupport, closerStars];
+    };
+    const drawRoutePlanner = () => {
+      const drawRoute = (star: any, other: any, hudColor: string) => {
+        const visTicks = 0;
+        const speed = NeptunesPride.universe.galaxy.fleet_speed;
+        const color = hudColor;
+        const tickDistance = Math.sqrt(rawDistanceSquared(star, other));
+        const ticks = Math.ceil(tickDistance / speed);
+        const midX = map.worldToScreenX((star.x + other.x) / 2);
+        const midY = map.worldToScreenY((star.y + other.y) / 2);
+
+        const rotationAngle = (star1: any, star2: any) => {
+          const xoff = star1.x - star2.x;
+          const yoff = star1.y - star2.y;
+          const flipped = xoff < 0;
+          const flip = Math.PI * (flipped ? 1 : 0);
+          return { angle: Math.atan2(yoff, xoff) + flip, flipped };
+        };
+        map.context.save();
+        map.context.globalAlpha = 1;
+        map.context.strokeStyle = color;
+        map.context.shadowColor = "black";
+        map.context.shadowOffsetX = 2;
+        map.context.shadowOffsetY = 2;
+        map.context.shadowBlur = 2;
+        map.context.fillStyle = color;
+        map.context.lineWidth = 2 * map.pixelRatio;
+        map.context.lineCap = "round";
+        map.context.translate(midX, midY);
+        const { angle, flipped } = rotationAngle(star, other);
+        map.context.rotate(angle);
+        const visArcRadius =
+          map.worldToScreenX(visTicks * speed) - map.worldToScreenX(0);
+        const visArcX =
+          (map.worldToScreenX(tickDistance) - map.worldToScreenX(0)) / 2;
+        const start =
+          map.worldToScreenX(tickDistance - 2 * speed) - map.worldToScreenX(0);
+        const end =
+          map.worldToScreenX(tickDistance - 2 * speed) - map.worldToScreenX(0);
+        if (start > 0 && end > 0) {
+          map.context.beginPath();
+          map.context.moveTo(-start / 2, 0);
+          map.context.lineTo(end / 2, 0);
+          map.context.stroke();
+          map.context.beginPath();
+          const arrow = flipped ? -1 : 1;
+          const arrowSize = 5;
+          map.context.moveTo((arrow * end) / 2, 0);
+          map.context.lineTo(
+            (arrow * end) / 2 - arrow * arrowSize * map.pixelRatio,
+            arrowSize * map.pixelRatio,
+          );
+          map.context.lineTo(
+            (arrow * end) / 2 - arrow * arrowSize * map.pixelRatio,
+            -arrowSize * map.pixelRatio,
+          );
+          map.context.closePath();
+          map.context.fill();
+          if (visArcRadius - visArcX - end / 2 + 1.0 <= 1.0) {
+            map.context.beginPath();
+            const arcLen = (Math.PI * 8) / visArcRadius;
+            const flipPi = flipped ? Math.PI : 0;
+            const x = flipped ? visArcX : -visArcX;
+            map.context.arc(
+              x,
+              0,
+              visArcRadius,
+              flipPi - arcLen,
+              flipPi + arcLen,
+            );
+            map.context.stroke();
+          }
+        }
+        map.context.textAlign = "center";
+        map.context.translate(0, -8 * map.pixelRatio);
+        //const textColor = color;
+        //drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0, textColor);
+        map.context.setLineDash([]);
+        map.context.restore();
+        return ticks;
+      };
+      if (
+        settings.routePlanOn &&
+        universe.selectedStar?.alliedDefenders !== undefined
+      ) {
+        const stars = NeptunesPride.universe.galaxy.stars;
+        const fleetRange = getAdjustedFleetRange(NeptunesPride.universe.player);
+        const frSquared = fleetRange * fleetRange;
+        const visibleStarUids = Object.keys(stars).filter((k) =>
+          isVisible(stars[k]),
+        );
+        console.log(`Can see ${visibleStarUids.length} stars`);
+        const dijkstra = () => {
+          const dist = {};
+          const prev = {};
+          const Q = [];
+          for (const v of visibleStarUids) {
+            dist[v] = Number.POSITIVE_INFINITY;
+            prev[v] = undefined;
+            Q.push(v);
+          }
+          dist[universe.selectedStar.uid] = 0;
+          while (Q.length > 0) {
+            let closest = 0;
+            for (let candidate = 1; candidate < Q.length; ++candidate) {
+              if (dist[Q[candidate]] < dist[Q[closest]]) {
+                closest = candidate;
+              }
+            }
+            const u = Q[closest];
+            Q.splice(closest, 1);
+            for (const v of Q) {
+              const rawDistance = rawDistanceSquared(stars[u], stars[v]);
+              if (rawDistance > frSquared) {
+                continue;
+              }
+              const candidateDistance = dist[u] + distance(stars[u], stars[v]);
+              if (candidateDistance < dist[v]) {
+                dist[v] = candidateDistance;
+                prev[v] = u;
+              }
+            }
+          }
+          return { dist, prev };
+        };
+        const { dist, prev } = dijkstra();
+        for (const starUid in prev) {
+          const pred = prev[starUid];
+          if (pred !== undefined) {
+            const player = universe.player;
+            const desirable = stars[starUid].puid == player.uid;
+            if (desirable) {
+              let p = pred;
+              let u = starUid;
+              while (p !== undefined) {
+                drawRoute(stars[p], stars[u], "#088808");
+                u = p;
+                p = prev[p];
+              }
+            }
+          }
+        }
+      }
     };
     const drawAutoRuler = () => {
       const universe = NeptunesPride.universe;
@@ -2861,6 +3013,7 @@ function NeptunesPrideAgent() {
       }
 
       drawAutoRuler();
+      drawRoutePlanner();
     };
     let base = -1;
     let wasBatched = false;
@@ -3860,6 +4013,16 @@ function NeptunesPrideAgent() {
     toggleTerritory,
     "Toggle the territory display. Range and scanning for all stars of the selected empire are shown.",
     "Toggle Territory",
+  );
+  const toggleRoutePlanner = () => {
+    settings.routePlanOn = !settings.routePlanOn;
+    mapRebuild();
+  };
+  defineHotkey(
+    "R",
+    toggleRoutePlanner,
+    "Toggle the route planner display. Shows shortest paths between your stars and the front.",
+    "Toggle Route Planner",
   );
 
   const setPlayerColor = (uid: number, color: string) => {
