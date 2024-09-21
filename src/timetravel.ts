@@ -78,9 +78,11 @@ export function futureTime(
           // combat outcomes happen first, then production.
           newStar.st = starstate.st;
         }
-        players[newStar.puid].total_stars -= 1;
+        if (players[newStar.puid] !== undefined)
+          players[newStar.puid].total_stars -= 1;
         newStar.puid = starstate.puid;
-        players[newStar.puid].total_stars += 1;
+        if (players[newStar.puid] !== undefined)
+          players[newStar.puid].total_stars += 1;
         stars[sk] = newStar;
       }
       if (isVisible(newStar) && isVisible(star)) {
