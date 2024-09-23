@@ -18,6 +18,7 @@ import {
   handicapString,
   tickNumber,
 } from "./combatcalc";
+import { getTemplates, getUI } from "./dynamic";
 import {
   anyEventsNewerThan,
   isNP4,
@@ -82,17 +83,10 @@ import { isWithinRange } from "./visibility";
 
 export let allSeenKeys: string[] = [];
 interface CruxLib {
-  IconButton: any;
   touchEnabled: boolean;
   crux: any;
   format: any;
   formatTime: any;
-  Button: any;
-  Text: any;
-  Widget: any;
-  DropDown: any;
-  TextInput: any;
-  Clickable: any;
   templates: { [k: string]: string };
   tickCallbacks: any[];
 }
@@ -126,13 +120,16 @@ declare global {
   }
 }
 
-function NeptunesPrideAgent() {
+async function NeptunesPrideAgent() {
   window.addEventListener("error", logError);
   window.addEventListener("unhandledrejection", logError);
 
   const title = getVersion();
   const version = title.replace(/^.*v2/, "v2");
   console.log(title);
+
+  const UI = await getUI();
+  const templates = await getTemplates();
 
   const settings: GameStore = new GameStore("global_settings");
 
@@ -1507,15 +1504,15 @@ function NeptunesPrideAgent() {
   ) => {
     const props = settings.getProperties().filter(filter);
     const numSettings = props.length;
-    const options = Crux.Widget("rel")
+    const options = new UI.Widget("rel")
       .size(480, 50 * numSettings)
       .roost(screen);
 
     props.forEach(async (p, i) => {
       const labelKey = `npa_${p.name}`;
-      Crux.templates[labelKey] = p.displayName;
+      templates[labelKey] = p.displayName;
       const bad = info?.missingKey === p.name ? "txt_warn_bad" : "";
-      Crux.Text(labelKey, `pad12 ${bad}`)
+      new UI.Text(labelKey, `pad12 ${bad}`)
         .grid(0, 3 * i, 20, 3)
         .roost(options);
       const rawSettings: { [k: string]: any } = settings;
@@ -1530,7 +1527,7 @@ function NeptunesPrideAgent() {
           }
         });
         const eventKey = `setting_change_${p.name}`;
-        Crux.DropDown(defaultIndex, values, eventKey)
+        new UI.DropDown(defaultIndex, values, eventKey)
           .grid(15, 3 * i, 15, 3)
           .roost(options);
         screen.on(eventKey, (_x: any, y: any) => {
@@ -1538,7 +1535,7 @@ function NeptunesPrideAgent() {
           mapRebuild();
         });
       } else {
-        const field = Crux.TextInput("single")
+        const field = new UI.TextInput("single")
           .grid(15, 3 * i, 15, 3)
           .roost(options);
         field.setValue(defaultValue);
@@ -1559,7 +1556,7 @@ function NeptunesPrideAgent() {
     });
   };
   NeptunesPride.npui.Screen = () => {
-    const ret = Crux.Widget("rel col_base no_overflow");
+    const ret = new UI.Widget("rel col_base no_overflow");
 
     ret.screenTop = 52;
 
@@ -1567,31 +1564,28 @@ function NeptunesPrideAgent() {
     ret.yOffset = ret.screenTop;
     ret.footerRequired = true;
 
-    ret.header = Crux.Widget("rel").size(480, 48).roost(ret);
+    ret.header = new UI.Widget("rel").size(480, 48).roost(ret);
 
-    ret.heading = Crux.Text("n_p_a", "screen_title txt_ellipsis")
+    ret.heading = new UI.Text("n_p_a", "screen_title txt_ellipsis")
       .size(360, 48)
       .roost(ret.header);
 
-    ret.closeButton = Crux.IconButton("icon-cancel", "hide_screen")
+    ret.closeButton = new UI.IconButton("icon-cancel", "hide_screen")
       .grid(27, 0, 3, 3)
       .roost(ret.header);
 
-    Crux.Widget("rel col_black").size(480, 4).roost(ret);
+    new UI.Widget("rel col_black").size(480, 4).roost(ret);
 
-    ret.body = Crux.Widget("rel").size(480, 0).roost(ret);
+    ret.body = new UI.Widget("rel").size(480, 0).roost(ret);
 
-    Crux.Widget("rel col_black").size(480, 4).roost(ret);
+    new UI.Widget("rel col_black").size(480, 4).roost(ret);
     return ret;
   };
   const npaOptions = (info?: any) => {
     const npui = NeptunesPride.npui;
-    Crux.templates.npa_options = `NPA Settings ${version.replaceAll(
-      / .*$/g,
-      "",
-    )}`;
+    templates.npa_options = `*NPA Settings ${version.replaceAll(/ .*$/g, "")}`;
     const optionsScreen = npui.Screen("npa_options");
-    Crux.IconButton("icon-help", "show_screen", "help")
+    new UI.IconButton("icon-help", "show_screen", "help")
       .grid(24.5, 0, 3, 3)
       .roost(optionsScreen).onClick = npaHelp;
 
@@ -1612,9 +1606,9 @@ function NeptunesPrideAgent() {
   let currentCustomShape = 0;
   const npaColours = (_info?: any) => {
     const npui = NeptunesPride.npui;
-    Crux.templates.npa_colours = "Colours and Shapes";
+    templates.npa_colours = "Colours and Shapes";
     const colourScreen = npui.Screen("npa_colours");
-    Crux.IconButton("icon-help", "show_screen", "help")
+    new UI.IconButton("icon-help", "show_screen", "help")
       .grid(24.5, 0, 3, 3)
       .roost(colourScreen).onClick = npaHelp;
 
@@ -1627,7 +1621,7 @@ function NeptunesPrideAgent() {
     const swatchesPerRow = 10;
     const colorSwatchRows = Math.ceil(customColors.length / swatchesPerRow);
     const shapeRowHeight = 3;
-    const colours = Crux.Widget("rel")
+    const colours = new UI.Widget("rel")
       .size(480, 50 * (numPlayers + colorSwatchRows) + shapeRowHeight * 16)
       .roost(colourScreen);
 
@@ -1637,7 +1631,7 @@ function NeptunesPrideAgent() {
       const swatchSize = 28;
       const style = `text-align: center; vertical-align: middle; border-radius: 5px; width: ${swatchSize}px; height: ${swatchSize}px; background-color: ${c}; display: inline-block`;
       const tickMark = i === currentCustomColor ? "✓" : "";
-      Crux.Text("", "pad12")
+      new UI.Text("", "pad12")
         .rawHTML(
           `<span onClick=\"NeptunesPride.crux.trigger('set_cc', ${i})\" style='${style}'>${tickMark}</span>`,
         )
@@ -1663,7 +1657,7 @@ function NeptunesPrideAgent() {
       } else {
         style += "border: 2px solid grey; ";
       }
-      Crux.Text("", "pad12")
+      new UI.Text("", "pad12")
         .rawHTML(
           `<span class='playericon_font' style='${style}' onClick=\"NeptunesPride.crux.trigger('set_cs', ${i})\">${s}</span>`,
         )
@@ -1681,17 +1675,17 @@ function NeptunesPrideAgent() {
       const color = playerToColorMap(p);
       const shape = playerToShapeMap(p);
       const yOffset = 3 * i + 3 * colorSwatchRows + shapeRowHeight;
-      Crux.Text("", "pad12")
+      new UI.Text("", "pad12")
         .rawHTML(name)
         .grid(0, yOffset, 20, 3)
         .roost(colours);
-      const shapeField = Crux.TextInput("single")
+      const shapeField = new UI.TextInput("single")
         .grid(16, yOffset, 3, 3)
         .roost(colours);
       shapeField.node.addClass("playericon_font");
       shapeField.node.css("color", color);
       shapeField.setValue(shape);
-      const field = Crux.TextInput("single")
+      const field = new UI.TextInput("single")
         .grid(19, yOffset, 6, 3)
         .roost(colours);
       field.setValue(color);
@@ -1749,7 +1743,7 @@ function NeptunesPrideAgent() {
         handleChange();
       });
       const eventName = `reset_cc_${p.uid}`;
-      const button = Crux.Button(eventName, eventName, p)
+      const button = new UI.Button(eventName, eventName, p)
         .rawHTML("Reset")
         .grid(25, yOffset, 5, 3)
         .roost(colours);
@@ -3017,7 +3011,7 @@ function NeptunesPrideAgent() {
     };
     let base = -1;
     let wasBatched = false;
-    Crux.tickCallbacks.push(() => {
+    onTrigger("one_second_tick", () => {
       if (base === -1) {
         const msplus = msToTick(1);
         const parts = superFormatTime(msplus, true, true, true).split(" ");
@@ -3403,10 +3397,10 @@ function NeptunesPrideAgent() {
       return output.join("\n");
     };
     const npui = NeptunesPride.npui;
-    Crux.templates.n_p_a = "NP Agent";
-    Crux.templates.npa_report_type = "Filter:";
-    Crux.templates.npa_paste = "Intel";
-    Crux.templates.npa_screenshot = "Screenshot";
+    templates.n_p_a = "NP Agent";
+    templates.npa_report_type = "Filter:";
+    templates.npa_paste = "Intel";
+    templates.npa_screenshot = "Screenshot";
     const superNewMessageCommentBox = npui.NewMessageCommentBox;
 
     const npaReportIcons: { [k: string]: string } = {
@@ -3474,13 +3468,13 @@ function NeptunesPrideAgent() {
     onTrigger("paste_report", reportPasteHook);
     npui.NewMessageCommentBox = () => {
       const widget = superNewMessageCommentBox();
-      const reportButton = Crux.Button(
+      const reportButton = new UI.Button(
         "npa_paste",
         "paste_report",
         "intel",
       ).grid(9.5, 12, 4.5, 3);
       reportButton.roost(widget);
-      const screenShotButton = Crux.Button(
+      const screenShotButton = new UI.Button(
         "npa_screenshot",
         "paste_report",
         "screenshot",
@@ -3491,25 +3485,29 @@ function NeptunesPrideAgent() {
     const npaReports = () => {
       const reportScreen = npui.Screen("n_p_a");
 
-      Crux.Text("", "rel pad12 txt_center col_black  section_title")
+      new UI.Text("", "rel pad12 txt_center col_black  section_title")
         .rawHTML(title)
         .roost(reportScreen);
-      Crux.IconButton("icon-help", "show_screen", "help")
+      new UI.IconButton("icon-help", "show_screen", "help")
         .grid(24.5, 0, 3, 3)
         .roost(reportScreen).onClick = npaHelp;
 
-      const report = Crux.Widget("rel  col_accent").size(480, 48);
-      const output = Crux.Widget("rel").nudge(-24, 0);
+      const report = new UI.Widget("rel  col_accent").size(480, 48);
+      const output = new UI.Widget("rel").nudge(-24, 0);
 
-      Crux.Text("npa_report_type", "pad12").roost(report);
-      reportSelector = Crux.DropDown(lastReport, npaReportNames, "exec_report")
+      new UI.Text("npa_report_type", "pad12").roost(report);
+      reportSelector = new UI.DropDown(
+        lastReport,
+        npaReportNames,
+        "exec_report",
+      )
         .grid(15, 0, 15, 3)
         .roost(report);
-      filterInput = Crux.TextInput("single").grid(5, 0, 10, 3).roost(report);
+      filterInput = new UI.TextInput("single").grid(5, 0, 10, 3).roost(report);
 
       filterInput.eventKind = "exec_report";
 
-      const text = Crux.Text("", "pad12 rel txt_selectable")
+      const text = new UI.Text("", "pad12 rel txt_selectable")
         .size(432)
         .pos(48)
 
@@ -3577,7 +3575,7 @@ function NeptunesPrideAgent() {
         text.rawHTML(html);
       };
       reportHook(0, lastReport);
-      reportScreen.on("exec_report", reportHook);
+      onTrigger("exec_report", reportHook);
 
       return reportScreen;
     };
@@ -3589,8 +3587,8 @@ function NeptunesPrideAgent() {
       event: string,
       data: string,
     ) => {
-      const smi = Crux.Clickable(event, data)
-        .addStyle("rel side_menu_item")
+      const smi = new UI.Clickable(event, data)
+        .addClass("rel side_menu_item")
         .configStyles(
           "side_menu_item_up",
           "side_menu_item_down",
@@ -3599,16 +3597,16 @@ function NeptunesPrideAgent() {
         )
         .size(npaMenuWidth, 40);
 
-      Crux.Text("", "pad12 txt_center")
-        .addStyle(icon)
+      new UI.Text("", "pad12 txt_center")
+        .addClass(icon)
         .grid(0, -0.25, 3, 2.5)
         .rawHTML("")
         .roost(smi);
 
-      Crux.Text(label, "pad12").grid(2, -0.25, 18, 2.5).roost(smi);
+      new UI.Text(label, "pad12").grid(2, -0.25, 18, 2.5).roost(smi);
 
       const hotkey = getHotkey(data);
-      Crux.Text("", "pad12 txt_right")
+      new UI.Text("", "pad12 txt_right")
         .grid(0, -0.25, 18, 4)
         .rawHTML(`<span float='right'>${hotkey}</span>`)
         .roost(smi);
@@ -3622,7 +3620,7 @@ function NeptunesPrideAgent() {
       npui.trigger("show_npa", "npa_ui_screen");
     };
     npui.npaMenu = (() => {
-      const sideMenu = Crux.Widget("col_accent side_menu").size(
+      const sideMenu = new UI.Widget("col_accent side_menu").size(
         npaMenuWidth,
         0,
       );
@@ -3632,16 +3630,16 @@ function NeptunesPrideAgent() {
       sideMenu.rows = 11;
       npui.sideMenuItemSize = 40;
 
-      sideMenu.spacer = Crux.Widget("rel").size(160, 48).roost(sideMenu);
+      sideMenu.spacer = new UI.Widget("rel").size(160, 48).roost(sideMenu);
 
-      sideMenu.showBtn = Crux.IconButton("icon-menu", "hide_side_menu")
+      sideMenu.showBtn = new UI.IconButton("icon-menu", "hide_side_menu")
         .grid(0, 0, 3, 3)
         .roost(sideMenu);
-      sideMenu.showBtn = Crux.IconButton("icon-eye", "hide_side_menu")
+      sideMenu.showBtn = new UI.IconButton("icon-eye", "hide_side_menu")
         .grid(2.5, 0, 3, 3)
         .roost(sideMenu);
 
-      Crux.Text("", "pad12 txt_right")
+      new UI.Text("", "pad12 txt_right")
         .grid(0, -0.25, 18, 4.5)
         .rawHTML("<span float='right'>Hotkey</span>")
         .roost(sideMenu);
@@ -3649,7 +3647,7 @@ function NeptunesPrideAgent() {
       for (const k in npaReportNames) {
         const iconName = npaReportIcons[k];
         const templateKey = `npa_key_${k}`;
-        Crux.templates[templateKey] = npaReportNames[k];
+        templates[templateKey] = npaReportNames[k];
 
         npui
           .NpaMenuItem(iconName, templateKey, "show_report", k)
@@ -3661,14 +3659,14 @@ function NeptunesPrideAgent() {
         sideMenu.showBtn.hide();
         sideMenu.spacer.hide();
         sideMenu.pinned = true;
-        sideMenu.addStyle("fixed");
+        sideMenu.addClass("fixed");
       };
 
       sideMenu.unPin = () => {
         sideMenu.pinned = false;
         sideMenu.showBtn.show();
         sideMenu.spacer.show();
-        sideMenu.removeStyle("fixed");
+        sideMenu.removeClass("fixed");
         sideMenu.hide();
       };
 
@@ -3689,10 +3687,10 @@ function NeptunesPrideAgent() {
         sideMenu.hide();
       };
 
-      sideMenu.on("show_report", showReport);
-      sideMenu.on("show_npa_help", npaHelp);
-      sideMenu.on("show_npa_menu", sideMenu.onPopUp);
-      sideMenu.on("hide_side_menu", sideMenu.onPopDown);
+      onTrigger("show_report", showReport);
+      onTrigger("show_npa_help", npaHelp);
+      onTrigger("show_npa_menu", sideMenu.onPopUp);
+      onTrigger("hide_side_menu", sideMenu.onPopDown);
 
       sideMenu.onPopDown();
 
@@ -3706,7 +3704,7 @@ function NeptunesPrideAgent() {
         npui.npaMenu.onPopUp();
       }
     };
-    npui.status.npaMenuBtn = Crux.IconButton("icon-eye", "show_npa_menu")
+    npui.status.npaMenuBtn = new UI.IconButton("icon-eye", "show_npa_menu")
       .grid(2.5, 0, 3, 3)
       .roost(npui.status);
     defineHotkey(
@@ -3843,7 +3841,9 @@ function NeptunesPrideAgent() {
 
       npui.DirectoryTabs("emp").roost(starDir);
 
-      const header = Crux.Widget("rel col_accent").size(480, 48).roost(starDir);
+      const header = new UI.Widget("rel col_accent")
+        .size(480, 48)
+        .roost(starDir);
 
       const pageHTML = `
         <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'inf:raw')">Infrastructure</a> |
@@ -3851,14 +3851,14 @@ function NeptunesPrideAgent() {
         <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'inf:tech')">Technology</a> |
         <a onPointerUp="NeptunesPride.crux.trigger('emp_dir_page', 'col')">Colors</a>
       `;
-      Crux.Text("", "pad12 col_accent").rawHTML(pageHTML).roost(header);
+      new UI.Text("", "pad12 col_accent").rawHTML(pageHTML).roost(header);
 
       const universe = NeptunesPride.universe;
       if (universe.empireDirectory.page === "col") {
-        Crux.IconButton("icon-loop", "player_color_shape_reset_all")
+        new UI.IconButton("icon-loop", "player_color_shape_reset_all")
           .grid(27, 0, 3, 3)
           .roost(header);
-        Crux.IconButton("icon-light-up", "player_color_shape_zero_all")
+        new UI.IconButton("icon-light-up", "player_color_shape_zero_all")
           .grid(24.5, 0, 3, 3)
           .roost(header);
       }
@@ -3988,7 +3988,7 @@ function NeptunesPrideAgent() {
         html += "</table>";
       }
 
-      Crux.Text("", "rel").rawHTML(html).roost(starDir);
+      new UI.Text("", "rel").rawHTML(html).roost(starDir);
 
       return starDir;
     };
@@ -5033,7 +5033,7 @@ function NeptunesPrideAgent() {
   };
 
   NeptunesPride.sendAllTech = (recipient: number) => {
-    Crux.templates.confirm_send_bulktech =
+    templates.confirm_send_bulktech =
       "Are you sure you want to send<br>[[alias]]<br>[[techs]]?";
     const npui = NeptunesPride.npui;
     const player = NeptunesPride.universe.galaxy.players[recipient];
@@ -5091,7 +5091,7 @@ function NeptunesPrideAgent() {
   };
   onTrigger("send_bulktech", sendBulkTech);
   NeptunesPride.sendCash = (recipient: number, credits: number) => {
-    Crux.templates.confirm_send_cash =
+    templates.confirm_send_cash =
       "Are you sure you want to send<br>[[alias]]<br>$[[amount]] credits?";
     const npui = NeptunesPride.npui;
     const player = NeptunesPride.universe.galaxy.players[recipient];
