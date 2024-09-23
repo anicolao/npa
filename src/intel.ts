@@ -3815,19 +3815,6 @@ async function NeptunesPrideAgent() {
       "Timebase",
     );
 
-    if (window.chrome) {
-      Object.defineProperty(Crux, "touchEnabled", { get: () => false });
-      Object.defineProperty(NeptunesPride.npui.map, "ignoreMouseEvents", {
-        get: () => false,
-      });
-    } else if (isSafari()) {
-      // safari: trackpad is available and works on iPads
-      NeptunesPride.crux.onTouchDown = () => {
-        Crux.touchEnabled = false;
-      };
-      NeptunesPride.crux.one("touchstart", NeptunesPride.crux.onTouchDown);
-    }
-
     const universe = NeptunesPride.universe;
     const superTimeToTick = universe.timeToTick.bind(universe);
     universe.timeToTick = (tick: number, wholeTime: boolean) => {
