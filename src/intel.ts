@@ -4122,9 +4122,6 @@ async function NeptunesPrideAgent() {
       allAccessors();
       console.log("hook for all accessors");
       onTrigger("order:full_universe", allAccessors);
-      if (trueTick === 0) {
-        recordTrueTick(undefined, NeptunesPride.universe.galaxy);
-      }
     } else {
       console.log(
         "Game not fully initialized yet; wait.",
