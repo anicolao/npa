@@ -1530,7 +1530,7 @@ async function NeptunesPrideAgent() {
         new UI.DropDown(defaultIndex, values, eventKey)
           .grid(15, 3 * i, 15, 3)
           .roost(options);
-        screen.on(eventKey, (_x: any, y: any) => {
+        screen.ui.on(eventKey, (_x: any, y: any) => {
           rawSettings[p.name] = values[y];
           mapRebuild();
         });
@@ -1540,7 +1540,7 @@ async function NeptunesPrideAgent() {
           .roost(options);
         field.setValue(defaultValue);
         field.eventKind = "text_entry";
-        screen.on(field.eventKind, (_x: any, _y: any) => {
+        screen.ui.on(field.eventKind, (_x: any, _y: any) => {
           if (field.getValue() !== rawSettings[p.name]) {
             if (p.type === "number") {
               rawSettings[p.name] = +field.getValue() || rawSettings[p.name];
@@ -1637,7 +1637,7 @@ async function NeptunesPrideAgent() {
         )
         .grid(xOffset, yOffset, 3, 3)
         .roost(colours)
-        .on("set_cc", (_x: any, y: any) => {
+        .listen(NeptunesPride.crux, "set_cc", (_x: any, y: any) => {
           if (currentCustomColor !== y) {
             currentCustomColor = y;
             NeptunesPride.np.trigger("refresh_interface");
@@ -1663,7 +1663,7 @@ async function NeptunesPrideAgent() {
         )
         .grid(xOffset, yOffset, 3, 3)
         .roost(colours)
-        .on("set_cs", (_x: any, y: any) => {
+        .listen(NeptunesPride.crux, "set_cs", (_x: any, y: any) => {
           if (currentCustomShape !== y) {
             currentCustomShape = y;
             NeptunesPride.np.trigger("refresh_interface");
@@ -1739,15 +1739,19 @@ async function NeptunesPrideAgent() {
         shapeField.setValue(newShape);
         handleChange();
       });
-      colourScreen.on(field.eventKind, (_x: any, _y: any) => {
-        handleChange();
-      });
+      colourScreen.listen(
+        NeptunesPride.crux,
+        field.eventKind,
+        (_x: any, _y: any) => {
+          handleChange();
+        },
+      );
       const eventName = `reset_cc_${p.uid}`;
       const button = new UI.Button(eventName, eventName, p)
         .rawHTML("Reset")
         .grid(25, yOffset, 5, 3)
         .roost(colours);
-      button.on(eventName, (_x: any, _y: any) => {
+      button.listen(NeptunesPride.crux, eventName, (_x: any, _y: any) => {
         const shapeIndex = p.shapeIndex !== undefined ? p.shapeIndex : p.shape;
         if (
           p.prevColor &&
@@ -5591,7 +5595,7 @@ async function NeptunesPrideAgent() {
             messageIndex.api
               ?.flatMap((m: any) => {
                 const body = m.message.body || m.message.payload?.body;
-                return body.match(/\[\[api:\w\w\w\w\w\w\]\]/);
+                return body.match(/\[\[api:\w\w\w\w\w\w\(\w\w\w\w\w\w)?]\]/);
               })
               .filter((k) => k)
               .filter((v, i, a) => a.indexOf(v) === i) || [];
