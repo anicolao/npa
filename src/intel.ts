@@ -181,12 +181,20 @@ async function NeptunesPrideAgent() {
   }
 
   function onTrigger(trigger: string, fn: any) {
-    if (NeptunesPride?.np?.ui?.on && NeptunesPride.universe?.galaxy?.players) {
+    if (
+      window?.NeptunesPride?.np?.ui?.on &&
+      NeptunesPride.universe?.galaxy?.players
+    ) {
       NeptunesPride.crux.ui.on(trigger, fn);
-      //NeptunesPride.npui.ui.on(trigger, fn);
-      //NeptunesPride.np.ui.on(trigger, fn);
+      if (trueTick === 0) {
+        recordTrueTick(undefined, NeptunesPride.universe.galaxy);
+        window.setTimeout(() => {
+          NeptunesPride.np.trigger("map_rebuild");
+          NeptunesPride.np.trigger("refresh_interface");
+        }, 500);
+      }
     } else {
-      if ((NeptunesPride as any).MetaGame) {
+      if ((window?.NeptunesPride as any).MetaGame) {
         console.log(`In metagame screen, stop; trigger ${trigger}`);
         return;
       }
@@ -5592,7 +5600,7 @@ async function NeptunesPrideAgent() {
             messageIndex.api
               ?.flatMap((m: any) => {
                 const body = m.message.body || m.message.payload?.body;
-                return body.match(/\[\[api:\w\w\w\w\w\w\(\w\w\w\w\w\w)?]\]/);
+                return body.match(/\[\[api:\w\w\w\w\w\w\(\w\w\w\w\w\w\)?]\]/);
               })
               .filter((k) => k)
               .filter((v, i, a) => a.indexOf(v) === i) || [];
