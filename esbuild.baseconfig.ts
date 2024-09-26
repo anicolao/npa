@@ -1,11 +1,12 @@
 import * as esbuild from "esbuild";
 import * as p from "./package.json";
+import { writeVersionAndManifest } from "./bin/version";
 
 const version = {
   name: "version",
   setup(build) {
-    build.onStart(() => {
-      Bun.spawn(["./bin/version"]);
+    build.onStart(async () => {
+      await writeVersionAndManifest();
     });
   },
 };
