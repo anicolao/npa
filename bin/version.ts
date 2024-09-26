@@ -1,6 +1,9 @@
 import { $ } from "bun";
 import * as p from "../package.json";
 
+await $`mkdir -p dist`;
+await $`cp static/* dist`;
+
 export async function writeVersionAndManifest() {
   const version = p.version;
   const version_info = {
