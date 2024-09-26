@@ -118,7 +118,7 @@ In the code, find the line that looks like
 ```
 
 and put a breakpoint on that line by clicking to its left. Open a new
-message in the game, and type [[0] to see the debugger pop up on the
+message in the game, and type [[1] to see the debugger pop up on the
 autocomplete code. The screen should look something like this:
 
 ![Development](pictures/devscreenshot.png?raw=true)
