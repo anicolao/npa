@@ -6,9 +6,11 @@ await $`cp static/* dist`;
 
 export async function writeVersionAndManifest() {
   const version = p.version;
+  const d = new Date();
+  const date = `${d.getDate()} ${d.toLocaleString("default", { month: "short" })} ${d.getFullYear()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
   const version_info = {
     hash: (await $`git rev-parse --short HEAD`.text()).replace(/\n$/, ""),
-    date: (await $`date "+%d %b %Y %H:%M"`.text()).replace(/\n$/, ""),
+    date,
     status: (await $`git status -s`.text()).replace(/\n$/, ""),
     version,
   };
