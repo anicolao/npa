@@ -45,7 +45,8 @@ Start by forking this repository on github. Then:
 git clone git@github.com/<username>/npa.git
 ```
 
-where `<username>` is the user you used to create your fork.
+where `<username>` is the user you used to create your fork. On some
+setups, it might be more convenient to clone via `https` than ssh.
 
 Before you can build for the first time, you will need to
 use `bun` to install all the development tools, like so:
@@ -68,11 +69,9 @@ will create a new directory named `dist` which contains the Chrome
 extension. Then, in Chrome, visit `chrome://extensions`, and turn
 on "developer mode". Finally, use the "Load Unpacked Extension"
 folder to load your freshly built extension by opening the `dist`
-directory that was created by the build process.
-
-On some versions of windows `bun run start` might give an error about
-script execution being disabled. [This article](https://bobbyhadz.com/blog/nodemon-cannot-be-loaded-running-scripts-disabled) shows how to fix
-it, and [this page from Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3) may also be useful.
+directory that was created by the build process. If you have a
+production build of NPA installed, use the extensions page to
+disable it so that only one copy is running at a time.
 
 You'll notice that `bun run start` never exits. It watches your
 filesystem for changes to the source code, which you can make in
