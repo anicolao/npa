@@ -331,7 +331,7 @@ export function calcSpeedBetweenStars(
 ) {
   const universe = NeptunesPride.universe;
   const players = universe.galaxy.players;
-  const rangeTechLevel = getTech(players[puid], "manufacturing").level;
+  const rangeTechLevel = getTech(players[puid], "propulsion").level;
   const a = universe.galaxy.stars[starA];
   const b = universe.galaxy.stars[starB];
   const whDist = universe.starDistance(a, b);
