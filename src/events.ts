@@ -30,11 +30,16 @@ function dbName(group: string) {
   return `${getGameNumber()}:${group}`;
 }
 async function store(incoming: any[], group: string) {
-  const db = await openDB(dbName(group), 1, {
+  const db = await openDB(dbName(group), 2, {
     upgrade(db) {
-      const store = db.createObjectStore(group, {
-        keyPath: "key",
-      });
+      db.deleteObjectStore(group);
+      const options: any = {};
+      if (group !== "game_diplomacy" && group !== "game_event") {
+        options.autoIncrement = true;
+      } else {
+        options.keyPath = "key";
+      }
+      const store = db.createObjectStore(group, options);
       store.createIndex("date", "date", { unique: false });
     },
   });
@@ -42,12 +47,12 @@ async function store(incoming: any[], group: string) {
   const tx = db.transaction(group, "readwrite");
   await Promise.all([
     ...incoming.map(async (x) => {
-      if (x?.comment_count === 0) {
+      if (group !== "game_diplomacy" && group !== "game_event") {
         return tx.store.add(x);
       }
       await tx.store.put(x);
-      if (x.comment_count) {
-        if (x.status === "read") {
+      if (group === "game_diplomacy") {
+        if (x.status === "read" || x.status === undefined) {
           if (messageCache[x.key]?.length === undefined) {
             requestMessageComments(x.comment_count, x.key);
           } else {
@@ -66,11 +71,16 @@ async function store(incoming: any[], group: string) {
   ]);
 }
 async function restore(group: string) {
-  const db = await openDB(dbName(group), 1, {
+  const db = await openDB(dbName(group), 2, {
     upgrade(db) {
-      const store = db.createObjectStore(group, {
-        keyPath: "key",
-      });
+      db.deleteObjectStore(group);
+      const options: any = {};
+      if (group !== "game_diplomacy" && group !== "game_event") {
+        options.autoIncrement = true;
+      } else {
+        options.keyPath = "key";
+      }
+      const store = db.createObjectStore(group, options);
       store.createIndex("date", "date", { unique: false });
     },
   });
@@ -155,7 +165,9 @@ async function cacheEventResponseCallback(
             );
             return false;
           }
-          const ret = message?.comment_count === latest?.comment_count;
+          const ret =
+            message?.comment_count === latest?.comment_count &&
+            message?.created === latest?.created;
           logCount(`isUnchanged_${ret}`);
           return ret;
         };
@@ -307,9 +319,10 @@ export async function requestMessageComments(
   const url = `/${getRequestPath()}/fetch_game_message_comments`;
   const data = {
     type: "fetch_game_message_comments",
-    count: fetchSize,
+    count: Number.isNaN(fetchSize) || !fetchSize ? 100 : fetchSize,
     offset: 0,
     message_key,
+    key: message_key,
     version: NeptunesPride.version,
     game_number: getGameNumber(),
     gameId: getGameNumber(),

@@ -5617,7 +5617,11 @@ async function NeptunesPrideAgent() {
             messageIndex.api
               ?.flatMap((m: any) => {
                 const body = m.message.body || m.message.payload?.body;
-                return body.match(/\[\[api:\w\w\w\w\w\w\(\w\w\w\w\w\w\)?]\]/);
+                let ret = body.match(/\[\[api(:|\&\#x3A\;)(\w{6}|\w{12})?]\]/);
+                if (ret?.length > 1) {
+                  ret = [`[[api:${ret[2]}]]`];
+                }
+                return ret;
               })
               .filter((k) => k)
               .filter((v, i, a) => a.indexOf(v) === i) || [];
