@@ -75,7 +75,7 @@ import {
   or,
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
-import { futureTime, resetAliases } from "./timetravel";
+import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
 import { isSafari } from "./useragent";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
@@ -2385,15 +2385,16 @@ async function NeptunesPrideAgent() {
             Q.splice(closest, 1);
             for (const v of Q) {
               const rawDistance = rawDistanceSquared(stars[u], stars[v]);
-              if (rawDistance > frSquared) {
+              if (rawDistance > frSquared && stars[u].wh != v) {
                 continue;
               }
-              const hasMyProduction =
-                stars[v].i > 0 &&
-                stars[v].puid === NeptunesPride.universe.galaxy.player_uid;
+              const puid = NeptunesPride.universe.galaxy.player_uid;
+              const hasMyProduction = stars[v].i > 0 && stars[v].puid === puid;
               const m = hasMyProduction ? 1 : rangeTechLevel + 1;
               const candidateDistance =
-                m * dist[u] + m * distance(stars[u], stars[v]);
+                m * dist[u] +
+                m *
+                  (Math.sqrt(rawDistance) / calcSpeedBetweenStars(u, v, puid));
               if (candidateDistance < dist[v]) {
                 dist[v] = candidateDistance;
                 prev[v] = u;
