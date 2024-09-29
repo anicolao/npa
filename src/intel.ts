@@ -1260,10 +1260,16 @@ async function NeptunesPrideAgent() {
     colorMap?.forEach((c: string, i: number) => {
       const uid = i + (isNP4() ? 1 : 0);
       if (NeptunesPride.universe.galaxy.players[uid]) {
-        if (settings.whitePlayer && uid === NeptunesPride.universe.player.uid) {
-          return;
-        }
         setPlayerColor(uid, c);
+        if (c !== "#ffffff") {
+          if (
+            settings.whitePlayer &&
+            uid === NeptunesPride.universe.player.uid
+          ) {
+            NeptunesPride.universe.player.prevColor = c;
+            setPlayerColor(uid, "#ffffff");
+          }
+        }
       }
     });
   };
@@ -1762,9 +1768,8 @@ async function NeptunesPrideAgent() {
       button.listen(NeptunesPride.crux, eventName, (_x: any, _y: any) => {
         const shapeIndex = p.shapeIndex !== undefined ? p.shapeIndex : p.shape;
         if (
-          p.prevColor &&
-          (field.getValue() !== p.originalColor ||
-            shapeField.getValue() != shapeIndex)
+          field.getValue() !== p.originalColor ||
+          shapeField.getValue() != shapeIndex
         ) {
           field.setValue(p.originalColor);
           shapeField.setValue(shapeIndex);
@@ -4058,7 +4063,8 @@ async function NeptunesPrideAgent() {
       setPlayerColor(player.uid, "#ffffff");
     } else {
       if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
-        setPlayerColor(player.uid, colors[player.color]);
+        console.log(`PREV COLOR ${player.prevColor}`, player);
+        setPlayerColor(player.uid, player.prevColor);
       } else {
         if (player.prevColor !== undefined) {
           setPlayerColor(player.uid, player.prevColor);
@@ -4121,6 +4127,9 @@ async function NeptunesPrideAgent() {
               setPlayerColor(uid, c);
             }
           });
+          if (NeptunesPride?.universe?.galaxy) {
+            rebuildColorMap(NeptunesPride.universe.galaxy);
+          }
           store.get("shapeMap").then((s) => {
             shapeMap = s.split(" ").map((x: string) => +x);
             recolorPlayers();
