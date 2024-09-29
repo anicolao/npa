@@ -2351,7 +2351,9 @@ async function NeptunesPrideAgent() {
         universe.selectedStar?.alliedDefenders !== undefined
       ) {
         const stars = NeptunesPride.universe.galaxy.stars;
-        const fleetRange = getAdjustedFleetRange(NeptunesPride.universe.player);
+        const player = NeptunesPride.universe.player;
+        const rangeTechLevel = getTech(player, "propulsion").level;
+        const fleetRange = getAdjustedFleetRange(player);
         const frSquared = fleetRange * fleetRange;
         const visibleStarUids = Object.keys(stars).filter((k) =>
           isVisible(stars[k]),
@@ -2381,7 +2383,12 @@ async function NeptunesPrideAgent() {
               if (rawDistance > frSquared) {
                 continue;
               }
-              const candidateDistance = dist[u] + distance(stars[u], stars[v]);
+              const hasMyProduction =
+                stars[v].i > 0 &&
+                stars[v].puid === NeptunesPride.universe.galaxy.player_uid;
+              const m = hasMyProduction ? 1 : rangeTechLevel + 1;
+              const candidateDistance =
+                m * dist[u] + m * distance(stars[u], stars[v]);
               if (candidateDistance < dist[v]) {
                 dist[v] = candidateDistance;
                 prev[v] = u;
