@@ -349,6 +349,7 @@ export function calcSpeedBetweenStars(
     }
   }
 
+  /*
   console.log("CALC: ", {
     normalSpeed,
     wormholeSpeed,
@@ -357,5 +358,6 @@ export function calcSpeedBetweenStars(
     starA,
     starB,
   });
+  */
   return Math.max(normalSpeed, wormholeSpeed, gateSpeed);
 }

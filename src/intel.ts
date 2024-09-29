@@ -256,6 +256,7 @@ async function NeptunesPrideAgent() {
       { kind: "npa_colours", ...options },
     ]);
   };
+  let destinationLock: ScannedStar | undefined = undefined;
   const prepReport = (
     reportName: string,
     stanzas: (string | string[])[],
@@ -2272,12 +2273,17 @@ async function NeptunesPrideAgent() {
       return [closest, closestSupport, closerStars];
     };
     const drawRoutePlanner = () => {
-      const drawRoute = (star: any, other: any, hudColor: string) => {
+      const drawRoute = (
+        star: any,
+        other: any,
+        hudColor: string,
+        tick: number,
+      ) => {
         const visTicks = 0;
         const speed = NeptunesPride.universe.galaxy.fleet_speed;
         const color = hudColor;
         const tickDistance = Math.sqrt(rawDistanceSquared(star, other));
-        const ticks = Math.ceil(tickDistance / speed);
+        const ticks = tick;
         const midX = map.worldToScreenX((star.x + other.x) / 2);
         const midY = map.worldToScreenY((star.y + other.y) / 2);
 
@@ -2345,16 +2351,21 @@ async function NeptunesPrideAgent() {
         }
         map.context.textAlign = "center";
         map.context.translate(0, -8 * map.pixelRatio);
-        //const textColor = color;
-        //drawString(`[[Tick #${tickNumber(ticks)}]]`, 0, 0, textColor);
+        const textColor = color;
+        drawString(`[[Tick #${ticks}]]`, 0, 0, textColor);
         map.context.setLineDash([]);
         map.context.restore();
         return ticks;
       };
       if (
         settings.routePlanOn &&
-        universe.selectedStar?.alliedDefenders !== undefined
+        (universe.selectedStar?.alliedDefenders !== undefined ||
+          destinationLock !== undefined)
       ) {
+        const destUid =
+          destinationLock !== undefined
+            ? destinationLock.uid
+            : universe.selectedStar?.uid;
         const stars = NeptunesPride.universe.galaxy.stars;
         const player = NeptunesPride.universe.player;
         const rangeTechLevel = getTech(player, "propulsion").level;
@@ -2373,7 +2384,7 @@ async function NeptunesPrideAgent() {
             prev[v] = undefined;
             Q.push(v);
           }
-          dist[universe.selectedStar.uid] = 0;
+          dist[destUid] = 0;
           while (Q.length > 0) {
             let closest = 0;
             for (let candidate = 1; candidate < Q.length; ++candidate) {
@@ -2390,7 +2401,7 @@ async function NeptunesPrideAgent() {
               }
               const puid = NeptunesPride.universe.galaxy.player_uid;
               const hasMyProduction = stars[v].i > 0 && stars[v].puid === puid;
-              const m = hasMyProduction ? 1 : rangeTechLevel + 1;
+              const m = hasMyProduction ? 1 : Math.sqrt(rangeTechLevel + 3);
               const candidateDistance =
                 m * dist[u] +
                 m *
@@ -2404,6 +2415,7 @@ async function NeptunesPrideAgent() {
           return { dist, prev };
         };
         const { dist, prev } = dijkstra();
+        const children = {};
         for (const starUid in prev) {
           const pred = prev[starUid];
           if (pred !== undefined) {
@@ -2413,13 +2425,38 @@ async function NeptunesPrideAgent() {
               let p = pred;
               let u = starUid;
               while (p !== undefined) {
-                drawRoute(stars[p], stars[u], "#088808");
+                if (children[p] === undefined) {
+                  children[p] = [];
+                }
+                if (children[p].indexOf(u) === -1) {
+                  children[p].push(u);
+                }
                 u = p;
                 p = prev[p];
               }
             }
           }
         }
+        const dfsDraw = (uid: number, tick: number, parent?: number) => {
+          if (parent) {
+            drawRoute(
+              stars[parent],
+              stars[uid],
+              destinationLock ? "#08ee08" : "#088808",
+              tick,
+            );
+          }
+          const puid = player.uid;
+          for (let i = 0; i < children[uid]?.length; ++i) {
+            const child = children[uid][i];
+            const rawDistance = rawDistanceSquared(stars[child], stars[uid]);
+            const ticks = Math.ceil(
+              Math.sqrt(rawDistance) / calcSpeedBetweenStars(child, uid, puid),
+            );
+            dfsDraw(child, tick + ticks, uid);
+          }
+        };
+        dfsDraw(destUid, universe.galaxy.tick);
       }
     };
     const drawAutoRuler = () => {
@@ -4035,6 +4072,25 @@ async function NeptunesPrideAgent() {
     toggleRoutePlanner,
     "Toggle the route planner display. Shows shortest paths between your stars and the front.",
     "Toggle Route Planner",
+  );
+  const toggleRoutePlannerLock = () => {
+    if (settings.routePlanOn) {
+      if (destinationLock !== undefined) {
+        destinationLock = undefined;
+      } else {
+        const universe = NeptunesPride.universe;
+        if (universe.selectedStar?.alliedDefenders !== undefined) {
+          destinationLock = universe.selectedStar;
+        }
+      }
+      mapRebuild();
+    }
+  };
+  defineHotkey(
+    "L",
+    toggleRoutePlannerLock,
+    "Lock or unlock the route planner display.",
+    "Lock Route Planner",
   );
 
   const setPlayerColor = (uid: number, color: string) => {
