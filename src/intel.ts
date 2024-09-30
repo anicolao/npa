@@ -2278,6 +2278,7 @@ async function NeptunesPrideAgent() {
         other: any,
         hudColor: string,
         tick: number,
+        shipsPerTick: number,
       ) => {
         const visTicks = 0;
         const speed = NeptunesPride.universe.galaxy.fleet_speed;
@@ -2353,6 +2354,10 @@ async function NeptunesPrideAgent() {
         map.context.translate(0, -8 * map.pixelRatio);
         const textColor = color;
         drawString(`[[Tick #${ticks}]]`, 0, 0, textColor);
+        if (shipsPerTick) {
+          map.context.translate(0, 2 * 9 * map.pixelRatio);
+          drawString(`${shipsPerTick} ships/h`, 0, 0, textColor);
+        }
         map.context.setLineDash([]);
         map.context.restore();
         return ticks;
@@ -2438,14 +2443,7 @@ async function NeptunesPrideAgent() {
           }
         }
         const dfsDraw = (uid: number, tick: number, parent?: number) => {
-          if (parent) {
-            drawRoute(
-              stars[parent],
-              stars[uid],
-              destinationLock ? "#08ee08" : "#088808",
-              tick,
-            );
-          }
+          let shipsPerTick = 0;
           const puid = player.uid;
           for (let i = 0; i < children[uid]?.length; ++i) {
             const child = children[uid][i];
@@ -2453,8 +2451,23 @@ async function NeptunesPrideAgent() {
             const ticks = Math.ceil(
               Math.sqrt(rawDistance) / calcSpeedBetweenStars(child, uid, puid),
             );
-            dfsDraw(child, tick + ticks, uid);
+            shipsPerTick += dfsDraw(child, tick + ticks, uid);
           }
+          if (stars[uid].puid === puid) {
+            shipsPerTick += stars[uid].shipsPerTick;
+          }
+          if (parent) {
+            const dim = shipsPerTick ? "#088808" : "#888888";
+            const bright = shipsPerTick ? "#08ee08" : "#aaaaaa";
+            drawRoute(
+              stars[parent],
+              stars[uid],
+              destinationLock ? bright : dim,
+              tick,
+              shipsPerTick,
+            );
+          }
+          return shipsPerTick;
         };
         dfsDraw(destUid, universe.galaxy.tick);
       }
