@@ -57,13 +57,13 @@ export function futureTime(
     logCount("error_back_to_the_future");
     return newState;
   }
-  const stars = { ...newState.stars };
-  const fleets = { ...newState.fleets };
-  const players = { ...newState.players };
   if (isNP4()) {
     addAccessors("galaxy", newState);
   }
   for (let i = 0; i < tickOffset; ++i) {
+    const stars = { ...newState.stars };
+    const fleets = { ...newState.fleets };
+    const players = { ...newState.players };
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
@@ -239,6 +239,7 @@ export function futureTime(
             newFleet.w = newFleet.warpSpeed;
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             if (isNP4()) {
+              /*
               console.log({
                 nextDestUid,
                 nextDestination,
@@ -246,6 +247,7 @@ export function futureTime(
                 f: fleets[fk],
                 newFleet,
               });
+              */
               speed = calcSpeedBetweenStars(
                 destination.uid,
                 nextDestination.uid,
@@ -276,6 +278,12 @@ export function futureTime(
         }
       }
       if (fleets[fk].st === 0) {
+        if (fleets[fk].orbiting) {
+          const star: ScannedStar = stars[
+            fleets[fk].orbiting.uid
+          ] as ScannedStar;
+          star.fleetsInOrbit = star.fleetsInOrbit.filter((x) => x.uid !== +fk);
+        }
         delete fleets[fk];
       }
     }
@@ -317,10 +325,10 @@ export function futureTime(
       }
       newState.production_counter = 0;
     }
+    newState.stars = stars;
+    newState.fleets = fleets;
+    newState.players = players;
   }
-  newState.stars = stars;
-  newState.fleets = fleets;
-  newState.players = players;
   return newState;
 }
 
