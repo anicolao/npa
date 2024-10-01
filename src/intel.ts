@@ -2356,7 +2356,8 @@ async function NeptunesPrideAgent() {
         drawString(`[[Tick #${ticks}]]`, 0, 0, textColor);
         if (shipsPerTick) {
           map.context.translate(0, 2 * 9 * map.pixelRatio);
-          drawString(`${shipsPerTick} ships/h`, 0, 0, textColor);
+          const rounded = Math.round(shipsPerTick * 100) / 100;
+          drawString(`${rounded} ships/h`, 0, 0, textColor);
         }
         map.context.setLineDash([]);
         map.context.restore();
