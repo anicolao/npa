@@ -32,7 +32,11 @@ function dbName(group: string) {
 async function store(incoming: any[], group: string) {
   const db = await openDB(dbName(group), 2, {
     upgrade(db) {
-      db.deleteObjectStore(group);
+      try {
+        db.deleteObjectStore(group);
+      } catch (err) {
+        console.log(`Ignore ${err} while deletingObject store`, err);
+      }
       const options: any = {};
       if (group !== "game_diplomacy" && group !== "game_event") {
         options.autoIncrement = true;
@@ -73,7 +77,11 @@ async function store(incoming: any[], group: string) {
 async function restore(group: string) {
   const db = await openDB(dbName(group), 2, {
     upgrade(db) {
-      db.deleteObjectStore(group);
+      try {
+        db.deleteObjectStore(group);
+      } catch (err) {
+        console.log(`Ignore ${err} while deletingObject store`, err);
+      }
       const options: any = {};
       if (group !== "game_diplomacy" && group !== "game_event") {
         options.autoIncrement = true;
