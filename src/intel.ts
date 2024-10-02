@@ -4901,7 +4901,7 @@ async function NeptunesPrideAgent() {
         : shapeMap.slice(0, allPlayers.length);
     if (settings.allianceDiscriminator === "color" && settings.whitePlayer) {
       const p = NeptunesPride.universe.player;
-      allianceMatch[p.uid] = p.prevColor;
+      allianceMatch[p.uid - offset] = p.prevColor;
     }
     const alliancePairs: [any, number][] = allianceMatch
       .map((x: any, i: string | number): [any, number] => [x, +i + offset])
