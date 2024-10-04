@@ -56,6 +56,7 @@ import { safe_image_url, youtube } from "./imageutils";
 import { get, post } from "./network";
 import {
   countScans,
+  diffCache,
   getLastRecord,
   getScan,
   getServerScans,
@@ -65,7 +66,7 @@ import {
   scanInfo,
   unloadServerScans,
 } from "./npaserver";
-import { clone } from "./patch";
+import { clone, patch } from "./patch";
 import {
   type Filter,
   type Stanzas,
@@ -242,6 +243,7 @@ async function NeptunesPrideAgent() {
   let showingNPA = false;
   let showingOurOptions = false;
   let reportSelector: any = null;
+  let filterContent = "";
   let filterInput: any = null;
   const showUI = () => NeptunesPride.npui.trigger("show_npa", "npa_ui_screen");
   const showOptions = (options?: any) => {
@@ -277,6 +279,7 @@ async function NeptunesPrideAgent() {
     }
     if (filterInput !== null) {
       const content = filterInput.getValue().toLowerCase();
+      filterContent = content;
       const containsPlayer = (s: string) => {
         const players = NeptunesPride.universe.galaxy.players;
         const filters = [];
@@ -1080,24 +1083,85 @@ async function NeptunesPrideAgent() {
         : NeptunesPride.universe.player.uid;
     const startMillis = new Date().getTime();
     timeTravelTickIndices = {};
-    const myKeys = getMyKeys();
     do {
-      const scanList = myKeys
-        .map((k) =>
-          getTimeTravelScanForTick(
-            currentTick,
-            k,
-            currentTick ? "forwards" : "back",
-          ),
-        )
-        .filter((scan) => scan && scan.tick === currentTick);
-      /*
-       * console.log(
-        `Got ${scanList.length} scans for tick #${currentTick}`,
-        scanList,
-      );
-      */
-      if (scanList.length > 0) {
+      const myKeys = allSeenKeys.filter((x) => {
+        const k = getCodeFromApiText(x);
+        return (
+          scanInfo[k] &&
+          scanInfo[k].firstTick <= currentTick &&
+          scanInfo[k].lastTick >= currentTick
+        );
+      });
+      const newMethod = true;
+      if (myKeys.length > 0 && newMethod) {
+        const code = getCodeFromApiText(myKeys[0]);
+        const diffs = diffCache[code];
+        let currentTickIndex = -1;
+        let lastPlayers = clone(diffs[0].cached.players);
+        for (let index = 0; index < diffs.length; ++index) {
+          const diff = diffs[index];
+          if (diff?.forward?.tick === currentTick) {
+            currentTickIndex = index;
+            break;
+          }
+          if (diff.forward?.players !== undefined) {
+            lastPlayers = patch(lastPlayers, diff.forward.players);
+          }
+        }
+        while (currentTickIndex < diffs.length && currentTickIndex >= 0) {
+          const diff = diffs[currentTickIndex];
+          if (diff.forward?.tick !== undefined) {
+            if (diff.forward.tick - currentTick > 1) {
+              console.log(`Jumping from ${currentTick} to ${diff.foward.tick}`);
+            }
+            console.log(currentTick);
+            currentTick = diff.forward.tick;
+          }
+          if (diff.forward?.players !== undefined) {
+            const sameTick = diff.forward.tick === undefined;
+            const active = (p: any, last: any, manual: boolean) => {
+              if (p === undefined) return false;
+              if (p.totalEconomy > last.totalEconomy) return true;
+              if (p.totalFleets > last.totalFleets) return true;
+              const manualUpgrade = p.totalStars === undefined || manual;
+              if (p.totalIndustry > last.totalIndustry && manualUpgrade)
+                return true;
+              if (p.totalScience > last.totalScience && manualUpgrade)
+                return true;
+              return false;
+            };
+            for (const p in players) {
+              if (active(diff.forward.players[p], lastPlayers[p], sameTick)) {
+                let playerData = clone(lastPlayers[p]);
+                playerData = patch(playerData, diff.forward.players[p]);
+                const last = playerBlock[p].splice(-1);
+                if (
+                  last[0] &&
+                  !last[0].startsWith(`[[Tick #${currentTick}]]`)
+                ) {
+                  playerBlock[p].push(last[0]);
+                }
+                playerBlock[p].push(
+                  `[[Tick #${currentTick}]]|${playerData.totalEconomy}|${playerData.totalIndustry}|${playerData.totalScience}|${playerData.totalFleets}|${playerData.totalStars}`,
+                );
+              }
+            }
+
+            lastPlayers = patch(lastPlayers, diff.forward.players);
+          }
+          currentTickIndex++;
+        }
+      } else if (myKeys.length > 0) {
+        const scanList = myKeys
+          .slice(0, 1)
+          .map((k) =>
+            getTimeTravelScanForTick(
+              currentTick,
+              k,
+              currentTick ? "forwards" : "back",
+            ),
+          )
+          .filter((scan) => scan && scan.tick === currentTick);
         const myScan = scanList.filter((scan) => getPlayerUid(scan) === myId);
         const scan = myScan.length > 0 ? myScan[0] : scanList[0];
         const row = { ...scan.players, tick: scan.tick };
@@ -3580,9 +3644,12 @@ async function NeptunesPrideAgent() {
         .grid(15, 0, 15, 3)
         .roost(report);
       filterInput = new UI.TextInput("single").grid(5, 0, 10, 3).roost(report);
+      filterInput.setValue(filterContent);
 
       filterInput.eventKind = "exec_report";
 
+      let generating = false;
+      let rhCounter = 0;
       const text = new UI.Text("", "pad12 rel txt_selectable")
         .size(432)
         .pos(48)
@@ -3593,7 +3660,7 @@ async function NeptunesPrideAgent() {
       report.roost(reportScreen);
       output.roost(reportScreen);
 
-      const reportHook = async (_e: number, lr: string) => {
+      const runReport = async (lr: string) => {
         let d = lr;
         if (d === undefined) {
           d = lastReport;
@@ -3649,6 +3716,20 @@ async function NeptunesPrideAgent() {
         let html = getClip().replace(/\n/g, "<br>");
         html = NeptunesPride.inbox.hyperlinkMessage(html);
         text.rawHTML(html);
+      };
+      const reportHook = async (_e: number, lr: string) => {
+        rhCounter++;
+        generating = true;
+        const key = lr || lastReport;
+        const name = npaReportNames[key];
+        text.rawHTML(`Generating ${name} report...`);
+        window.setTimeout(() => {
+          rhCounter--;
+          if (rhCounter === 0) {
+            runReport(lr);
+            generating = false;
+          }
+        }, 250);
       };
       reportHook(0, lastReport);
       onTrigger("exec_report", reportHook);
@@ -4453,6 +4534,14 @@ async function NeptunesPrideAgent() {
   ) => {
     const api = getCodeFromApiText(apikey);
     if (!countScans(api)) return null;
+    if (
+      !scanInfo[api] ||
+      targetTick > scanInfo[api].lastTick ||
+      targetTick < scanInfo[api].firstTick
+    ) {
+      return null;
+    }
+
     let timeTravelTickIndex = dir === "back" ? countScans(api) - 1 : 0;
     if (timeTravelTickIndices[apikey] !== undefined) {
       timeTravelTickIndex = timeTravelTickIndices[apikey];
