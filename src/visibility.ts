@@ -1,25 +1,9 @@
-import type { ScanningData, SpaceObject, Star } from "./galaxy";
+import { BspTree } from "./bsp";
+import type { ScanningData, Star } from "./galaxy";
 
 let lastGalaxy: ScanningData | null = null;
-const distanceMap: { [star: number]: Star[] } = {};
-
-const distance = (star1: SpaceObject, star2: SpaceObject) => {
-  const xoff = +star1.x - +star2.x;
-  const yoff = +star1.y - +star2.y;
-  return xoff * xoff + yoff * yoff;
-};
-function rebuildDistanceMap(galaxy: ScanningData) {
-  const allStars = Object.keys(galaxy.stars).map((k) => galaxy.stars[k]);
-  const sortedStars = [...allStars];
-  for (const star of allStars) {
-    const resorted = [
-      ...sortedStars.sort(
-        (a: any, b: any) => distance(star, b) - distance(star, a),
-      ),
-    ].reverse();
-    distanceMap[star.uid] = resorted;
-  }
-}
+let playerMap: { [puid: number]: Star[] } = {};
+let bsp: BspTree;
 
 export function isWithinRange(
   puid: number,
@@ -27,17 +11,21 @@ export function isWithinRange(
   star: Star,
   galaxy: ScanningData,
 ): boolean {
-  if (galaxy !== lastGalaxy || distanceMap[star.uid] === undefined) {
-    rebuildDistanceMap(galaxy);
+  if (galaxy !== lastGalaxy || bsp === undefined) {
     lastGalaxy = galaxy;
+    bsp = new BspTree(galaxy.stars);
+    playerMap = {};
+    for (const sk in galaxy.stars) {
+      if (playerMap[galaxy.stars[sk].puid] === undefined) {
+        playerMap[galaxy.stars[sk].puid] = [];
+      }
+      playerMap[galaxy.stars[sk].puid].push(galaxy.stars[sk]);
+    }
   }
-  const rangeSquared = range * range;
-  const sortedStars = distanceMap[star.uid];
-  for (let i = 0; sortedStars && i < sortedStars.length; ++i) {
-    const candidate = sortedStars[i];
-    if (candidate.puid === puid) {
-      const dist = distance(candidate, star);
-      return dist <= rangeSquared;
+  const inRange = bsp.findMany(playerMap[puid], range);
+  for (const candidate of inRange) {
+    if (candidate.uid == star.uid) {
+      return true;
     }
   }
   return false;

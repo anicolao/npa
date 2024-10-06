@@ -36,8 +36,8 @@ export interface SpaceObject {
   n: string;
   puid: number;
   uid: number;
-  x: string;
-  y: string;
+  x: number;
+  y: number;
 }
 export enum FleetOrder {
   Nothing = 0,
