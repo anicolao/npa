@@ -5,12 +5,11 @@ let lastGalaxy: ScanningData | null = null;
 let playerMap: { [puid: number]: Star[] } = {};
 let bsp: BspTree;
 
-export function isWithinRange(
+export function getWithinRange(
   puid: number,
   range: number,
-  star: Star,
   galaxy: ScanningData,
-): boolean {
+): Star[] {
   if (galaxy !== lastGalaxy || bsp === undefined) {
     lastGalaxy = galaxy;
     bsp = new BspTree(galaxy.stars);
@@ -23,10 +22,5 @@ export function isWithinRange(
     }
   }
   const inRange = bsp.findMany(playerMap[puid], range);
-  for (const candidate of inRange) {
-    if (candidate.uid == star.uid) {
-      return true;
-    }
-  }
-  return false;
+  return inRange;
 }

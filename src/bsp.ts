@@ -21,12 +21,8 @@ export class BspTree {
       right: null,
       value,
     };
-    for (let i = 0; i < index; ++i) {
-      const k = this.keys[i];
-      this.insert(this.root, data[k], 0);
-    }
-    for (let i = index + 1; i < this.keys.length; ++i) {
-      const k = this.keys[i];
+    for (const k in data) {
+      if (data[k] === value) continue;
       this.insert(this.root, data[k], 0);
     }
   }

@@ -81,7 +81,7 @@ import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
 import { isSafari } from "./useragent";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
-import { isWithinRange } from "./visibility";
+import { getWithinRange } from "./visibility";
 
 export let allSeenKeys: string[] = [];
 interface CruxLib {
@@ -2949,15 +2949,14 @@ async function NeptunesPrideAgent() {
                 const star = universe.galaxy.stars[key];
                 if (star.player?.uid == p) {
                   scanning = drawStarTerritory(bcontext, star, outer);
-                } else {
-                  const range = outer
-                    ? Math.max(scanRange, fleetRange)
-                    : Math.min(scanRange, fleetRange);
-                  const galaxy = NeptunesPride.universe.galaxy;
-                  if (isWithinRange(p, range, star, galaxy)) {
-                    drawStarPimple(bcontext, star);
-                  }
                 }
+              }
+              const range = outer
+                ? Math.max(scanRange, fleetRange)
+                : Math.min(scanRange, fleetRange);
+              const inRange = getWithinRange(p, range, galaxy);
+              for (const star of inRange) {
+                drawStarPimple(bcontext, star);
               }
               const player = universe.galaxy.players[p];
               const color = playerToColorMap(player);
