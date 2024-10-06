@@ -8,6 +8,7 @@
 
 import { computeAlliances } from "./alliances";
 import { setupAutocomplete } from "./autocomplete";
+import { BspTree } from "./bsp";
 import {
   type StarState,
   alliedFleet,
@@ -473,101 +474,212 @@ async function NeptunesPrideAgent() {
   function tradeActivityReport() {
     const output = [];
     output.push("Trading Activity:");
-    const ticks = new TickIterator(getMyKeys());
-    let lastScan = undefined;
-    while (ticks.hasNext()) {
-      ticks.next();
-      const scan = ticks.getScanData();
-      const seenCache: { [k: string]: { [k: string]: [string, string] } } = {};
-      let memoStars: any = null;
-      let memo: { [k: string]: boolean } = {};
-      const sees = (sourceS: string, sinkS: string) => {
-        if (memoStars !== scan.stars) {
-          memoStars = scan.stars;
-          memo = {};
+    const newMethod = true;
+    if (newMethod) {
+      let currentTick = 1;
+      const myKeys = allSeenKeys.filter((x) => {
+        const k = getCodeFromApiText(x);
+        return (
+          scanInfo[k] &&
+          scanInfo[k].firstTick <= currentTick &&
+          scanInfo[k].lastTick >= currentTick
+        );
+      });
+      if (myKeys.length > 0 && newMethod) {
+        const code = getCodeFromApiText(myKeys[0]);
+        const diffs = diffCache[code];
+        let currentTickIndex = -1;
+        let players = clone(diffs[0].cached.players);
+        let scan = clone(diffs[0].cached);
+        let bsp = new BspTree(scan.stars);
+        let bspStars = { ...scan.stars };
+        for (let index = 0; index < diffs.length; ++index) {
+          const diff = diffs[index];
+          if (diff?.forward?.tick === currentTick) {
+            currentTickIndex = index;
+            break;
+          }
+          scan = patch(scan, diff.forward);
         }
-        const key = `${sourceS}->${sinkS}`;
-        if (memo[key] !== undefined) {
-          return memo[key];
-        }
-        const source = Number.parseInt(sourceS);
-        const sink = Number.parseInt(sinkS);
-        const scanRange = getScanValue(scan.players[source]);
-        const inScanRange = (s0: Star, s1: Star) => {
-          if (s0.puid === source) {
-            if (s1.puid === sink) {
-              const distance = dist(s0, s1);
-              if (distance <= scanRange) {
-                return true;
+        while (currentTickIndex < diffs.length && currentTickIndex >= 0) {
+          const diff = diffs[currentTickIndex];
+          const seenCache: { [k: string]: { [k: string]: [string, string] } } =
+            {};
+          let memoStars: any = null;
+          let memo: { [k: string]: boolean } = {};
+          const sees = (sourceS: string, sinkS: string) => {
+            const source = Number.parseInt(sourceS);
+            if (memoStars !== scan.stars) {
+              memo = {};
+              memoStars = scan.stars;
+            }
+            const key = `${source}->${sinkS}`;
+            if (memo[key] !== undefined) {
+              return memo[key];
+            }
+            const allStars = Object.keys(memoStars);
+            const sourceStars = [];
+            for (const k of allStars) {
+              if (memoStars[k].puid === source) {
+                sourceStars.push(memoStars[k]);
+              }
+              if (bspStars[k] === undefined) {
+                bspStars = { ...memoStars };
+                bsp = new BspTree(bspStars);
               }
             }
+            const scanRange = getScanValue(scan.players[source]);
+            const scannedStars = bsp.findMany(sourceStars, scanRange);
+            for (const puid in scan.players) {
+              memo[`${source}->${puid}`] = false;
+            }
+            for (const sk of scannedStars) {
+              const star = memoStars[sk.uid];
+              memo[`${source}->${star.puid}`] = true;
+              //console.log(`for ${source} calculated ${star.puid} is visible`);
+            }
+            return memo[key];
+          };
+          if (diff.forward?.tick !== undefined) {
+            if (diff.forward.tick - currentTick > 1) {
+              console.log(`Jumping from ${currentTick} to ${diff.foward.tick}`);
+            }
+            currentTick = diff.forward.tick;
           }
-          return false;
-        };
-        if (seenCache?.[source]?.[sink]) {
-          const [star0, star1] = seenCache[source][sink];
-          const s0 = scan.stars[star0];
-          const s1 = scan.stars[star1];
-          if (inScanRange(s0, s1)) {
-            memo[key] = true;
-            return true;
-          }
-        }
-        for (const sk1 in scan.stars) {
-          const s1 = scan.stars[sk1];
-          if (s1.puid === source) {
-            for (const sk2 in scan.stars) {
-              const s2 = scan.stars[sk2];
-              if (s2.puid === sink) {
-                if (inScanRange(s1, s2)) {
-                  if (seenCache[source] === undefined) {
-                    seenCache[source] = {};
+          scan = patch(scan, diff.forward);
+          if (diff.forward?.players !== undefined) {
+            const sameTick = diff.forward.tick === undefined;
+            if (sameTick) {
+              for (const k in players) {
+                const p = diff.forward.players?.[k];
+                if (p?.tech) {
+                  for (const tk in p.tech) {
+                    const level = p.tech[tk].level;
+                    if (level === undefined) continue; // happens with FAs
+                    const tech = translateTech(tk);
+                    let sourceString = "";
+                    let faSources = "";
+                    for (const op in scan.players) {
+                      if (op !== k) {
+                        if (scan.players[op].tech[tk].level >= level) {
+                          if (!tradeScanned() || sees(op, k)) {
+                            sourceString += ` [[#${op}]]`;
+                          } else if (tradeScanned()) {
+                            faSources += ` [[#${op}]]`;
+                          }
+                        }
+                      }
+                    }
+                    output.push(
+                      `[[Tick #${currentTick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
+                    );
                   }
-                  seenCache[source][sink] = [sk1, sk2];
-                  memo[key] = true;
+                }
+              }
+              players = patch(players, diff.forward.players);
+            }
+          }
+          currentTickIndex++;
+        }
+      }
+    } else {
+      const ticks = new TickIterator(getMyKeys());
+      let lastScan = undefined;
+      while (ticks.hasNext()) {
+        ticks.next();
+        const scan = ticks.getScanData();
+        const seenCache: { [k: string]: { [k: string]: [string, string] } } =
+          {};
+        let memoStars: any = null;
+        let memo: { [k: string]: boolean } = {};
+        const sees = (sourceS: string, sinkS: string) => {
+          if (memoStars !== scan.stars) {
+            memoStars = scan.stars;
+            memo = {};
+          }
+          const key = `${sourceS}->${sinkS}`;
+          if (memo[key] !== undefined) {
+            return memo[key];
+          }
+          const source = Number.parseInt(sourceS);
+          const sink = Number.parseInt(sinkS);
+          const scanRange = getScanValue(scan.players[source]);
+          const inScanRange = (s0: Star, s1: Star) => {
+            if (s0.puid === source) {
+              if (s1.puid === sink) {
+                const distance = dist(s0, s1);
+                if (distance <= scanRange) {
                   return true;
                 }
               }
             }
+            return false;
+          };
+          if (seenCache?.[source]?.[sink]) {
+            const [star0, star1] = seenCache[source][sink];
+            const s0 = scan.stars[star0];
+            const s1 = scan.stars[star1];
+            if (inScanRange(s0, s1)) {
+              memo[key] = true;
+              return true;
+            }
           }
-        }
-        memo[key] = false;
-        return false;
-      };
-      const scanRecord = ticks.getScanRecord();
-      if (scanRecord.back !== undefined) {
-        if (scanRecord.back.tick === undefined) {
-          const changedPlayers = scanRecord.back.players;
-          for (const k in changedPlayers) {
-            const p = changedPlayers[k];
-            if (p.tech) {
-              for (const tk in p.tech) {
-                const tech = translateTech(tk);
-                const level = scan.players[k].tech[tk].level;
-                if (
-                  lastScan === undefined ||
-                  level > lastScan.players[k].tech[tk].level
-                ) {
-                  let sourceString = "";
-                  for (const op in scan.players) {
-                    if (op !== k) {
-                      if (scan.players[op].tech[tk].level >= level) {
-                        if (!tradeScanned() || sees(op, k)) {
-                          sourceString += ` [[#${op}]]`;
+          for (const sk1 in scan.stars) {
+            const s1 = scan.stars[sk1];
+            if (s1.puid === source) {
+              for (const sk2 in scan.stars) {
+                const s2 = scan.stars[sk2];
+                if (s2.puid === sink) {
+                  if (inScanRange(s1, s2)) {
+                    if (seenCache[source] === undefined) {
+                      seenCache[source] = {};
+                    }
+                    seenCache[source][sink] = [sk1, sk2];
+                    memo[key] = true;
+                    return true;
+                  }
+                }
+              }
+            }
+          }
+          memo[key] = false;
+          return false;
+        };
+        const scanRecord = ticks.getScanRecord();
+        if (scanRecord.back !== undefined) {
+          if (scanRecord.back.tick === undefined) {
+            const changedPlayers = scanRecord.back.players;
+            for (const k in changedPlayers) {
+              const p = changedPlayers[k];
+              if (p.tech) {
+                for (const tk in p.tech) {
+                  const tech = translateTech(tk);
+                  const level = scan.players[k].tech[tk].level;
+                  if (
+                    lastScan === undefined ||
+                    level > lastScan.players[k].tech[tk].level
+                  ) {
+                    let sourceString = "";
+                    for (const op in scan.players) {
+                      if (op !== k) {
+                        if (scan.players[op].tech[tk].level >= level) {
+                          if (!tradeScanned() || sees(op, k)) {
+                            sourceString += ` [[#${op}]]`;
+                          }
                         }
                       }
                     }
+                    output.push(
+                      `[[Tick #${scan.tick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
+                    );
                   }
-                  output.push(
-                    `[[Tick #${scan.tick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
-                  );
                 }
               }
             }
           }
         }
+        lastScan = clone(scan);
       }
-      lastScan = clone(scan);
     }
     if (output.length === 1) {
       output.push("No trade activity data found");
@@ -1081,7 +1193,6 @@ async function NeptunesPrideAgent() {
       NeptunesPride.universe.selectedSpaceObject?.puid >= 0
         ? NeptunesPride.universe.selectedSpaceObject?.puid
         : NeptunesPride.universe.player.uid;
-    const startMillis = new Date().getTime();
     timeTravelTickIndices = {};
     do {
       const myKeys = allSeenKeys.filter((x) => {
@@ -1212,8 +1323,6 @@ async function NeptunesPrideAgent() {
         output.push(playerBlock[k]);
       }
     }
-    const endMillis = new Date().getTime();
-    output.push(`Time required ${endMillis - startMillis}ms`);
     prepReport("activity", output);
   }
   defineHotkey(
@@ -3661,6 +3770,7 @@ async function NeptunesPrideAgent() {
       output.roost(reportScreen);
 
       const runReport = async (lr: string) => {
+        const start = new Date().getTime();
         let d = lr;
         if (d === undefined) {
           d = lastReport;
@@ -3715,7 +3825,12 @@ async function NeptunesPrideAgent() {
         }
         let html = getClip().replace(/\n/g, "<br>");
         html = NeptunesPride.inbox.hyperlinkMessage(html);
-        text.rawHTML(html);
+        const end = new Date().getTime();
+        const duration = end - start;
+        const timing = `Time: ${duration}ms`;
+        text.rawHTML(
+          `${html}<br><p style="font-size: 40%;text-align: right;">${timing}</p>`,
+        );
       };
       const reportHook = async (_e: number, lr: string) => {
         rhCounter++;

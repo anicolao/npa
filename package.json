@@ -10,6 +10,7 @@
     "lint:fix": "bunx biome check --write src",
     "format": "bunx biome format --write src tests",
     "test": "vitest run --coverage",
+    "test:watch": "vitest watch --coverage",
     "prepare": "husky install .husky",
     "postversion": "./bin/packagedist"
   },
