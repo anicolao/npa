@@ -126,7 +126,7 @@ export async function restoreFromDB(
         `Restored message cache for ${group} from db: ${messageCache[group].length}`,
       );
       if (group === "game_diplomacy") {
-        logCount("loading_diplomacy_from_db");
+        //logCount("loading_diplomacy_from_db");
         for (const message of messageCache[group]) {
           restoreFromDB(message.key);
         }
@@ -168,15 +168,15 @@ async function cacheEventResponseCallback(
             message?.status &&
             message.status !== latest?.status
           ) {
-            logCount(
-              `status_changed_from_${message.status}_to_${latest.status}`,
-            );
+            //logCount(
+            //`status_changed_from_${message.status}_to_${latest.status}`,
+            //);
             return false;
           }
           const ret =
             message?.comment_count === latest?.comment_count &&
             message?.created === latest?.created;
-          logCount(`isUnchanged_${ret}`);
+          //logCount(`isUnchanged_${ret}`);
           return ret;
         };
         const orig_i = i;
@@ -189,7 +189,7 @@ async function cacheEventResponseCallback(
             const outOfOrderCandidate = incoming[i - 1];
             if (keys[outOfOrderCandidate.key]) {
               i--;
-              logCount(`decrement_i_${orig_i - i}`);
+              //logCount(`decrement_i_${orig_i - i}`);
               continue;
             }
             break;
@@ -199,12 +199,12 @@ async function cacheEventResponseCallback(
           for (let j = i; j < incoming.length; ++j) {
             overlapsFound &&= keys[incoming[j].key];
           }
-          logCount(`overlaps_found_${overlapsFound}`);
+          //logCount(`overlaps_found_${overlapsFound}`);
           let collisionsFound = false;
           for (let j = 0; j < i; ++j) {
             collisionsFound ||= keys[incoming[j].key] === true;
           }
-          logCount(`collisions_found_${collisionsFound}`);
+          //logCount(`collisions_found_${collisionsFound}`);
           break;
         }
         messageCache[group] = messageCache[group].slice(1);
@@ -213,7 +213,7 @@ async function cacheEventResponseCallback(
       }
     }
     if (incoming.length > messageCache[group].length) {
-      logCount("would_force_restore");
+      //logCount("would_force_restore");
       console.log(`Incoming messages forced restore: ${incoming.length}`);
       const knownKeys: { [k: string]: boolean } = {};
       for (const m of messageCache[group]) {
@@ -226,7 +226,7 @@ async function cacheEventResponseCallback(
         }
       }
       console.log(`Forcibly adding ${forceIncoming.length} missing keys`);
-      logCount(`Force store ${forceIncoming.length}`);
+      //logCount(`Force store ${forceIncoming.length}`);
       store(forceIncoming, group);
       messageCache[group] = forceIncoming.concat(messageCache[group]);
       logCount(`Force messageCache len ${messageCache[group].length}`);
@@ -258,20 +258,20 @@ async function cacheEventResponseCallback(
       }
       console.log(`Missing some events for ${group}, double fetch to ${size}`);
       if (group === "game_event" || group === "game_diplomacy") {
-        logCount("recursive_rrm");
+        //logCount("recursive_rrm");
         return requestRecentMessages(size, group);
       }
-      logCount("call_rmc");
+      //logCount("call_rmc");
       return requestMessageComments(size, group);
     }
   }
   try {
-    logCount("prestore");
+    //logCount("prestore");
     store(incoming, group);
-    logCount("poststore");
+    //logCount("poststore");
     indexMessages(group, incoming);
     messageCache[group] = incoming.concat(messageCache[group]);
-    logCount("postcache");
+    //logCount("postcache");
     console.log(
       `Return full message set for ${group} of ${messageCache[group].length}`,
     );
@@ -301,7 +301,7 @@ export async function requestRecentMessages(
 ) {
   console.log("requestRecentMessages");
   const url = `/${getRequestPath()}/fetch_game_messages`;
-  logCount(`requestRecentMessages ${fetchSize} ${group}`);
+  //logCount(`requestRecentMessages ${fetchSize} ${group}`);
   const data = {
     type: "fetch_game_messages",
     count: messageCache[group].length > 0 ? fetchSize : 100000,
@@ -311,7 +311,7 @@ export async function requestRecentMessages(
     game_number: getGameNumber(),
     gameId: getGameNumber(),
   };
-  logCount(group);
+  //logCount(group);
   const response = await post(url, data);
   if (!response.report) {
     response.report = response[1];
