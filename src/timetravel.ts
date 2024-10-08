@@ -96,7 +96,7 @@ export function futureTime(
           const manuPlus = isNP4() ? 4 : 5;
           const production =
             (industry * (manufacturing + manuPlus)) / ticksPerDay;
-          const partial = newStar.c !== undefined ? newStar.c : newStar.yard;
+          const partial = newStar.yard !== undefined ? newStar.yard : newStar.c;
           newStar.st += production + partial;
           if (isNP4()) {
             newStar.yard = newStar.st - Math.floor(newStar.st);
