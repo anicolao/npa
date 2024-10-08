@@ -126,6 +126,15 @@ export const alliedFleet = (
   }
   const fOwner = players[fleetOwnerId];
   const sOwner = players[starOwnerId];
+  if (
+    fleetOwnerId !== starOwnerId &&
+    fOwner &&
+    sOwner &&
+    (fOwner.ai !== 0 || sOwner.ai !== 0)
+  ) {
+    // AI are never allied with players or each other.
+    return false;
+  }
   const warMap = fOwner?.war || sOwner?.war || {};
   if (fleetOwnerId == starOwnerId) return true;
   if (warMap[fleetOwnerId] && warMap[starOwnerId]) return false;
