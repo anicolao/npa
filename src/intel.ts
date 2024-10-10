@@ -5587,7 +5587,7 @@ async function NeptunesPrideAgent() {
           line += `[[sub:${researchPriority.join(",")}]]`;
         }
         if (tech.level < best[key].level) {
-          line += `<div>[[sub:(L${tech.level})]]</div>`;
+          line += `[[sub:(L${tech.level})]]`;
         }
       }
       output.push([line]);
