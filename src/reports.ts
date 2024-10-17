@@ -26,7 +26,7 @@ export const makeReportContent = (
       if (preprocess !== undefined) {
         x = x.map(preprocess);
       }
-      const accepted = x.filter(filter);
+      const accepted = [x.join(" ")].filter(filter);
       return accepted.length > 0;
     }
     return true;
