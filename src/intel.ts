@@ -4480,14 +4480,14 @@ async function NeptunesPrideAgent() {
   };
 
   const cacheApiKey = (code: string, scan: any) => {
-    if (getPlayerUid(scan) >= 0) {
+    if (scan !== undefined && getPlayerUid(scan) >= 0) {
       const key = `API:${getPlayerUid(scan)}`;
       store.get(key).then((apiCode) => {
         if (!apiCode || apiCode !== otherUserCode) {
           store.set(key, code);
         }
       });
-    } else {
+    } else if (scan !== undefined) {
       if (otherUserCode !== "badkey") {
         store.keys().then((allKeys: string[]) => {
           const apiKeys = allKeys.filter((x) => x.startsWith("API:"));
