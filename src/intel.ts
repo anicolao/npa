@@ -192,7 +192,6 @@ async function NeptunesPrideAgent() {
         recordTrueTick(undefined, NeptunesPride.universe.galaxy);
         window.setTimeout(() => {
           NeptunesPride.np.trigger("map_rebuild");
-          NeptunesPride.np.trigger("refresh_interface");
         }, 500);
       }
     } else {
