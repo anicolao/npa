@@ -17,7 +17,7 @@ export async function createContext(production?: boolean) {
   return await esbuild.context({
     entryPoints: ["src/intel.ts", "src/background.js"],
     bundle: true,
-    sourcemap: true,
+    sourcemap: minify ? true : "inline",
     outdir: "dist",
     logLevel: "info",
     color: false,
