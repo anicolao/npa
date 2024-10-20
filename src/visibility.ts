@@ -3,6 +3,7 @@ import type { ScanningData, Star } from "./galaxy";
 
 let lastGalaxy: ScanningData | null = null;
 let playerMap: { [puid: number]: Star[] } = {};
+let rangeMap: { [puid: number]: Star[] } = {};
 let bsp: BspTree;
 
 export function getWithinRange(
@@ -14,6 +15,7 @@ export function getWithinRange(
     lastGalaxy = galaxy;
     bsp = new BspTree(galaxy.stars);
     playerMap = {};
+    rangeMap = {};
     for (const sk in galaxy.stars) {
       if (playerMap[galaxy.stars[sk].puid] === undefined) {
         playerMap[galaxy.stars[sk].puid] = [];
@@ -21,6 +23,8 @@ export function getWithinRange(
       playerMap[galaxy.stars[sk].puid].push(galaxy.stars[sk]);
     }
   }
-  const inRange = bsp.findMany(playerMap[puid], range);
-  return inRange;
+  if (!rangeMap[puid]) {
+    rangeMap[puid] = bsp.findMany(playerMap[puid], range);
+  }
+  return rangeMap[puid];
 }
