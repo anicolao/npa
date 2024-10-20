@@ -354,11 +354,13 @@ async function NeptunesPrideAgent() {
     }
 
     let output: Stanzas = [];
+    const sortedStars = Object.keys(stars);
+    sortedStars.sort((a, b) => stars[b].st - stars[a].st);
     for (const p in players) {
       const playerOutput: Stanzas = [];
       let grandTotalShips = 0;
       playerOutput.push(["[[{0}]]".format(p)]);
-      for (const s in stars) {
+      for (const s of sortedStars) {
         const star = stars[s];
         if (star.puid == p && star.shipsPerTick >= 0 && isVisible(star)) {
           playerOutput.push([
@@ -1001,7 +1003,7 @@ async function NeptunesPrideAgent() {
     for (const s of allMyStars) {
       communalEmpires[s.originalStar.puid].totaluce += s.totaluce;
     }
-    const reserve = communalEmpires[universe.player.uid].totaluce;
+    const reserve = communalEmpires[universe.player.uid]?.totaluce;
     for (const uid in communalEmpires) {
       const cash = communalEmpires[uid].cash;
       const needed = communalEmpires[uid].totaluce;
@@ -3384,6 +3386,10 @@ async function NeptunesPrideAgent() {
         i = i + 1;
         fp = s.indexOf("[[");
         sp = s.indexOf("]]");
+        if (sp < fp) {
+          s = `${s.slice(0, sp)}?${s.slice(sp + 2)}`;
+          continue;
+        }
         if (fp === -1 || sp === -1) break;
         sub = s.slice(fp + 2, sp);
         pattern = `[[${sub}]]`;
@@ -4747,12 +4753,12 @@ async function NeptunesPrideAgent() {
     timeTravel("back");
   };
   const timeTravelForward = () => {
+    if (timeTravelTick === -1) {
+      timeTravelTick = NeptunesPride.universe.galaxy.tick;
+    }
     if (NeptunesPride.universe.galaxy.turn_based) {
       timeTravelTick += turnJumpTicks();
     } else {
-      if (timeTravelTick === -1) {
-        timeTravelTick = NeptunesPride.universe.galaxy.tick;
-      }
       timeTravelTick += 1;
     }
     timeTravel("forwards");
