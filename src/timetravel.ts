@@ -35,7 +35,7 @@ export function resetAliases() {
     const player = universe.galaxy.players[pk];
     player.alias = player.rawAlias.split(space)[0];
     player.rawAlias = player.alias;
-    if (player.ai === 1 || player.ready === 1) {
+    if (player.ai === 1) {
       player.alias += `${space}${modSymbols[player.modTick]} `;
     }
   }
