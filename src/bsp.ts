@@ -88,7 +88,7 @@ export class BspTree {
   }
 
   rfindMany(node: Node, points: Point[], r: number, level: number) {
-    if (node === null) {
+    if (node === null || points === undefined || points.length === 0) {
       return [];
     }
     let goLeft: Point[] = [];
