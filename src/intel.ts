@@ -1392,6 +1392,39 @@ async function NeptunesPrideAgent() {
   };
 
   let trueTick = 0;
+  const colors = [
+    "#0000ff",
+    "#009fdf",
+    "#40c000",
+    "#ffc000",
+    "#df5f00",
+    "#c00000",
+    "#c000c0",
+    "#6000c0",
+  ];
+
+  let colorMap = colors.flatMap((_x) => colors);
+  let shapeMap = colorMap.map((_x, i) => Math.floor(i / 8));
+  const setPlayerColor = (uid: number, color: string) => {
+    //console.log(`Set player color to ${color} for ${uid}`);
+    const player = NeptunesPride.universe.galaxy.players[uid];
+    colorMap[player.uid + (isNP4() ? -1 : 0)] = color;
+    if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
+      if (!player.originalColor) {
+        player.originalColor = player.colorStyle;
+        //console.log(`Record original color as ${player.originalColor}`);
+      }
+      //console.log(`original color was ${player.originalColor}`);
+      player.colorStyle = playerToColorMap(player);
+      //console.log(`colorStyle is ${player.colorStyle}`);
+    } else {
+      if (!player.originalColor) {
+        player.originalColor = player.color;
+      }
+      player.prevColor = player.color;
+      player.color = playerToColorMap(player);
+    }
+  };
   const rebuildColorMap = (galaxy: any) => {
     if (galaxy.players[1].shape !== undefined && colorMap) {
       //console.log("rebuild color map before ", JSON.stringify(colorMap));
@@ -1448,6 +1481,7 @@ async function NeptunesPrideAgent() {
       }
     });
   };
+  let timeTravelTick = -1;
   const recordTrueTick = (_: any, galaxy: any) => {
     trueTick = galaxy.tick;
     rebuildColorMap(galaxy);
@@ -2129,19 +2163,6 @@ async function NeptunesPrideAgent() {
     }
     return rules;
   }
-  const colors = [
-    "#0000ff",
-    "#009fdf",
-    "#40c000",
-    "#ffc000",
-    "#df5f00",
-    "#c00000",
-    "#c000c0",
-    "#6000c0",
-  ];
-
-  let colorMap = colors.flatMap((_x) => colors);
-  let shapeMap = colorMap.map((_x, i) => Math.floor(i / 8));
   function playerToColorMap(player: Player) {
     return colorMap[player.uid - (isNP4() ? 1 : 0)];
   }
@@ -4307,26 +4328,6 @@ async function NeptunesPrideAgent() {
     "Lock Route Planner",
   );
 
-  const setPlayerColor = (uid: number, color: string) => {
-    //console.log(`Set player color to ${color} for ${uid}`);
-    const player = NeptunesPride.universe.galaxy.players[uid];
-    colorMap[player.uid + (isNP4() ? -1 : 0)] = color;
-    if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
-      if (!player.originalColor) {
-        player.originalColor = player.colorStyle;
-        //console.log(`Record original color as ${player.originalColor}`);
-      }
-      //console.log(`original color was ${player.originalColor}`);
-      player.colorStyle = playerToColorMap(player);
-      //console.log(`colorStyle is ${player.colorStyle}`);
-    } else {
-      if (!player.originalColor) {
-        player.originalColor = player.color;
-      }
-      player.prevColor = player.color;
-      player.color = playerToColorMap(player);
-    }
-  };
   const toggleWhitePlayer = () => {
     const player = NeptunesPride.universe.player;
     settings.whitePlayer = !settings.whitePlayer;
@@ -4635,7 +4636,6 @@ async function NeptunesPrideAgent() {
   };
   onTrigger("view_game", viewGame);
 
-  let timeTravelTick = -1;
   let timeTravelTickIndices: { [k: string]: number } = {};
   const adjustNow = (scan: any) => {
     const wholeTick = tickRate() * 60 * 1000;
