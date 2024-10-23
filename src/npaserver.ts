@@ -185,6 +185,7 @@ export async function getServerScans(apikey: string) {
   if (len > 0) {
     const first = 0;
     const last = len - 1;
+    console.log(`Call getPlayerUid for ${apikey}`, diffCache[apikey], first);
     const puid = getPlayerUid(diffCache[apikey][first].cached);
     const firstTick = diffCache[apikey][first].cached.tick;
     const lastTick = diffCache[apikey][last].cached.tick;

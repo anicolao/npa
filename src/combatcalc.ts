@@ -206,6 +206,25 @@ export const computeCombatOutcomes = (
         ),
         fleet,
       ]);
+    } else {
+      const stop = fleet.orbiting.uid;
+      const ticks = 1;
+      if (maxTick !== undefined && galaxy.tick + ticks > maxTick) continue;
+      const starname = stars[stop]?.n;
+      if (!starname) {
+        continue;
+      }
+      flights.push([
+        ticks,
+        "[[{0}]] [[{1}]] {2} orbiting [[{3}]]".format(
+          fleet.puid,
+          fleet.n,
+          fleet.st,
+          starname,
+          absoluteTick(galaxy, ticks),
+        ),
+        fleet,
+      ]);
     }
   }
   flights = flights.sort((a, b) => a[0] - b[0]);
@@ -230,7 +249,10 @@ export const computeCombatOutcomes = (
     if (fleet !== NeptunesPride.universe.selectedFleet || lo?.length) {
       orders = lo;
     }
-    const arrivalKey = [flights[i][0], orders[0][1]].toString();
+    const arrivalKey = [
+      flights[i][0],
+      orders[0] ? orders[0][1] : fleet.orbiting.uid,
+    ].toString();
     if (arrivals[arrivalKey] !== undefined) {
       arrivals[arrivalKey].push(fleet);
     } else {
@@ -284,7 +306,10 @@ export const computeCombatOutcomes = (
           }
         } else {
           fleetStrength[fleet.uid] = fleet.st;
-          totalDefense += fleet.st;
+          if (alliedFleet(galaxy.players, fleet.puid, vstar.puid, 0)) {
+            // now accounted for as an arriving fleet.
+            //totalDefense += fleet.st;
+          }
         }
       }
       starstate[starId] = {
