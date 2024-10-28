@@ -54,6 +54,7 @@ import {
   setClip,
 } from "./hotkey";
 import { safe_image_url, youtube } from "./imageutils";
+import { logCount, logError } from "./logging";
 import { get, post } from "./network";
 import {
   countScans,
@@ -61,8 +62,6 @@ import {
   getLastRecord,
   getScan,
   getServerScans,
-  logCount,
-  logError,
   registerForScans,
   scanInfo,
   unloadServerScans,

@@ -1,4 +1,4 @@
-import { logCount } from "./npaserver";
+import { logCount } from "./logging";
 
 export async function post(url: string, data: any): Promise<any> {
   const response = await fetch(url, {

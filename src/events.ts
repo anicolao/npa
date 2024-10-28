@@ -1,7 +1,7 @@
 import { openDB } from "idb";
 import { getGameNumber } from "./intel";
+import { logCount } from "./logging";
 import { post } from "./network";
-import { logCount } from "./npaserver";
 export const messageCache: { [k: string]: any[] } = {
   game_event: [],
   game_diplomacy: [],

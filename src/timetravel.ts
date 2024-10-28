@@ -9,7 +9,7 @@ import {
   getTech,
   techCost,
 } from "./galaxy";
-import { logCount } from "./npaserver";
+import { logCount } from "./logging";
 import { clone } from "./patch";
 
 export interface TimeMachineData {
