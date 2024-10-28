@@ -1,14 +1,13 @@
 import {
-  addDoc,
   collection,
   onSnapshot,
   orderBy,
   query,
   where,
 } from "firebase/firestore";
-import { openDB } from "idb";
 import { firestore } from "./firestore";
 import { type ScanningData, getPlayerUid } from "./galaxy";
+import { open } from "./idb";
 import { getGameNumber } from "./intel";
 import { type Patch, clone, diff, patch as patchR } from "./patch";
 
@@ -61,17 +60,6 @@ export function countScans(apikey: string) {
   }
   //console.log(`Count scans for key ${apikey} ${diffCache[apikey]?.length}`);
   return diffCache[apikey]?.length || 0;
-}
-
-async function open(dbName: string) {
-  return openDB(dbName, 1, {
-    upgrade(db) {
-      const store = db.createObjectStore(dbName, {
-        keyPath: "timestamp",
-      });
-      store.createIndex("timestamp", "timestamp", { unique: true });
-    },
-  });
 }
 
 async function store(
