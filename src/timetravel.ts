@@ -10,6 +10,7 @@ import {
   techCost,
 } from "./galaxy";
 import { logCount } from "./npaserver";
+import { clone } from "./patch";
 
 export interface TimeMachineData {
   futureTime: boolean;
@@ -37,6 +38,8 @@ export function resetAliases() {
     player.rawAlias = player.alias;
     if (player.ai === 1) {
       player.alias += `${space}${modSymbols[player.modTick]} `;
+    } else if (player.missedTurns) {
+      player.alias += `${space}${-player.missedTurns} `;
     }
   }
 }
@@ -328,6 +331,9 @@ export function futureTime(
     newState.stars = stars;
     newState.fleets = fleets;
     newState.players = players;
+    for (const fleet of Object.values(newState.fleets)) {
+      NeptunesPride.universe.expandFleetData(fleet);
+    }
   }
   return newState;
 }
