@@ -154,14 +154,11 @@ function rebuildOldDiffCache(apikey) {
       puid = next.cached.playerUid;
     }
   }
-  while (
-    diffCache[apikey].length &&
-    diffCache[apikey][0].cached === undefined
-  ) {
-    diffCache[apikey] = diffCache[apikey].slice(1);
-    if (diffCache[apikey][0].cached === undefined) {
-      logCount("error_multiple_blank_patches");
-    }
+  for (let i = 0; i < diffCache[apikey].length - 1; ++i) {
+    diffCache[apikey][i].cached = diffCache[apikey][i + 1].cached;
+    diffCache[apikey][i].forward = diffCache[apikey][i + 1].forward;
+    diffCache[apikey][i + 1].cached = undefined;
+    diffCache[apikey][i + 1].forward = undefined;
   }
   console.log(
     `Rebuild diff cache for ${apikey} from tick ${firstTick} to ${lastTick} for [[${puid}]]`,

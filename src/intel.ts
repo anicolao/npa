@@ -709,7 +709,7 @@ async function NeptunesPrideAgent() {
         let combatants = "";
         let countCombatants = 0;
         for (const k in changedPlayers) {
-          const p = changedPlayers[k];
+          const p = clone(changedPlayers[k]);
           if (isNP4()) {
             addAccessors(p.alias, p);
             if (scan.players[k].total_stars === undefined) {
