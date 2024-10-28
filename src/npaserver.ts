@@ -4,20 +4,16 @@ import { isSafari } from "./useragent";
 import {
   addDoc,
   collection,
-  doc,
-  increment,
   initializeFirestore,
   onSnapshot,
   orderBy,
   query,
-  setDoc,
   where,
 } from "firebase/firestore";
 import { openDB } from "idb";
 import { type ScanningData, getPlayerUid } from "./galaxy";
 import { getGameNumber } from "./intel";
 import { type Patch, clone, diff, patch as patchR } from "./patch";
-import { getVersion } from "./version";
 
 function containsNulls(a: Patch) {
   if (typeof a !== "object") return false;
