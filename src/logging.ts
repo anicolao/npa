@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, increment, setDoc } from "firebase/firestore";
+import { firestore } from "./firestore";
 import { getGameNumber } from "./intel";
-import { firestore } from "./npaserver";
 import { getVersion } from "./version";
 
 export function logError(e: any) {

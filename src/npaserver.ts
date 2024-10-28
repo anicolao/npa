@@ -1,16 +1,13 @@
-import { initializeApp } from "firebase/app";
-import { isSafari } from "./useragent";
-
 import {
   addDoc,
   collection,
-  initializeFirestore,
   onSnapshot,
   orderBy,
   query,
   where,
 } from "firebase/firestore";
 import { openDB } from "idb";
+import { firestore } from "./firestore";
 import { type ScanningData, getPlayerUid } from "./galaxy";
 import { getGameNumber } from "./intel";
 import { type Patch, clone, diff, patch as patchR } from "./patch";
@@ -125,20 +122,6 @@ export async function getLastRecord(
   if (lastKey) return db.getFromIndex(dbName, "timestamp", lastKey);
   return undefined;
 }
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCzwCKesO-Me1dVpo-5jZxoo559SoGGstk",
-  authDomain: "npaserver.firebaseapp.com",
-  projectId: "npaserver",
-  storageBucket: "npaserver.appspot.com",
-  messagingSenderId: "560331767449",
-  appId: "1:560331767449:web:5595a4f5c3e02ed49bc208",
-};
-
-const app = initializeApp(firebaseConfig);
-export const firestore = initializeFirestore(app, {
-  experimentalForceLongPolling: isSafari(),
-});
 
 export async function restoreFromDB(gameId: number, apikey: string) {
   if (!diffCache[apikey] || diffCache[apikey].length === 0) {

@@ -55,7 +55,7 @@ import {
 } from "./hotkey";
 import { safe_image_url, youtube } from "./imageutils";
 import { logCount, logError } from "./logging";
-import { get, post } from "./network";
+import { get } from "./network";
 import {
   countScans,
   diffCache,
@@ -77,7 +77,6 @@ import {
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
-import { isSafari } from "./useragent";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
 import { getWithinRange } from "./visibility";
