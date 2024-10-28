@@ -1225,7 +1225,6 @@ async function NeptunesPrideAgent() {
             if (diff.forward.tick - currentTick > 1) {
               console.log(`Jumping from ${currentTick} to ${diff.foward.tick}`);
             }
-            console.log(currentTick);
             currentTick = diff.forward.tick;
           }
           if (diff.forward?.players !== undefined) {
@@ -5749,7 +5748,7 @@ async function NeptunesPrideAgent() {
     output.push("--- Allied API Keys ---");
     output.push("--- All Seen Keys ---");
     output.push(":--|--:|--:");
-    output.push("Empire|Merge|Last?");
+    output.push("Empire|Merge|Last?|From|To|P");
     for (const key of allSeenKeys) {
       let owner = "Unknown";
       let good = "❌";
@@ -5771,7 +5770,15 @@ async function NeptunesPrideAgent() {
         owner = `[[${uid}]]`;
       }
       const merge = key.replace(":", "m:");
-      output.push([`${owner}|${merge}|${good}`]);
+      const { firstTick, lastTick, puid } = scanInfo[code] || {
+        firstTick: undefined,
+        lastTick: undefined,
+        puid: undefined,
+      };
+      const user = puid !== undefined ? `[[#${puid}]]` : "?";
+      const first = firstTick !== undefined ? `[[Tick #${firstTick}]]` : "?";
+      const last = firstTick !== undefined ? `[[Tick #${lastTick}]]` : "?";
+      output.push([`${owner}|${merge}|${good}|${first}|${last}|${user}`]);
     }
     output.push("--- All Seen Keys ---");
     prepReport("api", output);

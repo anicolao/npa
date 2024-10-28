@@ -77,7 +77,6 @@ function validateCache(apikey: string) {
           logCount("error_bad_backlink");
           return;
         }
-        console.log(`Validated back for ${prev.timestamp}`);
       }
     }
   }
@@ -117,7 +116,6 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
   for (let ti = 0; ti < timestamps.length; ++ti) {
     const timestamp = timestamps[ti];
     const nextTime = timestamps[ti + 1];
-    //console.log(`Time: ${ti} -> ${timestamp} (next: ${nextTime})`);
     const patch = JSON.parse(patches[timestamp]).scanning_data;
     if (timestamp !== next.timestamp) {
       console.error(
@@ -156,7 +154,18 @@ function rebuildOldDiffCache(apikey) {
       puid = next.cached.playerUid;
     }
   }
-  console.log(`Rebuild diff cache for ${apikey}...`);
+  while (
+    diffCache[apikey].length &&
+    diffCache[apikey][0].cached === undefined
+  ) {
+    diffCache[apikey] = diffCache[apikey].slice(1);
+    if (diffCache[apikey][0].cached === undefined) {
+      logCount("error_multiple_blank_patches");
+    }
+  }
+  console.log(
+    `Rebuild diff cache for ${apikey} from tick ${firstTick} to ${lastTick} for [[${puid}]]`,
+  );
   scanInfo[apikey] = {
     firstTick,
     lastTick,
@@ -178,8 +187,20 @@ export async function watchForBlocks(apikey: string) {
   const gameid = getGameNumber();
   const diffskey = `scandiffblocks/${gameid}/${apikey}`;
   const dbName = `${gameid}:${apikey}:scandiffblocks`;
-  const diffTimestamp = 0;
+  let diffTimestamp = 0;
   const db = await open(dbName, "initial_timestamp");
+  const storedData = await db.getAllFromIndex(dbName, "initial_timestamp");
+  console.log(`IndexDB cache for ${apikey}:`, storedData);
+  for (const block of storedData) {
+    updateCache(gameid, apikey, block);
+  }
+  for (const _ of storedData) {
+    rebuildOldDiffCache(apikey);
+  }
+  for (let next = cached[apikey]; next; next = next.next) {
+    diffTimestamp = next.timestamp || diffTimestamp;
+  }
+  console.log(`Query for ${apikey} later than ${diffTimestamp}`);
   return onSnapshot(
     query(
       collection(firestore, diffskey),
