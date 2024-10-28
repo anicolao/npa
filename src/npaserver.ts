@@ -136,16 +136,6 @@ export async function restoreFromDB(gameId: number, apikey: string) {
   }
 }
 
-export function registerForScans(apikey: string, notifications?: string) {
-  const gameid = getGameNumber();
-  const store = collection(firestore, `newkey`);
-  if (notifications) {
-    addDoc(store, { game_id: gameid, api_key: apikey, notifications });
-  } else {
-    addDoc(store, { game_id: gameid, api_key: apikey });
-  }
-}
-
 export function unloadServerScans() {
   for (const k in diffCache) {
     delete diffCache[k];

@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
+import { addDoc, collection } from "firebase/firestore";
 import { isSafari } from "./useragent";
 
 import { initializeFirestore } from "firebase/firestore";
+import { getGameNumber } from "./intel";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzwCKesO-Me1dVpo-5jZxoo559SoGGstk",
@@ -16,3 +18,13 @@ const app = initializeApp(firebaseConfig);
 export const firestore = initializeFirestore(app, {
   experimentalForceLongPolling: isSafari(),
 });
+
+export function registerForScans(apikey: string, notifications?: string) {
+  const gameid = getGameNumber();
+  const store = collection(firestore, `newkey`);
+  if (notifications) {
+    addDoc(store, { game_id: gameid, api_key: apikey, notifications });
+  } else {
+    addDoc(store, { game_id: gameid, api_key: apikey });
+  }
+}

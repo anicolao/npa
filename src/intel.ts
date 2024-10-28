@@ -28,6 +28,7 @@ import {
   restoreFromDB,
   updateMessageCache,
 } from "./events";
+import { registerForScans } from "./firestore";
 import {
   type Player,
   type ScannedStar,
@@ -62,7 +63,6 @@ import {
   getLastRecord,
   getScan,
   getServerScans,
-  registerForScans,
   scanInfo,
   unloadServerScans,
 } from "./npaserver";
