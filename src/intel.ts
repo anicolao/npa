@@ -2036,7 +2036,7 @@ async function NeptunesPrideAgent() {
   defineHotkey(
     "#",
     screenshot,
-    "Create a data: URL of the current map. Paste it into a browser window to view. This is likely to be removed.",
+    "Uses your imgbb API key to upload a screenshot of the map.",
     "Screenshot",
   );
 
