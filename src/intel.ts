@@ -76,6 +76,7 @@ import {
   or,
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
+import { watchForBlocks } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
@@ -4656,6 +4657,10 @@ async function NeptunesPrideAgent() {
       targetTick > scanInfo[api].lastTick ||
       targetTick < scanInfo[api].firstTick
     ) {
+      console.log(
+        `Destination tick ${targetTick} not in scaninfo for ${api}`,
+        scanInfo[api],
+      );
       return null;
     }
 
@@ -5912,7 +5917,7 @@ async function NeptunesPrideAgent() {
           console.log("Probable API Keys II: ", allSeenKeys);
           for (const key of allSeenKeys) {
             const code = getCodeFromApiText(key);
-            await getServerScans(code);
+            await watchForBlocks(code);
             if (countScans(code) > 0) {
               console.log(`Scans for ${code} cached`);
               continue;

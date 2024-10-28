@@ -1,12 +1,13 @@
 import { openDB } from "idb";
 
-export async function open(dbName: string) {
+export async function open(dbName: string, opt_key?: string) {
+  const keyPath = opt_key ? opt_key : "timestamp";
   return openDB(dbName, 1, {
     upgrade(db) {
       const store = db.createObjectStore(dbName, {
-        keyPath: "timestamp",
+        keyPath,
       });
-      store.createIndex("timestamp", "timestamp", { unique: true });
+      store.createIndex(keyPath, keyPath, { unique: true });
     },
   });
 }
