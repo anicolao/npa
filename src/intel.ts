@@ -5504,6 +5504,15 @@ async function NeptunesPrideAgent() {
     const { apiKeys, playerIndexes } = await getPrimaryAlliance();
     const processedUids: { [k: string]: Player } = {};
     const output: Stanzas = [];
+    const player = NeptunesPride.universe.player;
+    const techs = Object.keys(player.tech);
+    const best: BestProgress = {};
+    for (const tech of techs) {
+      best[tech] = {
+        level: 1,
+        research: 0,
+      };
+    }
     output.push("--- Alliance Research Progress ---");
     output.push(":--|:--|--:|--:|--:|--");
     output.push("Empire|Tech|ETA|Progress|Sci|⬆S");
@@ -5538,27 +5547,12 @@ async function NeptunesPrideAgent() {
             }
           }
           const techName = translateTech(player.researching);
+          const judged = `${techName}${tech.level}`;
           output.push([
-            `[[${suid}]]|${techName}|[[Tick #${tick}]]|${soFar}/${total}|${science}|${upgrade}`,
+            `[[${suid}]]|${judged}|[[Tick #${tick}]]|${soFar}/${total}|${science}|${upgrade}`,
           ]);
         }
       }
-    }
-    output.push("--- Alliance Research Progress ---");
-    const player = NeptunesPride.universe.player;
-    const techs = Object.keys(player.tech);
-    type BestProgress = {
-      [key: string]: {
-        level: number;
-        research: number;
-      };
-    };
-    const best: BestProgress = {};
-    for (const tech of techs) {
-      best[tech] = {
-        level: 1,
-        research: 0,
-      };
     }
     for (const pk in processedUids) {
       const player = processedUids[pk];
@@ -5572,6 +5566,13 @@ async function NeptunesPrideAgent() {
         }
       }
     }
+    output.push("--- Alliance Research Progress ---");
+    type BestProgress = {
+      [key: string]: {
+        level: number;
+        research: number;
+      };
+    };
     output.push("--- All Alliance Research ---");
     output.push(`:--|${techs.map(() => "--:").join("|")}`);
     output.push(
