@@ -113,6 +113,7 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
       timestamp: patches.initial_timestamp,
     };
   }
+  let lastCheck = undefined;
   for (let ti = 0; ti < timestamps.length; ++ti) {
     const timestamp = timestamps[ti];
     const nextTime = timestamps[ti + 1];
@@ -127,10 +128,13 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
       next.next = { timestamp: nextTime };
     } else {
       next.check = JSON.parse(patches.last_scan).scanning_data;
+      lastCheck = next.check;
     }
     next = next.next;
   }
-  validateCache(apikey);
+  if (lastCheck.tick === NeptunesPride.universe.galaxy.tick) {
+    validateCache(apikey);
+  }
 }
 
 function rebuildOldDiffCache(apikey) {
@@ -144,7 +148,7 @@ function rebuildOldDiffCache(apikey) {
   let lastTick = undefined;
   let puid = undefined;
   for (let next = cached[apikey]; next; next = next.next) {
-    diffCache[apikey].push(next);
+    diffCache[apikey].push({ ...next });
     if (next.check) {
       if (firstTick === undefined) {
         firstTick = next.check?.tick;
@@ -191,7 +195,7 @@ export async function watchForBlocks(apikey: string) {
   for (const block of storedData) {
     updateCache(gameid, apikey, block);
   }
-  for (const _ of storedData) {
+  if (storedData.length) {
     rebuildOldDiffCache(apikey);
   }
   for (let next = cached[apikey]; next; next = next.next) {
