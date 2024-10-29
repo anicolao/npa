@@ -542,7 +542,7 @@ async function NeptunesPrideAgent() {
           };
           if (diff.forward?.tick !== undefined) {
             if (diff.forward.tick - currentTick > 1) {
-              console.log(`Jumping from ${currentTick} to ${diff.foward.tick}`);
+              console.log(`Jump from ${currentTick} to ${diff.forward.tick}`);
             }
             currentTick = diff.forward.tick;
           }
@@ -1223,7 +1223,7 @@ async function NeptunesPrideAgent() {
           const diff = diffs[currentTickIndex];
           if (diff.forward?.tick !== undefined) {
             if (diff.forward.tick - currentTick > 1) {
-              console.log(`Jumping from ${currentTick} to ${diff.foward.tick}`);
+              console.log(`Jump from ${currentTick} to ${diff.forward.tick}`);
             }
             currentTick = diff.forward.tick;
           }
