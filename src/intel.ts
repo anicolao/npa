@@ -4376,6 +4376,33 @@ async function NeptunesPrideAgent() {
       console.log("*skip REDEFINE PROPERTIES");
     }
   }
+  const loadColors = () => {
+    return store
+      .get("colorMap")
+      .then((c) => {
+        const newColors = c.split(" ");
+        newColors.forEach((c: string, i: number) => {
+          const uid = i + (isNP4() ? 1 : 0);
+          if (NeptunesPride.universe.galaxy.players[uid]) {
+            setPlayerColor(uid, c);
+          }
+        });
+        if (NeptunesPride?.universe?.galaxy) {
+          rebuildColorMap(NeptunesPride.universe.galaxy);
+        }
+        store.get("shapeMap").then((s) => {
+          shapeMap = s.split(" ").map((x: string) => +x);
+          recolorPlayers();
+          NeptunesPride.np.trigger("refresh_interface");
+          mapRebuild();
+        });
+      })
+      .catch((_err) => {
+        if (NeptunesPride?.universe?.galaxy) {
+          rebuildColorMap(NeptunesPride.universe.galaxy);
+        }
+      });
+  };
   const init = () => {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
       linkFleets();
@@ -4387,32 +4414,7 @@ async function NeptunesPrideAgent() {
       } else {
         console.log("HUD setup already done; skipping.");
       }
-      store
-        .get("colorMap")
-        .then((c) => {
-          const newColors = c.split(" ");
-          newColors.forEach((c: string, i: number) => {
-            const uid = i + (isNP4() ? 1 : 0);
-            if (NeptunesPride.universe.galaxy.players[uid]) {
-              setPlayerColor(uid, c);
-            }
-          });
-          if (NeptunesPride?.universe?.galaxy) {
-            rebuildColorMap(NeptunesPride.universe.galaxy);
-          }
-          store.get("shapeMap").then((s) => {
-            shapeMap = s.split(" ").map((x: string) => +x);
-            recolorPlayers();
-            NeptunesPride.np.trigger("refresh_interface");
-            mapRebuild();
-          });
-        })
-        .catch((_err) => {
-          if (NeptunesPride?.universe?.galaxy) {
-            rebuildColorMap(NeptunesPride.universe.galaxy);
-          }
-        });
-
+      loadColors();
       allAccessors();
       console.log("hook for all accessors");
       onTrigger("order:full_universe", allAccessors);
@@ -4462,6 +4464,14 @@ async function NeptunesPrideAgent() {
     console.error("onServerResponse undefined.");
   }
 
+  const loadGalaxy = (galaxy: any) => {
+    const oldColors = NeptunesPride.universe.galaxy.players;
+    NeptunesPride.np.onFullUniverse(null, galaxy);
+    for (const uid in oldColors) {
+      galaxy.players[uid].colorStyle = oldColors[uid].colorStyle;
+    }
+  };
+
   const switchUser = async (_event?: any, data?: string) => {
     if (NeptunesPride.originalPlayer === undefined) {
       NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
@@ -4472,7 +4482,7 @@ async function NeptunesPrideAgent() {
       const scan = await getUserScanData(code);
       if (!cacheApiKey(code, scan)) return;
       console.log("SCAN: ", { scan });
-      NeptunesPride.np.onFullUniverse(null, scan);
+      loadGalaxy(scan);
       NeptunesPride.npui.onHideScreen(null, true);
       NeptunesPride.np.trigger("select_player", [
         NeptunesPride.universe.player.uid,
@@ -4581,7 +4591,7 @@ async function NeptunesPrideAgent() {
       const scan = await getUserScanData(code);
       if (!cacheApiKey(code, scan)) return;
       mergeScanData(scan);
-      NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
+      loadGalaxy(NeptunesPride.universe.galaxy);
       NeptunesPride.npui.onHideScreen(null, true);
       logCount("mergeuser_init");
       init();
@@ -4704,7 +4714,7 @@ async function NeptunesPrideAgent() {
         const tickOffset = timeTravelTick - NeptunesPride.universe.galaxy.tick;
         resetAliases();
         const newGalaxy = futureTime(NeptunesPride.universe.galaxy, tickOffset);
-        NeptunesPride.np.onFullUniverse(null, newGalaxy);
+        loadGalaxy(newGalaxy);
       } else if (dir === "back") {
         warpTime(null, `${trueTick}`);
       }
@@ -4723,12 +4733,12 @@ async function NeptunesPrideAgent() {
       : getPlayerUid(NeptunesPride.universe.galaxy);
     const myScan = scans.filter((scan) => getPlayerUid(scan) === myId);
     const first = myScan.length > 0 ? myScan[0] : scans[0];
-    NeptunesPride.np.onFullUniverse(null, first);
+    loadGalaxy(first);
     NeptunesPride.gameConfig.name = NeptunesPride.universe.galaxy.name;
     console.log(`RESET game name to ${NeptunesPride.gameConfig.name}`);
 
     scans.forEach(mergeScanData);
-    NeptunesPride.np.onFullUniverse(null, NeptunesPride.universe.galaxy);
+    loadGalaxy(NeptunesPride.universe.galaxy);
     logCount("timetravel_init");
     init();
   };
