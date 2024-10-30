@@ -32,6 +32,7 @@ import { registerForScans } from "./firestore";
 import {
   type Player,
   type ScannedStar,
+  type ScanningData,
   type Star,
   type TechKey,
   addAccessors,
@@ -57,15 +58,6 @@ import {
 import { safe_image_url, youtube } from "./imageutils";
 import { logCount, logError } from "./logging";
 import { get } from "./network";
-import {
-  countScans,
-  diffCache,
-  getLastRecord,
-  getScan,
-  getServerScans,
-  scanInfo,
-  unloadServerScans,
-} from "./npaserver";
 import { clone, patch } from "./patch";
 import {
   type Filter,
@@ -76,7 +68,15 @@ import {
   or,
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
-import { watchForBlocks } from "./timemachine";
+import {
+  type CachedScan,
+  getCacheForKey,
+  getLastRecord,
+  scanInfo,
+  scansExist,
+  unloadServerScans,
+  watchForBlocks,
+} from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
@@ -403,7 +403,7 @@ async function NeptunesPrideAgent() {
       ? NeptunesPride.originalPlayer
       : getPlayerUid(NeptunesPride.universe.galaxy);
 
-    timeTravelTickIndices = {};
+    timeTravelTickCaches = {};
     output.push(
       `Star ownership changes from [[Tick #${currentTick}]] to [[Tick #${endTick}]]:`,
     );
@@ -474,211 +474,106 @@ async function NeptunesPrideAgent() {
   function tradeActivityReport() {
     const output = [];
     output.push("Trading Activity:");
-    const newMethod = true;
-    if (newMethod) {
-      let currentTick = 1;
-      const myKeys = allSeenKeys.filter((x) => {
-        const k = getCodeFromApiText(x);
-        return (
-          scanInfo[k] &&
-          scanInfo[k].firstTick <= currentTick &&
-          scanInfo[k].lastTick >= currentTick
-        );
-      });
-      if (myKeys.length > 0 && newMethod) {
-        const code = getCodeFromApiText(myKeys[0]);
-        const diffs = diffCache[code];
-        let currentTickIndex = -1;
-        let players = clone(diffs[0].cached.players);
-        let scan = clone(diffs[0].cached);
-        let bsp = new BspTree(scan.stars);
-        let bspStars = { ...scan.stars };
-        for (let index = 0; index < diffs.length; ++index) {
-          const diff = diffs[index];
-          if (diff?.forward?.tick === currentTick) {
-            currentTickIndex = index;
-            break;
-          }
-          scan = patch(scan, diff.forward);
+    let currentTick = 1;
+    const myKeys = allSeenKeys.filter((x) => {
+      const k = getCodeFromApiText(x);
+      return (
+        scanInfo[k] &&
+        scanInfo[k].firstTick <= currentTick &&
+        scanInfo[k].lastTick >= currentTick
+      );
+    });
+    if (myKeys.length > 0) {
+      const code = getCodeFromApiText(myKeys[0]);
+      let cachedScan: CachedScan = getCacheForKey(code);
+      let scan: ScanningData = {} as ScanningData;
+      scan = patch(scan, cachedScan.next.forward) as ScanningData;
+      let players = clone(scan.players);
+      let bsp = new BspTree(scan.stars);
+      let bspStars = { ...scan.stars };
+      for (; cachedScan.next; cachedScan = cachedScan.next) {
+        if (cachedScan.forward?.tick === currentTick) {
+          break;
         }
-        while (currentTickIndex < diffs.length && currentTickIndex >= 0) {
-          const diff = diffs[currentTickIndex];
-          const seenCache: { [k: string]: { [k: string]: [string, string] } } =
-            {};
-          let memoStars: any = null;
-          let memo: { [k: string]: boolean } = {};
-          const sees = (sourceS: string, sinkS: string) => {
-            const source = Number.parseInt(sourceS);
-            if (memoStars !== scan.stars) {
-              memo = {};
-              memoStars = scan.stars;
-            }
-            const key = `${source}->${sinkS}`;
-            if (memo[key] !== undefined) {
-              return memo[key];
-            }
-            const allStars = Object.keys(memoStars);
-            const sourceStars = [];
-            for (const k of allStars) {
-              if (memoStars[k].puid === source) {
-                sourceStars.push(memoStars[k]);
-              }
-              if (bspStars[k] === undefined) {
-                bspStars = { ...memoStars };
-                bsp = new BspTree(bspStars);
-              }
-            }
-            const scanRange = getScanValue(scan.players[source]);
-            const scannedStars = bsp.findMany(sourceStars, scanRange);
-            for (const puid in scan.players) {
-              memo[`${source}->${puid}`] = false;
-            }
-            for (const sk of scannedStars) {
-              const star = memoStars[sk.uid];
-              memo[`${source}->${star.puid}`] = true;
-              //console.log(`for ${source} calculated ${star.puid} is visible`);
-            }
-            return memo[key];
-          };
-          if (diff.forward?.tick !== undefined) {
-            if (diff.forward.tick - currentTick > 1) {
-              console.log(`Jump from ${currentTick} to ${diff.forward.tick}`);
-            }
-            currentTick = diff.forward.tick;
-          }
-          scan = patch(scan, diff.forward);
-          if (diff.forward?.players !== undefined) {
-            const sameTick = diff.forward.tick === undefined;
-            if (sameTick) {
-              for (const k in players) {
-                const p = diff.forward.players?.[k];
-                if (p?.tech) {
-                  for (const tk in p.tech) {
-                    const level = p.tech[tk].level;
-                    if (level === undefined) continue; // happens with FAs
-                    const tech = translateTech(tk);
-                    let sourceString = "";
-                    let faSources = "";
-                    for (const op in scan.players) {
-                      if (op !== k) {
-                        if (scan.players[op].tech[tk].level >= level) {
-                          if (!tradeScanned() || sees(op, k)) {
-                            sourceString += ` [[#${op}]]`;
-                          } else if (tradeScanned()) {
-                            faSources += ` [[#${op}]]`;
-                          }
-                        }
-                      }
-                    }
-                    output.push(
-                      `[[Tick #${currentTick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
-                    );
-                  }
-                }
-              }
-              players = patch(players, diff.forward.players);
-            }
-          }
-          currentTickIndex++;
-        }
+        scan = patch(scan, cachedScan.forward) as ScanningData;
       }
-    } else {
-      const ticks = new TickIterator(getMyKeys());
-      let lastScan = undefined;
-      while (ticks.hasNext()) {
-        ticks.next();
-        const scan = ticks.getScanData();
-        const seenCache: { [k: string]: { [k: string]: [string, string] } } =
-          {};
+      while (cachedScan) {
+        const diff = cachedScan;
         let memoStars: any = null;
         let memo: { [k: string]: boolean } = {};
         const sees = (sourceS: string, sinkS: string) => {
+          const source = Number.parseInt(sourceS);
           if (memoStars !== scan.stars) {
-            memoStars = scan.stars;
             memo = {};
+            memoStars = scan.stars;
           }
-          const key = `${sourceS}->${sinkS}`;
+          const key = `${source}->${sinkS}`;
           if (memo[key] !== undefined) {
             return memo[key];
           }
-          const source = Number.parseInt(sourceS);
-          const sink = Number.parseInt(sinkS);
+          const allStars = Object.keys(memoStars);
+          const sourceStars = [];
+          for (const k of allStars) {
+            if (memoStars[k].puid === source) {
+              sourceStars.push(memoStars[k]);
+            }
+            if (bspStars[k] === undefined) {
+              bspStars = { ...memoStars };
+              bsp = new BspTree(bspStars);
+            }
+          }
           const scanRange = getScanValue(scan.players[source]);
-          const inScanRange = (s0: Star, s1: Star) => {
-            if (s0.puid === source) {
-              if (s1.puid === sink) {
-                const distance = dist(s0, s1);
-                if (distance <= scanRange) {
-                  return true;
-                }
-              }
-            }
-            return false;
-          };
-          if (seenCache?.[source]?.[sink]) {
-            const [star0, star1] = seenCache[source][sink];
-            const s0 = scan.stars[star0];
-            const s1 = scan.stars[star1];
-            if (inScanRange(s0, s1)) {
-              memo[key] = true;
-              return true;
-            }
+          const scannedStars = bsp.findMany(sourceStars, scanRange);
+          for (const puid in scan.players) {
+            memo[`${source}->${puid}`] = false;
           }
-          for (const sk1 in scan.stars) {
-            const s1 = scan.stars[sk1];
-            if (s1.puid === source) {
-              for (const sk2 in scan.stars) {
-                const s2 = scan.stars[sk2];
-                if (s2.puid === sink) {
-                  if (inScanRange(s1, s2)) {
-                    if (seenCache[source] === undefined) {
-                      seenCache[source] = {};
-                    }
-                    seenCache[source][sink] = [sk1, sk2];
-                    memo[key] = true;
-                    return true;
-                  }
-                }
-              }
-            }
+          for (const sk of scannedStars) {
+            const star = memoStars[sk.uid];
+            memo[`${source}->${star.puid}`] = true;
+            //console.log(`for ${source} calculated ${star.puid} is visible`);
           }
-          memo[key] = false;
-          return false;
+          return memo[key];
         };
-        const scanRecord = ticks.getScanRecord();
-        if (scanRecord.back !== undefined) {
-          if (scanRecord.back.tick === undefined) {
-            const changedPlayers = scanRecord.back.players;
-            for (const k in changedPlayers) {
-              const p = changedPlayers[k];
-              if (p.tech) {
+        if (diff.forward?.tick !== undefined) {
+          if (diff.forward.tick - currentTick > 1) {
+            console.log(`Jump from ${currentTick} to ${diff.forward.tick}`);
+          }
+          currentTick = diff.forward.tick;
+        }
+        scan = patch(scan, diff.forward) as ScanningData;
+        if (diff.forward?.players !== undefined) {
+          const sameTick = diff.forward.tick === undefined;
+          if (sameTick) {
+            for (const k in players) {
+              const p = diff.forward.players?.[k];
+              if (p?.tech) {
                 for (const tk in p.tech) {
+                  const level = p.tech[tk].level;
+                  if (level === undefined) continue; // happens with FAs
                   const tech = translateTech(tk);
-                  const level = scan.players[k].tech[tk].level;
-                  if (
-                    lastScan === undefined ||
-                    level > lastScan.players[k].tech[tk].level
-                  ) {
-                    let sourceString = "";
-                    for (const op in scan.players) {
-                      if (op !== k) {
-                        if (scan.players[op].tech[tk].level >= level) {
-                          if (!tradeScanned() || sees(op, k)) {
-                            sourceString += ` [[#${op}]]`;
-                          }
+                  let sourceString = "";
+                  let faSources = "";
+                  for (const op in scan.players) {
+                    if (op !== k) {
+                      if (scan.players[op].tech[tk].level >= level) {
+                        if (!tradeScanned() || sees(op, k)) {
+                          sourceString += ` [[#${op}]]`;
+                        } else if (tradeScanned()) {
+                          faSources += ` [[#${op}]]`;
                         }
                       }
                     }
-                    output.push(
-                      `[[Tick #${scan.tick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
-                    );
                   }
+                  output.push(
+                    `[[Tick #${currentTick}]] [[${k}]] ← ${tech}${level} from ${sourceString}`,
+                  );
                 }
               }
             }
+            players = patch(players, diff.forward.players);
           }
         }
-        lastScan = clone(scan);
+        cachedScan = cachedScan.next;
       }
     }
     if (output.length === 1) {
@@ -703,9 +598,9 @@ async function NeptunesPrideAgent() {
     while (ticks.hasNext()) {
       ticks.next();
       const scan = ticks.getScanData();
-      const scanRecord = ticks.getScanRecord();
-      if (scanRecord.back !== undefined) {
-        const changedPlayers = scanRecord.back.players;
+      const scanRecord: CachedScan = ticks.getScanRecord();
+      if (scanRecord.forward !== undefined) {
+        const changedPlayers = scanRecord.forward.players;
         let combatants = "";
         let countCombatants = 0;
         for (const k in changedPlayers) {
@@ -717,8 +612,8 @@ async function NeptunesPrideAgent() {
             }
           }
           if (p.total_strength) {
-            const oldSt = p.total_strength;
-            const newSt = scan.players[k].total_strength;
+            const newSt = p.total_strength;
+            const oldSt = scan.players[k].total_strength;
             if (newSt < oldSt) {
               combatants += `[[#${k}]] `;
               countCombatants++;
@@ -1179,10 +1074,6 @@ async function NeptunesPrideAgent() {
       [k: string]: string[];
     } = {};
     let currentTick = 0;
-    const myId = NeptunesPride.originalPlayer
-      ? NeptunesPride.originalPlayer
-      : getPlayerUid(NeptunesPride.universe.galaxy);
-    let prior = null;
     const players = NeptunesPride.universe.galaxy.players;
     for (const k in players) {
       playerBlock[k] = [`--- [[${k}]] ---`];
@@ -1193,7 +1084,7 @@ async function NeptunesPrideAgent() {
       NeptunesPride.universe.selectedSpaceObject?.puid >= 0
         ? NeptunesPride.universe.selectedSpaceObject?.puid
         : NeptunesPride.universe.player.uid;
-    timeTravelTickIndices = {};
+    timeTravelTickCaches = {};
     do {
       const myKeys = allSeenKeys.filter((x) => {
         const k = getCodeFromApiText(x);
@@ -1203,24 +1094,20 @@ async function NeptunesPrideAgent() {
           scanInfo[k].lastTick >= currentTick
         );
       });
-      const newMethod = true;
-      if (myKeys.length > 0 && newMethod) {
+      if (myKeys.length > 0) {
         const code = getCodeFromApiText(myKeys[0]);
-        const diffs = diffCache[code];
-        let currentTickIndex = -1;
-        let lastPlayers = clone(diffs[0].cached.players);
-        for (let index = 0; index < diffs.length; ++index) {
-          const diff = diffs[index];
-          if (diff?.forward?.tick === currentTick) {
-            currentTickIndex = index;
+        let diffs: CachedScan = getCacheForKey(code);
+        let lastPlayers = clone(diffs.next.check.players);
+        for (; diffs; diffs = diffs.next) {
+          if (diffs?.forward?.tick === currentTick) {
             break;
           }
-          if (diff.forward?.players !== undefined) {
-            lastPlayers = patch(lastPlayers, diff.forward.players);
+          if (diffs.forward?.players !== undefined) {
+            lastPlayers = patch(lastPlayers, diffs.forward.players);
           }
         }
-        while (currentTickIndex < diffs.length && currentTickIndex >= 0) {
-          const diff = diffs[currentTickIndex];
+        for (; diffs; diffs = diffs.next) {
+          const diff = diffs;
           if (diff.forward?.tick !== undefined) {
             if (diff.forward.tick - currentTick > 1) {
               console.log(`Jump from ${currentTick} to ${diff.forward.tick}`);
@@ -1259,49 +1146,7 @@ async function NeptunesPrideAgent() {
 
             lastPlayers = patch(lastPlayers, diff.forward.players);
           }
-          currentTickIndex++;
         }
-      } else if (myKeys.length > 0) {
-        const scanList = myKeys
-          .slice(0, 1)
-          .map((k) =>
-            getTimeTravelScanForTick(
-              currentTick,
-              k,
-              currentTick ? "forwards" : "back",
-            ),
-          )
-          .filter((scan) => scan && scan.tick === currentTick);
-        const myScan = scanList.filter((scan) => getPlayerUid(scan) === myId);
-        const scan = myScan.length > 0 ? myScan[0] : scanList[0];
-        const row = { ...scan.players, tick: scan.tick };
-        if (isNP4()) {
-          for (const pk in row) {
-            const player = row[pk];
-            addAccessors(player.alias, player);
-          }
-        }
-        if (prior === null) {
-          prior = row;
-        }
-        const active = (p: any, last: any, manual: boolean) => {
-          if (p.total_economy > last.total_economy) return true;
-          if (p.total_fleets > last.total_fleets) return true;
-          const manualUpgrade = p.total_stars === last.total_stars || manual;
-          if (p.total_industry > last.total_industry && manualUpgrade)
-            return true;
-          if (p.total_science > last.total_science && manualUpgrade)
-            return true;
-          return false;
-        };
-        for (const p in players) {
-          if (active(row[p], prior[p], row.tick === prior.tick)) {
-            playerBlock[p].push(
-              `[[Tick #${scan.tick}]]|${row[p].total_economy}|${row[p].total_industry}|${row[p].total_science}|${row[p].total_fleets}|${row[p].total_stars}`,
-            );
-          }
-        }
-        prior = row;
       }
       currentTick++;
     } while (currentTick <= endTick);
@@ -4666,17 +4511,19 @@ async function NeptunesPrideAgent() {
     allSeenKeys = keys.map((x) => `[[api:${x}]]`);
     let maxTick = 0;
     for (const code of keys) {
-      await getServerScans(code);
-      const numScans = countScans(code);
-      if (numScans > 0) {
-        console.log(`${numScans} scans for ${code} cached`);
-        const last = numScans - 1;
-        const lastScan = getScan(code, last);
-        console.log({ lastScan });
-        if (lastScan?.tick > maxTick) {
-          maxTick = lastScan.tick;
-          console.log(`New maxtick found: ${maxTick}`);
-          trueTick = maxTick;
+      await watchForBlocks(code);
+      if (scansExist(code)) {
+        console.log(`Scans for ${code} cached`);
+        for (
+          let cachedScan: CachedScan = getCacheForKey(code);
+          cachedScan;
+          cachedScan = cachedScan.next
+        ) {
+          if (cachedScan.forward?.tick > maxTick) {
+            maxTick = cachedScan.forward?.tick;
+            console.log(`New maxtick found: ${maxTick}`);
+            trueTick = maxTick;
+          }
         }
       } else {
         console.log(`No scans found for ${code}`);
@@ -4686,7 +4533,7 @@ async function NeptunesPrideAgent() {
   };
   onTrigger("view_game", viewGame);
 
-  let timeTravelTickIndices: { [k: string]: number } = {};
+  let timeTravelTickCaches: { [k: string]: CachedScan } = {};
   const adjustNow = (scan: any) => {
     const wholeTick = tickRate() * 60 * 1000;
     const fragment = tickFragment(scan) * wholeTick;
@@ -4702,7 +4549,7 @@ async function NeptunesPrideAgent() {
     dir: "back" | "forwards",
   ) => {
     const api = getCodeFromApiText(apikey);
-    if (!countScans(api)) return null;
+    if (!scansExist(api)) return null;
     if (
       !scanInfo[api] ||
       targetTick > scanInfo[api].lastTick ||
@@ -4715,36 +4562,48 @@ async function NeptunesPrideAgent() {
       return null;
     }
 
-    let timeTravelTickIndex = dir === "back" ? countScans(api) - 1 : 0;
-    if (timeTravelTickIndices[apikey] !== undefined) {
-      timeTravelTickIndex = timeTravelTickIndices[apikey];
+    let timeTravelTickCachedScan = getCacheForKey(api).next;
+    if (timeTravelTickCaches[apikey] !== undefined) {
+      timeTravelTickCachedScan = timeTravelTickCaches[apikey];
+    } else if (dir === "back") {
+      while (timeTravelTickCachedScan.next) {
+        timeTravelTickCachedScan = timeTravelTickCachedScan.next;
+      }
     }
-    let scan = getScan(api, timeTravelTickIndex);
+    let scan = timeTravelTickCachedScan.cached;
     scan = adjustNow(scan);
     if (scan.tick < targetTick) {
       while (scan.tick < targetTick && dir === "forwards") {
-        timeTravelTickIndex++;
-        if (timeTravelTickIndex === countScans(api)) {
-          timeTravelTickIndices[apikey] = undefined;
+        const next = timeTravelTickCachedScan.next;
+        if (!next) {
+          timeTravelTickCaches[apikey] = undefined;
           return null;
         }
-        //console.log({ timeTravelTickIndex, len: scans.length, targetTick });
-        scan = getScan(api, timeTravelTickIndex);
-        scan = adjustNow(scan);
+        next.cached = patch(
+          timeTravelTickCachedScan.cached,
+          timeTravelTickCachedScan.forward,
+        ) as ScanningData;
+        timeTravelTickCachedScan.cached = undefined;
+        timeTravelTickCachedScan = next;
+        scan = adjustNow(next.cached);
       }
     } else if (scan.tick > targetTick) {
       while (scan.tick > targetTick && dir === "back") {
-        timeTravelTickIndex--;
-        if (timeTravelTickIndex < 0) {
-          timeTravelTickIndices[apikey] = undefined;
+        const prev = timeTravelTickCachedScan.prev;
+        if (prev.back === undefined) {
+          timeTravelTickCaches[apikey] = undefined;
           return null;
         }
-        //console.log({ timeTravelTickIndex, len: scans.length, timeTravelTick });
-        scan = getScan(api, timeTravelTickIndex);
-        scan = adjustNow(scan);
+        prev.cached = patch(
+          timeTravelTickCachedScan.cached,
+          prev.back,
+        ) as ScanningData;
+        timeTravelTickCachedScan.cached = undefined;
+        timeTravelTickCachedScan = prev;
+        scan = adjustNow(prev.cached);
       }
     }
-    timeTravelTickIndices[apikey] = timeTravelTickIndex;
+    timeTravelTickCaches[apikey] = timeTravelTickCachedScan;
     //const steps = timeTravelTickIndices[apikey] - timeTravelTickIndex;
     //console.log(`Found scan for ${targetTick} ${apikey}:${scan.tick} ${steps}`);
     return clone(scan);
@@ -5806,14 +5665,17 @@ async function NeptunesPrideAgent() {
       let owner = "Unknown";
       let good = "❌";
       const code = getCodeFromApiText(key);
-      if (countScans(code) > 0) {
-        let last = countScans(code) - 1;
-        const scan = getScan(code, last);
+      if (scansExist(code)) {
+        let cached = getCacheForKey(code).next;
+        while (cached.next) {
+          cached = cached.next;
+        }
+        let scan = clone(cached.check);
         let eof = scan?.eof;
         let uid = scan ? getPlayerUid(scan) : undefined;
         good = `[[Tick #${scan?.tick}]]`;
-        while ((uid === undefined || eof) && --last > 0) {
-          const scan = getScan(code, last);
+        while ((uid === undefined || eof) && cached.prev?.back) {
+          scan = patch(scan, cached.prev.back) as ScanningData;
           eof = scan?.eof;
           uid = scan ? getPlayerUid(scan) : undefined;
           if (uid !== undefined) {
@@ -5842,9 +5704,9 @@ async function NeptunesPrideAgent() {
     const databases = await indexedDB.databases();
     const games: { [k: string]: string[] & { name?: string } } = {};
     for (const d of databases) {
-      if (/^[0-9]+:[0-9A-Za-z]+$/.test(d.name)) {
+      if (/^[0-9]+:[0-9A-Za-z]+:scandiffblocks$/.test(d.name)) {
         const gameId = d.name.match(/^[0-9]+/)[0];
-        const apiKey = d.name.match(/[0-9A-Za-z]+$/)[0];
+        const apiKey = d.name.match(/([0-9A-Za-z]+):scandiffblocks$/)[1];
         if (!games[gameId]) {
           games[gameId] = [];
         }
@@ -5855,9 +5717,9 @@ async function NeptunesPrideAgent() {
     for (const gameId in games) {
       for (const apikey of games[gameId]) {
         if (games[gameId].name === undefined) {
-          const lastScan = await getLastRecord(+gameId, apikey, "diffCache");
+          const lastScan = await getLastRecord(+gameId, apikey);
           console.log({ lastScan });
-          games[gameId].name = lastScan?.cached?.name;
+          games[gameId].name = lastScan?.check?.name;
         }
       }
     }
@@ -5978,7 +5840,7 @@ async function NeptunesPrideAgent() {
           for (const key of allSeenKeys) {
             const code = getCodeFromApiText(key);
             await watchForBlocks(code);
-            if (countScans(code) > 0) {
+            if (scansExist(code)) {
               console.log(`Scans for ${code} cached`);
               continue;
             }
@@ -6024,7 +5886,7 @@ async function NeptunesPrideAgent() {
     refreshScanData().then(() => {
       if (myApiKey) {
         console.log(`Loading scan data for key ${myApiKey}`);
-        getServerScans(myApiKey);
+        watchForBlocks(myApiKey);
       } else {
         console.log("API Key unknown. No scan history.");
       }

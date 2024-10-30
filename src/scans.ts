@@ -1,6 +1,7 @@
+import type { ScanningData } from "./galaxy";
 import { Heap } from "./heap";
-import { countScans, diffCache } from "./npaserver";
-import { clone, patch } from "./patch";
+import { patch } from "./patch";
+import { type CachedScan, getCacheForKey } from "./timemachine";
 
 export const getCodeFromApiText = (key: string) => {
   const tokens = key.split(/[^\w]/);
@@ -8,14 +9,15 @@ export const getCodeFromApiText = (key: string) => {
 };
 
 export class ScanKeyIterator {
-  apikey;
-  currentScanRecord;
-  currentScanData;
+  apikey: string;
+  currentScanRecord: CachedScan;
+  currentScanData: ScanningData;
   constructor(apilink: string) {
     this.apikey = getCodeFromApiText(apilink);
-    if (countScans(this.apikey) > 0) {
-      this.currentScanRecord = diffCache[this.apikey][0];
-      this.currentScanData = clone(this.currentScanRecord.cached);
+    const cache = getCacheForKey(this.apikey);
+    if (cache !== undefined) {
+      this.currentScanRecord = cache.next;
+      this.currentScanData = {} as ScanningData;
     } else this.currentScanRecord = undefined;
   }
   getScanRecord() {
@@ -30,7 +32,7 @@ export class ScanKeyIterator {
   }
   next() {
     const p = patch(this.currentScanData, this.currentScanRecord?.forward);
-    this.currentScanData = p;
+    this.currentScanData = p as ScanningData;
     this.currentScanRecord = this.currentScanRecord?.next;
   }
   timestamp() {
@@ -44,21 +46,24 @@ export class TickIterator {
     const iterators = apilinks
       .map((link) => new ScanKeyIterator(link))
       .filter((i) => i.hasNext());
-    this.scanIteratorHeap = new Heap(iterators, (a, b) => {
-      const aScan = a.getScanData();
-      const bScan = b.getScanData();
-      if (aScan === undefined) return aScan;
-      if (bScan === undefined) return bScan;
-      let preference = 0;
-      if (preferredUser === bScan.player_uid) {
-        // (b - p) - a = b - a - p
-        preference = 0.5;
-      } else if (preferredUser === aScan.player_uid) {
-        // b - (a - p) = b - a + p
-        preference = -0.5;
-      }
-      return bScan.tick - aScan.tick - preference;
-    });
+    this.scanIteratorHeap = new Heap(
+      iterators,
+      (a: ScanKeyIterator, b: ScanKeyIterator): number => {
+        const aScan = a.getScanData();
+        const bScan = b.getScanData();
+        if (aScan === undefined) return 1;
+        if (bScan === undefined) return -1;
+        let preference = 0;
+        if (preferredUser === bScan.player_uid) {
+          // (b - p) - a = b - a - p
+          preference = 0.5;
+        } else if (preferredUser === aScan.player_uid) {
+          // b - (a - p) = b - a + p
+          preference = -0.5;
+        }
+        return bScan.tick - aScan.tick - preference;
+      },
+    );
     while (this.getScanData() === undefined && this.scanIteratorHeap.size()) {
       this.scanIteratorHeap.extract();
     }

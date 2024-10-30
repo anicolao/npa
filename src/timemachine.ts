@@ -6,12 +6,10 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "./firestore";
-import { type ScanningData, getPlayerUid } from "./galaxy";
 import { open } from "./idb";
 import { getGameNumber } from "./intel";
 import { logCount } from "./logging";
-import { diffCache, scanInfo } from "./npaserver";
-import { type Patch, clone, diff, patch } from "./patch";
+import { clone, diff, patch } from "./patch";
 
 export interface ApiInfo {
   firstTick: number;
@@ -28,6 +26,7 @@ export interface CachedScan {
   prev?: CachedScan;
   timestamp: number;
 }
+export const scanInfo: { [k: string]: ApiInfo } = {};
 
 export interface Block {
   initial_timestamp: number;
@@ -38,6 +37,29 @@ export interface Block {
 }
 
 const cached: { [k: string]: CachedScan } = {};
+
+export function unloadServerScans() {
+  //cached = {};
+}
+
+export function getCacheForKey(apikey: string): CachedScan {
+  return cached[apikey];
+}
+export function scansExist(apikey: string): boolean {
+  return cached[apikey]?.next !== undefined && cached[apikey].next !== null;
+}
+export async function getLastRecord(gameid: number, apikey: string) {
+  await loadBlocks(gameid, apikey);
+  let cache = getCacheForKey(apikey);
+  if (!cache) {
+    await subscribe(gameid, apikey);
+  }
+  cache = getCacheForKey(apikey);
+  while (cache?.next) {
+    cache = cache.next;
+  }
+  return cache;
+}
 function validateCache(apikey: string) {
   if (!cached[apikey]) {
     console.error("Cached data not found");
@@ -137,18 +159,16 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
   }
 }
 
-function rebuildOldDiffCache(apikey) {
+function updateScanInfo(apikey: string) {
   if (!cached[apikey]) {
     console.error("Cached data not found");
     logCount("error_missing_cache_on_rebuild");
     return;
   }
-  diffCache[apikey] = [];
   let firstTick = undefined;
   let lastTick = undefined;
   let puid = undefined;
   for (let next = cached[apikey]; next; next = next.next) {
-    diffCache[apikey].push({ ...next });
     if (next.check) {
       if (firstTick === undefined) {
         firstTick = next.check?.tick;
@@ -158,14 +178,8 @@ function rebuildOldDiffCache(apikey) {
       puid = next.cached.playerUid;
     }
   }
-  for (let i = 0; i < diffCache[apikey].length - 1; ++i) {
-    diffCache[apikey][i].cached = diffCache[apikey][i + 1].cached;
-    diffCache[apikey][i].forward = diffCache[apikey][i + 1].forward;
-    diffCache[apikey][i + 1].cached = undefined;
-    diffCache[apikey][i + 1].forward = undefined;
-  }
   console.log(
-    `Rebuild diff cache for ${apikey} from tick ${firstTick} to ${lastTick} for [[${puid}]]`,
+    `Update scan info for ${apikey} from tick ${firstTick} to ${lastTick} for [[${puid}]]`,
   );
   scanInfo[apikey] = {
     firstTick,
@@ -180,28 +194,38 @@ async function store(dbName: string, db: any, persist: any): Promise<void> {
   return tx.done;
 }
 
-export async function watchForBlocks(apikey: string) {
-  if (cached[apikey] !== undefined) {
-    console.log(`Already watching ${apikey}`);
-    return;
-  }
-  const gameid = getGameNumber();
-  const diffskey = `scandiffblocks/${gameid}/${apikey}`;
+export async function loadBlocks(gameid: number, apikey: string) {
   const dbName = `${gameid}:${apikey}:scandiffblocks`;
-  let diffTimestamp = 0;
   const db = await open(dbName, "initial_timestamp");
+  console.log(`OPEN DB: ${dbName}`, db);
   const storedData = await db.getAllFromIndex(dbName, "initial_timestamp");
   console.log(`IndexDB cache for ${apikey}:`, storedData);
   for (const block of storedData) {
     updateCache(gameid, apikey, block);
   }
   if (storedData.length) {
-    rebuildOldDiffCache(apikey);
+    updateScanInfo(apikey);
   }
+  return scanInfo[apikey];
+}
+export async function watchForBlocks(apikey: string) {
+  if (cached[apikey] !== undefined) {
+    console.log(`Already watching ${apikey}`);
+    return;
+  }
+  const gameid = getGameNumber();
+  await loadBlocks(gameid, apikey);
+  return subscribe(gameid, apikey);
+}
+async function subscribe(gameid: number, apikey: string) {
+  const dbName = `${gameid}:${apikey}:scandiffblocks`;
+  const db = await open(dbName, "initial_timestamp");
+  let diffTimestamp = 0;
   for (let next = cached[apikey]; next; next = next.next) {
     diffTimestamp = next.timestamp || diffTimestamp;
   }
-  console.log(`Query for ${apikey} later than ${diffTimestamp}`);
+  console.log(`Query for ${gameid}:${apikey} later than ${diffTimestamp}`);
+  const diffskey = `scandiffblocks/${gameid}/${apikey}`;
   return onSnapshot(
     query(
       collection(firestore, diffskey),
@@ -215,7 +239,7 @@ export async function watchForBlocks(apikey: string) {
         const patches = doc.data() as any;
         store(dbName, db, patches);
         updateCache(gameid, apikey, patches);
-        rebuildOldDiffCache(apikey);
+        updateScanInfo(apikey);
       }
     },
     (error) => {
