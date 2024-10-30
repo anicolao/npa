@@ -4590,13 +4590,13 @@ async function NeptunesPrideAgent() {
     } else if (scan.tick > targetTick) {
       while (scan.tick > targetTick && dir === "back") {
         const prev = timeTravelTickCachedScan.prev;
-        if (prev.back === undefined) {
+        if (timeTravelTickCachedScan.back === undefined) {
           timeTravelTickCaches[apikey] = undefined;
           return null;
         }
         prev.cached = patch(
           timeTravelTickCachedScan.cached,
-          prev.back,
+          timeTravelTickCachedScan.back,
         ) as ScanningData;
         timeTravelTickCachedScan.cached = undefined;
         timeTravelTickCachedScan = prev;
