@@ -484,24 +484,21 @@ async function NeptunesPrideAgent() {
         code = k;
       }
     }
-    if (code) {
-      let cachedScan: CachedScan = getCacheForKey(code);
-      let scan: ScanningData = {} as ScanningData;
-      scan = patch(scan, cachedScan.next.forward) as ScanningData;
+    const myId = NeptunesPride.originalPlayer
+      ? NeptunesPride.originalPlayer
+      : getPlayerUid(NeptunesPride.universe.galaxy);
+    const ticks = new TickIterator(getMyKeys(), myId);
+    while (ticks.hasNext()) {
+      ticks.next();
+      let scan = clone(ticks.getScanData());
+      if (scan.tick === undefined) continue;
+      const cachedScan: CachedScan = ticks.getScanRecord();
       let players = clone(scan.players);
       let bsp = new BspTree(scan.stars);
       let bspStars = { ...scan.stars };
-      for (; cachedScan.next; cachedScan = cachedScan.next) {
-        if (cachedScan.forward?.tick === currentTick) {
-          break;
-        }
-        if (currentTick < cachedScan.forward?.tick) {
-          currentTick = cachedScan.forward.tick;
-          break;
-        }
-        scan = patch(scan, cachedScan.forward) as ScanningData;
-      }
-      while (cachedScan) {
+      if (scan.tick < currentTick) continue;
+      currentTick = scan.tick;
+      if (cachedScan) {
         const diff = cachedScan;
         let memoStars: any = null;
         let memo: { [k: string]: boolean } = {};
@@ -577,7 +574,6 @@ async function NeptunesPrideAgent() {
             players = patch(players, diff.forward.players);
           }
         }
-        cachedScan = cachedScan.next;
       }
     }
     if (output.length === 1) {
