@@ -475,16 +475,16 @@ async function NeptunesPrideAgent() {
     const output = [];
     output.push("Trading Activity:");
     let currentTick = 1;
-    const myKeys = allSeenKeys.filter((x) => {
-      const k = getCodeFromApiText(x);
-      return (
-        scanInfo[k] &&
-        scanInfo[k].firstTick <= currentTick &&
-        scanInfo[k].lastTick >= currentTick
-      );
-    });
-    if (myKeys.length > 0) {
-      const code = getCodeFromApiText(myKeys[0]);
+    let bestSize = 0;
+    let code = "";
+    for (const k in scanInfo) {
+      const size = scanInfo[k].lastTick - scanInfo[k].firstTick;
+      if (size > bestSize) {
+        bestSize = size;
+        code = k;
+      }
+    }
+    if (code) {
       let cachedScan: CachedScan = getCacheForKey(code);
       let scan: ScanningData = {} as ScanningData;
       scan = patch(scan, cachedScan.next.forward) as ScanningData;
@@ -493,6 +493,10 @@ async function NeptunesPrideAgent() {
       let bspStars = { ...scan.stars };
       for (; cachedScan.next; cachedScan = cachedScan.next) {
         if (cachedScan.forward?.tick === currentTick) {
+          break;
+        }
+        if (currentTick < cachedScan.forward?.tick) {
+          currentTick = cachedScan.forward.tick;
           break;
         }
         scan = patch(scan, cachedScan.forward) as ScanningData;
