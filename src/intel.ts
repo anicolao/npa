@@ -4510,6 +4510,7 @@ async function NeptunesPrideAgent() {
     const keys = games[gameId] !== undefined ? games[gameId] : [splits[2]];
     allSeenKeys = keys.map((x) => `[[api:${x}]]`);
     let maxTick = 0;
+    let minTick = 100000;
     for (const code of keys) {
       await watchForBlocks(code);
       if (scansExist(code)) {
@@ -4521,7 +4522,10 @@ async function NeptunesPrideAgent() {
         ) {
           if (cachedScan.forward?.tick > maxTick) {
             maxTick = cachedScan.forward?.tick;
-            console.log(`New maxtick found: ${maxTick}`);
+            trueTick = maxTick;
+          }
+          if (cachedScan.forward?.tick < minTick) {
+            minTick = cachedScan.forward?.tick;
             trueTick = maxTick;
           }
         }
@@ -4529,7 +4533,14 @@ async function NeptunesPrideAgent() {
         console.log(`No scans found for ${code}`);
       }
     }
-    warpTime(null, "0");
+    console.log(`Historical game loaded from tick #${minTick} to ${maxTick}`);
+    warpTime(null, `${minTick}`);
+    while (
+      NeptunesPride.universe.galaxy.tick !== timeTravelTick &&
+      timeTravelTick <= maxTick
+    ) {
+      timeTravel("forwards");
+    }
   };
   onTrigger("view_game", viewGame);
 
