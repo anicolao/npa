@@ -2096,6 +2096,48 @@ async function NeptunesPrideAgent() {
       "<p>The clipboard should be pasted into a CSV and then imported.",
     "Summary CSV",
   );
+  const starSheet = () => {
+    const p = NeptunesPride.universe.galaxy.stars;
+    const output = [];
+    const fields = [
+      "uid",
+      "x",
+      "y",
+      "n",
+      "exp",
+      "puid",
+      "v",
+      "r",
+      "nr",
+      "yard",
+      "e",
+      "i",
+      "s",
+      "ga",
+      "st",
+      "alliedDefenders",
+      "shipsPerTick",
+      "owned",
+      "totalDefenses",
+      "uce",
+      "uci",
+      "ucs",
+      "ucg",
+    ];
+    output.push(fields.join(","));
+    for (const i in p) {
+      const record = fields.map((f) => p[i][f]);
+      output.push(record.join(","));
+    }
+    setClip(output.join("\n"));
+  };
+  defineHotkey(
+    "ctrl+shift+8",
+    starSheet,
+    "Generate a star summary mean to be made into a spreadsheet." +
+      "<p>The clipboard should be pasted into a CSV and then imported.",
+    "Stars CSV",
+  );
 
   const drawString = (s: string, x: number, y: number, fgColor?: string) => {
     const str = Crux.format(s, { linkTimes: false });
