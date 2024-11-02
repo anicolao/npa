@@ -6,7 +6,7 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "./firestore";
-import { open } from "./idb";
+import { deleteDB, open } from "./idb";
 import { getGameNumber } from "./intel";
 import { logCount } from "./logging";
 import { clone, diff, patch } from "./patch";
@@ -60,11 +60,11 @@ export async function getLastRecord(gameid: number, apikey: string) {
   }
   return cache;
 }
-function validateCache(apikey: string) {
+function validateCache(apikey: string): number {
   if (!cached[apikey]) {
     console.error("Cached data not found");
     logCount("error_missing_cache");
-    return;
+    return 0;
   }
   let state = {};
   let count = 0;
@@ -81,12 +81,14 @@ function validateCache(apikey: string) {
         console.error(
           `Invalid patch at timestamp ${next.timestamp} for ${apikey}`,
         );
+        prev.next = null;
         logCount("error_invalid_patch");
-        return;
+        return prev.timestamp;
       }
     }
     count++;
   }
+  const lastTimestamp = prev.timestamp;
   if (prev.next) {
     console.error(`Unexpected next at end of chain.`);
   } else {
@@ -97,12 +99,13 @@ function validateCache(apikey: string) {
         if (d !== null) {
           console.error(`Invalid backlink at ${prev.timestamp} for ${apikey}`);
           logCount("error_bad_backlink");
-          return;
+          return 0;
         }
       }
     }
   }
   console.log(`Validated ${count} patches for ${apikey}`);
+  return lastTimestamp;
 }
 
 function updateCache(gameid: number, apikey: string, patches: Block) {
@@ -136,6 +139,7 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
     };
   }
   let lastCheck = undefined;
+  let last = undefined;
   for (let ti = 0; ti < timestamps.length; ++ti) {
     const timestamp = timestamps[ti];
     const nextTime = timestamps[ti + 1];
@@ -150,12 +154,21 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
       next.next = { timestamp: nextTime };
     } else {
       next.check = JSON.parse(patches.last_scan).scanning_data;
+      last = next;
       lastCheck = next.check;
     }
     next = next.next;
   }
   if (lastCheck.tick === NeptunesPride.universe.galaxy.tick) {
-    validateCache(apikey);
+    const lastValidTimestamp = validateCache(apikey);
+    if (lastValidTimestamp < last.timestamp) {
+      console.error(
+        `${lastValidTimestamp} < ${last.timestamp}; delete db for ${apikey}`,
+      );
+      const dbName = `${gameid}:${apikey}:scandiffblocks`;
+      logCount("error_invalid_db_deleted");
+      deleteDB(dbName);
+    }
   }
 }
 
@@ -223,6 +236,12 @@ async function subscribe(gameid: number, apikey: string) {
   let diffTimestamp = 0;
   for (let next = cached[apikey]; next; next = next.next) {
     diffTimestamp = next.timestamp || diffTimestamp;
+  }
+  const lastValidTime = validateCache(apikey);
+  if (lastValidTime < diffTimestamp) {
+    console.error(`Using ${lastValidTime} instead of ${diffTimestamp}`);
+    logCount("error_heal_bad_diffcache");
+    diffTimestamp = lastValidTime;
   }
   console.log(`Query for ${gameid}:${apikey} later than ${diffTimestamp}`);
   const diffskey = `scandiffblocks/${gameid}/${apikey}`;

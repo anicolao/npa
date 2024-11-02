@@ -18,6 +18,8 @@ export class ScanKeyIterator {
     if (cache !== undefined) {
       this.currentScanRecord = cache.next;
       this.currentScanData = {} as ScanningData;
+      const p = patch(this.currentScanData, cache.forward);
+      this.currentScanData = p as ScanningData;
     } else this.currentScanRecord = undefined;
   }
   getScanRecord() {
