@@ -2491,7 +2491,9 @@ async function NeptunesPrideAgent() {
               const candidateDistance =
                 m * dist[u] +
                 m *
-                  (Math.sqrt(rawDistance) / calcSpeedBetweenStars(u, v, puid));
+                  Math.ceil(
+                    Math.sqrt(rawDistance) / calcSpeedBetweenStars(u, v, puid),
+                  );
               if (candidateDistance < dist[v]) {
                 dist[v] = candidateDistance;
                 prev[v] = u;
