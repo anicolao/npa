@@ -4324,34 +4324,21 @@ async function NeptunesPrideAgent() {
   let otherUserCode: string | undefined = undefined;
   const game = getGameNumber();
   const store = new GameStore(game);
-  const superOnServerResponse = NeptunesPride.np.onServerResponse.bind(
-    NeptunesPride.np,
-  );
-  if (superOnServerResponse !== undefined) {
-    NeptunesPride.np.onServerResponse = (
-      response: { event: string } | any[],
-    ) => {
-      superOnServerResponse(response);
-      // TODO: replace this with normal event handling
-      const event = Array.isArray(response) ? response[0] : response.event;
-      if (event === "order:player_achievements") {
-        console.log("Initial load complete. Reinstall.");
-        logCount("achievements_init");
-        init();
-      } else if (event === "order:full_universe") {
-        console.log("Universe received. Reinstall.");
-        NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
-        logCount("universe_init");
-        init();
-      } else if (!hooksLoaded && NeptunesPride.npui.map) {
-        console.log("Hooks need loading and map is ready. Reinstall.");
-        logCount(`${event}_init`);
-        init();
-      }
-    };
-  } else {
-    console.error("onServerResponse undefined.");
-  }
+  onTrigger("order:player_achievements", () => {
+    window.setTimeout(() => {
+      console.log("Initial load complete. Reinstall.");
+      logCount("achievements_init");
+      init();
+    }, 500);
+  });
+  onTrigger("order:full_universe", () => {
+    window.setTimeout(() => {
+      console.log("Universe received. Reinstall.");
+      NeptunesPride.originalPlayer = NeptunesPride.universe.player.uid;
+      logCount("universe_init");
+      init();
+    }, 500);
+  });
 
   const loadGalaxy = (galaxy: any) => {
     const oldColors = NeptunesPride.universe.galaxy.players;
