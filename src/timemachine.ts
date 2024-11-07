@@ -60,7 +60,7 @@ export async function getLastRecord(gameid: number, apikey: string) {
   }
   return cache;
 }
-function validateCache(apikey: string): number {
+async function validateCache(apikey: string): Promise<number> {
   if (!cached[apikey]) {
     console.error("Cached data not found");
     logCount("error_missing_cache");
@@ -69,6 +69,7 @@ function validateCache(apikey: string): number {
   let state = {};
   let count = 0;
   let prev = null;
+  let startTime = performance.now();
   for (let next = cached[apikey]; next !== undefined; next = next.next) {
     const previous = clone(state);
     state = patch(state, next.forward);
@@ -87,6 +88,11 @@ function validateCache(apikey: string): number {
       }
     }
     count++;
+    const endTime = performance.now();
+    if (endTime - startTime > 200) {
+      await delay(50);
+      startTime = performance.now();
+    }
   }
   const lastTimestamp = prev.timestamp;
   if (prev.next) {
@@ -108,14 +114,16 @@ function validateCache(apikey: string): number {
   return lastTimestamp;
 }
 
-function updateCache(gameid: number, apikey: string, patches: Block) {
+async function updateCache(gameid: number, apikey: string, patches: Block) {
   const timestamps = Object.keys(patches)
     .filter((x) => +x)
     .map((x) => +x)
     .sort();
-  console.log(
-    `Update cache for ${gameid}:${apikey}; ${timestamps.length} patches found`,
-  );
+  const check = JSON.parse(patches.initial_scan).scanning_data;
+  //const lastScan = JSON.parse(patches.last_scan).scanning_data;
+  //console.log(
+  //`Update cache for ${gameid}:${apikey}; ${timestamps.length} patches found from ${check?.tick} to ${lastScan?.tick}`,
+  //);
   cached[apikey] = cached[apikey] || { timestamp: patches.initial_timestamp };
   let next = cached[apikey];
   while (next.next) {
@@ -130,7 +138,7 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
   }
   next.next = {
     timestamp: patches.initial_timestamp,
-    check: JSON.parse(patches.initial_scan).scanning_data,
+    check,
   };
   next = next.next;
   if (cached[apikey] === undefined) {
@@ -160,7 +168,7 @@ function updateCache(gameid: number, apikey: string, patches: Block) {
     next = next.next;
   }
   if (lastCheck.tick === NeptunesPride.universe.galaxy.tick) {
-    const lastValidTimestamp = validateCache(apikey);
+    const lastValidTimestamp = await validateCache(apikey);
     if (lastValidTimestamp < last.timestamp) {
       console.error(
         `${lastValidTimestamp} < ${last.timestamp}; delete db for ${apikey}`,
@@ -207,18 +215,28 @@ async function store(dbName: string, db: any, persist: any): Promise<void> {
   return tx.done;
 }
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function loadBlocks(gameid: number, apikey: string) {
+  const start = performance.now();
   const dbName = `${gameid}:${apikey}:scandiffblocks`;
   const db = await open(dbName, "initial_timestamp");
   console.log(`OPEN DB: ${dbName}`, db);
   const storedData = await db.getAllFromIndex(dbName, "initial_timestamp");
   console.log(`IndexDB cache for ${apikey}:`, storedData);
+  const cacheFetched = performance.now();
   for (const block of storedData) {
     updateCache(gameid, apikey, block);
+    await delay(50);
   }
   if (storedData.length) {
     updateScanInfo(apikey);
   }
+  const done = performance.now();
+  console.log(`Cache time: ${cacheFetched - start}`);
+  console.log(`Processing time: ${done - cacheFetched}`);
   return scanInfo[apikey];
 }
 export async function watchForBlocks(apikey: string) {
@@ -237,7 +255,10 @@ async function subscribe(gameid: number, apikey: string) {
   for (let next = cached[apikey]; next; next = next.next) {
     diffTimestamp = next.timestamp || diffTimestamp;
   }
-  const lastValidTime = validateCache(apikey);
+  const preValidation = performance.now();
+  const lastValidTime = await validateCache(apikey);
+  const postValidation = performance.now();
+  console.log(`Validation time ${postValidation - preValidation}`);
   if (lastValidTime < diffTimestamp) {
     console.error(`Using ${lastValidTime} instead of ${diffTimestamp}`);
     logCount("error_heal_bad_diffcache");
