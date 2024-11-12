@@ -67,6 +67,7 @@ export interface Fleet extends SpaceObject {
   ouid?: number;
   speed?: number;
   lsuid?: number;
+  lastStar?: Star;
 }
 export interface Player {
   ai: number;
@@ -155,10 +156,10 @@ export function getRangeValue(player: Player) {
   return player.tech.propulsion.value;
 }
 export interface UnscannedStar extends SpaceObject {
-  v: "0"; // unscanned (!visible)
+  v: "0" | 0; // unscanned (!visible)
 }
 export interface ScannedStar extends SpaceObject {
-  v: "1"; // scanned (visible)
+  v: "1" | 1; // scanned (visible)
   c: number; // fractional ship count
   yard: number; // NP4 fractional ship count
   e: number; // economy

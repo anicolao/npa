@@ -139,10 +139,7 @@ export function futureTime(
             newFleet.o = [...newFleet.o];
             newFleet.o[0] = [delay - 1, destUid, action, argument];
           } else {
-            const [x, y] = [
-              Number.parseFloat(newFleet.x),
-              Number.parseFloat(newFleet.y),
-            ];
+            const [x, y] = [+newFleet.x, +newFleet.y];
             const [dx, dy] = [destX - x, destY - y];
             if (newFleet.uid === NeptunesPride.universe.selectedFleet?.uid) {
               console.log(
@@ -152,6 +149,15 @@ export function futureTime(
             let speed = newState.fleet_speed * (newFleet.warpSpeed ? 3 : 1);
             if (isNP4()) {
               if (
+                newFleet.lastStar?.v === 1 &&
+                stars[newFleet.o[0][1]]?.v === 1
+              ) {
+                speed = calcSpeedBetweenStars(
+                  newFleet.lastStar.uid,
+                  newFleet.o[0][1],
+                  newFleet.puid,
+                );
+              } else if (
                 newFleet.speed &&
                 !Number.isNaN(newFleet.speed) &&
                 (newFleet.speed > 0.042 || !newFleet.ouid)
@@ -181,6 +187,8 @@ export function futureTime(
           newFleet.y = String(destY);
           const firstOrder = newFleet.o[0];
           newFleet.o = newFleet.o.slice(1);
+          newFleet.lastStar = newStar;
+          newFleet.lsuid = newStar.uid;
           if (newFleet.l === 1) {
             newFleet.o.push(firstOrder);
           }
