@@ -4249,7 +4249,14 @@ async function NeptunesPrideAgent() {
     const fleet = NeptunesPride.universe.selectedFleet;
     const stars = NeptunesPride.universe.galaxy.stars;
     const universe = NeptunesPride.universe;
-    if (fleet.o.length === 0 && fleet.puid === player.uid) {
+    if (!fleet && universe.selectedStar) {
+      NeptunesPride.np.trigger("show_screen", [
+        "new_fleet",
+        universe.selectedStar,
+      ]);
+      return;
+    }
+    if (fleet && fleet.o.length === 0 && fleet.puid === player.uid) {
       if (settings.routePlanOn && destinationLock !== undefined) {
         const orbit = stars[fleet.ouid];
         universe.defaultFleetOrderOverride = 0;
