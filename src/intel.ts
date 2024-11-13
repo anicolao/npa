@@ -30,6 +30,7 @@ import {
 } from "./events";
 import { registerForScans } from "./firestore";
 import {
+  FleetOrder,
   type Player,
   type ScannedStar,
   type ScanningData,
@@ -258,6 +259,9 @@ async function NeptunesPrideAgent() {
     ]);
   };
   let destinationLock: ScannedStar | undefined = undefined;
+  let routeParents = undefined;
+  let routeChildren = undefined;
+
   const prepReport = (
     reportName: string,
     stanzas: (string | string[])[],
@@ -2552,6 +2556,8 @@ async function NeptunesPrideAgent() {
           }
           return shipsPerTick;
         };
+        routeParents = prev;
+        routeChildren = children;
         dfsDraw(destUid, universe.galaxy.tick);
       }
     };
@@ -4237,6 +4243,47 @@ async function NeptunesPrideAgent() {
     toggleWhitePlayer,
     "Toggle between my color and white on the map display.",
     "Whiteout",
+  );
+  const autoWaypoints = () => {
+    const player = NeptunesPride.universe.player;
+    const fleet = NeptunesPride.universe.selectedFleet;
+    const stars = NeptunesPride.universe.galaxy.stars;
+    const universe = NeptunesPride.universe;
+    if (fleet.o.length === 0 && fleet.puid === player.uid) {
+      if (settings.routePlanOn && destinationLock !== undefined) {
+        const orbit = stars[fleet.ouid];
+        universe.defaultFleetOrderOverride = 0;
+        const returnPath = [orbit];
+        for (
+          let pred = routeParents[fleet.ouid];
+          pred;
+          pred = routeParents[pred]
+        ) {
+          const next = stars[pred];
+          if (!routeParents[pred]) {
+            // start return flight
+            universe.defaultFleetOrderOverride = FleetOrder.DropAll;
+          } else {
+            returnPath.push(next);
+          }
+          NeptunesPride.np.trigger("add_waypoint", next);
+        }
+        returnPath.reverse();
+        for (const retstar of returnPath) {
+          if (retstar === orbit) {
+            universe.defaultFleetOrderOverride = 0;
+          }
+          NeptunesPride.np.trigger("add_waypoint", retstar);
+        }
+        fleet.loop = 1;
+      }
+    }
+  };
+  defineHotkey(
+    "W",
+    autoWaypoints,
+    "Automatically route this fleet along the route planner's path. Only works on a fleet with no orders",
+    "Autoroute",
   );
   const checkRecolor = () => {
     if (settings.whitePlayer) {
