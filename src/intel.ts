@@ -811,7 +811,7 @@ async function NeptunesPrideAgent() {
       ({ e, i, s } = buyAllTheThings(balance, "bank"));
       output.push([`Banking|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
       const bankCost = tradeCostForLevel(
-        universe.player.tech.banking.level + 1,
+        getTech(universe.player, "banking").level + 1,
       );
       universe.player.cash = myCash - bankCost;
       universe.player.total_economy = preEcon;
@@ -821,7 +821,7 @@ async function NeptunesPrideAgent() {
       balance =
         universe.player.total_economy * 10 +
         universe.player.cash +
-        universe.player.tech.banking.level * 75;
+        getTech(universe.player, "banking").level * 75;
       ({ e, i, s } = buyAllTheThings(balance, "bank"));
       output.push([
         `Buy it ($${bankCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
@@ -834,11 +834,11 @@ async function NeptunesPrideAgent() {
       balance =
         universe.player.total_economy * 10 +
         universe.player.cash +
-        universe.player.tech.banking.level * 75;
+        getTech(universe.player, "banking").level * 75;
       ({ e, i, s } = buyAllTheThings(balance, "terra"));
       output.push([`Terraforming|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
       const terraCost = tradeCostForLevel(
-        universe.player.tech.terraforming.level + 1,
+        getTech(universe.player, "terraforming").level + 1,
       );
       universe.player.cash = myCash - terraCost;
       universe.player.total_economy = preEcon;
@@ -848,13 +848,80 @@ async function NeptunesPrideAgent() {
       balance =
         universe.player.total_economy * 10 +
         universe.player.cash +
-        universe.player.tech.banking.level * 75;
+        getTech(universe.player, "banking").level * 75;
       ({ e, i, s } = buyAllTheThings(balance, "terra"));
       output.push([
         `Buy it ($${terraCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
       ]);
       output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
       //output.push(`Bought ${count} economy for ${cost} using terraforming with ${universe.player.cash} left over.`)
+    } else if (isNP4() && NeptunesPride.universe.galaxy.config.noTer === 0) {
+      output.push(`--- Economists Report for [[${myUid}]] ($${myCash}) ---`);
+      output.push(`:--|--:|--:`);
+      output.push(`Technology|New Income (Balance)|Buys one of E/I/S`);
+      let count = buyAllTheHypotheticalEconomy("none", "E");
+      let newIncome =
+        count * (10 + 2 * getTech(universe.player, "banking").level);
+      let balance =
+        universe.player.total_economy *
+          (10 + 2 * getTech(universe.player, "banking").level) +
+        universe.player.cash;
+      let { e, i, s } = buyAllTheThings(balance, "none");
+      output.push([`No Tech|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
+
+      universe.player.cash = myCash;
+      universe.player.total_economy = preEcon;
+      count = buyAllTheHypotheticalEconomy("bank", "E");
+      newIncome =
+        count * (10 + 2 * getTech(universe.player, "banking").level + 2);
+      balance =
+        universe.player.total_economy *
+          (10 + 2 * getTech(universe.player, "banking").level + 2) +
+        universe.player.cash;
+      ({ e, i, s } = buyAllTheThings(balance, "bank"));
+      output.push([`Banking|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
+      const bankCost = tradeCostForLevel(
+        getTech(universe.player, "banking").level + 1,
+      );
+      universe.player.cash = myCash - bankCost;
+      universe.player.total_economy = preEcon;
+      count = buyAllTheHypotheticalEconomy("bank", "E");
+      newIncome =
+        count * (10 + 2 * getTech(universe.player, "banking").level + 2);
+      balance =
+        universe.player.total_economy *
+          (10 + 2 * getTech(universe.player, "banking").level + 2) +
+        universe.player.cash;
+      ({ e, i, s } = buyAllTheThings(balance, "bank"));
+      output.push([
+        `Buy it ($${bankCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
+      ]);
+      universe.player.cash = myCash;
+      universe.player.total_economy = preEcon;
+      count = buyAllTheHypotheticalEconomy("terra", "E");
+      newIncome = count * (10 + 2 * getTech(universe.player, "banking").level);
+      balance =
+        universe.player.total_economy *
+          (10 + 2 * getTech(universe.player, "banking").level) +
+        universe.player.cash;
+      ({ e, i, s } = buyAllTheThings(balance, "terra"));
+      output.push([`Terraforming|$${newIncome} ($${balance})|${e}/${i}/${s}`]);
+      const terraCost = tradeCostForLevel(
+        getTech(universe.player, "terraforming").level + 1,
+      );
+      universe.player.cash = myCash - terraCost;
+      universe.player.total_economy = preEcon;
+      count = buyAllTheHypotheticalEconomy("terra", "E");
+      newIncome = count * (10 + 2 * getTech(universe.player, "banking").level);
+      balance =
+        universe.player.total_economy *
+          (10 + 2 * getTech(universe.player, "banking").level) +
+        universe.player.cash;
+      ({ e, i, s } = buyAllTheThings(balance, "terra"));
+      output.push([
+        `Buy it ($${terraCost})|$${newIncome} ($${balance})|${e}/${i}/${s}`,
+      ]);
+      output.push(`--- Economists Report for [[${myUid}]] (${myCash}) ---`);
     }
 
     universe.player.cash = originalCash;
