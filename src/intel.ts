@@ -4774,40 +4774,56 @@ async function NeptunesPrideAgent() {
     }
   };
   onTrigger("warp_time", warpTime);
-  const timeTravelBack = () => {
-    if (timeTravelTick === -1) {
-      timeTravelTick = NeptunesPride.universe.galaxy.tick;
-    }
-    if (NeptunesPride.universe.galaxy.turn_based) {
-      timeTravelTick -= turnJumpTicks();
-    } else {
-      timeTravelTick -= 1;
-    }
-    if (timeTravelTick < 0) timeTravelTick = 0;
-    timeTravel("back");
+  const timeTravelBack = (onetick?: boolean) => {
+    return () => {
+      if (timeTravelTick === -1) {
+        timeTravelTick = NeptunesPride.universe.galaxy.tick;
+      }
+      if (NeptunesPride.universe.galaxy.turn_based && !onetick) {
+        timeTravelTick -= turnJumpTicks();
+      } else {
+        timeTravelTick -= 1;
+      }
+      if (timeTravelTick < 0) timeTravelTick = 0;
+      timeTravel("back");
+    };
   };
-  const timeTravelForward = () => {
-    if (timeTravelTick === -1) {
-      timeTravelTick = NeptunesPride.universe.galaxy.tick;
-    }
-    if (NeptunesPride.universe.galaxy.turn_based) {
-      timeTravelTick += turnJumpTicks();
-    } else {
-      timeTravelTick += 1;
-    }
-    timeTravel("forwards");
+  const timeTravelForward = (onetick?: boolean) => {
+    return () => {
+      if (timeTravelTick === -1) {
+        timeTravelTick = NeptunesPride.universe.galaxy.tick;
+      }
+      if (NeptunesPride.universe.galaxy.turn_based && !onetick) {
+        timeTravelTick += turnJumpTicks();
+      } else {
+        timeTravelTick += 1;
+      }
+      timeTravel("forwards");
+    };
   };
   defineHotkey(
     "ctrl+,",
-    timeTravelBack,
-    "Go back a tick in time.",
+    timeTravelBack(),
+    "Go back a tick or a turn in time.",
     "Time Machine: Back",
   );
   defineHotkey(
     "ctrl+.",
-    timeTravelForward,
-    "Go forward a tick in time.",
+    timeTravelForward(),
+    "Go forward a tick or a turn in time.",
     "Time Machine: Forward",
+  );
+  defineHotkey(
+    "shift+ctrl+.",
+    timeTravelForward(true),
+    "Go forward exactly a tick in time, even in turn based.",
+    "Time Machine: Micro-Forward",
+  );
+  defineHotkey(
+    "shift+ctrl+,",
+    timeTravelBack(true),
+    "Go back exactly a tick in time, even in turn based.",
+    "Time Machine: Micro-Back",
   );
   const timeTravelBackCycle = () => {
     if (timeTravelTick === -1) {
