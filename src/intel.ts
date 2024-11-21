@@ -2361,16 +2361,10 @@ async function NeptunesPrideAgent() {
     const distance = (star1: any, star2: any) => {
       const xoff = star1.x - star2.x;
       const yoff = star1.y - star2.y;
-      const gatefactor = star1?.ga * star2?.ga * 9 || 1;
-      if (NeptunesPride.gameVersion === "proteus" || isNP4()) {
-        if (gatefactor > 1) {
-          const actualDistanceSquared = xoff * xoff + yoff * yoff;
-          const twelveTickDistance =
-            12 * NeptunesPride.universe.galaxy.fleet_speed;
-          const cap = twelveTickDistance * twelveTickDistance;
-          return Math.min(actualDistanceSquared, cap);
-        }
-      }
+      const player = NeptunesPride.universe.galaxy.players[star2.puid];
+      const rangeTechLevel = getTech(player, "propulsion").level;
+      const fleetRange = rangeTechLevel + combatInfo.combatHandicap;
+      const gatefactor = star1?.ga * star2?.ga * (fleetRange + 3) || 1;
       return (xoff * xoff + yoff * yoff) / gatefactor;
     };
     const findClosestStars = (star: any, steps: number) => {
@@ -2634,7 +2628,7 @@ async function NeptunesPrideAgent() {
       if (
         universe.selectedStar?.alliedDefenders &&
         settings.autoRulerPower > 0 &&
-        map.scale >= 200
+        map.scale >= 100
       ) {
         const visTicks = NeptunesPride.universe.galaxy.turn_based
           ? turnJumpTicks()
@@ -3214,13 +3208,15 @@ async function NeptunesPrideAgent() {
                   if (anyStarCanSee(universe.selectedStar.puid, fleet)) {
                     visColor = "#888888";
                   }
-                  drawOverlayString(
-                    map.context,
-                    `Scan [[Tick #${tickNumber(ticks)}]]`,
-                    x,
-                    y,
-                    visColor,
-                  );
+                  if (map.scale >= 200) {
+                    drawOverlayString(
+                      map.context,
+                      `Scan [[Tick #${tickNumber(ticks)}]]`,
+                      x,
+                      y,
+                      visColor,
+                    );
+                  }
                 }
               }
             }
