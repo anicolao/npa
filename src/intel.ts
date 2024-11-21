@@ -1021,11 +1021,25 @@ async function NeptunesPrideAgent() {
       output.push("Message cache stale!");
     } else {
       const universe = NeptunesPride.universe;
+      const players = universe.galaxy.players;
       const myId = NeptunesPride.originalPlayer
         ? NeptunesPride.originalPlayer
         : getPlayerUid(NeptunesPride.universe.galaxy);
+      const { playerIndexes } = await getPrimaryAlliance();
+      let bestWeapons = 0;
+      for (const pk in players) {
+        if (playerIndexes.indexOf(+pk) === -1 && players[pk].ai !== 1) {
+          bestWeapons = Math.max(
+            bestWeapons,
+            getTech(players[pk], "weapons").level,
+          );
+        }
+      }
+      bestWeapons += combatInfo.combatHandicap;
 
-      preput.push(`--- Generals Science for [[${myId}]] ---`);
+      preput.push(
+        `--- Generals Science for [[${myId}]] vs W${bestWeapons} ---`,
+      );
       preput.push(`:--|--:|--:`);
       preput.push(`Technology|New Industry|Damage/tick`);
       const doTech = (
@@ -1033,7 +1047,6 @@ async function NeptunesPrideAgent() {
       ) => {
         const tech =
           techType !== "manu" && techType !== "weapons" ? techType : "none";
-        const players = universe.galaxy.players;
         const origPlayer = universe.player;
         const player = { ...players[myId] };
         player.tech = clone(player.tech);
@@ -1055,9 +1068,8 @@ async function NeptunesPrideAgent() {
         universe.player = origPlayer;
         universe.galaxy.players[myId] = origPlayer;
         const adjWeaps = techType === "weapons" ? weapons + 1 : weapons;
-        preput.push(
-          `${techType}|${indy}|${Math.trunc(shipsPerTick * adjWeaps)}`,
-        );
+        const rounds = Math.ceil(shipsPerTick / (bestWeapons + 1));
+        preput.push(`${techType}|${indy}|${Math.trunc(rounds * adjWeaps)}`);
       };
       doTech("none");
       doTech("weapons");
