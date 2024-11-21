@@ -1020,6 +1020,54 @@ async function NeptunesPrideAgent() {
       console.error("Updating message cache failed");
       output.push("Message cache stale!");
     } else {
+      const universe = NeptunesPride.universe;
+      const myId = NeptunesPride.originalPlayer
+        ? NeptunesPride.originalPlayer
+        : getPlayerUid(NeptunesPride.universe.galaxy);
+
+      preput.push(`--- Generals Science for [[${myId}]] ---`);
+      preput.push(`:--|--:|--:`);
+      preput.push(`Technology|New Industry|Damage/tick`);
+      const doTech = (
+        techType: "none" | "terra" | "bank" | "manu" | "weapons",
+      ) => {
+        const tech =
+          techType !== "manu" && techType !== "weapons" ? techType : "none";
+        const players = universe.galaxy.players;
+        const origPlayer = universe.player;
+        const player = { ...players[myId] };
+        player.tech = clone(player.tech);
+        universe.player = player;
+        universe.galaxy.players[myId] = player;
+        if (techType === "manu") {
+          player.tech[universe.TECH.MANU].level += 1;
+        }
+        const weapons = getTech(player, "weapons").level;
+        const bump = techType === "bank" ? 1 : 0;
+        const banking = getTech(universe.player, "banking").level + bump;
+        const newIncome = player.totalEconomy * (10 + 2 * banking);
+        const origCash = universe.player.cash;
+        const balance = newIncome;
+        universe.player.cash = balance;
+        const indy = buyAllTheHypotheticalEconomy(tech, "I");
+        const shipsPerTick = universe.calcShipsPerTickTotal(player);
+        universe.player.cash = origCash;
+        universe.player = origPlayer;
+        universe.galaxy.players[myId] = origPlayer;
+        const adjWeaps = techType === "weapons" ? weapons + 1 : weapons;
+        preput.push(
+          `${techType}|${indy}|${Math.trunc(shipsPerTick * adjWeaps)}`,
+        );
+      };
+      doTech("none");
+      doTech("weapons");
+      doTech("manu");
+      doTech("terra");
+      doTech("bank");
+
+      preput.push(`--- Generals Science Requests ---`);
+      preput.push(``);
+
       const losses: { [k: number]: number } = {};
       const looted: { [k: number]: number } = {};
       const trashed: { [k: number]: number } = {};
@@ -1032,9 +1080,6 @@ async function NeptunesPrideAgent() {
       output.push("--- Combat history ---");
       output.push(":--|:--|:--|--:|--:|--:|--:");
       output.push(`Tick|[[:star:]]|[[:carrier:]]|Kills|Losses|$|E`);
-      const myId = NeptunesPride.originalPlayer
-        ? NeptunesPride.originalPlayer
-        : getPlayerUid(NeptunesPride.universe.galaxy);
       for (let i = 0; i < messageCache.game_event.length; ++i) {
         const m = messageCache.game_event[i];
         if (m.payload.template === "combat_mk_ii") {
