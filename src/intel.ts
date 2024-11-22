@@ -1022,9 +1022,7 @@ async function NeptunesPrideAgent() {
     } else {
       const universe = NeptunesPride.universe;
       const players = universe.galaxy.players;
-      const myId = NeptunesPride.originalPlayer
-        ? NeptunesPride.originalPlayer
-        : getPlayerUid(NeptunesPride.universe.galaxy);
+      const myId = universe.player.uid;
       const { playerIndexes } = await getPrimaryAlliance();
       let bestWeapons = 0;
       for (const pk in players) {
@@ -1041,22 +1039,26 @@ async function NeptunesPrideAgent() {
         `--- Generals Science for [[${myId}]] vs W${bestWeapons} ---`,
       );
       preput.push(`:--|--:|--:`);
-      preput.push(`Technology|New Industry|Damage/tick`);
-      const doTech = (
-        techType: "none" | "terra" | "bank" | "manu" | "weapons",
-      ) => {
+      preput.push(`Technology|Ticks Req'd|Next Ticks|New Industry|Damage/tick`);
+      const doTech = (techType: TechKey | "none") => {
         const tech =
-          techType !== "manu" && techType !== "weapons" ? techType : "none";
+          techType !== "manufacturing" && techType !== "weapons"
+            ? techType === "banking"
+              ? "bank"
+              : techType === "terraforming"
+                ? "terra"
+                : "none"
+            : "none";
         const origPlayer = universe.player;
         const player = { ...players[myId] };
         player.tech = clone(player.tech);
         universe.player = player;
         universe.galaxy.players[myId] = player;
-        if (techType === "manu") {
+        if (techType === "manufacturing") {
           player.tech[universe.TECH.MANU].level += 1;
         }
         const weapons = getTech(player, "weapons").level;
-        const bump = techType === "bank" ? 1 : 0;
+        const bump = techType === "banking" ? 1 : 0;
         const banking = getTech(universe.player, "banking").level + bump;
         const newIncome = player.totalEconomy * (10 + 2 * banking);
         const origCash = universe.player.cash;
@@ -1069,13 +1071,30 @@ async function NeptunesPrideAgent() {
         universe.galaxy.players[myId] = origPlayer;
         const adjWeaps = techType === "weapons" ? weapons + 1 : weapons;
         const rounds = Math.ceil(shipsPerTick / (bestWeapons + 1));
-        preput.push(`${techType}|${indy}|${Math.trunc(rounds * adjWeaps)}`);
+        let ticksNeeded = 0;
+        let nextTicksNeeded = 0;
+        const t = techType !== "none" ? getTech(player, techType) : undefined;
+        if (t !== undefined) {
+          const soFar = t.research;
+          const total = techCost(t);
+          const remaining = total - soFar;
+          const science = player.total_science || player.totalScience;
+          ticksNeeded = Math.ceil(remaining / science);
+
+          const nt = { ...t };
+          nt.level += 1;
+          const nTotal = techCost(nt);
+          nextTicksNeeded = Math.ceil(nTotal / science);
+        }
+        preput.push(
+          `${techType}|${ticksNeeded}|${nextTicksNeeded}|${indy}|${Math.trunc(rounds * adjWeaps)}`,
+        );
       };
       doTech("none");
       doTech("weapons");
-      doTech("manu");
-      doTech("terra");
-      doTech("bank");
+      doTech("manufacturing");
+      doTech("terraforming");
+      doTech("banking");
 
       preput.push(`--- Generals Science Requests ---`);
       preput.push(``);
