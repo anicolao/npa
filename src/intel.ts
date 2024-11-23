@@ -1093,7 +1093,9 @@ async function NeptunesPrideAgent() {
       doTech("none");
       doTech("weapons");
       doTech("manufacturing");
-      doTech("terraforming");
+      if (universe.galaxy.config.noTer !== 1) {
+        doTech("terraforming");
+      }
       doTech("banking");
 
       preput.push(`--- Generals Science Requests ---`);
