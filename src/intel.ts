@@ -170,6 +170,10 @@ async function NeptunesPrideAgent() {
     true,
     false,
   ]);
+  settings.newSetting("Invasion Planner Display", "invasionPlanOn", false, [
+    true,
+    false,
+  ]);
 
   if (!String.prototype.format) {
     String.prototype.format = function (...args) {
@@ -2369,8 +2373,7 @@ async function NeptunesPrideAgent() {
     }
 
     function lyToMap() {
-      const player = NeptunesPride.universe.player;
-      return getScanValue(player) / (getTech(player, "scanning").level + 2);
+      return 0.125;
     }
 
     function getAdjustedScanRange(player: Player) {
@@ -2439,7 +2442,9 @@ async function NeptunesPrideAgent() {
     const distance = (star1: any, star2: any) => {
       const xoff = star1.x - star2.x;
       const yoff = star1.y - star2.y;
-      const player = NeptunesPride.universe.galaxy.players[star2.puid];
+      const player =
+        NeptunesPride.universe.galaxy.players[star2.puid] ||
+        NeptunesPride.universe.player;
       const rangeTechLevel = getTech(player, "propulsion").level;
       const fleetRange = rangeTechLevel + combatInfo.combatHandicap;
       const gatefactor = star1?.ga * star2?.ga * (fleetRange + 3) || 1;
@@ -2600,10 +2605,9 @@ async function NeptunesPrideAgent() {
         const rangeTechLevel = getTech(player, "propulsion").level;
         const fleetRange = getAdjustedFleetRange(player);
         const frSquared = fleetRange * fleetRange;
-        const visibleStarUids = Object.keys(stars).filter((k) =>
-          isVisible(stars[k]),
+        const visibleStarUids = Object.keys(stars).filter(
+          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]) || true,
         );
-        console.log(`Can see ${visibleStarUids.length} stars`);
         const dijkstra = () => {
           const dist = {};
           const prev = {};
@@ -2651,7 +2655,8 @@ async function NeptunesPrideAgent() {
           const pred = prev[starUid];
           if (pred !== undefined) {
             const player = universe.player;
-            const desirable = stars[starUid].puid == player.uid;
+            const desirable =
+              stars[starUid].puid == player.uid || stars[starUid].puid == -1;
             if (desirable) {
               let p = pred;
               let u = starUid;
@@ -2697,6 +2702,188 @@ async function NeptunesPrideAgent() {
         };
         routeParents = prev;
         routeChildren = children;
+        dfsDraw(destUid, universe.galaxy.tick);
+      }
+    };
+    const drawInvasionPlanner = () => {
+      const drawRoute = (
+        star: any,
+        other: any,
+        hudColor: string,
+        tick: number,
+        shipsPerTick: number,
+      ) => {
+        const speed = NeptunesPride.universe.galaxy.fleet_speed;
+        const tickDistance = Math.sqrt(rawDistanceSquared(star, other));
+        const ticks = tick;
+        const color = hudColor;
+        const midX = map.worldToScreenX((star.x + other.x) / 2);
+        const midY = map.worldToScreenY((star.y + other.y) / 2);
+
+        const rotationAngle = (star1: any, star2: any) => {
+          const xoff = star1.x - star2.x;
+          const yoff = star1.y - star2.y;
+          const flipped = xoff < 0;
+          const flip = Math.PI * (flipped ? 1 : 0);
+          return { angle: Math.atan2(yoff, xoff) + flip, flipped };
+        };
+        map.context.save();
+        map.context.globalAlpha = 1;
+        map.context.strokeStyle = color;
+        map.context.shadowColor = "black";
+        map.context.shadowOffsetX = 2;
+        map.context.shadowOffsetY = 2;
+        map.context.shadowBlur = 2;
+        map.context.fillStyle = color;
+        map.context.lineWidth = 2 * map.pixelRatio;
+        map.context.lineCap = "round";
+        map.context.translate(midX, midY);
+        const { angle } = rotationAngle(star, other);
+        map.context.rotate(angle);
+        const start =
+          map.worldToScreenX(tickDistance - 2 * speed) - map.worldToScreenX(0);
+        const end =
+          map.worldToScreenX(tickDistance - 2 * speed) - map.worldToScreenX(0);
+        if (start > 0 && end > 0) {
+          map.context.beginPath();
+          map.context.moveTo(-start / 2, 0);
+          map.context.lineTo(end / 2, 0);
+          map.context.stroke();
+          map.context.closePath();
+        }
+        map.context.textAlign = "center";
+        map.context.translate(0, -8 * map.pixelRatio);
+        const textColor = color;
+        //drawString(`[[Tick #${ticks}]]`, 0, 0, textColor);
+        if (shipsPerTick) {
+          map.context.translate(0, 2 * 9 * map.pixelRatio);
+          const rounded = Math.round(shipsPerTick * 100) / 100;
+          //drawString(`${rounded} ships/h`, 0, 0, textColor);
+        }
+        map.context.setLineDash([]);
+        map.context.restore();
+        return ticks;
+      };
+      if (
+        settings.invasionPlanOn &&
+        (universe.selectedStar?.alliedDefenders !== undefined ||
+          destinationLock !== undefined)
+      ) {
+        const destUid =
+          destinationLock !== undefined
+            ? destinationLock.uid
+            : universe.selectedStar?.uid;
+        const stars = NeptunesPride.universe.galaxy.stars;
+        const player = NeptunesPride.universe.player;
+        const rangeTechLevel = getTech(player, "propulsion").level;
+        const fleetRange = getAdjustedFleetRange(player);
+        const frSquared = fleetRange * fleetRange;
+        const visibleStarUids = Object.keys(stars).filter(
+          (k) => isVisible(stars[k]) || true,
+        );
+        const prim = () => {
+          const dist = {};
+          const prev = {};
+          const Q = [];
+          for (const v of visibleStarUids) {
+            dist[v] = Number.POSITIVE_INFINITY;
+            prev[v] = undefined;
+            Q.push(v);
+          }
+          dist[destUid] = 0;
+          while (Q.length > 0) {
+            let closest = 0;
+            for (let candidate = 1; candidate < Q.length; ++candidate) {
+              if (dist[Q[candidate]] < dist[Q[closest]]) {
+                closest = candidate;
+              }
+            }
+            const u = Q[closest];
+            Q.splice(closest, 1);
+            for (const v of Q) {
+              const rawDistance = rawDistanceSquared(stars[u], stars[v]);
+              if (rawDistance > frSquared && stars[u].wh != v) {
+                continue;
+              }
+              const puid = NeptunesPride.universe.galaxy.player_uid;
+              const hasMyProduction = stars[v].i > 0 && stars[v].puid === puid;
+              const m = hasMyProduction ? 1 : Math.sqrt(rangeTechLevel + 3);
+              const candidateDistance = Math.ceil(
+                Math.sqrt(rawDistance) / calcSpeedBetweenStars(u, v, puid),
+              );
+              if (candidateDistance < dist[v]) {
+                dist[v] = candidateDistance;
+                prev[v] = u;
+              }
+            }
+          }
+          return { dist, prev };
+        };
+        const { dist, prev } = prim();
+        const children = {};
+        for (const starUid in prev) {
+          const pred = prev[starUid];
+          if (pred !== undefined) {
+            const player = universe.player;
+            const desirable =
+              stars[starUid].puid == player.uid ||
+              stars[pred].puid == player.uid ||
+              stars[starUid].puid == -1 ||
+              stars[pred].puid == -1;
+            if (desirable) {
+              let p = pred;
+              let u = starUid;
+              while (p !== undefined) {
+                if (children[p] === undefined) {
+                  children[p] = [];
+                }
+                if (children[p].indexOf(u) === -1) {
+                  children[p].push(u);
+                }
+                u = p;
+                p = prev[p];
+              }
+            }
+          }
+        }
+        const dfsDraw = (uid: number, tick: number, parent?: number) => {
+          let shipsPerTick = 0;
+          const puid = player.uid;
+          for (let i = 0; i < children[uid]?.length; ++i) {
+            const child = children[uid][i];
+            shipsPerTick += dfsDraw(child, tick, uid);
+          }
+          if (stars[uid].puid === puid) {
+            shipsPerTick += stars[uid].shipsPerTick;
+          }
+          if (parent) {
+            const rawDistance = rawDistanceSquared(stars[parent], stars[uid]);
+            const ticks = Math.ceil(
+              Math.sqrt(rawDistance) / calcSpeedBetweenStars(parent, uid, puid),
+            );
+            const oneTurn =
+              ticks < NeptunesPride.universe.galaxy.config.turnJumpTicks;
+            const friendly = stars[parent].puid === stars[uid].puid;
+            const dim = oneTurn
+              ? friendly
+                ? "#088808"
+                : "#880404"
+              : "#888888";
+            const bright = oneTurn
+              ? friendly
+                ? "#08ee08"
+                : "#ee0808"
+              : "#aaaaaa";
+            drawRoute(
+              stars[parent],
+              stars[uid],
+              destinationLock ? bright : dim,
+              tick + ticks,
+              shipsPerTick,
+            );
+          }
+          return shipsPerTick;
+        };
         dfsDraw(destUid, universe.galaxy.tick);
       }
     };
@@ -3312,6 +3499,7 @@ async function NeptunesPrideAgent() {
 
       drawAutoRuler();
       drawRoutePlanner();
+      drawInvasionPlanner();
     };
     let base = -1;
     let wasBatched = false;
@@ -4342,8 +4530,18 @@ async function NeptunesPrideAgent() {
     "Toggle the route planner display. Shows shortest paths between your stars and the front.",
     "Toggle Route Planner",
   );
+  const toggleInvasionPlanner = () => {
+    settings.invasionPlanOn = !settings.invasionPlanOn;
+    mapRebuild();
+  };
+  defineHotkey(
+    "ctrl+i",
+    toggleInvasionPlanner,
+    "Toggle the invasion planner display. Shows shortest paths between the selected empire's stars and the enemy.",
+    "Toggle Invasion Planner",
+  );
   const toggleRoutePlannerLock = () => {
-    if (settings.routePlanOn) {
+    if (settings.routePlanOn || settings.invasionPlanOn) {
       if (destinationLock !== undefined) {
         destinationLock = undefined;
       } else {
