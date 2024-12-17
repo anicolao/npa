@@ -2606,7 +2606,7 @@ async function NeptunesPrideAgent() {
         const fleetRange = getAdjustedFleetRange(player);
         const frSquared = fleetRange * fleetRange;
         const visibleStarUids = Object.keys(stars).filter(
-          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]) || true,
+          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]),
         );
         const dijkstra = () => {
           const dist = {};
@@ -2649,14 +2649,17 @@ async function NeptunesPrideAgent() {
           }
           return { dist, prev };
         };
-        const { dist, prev } = dijkstra();
+        const { prev } = dijkstra();
         const children = {};
         for (const starUid in prev) {
           const pred = prev[starUid];
           if (pred !== undefined) {
             const player = universe.player;
-            const desirable =
-              stars[starUid].puid == player.uid || stars[starUid].puid == -1;
+            const isDesired = (suid: string) =>
+              stars[suid].puid == player.uid ||
+              (stars[suid].puid == -1 &&
+                (prev[suid] === undefined || isDesired(prev[suid])));
+            const desirable = isDesired(starUid);
             if (desirable) {
               let p = pred;
               let u = starUid;
@@ -2779,7 +2782,7 @@ async function NeptunesPrideAgent() {
         const fleetRange = getAdjustedFleetRange(player);
         const frSquared = fleetRange * fleetRange;
         const visibleStarUids = Object.keys(stars).filter(
-          (k) => isVisible(stars[k]) || true,
+          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]),
         );
         const prim = () => {
           const dist = {};
