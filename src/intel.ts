@@ -4797,6 +4797,22 @@ async function NeptunesPrideAgent() {
         }
       }
     }
+    for (const muid in scan.players) {
+      const gp = universe.galaxy.players[muid];
+      const sp = scan.players[muid];
+      if (Object.keys(gp.tech[0]).length > Object.keys(sp.tech[0]).length) {
+        universe.galaxy.players[muid] = {
+          ...sp,
+          ...gp,
+        };
+      } else {
+        universe.galaxy.players[muid] = {
+          ...gp,
+          ...sp,
+        };
+        universe.player.war[sp.uid] = 0;
+      }
+    }
     const uid = getPlayerUid(universe.galaxy);
     universe.galaxy.players[uid] = {
       ...scan.players[uid],
