@@ -293,8 +293,8 @@ async function NeptunesPrideAgent() {
         for (const pi in players) {
           const player = players[pi];
           if (player.alias.toLowerCase().indexOf(s) !== -1) {
-            filters.push(contains(`(${pi})`));
-            filters.push(contains(`(#${pi})`));
+            filters.push(contains(`[[${pi}]]`));
+            filters.push(contains(`[[#${pi}]]`));
           }
         }
         return filters.reduce(or, () => false);
@@ -309,11 +309,7 @@ async function NeptunesPrideAgent() {
       }
     }
     lastReport = reportName;
-    setClip(
-      makeReportContent(stanzas, filter, (s) =>
-        Crux.format(s, {}).toLowerCase(),
-      ),
-    );
+    setClip(makeReportContent(stanzas, filter, (s) => s.toLowerCase()));
   };
   defineHotkey(
     "`",
@@ -1647,7 +1643,7 @@ async function NeptunesPrideAgent() {
     if (find === undefined) {
       prepReport("filteredcombats", ["Select a fleet or star."]);
     } else {
-      find = `(${find})`;
+      find = `[[${find}]]`;
       prepReport("filteredcombats", combatOutcomes(), contains(find));
     }
   }
@@ -2782,7 +2778,7 @@ async function NeptunesPrideAgent() {
         const fleetRange = getAdjustedFleetRange(player);
         const frSquared = fleetRange * fleetRange;
         const visibleStarUids = Object.keys(stars).filter(
-          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]),
+          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]) || true,
         );
         const prim = () => {
           const dist = {};
@@ -3816,7 +3812,7 @@ async function NeptunesPrideAgent() {
             `<div width="100%" class="screenshot"><img class="screenshot" src="${sub}"/></div>`,
           );
         } else {
-          console.error(`failed substitution ${sub}`);
+          console.error(`failed substitution ${sub} in ${s}`);
           s = s.replace(pattern, `(${sub})`);
         }
       }
@@ -6324,20 +6320,6 @@ async function NeptunesPrideAgent() {
     console.log("Universe already loaded, refresh scan data.");
     loadScanData();
   }
-
-  const wst = window.setTimeout;
-  const timeoutCatcher = (
-    callback: TimerHandler,
-    time?: number,
-    ...args: any[]
-  ): number => {
-    if (callback?.toLocaleString().indexOf("autocompleteTrigger") !== -1) {
-      console.log("SAT duplicate code detected. Ignore it.");
-      return 0;
-    }
-    return wst(callback, time, args);
-  };
-  window.setTimeout = timeoutCatcher as any;
 
   if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
     console.log("Universe already loaded. Hyperlink fleets & load hooks.");
