@@ -105,7 +105,6 @@ export interface NeptunesPrideData {
   np: any;
   npui: any;
   originalPlayer: any;
-  gameConfig: any;
   account: any;
   crux: any;
 }
@@ -5043,8 +5042,6 @@ async function NeptunesPrideAgent() {
     const myScan = scans.filter((scan) => getPlayerUid(scan) === myId);
     const first = myScan.length > 0 ? myScan[0] : scans[0];
     loadGalaxy(first);
-    NeptunesPride.gameConfig.name = NeptunesPride.universe.galaxy.name;
-    console.log(`RESET game name to ${NeptunesPride.gameConfig.name}`);
 
     scans.forEach(mergeScanData);
     loadGalaxy(NeptunesPride.universe.galaxy);
@@ -5242,11 +5239,7 @@ async function NeptunesPrideAgent() {
     if (NeptunesPride.gameVersion === "proteus") {
       return level * level * 5;
     }
-    return (
-      level *
-      (NeptunesPride.gameConfig.tradeCost ||
-        NeptunesPride.universe.galaxy.config.tradeCost)
-    );
+    return level * NeptunesPride.universe.galaxy.config.tradeCost;
   };
   const techTable = (
     output: Stanzas,
@@ -5330,9 +5323,7 @@ async function NeptunesPrideAgent() {
     output.push(`--- ${title} ---`);
   };
   const tradeScanned = () =>
-    NeptunesPride.gameConfig.tradeScanned ||
-    NeptunesPride.gameVersion === "proteus" ||
-    NeptunesPride.universe.galaxy?.config?.tradeScanned;
+    !!NeptunesPride.universe.galaxy?.config?.tradeScanned;
   const tradingReport = async () => {
     lastReport = "trading";
     const { players, playerIndexes } = await getPrimaryAlliance();
