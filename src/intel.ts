@@ -69,6 +69,7 @@ import {
   or,
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
+import { politicalMap } from "./politicalMap";
 import {
   type CachedScan,
   getCacheForKey,
@@ -2347,6 +2348,11 @@ async function NeptunesPrideAgent() {
     window.setTimeout(() => NeptunesPride.np.trigger("map_rebuild"), 500);
   }
   const loadHooks = () => {
+    onTrigger("order:full_universe", () => {
+      politicalMap.updateStarData(NeptunesPride.universe.galaxy);
+    });
+    politicalMap.updateStarData(NeptunesPride.universe.galaxy);
+
     const map = NeptunesPride.npui.map;
 
     function drawDisc(
@@ -3154,6 +3160,12 @@ async function NeptunesPrideAgent() {
     const superDrawSelectionRing = map.drawSelectionRing.bind(map);
     const bubbleLayer = document.createElement("canvas");
     map.drawSelectionRing = () => {
+      politicalMap.drawPoliticalMap(map.context, map.viewportWidth, map.viewportHeight, {
+        worldToScreenX: map.worldToScreenX.bind(map),
+        worldToScreenY: map.worldToScreenY.bind(map),
+        worldToPixels
+      });
+
       const universe = NeptunesPride.universe;
       const galaxy = universe.galaxy;
       if (universe.selectedFleet?.uid) {
