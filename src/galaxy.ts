@@ -219,10 +219,7 @@ export function addAccessors(_n: string, p: any) {
 }
 
 export function productionTicks() {
-  return (
-    NeptunesPride?.gameConfig?.productionTicks ||
-    NeptunesPride?.universe?.galaxy?.config?.prodTicks
-  );
+  return NeptunesPride?.universe?.galaxy?.config?.prodTicks;
 }
 
 export function getPlayerUid(galaxy: ScanningData): number {
@@ -232,8 +229,5 @@ export function getPlayerUid(galaxy: ScanningData): number {
   return galaxy.playerUid;
 }
 export function turnJumpTicks() {
-  return (
-    NeptunesPride.gameConfig?.turnJumpTicks ||
-    NeptunesPride.universe.galaxy?.config?.turnJumpTicks
-  );
+  return NeptunesPride.universe.galaxy?.config?.turnJumpTicks;
 }

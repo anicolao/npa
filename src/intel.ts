@@ -106,7 +106,6 @@ export interface NeptunesPrideData {
   np: any;
   npui: any;
   originalPlayer: any;
-  gameConfig: any;
   account: any;
   crux: any;
 }
@@ -294,8 +293,8 @@ async function NeptunesPrideAgent() {
         for (const pi in players) {
           const player = players[pi];
           if (player.alias.toLowerCase().indexOf(s) !== -1) {
-            filters.push(contains(`(${pi})`));
-            filters.push(contains(`(#${pi})`));
+            filters.push(contains(`[[${pi}]]`));
+            filters.push(contains(`[[#${pi}]]`));
           }
         }
         return filters.reduce(or, () => false);
@@ -310,11 +309,7 @@ async function NeptunesPrideAgent() {
       }
     }
     lastReport = reportName;
-    setClip(
-      makeReportContent(stanzas, filter, (s) =>
-        Crux.format(s, {}).toLowerCase(),
-      ),
-    );
+    setClip(makeReportContent(stanzas, filter, (s) => s.toLowerCase()));
   };
   defineHotkey(
     "`",
@@ -1648,7 +1643,7 @@ async function NeptunesPrideAgent() {
     if (find === undefined) {
       prepReport("filteredcombats", ["Select a fleet or star."]);
     } else {
-      find = `(${find})`;
+      find = `[[${find}]]`;
       prepReport("filteredcombats", combatOutcomes(), contains(find));
     }
   }
@@ -2788,7 +2783,7 @@ async function NeptunesPrideAgent() {
         const fleetRange = getAdjustedFleetRange(player);
         const frSquared = fleetRange * fleetRange;
         const visibleStarUids = Object.keys(stars).filter(
-          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]),
+          (k) => isVisible(stars[k]) || !isVisible(stars[destUid]) || true,
         );
         const prim = () => {
           const dist = {};
@@ -3828,7 +3823,7 @@ async function NeptunesPrideAgent() {
             `<div width="100%" class="screenshot"><img class="screenshot" src="${sub}"/></div>`,
           );
         } else {
-          console.error(`failed substitution ${sub}`);
+          console.error(`failed substitution ${sub} in ${s}`);
           s = s.replace(pattern, `(${sub})`);
         }
       }
@@ -5059,8 +5054,6 @@ async function NeptunesPrideAgent() {
     const myScan = scans.filter((scan) => getPlayerUid(scan) === myId);
     const first = myScan.length > 0 ? myScan[0] : scans[0];
     loadGalaxy(first);
-    NeptunesPride.gameConfig.name = NeptunesPride.universe.galaxy.name;
-    console.log(`RESET game name to ${NeptunesPride.gameConfig.name}`);
 
     scans.forEach(mergeScanData);
     loadGalaxy(NeptunesPride.universe.galaxy);
@@ -5258,11 +5251,7 @@ async function NeptunesPrideAgent() {
     if (NeptunesPride.gameVersion === "proteus") {
       return level * level * 5;
     }
-    return (
-      level *
-      (NeptunesPride.gameConfig.tradeCost ||
-        NeptunesPride.universe.galaxy.config.tradeCost)
-    );
+    return level * NeptunesPride.universe.galaxy.config.tradeCost;
   };
   const techTable = (
     output: Stanzas,
@@ -5346,9 +5335,7 @@ async function NeptunesPrideAgent() {
     output.push(`--- ${title} ---`);
   };
   const tradeScanned = () =>
-    NeptunesPride.gameConfig.tradeScanned ||
-    NeptunesPride.gameVersion === "proteus" ||
-    NeptunesPride.universe.galaxy?.config?.tradeScanned;
+    !!NeptunesPride.universe.galaxy?.config?.tradeScanned;
   const tradingReport = async () => {
     lastReport = "trading";
     const { players, playerIndexes } = await getPrimaryAlliance();
@@ -6336,20 +6323,6 @@ async function NeptunesPrideAgent() {
     console.log("Universe already loaded, refresh scan data.");
     loadScanData();
   }
-
-  const wst = window.setTimeout;
-  const timeoutCatcher = (
-    callback: TimerHandler,
-    time?: number,
-    ...args: any[]
-  ): number => {
-    if (callback?.toLocaleString().indexOf("autocompleteTrigger") !== -1) {
-      console.log("SAT duplicate code detected. Ignore it.");
-      return 0;
-    }
-    return wst(callback, time, args);
-  };
-  window.setTimeout = timeoutCatcher as any;
 
   if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
     console.log("Universe already loaded. Hyperlink fleets & load hooks.");
