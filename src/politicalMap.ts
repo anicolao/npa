@@ -219,15 +219,17 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   // Group the stars based on intersecting influences; this will merge together stars whose influence
   // spheres intersect; because of how we did our prior calculations this wil only include stars that
   // are owned by the same player because we've adjusted influence circles to only go as far as
-  // the closest border to an unfriendly star
-  const starGroupsByStarID = groupStarsByInfluence(stars);
+  // the closest border to an unfriendly star; this will be the initial pass through grouping that we
+  // use to identify exclave stars
+  const initialStarGroupsByStarID = groupStarsByInfluence(stars);
 
-  // Create an array of unique star groups from the merged set using the unique values
+  // We now want to eliminate individual stars that didn't wind up in groups from further groupings
+  // by marking them as exclaves
   let starGroupSet = new Set<number[]>();
-  for (let starGroup of Array.from(starGroupsByStarID.values())) {
+  for (let starGroup of Array.from(initialStarGroupsByStarID.values())) {
     starGroupSet.add(starGroup);
   }
-  let nationStarGroups = Array.from(starGroupSet).filter(x => x.length > 1);
+  // let nationStarGroups = Array.from(starGroupSet).filter(x => x.length > 1);
   let satelliteStarIDs: number[] = [];
   for (let starGroup of Array.from(starGroupSet).filter(x => x.length <= 1)) {
     satelliteStarIDs.push.apply(satelliteStarIDs, starGroup);
@@ -239,6 +241,17 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   // Now that we've marked certain owned stars as exclaves, expand the star influence spheres
   // again; this will prevent individual stars from breaking up star regions
   expandInfluenceRadiiToFillGaps(stars);
+
+  // Redo the star grouping with the final influence spheres; this will merge previously split
+  // regions that were interrupted due to exclaves
+  const starGroupsByStarID = groupStarsByInfluence(stars);
+  starGroupSet = new Set<number[]>();
+  for (let starGroup of Array.from(starGroupsByStarID.values())) {
+    starGroupSet.add(starGroup);
+  }
+
+  // Get every star group with more than one star - these are our final nation groups
+  let nationStarGroups = Array.from(starGroupSet).filter(x => x.length > 1);
 
   // For each star ID list, create a star group, calculating the rough weighted center (we'll
   // weight the average based on the size of the influence radius)
