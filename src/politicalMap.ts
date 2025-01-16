@@ -15,6 +15,7 @@ export interface NP4GalaxyStar {
   uid: number;
   x: number;
   y: number;
+  name: string;
 }
 
 export interface NPAController {
@@ -143,12 +144,14 @@ function twoDigitHex(val: number) {
   }
 }
 
+type WritableStar = { -readonly [P in keyof Star]: Star[P] };
+
 function parseRawStarData(rawStarData: NP4Galaxy) {
   let minX = Number.MAX_SAFE_INTEGER;
   let minY = Number.MAX_SAFE_INTEGER;
   let maxX = Number.MIN_SAFE_INTEGER;
   let maxY = Number.MIN_SAFE_INTEGER;
-  let stars: { -readonly [P in keyof Star]: Star[P] }[] = [];
+  let stars: WritableStar[] = [];
   let maxLocationStars = 0;
 
   for (let starID in rawStarData.stars) {
@@ -183,50 +186,14 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   // that as a starting influence zone; this will produce a large amount of overlap but we can
   // use it to give us something to sort on for other calculations (our algorithm trims back but
   // doesn't allow us to grow to fill gaps)
-  for (let starID = 0; starID < stars.length; starID++) {
-    const star = stars[starID];
-    if (!star) continue;
-    for (let otherStarID = starID + 1; otherStarID < stars.length; otherStarID++) {
-      const otherStar = stars[otherStarID];
-      if (otherStar && otherStar.ownerID != star.ownerID) {
-        const otherStarOffsetX = otherStar.x - star.x;
-        const otherStarOffsetY = otherStar.y - star.y;
-        const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
-        const influenceRange = otherStarDistance / 2;
-        star.influenceRange = Math.min(star.influenceRange, influenceRange);
-        otherStar.influenceRange = Math.min(otherStar.influenceRange, influenceRange);
-      }
-    }
-  }
+  initializeInfluenceRadiusToOpponentHalfwayPoint(stars);
 
-  // Get star IDs sorted by influence size; this will let us fairly and deterministically adjust
-  // influence areas without complex formulas and without giving unfair weight to stars that
-  // happen to have higher or lower ID numbers; we're going to sort largest to smallest, which
-  // will force largest influence star ranges to be trimmed first, which will advantage the smallest
-  // stars (which will have the most likelihood of gaps to fill)
-  var starIDsByInfluenceSize = stars.slice().filter(x => !!x).sort((a, b) => a.influenceRange - b.influenceRange).map(x => x.id);
-  var starIDsByInfluenceSize = stars.slice().filter(x => !!x).sort((a, b) => b.influenceRange - a.influenceRange).map(x => x.id);
-
-  // The above produces a lot of gaps; in reverse order (smallest to largest) let's expand
-  // the sphere of influence to try to fill these remaining gaps; this will heavily favor
-  // individual stars so they show up as large as possible while still allowing large
-  // groupings to consolidate as much as possible
-  starIDsByInfluenceSize.reverse();
-  for (let starID of starIDsByInfluenceSize) {
-    const star = stars[starID];
-    let smallestGap = 1000; // TODO: Make this less arbitrary?
-    for (let otherStarID of starIDsByInfluenceSize) {
-      const otherStar = stars[otherStarID];
-      if (otherStar && otherStar.ownerID != star.ownerID) {
-        const otherStarOffsetX = otherStar.x - star.x;
-        const otherStarOffsetY = otherStar.y - star.y;
-        const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
-        const totalInfluenceRadius = star.influenceRange + otherStar.influenceRange;
-        smallestGap = Math.min(otherStarDistance - totalInfluenceRadius, smallestGap);
-      }
-    }
-    star.influenceRange += smallestGap;
-  }
+  // Default influence distances will produce a lot of gaps because we go halfway to any opponent
+  // stars but those stars may have influence ranges that are much smaller; in reverse order
+  // (smallest to largest) let's expand the sphere of influence to try to fill these remaining
+  // gaps; this will heavily favor individual stars so they show up as large as possible while still
+  // allowing large groupings to consolidate as much as possible
+  expandInfluenceRadiiToFillGaps(stars);
 
   // Once we've calculated final influence ranges we use them to get the true extent of the map
   // including any influence spheres
@@ -244,49 +211,7 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   const mapSizeX = maxMapX - minMapX;
   const mapSizeY = maxMapY - minMapY;
 
-  // Try to get a list of regions so we can put a label on the screen in the rough center of
-  // any larger regions; we start by creating region objects that contain every star
-  let groupedStarIDs = new Map<number, number[]>();
-  for (let starID = 0; starID < stars.length; starID++) {
-    const star = stars[starID];
-    if (!star) continue;
-
-    // We might have been included as part of another star group already; if we are we'll start
-    // with that group
-    let starGroup = groupedStarIDs.get(starID);
-    if (!starGroup) {
-      starGroup = [starID];
-      groupedStarIDs.set(starID, starGroup);
-    }
-
-    // Loop through other stars after this one (prior stars will already have matched to us)
-    for (let otherStarID = starID + 1; otherStarID < stars.length; otherStarID++) {
-      const otherStar = stars[otherStarID];
-      if (!otherStar || otherStar.ownerID != star.ownerID) continue;
-      const otherStarOffsetX = otherStar.x - star.x;
-      const otherStarOffsetY = otherStar.y - star.y;
-      const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
-      const totalInfluenceRadius = star.influenceRange + otherStar.influenceRange;
-      if (totalInfluenceRadius > otherStarDistance) {
-        // If we get here, the two stars are within range; the merged group needs to include all
-        // stars in both groups, and any star in the first and second group should all point to
-        // the new merged group; note that if we were already matched the other star group will
-        // be equal to this group
-        let otherStarGroup = groupedStarIDs.get(otherStarID);
-        if (otherStarGroup != starGroup) {
-          if (!otherStarGroup) {
-            otherStarGroup = [otherStarID];
-            groupedStarIDs.set(otherStarID, starGroup);
-          }
-          let mergedStarGroup = [...starGroup, ...otherStarGroup].sort((a, b) => a - b);
-          for (let mergedStarID of mergedStarGroup) {
-            groupedStarIDs.set(mergedStarID, mergedStarGroup);
-          }
-          starGroup = mergedStarGroup;
-        }
-      }
-    }
-  }
+  const groupedStarIDs = groupStarsByInfluence(stars);
 
   // Create an array of unique star groups from the merged set using the unique values
   let starGroupSet = new Set<number[]>();
@@ -352,4 +277,93 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
     players: players as readonly Player[],
     maxShipCount: maxLocationStars,
   };
+}
+
+function initializeInfluenceRadiusToOpponentHalfwayPoint(stars: WritableStar[]) {
+  for (let starID = 0; starID < stars.length; starID++) {
+    const star = stars[starID];
+    if (!star) continue;
+    if (star.ownerID == -1) {
+      star.influenceRange = 0;
+      continue;
+    }
+    for (let otherStarID = starID + 1; otherStarID < stars.length; otherStarID++) {
+      const otherStar = stars[otherStarID];
+      if (otherStar && otherStar.ownerID != star.ownerID) {
+        const otherStarOffsetX = otherStar.x - star.x;
+        const otherStarOffsetY = otherStar.y - star.y;
+        const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
+        const influenceRange = otherStar.ownerID == -1 ? otherStarDistance * 9 / 10 : otherStarDistance / 2;
+        star.influenceRange = Math.min(star.influenceRange, influenceRange);
+        otherStar.influenceRange = Math.min(otherStar.influenceRange, influenceRange);
+      }
+    }
+  }
+}
+
+function groupStarsByInfluence(stars: Star[]) {
+  // Try to get a list of regions so we can put a label on the screen in the rough center of
+  // any larger regions; we start by creating region objects that contain every star
+  const groupedStarIDs = new Map<number, number[]>();
+  for (let starID = 0; starID < stars.length; starID++) {
+    const star = stars[starID];
+    if (!star) continue;
+
+    // We might have been included as part of another star group already; if we are we'll start
+    // with that group
+    let starGroup = groupedStarIDs.get(starID);
+    if (!starGroup) {
+      starGroup = [starID];
+      groupedStarIDs.set(starID, starGroup);
+    }
+
+    // Loop through other stars after this one (prior stars will already have matched to us)
+    for (let otherStarID = starID + 1; otherStarID < stars.length; otherStarID++) {
+      const otherStar = stars[otherStarID];
+      if (!otherStar || otherStar.ownerID != star.ownerID) continue;
+      const otherStarOffsetX = otherStar.x - star.x;
+      const otherStarOffsetY = otherStar.y - star.y;
+      const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
+      const totalInfluenceRadius = star.influenceRange + otherStar.influenceRange;
+      if (totalInfluenceRadius > otherStarDistance) {
+        // If we get here, the two stars are within range; the merged group needs to include all
+        // stars in both groups, and any star in the first and second group should all point to
+        // the new merged group; note that if we were already matched the other star group will
+        // be equal to this group
+        let otherStarGroup = groupedStarIDs.get(otherStarID);
+        if (otherStarGroup != starGroup) {
+          if (!otherStarGroup) {
+            otherStarGroup = [otherStarID];
+            groupedStarIDs.set(otherStarID, starGroup);
+          }
+          let mergedStarGroup = [...starGroup, ...otherStarGroup].sort((a, b) => a - b);
+          for (let mergedStarID of mergedStarGroup) {
+            groupedStarIDs.set(mergedStarID, mergedStarGroup);
+          }
+          starGroup = mergedStarGroup;
+        }
+      }
+    }
+  }
+  return groupedStarIDs
+}
+
+function expandInfluenceRadiiToFillGaps(stars: WritableStar[]) {
+  const starIDsByInfluenceSize = stars.slice().filter(x => !!x).sort((a, b) => a.influenceRange - b.influenceRange).map(x => x.id);
+  for (let starID of starIDsByInfluenceSize) {
+    const star = stars[starID];
+    let smallestGap = 10000; // TODO: Make this less arbitrary?
+    if (star.id == 2) debugger;
+    for (let otherStarID of starIDsByInfluenceSize) {
+      const otherStar = stars[otherStarID];
+      if (otherStar && otherStar.ownerID != star.ownerID) {
+        const otherStarOffsetX = otherStar.x - star.x;
+        const otherStarOffsetY = otherStar.y - star.y;
+        const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
+        const totalInfluenceRadius = star.influenceRange + otherStar.influenceRange;
+        smallestGap = Math.min(otherStarDistance - totalInfluenceRadius, smallestGap);
+      }
+    }
+    star.influenceRange += smallestGap;
+  }
 }
