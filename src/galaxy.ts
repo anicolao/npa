@@ -72,6 +72,7 @@ export interface Fleet extends SpaceObject {
 export interface Player {
   ai: number;
   alias: string;
+  rawAlias: string;
   avatar: number;
   conceded: number;
   huid: number;

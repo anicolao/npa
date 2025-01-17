@@ -1,22 +1,4 @@
-// TODO: Are the internal NP interfaces declared elsewhere? These declarations are just the ones I need for now
-
-export interface NP4Galaxy {
-  players: { [uid: number]: NP4GalaxyPlayer };
-  stars: { [uid: number]: NP4GalaxyStar };
-}
-
-export interface NP4GalaxyPlayer {
-  rawAlias: string;
-  uid: number;
-}
-
-export interface NP4GalaxyStar {
-  puid: number;
-  uid: number;
-  x: number;
-  y: number;
-  name: string;
-}
+import type { Player, ScanningData } from "./galaxy";
 
 export interface NPAController {
   worldToScreenX(x: number): number;
@@ -24,7 +6,7 @@ export interface NPAController {
   worldToPixels(d: number): number;
 }
 
-export interface Star {
+export interface PoliticalStar {
   readonly id: number;
   readonly ownerID: number;
   readonly x: number;
@@ -42,11 +24,6 @@ export interface StarRegion {
   readonly starIDs: readonly number[];
 }
 
-export interface Player {
-  readonly id: number;
-  readonly name: string;
-}
-
 export class PoliticalMap {
   private starData?: ReturnType<typeof parseRawStarData>;
   private borderCanvas: OffscreenCanvas;
@@ -57,7 +34,7 @@ export class PoliticalMap {
     this.borderCanvasDrawingContext = this.borderCanvas.getContext("2d");
   }
 
-  public updateStarData(galaxy: NP4Galaxy) {
+  public updateStarData(galaxy: ScanningData) {
     this.starData = parseRawStarData(galaxy);
   }
 
@@ -226,9 +203,9 @@ function twoDigitHex(val: number) {
   return val.toString(16);
 }
 
-type WritableStar = { -readonly [P in keyof Star]: Star[P] };
+type WritableStar = { -readonly [P in keyof PoliticalStar]: PoliticalStar[P] };
 
-function parseRawStarData(rawStarData: NP4Galaxy) {
+function parseRawStarData(rawStarData: ScanningData) {
   const stars: WritableStar[] = [];
 
   for (const starID in rawStarData.stars) {
@@ -315,7 +292,7 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
     let x = 0;
     let y = 0;
     let totalInfluence = 0;
-    let star: Star;
+    let star: PoliticalStar;
     for (const starID of starGroup) {
       star = stars[starID];
       x += star.x * star.influenceRange;
@@ -367,7 +344,7 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   }
 
   return {
-    stars: stars as readonly Star[],
+    stars: stars as readonly PoliticalStar[],
     starRegions: starRegions as readonly StarRegion[],
     players: players as readonly Player[],
   };
@@ -410,7 +387,7 @@ function initializeInfluenceRadiusToOpponentHalfwayPoint(
   }
 }
 
-function groupStarsByInfluence(stars: Star[]) {
+function groupStarsByInfluence(stars: PoliticalStar[]) {
   // Try to get a list of regions so we can put a label on the screen in the rough center of
   // any larger regions; we start by creating region objects that contain every star
   const groupedStarIDs = new Map<number, number[]>();
