@@ -150,7 +150,7 @@ export class PoliticalMap {
       for (const starRegion of this.starData.starRegions) {
         const player = this.starData.players[starRegion.ownerID];
         if (!player) continue;
-        const playerCaption = player.name
+        const playerCaption = player.rawAlias
           .toLocaleUpperCase()
           .replace(/ /gm, "  ")
           .split("")
@@ -336,11 +336,7 @@ function parseRawStarData(rawStarData: ScanningData) {
 
   const players: Player[] = [];
   for (const playerID in rawStarData.players) {
-    const player = rawStarData.players[playerID];
-    players[playerID] = {
-      id: player.uid,
-      name: player.rawAlias,
-    };
+    players[playerID] = rawStarData.players[playerID];
   }
 
   return {
