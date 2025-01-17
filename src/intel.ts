@@ -3156,19 +3156,6 @@ async function NeptunesPrideAgent() {
     const superDrawSelectionRing = map.drawSelectionRing.bind(map);
     const bubbleLayer = document.createElement("canvas");
     map.drawSelectionRing = () => {
-      if (settings.mapnamesOn) {
-        politicalMap.drawPoliticalMap(
-          map.context,
-          map.viewportWidth,
-          map.viewportHeight,
-          {
-            worldToScreenX: map.worldToScreenX.bind(map),
-            worldToScreenY: map.worldToScreenY.bind(map),
-            worldToPixels,
-          },
-        );
-      }
-
       const universe = NeptunesPride.universe;
       const galaxy = universe.galaxy;
       if (universe.selectedFleet?.uid) {
@@ -3265,6 +3252,19 @@ async function NeptunesPrideAgent() {
             }
           } while (outer);
         }
+      }
+
+      if (settings.mapnamesOn) {
+        politicalMap.drawPoliticalMap(
+          map.context,
+          map.viewportWidth,
+          map.viewportHeight,
+          {
+            worldToScreenX: map.worldToScreenX.bind(map),
+            worldToScreenY: map.worldToScreenY.bind(map),
+            worldToPixels,
+          },
+        );
       }
 
       superDrawSelectionRing();
