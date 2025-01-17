@@ -60,6 +60,7 @@ import { safe_image_url, youtube } from "./imageutils";
 import { logCount, logError } from "./logging";
 import { get } from "./network";
 import { clone, patch } from "./patch";
+import { politicalMap } from "./politicalMap";
 import {
   type Filter,
   type Stanzas,
@@ -69,7 +70,6 @@ import {
   or,
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
-import { politicalMap } from "./politicalMap";
 import {
   type CachedScan,
   getCacheForKey,
@@ -153,6 +153,7 @@ async function NeptunesPrideAgent() {
     timeOptions,
   );
   settings.newSetting("Territory Display", "territoryOn", true, [true, false]);
+  settings.newSetting("Map Names Display", "mapnamesOn", true, [true, false]);
   settings.newSetting("Recolor me", "whitePlayer", false, [false, true]);
   settings.newSetting(
     "Territory Style",
@@ -3155,11 +3156,18 @@ async function NeptunesPrideAgent() {
     const superDrawSelectionRing = map.drawSelectionRing.bind(map);
     const bubbleLayer = document.createElement("canvas");
     map.drawSelectionRing = () => {
-      politicalMap.drawPoliticalMap(map.context, map.viewportWidth, map.viewportHeight, {
-        worldToScreenX: map.worldToScreenX.bind(map),
-        worldToScreenY: map.worldToScreenY.bind(map),
-        worldToPixels
-      });
+      if (settings.mapnamesOn) {
+        politicalMap.drawPoliticalMap(
+          map.context,
+          map.viewportWidth,
+          map.viewportHeight,
+          {
+            worldToScreenX: map.worldToScreenX.bind(map),
+            worldToScreenY: map.worldToScreenY.bind(map),
+            worldToPixels,
+          },
+        );
+      }
 
       const universe = NeptunesPride.universe;
       const galaxy = universe.galaxy;
@@ -4529,6 +4537,16 @@ async function NeptunesPrideAgent() {
     toggleTerritory,
     "Toggle the territory display. Range and scanning for all stars of the selected empire are shown.",
     "Toggle Territory",
+  );
+  const toggleMapnames = () => {
+    settings.mapnamesOn = !settings.mapnamesOn;
+    mapRebuild();
+  };
+  defineHotkey(
+    "ctrl+0",
+    toggleMapnames,
+    "Toggle the political map display. Stars are grouped into regions and labelled with the empire name that owns the region.",
+    "Toggle Map Names",
   );
   const toggleRoutePlanner = () => {
     settings.routePlanOn = !settings.routePlanOn;
