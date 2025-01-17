@@ -1,8 +1,8 @@
 // TODO: Are the internal NP interfaces declared elsewhere? These declarations are just the ones I need for now
 
 export interface NP4Galaxy {
-  players: { [uid: number]: NP4GalaxyPlayer; };
-  stars: { [uid: number]: NP4GalaxyStar}
+  players: { [uid: number]: NP4GalaxyPlayer };
+  stars: { [uid: number]: NP4GalaxyStar };
 }
 
 export interface NP4GalaxyPlayer {
@@ -31,7 +31,7 @@ export interface Star {
   readonly y: number;
   readonly influenceRange: number;
   readonly exclave: boolean;
-};
+}
 
 export interface StarRegion {
   readonly ownerID: number;
@@ -61,17 +61,30 @@ export class PoliticalMap {
     this.starData = parseRawStarData(galaxy);
   }
 
-  public drawPoliticalMap(drawingContext: CanvasRenderingContext2D, viewportWidth: number, viewportHeight: number, map: NPAController) {
-    if (this.borderCanvas.width != viewportWidth || this.borderCanvas.height != viewportHeight) {
+  public drawPoliticalMap(
+    drawingContext: CanvasRenderingContext2D,
+    viewportWidth: number,
+    viewportHeight: number,
+    map: NPAController,
+  ) {
+    if (
+      this.borderCanvas.width != viewportWidth ||
+      this.borderCanvas.height != viewportHeight
+    ) {
       this.borderCanvas = new OffscreenCanvas(viewportWidth, viewportHeight);
       this.borderCanvasDrawingContext = this.borderCanvas.getContext("2d");
     }
     if (this.starData) {
       this.borderCanvasDrawingContext.save();
-      this.borderCanvasDrawingContext.clearRect(0, 0, viewportWidth, viewportHeight);
+      this.borderCanvasDrawingContext.clearRect(
+        0,
+        0,
+        viewportWidth,
+        viewportHeight,
+      );
 
       // Draw star borders for all stars grouped into regions (i.e. not exclave stars)
-      for (let star of this.starData.stars) {
+      for (const star of this.starData.stars) {
         if (!star || star.exclave) continue;
         const playerColor = "#003366FF";
         this.borderCanvasDrawingContext.strokeStyle = playerColor;
@@ -81,26 +94,39 @@ export class PoliticalMap {
         const radius = map.worldToPixels(star.influenceRange) - 4;
         if (radius <= 0) continue;
         this.borderCanvasDrawingContext.beginPath();
-        this.borderCanvasDrawingContext.arc(screenX, screenY, radius, 0, 2 * Math.PI);
+        this.borderCanvasDrawingContext.arc(
+          screenX,
+          screenY,
+          radius,
+          0,
+          2 * Math.PI,
+        );
         this.borderCanvasDrawingContext.fill();
       }
       this.borderCanvasDrawingContext.strokeStyle = "#FFFFFF";
       this.borderCanvasDrawingContext.fillStyle = "#FFFFFF";
-      this.borderCanvasDrawingContext.globalCompositeOperation = "destination-out"
-      for (let star of this.starData.stars) {
+      this.borderCanvasDrawingContext.globalCompositeOperation =
+        "destination-out";
+      for (const star of this.starData.stars) {
         if (!star || star.exclave) continue;
         const radius = map.worldToPixels(star.influenceRange) - 8;
         if (radius <= 0) continue;
         const screenX = map.worldToScreenX(star.x);
         const screenY = map.worldToScreenY(star.y);
         this.borderCanvasDrawingContext.beginPath();
-        this.borderCanvasDrawingContext.arc(screenX, screenY, radius, 0, 2 * Math.PI);
+        this.borderCanvasDrawingContext.arc(
+          screenX,
+          screenY,
+          radius,
+          0,
+          2 * Math.PI,
+        );
         this.borderCanvasDrawingContext.fill();
       }
 
       // Draw star borders for all exclave stars after grouped stars
-      this.borderCanvasDrawingContext.globalCompositeOperation = "source-over"
-      for (let star of this.starData.stars) {
+      this.borderCanvasDrawingContext.globalCompositeOperation = "source-over";
+      for (const star of this.starData.stars) {
         if (!star || !star.exclave) continue;
         const playerColor = "#663333";
         this.borderCanvasDrawingContext.strokeStyle = playerColor;
@@ -110,44 +136,66 @@ export class PoliticalMap {
         const radius = map.worldToPixels(star.influenceRange) - 4;
         if (radius <= 0) continue;
         this.borderCanvasDrawingContext.beginPath();
-        this.borderCanvasDrawingContext.arc(screenX, screenY, radius, 0, 2 * Math.PI);
+        this.borderCanvasDrawingContext.arc(
+          screenX,
+          screenY,
+          radius,
+          0,
+          2 * Math.PI,
+        );
         this.borderCanvasDrawingContext.fill();
       }
       this.borderCanvasDrawingContext.strokeStyle = "#FFFFFF";
       this.borderCanvasDrawingContext.fillStyle = "#FFFFFF";
-      this.borderCanvasDrawingContext.globalCompositeOperation = "destination-out"
-      for (let star of this.starData.stars) {
+      this.borderCanvasDrawingContext.globalCompositeOperation =
+        "destination-out";
+      for (const star of this.starData.stars) {
         if (!star || !star.exclave) continue;
         const radius = map.worldToPixels(star.influenceRange) - 8;
         if (radius <= 0) continue;
         const screenX = map.worldToScreenX(star.x);
         const screenY = map.worldToScreenY(star.y);
         this.borderCanvasDrawingContext.beginPath();
-        this.borderCanvasDrawingContext.arc(screenX, screenY, radius, 0, 2 * Math.PI);
+        this.borderCanvasDrawingContext.arc(
+          screenX,
+          screenY,
+          radius,
+          0,
+          2 * Math.PI,
+        );
         this.borderCanvasDrawingContext.fill();
       }
       this.borderCanvasDrawingContext.restore();
-  
+
       drawingContext.save();
       drawingContext.drawImage(this.borderCanvas, 0, 0);
 
-      for (let starRegion of this.starData.starRegions) {
+      for (const starRegion of this.starData.starRegions) {
         const player = this.starData.players[starRegion.ownerID];
         if (!player) continue;
-        const playerCaption = player.name.toLocaleUpperCase().replace(/ /gm, "  ").split("").join("  ");
+        const playerCaption = player.name
+          .toLocaleUpperCase()
+          .replace(/ /gm, "  ")
+          .split("")
+          .join("  ");
         const captionHorizontalPadding = 0.1;
         const captionWidth = starRegion.captionRight - starRegion.captionLeft;
-        const screenX = map.worldToScreenX(starRegion.captionLeft + captionWidth * captionHorizontalPadding);
+        const screenX = map.worldToScreenX(
+          starRegion.captionLeft + captionWidth * captionHorizontalPadding,
+        );
         const screenY = map.worldToScreenY(starRegion.centerY);
-        const screenWidth = map.worldToPixels(captionWidth * (1.0 - captionHorizontalPadding * 2))
+        const screenWidth = map.worldToPixels(
+          captionWidth * (1.0 - captionHorizontalPadding * 2),
+        );
         // if (screenWidth <= 100) continue;
         const minCaptionWidthDisplay = 100;
         const fullBrightCaptionWidthDisplay = Math.min(viewportWidth / 4, 300);
-        const captionWidthPartialDisplayRange = fullBrightCaptionWidthDisplay - minCaptionWidthDisplay;
+        const captionWidthPartialDisplayRange =
+          fullBrightCaptionWidthDisplay - minCaptionWidthDisplay;
         const brightness = 96;
-          // screenWidth > fullBrightCaptionWidthDisplay ? 128 :
-          // screenWidth < minCaptionWidthDisplay ? 0 :
-          // Math.round((screenWidth - minCaptionWidthDisplay) / captionWidthPartialDisplayRange * 128);
+        // screenWidth > fullBrightCaptionWidthDisplay ? 128 :
+        // screenWidth < minCaptionWidthDisplay ? 0 :
+        // Math.round((screenWidth - minCaptionWidthDisplay) / captionWidthPartialDisplayRange * 128);
         const metrics = drawingContext.measureText(playerCaption);
         const scaleX = screenWidth / metrics.width;
         drawingContext.font = "italic 12px Century Gothic, Verdana, sans-serif";
@@ -157,7 +205,11 @@ export class PoliticalMap {
         drawingContext.scale(scaleX, scaleX);
         drawingContext.textAlign = "left";
         // drawingContext.strokeText(playerCaption, screenX / scaleX, screenY / scaleX);
-        drawingContext.fillText(playerCaption, screenX / scaleX, screenY / scaleX);
+        drawingContext.fillText(
+          playerCaption,
+          screenX / scaleX,
+          screenY / scaleX,
+        );
         drawingContext.restore();
       }
       drawingContext.restore();
@@ -169,19 +221,20 @@ export const politicalMap = new PoliticalMap();
 
 function twoDigitHex(val: number) {
   if (val < 16) {
-    return "0" + val.toString(16);
-  } else {
-    return val.toString(16);
+    return `0${val.toString(16)}`;
   }
+  return val.toString(16);
 }
 
 type WritableStar = { -readonly [P in keyof Star]: Star[P] };
 
 function parseRawStarData(rawStarData: NP4Galaxy) {
-  let stars: WritableStar[] = [];
+  const stars: WritableStar[] = [];
 
-  for (let starID in rawStarData.stars) {
-    const nativeStar = rawStarData.stars[starID as unknown as keyof typeof rawStarData.stars] as typeof rawStarData.stars["1"];
+  for (const starID in rawStarData.stars) {
+    const nativeStar = rawStarData.stars[
+      starID as unknown as keyof typeof rawStarData.stars
+    ] as (typeof rawStarData.stars)["1"];
     const star = {
       id: nativeStar.uid,
       ownerID: nativeStar.puid,
@@ -189,7 +242,7 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
       y: nativeStar.y,
       lastPendingFleetArrivalTick: 0,
       influenceRange: 10000, // TODO: Make this less arbitrary?
-      exclave: nativeStar.puid == -1
+      exclave: nativeStar.puid == -1,
     };
     stars[star.id] = star;
   }
@@ -226,15 +279,17 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   // We now want to eliminate individual stars that didn't wind up in groups from further groupings
   // by marking them as exclaves
   let starGroupSet = new Set<number[]>();
-  for (let starGroup of Array.from(initialStarGroupsByStarID.values())) {
+  for (const starGroup of Array.from(initialStarGroupsByStarID.values())) {
     starGroupSet.add(starGroup);
   }
   // let nationStarGroups = Array.from(starGroupSet).filter(x => x.length > 1);
-  let satelliteStarIDs: number[] = [];
-  for (let starGroup of Array.from(starGroupSet).filter(x => x.length <= 1)) {
+  const satelliteStarIDs: number[] = [];
+  for (const starGroup of Array.from(starGroupSet).filter(
+    (x) => x.length <= 1,
+  )) {
     satelliteStarIDs.push.apply(satelliteStarIDs, starGroup);
   }
-  for (let starID of satelliteStarIDs) {
+  for (const starID of satelliteStarIDs) {
     stars[starID].exclave = true;
   }
 
@@ -246,22 +301,22 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
   // regions that were interrupted due to exclaves
   const starGroupsByStarID = groupStarsByInfluence(stars);
   starGroupSet = new Set<number[]>();
-  for (let starGroup of Array.from(starGroupsByStarID.values())) {
+  for (const starGroup of Array.from(starGroupsByStarID.values())) {
     starGroupSet.add(starGroup);
   }
 
   // Get every star group with more than one star - these are our final nation groups
-  let nationStarGroups = Array.from(starGroupSet).filter(x => x.length > 1);
+  const nationStarGroups = Array.from(starGroupSet).filter((x) => x.length > 1);
 
   // For each star ID list, create a star group, calculating the rough weighted center (we'll
   // weight the average based on the size of the influence radius)
-  let starRegions: StarRegion[] = [];
-  for (let starGroup of nationStarGroups) {
+  const starRegions: StarRegion[] = [];
+  for (const starGroup of nationStarGroups) {
     let x = 0;
     let y = 0;
     let totalInfluence = 0;
     let star: Star;
-    for (let starID of starGroup) {
+    for (const starID of starGroup) {
       star = stars[starID];
       x += star.x * star.influenceRange;
       y += star.y * star.influenceRange;
@@ -276,11 +331,20 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
     let minRegionX = originalCenterX;
     let maxRegionX = originalCenterX;
     const ownerID = star.ownerID;
-    for (let otherStarID of starGroup) {
-      let otherStar = stars[otherStarID];
-      if (otherStar.y + otherStar.influenceRange > centerY && otherStar.y - otherStar.influenceRange < centerY) {
-        minRegionX = Math.min(otherStar.x - otherStar.influenceRange, minRegionX);
-        maxRegionX = Math.max(otherStar.x + otherStar.influenceRange, maxRegionX);
+    for (const otherStarID of starGroup) {
+      const otherStar = stars[otherStarID];
+      if (
+        otherStar.y + otherStar.influenceRange > centerY &&
+        otherStar.y - otherStar.influenceRange < centerY
+      ) {
+        minRegionX = Math.min(
+          otherStar.x - otherStar.influenceRange,
+          minRegionX,
+        );
+        maxRegionX = Math.max(
+          otherStar.x + otherStar.influenceRange,
+          maxRegionX,
+        );
       }
     }
     starRegions.push({
@@ -289,27 +353,29 @@ function parseRawStarData(rawStarData: NP4Galaxy) {
       centerY,
       captionLeft: minRegionX,
       captionRight: maxRegionX,
-      starIDs: starGroup
+      starIDs: starGroup,
     });
   }
 
-  let players: Player[] = [];
-  for (let playerID in rawStarData.players) {
+  const players: Player[] = [];
+  for (const playerID in rawStarData.players) {
     const player = rawStarData.players[playerID];
     players[playerID] = {
       id: player.uid,
-      name: player.rawAlias
+      name: player.rawAlias,
     };
   }
 
   return {
     stars: stars as readonly Star[],
     starRegions: starRegions as readonly StarRegion[],
-    players: players as readonly Player[]
+    players: players as readonly Player[],
   };
 }
 
-function initializeInfluenceRadiusToOpponentHalfwayPoint(stars: WritableStar[]) {
+function initializeInfluenceRadiusToOpponentHalfwayPoint(
+  stars: WritableStar[],
+) {
   for (let starID = 0; starID < stars.length; starID++) {
     const star = stars[starID];
     if (!star) continue;
@@ -317,15 +383,28 @@ function initializeInfluenceRadiusToOpponentHalfwayPoint(stars: WritableStar[]) 
       star.influenceRange = 0;
       continue;
     }
-    for (let otherStarID = starID + 1; otherStarID < stars.length; otherStarID++) {
+    for (
+      let otherStarID = starID + 1;
+      otherStarID < stars.length;
+      otherStarID++
+    ) {
       const otherStar = stars[otherStarID];
       if (otherStar && otherStar.ownerID != star.ownerID) {
         const otherStarOffsetX = otherStar.x - star.x;
         const otherStarOffsetY = otherStar.y - star.y;
-        const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
-        const influenceRange = otherStar.ownerID == -1 ? otherStarDistance * 9 / 10 : otherStarDistance / 2;
+        const otherStarDistance = Math.sqrt(
+          otherStarOffsetX * otherStarOffsetX +
+            otherStarOffsetY * otherStarOffsetY,
+        );
+        const influenceRange =
+          otherStar.ownerID == -1
+            ? (otherStarDistance * 9) / 10
+            : otherStarDistance / 2;
         star.influenceRange = Math.min(star.influenceRange, influenceRange);
-        otherStar.influenceRange = Math.min(otherStar.influenceRange, influenceRange);
+        otherStar.influenceRange = Math.min(
+          otherStar.influenceRange,
+          influenceRange,
+        );
       }
     }
   }
@@ -348,13 +427,21 @@ function groupStarsByInfluence(stars: Star[]) {
     }
 
     // Loop through other stars after this one (prior stars will already have matched to us)
-    for (let otherStarID = starID + 1; otherStarID < stars.length; otherStarID++) {
+    for (
+      let otherStarID = starID + 1;
+      otherStarID < stars.length;
+      otherStarID++
+    ) {
       const otherStar = stars[otherStarID];
       if (!otherStar || otherStar.ownerID != star.ownerID) continue;
       const otherStarOffsetX = otherStar.x - star.x;
       const otherStarOffsetY = otherStar.y - star.y;
-      const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
-      const totalInfluenceRadius = star.influenceRange + otherStar.influenceRange;
+      const otherStarDistance = Math.sqrt(
+        otherStarOffsetX * otherStarOffsetX +
+          otherStarOffsetY * otherStarOffsetY,
+      );
+      const totalInfluenceRadius =
+        star.influenceRange + otherStar.influenceRange;
       if (totalInfluenceRadius > otherStarDistance) {
         // If we get here, the two stars are within range; the merged group needs to include all
         // stars in both groups, and any star in the first and second group should all point to
@@ -366,8 +453,10 @@ function groupStarsByInfluence(stars: Star[]) {
             otherStarGroup = [otherStarID];
             groupedStarIDs.set(otherStarID, starGroup);
           }
-          let mergedStarGroup = [...starGroup, ...otherStarGroup].sort((a, b) => a - b);
-          for (let mergedStarID of mergedStarGroup) {
+          const mergedStarGroup = [...starGroup, ...otherStarGroup].sort(
+            (a, b) => a - b,
+          );
+          for (const mergedStarID of mergedStarGroup) {
             groupedStarIDs.set(mergedStarID, mergedStarGroup);
           }
           starGroup = mergedStarGroup;
@@ -379,21 +468,36 @@ function groupStarsByInfluence(stars: Star[]) {
 }
 
 function expandInfluenceRadiiToFillGaps(stars: WritableStar[]) {
-  const starIDsByInfluenceSize = stars.slice().filter(x => !!x).sort((a, b) => b.influenceRange - a.influenceRange).map(x => x.id);
-  for (let starID of starIDsByInfluenceSize) {
+  const starIDsByInfluenceSize = stars
+    .slice()
+    .filter((x) => !!x)
+    .sort((a, b) => b.influenceRange - a.influenceRange)
+    .map((x) => x.id);
+  for (const starID of starIDsByInfluenceSize) {
     const star = stars[starID];
     // Exclave stars never expand and are ignored by other expansions; they will show up as
     // embedded in other empires in a sort of "disputed zone" fashion if they overlap
     if (star.exclave) continue;
     let smallestGap = 10000; // TODO: Make this less arbitrary?
-    for (let otherStarID of starIDsByInfluenceSize) {
+    for (const otherStarID of starIDsByInfluenceSize) {
       const otherStar = stars[otherStarID];
-      if (otherStar && otherStar.ownerID != star.ownerID && !otherStar.exclave) {
+      if (
+        otherStar &&
+        otherStar.ownerID != star.ownerID &&
+        !otherStar.exclave
+      ) {
         const otherStarOffsetX = otherStar.x - star.x;
         const otherStarOffsetY = otherStar.y - star.y;
-        const otherStarDistance = Math.sqrt(otherStarOffsetX * otherStarOffsetX + otherStarOffsetY * otherStarOffsetY);
-        const totalInfluenceRadius = star.influenceRange + otherStar.influenceRange;
-        smallestGap = Math.min(otherStarDistance - totalInfluenceRadius, smallestGap);
+        const otherStarDistance = Math.sqrt(
+          otherStarOffsetX * otherStarOffsetX +
+            otherStarOffsetY * otherStarOffsetY,
+        );
+        const totalInfluenceRadius =
+          star.influenceRange + otherStar.influenceRange;
+        smallestGap = Math.min(
+          otherStarDistance - totalInfluenceRadius,
+          smallestGap,
+        );
       }
     }
     star.influenceRange += smallestGap;
