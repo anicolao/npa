@@ -3647,11 +3647,11 @@ async function NeptunesPrideAgent() {
         i = i + 1;
         fp = s.indexOf("[[");
         sp = s.indexOf("]]");
+        if (fp === -1 || sp === -1) break;
         if (sp < fp) {
           s = `${s.slice(0, sp)}?${s.slice(sp + 2)}`;
           continue;
         }
-        if (fp === -1 || sp === -1) break;
         sub = s.slice(fp + 2, sp);
         pattern = `[[${sub}]]`;
         sub = sub.replaceAll("&#x3A;", ":");
@@ -4764,6 +4764,7 @@ async function NeptunesPrideAgent() {
   const loadGalaxy = (galaxy: any) => {
     const oldColors = NeptunesPride.universe.galaxy.players;
     NeptunesPride.np.onFullUniverse(null, galaxy);
+    politicalMap?.updateStarData(NeptunesPride.universe.galaxy);
     for (const uid in oldColors) {
       galaxy.players[uid].colorStyle = oldColors[uid].colorStyle;
     }
