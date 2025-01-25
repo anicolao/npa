@@ -1,4 +1,4 @@
-import type { Player, ScanningData } from "./galaxy";
+import { type Player, type ScanningData, getRangeValue } from "./galaxy";
 
 export interface NPAController {
   worldToScreenX(x: number): number;
@@ -212,13 +212,16 @@ function parseRawStarData(rawStarData: ScanningData) {
     const nativeStar = rawStarData.stars[
       starID as unknown as keyof typeof rawStarData.stars
     ] as (typeof rawStarData.stars)["1"];
+    const players = NeptunesPride.universe.galaxy.players;
+    const player = players[nativeStar.puid];
+    const influenceRange = player ? getRangeValue(player) : 1;
     const star = {
       id: nativeStar.uid,
       ownerID: nativeStar.puid,
       x: nativeStar.x,
       y: nativeStar.y,
       lastPendingFleetArrivalTick: 0,
-      influenceRange: 10000, // TODO: Make this less arbitrary?
+      influenceRange,
       exclave: nativeStar.puid == -1,
     };
     stars[star.id] = star;
@@ -448,10 +451,11 @@ function expandInfluenceRadiiToFillGaps(stars: WritableStar[]) {
     .map((x) => x.id);
   for (const starID of starIDsByInfluenceSize) {
     const star = stars[starID];
+    const player = NeptunesPride.universe.galaxy.players[star.ownerID];
     // Exclave stars never expand and are ignored by other expansions; they will show up as
     // embedded in other empires in a sort of "disputed zone" fashion if they overlap
     if (star.exclave) continue;
-    let smallestGap = 10000; // TODO: Make this less arbitrary?
+    let smallestGap = player ? getRangeValue(player) : 1.25;
     for (const otherStarID of starIDsByInfluenceSize) {
       const otherStar = stars[otherStarID];
       if (
@@ -474,5 +478,11 @@ function expandInfluenceRadiiToFillGaps(stars: WritableStar[]) {
       }
     }
     star.influenceRange += smallestGap;
+    if (player) {
+      star.influenceRange = Math.min(
+        getRangeValue(player),
+        star.influenceRange,
+      );
+    }
   }
 }
