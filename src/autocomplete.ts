@@ -47,7 +47,7 @@ export function setupAutocomplete(
         if (m?.length) {
           const puid = Number(autoString);
           const end = target.selectionEnd;
-          const auto = `${puid}]] ${neptunesPride.universe.galaxy.players[puid].alias}`;
+          const auto = `${neptunesPride.universe.galaxy.players[puid].rawAlias}]]`;
           target.value =
             target.value.substring(0, start) +
             auto +
@@ -75,11 +75,11 @@ export function setupAutocomplete(
             }
             for (const key in neptunesPride.universe.galaxy.players) {
               const player = neptunesPride.universe.galaxy.players[key];
-              if (!matches(player.alias)) continue;
+              if (!matches(player.rawAlias)) continue;
               candidates.push({
                 matchPriority: 0,
-                matchText: player.alias,
-                completion: `[[${key}]] ${player.alias}`,
+                matchText: player.rawAlias,
+                completion: `[[${player.rawAlias}]]`,
               });
             }
             candidates.sort((a, b) => {

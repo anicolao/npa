@@ -234,7 +234,8 @@ async function NeptunesPrideAgent() {
         universe.galaxy.players[i] !== undefined
       ) {
         const player = NeptunesPride.universe.galaxy.players[i];
-        universe.hyperlinkedMessageInserts[`${i}`] =
+        universe.hyperlinkedMessageInserts[`${player.rawAlias}`] =
+          universe.hyperlinkedMessageInserts[`${i}`] =
           universe.hyperlinkedMessageInserts[i] =
             player.hyperlinkedBox + player.hyperlinkedRawAlias;
 

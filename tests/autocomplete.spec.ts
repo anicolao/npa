@@ -14,9 +14,9 @@ describe("autocomplete tests", () => {
     universe: {
       galaxy: {
         players: {
-          0: { alias: "Player One" },
-          1: { alias: "Player Two" },
-          2: { alias: "Star Player" },
+          0: { rawAlias: "Player One" },
+          1: { rawAlias: "Player Two" },
+          2: { rawAlias: "Star Player" },
         },
         stars: {
           1: { n: "Star Name" },
@@ -93,13 +93,18 @@ describe("autocomplete tests", () => {
   it("autocompletes a player id", () => {
     setText("[[0|");
     type("]");
-    expect(getText()).to.equal("[[0]] Player One|");
+    expect(getText()).to.equal("[[Player One]]|");
   });
 
   it("autocompletes a player id before another completed player id", () => {
     setText("[[0| and [[1]] Player Two");
     type("]");
-    expect(getText()).to.equal("[[0]] Player One| and [[1]] Player Two");
+    expect(getText()).to.equal("[[Player One]]| and [[1]] Player Two");
+  });
+  it("autocompletes a player id before another completed player id", () => {
+    setText("[[0| and [[Player Two]]");
+    type("]");
+    expect(getText()).to.equal("[[Player One]]| and [[Player Two]]");
   });
 
   it("completes your api key", () => {
@@ -113,21 +118,21 @@ describe("autocomplete tests", () => {
   it("autocompletes player names in order", () => {
     setText("I am [[Player|");
     type("]");
-    expect(getText()).to.equal("I am [[0]] Player One|");
+    expect(getText()).to.equal("I am [[Player One]]|");
     type("]");
-    expect(getText()).to.equal("I am [[1]] Player Two|");
+    expect(getText()).to.equal("I am [[Player Two]]|");
     type("]");
-    expect(getText()).to.equal("I am [[0]] Player One|");
+    expect(getText()).to.equal("I am [[Player One]]|");
   });
 
   it("autocompletes player names and star names", () => {
     setText("I am [[star|");
     type("]");
-    expect(getText()).to.equal("I am [[2]] Star Player|");
+    expect(getText()).to.equal("I am [[Star Player]]|");
     type("]");
     expect(getText()).to.equal("I am [[Star Name]]|");
     type("]");
-    expect(getText()).to.equal("I am [[2]] Star Player|");
+    expect(getText()).to.equal("I am [[Star Player]]|");
     type("]");
     expect(getText()).to.equal("I am [[Star Name]]|");
   });
