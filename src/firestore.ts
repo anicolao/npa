@@ -20,7 +20,7 @@ export const firestore = initializeFirestore(app, {
 });
 
 export function registerForScans(apikey: string, notifications?: string) {
-  const gameid = getGameNumber();
+  const gameid = `${getGameNumber()}`;
   const store = collection(firestore, `newkey`);
   if (notifications) {
     addDoc(store, { game_id: gameid, api_key: apikey, notifications });
