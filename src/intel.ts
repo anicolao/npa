@@ -4223,6 +4223,11 @@ async function NeptunesPrideAgent() {
         if (sideMenu.pinned) return;
         sideMenu.isShowing = false;
         sideMenu.hide();
+        if (NeptunesPride.universe.interfaceSettings.sideMenuPin) {
+          NeptunesPride.npui.sideMenu.pin();
+        } else {
+          NeptunesPride.npui.sideMenu.unPin();
+        }
       };
 
       onTrigger("show_report", showReport);
