@@ -4170,10 +4170,10 @@ async function NeptunesPrideAgent() {
 
       sideMenu.spacer = new UI.Widget("rel").size(160, 48).roost(sideMenu);
 
-      sideMenu.showBtn = new UI.IconButton("icon-menu", "hide_side_menu")
+      sideMenu.showBtn = new UI.IconButton("icon-menu", "hide_npa_menu")
         .grid(0, 0, 3, 3)
         .roost(sideMenu);
-      sideMenu.showBtn = new UI.IconButton("icon-eye", "hide_side_menu")
+      sideMenu.showBtn = new UI.IconButton("icon-eye", "hide_npa_menu")
         .grid(2.5, 0, 3, 3)
         .roost(sideMenu);
 
@@ -4228,7 +4228,7 @@ async function NeptunesPrideAgent() {
       onTrigger("show_report", showReport);
       onTrigger("show_npa_help", npaHelp);
       onTrigger("show_npa_menu", sideMenu.onPopUp);
-      onTrigger("hide_side_menu", sideMenu.onPopDown);
+      onTrigger("hide_npa_menu", sideMenu.onPopDown);
 
       sideMenu.onPopDown();
 
@@ -4276,7 +4276,12 @@ async function NeptunesPrideAgent() {
       npui.onHideScreen(null, true);
       npui.onHideSelectionMenu();
 
-      npui.trigger("hide_side_menu");
+      if (NeptunesPride.universe.interfaceSettings.sideMenuPin) {
+        NeptunesPride.npui.sideMenu.pin();
+      } else {
+        NeptunesPride.npui.sideMenu.unPin();
+      }
+      npui.trigger("hide_npa_menu");
       npui.trigger("reset_edit_mode");
       npui.activeScreen = getScreen();
 
