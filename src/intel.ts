@@ -192,6 +192,9 @@ async function NeptunesPrideAgent() {
       window?.NeptunesPride?.np?.ui?.on &&
       NeptunesPride.universe?.galaxy?.players
     ) {
+      if (!hooksLoaded) {
+        NeptunesPride.np.firstFullUniverseReport();
+      }
       NeptunesPride.crux.ui.on(trigger, fn);
       if (trueTick === 0) {
         recordTrueTick(undefined, NeptunesPride.universe.galaxy);
