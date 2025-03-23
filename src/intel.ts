@@ -422,6 +422,7 @@ async function NeptunesPrideAgent() {
     const abandoned: { [k: string]: boolean } = {};
     let prior = null;
     const ticks = new TickIterator(getMyKeys(), myId);
+    const players = NeptunesPride.universe.galaxy.players;
     while (ticks.hasNext() && currentTick <= endTick) {
       ticks.next();
       const scanData = ticks.getScanData();
@@ -432,7 +433,9 @@ async function NeptunesPrideAgent() {
         const tick = scanData.tick;
         for (const k in newStars) {
           const nameOwner = (uid: any) =>
-            uid !== -1 && uid !== undefined ? `[[${uid}]]` : "Abandoned";
+            uid !== -1 && uid !== undefined
+              ? `[[${players[uid].rawAlias}]]`
+              : "Abandoned";
           const unowned = (uid: any) => uid === undefined || uid === -1;
           if (
             prior[k]?.puid !== newStars[k]?.puid &&
