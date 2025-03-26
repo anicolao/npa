@@ -192,9 +192,6 @@ async function NeptunesPrideAgent() {
       window?.NeptunesPride?.np?.ui?.on &&
       NeptunesPride.universe?.galaxy?.players
     ) {
-      if (!hooksLoaded) {
-        NeptunesPride.np.firstFullUniverseReport();
-      }
       NeptunesPride.crux.ui.on(trigger, fn);
       if (trueTick === 0) {
         recordTrueTick(undefined, NeptunesPride.universe.galaxy);
@@ -2187,6 +2184,7 @@ async function NeptunesPrideAgent() {
   };
 
   let hooksLoaded = false;
+  let superStarGatesDone = false;
   type CSSRuleMap = { [k: string]: CSSStyleRule };
   function cssrules(): CSSRuleMap {
     const rules: { [k: string]: CSSStyleRule } = {};
@@ -2298,17 +2296,20 @@ async function NeptunesPrideAgent() {
     // that every player can have a uniquely coloured gate
     // glow that matches their own colour.
     const npmap = NeptunesPride.npui.map;
-    const superCreateSpritesStars = npmap.createSpritesStars.bind(npmap);
-    NeptunesPride.npui.map.createSpritesStars = () => {
-      superCreateSpritesStars();
-      for (const sss of NeptunesPride.npui.map.sortedStarSprites) {
-        if (sss.gate && sss.puid >= 0) {
-          const shape = NeptunesPride.universe.galaxy.players[sss.puid].shape;
-          const col = shape !== undefined ? shape : Math.floor(sss.puid / 8);
-          sss.gate.spriteX = 64 * 8 + 64 * col;
+    if (!superStarGatesDone) {
+      const superCreateSpritesStars = npmap.createSpritesStars.bind(npmap);
+      NeptunesPride.npui.map.createSpritesStars = () => {
+        superCreateSpritesStars();
+        for (const sss of NeptunesPride.npui.map.sortedStarSprites) {
+          if (sss.gate && sss.puid >= 0) {
+            const shape = NeptunesPride.universe.galaxy.players[sss.puid].shape;
+            const col = shape !== undefined ? shape : Math.floor(sss.puid / 8);
+            sss.gate.spriteX = 64 * 8 + 64 * col;
+          }
         }
-      }
-    };
+      };
+      superStarGatesDone = true;
+    }
 
     map.starSrc.src = ownershipSprites.toDataURL();
     await map.starSrc.decode();
