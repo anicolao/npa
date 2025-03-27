@@ -1330,6 +1330,64 @@ async function NeptunesPrideAgent() {
       "<p>This same report can also be viewed via the menu; enter the agent and choose it from the dropdown.",
     "activity",
   );
+  function keyDetailReport() {
+    const output = [];
+    const endTick = NeptunesPride.universe.galaxy.tick;
+    output.push(`Key detail up to [[Tick #${endTick}]]:`);
+    const keyBlock: {
+      [k: string]: string[];
+    } = {};
+    const players = NeptunesPride.universe.galaxy.players;
+    console.log(allSeenKeys);
+    for (const k of allSeenKeys) {
+      const code = getCodeFromApiText(k);
+      const diffs: CachedScan = getCacheForKey(code);
+      let state: ScanningData = {} as ScanningData;
+      let count = 0;
+      for (let next = diffs; next !== undefined; next = next.next) {
+        state = patch(state, next.forward) as ScanningData;
+        if (state?.tick !== undefined) {
+          const tick = state.tick;
+          const player = state.players[state.playerUid];
+          if (keyBlock[code] === undefined) {
+            keyBlock[code] = [`--- [[${player.alias}]] [[apiv:${code}]] ---`];
+            keyBlock[code].push(":--|---|---|---|--:|--:");
+            keyBlock[code].push("Time|$|E|I|S|Fleets|Stars");
+          }
+          const fplayer = next.forward?.players?.[state.playerUid];
+          if (fplayer) {
+            keyBlock[code].push(
+              `[[Tick #${tick}]]|${player.cash}|${player.totalEconomy}|${player.totalIndustry}|${player.totalScience}|${player.totalFleets}|${player.totalStars}`,
+            );
+          }
+          count++;
+        }
+      }
+    }
+    for (const k in keyBlock) {
+      if (keyBlock[k].length === 3) {
+        keyBlock[k].push("No activity: AFK?");
+      }
+      if (keyBlock[k].length > 15) {
+        const lines = keyBlock[k];
+        const prefix = lines.slice(0, 3);
+        const end = lines.length;
+        const start = end - 50;
+        const suffix = lines.slice(start, end);
+        keyBlock[k] = [...prefix, ...suffix];
+      }
+      keyBlock[k].push(`--- [[${k}]] ---`);
+      output.push(keyBlock[k]);
+    }
+    prepReport("keydetail", output);
+  }
+  defineHotkey(
+    "shift+k",
+    keyDetailReport,
+    "View data from individual API keys." +
+      "<p>Use this report to take a deep look at API data you have.",
+    "keydetail",
+  );
   const routeEnemy = () => {
     const universe = NeptunesPride.universe;
     const npui = NeptunesPride.npui;
@@ -3935,6 +3993,7 @@ async function NeptunesPrideAgent() {
       tradeactivity: "icon-chart-line",
       combatactivity: "icon-chart-line",
       activity: "icon-chart-line",
+      keydetail: "icon-chart-line",
       planets: "icon-star-1",
       fleets: "icon-rocket",
       combats: "icon-rocket",
@@ -3967,6 +4026,7 @@ async function NeptunesPrideAgent() {
       economists: "Economists",
       generals: "Generals",
       api: "API Keys",
+      keydetail: "API Key Detail",
       games: "Past Games",
       fa: "Formal Alliances",
       controls: "Controls",
@@ -4077,6 +4137,8 @@ async function NeptunesPrideAgent() {
           await economistReport();
         } else if (d === "activity") {
           activityReport();
+        } else if (d === "keydetail") {
+          keyDetailReport();
         } else if (d === "trading") {
           await tradingReport();
         } else if (d === "empires") {
