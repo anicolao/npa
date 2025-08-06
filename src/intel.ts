@@ -264,7 +264,7 @@ async function NeptunesPrideAgent() {
       { kind: "npa_colours", ...options },
     ]);
   };
-  let destinationLock: ScannedStar | undefined = undefined;
+  let destinationLock: ScannedStar[] = [];
   let routeParents = undefined;
   let routeChildren = undefined;
 
@@ -2662,11 +2662,11 @@ async function NeptunesPrideAgent() {
       if (
         settings.routePlanOn &&
         (universe.selectedStar?.alliedDefenders !== undefined ||
-          destinationLock !== undefined)
+          destinationLock.length > 0)
       ) {
         const destUid =
-          destinationLock !== undefined
-            ? destinationLock.uid
+          destinationLock.length > 0
+            ? destinationLock[0].uid
             : universe.selectedStar?.uid;
         const stars = NeptunesPride.universe.galaxy.stars;
         const player = NeptunesPride.universe.player;
@@ -2686,6 +2686,11 @@ async function NeptunesPrideAgent() {
             Q.push(v);
           }
           dist[destUid] = 0;
+          if (destinationLock.length > 0) {
+            for (const d of destinationLock) {
+              dist[d.uid] = 0;
+            }
+          }
           while (Q.length > 0) {
             let closest = 0;
             for (let candidate = 1; candidate < Q.length; ++candidate) {
@@ -2701,8 +2706,9 @@ async function NeptunesPrideAgent() {
                 continue;
               }
               const puid = NeptunesPride.universe.galaxy.player_uid;
-              const hasMyProduction = stars[v].i > 0 && stars[v].puid === puid;
-              const m = hasMyProduction ? 1 : Math.sqrt(rangeTechLevel + 3);
+              //const hasMyProduction = stars[v].i > 0 && stars[v].puid === puid;
+              //const m = hasMyProduction ? 1 : Math.sqrt(rangeTechLevel + 3);
+              const m = 1;
               const candidateDistance =
                 m * dist[u] +
                 m *
@@ -2764,7 +2770,7 @@ async function NeptunesPrideAgent() {
             drawRoute(
               stars[parent],
               stars[uid],
-              destinationLock ? bright : dim,
+              destinationLock.length > 0 ? bright : dim,
               tick,
               shipsPerTick,
             );
@@ -2773,7 +2779,13 @@ async function NeptunesPrideAgent() {
         };
         routeParents = prev;
         routeChildren = children;
-        dfsDraw(destUid, universe.galaxy.tick);
+        if (destinationLock.length > 0) {
+          for (const d of destinationLock) {
+            dfsDraw(d.uid, universe.galaxy.tick);
+          }
+        } else {
+          dfsDraw(destUid, universe.galaxy.tick);
+        }
       }
     };
     const drawInvasionPlanner = () => {
@@ -2838,11 +2850,11 @@ async function NeptunesPrideAgent() {
       if (
         settings.invasionPlanOn &&
         (universe.selectedStar?.alliedDefenders !== undefined ||
-          destinationLock !== undefined)
+          destinationLock.length > 0)
       ) {
         const destUid =
-          destinationLock !== undefined
-            ? destinationLock.uid
+          destinationLock.length > 0
+            ? destinationLock[0].uid
             : universe.selectedStar?.uid;
         const stars = NeptunesPride.universe.galaxy.stars;
         const player = NeptunesPride.universe.player;
@@ -2948,7 +2960,7 @@ async function NeptunesPrideAgent() {
             drawRoute(
               stars[parent],
               stars[uid],
-              destinationLock ? bright : dim,
+              destinationLock.length > 0 ? bright : dim,
               tick + ticks,
               shipsPerTick,
             );
@@ -4629,7 +4641,14 @@ async function NeptunesPrideAgent() {
     "Toggle Map Names",
   );
   const toggleRoutePlanner = () => {
-    settings.routePlanOn = !settings.routePlanOn;
+    if (destinationLock.length > 0) {
+      const universe = NeptunesPride.universe;
+      if (universe.selectedStar?.alliedDefenders !== undefined) {
+        destinationLock.push(universe.selectedStar);
+      }
+    } else {
+      settings.routePlanOn = !settings.routePlanOn;
+    }
     mapRebuild();
   };
   defineHotkey(
@@ -4650,12 +4669,12 @@ async function NeptunesPrideAgent() {
   );
   const toggleRoutePlannerLock = () => {
     if (settings.routePlanOn || settings.invasionPlanOn) {
-      if (destinationLock !== undefined) {
-        destinationLock = undefined;
+      if (destinationLock.length > 0) {
+        destinationLock = [];
       } else {
         const universe = NeptunesPride.universe;
         if (universe.selectedStar?.alliedDefenders !== undefined) {
-          destinationLock = universe.selectedStar;
+          destinationLock = [universe.selectedStar];
         }
       }
       mapRebuild();
@@ -4704,7 +4723,7 @@ async function NeptunesPrideAgent() {
       return;
     }
     if (fleet && fleet.o.length === 0 && fleet.puid === player.uid) {
-      if (settings.routePlanOn && destinationLock !== undefined) {
+      if (settings.routePlanOn && destinationLock.length > 0) {
         const orbit = stars[fleet.ouid];
         universe.defaultFleetOrderOverride = 0;
         const returnPath = [orbit];
