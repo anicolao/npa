@@ -4076,6 +4076,11 @@ async function NeptunesPrideAgent() {
       screenShotButton.roost(widget);
       return widget;
     };
+    let reportKeystroke = () => {};
+    const reportHookCaller = () => {
+      reportKeystroke();
+    };
+    onTrigger("exec_report", reportHookCaller);
     const npaReports = () => {
       const reportScreen = npui.Screen("n_p_a");
 
@@ -4191,10 +4196,10 @@ async function NeptunesPrideAgent() {
             runReport(lr);
             generating = false;
           }
-        }, 250);
+        }, 150);
       };
       reportHook(0, lastReport);
-      onTrigger("exec_report", reportHook);
+      reportKeystroke = () => reportHook(0, reportSelector.getValue());
 
       return reportScreen;
     };
