@@ -80,6 +80,7 @@ import {
   watchForBlocks,
 } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
+import { registerUIHotkeys, showOptions, showUI } from "./ui-controls";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
 import { getWithinRange } from "./visibility";
@@ -251,19 +252,7 @@ async function NeptunesPrideAgent() {
   let reportSelector: any = null;
   let filterContent = "";
   let filterInput: any = null;
-  const showUI = () => NeptunesPride.npui.trigger("show_npa", "npa_ui_screen");
-  const showOptions = (options?: any) => {
-    NeptunesPride.npui.trigger("show_npa", [
-      "npa_ui_screen",
-      { kind: "npa_options", ...options },
-    ]);
-  };
-  const configureColours = (options?: any) => {
-    NeptunesPride.npui.trigger("show_npa", [
-      "npa_ui_screen",
-      { kind: "npa_colours", ...options },
-    ]);
-  };
+
   let destinationLock: ScannedStar[] = [];
   let routeParents = undefined;
   let routeChildren = undefined;
@@ -313,33 +302,7 @@ async function NeptunesPrideAgent() {
     lastReport = reportName;
     setClip(makeReportContent(stanzas, filter, (s) => s.toLowerCase()));
   };
-  defineHotkey(
-    "`",
-    showUI,
-    "Bring up the NP Agent UI." +
-      "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
-    "Open NPA UI",
-  );
-  defineHotkey(
-    "ctrl+`",
-    showOptions,
-    "Bring up the NP Agent Options." +
-      "<p>The Agent Options lets you customize advanced settings." +
-      "<p>In particular, if you want to upload screenshots, get an API " +
-      "key from api.imgbb.com and put it in the settings.",
-    "Open Options",
-  );
-  defineHotkey(
-    "ctrl+a",
-    configureColours,
-    "Configure colours and alliances." +
-      "<p>You can set the colour of every player in the game to a " +
-      "different value than the default, and if you wish you can " +
-      "use the same colour for multiple players to configure who " +
-      "you think is allied with who in order to get better reports " +
-      "and a map that reflects the alliances in your game.",
-    "Colours",
-  );
+  registerUIHotkeys();
 
   function starReport() {
     const players = NeptunesPride.universe.galaxy.players;
