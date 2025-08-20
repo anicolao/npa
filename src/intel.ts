@@ -9,6 +9,7 @@
 import { computeAlliances } from "./alliances";
 import { setupAutocomplete } from "./autocomplete";
 import { BspTree } from "./bsp";
+import { registerCombatControlHotkeys } from "./combat-controls";
 import {
   type StarState,
   alliedFleet,
@@ -29,6 +30,7 @@ import {
   updateMessageCache,
 } from "./events";
 import { registerForScans } from "./firestore";
+import { registerFleetRoutingHotkeys } from "./fleet-routing";
 import {
   FleetOrder,
   type Player,
@@ -48,6 +50,7 @@ import {
   turnJumpTicks,
 } from "./galaxy";
 import { GameStore, type TypedProperty } from "./gamestore";
+import { registerHelpHotkeys } from "./help";
 import {
   defineHotkey,
   getClip,
@@ -71,6 +74,11 @@ import {
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
 import {
+  registerScreenshotHotkeys,
+  screenshot,
+  setScreenshotSettings,
+} from "./screenshot";
+import {
   type CachedScan,
   getCacheForKey,
   getLastRecord,
@@ -80,9 +88,10 @@ import {
   watchForBlocks,
 } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
-/* global Crux, NeptunesPride, jQuery, */
+import { registerUIHotkeys, showOptions, showUI } from "./ui-controls";
 import { getVersion } from "./version.js";
 import { getWithinRange } from "./visibility";
+/* global Crux, NeptunesPride, jQuery, */
 
 export let allSeenKeys: string[] = [];
 interface CruxLib {
@@ -251,19 +260,7 @@ async function NeptunesPrideAgent() {
   let reportSelector: any = null;
   let filterContent = "";
   let filterInput: any = null;
-  const showUI = () => NeptunesPride.npui.trigger("show_npa", "npa_ui_screen");
-  const showOptions = (options?: any) => {
-    NeptunesPride.npui.trigger("show_npa", [
-      "npa_ui_screen",
-      { kind: "npa_options", ...options },
-    ]);
-  };
-  const configureColours = (options?: any) => {
-    NeptunesPride.npui.trigger("show_npa", [
-      "npa_ui_screen",
-      { kind: "npa_colours", ...options },
-    ]);
-  };
+
   let destinationLock: ScannedStar[] = [];
   let routeParents = undefined;
   let routeChildren = undefined;
@@ -313,33 +310,7 @@ async function NeptunesPrideAgent() {
     lastReport = reportName;
     setClip(makeReportContent(stanzas, filter, (s) => s.toLowerCase()));
   };
-  defineHotkey(
-    "`",
-    showUI,
-    "Bring up the NP Agent UI." +
-      "<p>The Agent UI will show you the last report you put on the clipboard or viewed.",
-    "Open NPA UI",
-  );
-  defineHotkey(
-    "ctrl+`",
-    showOptions,
-    "Bring up the NP Agent Options." +
-      "<p>The Agent Options lets you customize advanced settings." +
-      "<p>In particular, if you want to upload screenshots, get an API " +
-      "key from api.imgbb.com and put it in the settings.",
-    "Open Options",
-  );
-  defineHotkey(
-    "ctrl+a",
-    configureColours,
-    "Configure colours and alliances." +
-      "<p>You can set the colour of every player in the game to a " +
-      "different value than the default, and if you wish you can " +
-      "use the same colour for multiple players to configure who " +
-      "you think is allied with who in order to get better reports " +
-      "and a map that reflects the alliances in your game.",
-    "Colours",
-  );
+  registerUIHotkeys();
 
   function starReport() {
     const players = NeptunesPride.universe.galaxy.players;
@@ -1388,49 +1359,7 @@ async function NeptunesPrideAgent() {
       "<p>Use this report to take a deep look at API data you have.",
     "keydetail",
   );
-  const routeEnemy = () => {
-    const universe = NeptunesPride.universe;
-    const npui = NeptunesPride.npui;
-    if (universe.selectedStar && universe.selectedStar.puid !== -1) {
-      const star = universe.selectedStar;
-      universe.player = universe.galaxy.players[star.puid];
-      const base = 100000;
-      let uid = base + 1;
-      while (universe.galaxy.fleets[uid]) {
-        uid++;
-      }
-      const fakeFleet = {
-        l: 0,
-        lx: star.x,
-        ly: star.y,
-        x: star.x,
-        y: star.y,
-        ouid: star.uid,
-        n: `Fake Enemy Fleet ${uid - base}`,
-        o: [] as [number, number, number, number][],
-        puid: star.puid,
-        st: star.st,
-        uid,
-        w: false,
-      };
-      star.st = 0;
-      NeptunesPride.np.onNewFleetResponse(null, fakeFleet);
-    } else if (universe.selectedFleet) {
-      const fleet = universe.selectedFleet;
-      universe.player = universe.galaxy.players[fleet.puid];
-      npui.trigger("start_edit_waypoints", { fleet });
-    }
-  };
-  defineHotkey(
-    "x",
-    routeEnemy,
-    "Set fleet orders for an enemy fleet. " +
-      "These orders won't really happen but you can use them to explore " +
-      "attack or defense options your opponents have. First, select an " +
-      "enemy star, then press x to create and set orders for the fleet. You" +
-      "can then also route any other fleets that player controls.",
-    "Route Enemy",
-  );
+  registerFleetRoutingHotkeys();
 
   const ampm = (hours: number, minutes: number | string) => {
     let h = hours;
@@ -1659,36 +1588,7 @@ async function NeptunesPrideAgent() {
     "Increase number of distances shown by the auto ruler.",
     "+ Rulers",
   );
-  function incCombatHandicap() {
-    combatInfo.combatHandicap += 1;
-    NeptunesPride.np.trigger("map_rebuild");
-    NeptunesPride.np.trigger("refresh_interface");
-  }
-  function decCombatHandicap() {
-    combatInfo.combatHandicap -= 1;
-    NeptunesPride.np.trigger("map_rebuild");
-    NeptunesPride.np.trigger("refresh_interface");
-  }
-  defineHotkey(
-    ".",
-    incCombatHandicap,
-    "Change combat calculation to credit your enemies with +1 weapons. Useful " +
-      "if you suspect they will have achieved the next level of tech before a battle you are investigating." +
-      "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. If the " +
-      "indicator already shows an advantage for defenders, this hotkey will reduce that advantage first before crediting " +
-      "weapons to your opponent.",
-    "+ Handicap",
-  );
-  defineHotkey(
-    ",",
-    decCombatHandicap,
-    "Change combat calculation to credit yourself with +1 weapons. Useful " +
-      "when you will have achieved the next level of tech before a battle you are investigating." +
-      "<p>In the lower left of the HUD, an indicator will appear reminding you of the weapons adjustment. When " +
-      "indicator already shows an advantage for attackers, this hotkey will reduce that advantage first before crediting " +
-      "weapons to you.",
-    "- Handicap",
-  );
+  registerCombatControlHotkeys();
 
   function longFleetReport() {
     prepReport("combats", combatOutcomes());
@@ -2059,41 +1959,9 @@ async function NeptunesPrideAgent() {
   };
   onTrigger("set_colorscheme_api", setColorScheme);
 
-  const screenshot = async (): Promise<void> => {
-    const map = NeptunesPride.npui.map;
-    const key = settings.ibbApiKey;
-    if (!key) {
-      showOptions({ missingKey: "ibbApiKey" });
-      return;
-    }
-    const dataUrl = map.canvas[0].toDataURL("image/webp", 0.45);
-    const split = dataUrl.indexOf(",") + 1;
-    const params = {
-      expiration: 2592000,
-      key,
-      image: dataUrl.substring(split),
-    };
-    const resp = await fetch(`https://api.imgbb.com/1/upload`, {
-      method: "POST",
-      redirect: "follow",
-      body: new URLSearchParams(params as any),
-    });
-    const r = await resp.json();
-    if (r?.data?.url) {
-      setClip(`[[${r.data.url}]]`);
-    } else {
-      const message = `Error: ${JSON.stringify(r)}`;
-      logCount(message);
-      setClip(message);
-    }
-  };
-
-  defineHotkey(
-    "#",
-    screenshot,
-    "Uses your imgbb API key to upload a screenshot of the map.",
-    "Screenshot",
-  );
+  // Initialize screenshot settings
+  setScreenshotSettings({ ibbApiKey: settings.ibbApiKey });
+  registerScreenshotHotkeys();
 
   const homePlanets = () => {
     const p = NeptunesPride.universe.galaxy.players;
@@ -6305,55 +6173,7 @@ async function NeptunesPrideAgent() {
     "Merge All",
   );
 
-  const npaHelp = () => {
-    const help = [`<H1>${title}</H1>`];
-    help.push(" Neptune's Pride Agent is meant to help you focus on");
-    help.push(" diplomacy and spend less time doing tedious calculations");
-    help.push(" or manually sharing information.");
-    help.push("<h1>Hotkey Reference</h1>");
-    for (const key of getHotkeys()) {
-      const action = getHotkeyCallback(key);
-      let button = Crux.format(`[[goto:${key}]]`, {});
-      if (key === "?") button = Crux.format(`[[hotkey:${key}]]`, {});
-      help.push(`<h2>Hotkey: ${key} ${button}</h2>`);
-      if (action.help) {
-        help.push(action.help);
-      } else {
-        help.push(
-          `<p>No documentation yet.<p><code>${action.toLocaleString()}</code>`,
-        );
-      }
-    }
-    NeptunesPride.universe.helpHTML = help.join("");
-    NeptunesPride.np.trigger("show_screen", "help");
-  };
-  defineHotkey("?", npaHelp, "Display this help screen.", "help");
-
-  const npaControls = () => {
-    const output: Stanzas = [];
-    output.push("--- Controls ---");
-    output.push(":--|--|--:");
-    output.push("Button||Hotkey");
-    const div = document.createElement("div");
-    for (let key of getHotkeys()) {
-      let control = `[[goto:${key}]]`;
-      if (key === "?") control = `[[hotkey:${key}]]`;
-      if (key === "<") key = "&lt;";
-      else if (key === ">") key = "&gt;";
-      else if (key === "&") key = "&amp;";
-      else if (key.length === 1) {
-        key = `&#${key.charCodeAt(0)};`;
-      } else {
-        div.innerText = key;
-        key = div.innerHTML;
-      }
-      const partial = `${control}||${key}`;
-      output.push([partial]);
-    }
-    output.push("--- Controls ---");
-    prepReport("controls", output);
-  };
-  defineHotkey("~", npaControls, "Generate NPA Buttons.", "controls");
+  registerHelpHotkeys(prepReport);
 
   setupAutocomplete(document.body, NeptunesPride, () => {
     return myApiKey;
