@@ -29,6 +29,7 @@ import {
   updateMessageCache,
 } from "./events";
 import { registerForScans } from "./firestore";
+import { registerFleetRoutingHotkeys } from "./fleet-routing";
 import {
   FleetOrder,
   type Player,
@@ -82,9 +83,9 @@ import {
 } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
 import { registerUIHotkeys, showOptions, showUI } from "./ui-controls";
-/* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version.js";
 import { getWithinRange } from "./visibility";
+/* global Crux, NeptunesPride, jQuery, */
 
 export let allSeenKeys: string[] = [];
 interface CruxLib {
@@ -1352,49 +1353,7 @@ async function NeptunesPrideAgent() {
       "<p>Use this report to take a deep look at API data you have.",
     "keydetail",
   );
-  const routeEnemy = () => {
-    const universe = NeptunesPride.universe;
-    const npui = NeptunesPride.npui;
-    if (universe.selectedStar && universe.selectedStar.puid !== -1) {
-      const star = universe.selectedStar;
-      universe.player = universe.galaxy.players[star.puid];
-      const base = 100000;
-      let uid = base + 1;
-      while (universe.galaxy.fleets[uid]) {
-        uid++;
-      }
-      const fakeFleet = {
-        l: 0,
-        lx: star.x,
-        ly: star.y,
-        x: star.x,
-        y: star.y,
-        ouid: star.uid,
-        n: `Fake Enemy Fleet ${uid - base}`,
-        o: [] as [number, number, number, number][],
-        puid: star.puid,
-        st: star.st,
-        uid,
-        w: false,
-      };
-      star.st = 0;
-      NeptunesPride.np.onNewFleetResponse(null, fakeFleet);
-    } else if (universe.selectedFleet) {
-      const fleet = universe.selectedFleet;
-      universe.player = universe.galaxy.players[fleet.puid];
-      npui.trigger("start_edit_waypoints", { fleet });
-    }
-  };
-  defineHotkey(
-    "x",
-    routeEnemy,
-    "Set fleet orders for an enemy fleet. " +
-      "These orders won't really happen but you can use them to explore " +
-      "attack or defense options your opponents have. First, select an " +
-      "enemy star, then press x to create and set orders for the fleet. You" +
-      "can then also route any other fleets that player controls.",
-    "Route Enemy",
-  );
+  registerFleetRoutingHotkeys();
 
   const ampm = (hours: number, minutes: number | string) => {
     let h = hours;
