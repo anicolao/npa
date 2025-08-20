@@ -73,6 +73,11 @@ import {
 } from "./reports";
 import { TickIterator, getCodeFromApiText } from "./scans";
 import {
+  registerScreenshotHotkeys,
+  screenshot,
+  setScreenshotSettings,
+} from "./screenshot";
+import {
   type CachedScan,
   getCacheForKey,
   getLastRecord,
@@ -1982,41 +1987,9 @@ async function NeptunesPrideAgent() {
   };
   onTrigger("set_colorscheme_api", setColorScheme);
 
-  const screenshot = async (): Promise<void> => {
-    const map = NeptunesPride.npui.map;
-    const key = settings.ibbApiKey;
-    if (!key) {
-      showOptions({ missingKey: "ibbApiKey" });
-      return;
-    }
-    const dataUrl = map.canvas[0].toDataURL("image/webp", 0.45);
-    const split = dataUrl.indexOf(",") + 1;
-    const params = {
-      expiration: 2592000,
-      key,
-      image: dataUrl.substring(split),
-    };
-    const resp = await fetch(`https://api.imgbb.com/1/upload`, {
-      method: "POST",
-      redirect: "follow",
-      body: new URLSearchParams(params as any),
-    });
-    const r = await resp.json();
-    if (r?.data?.url) {
-      setClip(`[[${r.data.url}]]`);
-    } else {
-      const message = `Error: ${JSON.stringify(r)}`;
-      logCount(message);
-      setClip(message);
-    }
-  };
-
-  defineHotkey(
-    "#",
-    screenshot,
-    "Uses your imgbb API key to upload a screenshot of the map.",
-    "Screenshot",
-  );
+  // Initialize screenshot settings
+  setScreenshotSettings({ ibbApiKey: settings.ibbApiKey });
+  registerScreenshotHotkeys();
 
   const homePlanets = () => {
     const p = NeptunesPride.universe.galaxy.players;
