@@ -1,13 +1,16 @@
 // Script to fetch real Neptune's Pride game data for testing
-export async function get(url: string, data: any): Promise<Response> {
-  const response = await fetch(`${url}?osric_laptop&${new URLSearchParams(data).toString()}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+export async function get(url: string, data: any): Promise<any> {
+  const response = await fetch(
+    `${url}?osric_laptop&${new URLSearchParams(data).toString()}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
     },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  });
+  );
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
@@ -18,7 +21,7 @@ async function np4api(game: number, apiKey: string) {
 		code: apiKey,
 	};
 	console.log(`game: ${game} key: ${apiKey}`);
-	const api = await get("https://neptunespride4.appspot.com/api", params)
+	const api = await get("https://np4.ironhelmet.com/api", params);
 	console.log(JSON.stringify(api));
 	return api;
 }
