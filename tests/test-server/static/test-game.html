@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neptune's Pride - Test Environment</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #map-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #000011;
+        }
+        
+        .ui-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(26, 29, 68, 0.9);
+            border: 1px solid #2C3273;
+            padding: 10px;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        
+        .status-text {
+            color: #cccccc;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .load-indicator {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        /* Simulate Neptune's Pride styling */
+        .button {
+            background: linear-gradient(to bottom, #4a5196 0%, #3a4186 100%);
+            border: 1px solid #2c3273;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 2px;
+        }
+        
+        .button:hover {
+            background: linear-gradient(to bottom, #5a61a6 0%, #4a5196 100%);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="map-canvas" width="1200" height="800"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="status-text">Test Environment</div>
+            <div class="status-text">Extension Status: <span id="extension-status" class="load-indicator">Loading...</span></div>
+            <div class="status-text">Game Files: <span id="game-status" class="load-indicator">Loading...</span></div>
+            <button class="button" onclick="testScreenshot()">Test Screenshot</button>
+            <button class="button" onclick="testReports()">Test Reports</button>
+        </div>
+    </div>
+
+    <!-- Load game files in order -->
+    <script src="/scripts/client/crux.js"></script>
+    <script src="/scripts/client/templates.js"></script>
+    <script src="/scripts/client/widgets.js"></script>
+    <script src="/scripts/client/npui_shared.js"></script>
+    <script src="/scripts/client/np/universe.js"></script>
+    <script src="/scripts/client/np/game.js"></script>
+    <script src="/scripts/client/np/map.js"></script>
+    <script src="/scripts/client/np/interface.js"></script>
+    <script src="/scripts/client/np/screens.js"></script>
+    <script src="/scripts/client/np/inbox.js"></script>
+    <script src="/scripts/client/np/recorder.js"></script>
+
+    <script>
+        // Mock Neptune's Pride global object structure for testing
+        window.NeptunesPride = window.NeptunesPride || {
+            crux: window.Crux || {},
+            universe: {
+                galaxy: {
+                    players: {
+                        0: { rawAlias: "Test Player", uid: 0 },
+                        1: { rawAlias: "AI Player", uid: 1 }
+                    },
+                    stars: {
+                        1: { n: "Sol", uid: 1, x: 0, y: 0, puid: 0 },
+                        2: { n: "Alpha Centauri", uid: 2, x: 1, y: 1, puid: 1 }
+                    },
+                    tick: 1,
+                    tickRate: 60
+                }
+            },
+            npui: {
+                map: {
+                    canvas: [document.getElementById('map-canvas')]
+                }
+            },
+            gameVersion: "test-v1.0",
+            gameNumber: "test-game-123"
+        };
+
+        // Initialize a simple map visualization
+        function initializeTestMap() {
+            const canvas = document.getElementById('map-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.fillStyle = '#000011';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw some test stars
+            const stars = [
+                { x: 200, y: 200, name: "Sol", owner: 0 },
+                { x: 400, y: 300, name: "Alpha Centauri", owner: 1 },
+                { x: 600, y: 450, name: "Proxima", owner: -1 }
+            ];
+            
+            stars.forEach(star => {
+                // Draw star
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, 8, 0, 2 * Math.PI);
+                ctx.fillStyle = star.owner >= 0 ? '#4a9' : '#888';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.stroke();
+                
+                // Draw star name
+                ctx.fillStyle = '#fff';
+                ctx.font = '12px Arial';
+                ctx.fillText(star.name, star.x + 12, star.y + 4);
+            });
+            
+            // Draw some connecting lines (hyperspace lanes)
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(200, 200);
+            ctx.lineTo(400, 300);
+            ctx.moveTo(400, 300);
+            ctx.lineTo(600, 450);
+            ctx.stroke();
+        }
+
+        // Test functions for extension functionality
+        function testScreenshot() {
+            console.log('Testing screenshot functionality...');
+            document.getElementById('extension-status').textContent = 'Testing screenshot...';
+            
+            // This would normally trigger the extension's screenshot function
+            if (window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
+                window.NeptunesPride.crux.trigger('paste_report', 'screenshot');
+            } else {
+                console.log('Extension screenshot function not available');
+            }
+        }
+
+        function testReports() {
+            console.log('Testing report functionality...');
+            document.getElementById('extension-status').textContent = 'Testing reports...';
+            
+            // This would normally trigger the extension's report generation
+            if (window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
+                window.NeptunesPride.crux.trigger('show_screen', 'n_p_a');
+            } else {
+                console.log('Extension report function not available');
+            }
+        }
+
+        // Wait for game files to load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                initializeTestMap();
+                document.getElementById('game-status').textContent = 'Loaded';
+                
+                // Check if extension is loaded
+                if (window.NeptunesPrideAgent || (window.NeptunesPride && window.NeptunesPride.version)) {
+                    document.getElementById('extension-status').textContent = 'Active';
+                    document.getElementById('extension-status').style.color = '#4a9';
+                } else {
+                    document.getElementById('extension-status').textContent = 'Not Detected';
+                    document.getElementById('extension-status').style.color = '#f44';
+                }
+            }, 1000);
+        });
+
+        // Global functions for testing
+        window.testScreenshot = testScreenshot;
+        window.testReports = testReports;
+    </script>
+</body>
+</html>

@@ -5,3 +5,9 @@ node_modules/
 src/version.js
 .direnv/
 bun.exe
+
+# Testing artifacts
+test-results/
+test-game-files/
+playwright-report/
+test-results.json
