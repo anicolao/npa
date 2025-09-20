@@ -16,7 +16,6 @@
     "test:playwright:ui": "playwright test --ui",
     "test:server": "npx tsx tests/test-server/server.ts",
     "test:setup": "./scripts/setup-tests.sh",
-    "test:demo": "./scripts/demo-testing.sh",
     "test:all": "npm run test:unit && npm run test:playwright",
     "prepare": "husky install .husky",
     "postversion": "./bin/packagedist"

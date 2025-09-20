@@ -72,7 +72,7 @@
         
         <div class="ui-overlay">
             <div class="status-text">Neptune's Pride Agent Test Environment</div>
-            <div class="status-text">Real Game Files: <span id="game-status" class="load-indicator">Loading...</span></div>
+            <div class="status-text">Game Files: <span id="game-status" class="load-indicator">Loading...</span></div>
             <div class="status-text">Extension Status: <span id="extension-status" class="load-indicator">Loading...</span></div>
             <button class="button" onclick="testScreenshot()">Test Screenshot</button>
             <button class="button" onclick="testReports()">Test Reports</button>
@@ -103,7 +103,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing Neptune\'s Pride environment...');
             
-            // Check if real Neptune's Pride objects are available
+            // Ensure real Neptune's Pride objects are available
             if (window.Crux) {
                 console.log('Real Crux library loaded');
                 
@@ -143,16 +143,15 @@
                 console.log('Neptune\'s Pride environment initialized with real files');
                 
                 // Initialize the test map with real Neptune's Pride styling
-                initializeRealTestMap();
+                initializeTestMap();
                 
-                document.getElementById('game-status').textContent = 'Loaded (Real Files)';
+                document.getElementById('game-status').textContent = 'Loaded';
                 document.getElementById('game-status').style.color = '#4a9';
                 
             } else {
-                console.warn('Real Crux library not found, falling back to basic setup');
-                initializeBasicTestMap();
-                document.getElementById('game-status').textContent = 'Loaded (Fallback)';
-                document.getElementById('game-status').style.color = '#fa4';
+                console.error('Real Crux library not found. Cannot initialize test environment.');
+                document.getElementById('game-status').textContent = 'Error - Real files required';
+                document.getElementById('game-status').style.color = '#f44';
             }
             
             // Check if extension is loaded
@@ -168,7 +167,7 @@
         });
 
         // Initialize map with real Neptune's Pride styling and behavior
-        function initializeRealTestMap() {
+        function initializeTestMap() {
             const canvas = document.getElementById('map-canvas');
             const ctx = canvas.getContext('2d');
             
@@ -244,38 +243,6 @@
             ctx.setLineDash([]);
             
             console.log('Real Neptune\'s Pride test map initialized');
-        }
-
-        // Fallback basic map initialization
-        function initializeBasicTestMap() {
-            const canvas = document.getElementById('map-canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Clear canvas
-            ctx.fillStyle = '#000011';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw basic stars
-            const stars = [
-                { x: 200, y: 200, name: "Sol", owner: 0 },
-                { x: 400, y: 300, name: "Alpha Centauri", owner: 1 },
-                { x: 600, y: 450, name: "Proxima", owner: -1 }
-            ];
-            
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, 8, 0, 2 * Math.PI);
-                ctx.fillStyle = star.owner >= 0 ? '#4a9' : '#888';
-                ctx.fill();
-                ctx.strokeStyle = '#fff';
-                ctx.stroke();
-                
-                ctx.fillStyle = '#fff';
-                ctx.font = '12px Arial';
-                ctx.fillText(star.name, star.x + 12, star.y + 4);
-            });
-            
-            console.log('Basic fallback test map initialized');
         }
 
         // Test functions for extension functionality
