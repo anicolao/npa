@@ -1,0 +1,532 @@
+/*! normalize.css v1.0.1 | MIT License | git.io/normalize */
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary{display:block} audio,canvas,video{display:inline-block;*display:inline;*zoom:1} audio:not([controls]){display:none;height:0} [hidden]{display:none} html{font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%} html,button,input,select,textarea{font-family:sans-serif} body{margin:0} a:focus{outline:thin dotted} a:active,a:hover{outline:0} h1{font-size:2em;margin:0} h2{font-size:1.5em;margin:0} h3{font-size:1.25em;margin:0} h4{font-size:1em;margin:0} h5{font-size:.83em;margin:0} h6{font-size:.75em;margin:0} abbr[title]{border-bottom:1px dotted} b,strong{font-weight:bold} blockquote{margin:1em 40px} dfn{font-style:italic} mark{background:#ff0;color:#000} p,pre{margin:1em 0} code,kbd,pre,samp{font-family:monospace,serif;_font-family:'courier new',monospace;font-size:1em} pre{white-space:pre;white-space:pre-wrap;word-wrap:break-word} q{quotes:none} q:before,q:after{content:'';content:none} small{font-size:80%} sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline} sup{top:-0.5em} sub{bottom:-0.25em} dl,menu,ol,ul{margin:1em 0} dd{margin:0 0 0 40px} menu,ol,ul{padding:0 0 0 40px} nav ul,nav ol{list-style:none;list-style-image:none} img{border:0;-ms-interpolation-mode:bicubic} svg:not(:root){overflow:hidden} figure{margin:0} form{margin:0} fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:.35em .625em .75em} legend{border:0;padding:0;white-space:normal;*margin-left:-7px} button,input,select,textarea{font-size:100%;margin:0;vertical-align:baseline;*vertical-align:middle} button,input{line-height:normal} button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;*overflow:visible} button[disabled],input[disabled]{cursor:default} input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0;*height:13px;*width:13px} input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box} input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none} button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0} textarea{overflow:auto;vertical-align:top} table{border-collap:collapse;border-spacing:0}
+
+/*hide the spinner button on numerical inputs.*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type='number'] { -moz-appearance:textfield; }
+
+html, body              { width: 100%; height: 100%; background: Black; color: SeaShell; font-family: OpenSansRegular, sans-serif; font-size: 16px; line-height: 150%; -webkit-tap-highlight-color:rgba(0,0,0,0);}
+html                    { overflow-y: scroll; touch-action: manipulation;}
+/* table                   { border-collapse:collapse;border-spacing:0} */
+
+a                       { color: #FF9000; text-decoration: none; }
+a:hover                 { color: #09ff00; text-decoration: none; cursor:pointer}
+em                      { color: #99bbff;}
+b,strong                { font-weight:bold; color: #99bbff; text-shadow: 1px 1px 1px black;}
+
+li                      {margin: 0; margin-bottom: 0.5em}
+p                       {margin: 0; margin-bottom: 0.75em}
+h1, h2, h3              {margin: 0; margin-top: 0.25em; margin-bottom: 0.5em; line-height: 1.25em;}
+
+h1                      {font-size: 28px;}
+h2                      {font-size: 22px;}
+h3                      {font-size: 18px;}
+
+*                       { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; -moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased;}
+:focus                  { outline: none;}
+
+.fullscreen             { width: 100%; height: 100%;}
+.crux                   { width: 100%; height: 100%; -webkit-user-select: none; user-select: none;}
+.widget                 { position: absolute; }
+.rel                    { position: relative; }
+.fixed                  { position: fixed; }
+.hidden                 { display: none; }
+.center                 { margin-right: auto; margin-left: auto;}
+.no_overflow            { overflow: hidden;}
+
+.txt_bold               { font-weight: bold; }
+.txt_vcenter 			{ display: flex; justify-content: center; flex-direction: column; }
+.txt_center             { text-align: center; }
+.txt_right              { text-align: right; }
+.txt_left               { text-align: left; }
+.txt_anchor             { color: #FF9000; font-weight: bold }
+.txt_anchor:hover       { color: #FF99FF; text-decoration: none; cursor: pointer; }
+.txt_small              { font-size: 14px;}
+.txt_tiny               { font-size: 12px; line-height: 16px}
+.txt_warn_good          { color: #33CC33; text-shadow: 1px 1px 1px black;}
+.txt_warn_bad           { color: #FF4433; text-shadow: 1px 1px 1px black;}
+
+.txt_selectable         { -webkit-user-select: text; user-select: text; word-wrap:break-word;}
+.txt_ellipsis           { overflow: hidden;  white-space: nowrap; text-overflow:ellipsis;}
+.txt_em                 { color: #99a2ff; font-style: italic; }
+
+.clickable:focus        { outline: none}
+
+.button_flex            { border-radius: 4px; font-size: 14px; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor:pointer;}
+.button_flex_tab        { background: #2C3273; border-radius: 8px 8px 0 0 }
+.button_flex:focus      { outline: none; box-shadow: 0 0 0 2px #000000, 0 0 0 4px #939cff; }
+
+.button                 { border-radius: 4px; font-size: 14px; overflow: hidden;}
+.button_up              { background: #5961bb; }
+.button_down            { background: #00AA00; }
+.button_hover           { background: #FF9000; }
+.button_disabled        { background: #111122; }
+.button:focus           { outline: none; box-shadow: 0 0 0 2px #000000, 0 0 0 4px #939cff; }
+
+.option {
+  border: 1px solid #e5e5e5;
+  padding: 10px;
+}
+
+.button_text            { font-family: OpenSansRegular, sans-serif; text-align: center; width: 100%; cursor:pointer; margin-top: -12px}
+
+
+.tab_button             { background: #2C3273; border-radius: 8px 8px 0 0 }
+.tab_button_active      { background: #5961bb; }
+.tab_button:focus       { outline: none; box-shadow: 0 0 0 2px #000000, 0 0 0 4px #939cff;}
+
+.text_area              { border: none; position: absolute;  resize: none; width: 100%; height: 100%; background-color: #000000; color: #FDF0DC; font-size: 16px;  border-radius: 0; -webkit-appearance: none; -moz-appearance: none; font-family: OpenSansRegular, Helvetica, Arial, sans-serif; padding: 4px; line-height: 150%; -ms-user-select: text; -moz-user-select: text; -webkit-user-select: text; user-select: text;}
+.text_area:focus        { outline: none; box-shadow: 0 0 10px 0 #939cff;}
+.text_area_border       { border: solid #5961bb 2px}
+
+.drop_down              { background: #5961bb; border-radius: 4px; font-size: 14px; overflow: hidden;}
+.drop_down:focus        { outline: none; box-shadow: 0 0 0 2px #000000, 0 0 0 4px #939cff; }
+.drop_down select       { opacity: 0; width: 100%; height: 100%; -webkit-appearance: none; appearance: none;}
+
+.drop_down_text         { font-family: OpenSansRegular, sans-se rif; text-align: left; width: 100%; margin-top: -12px}
+.drop_down_icon         { margin-top: -12px}
+
+.drop_down_flex         { display: flex; justify-content: center; flex-direction: column;}
+.drop_down_text_flex    { width: 100%; padding-left: 8px; text-align: left;}
+.drop_down_icon_flex    { width: 100%; padding-right: 8px; text-align: right;}
+
+.img_black_cap          { border-width: 0; border-style: solid;  border-top-width: 4px; border-bottom-width: 4px; border-color: #000000;}
+.img_black_border       { border-width: 8px; border-style: solid;  border-color: #000000;}
+
+.side_menu                  { border-width: 0; border-style: solid;  border-right-width: 4px; border-color: black;}
+.side_menu_item             { border-width: 0; border-style: solid;  border-top-width: 2px; border-color: #1A1D44;}
+.side_menu_item_up          { background: #2C3273;}
+.side_menu_item_down        { background: #00AA00; }
+.side_menu_item_hover       { background: #FF9000; }
+.side_menu_item_disabled    { background: #FF9000; }
+
+.selmenu_cell           { border-width: 0; border-style: solid;  border-bottom-width: 4px; border-bottom-color: #000000; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;}
+.player_cell            { border-width: 0; border-style: solid;  border-bottom-width: 2px; border-bottom-color: #1A1D44; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;}
+
+.content_box            {-webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;}
+
+.click_row_up           { background: #2C3273; }
+.click_row_down         { background: #00AA00; }
+.click_row_hover        { background: #5961bb; }
+.click_row_disabled     { background: #111122; }
+.click_row_alt_up       { background: #1A1D44; }
+
+.nsph                   { font-size: 22px; font-weight: normal; line-height: 125%; padding: 12px; padding-top: 4px; padding-bottom: 4px; margin-bottom: 0}
+
+.section_title          {font-size: 22px; font-weight: normal; line-height: 125%; padding: 12px; padding-top: 8px; color: #FF9000}
+.screen_title           {font-size: 28px; font-weight: normal; line-height: 125%; padding: 12px; padding-top: 4px; padding-bottom: 4px;}
+.screen_subtitle        {font-size: 22px; font-weight: normal; line-height: 125%; padding: 12px; padding-top: 10px; }
+
+.premium_section_title  { font-size: 22px; font-weight: normal; line-height: 125%; padding: 12px; padding-top: 8px; color: #22EE22}
+
+.col_black              { background-color: #000000}
+.col_base               { background-color: #1A1D44}
+.col_accent             { background-color: #2C3273}
+.col_accent_light       { background-color: #5961bb}
+.col_grey               { background-color: #111122}
+.col_black_shade        { background-color: rgba(0, 0, 0, 0.5)}
+.col_black_darkshade    { background-color: rgba(0, 0, 0, 0.75)}
+
+.col_unread             { background-color: #FF9000;}
+.col_highlight          { background-color: #d8dcf9}
+.col_warning            { background-color: #881515}
+.col_google_red         { background-color: #d34937}
+
+.rad4                   { border-radius: 4px}
+.rad8                   { border-radius: 8px}
+.rad12                   { border-radius: 12px}
+.mar4                   { margin: 4px}
+.mar8                   { margin: 8px}
+.mar12                  { margin: 12px}
+.mart24                 { margin-top: 24px}
+.pad4                   { padding: 4px}
+.pad8                   { padding: 8px}
+.pad10                  { padding: 10px}
+.pad12                  { padding: 12px}
+
+.z99                    { z-index: 99}
+
+.minh72                 { min-height: 72px}
+.minh208                { min-height: 208px}
+.minh288                { min-height: 288px}
+
+.anim_slow              {-webkit-transition: all 1s ease-in-out;    transition: all 1s ease-in-out; }
+.anim_mid               {-webkit-transition: all 0.5s ease-in-out;  transition: all 0.5s ease-in-out; }
+.anim_fast              {-webkit-transition: all 0.25s ease-in-out; transition: all 0.25s ease-in-out; }
+
+.alpha_0                {opacity:0; }
+.alpha_1                {opacity:1; }
+
+.icon_button_flex { font-size: 21px;}
+
+.small_icon_button      {font-size: 16px; margin-top: -12px}
+.icon_button            {font-size: 21px; margin-top: -12px}
+.block_value_big_value  {font-size: 34px; font-weight: normal; line-height: 100%}
+
+.ddhelp                 {border: 2px solid #d8dcf9; border-radius: 8px; box-shadow: 0 0 16px #000000;}
+.ddhelp h1              {font-size: 22px; font-weight: normal; line-height: 125%; margin: 0; margin-bottom: 0.25em; color: #5961bb;}
+
+.help h1                {font-size: 22px; font-weight: normal; line-height: 125%; margin: 0; margin-bottom: 0.25em; margin-top: 0.5em; margin-left: -12px; margin-right: -12px; padding: 12px; background-color: #000000; color: #FF9000;}
+.help h2                {font-size: 22px; font-weight: normal; line-height: 125%; margin: 0; margin-bottom: 0.25em; margin-top: 1.5em; margin-left: -12px; margin-right: -12px; padding: 12px; background-color: #1A1D44; }
+.help h3                {font-size: 22px; font-weight: normal; line-height: 125%; margin: 0; margin-bottom: 0.25em; margin-top: 1.5em; }
+.help em                {font-size: 16px; font-style: italic;  line-height: 125%; color: #99a2ff;}
+.help var               {font-size: 14px; font-style: normal;  line-height: 125%; color: #99a2ff;}
+.help p                 {margin: 0; margin-bottom: 1em; margin-top: 0.5em}
+
+.help_tech_desc table   {width: 100%; }
+.help_tech_desc h3      {margin-top: 0px}
+
+.badge-help h3                {font-size: 22px; font-weight: normal; line-height: 125%; margin: 0; }
+
+.result_table           { width:100%; border: 0; background-color: #1A1D44; text-align: right; }
+.result_table td        { padding: 6px; padding-left: 12px; padding-right: 12px;}
+.result_table td:first-child {text-align: left;}
+.result_table tr:first-child {background-color: #000000}
+.result_table tr:nth-child(odd) {}
+.result_table tr:nth-child(even) {background-color: #2C3273}
+
+.star_directory         { width:100%; border: 0;}
+.star_directory td      { max-width: 64px; min-width: 32px; padding: 6px; text-align: center; }
+
+.star_directory td:nth-child(2) {text-align: left; padding-left: 0px;max-width: 128px; text-overflow:ellipsis; overflow: hidden; white-space: nowrap; }
+.star_directory td:nth-child(1) {padding-right: 0px}
+.star_directory tr:first-child {background-color: #000000}
+.star_directory tr:nth-child(even) {background-color: #2C3273}
+
+.analysis_dir  		{ width:100%; border: 0;}
+.analysis_dir td    { max-width: 32px; padding: 6px;}
+.analysis_dir tr:nth-child(even) {background-color: #2C3273}
+.analysis_dir td:nth-child(1) {text-align: left; padding-left:12px}
+.analysis_dir td:nth-child(2) {text-align: right; padding-right:12px;text-overflow:ellipsis;overflow: hidden;}
+.analysis_dir td:nth-child(3) {text-align: right; padding-right:12px;text-overflow:ellipsis;overflow: hidden;}
+
+.custom_settings         { width:100%;}
+.custom_settings td      { min-width: 32px; padding: 6px; text-align: left; padding-left: 12px; padding-right: 12px}
+.custom_settings td:nth-child(2) {text-align: right;}
+.custom_settings tr:nth-child(even) {background-color: #2C3273}
+
+.combat_result         { width:100%;}
+.combat_result td      { min-width: 32px; padding: 6px; text-align: center}
+.combat_result td:nth-child(3) {text-align: left; padding-left: 0; width: 176px; max-width: 176px; overflow:hidden;}
+.combat_result td:nth-child(2) {padding-right: 0; padding-left: 0}
+.combat_result td:nth-child(1) {padding-right: 0}
+.combat_result tr:first-child {background-color: #000000}
+.combat_result tr       {background-color: #2C3273}
+.combat_result_teams_heading     {text-align:left; border-width: 0; border-style: solid;  border-bottom-width: 2px; border-top-width: 2px; border-color: #5961bb;}
+
+
+.pc_0 {color: #0000ff; color: rgba(0, 0, 255, 1)}
+.pc_1 {color: #009fdf; color: rgba(0, 159, 223, 1)}
+.pc_2 {color: #40c000; color: rgba(64, 192, 0, 1)}
+.pc_3 {color: #ffc000; color: rgba(255, 192, 0, 1)}
+.pc_4 {color: #df5f00; color: rgba(223, 95, 0, 1)}
+.pc_5 {color: #c00000; color: rgba(192, 0, 0, 1)}
+.pc_6 {color: #c000c0; color: rgba(192, 0, 192, 1)}
+.pc_7 {color: #6000c0; color: rgba(96, 0, 192, 1)}
+
+.bgpc_0 {background-color: #0000ff; background-color: rgba(0, 0, 255, 1)}
+.bgpc_1 {background-color: #009fdf; background-color: rgba(0, 159, 223, 1)}
+.bgpc_2 {background-color: #40c000; background-color: rgba(64, 192, 0, 1)}
+.bgpc_3 {background-color: #ffc000; background-color: rgba(255, 192, 0, 1)}
+.bgpc_4 {background-color: #df5f00; background-color: rgba(223, 95, 0, 1)}
+.bgpc_5 {background-color: #c00000; background-color: rgba(192, 0, 0, 1)}
+.bgpc_6 {background-color: #c000c0; background-color: rgba(192, 0, 192, 1)}
+.bgpc_7 {background-color: #6000c0; background-color: rgba(96, 0, 192, 1)}
+
+
+/* Proteus needs these old styles! */
+.pci_48_0_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -0px}
+.pci_48_1_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -48px}
+.pci_48_2_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -96px}
+.pci_48_3_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -144px}
+.pci_48_4_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -192px}
+.pci_48_5_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -240px}
+.pci_48_6_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -288px}
+.pci_48_7_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -336px}
+
+.pci_48_0_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -0px}
+.pci_48_1_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -48px}
+.pci_48_2_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -96px}
+.pci_48_3_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -144px}
+.pci_48_4_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -192px}
+.pci_48_5_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -240px}
+.pci_48_6_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -288px}
+.pci_48_7_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -336px}
+
+.pci_48_0_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -0px}
+.pci_48_1_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -48px}
+.pci_48_2_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -96px}
+.pci_48_3_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -144px}
+.pci_48_4_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -192px}
+.pci_48_5_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -240px}
+.pci_48_6_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -288px}
+.pci_48_7_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -336px}
+
+.pci_48_0_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -0px}
+.pci_48_1_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -48px}
+.pci_48_2_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -96px}
+.pci_48_3_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -144px}
+.pci_48_4_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -192px}
+.pci_48_5_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -240px}
+.pci_48_6_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -288px}
+.pci_48_7_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -336px}
+
+.pci_48_0_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -0px}
+.pci_48_1_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -48px}
+.pci_48_2_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -96px}
+.pci_48_3_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -144px}
+.pci_48_4_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -192px}
+.pci_48_5_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -240px}
+.pci_48_6_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -288px}
+.pci_48_7_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -336px}
+
+.pci_48_0_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -0px}
+.pci_48_1_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -48px}
+.pci_48_2_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -96px}
+.pci_48_3_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -144px}
+.pci_48_4_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -192px}
+.pci_48_5_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -240px}
+.pci_48_6_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -288px}
+.pci_48_7_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -336px}
+
+.pci_48_0_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -0px}
+.pci_48_1_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -48px}
+.pci_48_2_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -96px}
+.pci_48_3_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -144px}
+.pci_48_4_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -192px}
+.pci_48_5_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -240px}
+.pci_48_6_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -288px}
+.pci_48_7_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -336px}
+
+.pci_48_0_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -0px}
+.pci_48_1_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -48px}
+.pci_48_2_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -96px}
+.pci_48_3_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -144px}
+.pci_48_4_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -192px}
+.pci_48_5_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -240px}
+.pci_48_6_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -288px}
+.pci_48_7_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -336px}
+
+
+.pci_32_0_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -0px}
+.pci_32_1_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -32px}
+.pci_32_2_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -64px}
+.pci_32_3_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -96px}
+.pci_32_4_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -128px}
+.pci_32_5_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -160px}
+.pci_32_6_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -192px}
+.pci_32_7_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -0px -224px}
+.pci_32_0_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -0px}
+.pci_32_1_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -32px}
+.pci_32_2_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -64px}
+.pci_32_3_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -96px}
+.pci_32_4_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -128px}
+.pci_32_5_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -160px}
+.pci_32_6_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -192px}
+.pci_32_7_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -32px -224px}
+.pci_32_0_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -0px}
+.pci_32_1_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -32px}
+.pci_32_2_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -64px}
+.pci_32_3_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -96px}
+.pci_32_4_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -128px}
+.pci_32_5_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -160px}
+.pci_32_6_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -192px}
+.pci_32_7_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -64px -224px}
+.pci_32_0_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -0px}
+.pci_32_1_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -32px}
+.pci_32_2_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -64px}
+.pci_32_3_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -96px}
+.pci_32_4_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -128px}
+.pci_32_5_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -160px}
+.pci_32_6_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -192px}
+.pci_32_7_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -96px -224px}
+.pci_32_0_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -0px}
+.pci_32_1_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -32px}
+.pci_32_2_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -64px}
+.pci_32_3_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -96px}
+.pci_32_4_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -128px}
+.pci_32_5_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -160px}
+.pci_32_6_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -192px}
+.pci_32_7_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -128px -224px}
+.pci_32_0_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -0px}
+.pci_32_1_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -32px}
+.pci_32_2_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -64px}
+.pci_32_3_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -96px}
+.pci_32_4_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -128px}
+.pci_32_5_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -160px}
+.pci_32_6_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -192px}
+.pci_32_7_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -160px -224px}
+.pci_32_0_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -0px}
+.pci_32_1_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -32px}
+.pci_32_2_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -64px}
+.pci_32_3_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -96px}
+.pci_32_4_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -128px}
+.pci_32_5_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -160px}
+.pci_32_6_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -192px}
+.pci_32_7_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -192px -224px}
+.pci_32_0_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -0px}
+.pci_32_1_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -32px}
+.pci_32_2_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -64px}
+.pci_32_3_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -96px}
+.pci_32_4_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -128px}
+.pci_32_5_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -160px}
+.pci_32_6_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -192px}
+.pci_32_7_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_32.png') -224px -224px}
+
+
+/* Triton needs these old styles! */
+.pci_48_0 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -0px}
+.pci_48_1 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -48px}
+.pci_48_2 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -96px}
+.pci_48_3 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -144px}
+.pci_48_4 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -192px}
+.pci_48_5 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -240px}
+.pci_48_6 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -288px}
+.pci_48_7 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -0px -336px}
+.pci_48_8 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -0px}
+.pci_48_9 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -48px}
+.pci_48_10 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -96px}
+.pci_48_11 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -144px}
+.pci_48_12 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -192px}
+.pci_48_13 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -240px}
+.pci_48_14 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -288px}
+.pci_48_15 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -48px -336px}
+.pci_48_16 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -0px}
+.pci_48_17 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -48px}
+.pci_48_18 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -96px}
+.pci_48_19 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -144px}
+.pci_48_20 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -192px}
+.pci_48_21 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -240px}
+.pci_48_22 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -288px}
+.pci_48_23 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -96px -336px}
+.pci_48_24 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -0px}
+.pci_48_25 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -48px}
+.pci_48_26 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -96px}
+.pci_48_27 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -144px}
+.pci_48_28 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -192px}
+.pci_48_29 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -240px}
+.pci_48_30 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -288px}
+.pci_48_31 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -144px -336px}
+.pci_48_32 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -0px}
+.pci_48_33 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -48px}
+.pci_48_34 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -96px}
+.pci_48_35 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -144px}
+.pci_48_36 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -192px}
+.pci_48_37 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -240px}
+.pci_48_38 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -288px}
+.pci_48_39 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -192px -336px}
+.pci_48_40 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -0px}
+.pci_48_41 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -48px}
+.pci_48_42 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -96px}
+.pci_48_43 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -144px}
+.pci_48_44 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -192px}
+.pci_48_45 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -240px}
+.pci_48_46 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -288px}
+.pci_48_47 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -240px -336px}
+.pci_48_48 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -0px}
+.pci_48_49 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -48px}
+.pci_48_50 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -96px}
+.pci_48_51 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -144px}
+.pci_48_52 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -192px}
+.pci_48_53 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -240px}
+.pci_48_54 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -288px}
+.pci_48_55 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -288px -336px}
+.pci_48_56 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -0px}
+.pci_48_57 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -48px}
+.pci_48_58 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -96px}
+.pci_48_59 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -144px}
+.pci_48_60 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -192px}
+.pci_48_61 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -240px}
+.pci_48_62 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -288px}
+.pci_48_63 {width: 48px; height:48px; background:url('/images/map/owner_rings_48.png') -336px -336px}
+
+.pci_32_0 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -0px}
+.pci_32_1 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -32px}
+.pci_32_2 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -64px}
+.pci_32_3 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -96px}
+.pci_32_4 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -128px}
+.pci_32_5 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -160px}
+.pci_32_6 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -192px}
+.pci_32_7 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -0px -224px}
+.pci_32_8 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -0px}
+.pci_32_9 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -32px}
+.pci_32_10 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -64px}
+.pci_32_11 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -96px}
+.pci_32_12 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -128px}
+.pci_32_13 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -160px}
+.pci_32_14 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -192px}
+.pci_32_15 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -32px -224px}
+.pci_32_16 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -0px}
+.pci_32_17 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -32px}
+.pci_32_18 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -64px}
+.pci_32_19 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -96px}
+.pci_32_20 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -128px}
+.pci_32_21 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -160px}
+.pci_32_22 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -192px}
+.pci_32_23 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -64px -224px}
+.pci_32_24 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -0px}
+.pci_32_25 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -32px}
+.pci_32_26 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -64px}
+.pci_32_27 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -96px}
+.pci_32_28 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -128px}
+.pci_32_29 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -160px}
+.pci_32_30 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -192px}
+.pci_32_31 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -96px -224px}
+.pci_32_32 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -0px}
+.pci_32_33 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -32px}
+.pci_32_34 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -64px}
+.pci_32_35 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -96px}
+.pci_32_36 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -128px}
+.pci_32_37 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -160px}
+.pci_32_38 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -192px}
+.pci_32_39 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -128px -224px}
+.pci_32_40 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -0px}
+.pci_32_41 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -32px}
+.pci_32_42 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -64px}
+.pci_32_43 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -96px}
+.pci_32_44 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -128px}
+.pci_32_45 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -160px}
+.pci_32_46 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -192px}
+.pci_32_47 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -160px -224px}
+.pci_32_48 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -0px}
+.pci_32_49 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -32px}
+.pci_32_50 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -64px}
+.pci_32_51 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -96px}
+.pci_32_52 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -128px}
+.pci_32_53 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -160px}
+.pci_32_54 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -192px}
+.pci_32_55 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -192px -224px}
+.pci_32_56 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -0px}
+.pci_32_57 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -32px}
+.pci_32_58 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -64px}
+.pci_32_59 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -96px}
+.pci_32_60 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -128px}
+.pci_32_61 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -160px}
+.pci_32_62 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -192px}
+.pci_32_63 {width: 32px; height:32px; background:url('/images/map/owner_rings_32.png') -224px -224px}
+
+/* This is for the menu.html background.*/
+.menu_bg_01           { position: fixed; background-image:url('/images/menu_bg_01.jpg'); background-repeat: no-repeat; background-position: center;}
+.menu_bg_02           { position: fixed; background-image:url('/images/menu_bg_02.jpg'); background-repeat: no-repeat; background-position: center;}
+.menu_bg_03           { position: fixed; background-image:url('/images/menu_bg_03.jpg'); background-repeat: no-repeat; background-position: center;}
+.menu_bg_04           { position: fixed; background-image:url('/images/menu_bg_04.jpg'); background-repeat: no-repeat; background-position: center;}
+.menu_title           { background-image:url('/images/neptunes_pride.jpg'); background-repeat: no-repeat; background-position: center;}
+
+@font-face {
+    font-family: 'OpenSansRegular';
+    src: url('/fonts/OpenSans/OpenSans-Regular-webfont.woff') format('woff'),
+         url('/fonts/OpenSans/OpenSans-Regular-webfont.svg#OpenSansRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.playericon_font {font-family: PlayerIcons; vertical-align: -0.25em; font-size: 24px}
+
+@font-face {
+    font-family: 'PlayerIcons';
+    src: url('/fonts/PlayerIcons/PlayerIcons.woff') format('woff'),
+        url('/fonts/PlayerIcons/PlayerIcons.svg#playericons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
