@@ -1,0 +1,104 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: 'fontello';
+  src:  url("/fonts/Fontello/fontello_002.svg#fontello") format('svg'),
+        url("/fonts/Fontello/fontello_002.woff") format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.fontello          { font-family: 'fontello';}
+.ic-lock           { font-family: 'fontello'; content: '🔒'; }
+.ic-lock-open      { font-family: 'fontello'; content: '🔓'; }
+.ic-myspace        { font-family: 'fontello'; content: '\5f'; }
+.ic-help           { font-family: 'fontello'; content: '\2753'; }
+.ic-star-1         { font-family: 'fontello'; content: '\e800'; }
+.ic-menu           { font-family: 'fontello'; content: '\2630'; }
+.ic-heart-1        { font-family: 'fontello'; content: '\e801'; }
+.ic-tools          { font-family: 'fontello'; content: '\2692'; }
+.ic-cog-1          { font-family: 'fontello'; content: '\e802'; }
+.ic-flash          { font-family: 'fontello'; content: '\26a1'; }
+.ic-mail           { font-family: 'fontello'; content: '\2709'; }
+.ic-cancel         { font-family: 'fontello'; content: '\e804'; }
+.ic-cancel-circled { font-family: 'fontello'; content: '\2716'; }
+.ic-plus-circled   { font-family: 'fontello'; content: '\2795'; }
+.ic-minus-circled  { font-family: 'fontello'; content: '\2796'; }
+.ic-eye            { font-family: 'fontello'; content: '\e70a'; }
+.ic-compass        { font-family: 'fontello'; content: '\e728'; }
+.ic-database       { font-family: 'fontello'; content: '\e754'; }
+.ic-beaker         { font-family: 'fontello'; content: '\f0c3'; }
+.ic-db-shape       { font-family: 'fontello'; content: '\f600'; }
+.ic-globe          { font-family: 'fontello'; content: '🌎'; }
+.ic-graduation-cap { font-family: 'fontello'; content: '🎓'; }
+.ic-users          { font-family: 'fontello'; content: '👥'; }
+.ic-dollar         { font-family: 'fontello'; content: '💵'; }
+.ic-light-up       { font-family: 'fontello'; content: '🔆'; }
+.ic-pin            { font-family: 'fontello'; content: '📌'; }
+.ic-clock-1        { font-family: 'fontello'; content: '\e803'; }
+.ic-rocket         { font-family: 'fontello'; content: '🚀'; }
+.ic-down-open      { font-family: 'fontello'; content: '\e75c'; }
+.ic-left-open      { font-family: 'fontello'; content: '\e75d'; }
+.ic-right-open     { font-family: 'fontello'; content: '\e75e'; }
+.ic-up-open        { font-family: 'fontello'; content: '\e75f'; }
+.ic-zoom-in        { font-family: 'fontello'; content: '\e750'; }
+.ic-zoom-out       { font-family: 'fontello'; content: '\e751'; }
+.ic-doc-text       { font-family: 'fontello'; content: '📄'; }
+.ic-chart-line     { font-family: 'fontello'; content: '📈'; }
+.ic-loop           { font-family: 'fontello'; content: '\e805'; }
+.icon-home         { font-family: 'fontello'; content: '\e806'; }
+.ic-ok             { font-family: 'fontello'; content: '\e807'; }
+
+
+.icon-lock:before           { font-family: 'fontello'; content: '🔒'; }
+.icon-lock-open:before      { font-family: 'fontello'; content: '🔓'; }
+.icon-myspace:before        { font-family: 'fontello'; content: '\5f'; }
+.icon-help:before           { font-family: 'fontello'; content: '\2753'; }
+.icon-star-1:before         { font-family: 'fontello'; content: '\e800'; }
+.icon-menu:before           { font-family: 'fontello'; content: '\2630'; }
+.icon-heart-1:before        { font-family: 'fontello'; content: '\e801'; }
+.icon-tools:before          { font-family: 'fontello'; content: '\2692'; }
+.icon-cog-1:before          { font-family: 'fontello'; content: '\e802'; }
+.icon-flash:before          { font-family: 'fontello'; content: '\26a1'; }
+.icon-mail:before           { font-family: 'fontello'; content: '\2709'; }
+.icon-cancel:before         { font-family: 'fontello'; content: '\e804'; }
+.icon-cancel-circled:before { font-family: 'fontello'; content: '\2716'; }
+.icon-plus-circled:before   { font-family: 'fontello'; content: '\2795'; }
+.icon-minus-circled:before  { font-family: 'fontello'; content: '\2796'; }
+.icon-eye:before            { font-family: 'fontello'; content: '\e70a'; }
+.icon-compass:before        { font-family: 'fontello'; content: '\e728'; }
+.icon-database:before       { font-family: 'fontello'; content: '\e754'; }
+.icon-beaker:before         { font-family: 'fontello'; content: '\f0c3'; }
+.icon-db-shape:before       { font-family: 'fontello'; content: '\f600'; }
+.icon-globe:before          { font-family: 'fontello'; content: '🌎'; }
+.icon-graduation-cap:before { font-family: 'fontello'; content: '🎓'; }
+.icon-users:before          { font-family: 'fontello'; content: '👥'; }
+.icon-dollar:before         { font-family: 'fontello'; content: '💵'; }
+.icon-light-up:before       { font-family: 'fontello'; content: '🔆'; }
+.icon-pin:before            { font-family: 'fontello'; content: '📌'; }
+.icon-clock-1:before        { font-family: 'fontello'; content: '\e803'; }
+.icon-rocket:before         { font-family: 'fontello'; content: '🚀'; }
+.icon-award:before          { font-family: 'fontello'; content: '🏉'; }
+.icon-down-open:before      { font-family: 'fontello'; content: '\e75c'; }
+.icon-left-open:before      { font-family: 'fontello'; content: '\e75d'; }
+.icon-right-open:before     { font-family: 'fontello'; content: '\e75e'; }
+.icon-up-open:before        { font-family: 'fontello'; content: '\e75f'; }
+.icon-zoom-in:before        { font-family: 'fontello'; content: '\e750'; }
+.icon-zoom-out:before       { font-family: 'fontello'; content: '\e751'; }
+.icon-doc-text:before       { font-family: 'fontello'; content: '📄'; }
+.icon-chart-line:before     { font-family: 'fontello'; content: '📈'; }
+.icon-loop:before           { font-family: 'fontello'; content: '\e805'; }
+.icon-home:before           { font-family: 'fontello'; content: '\e806'; }
+.icon-ok:before             { font-family: 'fontello'; content: '\e807'; }
+.icon-warning:before        { font-family: 'OpenSansRegular'; content: '!'; }
+
+.icon-globe-inline:before   { font-family: 'fontello'; margin-right: 0.5em; content: '🌎'; }
+.icon-star-inline:before    { font-family: 'fontello'; margin-right: 0.5em; content: '\e800'; }
+.icon-rocket-inline:before  { font-family: 'fontello'; margin-right: 0.5em; content: '🚀'; }
+.icon-graduation-cap-inline:before { font-family: 'fontello'; margin-right: 0.5em; content: '🎓'; }
+.icon-dollar-inline:before         { font-family: 'fontello'; margin-right: 0.5em; content: '💵'; }
+.icon-tools-inline:before          { font-family: 'fontello'; margin-right: 0.5em; content: '\2692'; }
+.icon-award-inline:before          { font-family: 'fontello'; margin-right: 0.5em; content: '🏉'; }
+.icon-heart-inline:before        { font-family: 'fontello'; margin-right: 0.5em; content: '\e801'; }
+.icon-ok-inline:before        { font-family: 'fontello'; margin-right: 0.5em; content: '\e807'; }
+
