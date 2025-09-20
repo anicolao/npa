@@ -21,22 +21,12 @@ if [ ! -d "test-game-files/np" ] || [ ! -f "test-game-files/crux.js" ]; then
         echo "📊 Files downloaded:"
         find test-game-files -name "*.js" | sort
     else
-        echo "⚠️  Failed to download real game files from server. Creating mock files instead..."
-        ./scripts/create-mock-game-files.sh test-game-files
-        echo "📋 Mock files created for testing."
+        echo "❌ Failed to download real game files from server."
+        echo "Cannot proceed without real game files. Please check your internet connection and try again."
+        exit 1
     fi
 else
-    echo "Game files already exist. Checking if they are real or mock files..."
-    if grep -q "Mock" test-game-files/crux.js 2>/dev/null; then
-        echo "📋 Found mock files. Attempting to download real files..."
-        if ./scripts/download-game-files.sh test-game-files; then
-            echo "✅ Upgraded to real game files successfully."
-        else
-            echo "⚠️  Could not upgrade to real files. Continuing with mock files."
-        fi
-    else
-        echo "✅ Real game files already present."
-    fi
+    echo "✅ Real game files already present."
 fi
 
 # Check if extension is built

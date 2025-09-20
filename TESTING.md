@@ -61,7 +61,7 @@ npx playwright install
 
 ### 1. Game Files Setup
 
-The `scripts/download-game-files.sh` script downloads the actual Neptune's Pride game files from the official servers:
+The `scripts/download-game-files.sh` script downloads the Neptune's Pride game files from the official servers:
 
 ```bash
 ./scripts/download-game-files.sh [output-directory]
@@ -73,7 +73,7 @@ This downloads the real game files including:
 - Interface modules (`interface.js`, `screens.js`)
 - Game engine (`crux.js`)
 
-**Real vs Mock Files**: The testing environment now uses the actual Neptune's Pride game files downloaded from `np4.ironhelmet.com`, providing a much more realistic testing environment. Mock files are only used as a fallback when the real servers are inaccessible.
+The testing environment requires actual Neptune's Pride game files downloaded from `np4.ironhelmet.com` to provide an authentic testing environment that matches the production game behavior.
 
 ### 2. Test Server
 
