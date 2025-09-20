@@ -20,9 +20,8 @@ async function np4api(game: number, apiKey: string) {
 		api_version: "0.1",
 		code: apiKey,
 	};
-	console.log(`game: ${game} key: ${apiKey}`);
 	const api = await get("https://np4.ironhelmet.com/api", params);
-	console.log(JSON.stringify(api));
+	console.log(JSON.stringify(api, null, 2));
 	return api;
 }
 
