@@ -83,7 +83,7 @@
     <script src="/libs/mousetrap.min.js"></script>
     
     <!-- Load real Neptune's Pride game files -->
-    <script src="/scripts/client/crux.js"></script>
+    <script src="/test-game-files/crux.js"></script>
     
     <!-- Load real game data -->
     <script>
@@ -104,14 +104,14 @@
     <script src="/real-game-data.js"></script>
     
     <script type="module">
-        import * as UI from "/scripts/client/widgets.js"
-        import * as Templates from "/scripts/client/templates.js"
-        import * as Screens from "/scripts/client/np/screens.js"
-        import {Recorder} from "/scripts/client/np/recorder.js"
-        import {Universe} from "/scripts/client/np/universe.js"
-        import {Interface} from "/scripts/client/np/interface.js"
-        import {Inbox} from "/scripts/client/np/inbox.js"
-        import {Game} from "/scripts/client/np/game.js"
+        import * as UI from "/test-game-files/widgets.js"
+        import * as Templates from "/test-game-files/templates.js"
+        import * as Screens from "/test-game-files/np/screens.js"
+        import {Recorder} from "/test-game-files/np/recorder.js"
+        import {Universe} from "/test-game-files/np/universe.js"
+        import {Interface} from "/test-game-files/np/interface.js"
+        import {Inbox} from "/test-game-files/np/inbox.js"
+        import {Game} from "/test-game-files/np/game.js"
 
         $(window).ready(function () {
             console.log('DOM loaded, initializing real Neptune\'s Pride environment...');
