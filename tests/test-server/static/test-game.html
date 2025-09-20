@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title>Neptune's Pride - Test Environment</title>
     <meta name="viewport" content="width=device-width, shrink-to-fit=no, user-scalable=no">
-    <link rel="stylesheet" href="https://np.ironhelmet.com/styles/neptune.css">
-    <link rel="stylesheet" href="https://np.ironhelmet.com/styles/fontello.css">
+    <link rel="stylesheet" href="/styles/neptune.css">
+    <link rel="stylesheet" href="/styles/fontello.css">
     <style>
         body {
             background-color: #000011;
@@ -77,13 +77,28 @@
 
     <!-- Load external libraries required by Neptune's Pride -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://np.ironhelmet.com/scripts/client/libs/store.min.js"></script>
-    <script src="https://np.ironhelmet.com/scripts/client/libs/buzz.min.js"></script>
-    <script src="https://np.ironhelmet.com/scripts/client/libs/hammer.min.js"></script>
-    <script src="https://np.ironhelmet.com/scripts/client/libs/mousetrap.min.js"></script>
+    <script src="/libs/store.min.js"></script>
+    <script src="/libs/buzz.min.js"></script>
+    <script src="/libs/hammer.min.js"></script>
+    <script src="/libs/mousetrap.min.js"></script>
     
     <!-- Load real Neptune's Pride game files -->
     <script src="/scripts/client/crux.js"></script>
+    
+    <!-- Load real game data -->
+    <script>
+        // Load real game data
+        fetch('/game-data.json')
+            .then(response => response.json())
+            .then(data => {
+                window.realGameData = data;
+                console.log('Real game data loaded:', Object.keys(data));
+            })
+            .catch(error => {
+                console.warn('Could not load real game data:', error);
+                window.realGameData = null;
+            });
+    </script>
     
     <!-- Load real game data -->
     <script src="/static/real-game-data.js"></script>
@@ -241,18 +256,18 @@
 
     <!-- Image resources for Neptune's Pride -->
     <div id="image-resources" style="display: none;">
-        <img id="img_clouds" src="https://np.ironhelmet.com/images/map/clouds2.jpg">
-        <img id="img_clouds_alt" src="https://np.ironhelmet.com/images/map/clouds3.jpg">
-        <img id="img_nebular" src="https://np.ironhelmet.com/images/nebular.png">
-        <img id="img_ripple" src="https://np.ironhelmet.com/images/map/halo.png">
-        <img id="img_halo" src="https://np.ironhelmet.com/images/map/halo2.png">
-        <img id="img_stars" src="https://np.ironhelmet.com/images/map/stars.png">
-        <img id="img_wormhole" src="https://np.ironhelmet.com/images/map/wh.png">
-        <img id="img_fleet_range" src="https://np.ironhelmet.com/images/map/fleet_range.png">
-        <img id="img_scanning_range" src="https://np.ironhelmet.com/images/map/scanning_range.png">
-        <img id="img_fleet_waypoint" src="https://np.ironhelmet.com/images/map/fleet_waypoint.png">
-        <img id="img_fleet_waypoint_next" src="https://np.ironhelmet.com/images/map/fleet_waypoint_next.png">
-        <img id="img_selection_ring" src="https://np.ironhelmet.com/images/map/selection_ring.png">
+        <img id="img_clouds" src="/images/map/clouds2.jpg">
+        <img id="img_clouds_alt" src="/images/map/clouds3.jpg">
+        <img id="img_nebular" src="/images/nebular.png">
+        <img id="img_ripple" src="/images/map/halo.png">
+        <img id="img_halo" src="/images/map/halo2.png">
+        <img id="img_stars" src="/images/map/stars.png">
+        <img id="img_wormhole" src="/images/map/wh.png">
+        <img id="img_fleet_range" src="/images/map/fleet_range.png">
+        <img id="img_scanning_range" src="/images/map/scanning_range.png">
+        <img id="img_fleet_waypoint" src="/images/map/fleet_waypoint.png">
+        <img id="img_fleet_waypoint_next" src="/images/map/fleet_waypoint_next.png">
+        <img id="img_selection_ring" src="/images/map/selection_ring.png">
     </div>
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
