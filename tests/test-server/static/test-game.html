@@ -163,37 +163,46 @@
             // Initialize global screens
             Screens.initGlobals()
 
-            // Check if we have real game data
-            if (window.realGameData && window.realGameData.scanning_data) {
-                console.log('Real game data found, setting up universe...');
-                
-                // Set up the universe with real game data
-                const gameData = window.realGameData.scanning_data;
-                
-                // Simulate receiving a full universe report by calling the real game function
-                NP.universe.galaxy = gameData;
-                
-                // Call the game's normal initialization with real data
-                if (NP.np.onFullUniverse) {
-                    NP.np.onFullUniverse(gameData);
+            // Start the game normally - this will initialize the basic engine
+            NP.np.firstFullUniverseReport()
+            
+            // After initialization, if we have real game data, try to inject it
+            setTimeout(() => {
+                if (window.realGameData && window.realGameData.scanning_data) {
+                    console.log('Attempting to inject real game data after initialization...');
+                    
+                    try {
+                        const gameData = window.realGameData.scanning_data;
+                        
+                        // Try to use the actual Neptune's Pride API call pattern
+                        if (NP.np && NP.np.onFullUniverse) {
+                            NP.np.onFullUniverse(gameData);
+                            console.log('Successfully called onFullUniverse');
+                        } else if (NP.universe && NP.universe.addGalaxy) {
+                            NP.universe.addGalaxy(gameData);
+                            console.log('Successfully called addGalaxy');
+                        }
+                        
+                        // Try to trigger a redraw
+                        if (NP.npui && NP.npui.map && NP.npui.map.draw) {
+                            NP.npui.map.draw();
+                        }
+                        
+                        document.getElementById('game-status').textContent = 'Loaded (Real Data)';
+                        document.getElementById('game-status').style.color = '#4a9';
+                        
+                        console.log('Real game data injection completed');
+                    } catch (error) {
+                        console.log('Error during real data injection:', error);
+                        document.getElementById('game-status').textContent = 'Loaded (Engine Only)';
+                        document.getElementById('game-status').style.color = '#fa4';
+                    }
                 } else {
-                    // Alternative initialization if onFullUniverse doesn't exist
-                    NP.np.firstFullUniverseReport();
+                    console.log('No real game data available');
+                    document.getElementById('game-status').textContent = 'Loaded (Engine Only)';
+                    document.getElementById('game-status').style.color = '#fa4';
                 }
-                
-                document.getElementById('game-status').textContent = 'Loaded (Real Engine)';
-                document.getElementById('game-status').style.color = '#4a9';
-                
-                console.log('Real Neptune\'s Pride game engine initialized with authentic data');
-            } else {
-                console.log('No real game data found, initializing with minimal setup...');
-                
-                // Initialize with minimal setup for testing
-                NP.np.firstFullUniverseReport();
-                
-                document.getElementById('game-status').textContent = 'Loaded (Minimal)';
-                document.getElementById('game-status').style.color = '#fa4';
-            }
+            }, 3000)
 
             // Check if extension is loaded
             setTimeout(() => {
