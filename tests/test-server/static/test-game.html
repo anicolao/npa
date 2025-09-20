@@ -71,128 +71,92 @@
         <canvas id="map-canvas" width="1200" height="800"></canvas>
         
         <div class="ui-overlay">
-            <div class="status-text">Test Environment</div>
+            <div class="status-text">Neptune's Pride Agent Test Environment</div>
+            <div class="status-text">Real Game Files: <span id="game-status" class="load-indicator">Loading...</span></div>
             <div class="status-text">Extension Status: <span id="extension-status" class="load-indicator">Loading...</span></div>
-            <div class="status-text">Game Files: <span id="game-status" class="load-indicator">Loading...</span></div>
             <button class="button" onclick="testScreenshot()">Test Screenshot</button>
             <button class="button" onclick="testReports()">Test Reports</button>
         </div>
     </div>
 
-    <!-- Load game files in order -->
+    <!-- Load jQuery first (required by Neptune's Pride) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Load real Neptune's Pride game files -->
     <script src="/scripts/client/crux.js"></script>
-    <script src="/scripts/client/templates.js"></script>
-    <script src="/scripts/client/widgets.js"></script>
+    <script type="module" src="/scripts/client/templates.js"></script>
+    <script type="module" src="/scripts/client/widgets.js"></script>
     <script src="/scripts/client/npui_shared.js"></script>
-    <script src="/scripts/client/np/universe.js"></script>
-    <script src="/scripts/client/np/game.js"></script>
-    <script src="/scripts/client/np/map.js"></script>
-    <script src="/scripts/client/np/interface.js"></script>
-    <script src="/scripts/client/np/screens.js"></script>
-    <script src="/scripts/client/np/inbox.js"></script>
-    <script src="/scripts/client/np/recorder.js"></script>
+    <script type="module" src="/scripts/client/np/universe.js"></script>
+    <script type="module" src="/scripts/client/np/game.js"></script>
+    <script type="module" src="/scripts/client/np/map.js"></script>
+    <script type="module" src="/scripts/client/np/interface.js"></script>
+    <script type="module" src="/scripts/client/np/screens.js"></script>
+    <script type="module" src="/scripts/client/np/inbox.js"></script>
+    <script type="module" src="/scripts/client/np/recorder.js"></script>
 
     <script>
-        // Mock Neptune's Pride global object structure for testing
-        window.NeptunesPride = window.NeptunesPride || {
-            crux: window.Crux || {},
-            universe: {
-                galaxy: {
-                    players: {
-                        0: { rawAlias: "Test Player", uid: 0 },
-                        1: { rawAlias: "AI Player", uid: 1 }
-                    },
-                    stars: {
-                        1: { n: "Sol", uid: 1, x: 0, y: 0, puid: 0 },
-                        2: { n: "Alpha Centauri", uid: 2, x: 1, y: 1, puid: 1 }
-                    },
-                    tick: 1,
-                    tickRate: 60
-                }
-            },
-            npui: {
-                map: {
-                    canvas: [document.getElementById('map-canvas')]
-                }
-            },
-            gameVersion: "test-v1.0",
-            gameNumber: "test-game-123"
-        };
-
-        // Initialize a simple map visualization
-        function initializeTestMap() {
-            const canvas = document.getElementById('map-canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Clear canvas
-            ctx.fillStyle = '#000011';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw some test stars
-            const stars = [
-                { x: 200, y: 200, name: "Sol", owner: 0 },
-                { x: 400, y: 300, name: "Alpha Centauri", owner: 1 },
-                { x: 600, y: 450, name: "Proxima", owner: -1 }
-            ];
-            
-            stars.forEach(star => {
-                // Draw star
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, 8, 0, 2 * Math.PI);
-                ctx.fillStyle = star.owner >= 0 ? '#4a9' : '#888';
-                ctx.fill();
-                ctx.strokeStyle = '#fff';
-                ctx.stroke();
-                
-                // Draw star name
-                ctx.fillStyle = '#fff';
-                ctx.font = '12px Arial';
-                ctx.fillText(star.name, star.x + 12, star.y + 4);
-            });
-            
-            // Draw some connecting lines (hyperspace lanes)
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(200, 200);
-            ctx.lineTo(400, 300);
-            ctx.moveTo(400, 300);
-            ctx.lineTo(600, 450);
-            ctx.stroke();
-        }
-
-        // Test functions for extension functionality
-        function testScreenshot() {
-            console.log('Testing screenshot functionality...');
-            document.getElementById('extension-status').textContent = 'Testing screenshot...';
-            
-            // This would normally trigger the extension's screenshot function
-            if (window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
-                window.NeptunesPride.crux.trigger('paste_report', 'screenshot');
-            } else {
-                console.log('Extension screenshot function not available');
-            }
-        }
-
-        function testReports() {
-            console.log('Testing report functionality...');
-            document.getElementById('extension-status').textContent = 'Testing reports...';
-            
-            // This would normally trigger the extension's report generation
-            if (window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
-                window.NeptunesPride.crux.trigger('show_screen', 'n_p_a');
-            } else {
-                console.log('Extension report function not available');
-            }
-        }
-
-        // Wait for game files to load
+        // Initialize environment for real Neptune's Pride files
+        window.$ = window.jQuery; // Ensure $ is available
+        
+        // Wait for all scripts to load before initializing
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                initializeTestMap();
-                document.getElementById('game-status').textContent = 'Loaded';
+            console.log('DOM loaded, initializing Neptune\'s Pride environment...');
+            
+            // Check if real Neptune's Pride objects are available
+            if (window.Crux) {
+                console.log('Real Crux library loaded');
                 
-                // Check if extension is loaded
+                // Initialize the global structure that the extension expects
+                window.NeptunesPride = window.NeptunesPride || {};
+                window.NeptunesPride.crux = window.Crux.crux || window.Crux;
+                
+                // Set up basic universe structure for testing
+                window.NeptunesPride.universe = {
+                    galaxy: {
+                        players: {
+                            0: { rawAlias: "Test Player", uid: 0, totalStars: 5 },
+                            1: { rawAlias: "AI Player", uid: 1, totalStars: 3 }
+                        },
+                        stars: {
+                            1: { n: "Sol", uid: 1, x: 0, y: 0, puid: 0, c: 50, e: 20, i: 15, s: 10 },
+                            2: { n: "Alpha Centauri", uid: 2, x: 1.5, y: 1.2, puid: 1, c: 30, e: 15, i: 12, s: 8 },
+                            3: { n: "Proxima", uid: 3, x: -0.8, y: 2.1, puid: -1, c: 25, e: 10, i: 8, s: 5 }
+                        },
+                        fleets: {},
+                        tick: 1,
+                        tickRate: 60,
+                        tickFragment: 0.5
+                    }
+                };
+                
+                // Set up npui structure for map canvas
+                window.NeptunesPride.npui = {
+                    map: {
+                        canvas: [document.getElementById('map-canvas')]
+                    }
+                };
+                
+                window.NeptunesPride.gameVersion = "real-v4.0";
+                window.NeptunesPride.gameNumber = "test-game-real";
+                
+                console.log('Neptune\'s Pride environment initialized with real files');
+                
+                // Initialize the test map with real Neptune's Pride styling
+                initializeRealTestMap();
+                
+                document.getElementById('game-status').textContent = 'Loaded (Real Files)';
+                document.getElementById('game-status').style.color = '#4a9';
+                
+            } else {
+                console.warn('Real Crux library not found, falling back to basic setup');
+                initializeBasicTestMap();
+                document.getElementById('game-status').textContent = 'Loaded (Fallback)';
+                document.getElementById('game-status').style.color = '#fa4';
+            }
+            
+            // Check if extension is loaded
+            setTimeout(() => {
                 if (window.NeptunesPrideAgent || (window.NeptunesPride && window.NeptunesPride.version)) {
                     document.getElementById('extension-status').textContent = 'Active';
                     document.getElementById('extension-status').style.color = '#4a9';
@@ -200,8 +164,152 @@
                     document.getElementById('extension-status').textContent = 'Not Detected';
                     document.getElementById('extension-status').style.color = '#f44';
                 }
-            }, 1000);
+            }, 2000);
         });
+
+        // Initialize map with real Neptune's Pride styling and behavior
+        function initializeRealTestMap() {
+            const canvas = document.getElementById('map-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Use Neptune's Pride-like styling
+            ctx.fillStyle = '#000011';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw stars with more realistic Neptune's Pride appearance
+            const stars = [
+                { x: 300, y: 250, name: "Sol", owner: 0, carrier: 50, economy: 20, industry: 15, science: 10 },
+                { x: 550, y: 350, name: "Alpha Centauri", owner: 1, carrier: 30, economy: 15, industry: 12, science: 8 },
+                { x: 200, y: 500, name: "Proxima", owner: -1, carrier: 25, economy: 10, industry: 8, science: 5 }
+            ];
+            
+            stars.forEach(star => {
+                // Draw star background circle
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, 12, 0, 2 * Math.PI);
+                ctx.fillStyle = star.owner >= 0 ? '#1a4a1a' : '#2a2a2a';
+                ctx.fill();
+                
+                // Draw star border
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, 12, 0, 2 * Math.PI);
+                ctx.strokeStyle = star.owner >= 0 ? '#4a9' : '#666';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw carrier count
+                if (star.carrier > 0) {
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(star.carrier.toString(), star.x, star.y + 4);
+                }
+                
+                // Draw star name
+                ctx.fillStyle = '#ccc';
+                ctx.font = '11px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(star.name, star.x, star.y - 18);
+                
+                // Draw resource indicators (small colored dots)
+                const resources = [
+                    { value: star.economy, color: '#4a4', offset: -8 },
+                    { value: star.industry, color: '#a44', offset: -4 },
+                    { value: star.science, color: '#44a', offset: 4 }
+                ];
+                
+                resources.forEach((resource, i) => {
+                    ctx.beginPath();
+                    ctx.arc(star.x + resource.offset, star.y + 18, 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = resource.color;
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(resource.value.toString(), star.x + resource.offset, star.y + 30);
+                });
+            });
+            
+            // Draw hyperspace lanes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([2, 4]);
+            ctx.beginPath();
+            ctx.moveTo(300, 250);
+            ctx.lineTo(550, 350);
+            ctx.moveTo(550, 350);
+            ctx.lineTo(200, 500);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            console.log('Real Neptune\'s Pride test map initialized');
+        }
+
+        // Fallback basic map initialization
+        function initializeBasicTestMap() {
+            const canvas = document.getElementById('map-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.fillStyle = '#000011';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw basic stars
+            const stars = [
+                { x: 200, y: 200, name: "Sol", owner: 0 },
+                { x: 400, y: 300, name: "Alpha Centauri", owner: 1 },
+                { x: 600, y: 450, name: "Proxima", owner: -1 }
+            ];
+            
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, 8, 0, 2 * Math.PI);
+                ctx.fillStyle = star.owner >= 0 ? '#4a9' : '#888';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.stroke();
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = '12px Arial';
+                ctx.fillText(star.name, star.x + 12, star.y + 4);
+            });
+            
+            console.log('Basic fallback test map initialized');
+        }
+
+        // Test functions for extension functionality
+        function testScreenshot() {
+            console.log('Testing screenshot functionality with real Neptune\'s Pride environment...');
+            document.getElementById('extension-status').textContent = 'Testing screenshot...';
+            
+            // This would normally trigger the extension's screenshot function
+            if (window.NeptunesPride && window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
+                window.NeptunesPride.crux.trigger('paste_report', 'screenshot');
+                console.log('Screenshot trigger sent via real Crux');
+            } else if (window.Crux && window.Crux.crux && window.Crux.crux.trigger) {
+                window.Crux.crux.trigger('paste_report', 'screenshot');
+                console.log('Screenshot trigger sent via Crux');
+            } else {
+                console.log('Extension screenshot function not available - no Crux trigger found');
+            }
+        }
+
+        function testReports() {
+            console.log('Testing report functionality with real Neptune\'s Pride environment...');
+            document.getElementById('extension-status').textContent = 'Testing reports...';
+            
+            // This would normally trigger the extension's report generation
+            if (window.NeptunesPride && window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
+                window.NeptunesPride.crux.trigger('show_screen', 'n_p_a');
+                console.log('Report trigger sent via real Crux');
+            } else if (window.Crux && window.Crux.crux && window.Crux.crux.trigger) {
+                window.Crux.crux.trigger('show_screen', 'n_p_a');
+                console.log('Report trigger sent via Crux');
+            } else {
+                console.log('Extension report function not available - no Crux trigger found');
+            }
+        }
 
         // Global functions for testing
         window.testScreenshot = testScreenshot;
