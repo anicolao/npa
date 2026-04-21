@@ -11,6 +11,18 @@
 		00AA00210000000000000000 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA00310000000000000000 /* ContentView.swift */; };
 		00AA00220000000000000000 /* GameWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA00320000000000000000 /* GameWebView.swift */; };
 		00AA00260000000000000000 /* Dist in Resources */ = {isa = PBXBuildFile; fileRef = 00AA00380000000000000000 /* Dist */; };
+		00AA01000000000000000000 /* AppIcon-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02000000000000000000 /* AppIcon-20@2x.png */; };
+		00AA01010000000000000000 /* AppIcon-20@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02010000000000000000 /* AppIcon-20@3x.png */; };
+		00AA01020000000000000000 /* AppIcon-29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02020000000000000000 /* AppIcon-29@2x.png */; };
+		00AA01030000000000000000 /* AppIcon-29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02030000000000000000 /* AppIcon-29@3x.png */; };
+		00AA01040000000000000000 /* AppIcon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02040000000000000000 /* AppIcon-40@2x.png */; };
+		00AA01050000000000000000 /* AppIcon-40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02050000000000000000 /* AppIcon-40@3x.png */; };
+		00AA01060000000000000000 /* AppIcon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02060000000000000000 /* AppIcon-60@2x.png */; };
+		00AA01070000000000000000 /* AppIcon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02070000000000000000 /* AppIcon-60@3x.png */; };
+		00AA01080000000000000000 /* AppIcon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02080000000000000000 /* AppIcon-76.png */; };
+		00AA01090000000000000000 /* AppIcon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA02090000000000000000 /* AppIcon-76@2x.png */; };
+		00AA010A0000000000000000 /* AppIcon-83.5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA020A0000000000000000 /* AppIcon-83.5@2x.png */; };
+		00AA010B0000000000000000 /* AppIcon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 00AA020B0000000000000000 /* AppIcon-1024.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +33,18 @@
 		00AA00360000000000000000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00AA00370000000000000000 /* NPAiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = NPAiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00AA00380000000000000000 /* Dist */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dist; sourceTree = "<group>"; };
+		00AA02000000000000000000 /* AppIcon-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-20@2x.png"; sourceTree = "<group>"; };
+		00AA02010000000000000000 /* AppIcon-20@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-20@3x.png"; sourceTree = "<group>"; };
+		00AA02020000000000000000 /* AppIcon-29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-29@2x.png"; sourceTree = "<group>"; };
+		00AA02030000000000000000 /* AppIcon-29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-29@3x.png"; sourceTree = "<group>"; };
+		00AA02040000000000000000 /* AppIcon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-40@2x.png"; sourceTree = "<group>"; };
+		00AA02050000000000000000 /* AppIcon-40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-40@3x.png"; sourceTree = "<group>"; };
+		00AA02060000000000000000 /* AppIcon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-60@2x.png"; sourceTree = "<group>"; };
+		00AA02070000000000000000 /* AppIcon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-60@3x.png"; sourceTree = "<group>"; };
+		00AA02080000000000000000 /* AppIcon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-76.png"; sourceTree = "<group>"; };
+		00AA02090000000000000000 /* AppIcon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-76@2x.png"; sourceTree = "<group>"; };
+		00AA020A0000000000000000 /* AppIcon-83.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-83.5@2x.png"; sourceTree = "<group>"; };
+		00AA020B0000000000000000 /* AppIcon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-1024.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +81,7 @@
 				00AA00310000000000000000 /* ContentView.swift */,
 				00AA00320000000000000000 /* GameWebView.swift */,
 				00AA00330000000000000000 /* Assets.xcassets */,
+				00AA03000000000000000000 /* AppIcons */,
 				00AA000A0000000000000000 /* Resources */,
 				00AA00360000000000000000 /* Info.plist */,
 			);
@@ -69,6 +94,25 @@
 				00AA00380000000000000000 /* Dist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		00AA03000000000000000000 /* AppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				00AA02000000000000000000 /* AppIcon-20@2x.png */,
+				00AA02010000000000000000 /* AppIcon-20@3x.png */,
+				00AA02020000000000000000 /* AppIcon-29@2x.png */,
+				00AA02030000000000000000 /* AppIcon-29@3x.png */,
+				00AA02040000000000000000 /* AppIcon-40@2x.png */,
+				00AA02050000000000000000 /* AppIcon-40@3x.png */,
+				00AA02060000000000000000 /* AppIcon-60@2x.png */,
+				00AA02070000000000000000 /* AppIcon-60@3x.png */,
+				00AA02080000000000000000 /* AppIcon-76.png */,
+				00AA02090000000000000000 /* AppIcon-76@2x.png */,
+				00AA020A0000000000000000 /* AppIcon-83.5@2x.png */,
+				00AA020B0000000000000000 /* AppIcon-1024.png */,
+			);
+			path = AppIcons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,6 +172,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00AA01000000000000000000 /* AppIcon-20@2x.png in Resources */,
+				00AA01010000000000000000 /* AppIcon-20@3x.png in Resources */,
+				00AA01020000000000000000 /* AppIcon-29@2x.png in Resources */,
+				00AA01030000000000000000 /* AppIcon-29@3x.png in Resources */,
+				00AA01040000000000000000 /* AppIcon-40@2x.png in Resources */,
+				00AA01050000000000000000 /* AppIcon-40@3x.png in Resources */,
+				00AA01060000000000000000 /* AppIcon-60@2x.png in Resources */,
+				00AA01070000000000000000 /* AppIcon-60@3x.png in Resources */,
+				00AA01080000000000000000 /* AppIcon-76.png in Resources */,
+				00AA01090000000000000000 /* AppIcon-76@2x.png in Resources */,
+				00AA010A0000000000000000 /* AppIcon-83.5@2x.png in Resources */,
+				00AA010B0000000000000000 /* AppIcon-1024.png in Resources */,
 				00AA00260000000000000000 /* Dist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
