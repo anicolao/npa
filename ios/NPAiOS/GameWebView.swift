@@ -18,7 +18,6 @@ struct GameWebView: UIViewRepresentable {
         configuration.websiteDataStore = .default()
 
         let controller = WKUserContentController()
-        controller.add(context.coordinator, name: ScriptBridge.name)
 
         if let cssScript = InjectedResources.cssInjectionScript() {
             controller.addUserScript(
@@ -79,78 +78,6 @@ final class Coordinator: NSObject, WKNavigationDelegate {
 
         decisionHandler(.allow)
     }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let script = """
-        (() => ({
-          href: window.location.href,
-          readyState: document.readyState,
-          hasNeptunesPride: typeof window.NeptunesPride !== "undefined",
-          hasCrux: typeof window.Crux !== "undefined",
-          hasNpaStyle: !!document.getElementById("npa-ios-style"),
-          injectionState: window.__NPAiOSInjectionState ?? null,
-          title: document.title
-        }))();
-        """
-
-        webView.evaluateJavaScript(script) { result, error in
-            if let error {
-                NSLog("NPA iOS: page probe failed: %@", String(describing: error))
-                return
-            }
-
-            NSLog("NPA iOS: page probe %@", String(describing: result))
-
-            let badgeScript = """
-            (() => {
-              const probe = \(javaScriptString(from: result));
-              const id = "__npa-ios-debug-badge";
-              let node = document.getElementById(id);
-              if (!node) {
-                node = document.createElement("div");
-                node.id = id;
-                node.style.position = "fixed";
-                node.style.top = "12px";
-                node.style.right = "12px";
-                node.style.zIndex = "2147483647";
-                node.style.padding = "8px 10px";
-                node.style.borderRadius = "10px";
-                node.style.background = "rgba(0,0,0,0.78)";
-                node.style.color = "#7CFF9B";
-                node.style.font = "12px/1.3 -apple-system, BlinkMacSystemFont, sans-serif";
-                node.style.whiteSpace = "pre-wrap";
-                node.style.maxWidth = "70vw";
-                node.style.pointerEvents = "none";
-                (document.body || document.documentElement).appendChild(node);
-              }
-              const state = probe?.injectionState;
-              const lines = [
-                `NPA bridge`,
-                `NP: ${probe?.hasNeptunesPride ? "yes" : "no"}  Crux: ${probe?.hasCrux ? "yes" : "no"}`,
-                `state: ${state?.type ?? "none"}`,
-                `${probe?.href ?? ""}`
-              ];
-              if (state?.message) lines.splice(3, 0, `err: ${state.message}`);
-              node.textContent = lines.join("\\n");
-            })();
-            """
-
-            webView.evaluateJavaScript(badgeScript, completionHandler: nil)
-        }
-    }
-}
-
-extension Coordinator: WKScriptMessageHandler {
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceive message: WKScriptMessage
-    ) {
-        guard message.name == ScriptBridge.name else {
-            return
-        }
-
-        NSLog("NPA iOS: script bridge %@", String(describing: message.body))
-    }
 }
 
 private enum DesktopUserAgent {
@@ -175,7 +102,7 @@ private enum InjectedResources {
           const script = document.createElement("script");
           script.id = "intel";
           script.title = "Neptune's Pride Agent iOS";
-          script.textContent = \(javaScriptStringLiteral(pageBootstrapScript(for: source)));
+          script.textContent = \(javaScriptStringLiteral(source));
           (document.head || document.documentElement).appendChild(script);
           script.remove();
         })();
@@ -197,49 +124,6 @@ private enum InjectedResources {
             (document.head || document.documentElement).appendChild(styleElement);
           }
           styleElement.textContent = \(javaScriptStringLiteral(css));
-        })();
-        """
-    }
-
-    private static func pageBootstrapScript(for source: String) -> String {
-        """
-        (() => {
-          window.__NPAiOSInjectionState = { type: "starting", href: window.location.href };
-          const send = (payload) => {
-            try {
-              window.webkit?.messageHandlers?.\(ScriptBridge.name)?.postMessage(payload);
-            } catch (_) {}
-          };
-          send({
-            type: "before",
-            href: window.location.href,
-            readyState: document.readyState,
-            userAgent: navigator.userAgent
-          });
-          try {
-            \(source)
-            window.__NPAiOSInjectionState = {
-              type: "after",
-              href: window.location.href,
-              hasNeptunesPride: typeof window.NeptunesPride !== "undefined",
-              hasCrux: typeof window.Crux !== "undefined"
-            };
-            send(window.__NPAiOSInjectionState);
-          } catch (error) {
-            window.__NPAiOSInjectionState = {
-              type: "error",
-              href: window.location.href,
-              message: String(error),
-              stack: error?.stack ?? null
-            };
-            send({
-              type: "error",
-              href: window.location.href,
-              message: String(error),
-              stack: error?.stack ?? null
-            });
-            throw error;
-          }
         })();
         """
     }
@@ -276,26 +160,4 @@ private enum InjectedResources {
 
         return String(serialized.dropFirst().dropLast())
     }
-}
-
-private enum ScriptBridge {
-    static let name = "npaBridge"
-}
-
-private func javaScriptString(from value: Any?) -> String {
-    guard let value else {
-        return "null"
-    }
-
-    if JSONSerialization.isValidJSONObject(value),
-       let data = try? JSONSerialization.data(withJSONObject: value),
-       let string = String(data: data, encoding: .utf8) {
-        return string
-    }
-
-    if let string = value as? String {
-        return "\"\(string.replacingOccurrences(of: "\"", with: "\\\""))\""
-    }
-
-    return "null"
 }
