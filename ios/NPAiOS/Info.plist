@@ -8,10 +8,44 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleDisplayName</key>
+	<string>NPA</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>NPA</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon-20@2x.png</string>
+				<string>AppIcon-20@3x.png</string>
+				<string>AppIcon-29@2x.png</string>
+				<string>AppIcon-29@3x.png</string>
+				<string>AppIcon-40@2x.png</string>
+				<string>AppIcon-40@3x.png</string>
+				<string>AppIcon-60@2x.png</string>
+				<string>AppIcon-60@3x.png</string>
+			</array>
+		</dict>
+	</dict>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIcon-20@2x.png</string>
+				<string>AppIcon-29@2x.png</string>
+				<string>AppIcon-40@2x.png</string>
+				<string>AppIcon-76.png</string>
+				<string>AppIcon-76@2x.png</string>
+				<string>AppIcon-83.5@2x.png</string>
+			</array>
+		</dict>
+	</dict>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
