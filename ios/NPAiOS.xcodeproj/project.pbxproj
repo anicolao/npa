@@ -1,0 +1,261 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00AA00200000000000000000 /* NPAiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA00300000000000000000 /* NPAiOSApp.swift */; };
+		00AA00210000000000000000 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA00310000000000000000 /* ContentView.swift */; };
+		00AA00220000000000000000 /* GameWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AA00320000000000000000 /* GameWebView.swift */; };
+		00AA00260000000000000000 /* Dist in Resources */ = {isa = PBXBuildFile; fileRef = 00AA00380000000000000000 /* Dist */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00AA00300000000000000000 /* NPAiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NPAiOSApp.swift; sourceTree = "<group>"; };
+		00AA00310000000000000000 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		00AA00320000000000000000 /* GameWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameWebView.swift; sourceTree = "<group>"; };
+		00AA00330000000000000000 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00AA00360000000000000000 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00AA00370000000000000000 /* NPAiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = NPAiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00AA00380000000000000000 /* Dist */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00AA00080000000000000000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00AA00020000000000000000 = {
+			isa = PBXGroup;
+			children = (
+				00AA00040000000000000000 /* NPAiOS */,
+				00AA00030000000000000000 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		00AA00030000000000000000 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00AA00370000000000000000 /* NPAiOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		00AA00040000000000000000 /* NPAiOS */ = {
+			isa = PBXGroup;
+			children = (
+				00AA00300000000000000000 /* NPAiOSApp.swift */,
+				00AA00310000000000000000 /* ContentView.swift */,
+				00AA00320000000000000000 /* GameWebView.swift */,
+				00AA00330000000000000000 /* Assets.xcassets */,
+				00AA000A0000000000000000 /* Resources */,
+				00AA00360000000000000000 /* Info.plist */,
+			);
+			path = NPAiOS;
+			sourceTree = "<group>";
+		};
+		00AA000A0000000000000000 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				00AA00380000000000000000 /* Dist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00AA00050000000000000000 /* NPAiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00AA00110000000000000000 /* Build configuration list for PBXNativeTarget "NPAiOS" */;
+			buildPhases = (
+				00AA00070000000000000000 /* Sources */,
+				00AA00080000000000000000 /* Frameworks */,
+				00AA00090000000000000000 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NPAiOS;
+			productName = NPAiOS;
+			productReference = 00AA00370000000000000000 /* NPAiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		00AA00010000000000000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					00AA00050000000000000000 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = 00AA00100000000000000000 /* Build configuration list for PBXProject "NPAiOS" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 00AA00020000000000000000;
+			productRefGroup = 00AA00030000000000000000 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				00AA00050000000000000000 /* NPAiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00AA00090000000000000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00AA00260000000000000000 /* Dist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00AA00070000000000000000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00AA00200000000000000000 /* NPAiOSApp.swift in Sources */,
+				00AA00210000000000000000 /* ContentView.swift in Sources */,
+				00AA00220000000000000000 /* GameWebView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		00AA00400000000000000000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = auto;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		00AA00410000000000000000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				SDKROOT = auto;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		00AA00420000000000000000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = NPAiOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD = "$(TOOLCHAIN_DIR)/usr/bin/clang";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.NPAiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00AA00430000000000000000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = NPAiOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD = "$(TOOLCHAIN_DIR)/usr/bin/clang";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.NPAiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00AA00100000000000000000 /* Build configuration list for PBXProject "NPAiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00AA00400000000000000000 /* Debug */,
+				00AA00410000000000000000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00AA00110000000000000000 /* Build configuration list for PBXNativeTarget "NPAiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00AA00420000000000000000 /* Debug */,
+				00AA00430000000000000000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 00AA00010000000000000000 /* Project object */;
+}
