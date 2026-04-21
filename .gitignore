@@ -1,6 +1,8 @@
 *.zip
 coverage/
 dist/
+!ios/NPAiOS/Resources/Dist/
+!ios/NPAiOS/Resources/Dist/**
 node_modules/
 src/version.js
 .direnv/
