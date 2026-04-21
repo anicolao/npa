@@ -11,3 +11,9 @@ test-results/
 test-game-files/
 playwright-report/
 test-results.json
+
+# iOS wrapper build artifacts
+ios/.DerivedData/
+ios/build/
+ios/**/*.xcuserstate
+ios/**/xcuserdata/
