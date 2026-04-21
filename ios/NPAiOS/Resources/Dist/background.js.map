@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/background.js"],
+  "sourcesContent": ["/* global chrome */\n\nchrome.runtime.onInstalled.addListener(() => {\n  console.log(\"Neptune's Pride Agent installed.\");\n});\n\nfunction intelDump() {\n  const s = document.createElement(\"script\");\n  s.src = chrome.runtime.getURL(\"intel.js\");\n  s.id = \"intel\";\n  s.title = `Neptune's Pride Agent v${chrome.runtime.getManifest().version}`;\n  s.onload = function () {\n    this.remove();\n  };\n  (document.head || document.documentElement).appendChild(s);\n  console.log(`${s.title} background page.`);\n}\n\nchrome.tabs.onUpdated.addListener((_tabId, changeInfo, tab) => {\n  if (changeInfo.status == \"complete\") {\n    chrome.scripting.executeScript({\n      target: { tabId: tab.id },\n      function: intelDump,\n    });\n  }\n});\n"],
+  "mappings": ";;;;;;;;;MAEA,OAAO,QAAQ,YAAY,YAAY,IAAM,CAC3C,QAAQ,IAAI,kCAAkC,CAChD,CAAC,EAED,SAASA,GAAY,CACnB,IAAMC,EAAI,SAAS,cAAc,QAAQ,EACzCA,EAAE,IAAM,OAAO,QAAQ,OAAO,UAAU,EACxCA,EAAE,GAAK,QACPA,EAAE,MAAQ,0BAA0B,OAAO,QAAQ,YAAY,EAAE,OAAO,GACxEA,EAAE,OAAS,UAAY,CACrB,KAAK,OAAO,CACd,GACC,SAAS,MAAQ,SAAS,iBAAiB,YAAYA,CAAC,EACzD,QAAQ,IAAI,GAAGA,EAAE,KAAK,mBAAmB,CAC3C,CAEA,OAAO,KAAK,UAAU,YAAY,CAACC,EAAQC,EAAYC,IAAQ,CACzDD,EAAW,QAAU,YACvB,OAAO,UAAU,cAAc,CAC7B,OAAQ,CAAE,MAAOC,EAAI,EAAG,EACxB,SAAUJ,CACZ,CAAC,CAEL,CAAC",
+  "names": ["intelDump", "s", "_tabId", "changeInfo", "tab"]
+}
