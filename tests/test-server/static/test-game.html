@@ -1,78 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Neptune's Pride - Test Environment</title>
-    <meta name="viewport" content="width=device-width, shrink-to-fit=no, user-scalable=no">
-    <link rel="stylesheet" href="/styles/neptune.css">
-    <link rel="stylesheet" href="/styles/fontello.css">
+    <meta
+      name="viewport"
+      content="width=device-width, shrink-to-fit=no, user-scalable=no"
+    />
+    <link rel="stylesheet" href="/styles/neptune.css" />
+    <link rel="stylesheet" href="/styles/fontello.css" />
     <style>
-        body {
-            background-color: #000011;
-            margin: 0;
-            padding: 0;
-        }
-        .ui-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(26, 29, 68, 0.9);
-            border: 1px solid #2C3273;
-            padding: 15px;
-            border-radius: 5px;
-            color: white;
-            font-family: Arial, sans-serif;
-            z-index: 1000;
-            min-width: 250px;
-        }
-        .status-text {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .load-indicator {
-            color: #fa4;
-            font-weight: bold;
-        }
-        .button {
-            background: #4a9;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            margin: 5px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .button:hover {
-            background: #5ba;
-        }
-        #contentArea {
-            width: 100%;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-        #loadingArea {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(26, 29, 68, 0.9);
-            padding: 20px;
-            border-radius: 5px;
-            color: white;
-            font-size: 18px;
-            z-index: 2000;
-        }
+      body {
+        background-color: #000011;
+        margin: 0;
+        padding: 0;
+      }
+      .ui-overlay {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(26, 29, 68, 0.9);
+        border: 1px solid #2c3273;
+        padding: 15px;
+        border-radius: 5px;
+        color: white;
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+        min-width: 250px;
+      }
+      .status-text {
+        margin: 5px 0;
+        font-size: 14px;
+      }
+      .load-indicator {
+        color: #fa4;
+        font-weight: bold;
+      }
+      .button {
+        background: #4a9;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        margin: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      .button:hover {
+        background: #5ba;
+      }
+      #contentArea {
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      #loadingArea {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(26, 29, 68, 0.9);
+        padding: 20px;
+        border-radius: 5px;
+        color: white;
+        font-size: 18px;
+        z-index: 2000;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="ui-overlay">
-        <div class="status-text">Neptune's Pride Agent Test Environment</div>
-        <div class="status-text">Game Files: <span id="game-status" class="load-indicator">Loading...</span></div>
-        <div class="status-text">Extension Status: <span id="extension-status" class="load-indicator">Loading...</span></div>
-        <button class="button" onclick="testScreenshot()">Test Screenshot</button>
-        <button class="button" onclick="testReports()">Test Reports</button>
+      <div class="status-text">Neptune's Pride Agent Test Environment</div>
+      <div class="status-text">
+        Game Files:
+        <span id="game-status" class="load-indicator">Loading...</span>
+      </div>
+      <div class="status-text">
+        Extension Status:
+        <span id="extension-status" class="load-indicator">Loading...</span>
+      </div>
+      <button class="button" onclick="testScreenshot()">Test Screenshot</button>
+      <button class="button" onclick="testReports()">Test Reports</button>
     </div>
 
     <!-- Load external libraries required by Neptune's Pride -->
@@ -81,209 +90,262 @@
     <script src="/libs/buzz.min.js"></script>
     <script src="/libs/hammer.min.js"></script>
     <script src="/libs/mousetrap.min.js"></script>
-    
+
     <!-- Load real Neptune's Pride game files -->
-    <script src="/test-game-files/crux.js"></script>
-    
+    <script src="/scripts/client/crux.js"></script>
+
     <!-- Load real game data -->
     <script>
-        // Load real game data
-        fetch('/game-data.json')
-            .then(response => response.json())
-            .then(data => {
-                window.realGameData = data;
-                console.log('Real game data loaded:', Object.keys(data));
-            })
-            .catch(error => {
-                console.warn('Could not load real game data:', error);
-                window.realGameData = null;
-            });
+      // Load real game data
+      fetch("/game-data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          window.realGameData = data.scanning_data;
+          console.log("Real game data loaded:", Object.keys(data));
+        })
+        .catch((error) => {
+          console.warn("Could not load real game data:", error);
+          window.realGameData = null;
+        });
     </script>
-    
+
     <!-- Load real game data -->
     <script src="/real-game-data.js"></script>
-    
+
     <script type="module">
-        import * as UI from "/test-game-files/widgets.js"
-        import * as Templates from "/test-game-files/templates.js"
-        import * as Screens from "/test-game-files/np/screens.js"
-        import {Recorder} from "/test-game-files/np/recorder.js"
-        import {Universe} from "/test-game-files/np/universe.js"
-        import {Interface} from "/test-game-files/np/interface.js"
-        import {Inbox} from "/test-game-files/np/inbox.js"
-        import {Game} from "/test-game-files/np/game.js"
+      import * as UI from "/scripts/client/widgets.js";
+      import * as Templates from "/scripts/client/templates.js";
+      import * as Screens from "/scripts/client/np/screens.js";
+      import { Recorder } from "/scripts/client/np/recorder.js";
+      import { Universe } from "/scripts/client/np/universe.js";
+      import { Interface } from "/scripts/client/np/interface.js";
+      import { Inbox } from "/scripts/client/np/inbox.js";
+      import { Game } from "/scripts/client/np/game.js";
 
-        $(window).ready(function () {
-            console.log('DOM loaded, initializing real Neptune\'s Pride environment...');
+      $(window).ready(function () {
+        console.log(
+          "DOM loaded, initializing real Neptune's Pride environment...",
+        );
 
-            window.NeptunesPride = {}
-            window.NP = window.NeptunesPride
+        window.NeptunesPride = {};
+        window.NP = window.NeptunesPride;
 
-            // Set up game info similar to real Neptune's Pride
-            NP.version = "";
-            NP.gameVersion = "";
-            NP.gameId = 4982
-            NP.gameCreated = new Date()
+        // Set up game info similar to real Neptune's Pride
+        NP.version = "";
+        NP.gameVersion = "";
+        NP.gameId = 4982;
+        NP.gameCreated = new Date();
 
-            // Set up test account
-            let account = {}
-            account.alias = "Test Player"
-            account.user_id = "test-user-id"
-            account.credits = "100"
-            account.subscribed = new Date(Date.now() + 86400000) // Tomorrow
-            account.created = new Date()
-            account.nagged = new Date()
-            NP.account = account
+        // Set up test account
+        let account = {};
+        account.alias = "Test Player";
+        account.user_id = "test-user-id";
+        account.credits = "100";
+        account.subscribed = new Date(Date.now() + 86400000); // Tomorrow
+        account.created = new Date();
+        account.nagged = new Date();
+        NP.account = account;
 
-            // Set up templates for old Crux compatibility
-            if (typeof Crux !== 'undefined') {
-                Crux.templates = Templates.getAll()
-            }
-
-            // Create the main crux widget
-            let crux = new UI.Widget("crux")
-            $("#contentArea").append(crux.ui)
-            NP.crux = crux
-
-            // Shortcut for trigger
-            NP.trigger = crux.trigger.bind(crux)
-
-            // Old Crux compatibility
-            if (typeof Crux !== 'undefined') {
-                window.Crux.crux = crux
-            }
-
-            // Initialize game components using real Neptune's Pride classes
-            NP.universe = new Universe()
-            NP.inbox = new Inbox()
-            NP.npui = new Interface()
-            NP.np = new Game()
-            NP.recorder = new Recorder()
-
-            // Initialize global screens
-            Screens.initGlobals()
-
-            // Start the game normally - this will initialize the basic engine
-            NP.np.firstFullUniverseReport()
-            
-            // After initialization, if we have real game data, try to inject it
-            setTimeout(() => {
-                if (window.realGameData && window.realGameData.scanning_data) {
-                    console.log('Attempting to inject real game data after initialization...');
-                    
-                    try {
-                        const gameData = window.realGameData.scanning_data;
-                        
-                        // Try to use the actual Neptune's Pride API call pattern
-                        if (NP.np && NP.np.onFullUniverse) {
-                            NP.np.onFullUniverse(gameData);
-                            console.log('Successfully called onFullUniverse');
-                        } else if (NP.universe && NP.universe.addGalaxy) {
-                            NP.universe.addGalaxy(gameData);
-                            console.log('Successfully called addGalaxy');
-                        }
-                        
-                        // Try to trigger a redraw
-                        if (NP.npui && NP.npui.map && NP.npui.map.draw) {
-                            NP.npui.map.draw();
-                        }
-                        
-                        document.getElementById('game-status').textContent = 'Loaded (Real Data)';
-                        document.getElementById('game-status').style.color = '#4a9';
-                        
-                        console.log('Real game data injection completed');
-                    } catch (error) {
-                        console.log('Error during real data injection:', error);
-                        document.getElementById('game-status').textContent = 'Loaded (Engine Only)';
-                        document.getElementById('game-status').style.color = '#fa4';
-                    }
-                } else {
-                    console.log('No real game data available');
-                    document.getElementById('game-status').textContent = 'Loaded (Engine Only)';
-                    document.getElementById('game-status').style.color = '#fa4';
-                }
-            }, 3000)
-
-            // Check if extension is loaded
-            setTimeout(() => {
-                if (window.NeptunesPrideAgent || (window.NeptunesPride && window.NeptunesPride.version)) {
-                    document.getElementById('extension-status').textContent = 'Active';
-                    document.getElementById('extension-status').style.color = '#4a9';
-                } else {
-                    document.getElementById('extension-status').textContent = 'Not Detected';
-                    document.getElementById('extension-status').style.color = '#f44';
-                }
-            }, 3000);
-
-            // Hide loading area
-            $("#loadingArea").hide();
-        });
-
-        // Test functions for extension functionality
-        window.testScreenshot = function() {
-            console.log('Testing screenshot functionality with real Neptune\'s Pride engine...');
-            document.getElementById('extension-status').textContent = 'Testing screenshot...';
-            
-            // This would normally trigger the extension's screenshot function
-            if (window.NeptunesPride && window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
-                window.NeptunesPride.crux.trigger('paste_report', 'screenshot');
-                console.log('Screenshot trigger sent via real Crux');
-            } else if (window.Crux && window.Crux.crux && window.Crux.crux.trigger) {
-                window.Crux.crux.trigger('paste_report', 'screenshot');
-                console.log('Screenshot trigger sent via Crux');
-            } else {
-                console.log('Extension screenshot function not available - no Crux trigger found');
-            }
+        // Set up templates for old Crux compatibility
+        if (typeof Crux !== "undefined") {
+          Crux.templates = Templates.getAll();
         }
 
-        window.testReports = function() {
-            console.log('Testing report functionality with real Neptune\'s Pride engine...');
-            document.getElementById('extension-status').textContent = 'Testing reports...';
-            
-            // This would normally trigger the extension's report generation
-            if (window.NeptunesPride && window.NeptunesPride.crux && window.NeptunesPride.crux.trigger) {
-                window.NeptunesPride.crux.trigger('show_screen', 'n_p_a');
-                console.log('Report trigger sent via real Crux');
-            } else if (window.Crux && window.Crux.crux && window.Crux.crux.trigger) {
-                window.Crux.crux.trigger('show_screen', 'n_p_a');
-                console.log('Report trigger sent via Crux');
-            } else {
-                console.log('Extension report function not available - no Crux trigger found');
-            }
+        // Create the main crux widget
+        let crux = new UI.Widget("crux");
+        $("#contentArea").append(crux.ui);
+        NP.crux = crux;
+
+        // Shortcut for trigger
+        NP.trigger = crux.trigger.bind(crux);
+
+        // Old Crux compatibility
+        if (typeof Crux !== "undefined") {
+          window.Crux.crux = crux;
         }
+
+        // Initialize game components using real Neptune's Pride classes
+        NP.universe = new Universe();
+        NP.inbox = new Inbox();
+        NP.npui = new Interface();
+        NP.np = new Game();
+        NP.recorder = new Recorder();
+
+        // Initialize global screens
+        Screens.initGlobals();
+
+        // Start the game normally - this will initialize the basic engine
+        NP.np.firstFullUniverseReport();
+
+        // After initialization, if we have real game data, try to inject it
+        setTimeout(() => {
+          if (window.realGameData && window.realGameData.playerUid) {
+            console.log(
+              "Attempting to inject real game data after initialization...",
+            );
+
+            try {
+              const gameData = window.realGameData;
+
+              // Try to use the actual Neptune's Pride API call pattern
+              //if (NP.np && NP.np.onFullUniverse) {
+              //NP.universe.galaxy = gameData; // Direct assignment as fallback
+              //NP.np.onFullUniverse(gameData);
+              //console.log("Successfully called onFullUniverse");
+              //} else if (NP.universe && NP.universe.addGalaxy) {
+              NP.universe.galaxy = gameData; // Direct assignment as fallback
+              NP.universe.addGalaxy(gameData);
+              console.log("Successfully called addGalaxy");
+              //}
+
+              NP.npui.onBuildInterface();
+              if (NP.npui && NP.npui.map && NP.npui.map.draw) {
+                console.log("Redrawing map with real data");
+                NP.npui.map.draw();
+              }
+
+              document.getElementById("game-status").textContent =
+                "Loaded (Real Data)";
+              document.getElementById("game-status").style.color = "#4a9";
+
+              console.log("Real game data injection completed");
+            } catch (error) {
+              console.log("Error during real data injection:", error);
+              document.getElementById("game-status").textContent =
+                "Loaded (Engine Only)";
+              document.getElementById("game-status").style.color = "#fa4";
+            }
+          } else {
+            console.log("No real game data available");
+            document.getElementById("game-status").textContent =
+              "Loaded (Engine Only)";
+            document.getElementById("game-status").style.color = "#fa4";
+          }
+        }, 300);
+
+        // Check if extension is loaded
+        setTimeout(() => {
+          if (
+            window.NeptunesPrideAgent ||
+            (window.NeptunesPride && window.NeptunesPride.version)
+          ) {
+            document.getElementById("extension-status").textContent = "Active";
+            document.getElementById("extension-status").style.color = "#4a9";
+          } else {
+            document.getElementById("extension-status").textContent =
+              "Not Detected";
+            document.getElementById("extension-status").style.color = "#f44";
+          }
+        }, 3000);
+
+        // Hide loading area
+        $("#loadingArea").hide();
+      });
+
+      // Test functions for extension functionality
+      window.testScreenshot = function () {
+        console.log(
+          "Testing screenshot functionality with real Neptune's Pride engine...",
+        );
+        document.getElementById("extension-status").textContent =
+          "Testing screenshot...";
+
+        // This would normally trigger the extension's screenshot function
+        if (
+          window.NeptunesPride &&
+          window.NeptunesPride.crux &&
+          window.NeptunesPride.crux.trigger
+        ) {
+          window.NeptunesPride.crux.trigger("paste_report", "screenshot");
+          console.log("Screenshot trigger sent via real Crux");
+        } else if (
+          window.Crux &&
+          window.Crux.crux &&
+          window.Crux.crux.trigger
+        ) {
+          window.Crux.crux.trigger("paste_report", "screenshot");
+          console.log("Screenshot trigger sent via Crux");
+        } else {
+          console.log(
+            "Extension screenshot function not available - no Crux trigger found",
+          );
+        }
+      };
+
+      window.testReports = function () {
+        console.log(
+          "Testing report functionality with real Neptune's Pride engine...",
+        );
+        document.getElementById("extension-status").textContent =
+          "Testing reports...";
+
+        // This would normally trigger the extension's report generation
+        if (
+          window.NeptunesPride &&
+          window.NeptunesPride.crux &&
+          window.NeptunesPride.crux.trigger
+        ) {
+          window.NeptunesPride.crux.trigger("show_screen", "n_p_a");
+          console.log("Report trigger sent via real Crux");
+        } else if (
+          window.Crux &&
+          window.Crux.crux &&
+          window.Crux.crux.trigger
+        ) {
+          window.Crux.crux.trigger("show_screen", "n_p_a");
+          console.log("Report trigger sent via Crux");
+        } else {
+          console.log(
+            "Extension report function not available - no Crux trigger found",
+          );
+        }
+      };
     </script>
 
     <noscript>
-        <div style="width:456px; margin:16px; margin-left:auto; margin-right:auto;">
-            <p><em>Neptune's Pride requires JavaScript.</em></p>
-        </div>
+      <div
+        style="
+          width: 456px;
+          margin: 16px;
+          margin-left: auto;
+          margin-right: auto;
+        "
+      >
+        <p><em>Neptune's Pride requires JavaScript.</em></p>
+      </div>
     </noscript>
 
-    <div id="contentArea" style="width: 100%; margin-right: auto; margin-left: auto;"></div>
+    <div
+      id="contentArea"
+      style="width: 100%; margin-right: auto; margin-left: auto"
+    ></div>
 
     <div id="loadingArea" class="txt_center fullscreen pad12">LOADING</div>
 
     <!-- Image resources for Neptune's Pride -->
-    <div id="image-resources" style="display: none;">
-        <img id="img_clouds" src="/images/map/clouds2.jpg">
-        <img id="img_clouds_alt" src="/images/map/clouds3.jpg">
-        <img id="img_nebular" src="/images/nebular.png">
-        <img id="img_ripple" src="/images/map/halo.png">
-        <img id="img_halo" src="/images/map/halo2.png">
-        <img id="img_stars" src="/images/map/stars.png">
-        <img id="img_wormhole" src="/images/map/wh.png">
-        <img id="img_fleet_range" src="/images/map/fleet_range.png">
-        <img id="img_scanning_range" src="/images/map/scanning_range.png">
-        <img id="img_fleet_waypoint" src="/images/map/fleet_waypoint.png">
-        <img id="img_fleet_waypoint_next" src="/images/map/fleet_waypoint_next.png">
-        <img id="img_selection_ring" src="/images/map/selection_ring.png">
+    <div id="image-resources" style="display: none">
+      <img id="img_clouds" src="/images/map/clouds2.jpg" />
+      <img id="img_clouds_alt" src="/images/map/clouds3.jpg" />
+      <img id="img_nebular" src="/images/nebular.png" />
+      <img id="img_ripple" src="/images/map/halo.png" />
+      <img id="img_halo" src="/images/map/halo2.png" />
+      <img id="img_stars" src="/images/map/stars.png" />
+      <img id="img_wormhole" src="/images/map/wh.png" />
+      <img id="img_fleet_range" src="/images/map/fleet_range.png" />
+      <img id="img_scanning_range" src="/images/map/scanning_range.png" />
+      <img id="img_fleet_waypoint" src="/images/map/fleet_waypoint.png" />
+      <img
+        id="img_fleet_waypoint_next"
+        src="/images/map/fleet_waypoint_next.png"
+      />
+      <img id="img_selection_ring" src="/images/map/selection_ring.png" />
     </div>
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script>
-        if (typeof google !== 'undefined') {
-            google.load('visualization', '1.0', {'packages':['corechart']});
-        }
+      if (typeof google !== "undefined") {
+        google.load("visualization", "1.0", { packages: ["corechart"] });
+      }
     </script>
-</body>
+  </body>
 </html>
