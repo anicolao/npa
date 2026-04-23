@@ -1,5 +1,8 @@
 import { createContext } from "./esbuild.baseconfig";
 
 const context = await createContext(true);
-await context.watch();
-context.dispose();
+try {
+  await context.rebuild();
+} finally {
+  await context.dispose();
+}

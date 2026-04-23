@@ -122,6 +122,15 @@
       import { Inbox } from "/scripts/client/np/inbox.js";
       import { Game } from "/scripts/client/np/game.js";
 
+      const hasAgentHooks = () =>
+        !!(
+          window.NeptunesPride &&
+          window.NeptunesPride.npui &&
+          window.NeptunesPride.npui.npaMenu &&
+          window.NeptunesPride.npui.status &&
+          window.NeptunesPride.npui.status.npaMenuBtn
+        );
+
       $(window).ready(function () {
         console.log(
           "DOM loaded, initializing real Neptune's Pride environment...",
@@ -204,6 +213,17 @@
                 NP.npui.map.draw();
               }
 
+              setTimeout(() => {
+                if (NP.crux && NP.crux.trigger) {
+                  NP.crux.trigger("order:full_universe", gameData);
+                }
+                if (NP.np && NP.np.trigger) {
+                  NP.np.trigger("order:full_universe", gameData);
+                  NP.np.trigger("order:player_achievements");
+                  NP.np.trigger("refresh_interface");
+                }
+              }, 1000);
+
               document.getElementById("game-status").textContent =
                 "Loaded (Real Data)";
               document.getElementById("game-status").style.color = "#4a9";
@@ -225,10 +245,7 @@
 
         // Check if extension is loaded
         setTimeout(() => {
-          if (
-            window.NeptunesPrideAgent ||
-            (window.NeptunesPride && window.NeptunesPride.version)
-          ) {
+          if (hasAgentHooks()) {
             document.getElementById("extension-status").textContent = "Active";
             document.getElementById("extension-status").style.color = "#4a9";
           } else {
@@ -282,21 +299,14 @@
         // This would normally trigger the extension's report generation
         if (
           window.NeptunesPride &&
-          window.NeptunesPride.crux &&
-          window.NeptunesPride.crux.trigger
+          window.NeptunesPride.npui &&
+          hasAgentHooks()
         ) {
-          window.NeptunesPride.crux.trigger("show_screen", "n_p_a");
-          console.log("Report trigger sent via real Crux");
-        } else if (
-          window.Crux &&
-          window.Crux.crux &&
-          window.Crux.crux.trigger
-        ) {
-          window.Crux.crux.trigger("show_screen", "n_p_a");
-          console.log("Report trigger sent via Crux");
+          window.NeptunesPride.npui.trigger("show_npa", "npa_ui_screen");
+          console.log("Report trigger sent via NPUI");
         } else {
           console.log(
-            "Extension report function not available - no Crux trigger found",
+            "Extension report function not available - no NPUI agent hooks found",
           );
         }
       };
