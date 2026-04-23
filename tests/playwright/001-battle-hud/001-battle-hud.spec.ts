@@ -41,27 +41,45 @@ test("documents the battle HUD controls and timebases", async ({
 
   const centerOnBattle = async () => {
     await appPage.evaluate(
-      ({ battleStarUid, syntheticFleetUidBase }) => {
+      ({ battleStarUid, waypointStarUid, syntheticFleetUidBase }) => {
         const np = window.NeptunesPride;
-        np.npui.map.scale = 140; // Zoom out to see the route
-        np.crux.trigger("show_star_uid", String(battleStarUid));
+        const s1 = np.universe.galaxy.stars[battleStarUid];
+        const s2 = np.universe.galaxy.stars[waypointStarUid];
+        
+        // Disable the game's automatic UI offsetting during centering
+        np.universe.interfaceSettings.screenPos = "none";
+        np.universe.interfaceSettings.showStarPimples = false;
+        np.universe.interfaceSettings.showScanningRanges = false;
+        
+        np.npui.map.scale = 180; 
+        
+        if (s1 && s2) {
+          const cx = (s1.x + s2.x) / 2 + 0.5;
+          const cy = (s1.y + s2.y) / 2 + 0.2;
+          // Use the game's internal centering method but without sliding
+          np.npui.map.centerPointInMap(cx, cy);
+        }
 
-        // Re-select the synthetic fleet if show_star_uid changed selection
+        // Re-select the synthetic fleet if something changed selection
         const fleet = Object.values(np.universe.galaxy.fleets)
           .filter((candidate) => candidate.uid >= syntheticFleetUidBase)
           .sort((left, right) => right.uid - left.uid)[0];
+        
         if (fleet) {
           np.universe.selectFleet(fleet);
         }
+        
+        np.np.trigger("map_rebuild");
       },
       {
         battleStarUid: BATTLE_STAR_UID,
+        waypointStarUid: WAYPOINT_STAR_UID,
         syntheticFleetUidBase: SYNTHETIC_FLEET_UID_BASE,
       },
     );
-    // Give the map a moment to settle
+    // Give it a long time to settle and for any animations to stop
     await waitForAnimations(appPage);
-    await appPage.waitForTimeout(1000);
+    await appPage.waitForTimeout(2000);
   };
 
   await centerOnBattle();
@@ -271,7 +289,19 @@ async function prepareBattleHudScenario(appPage: Page): Promise<void> {
   await appPage.evaluate(
     ({ battleStarUid, waypointStarUid, syntheticFleetUidBase }) => {
       const np = window.NeptunesPride;
-      np.npui.map.scale = 140;
+      
+      np.universe.interfaceSettings.screenPos = "none";
+      np.universe.interfaceSettings.showStarPimples = false;
+      np.universe.interfaceSettings.showScanningRanges = false;
+      np.npui.map.scale = 180;
+
+      const s1 = np.universe.galaxy.stars[battleStarUid];
+      const s2 = np.universe.galaxy.stars[waypointStarUid];
+      if (s1 && s2) {
+        // Offset slightly to the right/down to move stars to center/left
+        np.npui.map.centerPointInMap((s1.x + s2.x) / 2 + 0.5, (s1.y + s2.y) / 2 + 0.2);
+      }
+
       np.crux.trigger("show_star_uid", String(battleStarUid));
       window.Mousetrap.trigger("x");
 
