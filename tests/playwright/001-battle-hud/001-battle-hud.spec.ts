@@ -39,6 +39,27 @@ test("documents the battle HUD controls and timebases", async ({
   await waitForAgentHooks(appPage);
   await prepareBattleHudScenario(appPage);
 
+  const centerOnBattle = async () => {
+    await appPage.evaluate(
+      ({ battleStarUid, waypointStarUid }) => {
+        const np = window.NeptunesPride;
+        const s1 = np.universe.galaxy.stars[battleStarUid];
+        const s2 = np.universe.galaxy.stars[waypointStarUid];
+        if (s1 && s2) {
+          // Center on the midpoint between the two stars
+          np.npui.map.x = (s1.x + s2.x) / 2;
+          np.npui.map.y = (s1.y + s2.y) / 2;
+          np.npui.map.scale = 180; // slightly zoomed out to fit both
+          np.np.trigger("map_rebuild");
+        }
+      },
+      { battleStarUid: BATTLE_STAR_UID, waypointStarUid: WAYPOINT_STAR_UID },
+    );
+    // Give the map a moment to settle
+    await appPage.waitForTimeout(500);
+  };
+
+  await centerOnBattle();
   await helper.step("route-enemy-fleet-relative-eta", {
     description: "Create a fake enemy fleet from the selected frontline star",
     verifications: [
@@ -97,6 +118,7 @@ test("documents the battle HUD controls and timebases", async ({
     },
   });
 
+  await centerOnBattle();
   await helper.step("cycle-to-clock-and-relative-ticks", {
     description: "Cycle the battle ETA through clock time and relative ticks",
     verifications: [
@@ -142,6 +164,7 @@ test("documents the battle HUD controls and timebases", async ({
     },
   });
 
+  await centerOnBattle();
   await helper.step("cycle-to-absolute-tick-numbers", {
     description: "Show the same battle ETA as absolute tick numbers",
     verifications: [
@@ -182,6 +205,7 @@ test("documents the battle HUD controls and timebases", async ({
     },
   });
 
+  await centerOnBattle();
   await helper.step("apply-combat-handicap", {
     description: "Model a worse-case fight by giving the enemy extra weapons",
     verifications: [
@@ -241,7 +265,14 @@ async function prepareBattleHudScenario(appPage: Page): Promise<void> {
   await appPage.evaluate(
     ({ battleStarUid, waypointStarUid, syntheticFleetUidBase }) => {
       const np = window.NeptunesPride;
-      np.npui.map.scale = 220;
+      const s1 = np.universe.galaxy.stars[battleStarUid];
+      const s2 = np.universe.galaxy.stars[waypointStarUid];
+
+      if (s1 && s2) {
+        np.npui.map.x = (s1.x + s2.x) / 2;
+        np.npui.map.y = (s1.y + s2.y) / 2;
+      }
+      np.npui.map.scale = 180;
       np.crux.trigger("show_star_uid", String(battleStarUid));
       window.Mousetrap.trigger("x");
 
