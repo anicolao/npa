@@ -70,6 +70,21 @@ export class TestStepHelper {
     fs.mkdirSync(screenshotDir, { recursive: true });
 
     await waitForAnimations(this.page);
+
+    // Hide Playwright's own actionability/recording overlays if present
+    await this.page.addStyleTag({
+      content: `
+        #pw-recorder-root, 
+        .playwright-highlight,
+        [data-pw-highlight] {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+      `,
+    });
+
     await this.page.screenshot({
       path: path.join(screenshotDir, filename),
       ...options.screenshot,
