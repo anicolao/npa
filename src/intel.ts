@@ -5896,7 +5896,7 @@ async function NeptunesPrideAgent() {
       api_version: "0.1",
       code: apiKey,
     };
-    const apiurl = `https://${window.location.host}/api`;
+    const apiurl = `${window.location.origin}/api`;
     const api = await get(apiurl, params);
     await store.set(cacheKey, api.scanning_data);
     if (api.scanning_data) {
