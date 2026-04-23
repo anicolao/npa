@@ -19,29 +19,31 @@ mkdir -p "$OUTPUT_DIR"
 
 # List of game files to download
 GAME_FILES=(
-  "np/game.js"
-  "np/inbox.js"
-  "np/interface.js"
-  "np/map.js"
-  "np/recorder.js"
-  "np/screens.js"
-  "np/universe.js"
-  "crux.js"
-  "npui_shared.js"
-  "templates.js"
-  "widgets.js"
+	"np/game.js"
+	"np/inbox.js"
+	"np/interface.js"
+	"np/map.js"
+	"np/recorder.js"
+	"np/screens.js"
+	"np/universe.js"
+	"anim.js"
+	"crux.js"
+	"npui_shared.js"
+	"templates.js"
+	"widgets.js"
+	"np_widgets.js"
 )
 
 # Download each file
 for FILE in "${GAME_FILES[@]}"; do
-  DIR="$OUTPUT_DIR/$(dirname "$FILE")"
-  mkdir -p "$DIR"
-  cd "$DIR"
-  
-  echo "Downloading $FILE..."
-  curl -# -J -O "https://np4.ironhelmet.com/scripts/client/$FILE"
-  
-  cd "$OLDPWD"
+	DIR="$OUTPUT_DIR/$(dirname "$FILE")"
+	mkdir -p "$DIR"
+	cd "$DIR"
+
+	echo "Downloading $FILE..."
+	curl -# -J -O "https://np4.ironhelmet.com/scripts/client/$FILE"
+
+	cd "$OLDPWD"
 done
 
 echo "Game files downloaded to $OUTPUT_DIR"
