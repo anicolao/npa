@@ -47,8 +47,13 @@ test("documents the battle HUD controls and timebases", async ({
         const s2 = np.universe.galaxy.stars[waypointStarUid];
         if (s1 && s2) {
           // Center on the midpoint between the two stars
-          np.npui.map.x = (s1.x + s2.x) / 2;
-          np.npui.map.y = (s1.y + s2.y) / 2;
+          // Offset the center slightly to the right/down to move the stars toward the center/left
+          // NP map coordinates: positive X is right, positive Y is down.
+          // To move stars left in viewport, we move map.x right.
+          // To move stars up in viewport, we move map.y down.
+          // The battle HUD (star inspector) is on the right, so we want the action in the left/center.
+          np.npui.map.x = (s1.x + s2.x) / 2 + 0.5;
+          np.npui.map.y = (s1.y + s2.y) / 2 + 0.2;
           np.npui.map.scale = 180; // slightly zoomed out to fit both
           np.np.trigger("map_rebuild");
         }
@@ -269,8 +274,8 @@ async function prepareBattleHudScenario(appPage: Page): Promise<void> {
       const s2 = np.universe.galaxy.stars[waypointStarUid];
 
       if (s1 && s2) {
-        np.npui.map.x = (s1.x + s2.x) / 2;
-        np.npui.map.y = (s1.y + s2.y) / 2;
+        np.npui.map.x = (s1.x + s2.x) / 2 + 0.5;
+        np.npui.map.y = (s1.y + s2.y) / 2 + 0.2;
       }
       np.npui.map.scale = 180;
       np.crux.trigger("show_star_uid", String(battleStarUid));
