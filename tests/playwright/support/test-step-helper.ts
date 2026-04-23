@@ -76,7 +76,8 @@ export class TestStepHelper {
       content: `
         #pw-recorder-root, 
         .playwright-highlight,
-        [data-pw-highlight] {
+        [data-pw-highlight],
+        .ui-overlay {
           display: none !important;
           visibility: hidden !important;
           opacity: 0 !important;
