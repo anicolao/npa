@@ -11,6 +11,7 @@ bun.exe
 # Testing artifacts
 test-results/
 test-game-files/
+tests/test-server/static/scripts/
 playwright-report/
 test-results.json
 
