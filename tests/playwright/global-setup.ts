@@ -8,6 +8,12 @@ const repoRoot = path.resolve(__dirname, "../..");
 const downloadScript = path.join(repoRoot, "scripts/download-game-files.sh");
 
 export default async function globalSetup(): Promise<void> {
+  console.log("Building extension bundle for Playwright...");
+  execFileSync("npm", ["run", "build"], {
+    cwd: repoRoot,
+    stdio: "inherit",
+  });
+
   console.log("Refreshing live Neptune's Pride client assets for Playwright...");
   execFileSync("bash", [downloadScript, "test-game-files"], {
     cwd: repoRoot,
