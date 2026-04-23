@@ -3,6 +3,7 @@ import SwiftUI
 import WebKit
 
 struct GameWebView: UIViewRepresentable {
+    @ObservedObject var controller: GameWebViewController
     private let startURL = URL(string: "https://np.ironhelmet.com/")!
 
     func makeCoordinator() -> Coordinator {
@@ -17,10 +18,10 @@ struct GameWebView: UIViewRepresentable {
         configuration.allowsInlineMediaPlayback = true
         configuration.websiteDataStore = .default()
 
-        let controller = WKUserContentController()
+        let userContentController = WKUserContentController()
 
         if let cssScript = InjectedResources.cssInjectionScript() {
-            controller.addUserScript(
+            userContentController.addUserScript(
                 WKUserScript(
                     source: cssScript,
                     injectionTime: .atDocumentStart,
@@ -31,7 +32,7 @@ struct GameWebView: UIViewRepresentable {
         }
 
         if let javaScript = InjectedResources.javaScriptInjectionScript() {
-            controller.addUserScript(
+            userContentController.addUserScript(
                 WKUserScript(
                     source: javaScript,
                     injectionTime: .atDocumentEnd,
@@ -41,13 +42,14 @@ struct GameWebView: UIViewRepresentable {
             )
         }
 
-        configuration.userContentController = controller
+        configuration.userContentController = userContentController
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.allowsBackForwardNavigationGestures = true
         webView.customUserAgent = DesktopUserAgent.value
+        controller.attach(webView)
 
         if #available(iOS 16.4, *) {
             webView.isInspectable = true
@@ -58,6 +60,33 @@ struct GameWebView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
+
+final class GameWebViewController: ObservableObject {
+    private weak var webView: WKWebView?
+
+    func attach(_ webView: WKWebView) {
+        self.webView = webView
+    }
+
+    func scrollToTop() {
+        guard let scrollView = webView?.scrollView else { return }
+        let topOffset = CGPoint(x: scrollView.contentOffset.x, y: -scrollView.adjustedContentInset.top)
+        scrollView.setContentOffset(topOffset, animated: true)
+    }
+
+    func scrollToBottom() {
+        guard let scrollView = webView?.scrollView else { return }
+
+        let topOffsetY = -scrollView.adjustedContentInset.top
+        let bottomOffsetY = max(
+            topOffsetY,
+            scrollView.contentSize.height - scrollView.bounds.height + scrollView.adjustedContentInset.bottom
+        )
+
+        let bottomOffset = CGPoint(x: scrollView.contentOffset.x, y: bottomOffsetY)
+        scrollView.setContentOffset(bottomOffset, animated: true)
+    }
 }
 
 final class Coordinator: NSObject, WKNavigationDelegate {
