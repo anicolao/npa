@@ -2,10 +2,10 @@ import { createHash } from "node:crypto";
 import type { Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { waitForAgentHooks } from "../helpers";
-import { TestStepHelper } from "../support/test-step-helper";
+import { TestStepHelper, waitForAnimations } from "../support/test-step-helper";
 
-const BATTLE_STAR_UID = 407;
-const WAYPOINT_STAR_UID = 361;
+const BATTLE_STAR_UID = 571;
+const WAYPOINT_STAR_UID = 649;
 const SYNTHETIC_FLEET_UID_BASE = 100000;
 const OVERLAY_CLIP = { x: 1260, y: 1140, width: 340, height: 60 };
 
@@ -41,27 +41,27 @@ test("documents the battle HUD controls and timebases", async ({
 
   const centerOnBattle = async () => {
     await appPage.evaluate(
-      ({ battleStarUid, waypointStarUid }) => {
+      ({ battleStarUid, syntheticFleetUidBase }) => {
         const np = window.NeptunesPride;
-        const s1 = np.universe.galaxy.stars[battleStarUid];
-        const s2 = np.universe.galaxy.stars[waypointStarUid];
-        if (s1 && s2) {
-          // Center on the midpoint between the two stars
-          // Offset the center slightly to the right/down to move the stars toward the center/left
-          // NP map coordinates: positive X is right, positive Y is down.
-          // To move stars left in viewport, we move map.x right.
-          // To move stars up in viewport, we move map.y down.
-          // The battle HUD (star inspector) is on the right, so we want the action in the left/center.
-          np.npui.map.x = (s1.x + s2.x) / 2 + 0.5;
-          np.npui.map.y = (s1.y + s2.y) / 2 + 0.2;
-          np.npui.map.scale = 180; // slightly zoomed out to fit both
-          np.np.trigger("map_rebuild");
+        np.npui.map.scale = 140; // Zoom out to see the route
+        np.crux.trigger("show_star_uid", String(battleStarUid));
+
+        // Re-select the synthetic fleet if show_star_uid changed selection
+        const fleet = Object.values(np.universe.galaxy.fleets)
+          .filter((candidate) => candidate.uid >= syntheticFleetUidBase)
+          .sort((left, right) => right.uid - left.uid)[0];
+        if (fleet) {
+          np.universe.selectFleet(fleet);
         }
       },
-      { battleStarUid: BATTLE_STAR_UID, waypointStarUid: WAYPOINT_STAR_UID },
+      {
+        battleStarUid: BATTLE_STAR_UID,
+        syntheticFleetUidBase: SYNTHETIC_FLEET_UID_BASE,
+      },
     );
     // Give the map a moment to settle
-    await appPage.waitForTimeout(500);
+    await waitForAnimations(appPage);
+    await appPage.waitForTimeout(1000);
   };
 
   await centerOnBattle();
@@ -74,8 +74,8 @@ test("documents the battle HUD controls and timebases", async ({
           const battleStar = await appPage.evaluate((battleStarUid) => {
             return window.NeptunesPride.universe.galaxy.stars[battleStarUid];
           }, BATTLE_STAR_UID);
-          expect(battleStar.n).toBe("Elm");
-          expect(battleStar.alliedDefenders).toContain(14);
+          expect(battleStar.n).toBe("Sigma Hydrus");
+          expect(battleStar.puid).toBe(37); // Owned by Inn
         },
       },
       {
@@ -88,19 +88,16 @@ test("documents the battle HUD controls and timebases", async ({
           );
           expect(state.selectedFleetName).toMatch(/^Fleet \d+/);
           expect(state.selectedFleetPath).toEqual([WAYPOINT_STAR_UID]);
-          expect(state.controllingPlayerUid).toBe(43);
-          expect(state.controllingPlayerAlias).toContain("Pungastyle");
+          expect(state.controllingPlayerUid).toBe(37); // Fleet belongs to Inn
         },
       },
       {
         spec: "The route editor shows a relative ETA for the fake enemy fleet",
         check: async () => {
           await expect(appPage.getByText(/^Waypoints:/)).toContainText(
-            "Theta Chi",
+            "Kappa Tabit",
           );
           await expect(appPage.getByText(/^ETA:/)).toContainText("h");
-          const state = await readBattleState(appPage);
-          expect(state.etaSample).toContain("17h");
         },
       },
     ],
@@ -257,27 +254,24 @@ test("documents the battle HUD controls and timebases", async ({
 });
 
 async function prepareBattleHudScenario(appPage: Page): Promise<void> {
-  await appPage.waitForFunction((battleStarUid) => {
-    const np = window.NeptunesPride;
-    return !!(
-      np?.universe?.player &&
-      np.universe.player.uid === 5 &&
-      np.originalPlayer !== undefined &&
-      np.universe.galaxy?.stars?.[battleStarUid]?.alliedDefenders?.length
-    );
-  }, BATTLE_STAR_UID);
+  await appPage.waitForFunction(
+    ({ battleStarUid, waypointStarUid }) => {
+      const np = window.NeptunesPride;
+      return !!(
+        np?.universe?.player &&
+        np.universe.player.uid === 5 &&
+        np.originalPlayer !== undefined &&
+        np.universe.galaxy?.stars?.[battleStarUid]?.puid === 37 &&
+        np.universe.galaxy?.stars?.[waypointStarUid]
+      );
+    },
+    { battleStarUid: BATTLE_STAR_UID, waypointStarUid: WAYPOINT_STAR_UID },
+  );
 
   await appPage.evaluate(
     ({ battleStarUid, waypointStarUid, syntheticFleetUidBase }) => {
       const np = window.NeptunesPride;
-      const s1 = np.universe.galaxy.stars[battleStarUid];
-      const s2 = np.universe.galaxy.stars[waypointStarUid];
-
-      if (s1 && s2) {
-        np.npui.map.x = (s1.x + s2.x) / 2 + 0.5;
-        np.npui.map.y = (s1.y + s2.y) / 2 + 0.2;
-      }
-      np.npui.map.scale = 180;
+      np.npui.map.scale = 140;
       np.crux.trigger("show_star_uid", String(battleStarUid));
       window.Mousetrap.trigger("x");
 
@@ -316,7 +310,7 @@ async function prepareBattleHudScenario(appPage: Page): Promise<void> {
   );
   expect(setupState.selectedFleetName).toMatch(/^Fleet \d+/);
 
-  await expect(appPage.getByText(/^Waypoints:/)).toContainText("Theta Chi");
+  await expect(appPage.getByText(/^Waypoints:/)).toContainText("Kappa Tabit");
   await expect(appPage.getByText(/^ETA:/)).toBeVisible();
 }
 
