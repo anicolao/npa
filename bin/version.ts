@@ -25,6 +25,7 @@ export async function writeVersionAndManifest() {
     host_permissions: [
       "https://np.ironhelmet.com/*",
       "https://np4.ironhelmet.com/*",
+      "http://localhost:8080/*",
     ],
     action: {},
     web_accessible_resources: [
@@ -38,6 +39,7 @@ export async function writeVersionAndManifest() {
         matches: [
           "https://np.ironhelmet.com/*",
           "https://np4.ironhelmet.com/*",
+          "http://localhost:8080/*",
         ],
         css: ["intel.css"],
       },
