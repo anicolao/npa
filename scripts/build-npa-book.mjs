@@ -484,7 +484,8 @@ code {
 }
 
 figure {
-  margin: 24px 0 0;
+  margin: 32px auto 0;
+  max-width: 90%;
 }
 
 img {
@@ -493,13 +494,15 @@ img {
   border-radius: 8px;
   display: block;
   height: auto;
+  margin: 0 auto;
   max-width: 100%;
 }
 
 figcaption {
   color: var(--muted);
   font-size: 0.9rem;
-  margin-top: 8px;
+  margin-top: 12px;
+  text-align: center;
 }
 
 footer {
