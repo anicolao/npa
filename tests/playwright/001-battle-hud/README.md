@@ -16,18 +16,27 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 - [x] The route editor shows a relative ETA for the fake enemy fleet
 - [x] The screenshot frame keeps Hot Sham near the center with the selected fleet, route, and Red Chertan waypoint visible
 
-## Cycle the battle ETA through clock time and relative ticks
+## Show the battle ETA as clock time
 
-![Cycle the battle ETA through clock time and relative ticks](./screenshots/001-cycle-to-clock-and-relative-ticks.png)
+![Show the battle ETA as clock time](./screenshots/001-cycle-to-clock-time.png)
 
 ### Verifications
-- [x] The % hotkey produces an absolute clock-time ETA before moving to relative ticks
+- [x] The % hotkey changes the route ETA to an absolute clock-time display
+- [x] The route editor shows the clock-time ETA
+- [x] The clock-time screenshot still frames Hot Sham, the selected fake fleet, and the Red Chertan route
+
+## Show the battle ETA as relative ticks
+
+![Show the battle ETA as relative ticks](./screenshots/002-cycle-to-relative-ticks.png)
+
+### Verifications
+- [x] The next % press changes the route ETA to relative ticks
 - [x] The route editor updates to the relative-ticks view
 - [x] The relative-ticks screenshot still frames Hot Sham, the selected fake fleet, and the Red Chertan route
 
 ## Show the same battle ETA as absolute tick numbers
 
-![Show the same battle ETA as absolute tick numbers](./screenshots/002-cycle-to-absolute-tick-numbers.png)
+![Show the same battle ETA as absolute tick numbers](./screenshots/003-cycle-to-absolute-tick-numbers.png)
 
 ### Verifications
 - [x] A further % press changes the ETA sample to an absolute tick number
@@ -36,7 +45,7 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 
 ## Model a worse-case fight by giving the enemy extra weapons
 
-![Model a worse-case fight by giving the enemy extra weapons](./screenshots/003-apply-combat-handicap.png)
+![Model a worse-case fight by giving the enemy extra weapons](./screenshots/004-apply-combat-handicap.png)
 
 ### Verifications
 - [x] The . hotkey changes the rendered battle overlay in the HUD footer
