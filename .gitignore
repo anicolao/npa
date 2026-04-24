@@ -7,6 +7,7 @@ node_modules/
 src/version.js
 .direnv/
 bun.exe
+utilities/
 
 # Testing artifacts
 test-results/

@@ -12,6 +12,11 @@ download() {
 	local path="$1"
 	local output="$2"
 	curl -fsSL --compressed "$NP4_BASE_URL/$path" -o "$output"
+	case "$output" in
+	*.svg)
+		perl -0pi -e 's/[ \t]+\z//; $_ .= "\n" unless /\n\z/' "$output"
+		;;
+	esac
 }
 
 # Create directories

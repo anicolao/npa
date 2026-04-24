@@ -10,8 +10,7 @@ const downloadResourcesScript = path.join(
   repoRoot,
   "scripts/download-external-resources.sh",
 );
-const fixedScreenshotVersion =
-  "Neptune's Pride Agent v2.2.89 (e2e screenshots)";
+const fixedScreenshotVersion = "Neptune's Pride Agent v9.9.99 (fake version)";
 
 export default async function globalSetup(): Promise<void> {
   console.log("Building extension bundle for Playwright...");

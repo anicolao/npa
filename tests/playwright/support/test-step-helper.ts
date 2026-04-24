@@ -156,7 +156,7 @@ export class TestStepHelper {
       lines.push("");
     }
 
-    return `${lines.join("\n")}\n`;
+    return `${lines.join("\n").trimEnd()}\n`;
   }
 
   private buildDocs(metadata: ScenarioMetadata): string {
@@ -195,7 +195,7 @@ export class TestStepHelper {
       lines.push("");
     }
 
-    return `${lines.join("\n")}\n`;
+    return `${lines.join("\n").trimEnd()}\n`;
   }
 
   private getScenarioDir(): string {

@@ -96,4 +96,3 @@ You can also use fake fleets to plan routes and see exactly when they will enter
 
 ### What to expect
 - The scan HUD displays the expected entry tick for the planned route.
-
