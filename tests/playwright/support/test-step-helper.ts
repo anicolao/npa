@@ -165,8 +165,6 @@ export class TestStepHelper {
       "",
       metadata.docsSummary,
       "",
-      `Book section: \`${metadata.bookSection}\``,
-      "",
     ];
 
     for (const step of this.steps) {

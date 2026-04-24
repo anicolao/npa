@@ -75,7 +75,7 @@ test("documents territory display and scanning HUD controls", async ({
       "Verify that the territory overlay can be framed, restyled through all four modes, recolored to white, and combined with both existing and fake fleets to measure scan ETA.",
     docsTitle: "Territory Display And Scanning HUD",
     docsSummary:
-      "The territory and scanning HUD overlays make the map easier to read while planning. They show which empire owns the selected area, let you cycle through four different territory rendering styles, optionally recolor your own empire white, and show exactly when any fleet will enter the scanning range of the selected star.",
+      "The territory and scanning HUD overlays make the map easier to read while planning. They show which empire owns the selected area, allow you to cycle through different territory rendering styles, and provide precise arrival times for fleets entering a star's scanning range.",
     bookSection: "Territory display and scanning HUD",
   });
 
@@ -107,15 +107,14 @@ test("documents territory display and scanning HUD controls", async ({
     ],
     documentation: {
       summary:
-        "Select one of your stars, such as `Mega Segin`, to show the territory overlay for that empire. The colored territory shape summarizes the selected empire's local reach, while the map still shows nearby named stars for orientation.",
+        "Selecting a star highlights the territory owned by that empire. This colored shape provides a quick visual summary of an empire's local influence and borders. In the example below, selecting `Mega Segin` reveals the surrounding empire's reach.",
       howToUse: [
-        "Select a star owned by the empire you want to inspect.",
-        "Keep the map zoomed far enough out to see the surrounding territory edge.",
+        "Select any star on the map.",
+        "Zoom out to see the full extent of the territory overlay.",
       ],
       expectedResult: [
-        "`Mega Segin` stays near the middle of the screenshot.",
-        "The selected empire's territory overlay is visible around nearby Osric stars.",
-        "The map still shows enough neighboring stars to understand where the territory edge sits.",
+        "The territory of the selected star's owner is shaded on the map.",
+        "Neighboring stars (such as `Mega Segin` in the example) remain visible to help you orient the borders.",
       ],
     },
   });
@@ -139,8 +138,8 @@ test("documents territory display and scanning HUD controls", async ({
       ],
       documentation: {
         summary: `Style ${style + 1} offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on \`Mega Segin\`.`,
-        howToUse: ["Press `Ctrl+9` to cycle to the next style."],
-        expectedResult: ["The territory rendering updates immediately."],
+        howToUse: ["Press **Ctrl+9** to cycle to the next style."],
+        expectedResult: ["The visual style of the territory rendering updates immediately."],
       },
     });
   }
@@ -164,12 +163,12 @@ test("documents territory display and scanning HUD controls", async ({
     ],
     documentation: {
       summary:
-        "Press `w` to recolor your own empire white. This is useful when your normal player color blends into the nebula, territory fill, or another nearby empire's color. This comparison uses the same zoom and centering as the previous style examples.",
+        "If your player color is difficult to see against the background or neighboring empires, you can toggle your own empire's color to white. This only changes your local view and does not affect how other players see you.",
       howToUse: [
         "Select one of your own stars.",
-        "Press `w` to toggle your map color to white.",
+        "Press **w** to toggle your map color to white.",
       ],
-      expectedResult: ["Your empire's map color changes to white."],
+      expectedResult: ["Your empire's map color changes to white, as seen in the screenshot."],
     },
   });
 
@@ -230,15 +229,14 @@ test("documents territory display and scanning HUD controls", async ({
       },
     ],
     documentation: {
-      summary: `When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects \`${FAST_JIH_STAR_NAME}\`, owned by \`piers plowman\`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via \`${GREY_VISIBILITY_STAR_NAME}\` (Grey ETA).`,
+      summary: `Knowing exactly when a fleet will be detected is critical for timing your maneuvers. NPA displays color-coded scan ETA labels for fleets approaching a star. In this example, the enemy star \`${FAST_JIH_STAR_NAME}\` is being approached by multiple fleets.`,
       howToUse: [
-        "Select an enemy star being approached by multiple fleets.",
-        "Look for the distinct color-coded ETA labels near each fleet.",
+        "Select an enemy star that fleets are approaching.",
+        "Look for the distinct color-coded ETA labels near each fleet icon.",
       ],
       expectedResult: [
-        "Multiple scan ETA labels appear on the map.",
-        "Green labels (like for `Fleet 602`) indicate upcoming first-time detection.",
-        "Grey labels (like for `Fleet 1443`) indicate when this specific star will also gain a scan lock on an already-detected fleet.",
+        "**Green Labels:** Indicate a \"dark\" fleet's first-time detection by this star.",
+        "**Grey Labels:** Indicate when this star will gain a scan lock on a fleet that is already visible via other stars.",
       ],
     },
   });
@@ -260,12 +258,12 @@ test("documents territory display and scanning HUD controls", async ({
       summary:
         "You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.",
       howToUse: [
-        "Press `x` to create a fake planning fleet.",
+        "Press **x** to create a fake planning fleet.",
         "Add waypoints to the destination.",
-        "Select the destination star to see the scan ETA for that route.",
+        "Select the destination star (like \`${TARGET_STAR_NAME}\` in the example) to see the scan ETA for that route.",
       ],
       expectedResult: [
-        "The scan HUD displays the expected entry tick for the planned route.",
+        "As shown in the screenshot, the scan HUD displays the expected entry tick for the planned route.",
       ],
     },
   });
