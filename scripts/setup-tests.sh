@@ -29,6 +29,9 @@ else
 	echo "✅ Real game files already present."
 fi
 
+echo "Downloading external styles, images, libraries, and fonts..."
+./scripts/download-external-resources.sh
+
 # Check if extension is built
 if [ ! -d "dist" ] || [ ! -f "dist/intel.js" ]; then
 	echo "WARNING: Extension not built. Please run 'npm run build' before running tests."

@@ -81,7 +81,7 @@ import {
 } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
 /* global Crux, NeptunesPride, jQuery, */
-import { getVersion } from "./version.js";
+import { getVersion } from "./version";
 import { getWithinRange } from "./visibility";
 
 export let allSeenKeys: string[] = [];
