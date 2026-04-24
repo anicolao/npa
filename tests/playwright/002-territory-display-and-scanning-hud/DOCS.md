@@ -1,6 +1,6 @@
 # Territory Display And Scanning HUD
 
-The territory and scanning HUD overlays make the map easier to read while planning. They show which empire owns the selected area, let you change the territory rendering style, optionally recolor your own empire white, and show when a routed fleet will enter an enemy's scanning range.
+The territory and scanning HUD overlays make the map easier to read while planning. They show which empire owns the selected area, let you cycle through four different territory rendering styles, optionally recolor your own empire white, and show exactly when any fleet will enter the scanning range of the selected star.
 
 Book section: `Territory display and scanning HUD`
 
@@ -19,57 +19,92 @@ Select one of your stars, such as `Mega Segin`, to show the territory overlay fo
 - The selected empire's territory overlay is visible around nearby Osric stars.
 - The map still shows enough neighboring stars to understand where the territory edge sits.
 
-## Cycle the territory display style
+## Cycle to territory display style 2
 
-Press `Ctrl+9` to cycle the territory display style. This changes how strongly NPA draws the selected empire's territory, which helps when the default fill is either too subtle or too dominant for the current map background.
+Style 2 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on `Mega Segin`.
 
-![Cycle the territory display style](./screenshots/001-cycle-territory-display-style.png)
+![Cycle to territory display style 2](./screenshots/001-cycle-territory-display-style-2.png)
 
 ### How to use it
-- Select the empire or star whose territory you are inspecting.
-- Press `Ctrl+9` to advance to the next territory style.
-- Use `Ctrl+8` if you want to cycle backward instead.
+- Press `Ctrl+9` to cycle to the next style.
 
 ### What to expect
-- The territory overlay changes style without changing the selected star.
-- `Mega Segin` remains centered so you can compare the new rendering against the previous view.
+- The territory rendering updates immediately.
+
+## Cycle to territory display style 3
+
+Style 3 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on `Mega Segin`.
+
+![Cycle to territory display style 3](./screenshots/002-cycle-territory-display-style-3.png)
+
+### How to use it
+- Press `Ctrl+9` to cycle to the next style.
+
+### What to expect
+- The territory rendering updates immediately.
+
+## Cycle to territory display style 4
+
+Style 4 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on `Mega Segin`.
+
+![Cycle to territory display style 4](./screenshots/003-cycle-territory-display-style-4.png)
+
+### How to use it
+- Press `Ctrl+9` to cycle to the next style.
+
+### What to expect
+- The territory rendering updates immediately.
 
 ## Recolor your empire white on the map
 
-Press `w` to recolor your own empire white. This is useful when your normal player color blends into the nebula, territory fill, or another nearby empire's color.
+Press `w` to recolor your own empire white. This is useful when your normal player color blends into the nebula, territory fill, or another nearby empire's color. This comparison uses the same zoom and centering as the previous style examples.
 
-![Recolor your empire white on the map](./screenshots/002-recolor-my-territory-white.png)
+![Recolor your empire white on the map](./screenshots/004-recolor-my-territory-white.png)
 
 ### How to use it
 - Select one of your own stars.
 - Press `w` to toggle your map color to white.
-- Press `w` again later if you want to return to your normal color.
 
 ### What to expect
 - Your empire's map color changes to white.
-- `Mega Segin` and the surrounding territory remain in the same frame so the color change is easy to compare.
 
-### Caveats
-- This is a local display preference. It does not change your real player color for anyone else.
+## Green Scan ETA for a fleet not currently in scan
+
+When you select a star, NPA calculates the scan ETA for any fleet crossing that star's scan border. If the fleet is not currently scanned by any of that player's other stars, the ETA is shown (drawn in green on the map).
+
+![Green Scan ETA for a fleet not currently in scan](./screenshots/005-scan-eta-green-unscanned-fleet.png)
+
+### How to use it
+- Select an enemy star that one of your fleets is approaching.
+- NPA will show when that star specifically will gain a scan lock on your fleet.
+
+### What to expect
+- A scan ETA label appears near the fleet on the map.
+
+## Grey Scan ETA for a fleet already scanned by another star
+
+If the fleet is already within the scanning range of another star owned by the same player, the ETA is considered 'grey' (though technically drawn in the same style, it represents a redundant scan lock).
+
+![Grey Scan ETA for a fleet already scanned by another star](./screenshots/006-scan-eta-grey-already-scanned-fleet.png)
+
+### How to use it
+- Select the enemy star your fleet is approaching.
+- Compare ETAs if multiple fleets are approaching.
+
+### What to expect
+- Scan ETA labels appear for all approaching fleets that will cross the border.
 
 ## Measure scan ETA with a fake fleet route
 
-Create a fake fleet from `Mega Segin`, route it to enemy-held `Laser Fort 11`, then select `Laser Fort 11` while the fake route remains visible. NPA shows a scan ETA near the moving fleet so you can tell when that fleet should enter the enemy's scanning range.
+You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.
 
-![Measure scan ETA with a fake fleet route](./screenshots/003-measure-scan-eta-with-fake-fleet.png)
+![Measure scan ETA with a fake fleet route](./screenshots/007-measure-scan-eta-with-fake-fleet.png)
 
 ### How to use it
-- Select your origin star, here `Mega Segin`.
 - Press `x` to create a fake planning fleet.
-- Add the enemy star, here `Laser Fort 11`, as the waypoint.
-- Select the enemy star while keeping the fake fleet route visible.
+- Add waypoints to the destination.
+- Select the destination star to see the scan ETA for that route.
 
 ### What to expect
-- `Mega Segin`, the synthetic fleet, and the scan ETA label stay near the middle of the screenshot.
-- `Laser Fort 11` remains visible at the right end of the route.
-- The scan HUD displays a label such as `Scan Tick #531`, showing when the routed fleet should become visible to the selected enemy star's owner.
-
-### Caveats
-- The fake fleet is a local planning object. It does not submit orders to Neptune's Pride.
-- The scan ETA depends on the selected star's owner and the current route. If you select a different enemy star, the displayed scan tick can change.
+- The scan HUD displays the expected entry tick for the planned route.
 

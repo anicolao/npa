@@ -1,6 +1,6 @@
 # Territory Display And Scanning HUD Validation
 
-Verify that the territory overlay can be framed, restyled, recolored to white, and combined with a fake fleet route to measure when the fleet enters enemy scanning range.
+Verify that the territory overlay can be framed, restyled through all four modes, recolored to white, and combined with both existing and fake fleets to measure scan ETA.
 
 Documentation target: `Territory display and scanning HUD`
 
@@ -14,30 +14,52 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 - [x] The fixture starts with Mega Segin selected for Osric
 - [x] The screenshot frame keeps Mega Segin near the center with nearby Osric territory visible
 
-## Cycle the territory display style
+## Cycle to territory display style 2
 
-![Cycle the territory display style](./screenshots/001-cycle-territory-display-style.png)
+![Cycle to territory display style 2](./screenshots/001-cycle-territory-display-style-2.png)
 
 ### Verifications
-- [x] The ctrl+9 hotkey changes the rendered territory style
-- [x] The selected star remains Mega Segin after cycling the territory style
-- [x] The territory-style screenshot keeps Mega Segin and its surrounding territory in frame
+- [x] The territory style is now 2
+
+## Cycle to territory display style 3
+
+![Cycle to territory display style 3](./screenshots/002-cycle-territory-display-style-3.png)
+
+### Verifications
+- [x] The territory style is now 3
+
+## Cycle to territory display style 4
+
+![Cycle to territory display style 4](./screenshots/003-cycle-territory-display-style-4.png)
+
+### Verifications
+- [x] The territory style is now 4
 
 ## Recolor your empire white on the map
 
-![Recolor your empire white on the map](./screenshots/002-recolor-my-territory-white.png)
+![Recolor your empire white on the map](./screenshots/004-recolor-my-territory-white.png)
 
 ### Verifications
 - [x] The w hotkey changes the current player's map color to white
-- [x] The white recolor changes the rendered map while keeping the same selected star
-- [x] The white-territory screenshot keeps Mega Segin centered with the recolored territory visible
+
+## Green Scan ETA for a fleet not currently in scan
+
+![Green Scan ETA for a fleet not currently in scan](./screenshots/005-scan-eta-green-unscanned-fleet.png)
+
+### Verifications
+- [x] Selecting Fast Jih shows a green scan ETA for an approaching allied fleet (680) that the enemy cannot see yet
+
+## Grey Scan ETA for a fleet already scanned by another star
+
+![Grey Scan ETA for a fleet already scanned by another star](./screenshots/006-scan-eta-grey-already-scanned-fleet.png)
+
+### Verifications
+- [x] Selecting Fast Jih also shows scan ETA for other approaching fleets (684)
 
 ## Measure scan ETA with a fake fleet route
 
-![Measure scan ETA with a fake fleet route](./screenshots/003-measure-scan-eta-with-fake-fleet.png)
+![Measure scan ETA with a fake fleet route](./screenshots/007-measure-scan-eta-with-fake-fleet.png)
 
 ### Verifications
-- [x] The fake fleet route starts from Mega Segin and targets Laser Fort 11
 - [x] The scan HUD calculation predicts the tick when the fake fleet enters Laser Fort 11's scanning range
-- [x] The scan ETA screenshot keeps Mega Segin, Laser Fort 11, the selected fake fleet, and route visible
 
