@@ -43,6 +43,7 @@ test("documents the battle HUD controls and timebases", async ({
     await appPage.evaluate(
       ({ battleStarUid, waypointStarUid, syntheticFleetUidBase }) => {
         const np = window.NeptunesPride;
+        const map = np.npui.map;
         const s1 = np.universe.galaxy.stars[battleStarUid];
         const s2 = np.universe.galaxy.stars[waypointStarUid];
         
@@ -51,13 +52,14 @@ test("documents the battle HUD controls and timebases", async ({
         np.universe.interfaceSettings.showStarPimples = false;
         np.universe.interfaceSettings.showScanningRanges = false;
         
-        np.npui.map.scale = 180; 
+        // Zoom out more to ensure both stars are comfortably in view
+        map.scale = 140; 
         
         if (s1 && s2) {
-          const cx = (s1.x + s2.x) / 2 + 0.5;
-          const cy = (s1.y + s2.y) / 2 + 0.2;
-          // Use the game's internal centering method but without sliding
-          np.npui.map.centerPointInMap(cx, cy);
+          // Pure midpoint, no offset
+          const cx = (s1.x + s2.x) / 2;
+          const cy = (s1.y + s2.y) / 2;
+          map.centerPointInMap(cx, cy);
         }
 
         // Re-select the synthetic fleet if something changed selection
@@ -79,7 +81,7 @@ test("documents the battle HUD controls and timebases", async ({
     );
     // Give it a long time to settle and for any animations to stop
     await waitForAnimations(appPage);
-    await appPage.waitForTimeout(2000);
+    await appPage.waitForTimeout(3000);
   };
 
   await centerOnBattle();
@@ -293,13 +295,12 @@ async function prepareBattleHudScenario(appPage: Page): Promise<void> {
       np.universe.interfaceSettings.screenPos = "none";
       np.universe.interfaceSettings.showStarPimples = false;
       np.universe.interfaceSettings.showScanningRanges = false;
-      np.npui.map.scale = 180;
+      np.npui.map.scale = 140;
 
       const s1 = np.universe.galaxy.stars[battleStarUid];
       const s2 = np.universe.galaxy.stars[waypointStarUid];
       if (s1 && s2) {
-        // Offset slightly to the right/down to move stars to center/left
-        np.npui.map.centerPointInMap((s1.x + s2.x) / 2 + 0.5, (s1.y + s2.y) / 2 + 0.2);
+        np.npui.map.centerPointInMap((s1.x + s2.x) / 2, (s1.y + s2.y) / 2);
       }
 
       np.crux.trigger("show_star_uid", String(battleStarUid));
