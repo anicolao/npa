@@ -1,5 +1,6 @@
 *.zip
 coverage/
+book-dist/
 dist/
 !ios/NPAiOS/Resources/Dist/
 !ios/NPAiOS/Resources/Dist/**

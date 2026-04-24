@@ -1,0 +1,68 @@
+name: Deploy NPA Book
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/deploy-book.yml"
+      - "scripts/build-npa-book.mjs"
+      - "tests/playwright/*/DOCS.md"
+      - "tests/playwright/*/screenshots/**"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: npa-book-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build NPA Book
+        run: npm run docs:book -- --out book-dist
+
+      - name: Publish to Pages source branch
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin web
+
+          publish_dir="$(mktemp -d)"
+          git worktree add "$publish_dir" FETCH_HEAD
+
+          cname_file="$RUNNER_TEMP/CNAME"
+          if [ -f "$publish_dir/docs/CNAME" ]; then
+            cp "$publish_dir/docs/CNAME" "$cname_file"
+          fi
+
+          rm -rf "$publish_dir/docs"
+          mkdir -p "$publish_dir/docs"
+          cp -R book-dist/. "$publish_dir/docs/"
+
+          if [ -f "$cname_file" ]; then
+            cp "$cname_file" "$publish_dir/docs/CNAME"
+          fi
+
+          cd "$publish_dir"
+          git add docs
+
+          if git diff --cached --quiet; then
+            echo "NPA Book is already up to date."
+            exit 0
+          fi
+
+          git commit -m "Deploy NPA Book"
+          git push origin HEAD:web
