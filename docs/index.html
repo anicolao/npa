@@ -303,6 +303,15 @@ footer {
 <a class="nav-step" href="#section-002-green-and-grey-scan-etas-for-multiple-fleets">Green and Grey Scan ETAs for multiple fleets</a>
 <a class="nav-step" href="#section-002-measure-scan-eta-with-a-fake-fleet-route">Measure scan ETA with a fake fleet route</a>
       </div>
+<div class="nav-section">
+        <a class="nav-chapter" href="#section-003">
+          <span>003</span>Interpreting and Controlling the Auto-Ruler
+        </a>
+        <a class="nav-step" href="#section-003-view-automatic-distance-measurements-to-the-nearest-stars">View automatic distance measurements to the nearest stars</a>
+<a class="nav-step" href="#section-003-increase-the-number-of-stars-shown-by-the-auto-ruler">Increase the number of stars shown by the auto-ruler</a>
+<a class="nav-step" href="#section-003-decrease-the-number-of-stars-shown-by-the-auto-ruler">Decrease the number of stars shown by the auto-ruler</a>
+<a class="nav-step" href="#section-003-distinguish-between-effective-and-ineffective-support">Distinguish between effective and ineffective support</a>
+      </div>
     </nav>
     <main>
       <section class="hero" aria-labelledby="book-title">
@@ -570,6 +579,75 @@ footer {
 <h4 id="section-002-what-to-expect-8">What to expect</h4>
 <ul>
 <li>As shown in the screenshot, the scan HUD displays the expected entry tick for the planned route.</li>
+</ul>
+</article>
+<article class="chapter" aria-labelledby="section-003">
+<p class="chapter-kicker">Section 003</p>
+<h2 id="section-003" class="chapter-title">Interpreting and Controlling the Auto-Ruler</h2>
+<p>The auto-ruler is a tactical overlay that automatically measures distances and arrival times between a selected star and its neighbors. It helps you quickly identify which of your stars can provide timely support and how soon enemy threats might arrive.</p>
+<h3 id="section-003-view-automatic-distance-measurements-to-the-nearest-stars">View automatic distance measurements to the nearest stars</h3>
+<p>When you select a star, NPA automatically draws 'ruler' lines to the most relevant neighboring stars. These lines provide immediate tactical information without requiring you to manually measure each route.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/000-show-basic-auto-ruler.png" alt="View automatic distance measurements to the nearest stars" loading="lazy">
+<figcaption>View automatic distance measurements to the nearest stars</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it">How to use it</h4>
+<ul>
+<li>Select a star on the map (like <code>Hot Sham</code> in the example) to activate the auto-ruler.</li>
+<li>Look for the colored lines extending to nearby stars.</li>
+</ul>
+<h4 id="section-003-what-to-expect">What to expect</h4>
+<ul>
+<li><strong>Red Lines</strong> indicate connections to enemy-owned stars.</li>
+<li><strong>Green or Grey Lines</strong> indicate connections to stars owned by you or your allies.</li>
+<li>Tick numbers (e.g., <code>[[Tick #529]]</code>) show exactly when a fleet traveling at your current speed would arrive.</li>
+</ul>
+<h3 id="section-003-increase-the-number-of-stars-shown-by-the-auto-ruler">Increase the number of stars shown by the auto-ruler</h3>
+<p>You can control how many neighbors the auto-ruler identifies. Increasing the power reveals more distant threats and potential support stars.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/001-increase-ruler-power.png" alt="Increase the number of stars shown by the auto-ruler" loading="lazy">
+<figcaption>Increase the number of stars shown by the auto-ruler</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>Press <strong>9</strong> to increase the number of stars the auto-ruler connects to.</li>
+</ul>
+<h4 id="section-003-what-to-expect-2">What to expect</h4>
+<ul>
+<li>More ruler lines appear on the map, reaching further out from the selected star.</li>
+</ul>
+<h3 id="section-003-decrease-the-number-of-stars-shown-by-the-auto-ruler">Decrease the number of stars shown by the auto-ruler</h3>
+<p>If the map becomes too cluttered, you can decrease the auto-ruler power to focus only on the most immediate neighbors.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/002-decrease-ruler-power.png" alt="Decrease the number of stars shown by the auto-ruler" loading="lazy">
+<figcaption>Decrease the number of stars shown by the auto-ruler</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>Press <strong>8</strong> to decrease the number of stars the auto-ruler connects to.</li>
+</ul>
+<h4 id="section-003-what-to-expect-3">What to expect</h4>
+<ul>
+<li>Distant ruler lines disappear, leaving only the closest connections visible.</li>
+</ul>
+<h3 id="section-003-distinguish-between-effective-and-ineffective-support">Distinguish between effective and ineffective support</h3>
+<p>The auto-ruler uses color to help you make split-second defensive decisions. It compares the arrival time of enemy fleets against your own support fleets.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/003-understand-support-colors.png" alt="Distinguish between effective and ineffective support" loading="lazy">
+<figcaption>Distinguish between effective and ineffective support</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it-4">How to use it</h4>
+<ul>
+<li>Observe the colors of the lines connecting to your own stars.</li>
+</ul>
+<h4 id="section-003-what-to-expect-4">What to expect</h4>
+<ul>
+<li><strong>Green Lines</strong> represent 'Effective' support: these stars can reach the selected location *before* the closest enemy can.</li>
+<li><strong>Grey Lines</strong> represent 'Ineffective' support: these stars are too far away to help before the enemy arrives.</li>
+</ul>
+<h4 id="section-003-caveats">Caveats</h4>
+<ul>
+<li>Support effectiveness is calculated based on the closest detected enemy star. Always verify if the enemy has closer hidden fleets.</li>
 </ul>
 </article>
       <footer>
