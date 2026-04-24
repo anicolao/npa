@@ -1,20 +1,35 @@
 import { $ } from "bun";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 import * as p from "../package.json";
 
-await $`mkdir -p dist`;
-await $`cp static/* dist`;
+export type VersionInfo = {
+  hash: string;
+  date: string;
+  status: string;
+  version: string;
+  display: string;
+};
 
-export async function writeVersionAndManifest() {
-  const version = p.version;
+export async function getVersionInfo(): Promise<VersionInfo> {
   const d = new Date();
   const date = `${d.getDate()} ${d.toLocaleString("default", { month: "short" })} ${d.getFullYear()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
-  const version_info = {
-    hash: (await $`git rev-parse --short HEAD`.text()).replace(/\n$/, ""),
-    date,
-    status: (await $`git status -s`.text()).replace(/\n$/, ""),
-    version,
+  return {
+    hash:
+      process.env.VITE_NPA_COMMIT_HASH ??
+      (await $`git rev-parse --short HEAD`.text()).trim(),
+    date: process.env.VITE_NPA_VERSION_DATE ?? date,
+    status:
+      process.env.VITE_NPA_GIT_STATUS ??
+      (await $`git status -s`.text()).replace(/\n$/, ""),
+    version: process.env.VITE_NPA_VERSION ?? p.version,
+    display: process.env.VITE_NPA_VERSION_STRING ?? "",
   };
+}
 
+export async function writeVersionAndManifest(versionInfo?: VersionInfo) {
+  const version_info = versionInfo ?? (await getVersionInfo());
+  const version = version_info.version;
   const alphaEdition = version.endsWith(".0") ? "" : " άλφα Edition";
   const manifest = {
     name: `Neptune's Pride Agent${alphaEdition}`,
@@ -54,17 +69,12 @@ export async function writeVersionAndManifest() {
       "128": "icon_128.png",
     },
   };
-  await $`echo ${JSON.stringify(manifest, null, 2)} > dist/manifest.json`;
 
-  const getVersion = `
-export function getVersion() {
-  const caution = version_info.status.length > 0 ? "⚠" : "";
-  const date = version_info.status.length > 0 ? \`\${version_info.date} \` : "";
-  return \`Neptune's Pride Agent v\${version_info.version} (\${date}\${caution}\${version_info.hash})\`;
-}`;
-  await $`echo export const version_info = ${JSON.stringify(version_info, null, 2)} > src/version.js`;
-  for (const line of getVersion.split("\n")) {
-    await $`echo ${line} >> src/version.js`;
-  }
-  await $`bunx biome format --write src/version.js`;
+  await fs.mkdir("dist", { recursive: true });
+  await fs.cp("static", "dist", { recursive: true });
+  await fs.writeFile(
+    path.join("dist", "manifest.json"),
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
 }
