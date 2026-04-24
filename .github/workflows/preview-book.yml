@@ -31,7 +31,7 @@ jobs:
       - name: Build NPA Book
         run: npm run docs:book -- --out book-dist
         env:
-          NPA_BOOK_BASE_HREF: "/npa/previews/pr-${{ github.event.pull_request.number }}/"
+          NPA_BOOK_BASE_HREF: "/previews/pr-${{ github.event.pull_request.number }}/"
 
       - name: Deploy Preview
         id: deploy
@@ -47,9 +47,8 @@ jobs:
           git worktree add "$publish_dir" origin/web
 
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          # The web branch root corresponds to https://anicolao.github.io/npa/
-          # We deploy to previews/pr-N/ inside the web branch.
-          PREVIEW_PATH="previews/pr-$PR_NUMBER"
+          # Align with main deployment which uses 'docs/' as the root for GitHub Pages
+          PREVIEW_PATH="docs/previews/pr-$PR_NUMBER"
           
           rm -rf "$publish_dir/$PREVIEW_PATH"
           mkdir -p "$publish_dir/$PREVIEW_PATH"
