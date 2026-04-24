@@ -53,7 +53,17 @@ export class TestStepHelper {
   constructor(
     private readonly page: Page,
     private readonly testInfo: TestInfo,
-  ) {}
+  ) {
+    const screenshotDir = path.join(this.getScenarioDir(), "screenshots");
+    if (fs.existsSync(screenshotDir)) {
+      const files = fs.readdirSync(screenshotDir);
+      for (const file of files) {
+        if (file.endsWith(".png")) {
+          fs.unlinkSync(path.join(screenshotDir, file));
+        }
+      }
+    }
+  }
 
   setMetadata(metadata: ScenarioMetadata): void {
     this.metadata = metadata;
