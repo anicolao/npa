@@ -131,24 +131,64 @@ test("documents the battle HUD controls and timebases", async ({
   });
 
   await frameAndAssertBattleMap(appPage);
-  await helper.step("cycle-to-clock-and-relative-ticks", {
-    description: "Cycle the battle ETA through clock time and relative ticks",
+  await helper.step("cycle-to-clock-time", {
+    description: "Show the battle ETA as clock time",
     verifications: [
       {
-        spec: "The % hotkey produces an absolute clock-time ETA before moving to relative ticks",
+        spec: "The % hotkey changes the route ETA to an absolute clock-time display",
         check: async () => {
-          const outputs = await appPage.evaluate(() => {
+          const output = await appPage.evaluate(() => {
             const np = window.NeptunesPride;
             const fleet = np.universe.selectedFleet;
             window.Mousetrap.trigger("%");
-            const clock = np.universe.timeToTick(fleet.etaFirst, false);
-            window.Mousetrap.trigger("%");
-            const tickRelative = np.universe.timeToTick(fleet.etaFirst, false);
-            return { clock, tickRelative };
+            return np.universe.timeToTick(fleet.etaFirst, false);
           });
 
-          expect(outputs.clock).toMatch(/(@|AM|PM)/);
-          expect(outputs.tickRelative).toMatch(/ticks/);
+          expect(output).toMatch(/(@|AM|PM)/);
+        },
+      },
+      {
+        spec: "The route editor shows the clock-time ETA",
+        check: async () => {
+          await expect(appPage.getByText(/^ETA:/)).toContainText(/AM|PM|@/);
+        },
+      },
+      {
+        spec: "The clock-time screenshot still frames Hot Sham, the selected fake fleet, and the Red Chertan route",
+        check: async () => {
+          await frameAndAssertBattleMap(appPage);
+        },
+      },
+    ],
+    documentation: {
+      summary:
+        "With the `Hot Sham` route still centered, press `%` once to show the ETA as a real-world clock time. This is useful when you want to discuss the arrival in chat without converting from hours or ticks.",
+      howToUse: [
+        "With the battle route visible, press `%` once.",
+        "Read the ETA line in the waypoint editor as a clock time.",
+      ],
+      expectedResult: [
+        "Clock mode shows a real-world timestamp such as `11:40 AM`.",
+        "`Hot Sham`, the selected fake fleet, and the `Red Chertan` route stay in the same map frame while the ETA display changes.",
+      ],
+    },
+  });
+
+  await frameAndAssertBattleMap(appPage);
+  await helper.step("cycle-to-relative-ticks", {
+    description: "Show the battle ETA as relative ticks",
+    verifications: [
+      {
+        spec: "The next % press changes the route ETA to relative ticks",
+        check: async () => {
+          const output = await appPage.evaluate(() => {
+            const np = window.NeptunesPride;
+            const fleet = np.universe.selectedFleet;
+            window.Mousetrap.trigger("%");
+            return np.universe.timeToTick(fleet.etaFirst, false);
+          });
+
+          expect(output).toMatch(/ticks/);
         },
       },
       {
@@ -169,13 +209,12 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "With the `Hot Sham` route still centered, press `%` to cycle how the battle HUD explains travel time. NPA moves from wall-clock planning to tick-count planning without changing the route to `Red Chertan`.",
+        "Press `%` again to convert the same `Hot Sham` to `Red Chertan` route from clock time into a relative tick count. NPA changes only the timebase; the selected fleet and route stay the same.",
       howToUse: [
-        "With the battle route visible, press `%` once for clock time.",
-        "Press `%` again to switch to relative tick counts.",
+        "After clock-time mode is visible, press `%` one more time.",
+        "Read the ETA and production readouts as relative tick counts.",
       ],
       expectedResult: [
-        "Clock mode shows a real-world timestamp such as `11:40 AM`.",
         "Relative tick mode changes the same ETA into a tick count such as `4 ticks`.",
         "The waypoint panel, production readout, selected fleet, and visible route stay aligned with the chosen timebase.",
       ],

@@ -24,18 +24,31 @@ Start by selecting `Hot Sham`, the hostile frontline star shown near the center 
 ### Caveats
 - These orders are only for planning. They do not send any real orders to the server.
 
-## Cycle the battle ETA through clock time and relative ticks
+## Show the battle ETA as clock time
 
-With the `Hot Sham` route still centered, press `%` to cycle how the battle HUD explains travel time. NPA moves from wall-clock planning to tick-count planning without changing the route to `Red Chertan`.
+With the `Hot Sham` route still centered, press `%` once to show the ETA as a real-world clock time. This is useful when you want to discuss the arrival in chat without converting from hours or ticks.
 
-![Cycle the battle ETA through clock time and relative ticks](./screenshots/001-cycle-to-clock-and-relative-ticks.png)
+![Show the battle ETA as clock time](./screenshots/001-cycle-to-clock-time.png)
 
 ### How to use it
-- With the battle route visible, press `%` once for clock time.
-- Press `%` again to switch to relative tick counts.
+- With the battle route visible, press `%` once.
+- Read the ETA line in the waypoint editor as a clock time.
 
 ### What to expect
 - Clock mode shows a real-world timestamp such as `11:40 AM`.
+- `Hot Sham`, the selected fake fleet, and the `Red Chertan` route stay in the same map frame while the ETA display changes.
+
+## Show the battle ETA as relative ticks
+
+Press `%` again to convert the same `Hot Sham` to `Red Chertan` route from clock time into a relative tick count. NPA changes only the timebase; the selected fleet and route stay the same.
+
+![Show the battle ETA as relative ticks](./screenshots/002-cycle-to-relative-ticks.png)
+
+### How to use it
+- After clock-time mode is visible, press `%` one more time.
+- Read the ETA and production readouts as relative tick counts.
+
+### What to expect
 - Relative tick mode changes the same ETA into a tick count such as `4 ticks`.
 - The waypoint panel, production readout, selected fleet, and visible route stay aligned with the chosen timebase.
 
@@ -43,7 +56,7 @@ With the `Hot Sham` route still centered, press `%` to cycle how the battle HUD 
 
 Press `%` again when you want a precise game tick for the `Hot Sham` to `Red Chertan` route instead of a relative duration. This is the most explicit way to coordinate combat windows with allies.
 
-![Show the same battle ETA as absolute tick numbers](./screenshots/002-cycle-to-absolute-tick-numbers.png)
+![Show the same battle ETA as absolute tick numbers](./screenshots/003-cycle-to-absolute-tick-numbers.png)
 
 ### How to use it
 - After reaching relative tick mode, press `%` one more time.
@@ -57,7 +70,7 @@ Press `%` again when you want a precise game tick for the `Hot Sham` to `Red Che
 
 Use `.` while the `Hot Sham` battle route is visible to add one weapons level to the side NPA is currently treating as the enemy in the battle HUD calculation. The footer shows `Enemy WS+1` so you can see that the current numbers are a pessimistic model rather than the default estimate.
 
-![Model a worse-case fight by giving the enemy extra weapons](./screenshots/003-apply-combat-handicap.png)
+![Model a worse-case fight by giving the enemy extra weapons](./screenshots/004-apply-combat-handicap.png)
 
 ### How to use it
 - Keep the battle route selected.
