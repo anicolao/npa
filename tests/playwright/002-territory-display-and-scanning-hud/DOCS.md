@@ -68,37 +68,26 @@ Press `w` to recolor your own empire white. This is useful when your normal play
 ### What to expect
 - Your empire's map color changes to white.
 
-## Green Scan ETA for a fleet not currently in scan
+## Green and Grey Scan ETAs for multiple fleets
 
-When you select a star, NPA calculates the scan ETA for any fleet crossing that star's scan border. If the fleet is not currently scanned by any of that player's other stars, the ETA is shown (drawn in green on the map).
+When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects `Alshat`, owned by `piers plowman`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via `Blue Minchir` (Grey ETA).
 
-![Green Scan ETA for a fleet not currently in scan](./screenshots/005-scan-eta-green-unscanned-fleet.png)
-
-### How to use it
-- Select an enemy star that one of your fleets is approaching.
-- NPA will show when that star specifically will gain a scan lock on your fleet.
-
-### What to expect
-- A scan ETA label appears near the fleet on the map.
-
-## Grey Scan ETA for a fleet already scanned by another star
-
-If the fleet is already within the scanning range of another star owned by the same player, the ETA is considered 'grey' (though technically drawn in the same style, it represents a redundant scan lock).
-
-![Grey Scan ETA for a fleet already scanned by another star](./screenshots/006-scan-eta-grey-already-scanned-fleet.png)
+![Green and Grey Scan ETAs for multiple fleets](./screenshots/005-scan-eta-green-and-grey-fleets.png)
 
 ### How to use it
-- Select the enemy star your fleet is approaching.
-- Compare ETAs if multiple fleets are approaching.
+- Select an enemy star being approached by multiple fleets.
+- Look for the distinct color-coded ETA labels near each fleet.
 
 ### What to expect
-- Scan ETA labels appear for all approaching fleets that will cross the border.
+- Multiple scan ETA labels appear on the map.
+- Green labels (like for `Fleet 602`) indicate upcoming first-time detection.
+- Grey labels (like for `Fleet 1443`) indicate when this specific star will also gain a scan lock on an already-detected fleet.
 
 ## Measure scan ETA with a fake fleet route
 
 You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.
 
-![Measure scan ETA with a fake fleet route](./screenshots/007-measure-scan-eta-with-fake-fleet.png)
+![Measure scan ETA with a fake fleet route](./screenshots/006-measure-scan-eta-with-fake-fleet.png)
 
 ### How to use it
 - Press `x` to create a fake planning fleet.
