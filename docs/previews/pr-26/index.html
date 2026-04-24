@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="/npa/previews/pr-26/">
+  <base href="/previews/pr-26/">
   <title>NPA Book</title>
   <meta name="description" content="A practical guide to Neptune's Pride Agent, generated from the verified E2E documentation scenarios.">
   <style>
@@ -312,7 +312,7 @@ footer {
 <h2 id="section-001" class="chapter-title">How To Read The Battle HUD</h2>
 <p>The battle HUD is not one isolated panel. It is a set of map overlays, ETA labels, and control shortcuts that help you inspect a frontline star, plan enemy movement, and model worst-case combat assumptions.</p>
 <h3 id="section-001-create-a-fake-enemy-fleet-from-the-selected-frontline-star">Create a fake enemy fleet from the selected frontline star</h3>
-<p>To plan for incoming attacks, you can create &quot;synthetic&quot; fleets to model enemy movement. Select an enemy star (such as <code>Hot Sham</code> in the example below) and press **x** to create a fake enemy fleet. NPA temporarily switches your planning context to that empire so you can plot routes and see exactly when they might arrive at your stars without changing the real game state.</p>
+<p>To plan for incoming attacks, you can create &quot;synthetic&quot; fleets to model enemy movement. Select an enemy star (such as <code>Hot Sham</code> in the example below) and press <strong>x</strong> to create a fake enemy fleet. NPA temporarily switches your planning context to that empire so you can plot routes and see exactly when they might arrive at your stars without changing the real game state.</p>
 <figure>
 <img src="assets/001-battle-hud/screenshots/000-route-enemy-fleet-relative-eta.png" alt="Create a fake enemy fleet from the selected frontline star" loading="lazy">
 <figcaption>Create a fake enemy fleet from the selected frontline star</figcaption>
@@ -320,7 +320,7 @@ footer {
 <h4 id="section-001-how-to-use-it">How to use it</h4>
 <ul>
 <li>Select the enemy star you want to inspect.</li>
-<li>Press **x** to create a fake planning fleet from that star.</li>
+<li>Press <strong>x</strong> to create a fake planning fleet from that star.</li>
 <li>Add waypoints to nearby stars (like <code>Red Chertan</code> in the example) to see potential travel times.</li>
 </ul>
 <h4 id="section-001-what-to-expect">What to expect</h4>
@@ -334,14 +334,14 @@ footer {
 <li>Use these fake routes to identify the exact moment an enemy fleet could reach your territory. These orders are for local planning only and do not affect the live game.</li>
 </ul>
 <h3 id="section-001-show-the-battle-eta-as-clock-time">Show the battle ETA as clock time</h3>
-<p>NPA allows you to view ETAs in three different formats. Press **%** to cycle through these modes. Each serves a different tactical purpose: Clock Time (for personal alarms), Relative Ticks (for comparing speeds), and Absolute Ticks (for coordinating with allies).</p>
+<p>NPA allows you to view ETAs in three different formats. Press <strong>%</strong> to cycle through these modes. Each serves a different tactical purpose: Clock Time (for personal alarms), Relative Ticks (for comparing speeds), and Absolute Ticks (for coordinating with allies).</p>
 <figure>
 <img src="assets/001-battle-hud/screenshots/001-cycle-to-clock-time.png" alt="Show the battle ETA as clock time" loading="lazy">
 <figcaption>Show the battle ETA as clock time</figcaption>
 </figure>
 <h4 id="section-001-how-to-use-it-2">How to use it</h4>
 <ul>
-<li>With a fleet route visible, press **%** once to switch to clock-time mode.</li>
+<li>With a fleet route visible, press <strong>%</strong> once to switch to clock-time mode.</li>
 <li>Read the ETA line in the waypoint editor as a real-world time.</li>
 </ul>
 <h4 id="section-001-what-to-expect-2">What to expect</h4>
@@ -361,7 +361,7 @@ footer {
 </figure>
 <h4 id="section-001-how-to-use-it-3">How to use it</h4>
 <ul>
-<li>After clock-time mode is visible, press **%** one more time.</li>
+<li>After clock-time mode is visible, press <strong>%</strong> one more time.</li>
 <li>Read the ETA and production readouts as relative tick counts.</li>
 </ul>
 <h4 id="section-001-what-to-expect-3">What to expect</h4>
@@ -377,7 +377,7 @@ footer {
 </figure>
 <h4 id="section-001-how-to-use-it-4">How to use it</h4>
 <ul>
-<li>After reaching relative tick mode, press **%** one more time.</li>
+<li>After reaching relative tick mode, press <strong>%</strong> one more time.</li>
 <li>Read the ETA and production readouts as explicit tick numbers (e.g., <code>Tick #529</code>).</li>
 </ul>
 <h4 id="section-001-what-to-expect-4">What to expect</h4>
@@ -386,14 +386,14 @@ footer {
 <li>You can compare the fleet ETA directly against combat or production timing discussed in reports and chat.</li>
 </ul>
 <h3 id="section-001-model-a-worst-case-fight-by-giving-the-enemy-extra-weapons">Model a worst-case fight by giving the enemy extra weapons</h3>
-<p>You can manually adjust the weapons technology assumptions for a fight to see if your defense holds up against a more advanced enemy. Press **.** to add a weapons level to the side NPA is currently treating as the opponent.</p>
+<p>You can manually adjust the weapons technology assumptions for a fight to see if your defense holds up against a more advanced enemy. Press <strong>.</strong> to add a weapons level to the side NPA is currently treating as the opponent.</p>
 <figure>
 <img src="assets/001-battle-hud/screenshots/004-apply-enemy-ws-plus-one.png" alt="Model a worst-case fight by giving the enemy extra weapons" loading="lazy">
 <figcaption>Model a worst-case fight by giving the enemy extra weapons</figcaption>
 </figure>
 <h4 id="section-001-how-to-use-it-5">How to use it</h4>
 <ul>
-<li>With a battle route selected, press **.** to increase the enemy weapons assumption by one level.</li>
+<li>With a battle route selected, press <strong>.</strong> to increase the enemy weapons assumption by one level.</li>
 </ul>
 <h4 id="section-001-what-to-expect-5">What to expect</h4>
 <ul>
@@ -406,7 +406,7 @@ footer {
 <li>This is a planning aid. It changes NPA's local calculation, not the real weapons tech on the server.</li>
 </ul>
 <h3 id="section-001-return-to-the-regular-weapons-calculation">Return to the regular weapons calculation</h3>
-<p>Press **,** to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before trying the opposite assumption.</p>
+<p>Press <strong>,</strong> to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before trying the opposite assumption.</p>
 <figure>
 <img src="assets/001-battle-hud/screenshots/005-clear-combat-handicap.png" alt="Return to the regular weapons calculation" loading="lazy">
 <figcaption>Return to the regular weapons calculation</figcaption>
@@ -414,7 +414,7 @@ footer {
 <h4 id="section-001-how-to-use-it-6">How to use it</h4>
 <ul>
 <li>Start from the <code>Enemy WS+1</code> view.</li>
-<li>Press **,** once to step the weapons adjustment back to zero.</li>
+<li>Press <strong>,</strong> once to step the weapons adjustment back to zero.</li>
 </ul>
 <h4 id="section-001-what-to-expect-6">What to expect</h4>
 <ul>
@@ -422,7 +422,7 @@ footer {
 <li>The selected synthetic fleet and route toward its destination remain visible for easy comparison.</li>
 </ul>
 <h3 id="section-001-model-the-opposite-weapons-advantage-with-my-ws-1">Model the opposite weapons advantage with My WS-1</h3>
-<p>Press **,** again to continue past the regular calculation into <code>My WS-1</code>. A negative local weapons adjustment grants the other side of the battle the weapons advantage for the local projection.</p>
+<p>Press <strong>,</strong> again to continue past the regular calculation into <code>My WS-1</code>. A negative local weapons adjustment grants the other side of the battle the weapons advantage for the local projection.</p>
 <figure>
 <img src="assets/001-battle-hud/screenshots/006-apply-my-ws-minus-one.png" alt="Model the opposite weapons advantage with My WS-1" loading="lazy">
 <figcaption>Model the opposite weapons advantage with My WS-1</figcaption>
@@ -430,7 +430,7 @@ footer {
 <h4 id="section-001-how-to-use-it-7">How to use it</h4>
 <ul>
 <li>Start from the regular weapons calculation.</li>
-<li>Press **,** one more time to display <code>My WS-1</code>.</li>
+<li>Press <strong>,</strong> one more time to display <code>My WS-1</code>.</li>
 </ul>
 <h4 id="section-001-what-to-expect-7">What to expect</h4>
 <ul>
@@ -470,7 +470,7 @@ footer {
 </figure>
 <h4 id="section-002-how-to-use-it-2">How to use it</h4>
 <ul>
-<li>Press **Ctrl+9** to cycle to the next style.</li>
+<li>Press <strong>Ctrl+9</strong> to cycle to the next style.</li>
 </ul>
 <h4 id="section-002-what-to-expect-2">What to expect</h4>
 <ul>
@@ -484,7 +484,7 @@ footer {
 </figure>
 <h4 id="section-002-how-to-use-it-3">How to use it</h4>
 <ul>
-<li>Press **Ctrl+9** to cycle to the next style.</li>
+<li>Press <strong>Ctrl+9</strong> to cycle to the next style.</li>
 </ul>
 <h4 id="section-002-what-to-expect-3">What to expect</h4>
 <ul>
@@ -498,7 +498,7 @@ footer {
 </figure>
 <h4 id="section-002-how-to-use-it-4">How to use it</h4>
 <ul>
-<li>Press **Ctrl+9** to cycle to the next style.</li>
+<li>Press <strong>Ctrl+9</strong> to cycle to the next style.</li>
 </ul>
 <h4 id="section-002-what-to-expect-4">What to expect</h4>
 <ul>
@@ -513,7 +513,7 @@ footer {
 <h4 id="section-002-how-to-use-it-5">How to use it</h4>
 <ul>
 <li>Select one of your own stars.</li>
-<li>Press **w** to toggle your map color to white.</li>
+<li>Press <strong>w</strong> to toggle your map color to white.</li>
 </ul>
 <h4 id="section-002-what-to-expect-5">What to expect</h4>
 <ul>
@@ -532,8 +532,8 @@ footer {
 </ul>
 <h4 id="section-002-what-to-expect-6">What to expect</h4>
 <ul>
-<li>**Green Labels:** Indicate a &quot;dark&quot; fleet's first-time detection by this star.</li>
-<li>**Grey Labels:** Indicate when this star will gain a scan lock on a fleet that is already visible via other stars.</li>
+<li><strong>Green Labels:</strong> Indicate a &quot;dark&quot; fleet's first-time detection by this star.</li>
+<li><strong>Grey Labels:</strong> Indicate when this star will gain a scan lock on a fleet that is already visible via other stars.</li>
 </ul>
 <h3 id="section-002-measure-scan-eta-with-a-fake-fleet-route">Measure scan ETA with a fake fleet route</h3>
 <p>You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.</p>
@@ -543,7 +543,7 @@ footer {
 </figure>
 <h4 id="section-002-how-to-use-it-7">How to use it</h4>
 <ul>
-<li>Press **x** to create a fake planning fleet.</li>
+<li>Press <strong>x</strong> to create a fake planning fleet.</li>
 <li>Add waypoints to the destination.</li>
 <li>Select the destination star (like <code>${TARGET_STAR_NAME}</code> in the example) to see the scan ETA for that route.</li>
 </ul>
