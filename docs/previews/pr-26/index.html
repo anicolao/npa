@@ -18,6 +18,7 @@
   --accent-strong: #0b4f4a;
   --gold: #b7791f;
   --code-bg: #eef2f1;
+  --text-width: 840px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -164,7 +165,7 @@ h1 {
 .lede {
   color: var(--muted);
   font-size: clamp(1.1rem, 2vw, 1.45rem);
-  max-width: 820px;
+  max-width: var(--text-width);
 }
 
 .chapter {
@@ -174,17 +175,17 @@ h1 {
 
 .chapter-title {
   font-size: clamp(2rem, 4vw, 3.5rem);
-  max-width: 980px;
+  max-width: calc(var(--text-width) + 140px);
 }
 
 .chapter > p {
-  max-width: 840px;
+  max-width: var(--text-width);
 }
 
 h3 {
   font-size: clamp(1.45rem, 3vw, 2.3rem);
   margin-top: 56px;
-  max-width: 900px;
+  max-width: calc(var(--text-width) + 60px);
 }
 
 h4 {
@@ -195,7 +196,7 @@ h4 {
 
 ul {
   margin: 10px 0 0;
-  max-width: 860px;
+  max-width: var(--text-width);
   padding-left: 1.2rem;
 }
 
@@ -212,8 +213,8 @@ code {
 }
 
 figure {
-  margin: 32px auto 0;
-  max-width: 90%;
+  margin: 32px 0 0;
+  max-width: calc(var(--text-width) * 0.9);
 }
 
 img {
@@ -222,7 +223,6 @@ img {
   border-radius: 8px;
   display: block;
   height: auto;
-  margin: 0 auto;
   max-width: 100%;
 }
 
@@ -230,7 +230,6 @@ figcaption {
   color: var(--muted);
   font-size: 0.9rem;
   margin-top: 12px;
-  text-align: center;
 }
 
 footer {
