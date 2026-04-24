@@ -292,10 +292,11 @@ footer {
         <a class="nav-chapter" href="#section-002">
           <span>002</span>Territory Display And Scanning HUD
         </a>
-        <a class="nav-step" href="#section-002-show-the-selected-empire-s-territory-and-scanning-reach">Show the selected empire's territory and scanning reach</a>
-<a class="nav-step" href="#section-002-cycle-to-territory-display-style-2">Cycle to territory display style 2</a>
-<a class="nav-step" href="#section-002-cycle-to-territory-display-style-3">Cycle to territory display style 3</a>
-<a class="nav-step" href="#section-002-cycle-to-territory-display-style-4">Cycle to territory display style 4</a>
+        <a class="nav-step" href="#section-002-visualize-empire-reach-with-territory-overlays">Visualize empire reach with territory overlays</a>
+<a class="nav-step" href="#section-002-cycle-to-territory-rendering-style-bright-haze">Cycle to territory rendering style: Bright Haze</a>
+<a class="nav-step" href="#section-002-cycle-to-territory-rendering-style-black-background-with-outlines">Cycle to territory rendering style: Black Background with Outlines</a>
+<a class="nav-step" href="#section-002-cycle-to-territory-rendering-style-outlines-only">Cycle to territory rendering style: Outlines Only</a>
+<a class="nav-step" href="#section-002-toggle-political-map-borders-and-empire-names">Toggle political map borders and empire names</a>
 <a class="nav-step" href="#section-002-recolor-your-empire-white-on-the-map">Recolor your empire white on the map</a>
 <a class="nav-step" href="#section-002-green-and-grey-scan-etas-for-multiple-fleets">Green and Grey Scan ETAs for multiple fleets</a>
 <a class="nav-step" href="#section-002-measure-scan-eta-with-a-fake-fleet-route">Measure scan ETA with a fake fleet route</a>
@@ -305,7 +306,7 @@ footer {
       <section class="hero" aria-labelledby="book-title">
         <p class="eyebrow">Neptune's Pride Agent field guide</p>
         <h1 id="book-title">NPA Book</h1>
-        <p class="lede">A lightweight manual built from verified E2E documentation scenarios. Every section below is backed by generated screenshots from the extension running against the test game fixture.</p>
+        <p class="lede">A practical guide to mastering the galaxy with NPA. This manual provides clear, visual walkthroughs of the planning tools, overlays, and coordination features designed to give you a tactical edge in Neptune's Pride.</p>
       </section>
       <article class="chapter" aria-labelledby="section-001">
 <p class="chapter-kicker">Section 001</p>
@@ -445,92 +446,109 @@ footer {
 <article class="chapter" aria-labelledby="section-002">
 <p class="chapter-kicker">Section 002</p>
 <h2 id="section-002" class="chapter-title">Territory Display And Scanning HUD</h2>
-<p>The territory and scanning HUD overlays make the map easier to read while planning. They show which empire owns the selected area, allow you to cycle through different territory rendering styles, and provide precise arrival times for fleets entering a star's scanning range.</p>
-<h3 id="section-002-show-the-selected-empire-s-territory-and-scanning-reach">Show the selected empire's territory and scanning reach</h3>
-<p>Selecting a star highlights the territory owned by that empire. This colored shape provides a quick visual summary of an empire's local influence and borders. In the example below, selecting <code>Mega Segin</code> reveals the surrounding empire's reach.</p>
+<p>The territory and scanning HUD overlays provide essential context for both logistics and intelligence. They visualize the scanning and fleet range of any selected empire, helping you identify safe routes and imminent threats at a glance.</p>
+<h3 id="section-002-visualize-empire-reach-with-territory-overlays">Visualize empire reach with territory overlays</h3>
+<p>Selecting any star highlights the territory owned by that empire, visualizing both their current scanning range and their immediate fleet reach. This overlay is a vital tool for understanding the &quot;shape&quot; of an empire and where its influence begins and ends.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/000-show-selected-empire-territory.png" alt="Show the selected empire&#39;s territory and scanning reach" loading="lazy">
-<figcaption>Show the selected empire's territory and scanning reach</figcaption>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/000-show-selected-empire-territory.png" alt="Visualize empire reach with territory overlays" loading="lazy">
+<figcaption>Visualize empire reach with territory overlays</figcaption>
 </figure>
 <h4 id="section-002-how-to-use-it">How to use it</h4>
 <ul>
-<li>Select any star on the map.</li>
-<li>Zoom out to see the full extent of the territory overlay.</li>
+<li>Select any star on the map to see the territory of its owner.</li>
+<li>Zoom out to see the full extent of their local reach.</li>
 </ul>
 <h4 id="section-002-what-to-expect">What to expect</h4>
 <ul>
-<li>The territory of the selected star's owner is shaded on the map.</li>
-<li>Neighboring stars (such as <code>Mega Segin</code> in the example) remain visible to help you orient the borders.</li>
+<li>The map displays a shaded overlay representing the empire's scanning and fleet coverage.</li>
+<li>Neighboring stars (such as <code>Mega Segin</code> in the example) remain visible for spatial orientation.</li>
 </ul>
-<h3 id="section-002-cycle-to-territory-display-style-2">Cycle to territory display style 2</h3>
-<p>Style 2 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on <code>Mega Segin</code>.</p>
+<h3 id="section-002-cycle-to-territory-rendering-style-bright-haze">Cycle to territory rendering style: Bright Haze</h3>
+<p>NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: <strong>Dim Haze</strong>, <strong>Bright Haze</strong>, <strong>Black Background with Outlines</strong>, and <strong>Outlines Only</strong>.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/001-cycle-territory-display-style-2.png" alt="Cycle to territory display style 2" loading="lazy">
-<figcaption>Cycle to territory display style 2</figcaption>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/001-cycle-territory-display-style-2.png" alt="Cycle to territory rendering style: Bright Haze" loading="lazy">
+<figcaption>Cycle to territory rendering style: Bright Haze</figcaption>
 </figure>
 <h4 id="section-002-how-to-use-it-2">How to use it</h4>
 <ul>
-<li>Press <strong>Ctrl+9</strong> to cycle to the next style.</li>
+<li>Press <strong>Ctrl+9</strong> to cycle through the available styles.</li>
 </ul>
 <h4 id="section-002-what-to-expect-2">What to expect</h4>
 <ul>
-<li>The visual style of the territory rendering updates immediately.</li>
+<li>The rendering updates to the <strong>Bright Haze</strong> style.</li>
+<li>The view remains centered so you can easily compare the visual impact of each mode.</li>
 </ul>
-<h3 id="section-002-cycle-to-territory-display-style-3">Cycle to territory display style 3</h3>
-<p>Style 3 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on <code>Mega Segin</code>.</p>
+<h3 id="section-002-cycle-to-territory-rendering-style-black-background-with-outlines">Cycle to territory rendering style: Black Background with Outlines</h3>
+<p>NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: <strong>Dim Haze</strong>, <strong>Bright Haze</strong>, <strong>Black Background with Outlines</strong>, and <strong>Outlines Only</strong>.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/002-cycle-territory-display-style-3.png" alt="Cycle to territory display style 3" loading="lazy">
-<figcaption>Cycle to territory display style 3</figcaption>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/002-cycle-territory-display-style-3.png" alt="Cycle to territory rendering style: Black Background with Outlines" loading="lazy">
+<figcaption>Cycle to territory rendering style: Black Background with Outlines</figcaption>
 </figure>
 <h4 id="section-002-how-to-use-it-3">How to use it</h4>
 <ul>
-<li>Press <strong>Ctrl+9</strong> to cycle to the next style.</li>
+<li>Press <strong>Ctrl+9</strong> to cycle through the available styles.</li>
 </ul>
 <h4 id="section-002-what-to-expect-3">What to expect</h4>
 <ul>
-<li>The visual style of the territory rendering updates immediately.</li>
+<li>The rendering updates to the <strong>Black Background with Outlines</strong> style.</li>
+<li>The view remains centered so you can easily compare the visual impact of each mode.</li>
 </ul>
-<h3 id="section-002-cycle-to-territory-display-style-4">Cycle to territory display style 4</h3>
-<p>Style 4 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on <code>Mega Segin</code>.</p>
+<h3 id="section-002-cycle-to-territory-rendering-style-outlines-only">Cycle to territory rendering style: Outlines Only</h3>
+<p>NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: <strong>Dim Haze</strong>, <strong>Bright Haze</strong>, <strong>Black Background with Outlines</strong>, and <strong>Outlines Only</strong>.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/003-cycle-territory-display-style-4.png" alt="Cycle to territory display style 4" loading="lazy">
-<figcaption>Cycle to territory display style 4</figcaption>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/003-cycle-territory-display-style-4.png" alt="Cycle to territory rendering style: Outlines Only" loading="lazy">
+<figcaption>Cycle to territory rendering style: Outlines Only</figcaption>
 </figure>
 <h4 id="section-002-how-to-use-it-4">How to use it</h4>
 <ul>
-<li>Press <strong>Ctrl+9</strong> to cycle to the next style.</li>
+<li>Press <strong>Ctrl+9</strong> to cycle through the available styles.</li>
 </ul>
 <h4 id="section-002-what-to-expect-4">What to expect</h4>
 <ul>
-<li>The visual style of the territory rendering updates immediately.</li>
+<li>The rendering updates to the <strong>Outlines Only</strong> style.</li>
+<li>The view remains centered so you can easily compare the visual impact of each mode.</li>
 </ul>
-<h3 id="section-002-recolor-your-empire-white-on-the-map">Recolor your empire white on the map</h3>
-<p>If your player color is difficult to see against the background or neighboring empires, you can toggle your own empire's color to white. This only changes your local view and does not affect how other players see you.</p>
+<h3 id="section-002-toggle-political-map-borders-and-empire-names">Toggle political map borders and empire names</h3>
+<p>To further reduce map clutter, you can toggle the game's default political map borders and empire names off or on. This is especially useful when the map is crowded with fleet routes or scanning ETAs.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/004-recolor-my-territory-white.png" alt="Recolor your empire white on the map" loading="lazy">
-<figcaption>Recolor your empire white on the map</figcaption>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/004-toggle-political-borders.png" alt="Toggle political map borders and empire names" loading="lazy">
+<figcaption>Toggle political map borders and empire names</figcaption>
 </figure>
 <h4 id="section-002-how-to-use-it-5">How to use it</h4>
+<ul>
+<li>Press <strong>Ctrl+0</strong> to toggle the visibility of political borders and empire labels.</li>
+</ul>
+<h4 id="section-002-what-to-expect-5">What to expect</h4>
+<ul>
+<li>The political borders and empire name labels disappear or reappear immediately.</li>
+</ul>
+<h3 id="section-002-recolor-your-empire-white-on-the-map">Recolor your empire white on the map</h3>
+<p>If your player color is difficult to see against the background or neighboring empires, you can toggle your own empire's color to white. This is a local visual aid that helps you track your own borders more easily without affecting other players.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/005-recolor-my-territory-white.png" alt="Recolor your empire white on the map" loading="lazy">
+<figcaption>Recolor your empire white on the map</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-6">How to use it</h4>
 <ul>
 <li>Select one of your own stars.</li>
 <li>Press <strong>w</strong> to toggle your map color to white.</li>
 </ul>
-<h4 id="section-002-what-to-expect-5">What to expect</h4>
+<h4 id="section-002-what-to-expect-6">What to expect</h4>
 <ul>
 <li>Your empire's map color changes to white, as seen in the screenshot.</li>
 </ul>
 <h3 id="section-002-green-and-grey-scan-etas-for-multiple-fleets">Green and Grey Scan ETAs for multiple fleets</h3>
 <p>Knowing exactly when a fleet will be detected is critical for timing your maneuvers. NPA displays color-coded scan ETA labels for fleets approaching a star. In this example, the enemy star <code>Alshat</code> is being approached by multiple fleets.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/005-scan-eta-green-and-grey-fleets.png" alt="Green and Grey Scan ETAs for multiple fleets" loading="lazy">
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/006-scan-eta-green-and-grey-fleets.png" alt="Green and Grey Scan ETAs for multiple fleets" loading="lazy">
 <figcaption>Green and Grey Scan ETAs for multiple fleets</figcaption>
 </figure>
-<h4 id="section-002-how-to-use-it-6">How to use it</h4>
+<h4 id="section-002-how-to-use-it-7">How to use it</h4>
 <ul>
 <li>Select an enemy star that fleets are approaching.</li>
 <li>Look for the distinct color-coded ETA labels near each fleet icon.</li>
 </ul>
-<h4 id="section-002-what-to-expect-6">What to expect</h4>
+<h4 id="section-002-what-to-expect-7">What to expect</h4>
 <ul>
 <li><strong>Green Labels:</strong> Indicate a &quot;dark&quot; fleet's first-time detection by this star.</li>
 <li><strong>Grey Labels:</strong> Indicate when this star will gain a scan lock on a fleet that is already visible via other stars.</li>
@@ -538,22 +556,22 @@ footer {
 <h3 id="section-002-measure-scan-eta-with-a-fake-fleet-route">Measure scan ETA with a fake fleet route</h3>
 <p>You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.</p>
 <figure>
-<img src="assets/002-territory-display-and-scanning-hud/screenshots/006-measure-scan-eta-with-fake-fleet.png" alt="Measure scan ETA with a fake fleet route" loading="lazy">
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/007-measure-scan-eta-with-fake-fleet.png" alt="Measure scan ETA with a fake fleet route" loading="lazy">
 <figcaption>Measure scan ETA with a fake fleet route</figcaption>
 </figure>
-<h4 id="section-002-how-to-use-it-7">How to use it</h4>
+<h4 id="section-002-how-to-use-it-8">How to use it</h4>
 <ul>
 <li>Press <strong>x</strong> to create a fake planning fleet.</li>
 <li>Add waypoints to the destination.</li>
 <li>Select the destination star (like <code>${TARGET_STAR_NAME}</code> in the example) to see the scan ETA for that route.</li>
 </ul>
-<h4 id="section-002-what-to-expect-7">What to expect</h4>
+<h4 id="section-002-what-to-expect-8">What to expect</h4>
 <ul>
 <li>As shown in the screenshot, the scan HUD displays the expected entry tick for the planned route.</li>
 </ul>
 </article>
       <footer>
-        Generated from <code>tests/playwright/*/DOCS.md</code>. Update the numbered E2E sections to extend this book.
+        Documentation for NPA. Update the documentation sections in the repository to extend this book.
       </footer>
     </main>
   </div>
