@@ -43,12 +43,29 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 - [x] The route editor reflects absolute tick-number mode
 - [x] The absolute-tick screenshot keeps Hot Sham centered and the selected fleet route visible
 
-## Model a worse-case fight by giving the enemy extra weapons
+## Model a worst-case fight by giving the enemy extra weapons
 
-![Model a worse-case fight by giving the enemy extra weapons](./screenshots/004-apply-combat-handicap.png)
+![Model a worst-case fight by giving the enemy extra weapons](./screenshots/004-apply-enemy-ws-plus-one.png)
 
 ### Verifications
 - [x] The . hotkey changes the rendered battle overlay in the HUD footer
 - [x] The fake enemy fleet and battle route remain selected after applying the handicap
 - [x] The handicap screenshot keeps the battle HUD footer visible while Hot Sham and its selected fleet route remain in frame
 
+## Return to the regular weapons calculation
+
+![Return to the regular weapons calculation](./screenshots/005-clear-combat-handicap.png)
+
+### Verifications
+- [x] The , hotkey removes the Enemy WS+1 adjustment and returns the footer to the regular calculation
+- [x] The fake enemy fleet and battle route remain selected after clearing the handicap
+- [x] The regular-calculation screenshot keeps Hot Sham, the selected fleet route, and the battle HUD footer in frame
+
+## Model the opposite weapons advantage with My WS-1
+
+![Model the opposite weapons advantage with My WS-1](./screenshots/006-apply-my-ws-minus-one.png)
+
+### Verifications
+- [x] Pressing , again displays My WS-1 and changes the footer calculation from the regular baseline
+- [x] The fake enemy fleet and battle route remain selected after applying the WS-1 adjustment
+- [x] The WS-1 screenshot keeps Hot Sham, the selected fleet route, and the battle HUD footer in frame

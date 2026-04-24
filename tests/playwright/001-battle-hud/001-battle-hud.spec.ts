@@ -56,7 +56,7 @@ test("documents the battle HUD controls and timebases", async ({
       "Verify that the battle HUD workflow can select a frontline star, route a fake enemy fleet, cycle ETA timebases, and render combat handicap text.",
     docsTitle: "How To Read The Battle HUD",
     docsSummary:
-      "The battle HUD is not one isolated panel. It is a set of map overlays, ETA labels, and control shortcuts that help you inspect a frontline star, plan enemy movement, and model worse-case combat assumptions.",
+      "The battle HUD is not one isolated panel. It is a set of map overlays, ETA labels, and control shortcuts that help you inspect a frontline star, plan enemy movement, and model worst-case combat assumptions.",
     bookSection: "How to read the battle HUD",
   });
 
@@ -162,7 +162,7 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "With the `Hot Sham` route still centered, press `%` once to show the ETA as a real-world clock time. This is useful when you want to discuss the arrival in chat without converting from hours or ticks.",
+        "With the `Hot Sham` route still centered, press `%` once to show the ETA as a real-world clock time. This is useful for setting an alarm in your own timezone so you can observe the outcome or add follow-on fleet orders when the route resolves.",
       howToUse: [
         "With the battle route visible, press `%` once.",
         "Read the ETA line in the waypoint editor as a clock time.",
@@ -170,6 +170,7 @@ test("documents the battle HUD controls and timebases", async ({
       expectedResult: [
         "Clock mode shows a real-world timestamp such as `11:40 AM`.",
         "`Hot Sham`, the selected fake fleet, and the `Red Chertan` route stay in the same map frame while the ETA display changes.",
+        "Use this for your own alarms, not cross-timezone coordination. Allies in other timezones should usually coordinate by tick number instead.",
       ],
     },
   });
@@ -209,7 +210,7 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "Press `%` again to convert the same `Hot Sham` to `Red Chertan` route from clock time into a relative tick count. NPA changes only the timebase; the selected fleet and route stay the same.",
+        "Press `%` again to convert the same `Hot Sham` to `Red Chertan` route from clock time into a relative tick count. Relative ticks are best when you are comparing your selected fleet against other moving fleets you can see on the map, because tick offsets are easier to compare than the game's default relative real-time display.",
       howToUse: [
         "After clock-time mode is visible, press `%` one more time.",
         "Read the ETA and production readouts as relative tick counts.",
@@ -256,7 +257,7 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "Press `%` again when you want a precise game tick for the `Hot Sham` to `Red Chertan` route instead of a relative duration. This is the most explicit way to coordinate combat windows with allies.",
+        "Press `%` again when you want a precise game tick for the `Hot Sham` to `Red Chertan` route instead of a relative duration. Absolute tick numbers are the best timebase for ally coordination because everyone sees the same tick even when their local clock time differs.",
       howToUse: [
         "After reaching relative tick mode, press `%` one more time.",
         "Read the ETA and production readouts as explicit tick numbers.",
@@ -269,18 +270,18 @@ test("documents the battle HUD controls and timebases", async ({
   });
 
   await frameAndAssertBattleMap(appPage);
-  await helper.step("apply-combat-handicap", {
-    description: "Model a worse-case fight by giving the enemy extra weapons",
+  const regularCalculationHash = await clipHash(appPage, OVERLAY_CLIP);
+  await helper.step("apply-enemy-ws-plus-one", {
+    description: "Model a worst-case fight by giving the enemy extra weapons",
     verifications: [
       {
         spec: "The . hotkey changes the rendered battle overlay in the HUD footer",
         check: async () => {
-          const before = await clipHash(appPage, OVERLAY_CLIP);
           await appPage.evaluate(() => {
             window.Mousetrap.trigger(".");
           });
           const after = await clipHash(appPage, OVERLAY_CLIP);
-          expect(after).not.toBe(before);
+          expect(after).not.toBe(regularCalculationHash);
         },
       },
       {
@@ -303,7 +304,7 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "Use `.` while the `Hot Sham` battle route is visible to add one weapons level to the side NPA is currently treating as the enemy in the battle HUD calculation. The footer shows `Enemy WS+1` so you can see that the current numbers are a pessimistic model rather than the default estimate.",
+        "Use `.` while the `Hot Sham` battle route is visible to add one weapons level to the side NPA is currently treating as the enemy in the battle HUD calculation. The footer shows `Enemy WS+1` so you can see that the current numbers are using an adjusted estimate rather than the regular calculation.",
       howToUse: [
         "Keep the battle route selected.",
         "Press `.` to increase the enemy weapons assumption by one level.",
@@ -311,11 +312,110 @@ test("documents the battle HUD controls and timebases", async ({
       expectedResult: [
         "The footer overlay changes to show the enemy handicap, for example `Enemy WS+1`.",
         "`Hot Sham`, the selected synthetic fleet, and the route toward `Red Chertan` remain visible while the battle HUD describes the harsher combat assumption.",
-        "Because this example is controlling Macomber, `Enemy WS+1` is applied to Macomber's attacking fake fleet rather than the Red Chertan defenders. That is why the projected survivors are lower in the final screenshot.",
+        "Because this example is controlling Macomber, `Enemy WS+1` is applied to Macomber's attacking fake fleet rather than the Red Chertan defenders. That is why the projected survivors are lower in this screenshot.",
       ],
       caveats: [
         "`Enemy WS+1` follows the current planning perspective. When you are controlling another player, the bonus can affect either side of the fight depending on which side NPA is modeling as the enemy.",
         "This is a planning aid. It changes NPA's local calculation, not the real weapons tech on the server.",
+      ],
+    },
+  });
+
+  await frameAndAssertBattleMap(appPage);
+  await helper.step("clear-combat-handicap", {
+    description: "Return to the regular weapons calculation",
+    verifications: [
+      {
+        spec: "The , hotkey removes the Enemy WS+1 adjustment and returns the footer to the regular calculation",
+        check: async () => {
+          await appPage.evaluate(() => {
+            window.Mousetrap.trigger(",");
+          });
+          const after = await clipHash(appPage, OVERLAY_CLIP);
+          expect(after).toBe(regularCalculationHash);
+        },
+      },
+      {
+        spec: "The fake enemy fleet and battle route remain selected after clearing the handicap",
+        check: async () => {
+          const state = await readBattleState(appPage);
+          expect(state.selectedFleetUid).toBeGreaterThanOrEqual(
+            SYNTHETIC_FLEET_UID_BASE,
+          );
+          expect(state.selectedFleetPath).toEqual([WAYPOINT_STAR_UID]);
+        },
+      },
+      {
+        spec: "The regular-calculation screenshot keeps Hot Sham, the selected fleet route, and the battle HUD footer in frame",
+        check: async () => {
+          const composition = await frameAndAssertBattleMap(appPage);
+          expect(composition.battleStar.name).toBe(BATTLE_STAR_NAME);
+        },
+      },
+    ],
+    documentation: {
+      summary:
+        "Press `,` once after `Enemy WS+1` to remove the weapons adjustment and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before trying the opposite assumption.",
+      howToUse: [
+        "Start from the `Enemy WS+1` view.",
+        "Press `,` once to step the weapons adjustment back to zero.",
+      ],
+      expectedResult: [
+        "The footer no longer shows an `Enemy WS` adjustment.",
+        "`Hot Sham`, the selected synthetic fleet, and the route toward `Red Chertan` remain visible so you can compare the regular calculation against the adjusted one.",
+      ],
+      caveats: [
+        "This only changes NPA's local battle estimate. It does not change any real tech level or submitted fleet order.",
+      ],
+    },
+  });
+
+  await frameAndAssertBattleMap(appPage);
+  await helper.step("apply-my-ws-minus-one", {
+    description: "Model the opposite weapons advantage with My WS-1",
+    verifications: [
+      {
+        spec: "Pressing , again displays My WS-1 and changes the footer calculation from the regular baseline",
+        check: async () => {
+          await appPage.evaluate(() => {
+            window.Mousetrap.trigger(",");
+          });
+          const after = await clipHash(appPage, OVERLAY_CLIP);
+          expect(after).not.toBe(regularCalculationHash);
+        },
+      },
+      {
+        spec: "The fake enemy fleet and battle route remain selected after applying the WS-1 adjustment",
+        check: async () => {
+          const state = await readBattleState(appPage);
+          expect(state.selectedFleetUid).toBeGreaterThanOrEqual(
+            SYNTHETIC_FLEET_UID_BASE,
+          );
+          expect(state.selectedFleetPath).toEqual([WAYPOINT_STAR_UID]);
+        },
+      },
+      {
+        spec: "The WS-1 screenshot keeps Hot Sham, the selected fleet route, and the battle HUD footer in frame",
+        check: async () => {
+          const composition = await frameAndAssertBattleMap(appPage);
+          expect(composition.battleStar.name).toBe(BATTLE_STAR_NAME);
+        },
+      },
+    ],
+    documentation: {
+      summary:
+        "Press `,` again to continue past the regular calculation into `My WS-1`. A negative local weapons adjustment grants the other side of the battle the weapons advantage for the local projection.",
+      howToUse: [
+        "Start from the regular weapons calculation.",
+        "Press `,` one more time to display `My WS-1`.",
+      ],
+      expectedResult: [
+        "The footer overlay changes to show `My WS-1`.",
+        "`Hot Sham`, the selected synthetic fleet, and the route toward `Red Chertan` remain visible while the survivor estimate reflects the opposite weapons assumption.",
+        "Because this example is controlling Macomber, `My WS-1` reduces Macomber's attacking fake fleet by one weapons level, effectively granting the Red Chertan defenders the advantage.",
+      ],
+      caveats: [
+        "`My WS-1` follows the same perspective rule as `Enemy WS+1`: the label is relative to the current planning perspective, not necessarily your real account in the live game.",
       ],
     },
   });
