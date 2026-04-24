@@ -540,6 +540,9 @@ footer {
 function formatInline(value) {
   let output = escapeHtml(value);
 
+  output = output.replace(/\*\*([^*]+)\*\*/g, (_match, bold) => {
+    return `<strong>${bold}</strong>`;
+  });
   output = output.replace(/`([^`]+)`/g, (_match, code) => {
     return `<code>${code}</code>`;
   });

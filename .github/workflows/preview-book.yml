@@ -47,7 +47,9 @@ jobs:
           git worktree add "$publish_dir" origin/web
 
           PR_NUMBER="${{ github.event.pull_request.number }}"
-          PREVIEW_PATH="docs/previews/pr-$PR_NUMBER"
+          # The web branch root corresponds to https://anicolao.github.io/npa/
+          # We deploy to previews/pr-N/ inside the web branch.
+          PREVIEW_PATH="previews/pr-$PR_NUMBER"
           
           rm -rf "$publish_dir/$PREVIEW_PATH"
           mkdir -p "$publish_dir/$PREVIEW_PATH"
@@ -63,10 +65,6 @@ jobs:
             git push origin HEAD:web
           fi
           
-          # Construct the preview URL
-          # Assuming the base URL is https://anicolao.github.io/npa/
-          # The 'web' branch 'docs' folder is mapped to the root.
-          # So previews/pr-N/index.html should be the target.
           echo "url=https://anicolao.github.io/npa/previews/pr-$PR_NUMBER/" >> $GITHUB_OUTPUT
 
       - name: Comment on PR
