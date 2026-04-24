@@ -42,23 +42,16 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 ### Verifications
 - [x] The w hotkey changes the current player's map color to white
 
-## Green Scan ETA for a fleet not currently in scan
+## Green and Grey Scan ETAs for multiple fleets
 
-![Green Scan ETA for a fleet not currently in scan](./screenshots/005-scan-eta-green-unscanned-fleet.png)
-
-### Verifications
-- [x] Selecting Fast Jih shows a green scan ETA for an approaching allied fleet (680) that the enemy cannot see yet
-
-## Grey Scan ETA for a fleet already scanned by another star
-
-![Grey Scan ETA for a fleet already scanned by another star](./screenshots/006-scan-eta-grey-already-scanned-fleet.png)
+![Green and Grey Scan ETAs for multiple fleets](./screenshots/005-scan-eta-green-and-grey-fleets.png)
 
 ### Verifications
-- [x] Selecting Fast Jih also shows scan ETA for other approaching fleets (684)
+- [x] Selecting Alshat shows multiple scan ETAs: Green for unscanned fleets and Grey for already scanned fleets
 
 ## Measure scan ETA with a fake fleet route
 
-![Measure scan ETA with a fake fleet route](./screenshots/007-measure-scan-eta-with-fake-fleet.png)
+![Measure scan ETA with a fake fleet route](./screenshots/006-measure-scan-eta-with-fake-fleet.png)
 
 ### Verifications
 - [x] The scan HUD calculation predicts the tick when the fake fleet enters Laser Fort 11's scanning range

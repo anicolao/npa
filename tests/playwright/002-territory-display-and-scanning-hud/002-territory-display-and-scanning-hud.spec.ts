@@ -11,10 +11,10 @@ const TARGET_STAR_NAME = "Laser Fort 11";
 const ORIGIN_OWNER_UID = 5;
 const ORIGIN_OWNER_ALIAS = "Osric";
 
-const FAST_JIH_STAR_UID = 18;
-const FAST_JIH_STAR_NAME = "Fast Jih";
-const FLEET_680_UID = 680;
-const FLEET_684_UID = 684;
+const FAST_JIH_STAR_UID = 118;
+const FAST_JIH_STAR_NAME = "Alshat";
+const FLEET_680_UID = 602;
+const FLEET_684_UID = 1443;
 
 const SYNTHETIC_FLEET_UID_BASE = 100000;
 const TERRITORY_MAP_SCALE = 200; // Zoomed out enough to see borders clearly
@@ -168,36 +168,30 @@ test("documents territory display and scanning HUD controls", async ({
 
   // Move to scan info with existing fleets
   await frameAndAssertExistingScanMap(appPage, FAST_JIH_STAR_UID, FAST_JIH_SCREEN_TARGET);
-  await helper.step("scan-eta-green-unscanned-fleet", {
-    description: "Green Scan ETA for a fleet not currently in scan",
-    verifications: [
-      {
-        spec: "Selecting Fast Jih shows a green scan ETA for an approaching allied fleet (680) that the enemy cannot see yet",
-        check: async () => {
-          const state = await readTerritoryState(appPage);
-          expect(state.selectedStarUid).toBe(FAST_JIH_STAR_UID);
-          // We expect the scan ETA to be calculated and eventually drawn
-        },
-      },
-    ],
-    documentation: {
-      summary: "When you select a star, NPA calculates the scan ETA for any fleet crossing that star's scan border. If the fleet is not currently scanned by any of that player's other stars, the ETA is shown (drawn in green on the map).",
-      howToUse: [
-        "Select an enemy star that one of your fleets is approaching.",
-        "NPA will show when that star specifically will gain a scan lock on your fleet.",
-      ],
-      expectedResult: [
-        "A scan ETA label appears near the fleet on the map.",
-      ],
+  await helper.step("scan-eta-green-and-grey-fleets", {
+    description: "Green and Grey Scan ETAs for multiple fleets",
+    beforeScreenshot: async () => {
+      // Route multiple fleets to Alshat to show multiple ETAs
+      await appPage.evaluate(({ starUid, f1, f2 }) => {
+        const np = window.NeptunesPride;
+        const targetStar = np.universe.galaxy.stars[starUid];
+        
+        [f1, f2].forEach(uid => {
+          const fleet = np.universe.galaxy.fleets[uid];
+          if (fleet) {
+            fleet.o = [[0, starUid, 0, 0]]; // Force route to target star
+            fleet.path = [targetStar];
+          }
+        });
+        
+        np.universe.selectedStar = targetStar;
+        np.crux.trigger("show_star_uid", String(starUid));
+        np.np.trigger("map_rebuild");
+      }, { starUid: FAST_JIH_STAR_UID, f1: FLEET_680_UID, f2: FLEET_684_UID });
     },
-  });
-
-  await frameAndAssertExistingScanMap(appPage, FAST_JIH_STAR_UID, FAST_JIH_SCREEN_TARGET);
-  await helper.step("scan-eta-grey-already-scanned-fleet", {
-    description: "Grey Scan ETA for a fleet already scanned by another star",
     verifications: [
       {
-        spec: "Selecting Fast Jih also shows scan ETA for other approaching fleets (684)",
+        spec: "Selecting Alshat shows multiple scan ETAs: Green for unscanned fleets and Grey for already scanned fleets",
         check: async () => {
           const state = await readTerritoryState(appPage);
           expect(state.selectedStarUid).toBe(FAST_JIH_STAR_UID);
@@ -205,13 +199,15 @@ test("documents territory display and scanning HUD controls", async ({
       },
     ],
     documentation: {
-      summary: "If the fleet is already within the scanning range of another star owned by the same player, the ETA is considered 'grey' (though technically drawn in the same style, it represents a redundant scan lock).",
+      summary: "When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects `Alshat`, owned by `piers plowman`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via `Blue Minchir` (Grey ETA).",
       howToUse: [
-        "Select the enemy star your fleet is approaching.",
-        "Compare ETAs if multiple fleets are approaching.",
+        "Select an enemy star being approached by multiple fleets.",
+        "Look for the distinct color-coded ETA labels near each fleet.",
       ],
       expectedResult: [
-        "Scan ETA labels appear for all approaching fleets that will cross the border.",
+        "Multiple scan ETA labels appear on the map.",
+        "Green labels (like for `Fleet 602`) indicate upcoming first-time detection.",
+        "Grey labels (like for `Fleet 1443`) indicate when this specific star will also gain a scan lock on an already-detected fleet.",
       ],
     },
   });
