@@ -538,19 +538,29 @@ footer {
 }
 
 function formatInline(value) {
-  let output = escapeHtml(value);
+  const parts = [];
+  let current = 0;
+  const regex = /\*\*([^*]+)\*\*|`([^`]+)`|\[([^\]]+)]\(([^)]+)\)/g;
+  let match;
 
-  output = output.replace(/\*\*([^*]+)\*\*/g, (_match, bold) => {
-    return `<strong>${bold}</strong>`;
-  });
-  output = output.replace(/`([^`]+)`/g, (_match, code) => {
-    return `<code>${code}</code>`;
-  });
-  output = output.replace(/\[([^\]]+)]\(([^)]+)\)/g, (_match, text, href) => {
-    return `<a href="${escapeAttribute(href)}">${text}</a>`;
-  });
+  while ((match = regex.exec(value)) !== null) {
+    if (match.index > current) {
+      parts.push(escapeHtml(value.substring(current, match.index)));
+    }
+    if (match[1]) {
+      parts.push(`<strong>${escapeHtml(match[1])}</strong>`);
+    } else if (match[2]) {
+      parts.push(`<code>${escapeHtml(match[2])}</code>`);
+    } else if (match[3]) {
+      parts.push(`<a href="${escapeAttribute(match[4])}">${escapeHtml(match[3])}</a>`);
+    }
+    current = regex.lastIndex;
+  }
+  if (current < value.length) {
+    parts.push(escapeHtml(value.substring(current)));
+  }
 
-  return output;
+  return parts.join("");
 }
 
 function slugify(value) {
