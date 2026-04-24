@@ -19,7 +19,7 @@ const FLEET_684_UID = 1443;
 const SYNTHETIC_FLEET_UID_BASE = 100000;
 const TERRITORY_MAP_SCALE = 200; // Zoomed out enough to see borders clearly
 const SCAN_MAP_SCALE = 300;
-const SCAN_EXISTING_MAP_SCALE = 300;
+const SCAN_EXISTING_MAP_SCALE = 400; // Zoomed in tighter for scan indicators
 const ORIGIN_STAR_SCREEN_TARGET = { x: 800, y: 540 }; // Center of 1600x1080 clip roughly
 const SCAN_ORIGIN_SCREEN_TARGET = { x: 520, y: 570 };
 const FAST_JIH_SCREEN_TARGET = { x: 800, y: 540 };
@@ -181,6 +181,7 @@ test("documents territory display and scanning HUD controls", async ({
           if (fleet) {
             fleet.o = [[0, starUid, 0, 0]]; // Force route to target star
             fleet.path = [targetStar];
+            fleet.etaFirst = 10; // Ensure etaFirst is set so Scan HUD runs
           }
         });
         
