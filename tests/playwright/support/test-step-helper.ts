@@ -19,6 +19,7 @@ export interface StepOptions {
   verifications: Verification[];
   documentation: StepDocumentation;
   screenshot?: Omit<PageScreenshotOptions, "path">;
+  beforeScreenshot?: () => Promise<void>;
 }
 
 export interface ScenarioMetadata {
@@ -85,6 +86,8 @@ export class TestStepHelper {
         }
       `,
     });
+
+    await options.beforeScreenshot?.();
 
     await this.page.screenshot({
       path: path.join(screenshotDir, filename),
