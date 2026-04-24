@@ -56,4 +56,3 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 
 ### Verifications
 - [x] The scan HUD calculation predicts the tick when the fake fleet enters Laser Fort 11's scanning range
-
