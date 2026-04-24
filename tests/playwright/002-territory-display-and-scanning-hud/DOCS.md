@@ -70,7 +70,7 @@ Press `w` to recolor your own empire white. This is useful when your normal play
 
 ## Green and Grey Scan ETAs for multiple fleets
 
-When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects `Alshat`, owned by `piers plowman`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via `Blue Minchir` (Grey ETA).
+When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects `Alshat`, owned by `piers plowman`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via `Tau Keid` (Grey ETA).
 
 ![Green and Grey Scan ETAs for multiple fleets](./screenshots/005-scan-eta-green-and-grey-fleets.png)
 

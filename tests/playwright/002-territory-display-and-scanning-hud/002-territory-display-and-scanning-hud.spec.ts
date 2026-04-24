@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import type { Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { waitForAgentHooks } from "../helpers";
@@ -13,6 +12,8 @@ const ORIGIN_OWNER_ALIAS = "Osric";
 
 const FAST_JIH_STAR_UID = 118;
 const FAST_JIH_STAR_NAME = "Alshat";
+const GREY_VISIBILITY_STAR_UID = 123;
+const GREY_VISIBILITY_STAR_NAME = "Tau Keid";
 const FLEET_680_UID = 602;
 const FLEET_684_UID = 1443;
 
@@ -22,8 +23,7 @@ const SCAN_MAP_SCALE = 300;
 const SCAN_EXISTING_MAP_SCALE = 400; // Zoomed in tighter for scan indicators
 const ORIGIN_STAR_SCREEN_TARGET = { x: 800, y: 540 }; // Center of 1600x1080 clip roughly
 const SCAN_ORIGIN_SCREEN_TARGET = { x: 520, y: 570 };
-const FAST_JIH_SCREEN_TARGET = { x: 800, y: 540 };
-const MAP_CLIP = { x: 0, y: 120, width: 1600, height: 1080 };
+const FAST_JIH_SCREEN_TARGET = { x: 800, y: 540 }; // Center on target star
 
 type TerritoryState = {
   selectedStarUid: number | null;
@@ -51,6 +51,15 @@ type MapComposition = {
 type ScreenSubject = {
   uid: number;
   name: string;
+  x: number;
+  y: number;
+};
+
+type ScanHudIndicator = {
+  fleetUid: number;
+  color: "green" | "grey";
+  hudColor: "#00ff00" | "#888888";
+  selectedStarUid: number | null;
   x: number;
   y: number;
 };
@@ -160,35 +169,25 @@ test("documents territory display and scanning HUD controls", async ({
         "Select one of your own stars.",
         "Press `w` to toggle your map color to white.",
       ],
-      expectedResult: [
-        "Your empire's map color changes to white.",
-      ],
+      expectedResult: ["Your empire's map color changes to white."],
     },
   });
 
   // Move to scan info with existing fleets
-  await frameAndAssertExistingScanMap(appPage, FAST_JIH_STAR_UID, FAST_JIH_SCREEN_TARGET);
+  await prepareExistingFleetScanHud(appPage);
+  await frameAndAssertExistingScanMap(
+    appPage,
+    FAST_JIH_STAR_UID,
+    FAST_JIH_SCREEN_TARGET,
+  );
   await helper.step("scan-eta-green-and-grey-fleets", {
     description: "Green and Grey Scan ETAs for multiple fleets",
     beforeScreenshot: async () => {
-      // Route multiple fleets to Alshat to show multiple ETAs
-      await appPage.evaluate(({ starUid, f1, f2 }) => {
-        const np = window.NeptunesPride;
-        const targetStar = np.universe.galaxy.stars[starUid];
-        
-        [f1, f2].forEach(uid => {
-          const fleet = np.universe.galaxy.fleets[uid];
-          if (fleet) {
-            fleet.o = [[0, starUid, 0, 0]]; // Force route to target star
-            fleet.path = [targetStar];
-            fleet.etaFirst = 10; // Ensure etaFirst is set so Scan HUD runs
-          }
-        });
-        
-        np.universe.selectedStar = targetStar;
-        np.crux.trigger("show_star_uid", String(starUid));
-        np.np.trigger("map_rebuild");
-      }, { starUid: FAST_JIH_STAR_UID, f1: FLEET_680_UID, f2: FLEET_684_UID });
+      await frameAndAssertExistingScanMap(
+        appPage,
+        FAST_JIH_STAR_UID,
+        FAST_JIH_SCREEN_TARGET,
+      );
     },
     verifications: [
       {
@@ -196,11 +195,42 @@ test("documents territory display and scanning HUD controls", async ({
         check: async () => {
           const state = await readTerritoryState(appPage);
           expect(state.selectedStarUid).toBe(FAST_JIH_STAR_UID);
+          expect(state.selectedStarName).toBe(FAST_JIH_STAR_NAME);
+        },
+      },
+      {
+        spec: "The scan HUD example includes one green indicator and one grey indicator in the screenshot frame",
+        check: async () => {
+          const indicators = await readScanHudIndicators(appPage, [
+            FLEET_680_UID,
+            FLEET_684_UID,
+          ]);
+
+          expect(indicators).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                fleetUid: FLEET_680_UID,
+                color: "green",
+              }),
+              expect.objectContaining({
+                fleetUid: FLEET_684_UID,
+                color: "grey",
+              }),
+            ]),
+          );
+
+          for (const indicator of indicators) {
+            expect(indicator.selectedStarUid).toBe(FAST_JIH_STAR_UID);
+            expect(indicator.x).toBeGreaterThan(0);
+            expect(indicator.x).toBeLessThan(1600);
+            expect(indicator.y).toBeGreaterThan(120);
+            expect(indicator.y).toBeLessThan(1200);
+          }
         },
       },
     ],
     documentation: {
-      summary: "When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects `Alshat`, owned by `piers plowman`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via `Blue Minchir` (Grey ETA).",
+      summary: `When multiple fleets approach the same star, NPA calculates and displays scan ETAs for each one. This example selects \`${FAST_JIH_STAR_NAME}\`, owned by \`piers plowman\`. Two allied fleets are approaching: one is currently hidden from the enemy (Green ETA), and another is already visible to them via \`${GREY_VISIBILITY_STAR_NAME}\` (Grey ETA).`,
       howToUse: [
         "Select an enemy star being approached by multiple fleets.",
         "Look for the distinct color-coded ETA labels near each fleet.",
@@ -279,10 +309,10 @@ async function prepareTerritoryScenario(appPage: Page): Promise<void> {
       map.sx = target.x / map.pixelRatio - originStar.x * map.scale;
       map.sy = target.y / map.pixelRatio - originStar.y * map.scale;
 
+      np.universe.selectedPlayer = originStar.player;
       np.universe.selectedStar = originStar;
       np.universe.selectedFleet = null;
       np.universe.selectedSpaceObject = originStar;
-      np.crux.trigger("show_star_uid", String(originStarUid));
       np.np.trigger("map_rebuild");
     },
     {
@@ -300,6 +330,83 @@ async function prepareTerritoryScenario(appPage: Page): Promise<void> {
     });
 }
 
+async function prepareExistingFleetScanHud(appPage: Page): Promise<void> {
+  await appPage.evaluate(
+    ({ targetStarUid, visibilityStarUid, greenFleetUid, greyFleetUid }) => {
+      const np = window.NeptunesPride;
+      const galaxy = np.universe.galaxy;
+      const targetStar = galaxy.stars[targetStarUid];
+      const visibilityStar = galaxy.stars[visibilityStarUid];
+      const greenFleet = galaxy.fleets[greenFleetUid];
+      const greyFleet = galaxy.fleets[greyFleetUid];
+
+      if (!targetStar || !visibilityStar || !greenFleet || !greyFleet) {
+        throw new Error("Scan HUD fixture objects are missing.");
+      }
+
+      const scanRange = np.universe.calcScanValue(targetStar.player);
+      const setFleetRoute = (
+        fleet: {
+          x: number;
+          y: number;
+          lx: number;
+          ly: number;
+          o: unknown[];
+          path: unknown[];
+          etaFirst: number;
+        },
+        x: number,
+        y: number,
+      ) => {
+        fleet.x = x;
+        fleet.y = y;
+        fleet.lx = x;
+        fleet.ly = y;
+        fleet.o = [[0, targetStarUid, 0, 0]];
+        fleet.path = [targetStar];
+        fleet.etaFirst = 64;
+      };
+
+      setFleetRoute(greenFleet, targetStar.x + scanRange + 0.18, targetStar.y);
+
+      const dx = visibilityStar.x - targetStar.x;
+      const dy = visibilityStar.y - targetStar.y;
+      const length = Math.sqrt(dx * dx + dy * dy);
+      const greyVisibilityOffset = 0.45;
+      setFleetRoute(
+        greyFleet,
+        visibilityStar.x + (dx / length) * greyVisibilityOffset,
+        visibilityStar.y + (dy / length) * greyVisibilityOffset,
+      );
+
+      np.universe.selectedPlayer = targetStar.player;
+      np.universe.selectedStar = targetStar;
+      np.universe.selectedFleet = null;
+      np.universe.selectedSpaceObject = targetStar;
+      np.np.trigger("map_rebuild");
+    },
+    {
+      targetStarUid: FAST_JIH_STAR_UID,
+      visibilityStarUid: GREY_VISIBILITY_STAR_UID,
+      greenFleetUid: FLEET_680_UID,
+      greyFleetUid: FLEET_684_UID,
+    },
+  );
+
+  await expect
+    .poll(
+      async () =>
+        readScanHudIndicators(appPage, [FLEET_680_UID, FLEET_684_UID]),
+      { timeout: 10000 },
+    )
+    .toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fleetUid: FLEET_680_UID, color: "green" }),
+        expect.objectContaining({ fleetUid: FLEET_684_UID, color: "grey" }),
+      ]),
+    );
+}
+
 async function prepareFakeFleetScanRoute(appPage: Page): Promise<void> {
   await appPage.evaluate(
     ({ originStarUid, targetStarUid, syntheticFleetUidBase }) => {
@@ -307,10 +414,10 @@ async function prepareFakeFleetScanRoute(appPage: Page): Promise<void> {
       const originStar = np.universe.galaxy.stars[originStarUid];
       const targetStar = np.universe.galaxy.stars[targetStarUid];
 
+      np.universe.selectedPlayer = originStar.player;
       np.universe.selectedStar = originStar;
       np.universe.selectedFleet = null;
       np.universe.selectedSpaceObject = originStar;
-      np.crux.trigger("show_star_uid", String(originStarUid));
       window.Mousetrap.trigger("x");
 
       let fleet = np.universe.selectedFleet;
@@ -367,10 +474,11 @@ async function frameAndAssertTerritoryMap(
 async function frameAndAssertExistingScanMap(
   appPage: Page,
   starUid: number,
-  target: { x: number, y: number }
+  target: { x: number; y: number },
 ): Promise<MapComposition> {
   const composition = await frameMap(appPage, {
     selectedStarUid: starUid,
+    targetStarUid: starUid,
     focusStarUid: starUid,
     selectedFleet: false,
     mapScale: SCAN_EXISTING_MAP_SCALE,
@@ -378,6 +486,8 @@ async function frameAndAssertExistingScanMap(
   });
 
   expect(composition.scale).toBe(SCAN_EXISTING_MAP_SCALE);
+  expect(composition.targetStar.x).toBeCloseTo(target.x, 0);
+  expect(composition.targetStar.y).toBeCloseTo(target.y, 0);
   return composition;
 }
 
@@ -403,6 +513,7 @@ async function frameMap(
   appPage: Page,
   options: {
     selectedStarUid: number;
+    targetStarUid?: number;
     focusStarUid?: number;
     selectedFleet: boolean;
     mapScale: number;
@@ -412,9 +523,10 @@ async function frameMap(
   const composition = await appPage.evaluate(
     ({
       originStarUid,
-      targetStarUid,
+      defaultTargetStarUid,
       syntheticFleetUidBase,
       selectedStarUid,
+      targetStarUid,
       focusStarUid,
       selectedFleet,
       mapScale,
@@ -423,13 +535,15 @@ async function frameMap(
       const np = window.NeptunesPride;
       const map = np.npui.map;
       const originStar = np.universe.galaxy.stars[originStarUid];
-      const targetStar = np.universe.galaxy.stars[targetStarUid];
+      const targetStar =
+        np.universe.galaxy.stars[targetStarUid ?? defaultTargetStarUid];
       const selectedStar = np.universe.galaxy.stars[selectedStarUid];
-      const focusStar = np.universe.galaxy.stars[focusStarUid ?? selectedStarUid];
-      
+      const focusStar =
+        np.universe.galaxy.stars[focusStarUid ?? selectedStarUid];
+
       let fleet = np.universe.selectedFleet;
       if (!fleet || fleet.uid < syntheticFleetUidBase) {
-         fleet = Object.values(np.universe.galaxy.fleets)
+        fleet = Object.values(np.universe.galaxy.fleets)
           .filter((candidate) => candidate.uid >= syntheticFleetUidBase)
           .sort((left, right) => right.uid - left.uid)[0];
       }
@@ -445,6 +559,21 @@ async function frameMap(
       np.universe.interfaceSettings.textZoomStarNames = 0;
       np.universe.interfaceSettings.textZoomShips = 0;
 
+      if (selectedFleet) {
+        if (!fleet) {
+          throw new Error("Expected fake fleet to exist for scan map framing.");
+        }
+        np.universe.selectedPlayer = fleet.player;
+        np.universe.selectedFleet = fleet;
+        np.universe.selectedSpaceObject = fleet;
+        np.universe.selectedStar = selectedStar;
+      } else {
+        np.universe.selectedPlayer = selectedStar.player;
+        np.universe.selectedStar = selectedStar;
+        np.universe.selectedFleet = null;
+        np.universe.selectedSpaceObject = selectedStar;
+      }
+
       map.zooming = false;
       map.scale = mapScale;
       map.scaleTarget = mapScale;
@@ -452,18 +581,6 @@ async function frameMap(
       map.sx = target.x / map.pixelRatio - focusStar.x * map.scale;
       map.sy = target.y / map.pixelRatio - focusStar.y * map.scale;
 
-      np.universe.selectedStar = selectedStar;
-      if (selectedFleet) {
-        if (!fleet) {
-          throw new Error("Expected fake fleet to exist for scan map framing.");
-        }
-        np.universe.selectedFleet = fleet;
-        np.universe.selectedSpaceObject = fleet;
-      } else {
-        np.universe.selectedFleet = null;
-        np.universe.selectedSpaceObject = selectedStar;
-      }
-      np.crux.trigger("show_star_uid", String(selectedStar.uid));
       np.np.trigger("map_rebuild");
 
       if (typeof map.draw === "function") {
@@ -496,9 +613,10 @@ async function frameMap(
     },
     {
       originStarUid: ORIGIN_STAR_UID,
-      targetStarUid: TARGET_STAR_UID,
+      defaultTargetStarUid: TARGET_STAR_UID,
       syntheticFleetUidBase: SYNTHETIC_FLEET_UID_BASE,
       selectedStarUid: options.selectedStarUid,
+      targetStarUid: options.targetStarUid,
       focusStarUid: options.focusStarUid,
       selectedFleet: options.selectedFleet,
       mapScale: options.mapScale,
@@ -515,6 +633,44 @@ async function frameMap(
       }),
   );
   await waitForAnimations(appPage);
+  await appPage.evaluate(
+    async ({ selectedStarUid, focusStarUid, mapScale, target }) => {
+      const np = window.NeptunesPride;
+      const map = np.npui.map;
+      const focusStar =
+        np.universe.galaxy.stars[focusStarUid ?? selectedStarUid];
+
+      const applyFrame = () => {
+        map.zooming = false;
+        map.scale = mapScale;
+        map.scaleTarget = mapScale;
+        map.miniMapEnabled = false;
+        map.sx = target.x / map.pixelRatio - focusStar.x * map.scale;
+        map.sy = target.y / map.pixelRatio - focusStar.y * map.scale;
+        np.np.trigger("map_rebuild");
+
+        if (typeof map.draw === "function") {
+          map.draw();
+        }
+      };
+
+      applyFrame();
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => resolve()),
+      );
+      applyFrame();
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => resolve()),
+      );
+      applyFrame();
+    },
+    {
+      selectedStarUid: options.selectedStarUid,
+      focusStarUid: options.focusStarUid,
+      mapScale: options.mapScale,
+      target: options.target,
+    },
+  );
 
   return composition;
 }
@@ -547,12 +703,70 @@ async function readTerritoryState(appPage: Page): Promise<TerritoryState> {
   );
 }
 
-
-
-async function clipHash(
+async function readScanHudIndicators(
   appPage: Page,
-  clip: { x: number; y: number; width: number; height: number },
-): Promise<string> {
-  const png = await appPage.screenshot({ clip });
-  return createHash("sha256").update(png).digest("hex");
+  fleetUids: number[],
+): Promise<ScanHudIndicator[]> {
+  return appPage.evaluate((targetFleetUids) => {
+    const np = window.NeptunesPride;
+    const universe = np.universe;
+    const map = np.npui.map;
+    const selectedStar = universe.selectedStar;
+
+    if (
+      !selectedStar ||
+      selectedStar.puid === universe.player.uid ||
+      selectedStar.puid === -1 ||
+      map.scale < 200
+    ) {
+      return [];
+    }
+
+    const selectedStarOwner = universe.galaxy.players[selectedStar.puid];
+    const scanRange = universe.calcScanValue(selectedStarOwner);
+    const canOwnerSeeFleet = (fleet: { x: number; y: number }) =>
+      Object.values(universe.galaxy.stars).some(
+        (star) =>
+          star.puid === selectedStar.puid &&
+          universe.distance(star.x, star.y, fleet.x, fleet.y) <= scanRange,
+      );
+
+    return targetFleetUids.flatMap((fleetUid) => {
+      const fleet = universe.galaxy.fleets[fleetUid];
+      if (!fleet || !fleet.path?.length) {
+        return [];
+      }
+
+      const fleetDistance = universe.distance(
+        selectedStar.x,
+        selectedStar.y,
+        fleet.x,
+        fleet.y,
+      );
+      const destinationDistance = universe.distance(
+        selectedStar.x,
+        selectedStar.y,
+        fleet.path[0].x,
+        fleet.path[0].y,
+      );
+
+      if (fleetDistance <= scanRange || destinationDistance >= scanRange) {
+        return [];
+      }
+
+      const isGrey = canOwnerSeeFleet(fleet);
+      const x = map.worldToScreenX(fleet.x) + 26 * map.pixelRatio;
+      const y = map.worldToScreenY(fleet.y);
+      return [
+        {
+          fleetUid,
+          color: isGrey ? "grey" : "green",
+          hudColor: isGrey ? "#888888" : "#00ff00",
+          selectedStarUid: selectedStar.uid,
+          x: x / map.pixelRatio,
+          y: y / map.pixelRatio,
+        },
+      ];
+    });
+  }, fleetUids);
 }

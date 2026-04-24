@@ -48,6 +48,7 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 
 ### Verifications
 - [x] Selecting Alshat shows multiple scan ETAs: Green for unscanned fleets and Grey for already scanned fleets
+- [x] The scan HUD example includes one green indicator and one grey indicator in the screenshot frame
 
 ## Measure scan ETA with a fake fleet route
 
