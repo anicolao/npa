@@ -1,62 +1,77 @@
 # Territory Display And Scanning HUD
 
-The territory and scanning HUD overlays make the map easier to read while planning. They show which empire owns the selected area, allow you to cycle through different territory rendering styles, and provide precise arrival times for fleets entering a star's scanning range.
+The territory and scanning HUD overlays provide essential context for both logistics and intelligence. They visualize the scanning and fleet range of any selected empire, helping you identify safe routes and imminent threats at a glance.
 
-## Show the selected empire's territory and scanning reach
+## Visualize empire reach with territory overlays
 
-Selecting a star highlights the territory owned by that empire. This colored shape provides a quick visual summary of an empire's local influence and borders. In the example below, selecting `Mega Segin` reveals the surrounding empire's reach.
+Selecting any star highlights the territory owned by that empire, visualizing both their current scanning range and their immediate fleet reach. This overlay is a vital tool for understanding the "shape" of an empire and where its influence begins and ends.
 
-![Show the selected empire's territory and scanning reach](./screenshots/000-show-selected-empire-territory.png)
-
-### How to use it
-- Select any star on the map.
-- Zoom out to see the full extent of the territory overlay.
-
-### What to expect
-- The territory of the selected star's owner is shaded on the map.
-- Neighboring stars (such as `Mega Segin` in the example) remain visible to help you orient the borders.
-
-## Cycle to territory display style 2
-
-Style 2 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on `Mega Segin`.
-
-![Cycle to territory display style 2](./screenshots/001-cycle-territory-display-style-2.png)
+![Visualize empire reach with territory overlays](./screenshots/000-show-selected-empire-territory.png)
 
 ### How to use it
-- Press **Ctrl+9** to cycle to the next style.
+- Select any star on the map to see the territory of its owner.
+- Zoom out to see the full extent of their local reach.
 
 ### What to expect
-- The visual style of the territory rendering updates immediately.
+- The map displays a shaded overlay representing the empire's scanning and fleet coverage.
+- Neighboring stars (such as `Mega Segin` in the example) remain visible for spatial orientation.
 
-## Cycle to territory display style 3
+## Cycle to territory rendering style: Bright Haze
 
-Style 3 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on `Mega Segin`.
+NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: **Dim Haze**, **Bright Haze**, **Black Background with Outlines**, and **Outlines Only**.
 
-![Cycle to territory display style 3](./screenshots/002-cycle-territory-display-style-3.png)
+![Cycle to territory rendering style: Bright Haze](./screenshots/001-cycle-territory-display-style-2.png)
 
 ### How to use it
-- Press **Ctrl+9** to cycle to the next style.
+- Press **Ctrl+9** to cycle through the available styles.
 
 ### What to expect
-- The visual style of the territory rendering updates immediately.
+- The rendering updates to the **Bright Haze** style.
+- The view remains centered so you can easily compare the visual impact of each mode.
 
-## Cycle to territory display style 4
+## Cycle to territory rendering style: Black Background with Outlines
 
-Style 4 offers a different visual balance between territory fill and map clarity. Comparison is easy as the view remains centered on `Mega Segin`.
+NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: **Dim Haze**, **Bright Haze**, **Black Background with Outlines**, and **Outlines Only**.
 
-![Cycle to territory display style 4](./screenshots/003-cycle-territory-display-style-4.png)
+![Cycle to territory rendering style: Black Background with Outlines](./screenshots/002-cycle-territory-display-style-3.png)
 
 ### How to use it
-- Press **Ctrl+9** to cycle to the next style.
+- Press **Ctrl+9** to cycle through the available styles.
 
 ### What to expect
-- The visual style of the territory rendering updates immediately.
+- The rendering updates to the **Black Background with Outlines** style.
+- The view remains centered so you can easily compare the visual impact of each mode.
+
+## Cycle to territory rendering style: Outlines Only
+
+NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: **Dim Haze**, **Bright Haze**, **Black Background with Outlines**, and **Outlines Only**.
+
+![Cycle to territory rendering style: Outlines Only](./screenshots/003-cycle-territory-display-style-4.png)
+
+### How to use it
+- Press **Ctrl+9** to cycle through the available styles.
+
+### What to expect
+- The rendering updates to the **Outlines Only** style.
+- The view remains centered so you can easily compare the visual impact of each mode.
+
+## Toggle political map borders and empire names
+
+To further reduce map clutter, you can toggle the game's default political map borders and empire names off or on. This is especially useful when the map is crowded with fleet routes or scanning ETAs.
+
+![Toggle political map borders and empire names](./screenshots/004-toggle-political-borders.png)
+
+### How to use it
+- Press **Ctrl+0** to toggle the visibility of political borders and empire labels.
+
+### What to expect
+- The political borders and empire name labels disappear or reappear immediately.
 
 ## Recolor your empire white on the map
 
-If your player color is difficult to see against the background or neighboring empires, you can toggle your own empire's color to white. This only changes your local view and does not affect how other players see you.
+If your player color is difficult to see against the background or neighboring empires, you can toggle your own empire's color to white. This is a local visual aid that helps you track your own borders more easily without affecting other players.
 
-![Recolor your empire white on the map](./screenshots/004-recolor-my-territory-white.png)
+![Recolor your empire white on the map](./screenshots/005-recolor-my-territory-white.png)
 
 ### How to use it
 - Select one of your own stars.
@@ -69,7 +84,7 @@ If your player color is difficult to see against the background or neighboring e
 
 Knowing exactly when a fleet will be detected is critical for timing your maneuvers. NPA displays color-coded scan ETA labels for fleets approaching a star. In this example, the enemy star `Alshat` is being approached by multiple fleets.
 
-![Green and Grey Scan ETAs for multiple fleets](./screenshots/005-scan-eta-green-and-grey-fleets.png)
+![Green and Grey Scan ETAs for multiple fleets](./screenshots/006-scan-eta-green-and-grey-fleets.png)
 
 ### How to use it
 - Select an enemy star that fleets are approaching.
@@ -83,7 +98,7 @@ Knowing exactly when a fleet will be detected is critical for timing your maneuv
 
 You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.
 
-![Measure scan ETA with a fake fleet route](./screenshots/006-measure-scan-eta-with-fake-fleet.png)
+![Measure scan ETA with a fake fleet route](./screenshots/007-measure-scan-eta-with-fake-fleet.png)
 
 ### How to use it
 - Press **x** to create a fake planning fleet.

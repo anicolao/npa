@@ -265,11 +265,11 @@ ${buildCss()}
       <section class="hero" aria-labelledby="book-title">
         <p class="eyebrow">Neptune's Pride Agent field guide</p>
         <h1 id="book-title">NPA Book</h1>
-        <p class="lede">A lightweight manual built from verified E2E documentation scenarios. Every section below is backed by generated screenshots from the extension running against the test game fixture.</p>
+        <p class="lede">A practical guide to mastering the galaxy with NPA. This manual provides clear, visual walkthroughs of the planning tools, overlays, and coordination features designed to give you a tactical edge in Neptune's Pride.</p>
       </section>
       ${chaptersHtml}
       <footer>
-        Generated from <code>tests/playwright/*/DOCS.md</code>. Update the numbered E2E sections to extend this book.
+        Documentation for NPA. Update the documentation sections in the repository to extend this book.
       </footer>
     </main>
   </div>
