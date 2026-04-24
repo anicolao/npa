@@ -1,0 +1,83 @@
+name: Preview NPA Book
+
+on:
+  pull_request:
+    paths:
+      - "scripts/build-npa-book.mjs"
+      - "tests/playwright/*/DOCS.md"
+      - "tests/playwright/*/screenshots/**"
+      - "package.json"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: npa-book-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Build NPA Book
+        run: npm run docs:book -- --out book-dist
+        env:
+          NPA_BOOK_BASE_HREF: "/npa/previews/pr-${{ github.event.pull_request.number }}/"
+
+      - name: Deploy Preview
+        id: deploy
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin web
+          
+          publish_dir="$(mktemp -d)"
+          git worktree add "$publish_dir" origin/web
+
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PREVIEW_PATH="docs/previews/pr-$PR_NUMBER"
+          
+          rm -rf "$publish_dir/$PREVIEW_PATH"
+          mkdir -p "$publish_dir/$PREVIEW_PATH"
+          cp -R book-dist/. "$publish_dir/$PREVIEW_PATH/"
+
+          cd "$publish_dir"
+          git add "$PREVIEW_PATH"
+
+          if git diff --cached --quiet; then
+            echo "No changes to the book preview."
+          else
+            git commit -m "Deploy preview for PR $PR_NUMBER"
+            git push origin HEAD:web
+          fi
+          
+          # Construct the preview URL
+          # Assuming the base URL is https://anicolao.github.io/npa/
+          # The 'web' branch 'docs' folder is mapped to the root.
+          # So previews/pr-N/index.html should be the target.
+          echo "url=https://anicolao.github.io/npa/previews/pr-$PR_NUMBER/" >> $GITHUB_OUTPUT
+
+      - name: Comment on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: book-preview
+          message: |
+            ### 📖 Documentation Book Preview
+            
+            The documentation book has been updated with changes from this PR.
+            
+            **[View Preview](${{ steps.deploy.outputs.url }})**
+            
+            _Built from latest commit in this pull request._

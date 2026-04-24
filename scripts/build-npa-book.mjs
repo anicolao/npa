@@ -234,11 +234,14 @@ ${chapter.html}
     )
     .join("\n");
 
+  const baseHref = process.env.NPA_BOOK_BASE_HREF ?? "./";
+
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="${baseHref}">
   <title>NPA Book</title>
   <meta name="description" content="A practical guide to Neptune's Pride Agent, generated from the verified E2E documentation scenarios.">
   <style>
