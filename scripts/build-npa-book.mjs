@@ -308,6 +308,182 @@ ${buildCss()}
     </main>
   </div>
   <script>
+    (function() {
+      const VS = \`
+        attribute vec2 a_position;
+        attribute vec2 a_texCoord;
+        varying vec2 v_texCoord;
+        void main() {
+          gl_Position = vec4(a_position, 0, 1);
+          v_texCoord = a_texCoord;
+        }
+      \`;
+
+      const FS = \`
+        precision mediump float;
+        uniform sampler2D u_image;
+        uniform vec2 u_resolution;
+        uniform vec2 u_mouse;
+        uniform float u_zoom;
+        uniform float u_radius;
+        varying vec2 v_texCoord;
+
+        float circle(vec2 p, vec2 center, float radius) {
+          return 1.0 - smoothstep(radius - 1.0, radius + 1.0, length(p - center));
+        }
+
+        void main() {
+          vec2 p = v_texCoord * u_resolution;
+          vec2 mouse = u_mouse;
+          mouse.y = u_resolution.y - mouse.y; // Flip Y for WebGL
+
+          float mask = circle(p, mouse, u_radius);
+          float ring = circle(p, mouse, u_radius + 2.0) - circle(p, mouse, u_radius - 1.0);
+
+          vec2 mouseUV = mouse / u_resolution;
+          vec2 zoomedUV = (v_texCoord - mouseUV) / u_zoom + mouseUV;
+          vec4 base = texture2D(u_image, v_texCoord);
+          vec4 zoomed = texture2D(u_image, zoomedUV);
+          
+          vec4 ringColor = vec4(0.1, 0.5, 0.5, 1.0);
+          gl_FragColor = mix(base, zoomed, mask) + ring * ringColor;
+        }
+      \`;
+
+      let gl, program, positionBuffer, texCoordBuffer, texture;
+      let canvas = document.createElement('canvas');
+      canvas.className = 'magnifier-canvas';
+      let activeImage = null;
+      let isPinned = false;
+      let lastMousePos = { x: 0, y: 0 };
+
+      function initGL() {
+        gl = canvas.getContext('webgl');
+        if (!gl) return;
+
+        const createShader = (gl, type, source) => {
+          const shader = gl.createShader(type);
+          gl.shaderSource(shader, source);
+          gl.compileShader(shader);
+          return shader;
+        };
+
+        program = gl.createProgram();
+        gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, VS));
+        gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, FS));
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+
+        texCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0,0, 1,0, 0,1, 0,1, 1,0, 1,1]), gl.STATIC_DRAW);
+
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        texture = gl.createTexture();
+      }
+
+      function update(img, x, y) {
+        if (!gl) initGL();
+        if (!gl) return;
+
+        if (activeImage !== img) {
+          activeImage = img;
+          gl.bindTexture(gl.TEXTURE_2D, texture);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          
+          canvas.width = img.clientWidth;
+          canvas.height = img.clientHeight;
+          img.parentNode.appendChild(canvas);
+        }
+
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        
+        const aPos = gl.getAttribLocation(program, 'a_position');
+        gl.enableVertexAttribArray(aPos);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+        const aTex = gl.getAttribLocation(program, 'a_texCoord');
+        gl.enableVertexAttribArray(aTex);
+        gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+        gl.vertexAttribPointer(aTex, 2, gl.FLOAT, false, 0, 0);
+
+        gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), canvas.width, canvas.height);
+        gl.uniform2f(gl.getUniformLocation(program, 'u_mouse'), x, y);
+        gl.uniform1f(gl.getUniformLocation(program, 'u_zoom'), 2.5);
+        gl.uniform1f(gl.getUniformLocation(program, 'u_radius'), Math.min(canvas.width, canvas.height) * 0.15);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        canvas.style.display = 'block';
+      }
+
+      document.addEventListener('mousemove', (e) => {
+        if (isPinned) return;
+        if (e.target.tagName === 'IMG' && e.target.closest('figure')) {
+          const rect = e.target.getBoundingClientRect();
+          lastMousePos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+          update(e.target, lastMousePos.x, lastMousePos.y);
+        } else if (activeImage) {
+          canvas.style.display = 'none';
+          activeImage = null;
+        }
+      });
+
+      function handleTouch(e) {
+        if (isPinned) return;
+        const touch = e.touches[0];
+        if (touch.target.tagName === 'IMG' && touch.target.closest('figure')) {
+          const rect = touch.target.getBoundingClientRect();
+          lastMousePos = { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+          update(touch.target, lastMousePos.x, lastMousePos.y);
+        }
+      }
+      document.addEventListener('touchstart', handleTouch, { passive: true });
+      document.addEventListener('touchmove', handleTouch, { passive: true });
+
+      document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG' && e.target.closest('figure')) {
+          const rect = e.target.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          if (isPinned && activeImage === e.target) {
+            isPinned = false;
+            if (!matchMedia('(pointer: fine)').matches) {
+              canvas.style.display = 'none';
+              activeImage = null;
+            } else {
+              update(e.target, x, y);
+            }
+          } else {
+            isPinned = true;
+            update(e.target, x, y);
+          }
+        } else {
+          isPinned = false;
+          if (activeImage) {
+            canvas.style.display = 'none';
+            activeImage = null;
+          }
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        if (activeImage) {
+          canvas.width = activeImage.clientWidth;
+          canvas.height = activeImage.clientHeight;
+          if (isPinned) update(activeImage, lastMousePos.x, lastMousePos.y);
+        }
+      });
+    })();
+
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('bug-link')) {
         const block = e.target.closest('.doc-block');
@@ -543,6 +719,20 @@ img {
   display: block;
   height: auto;
   max-width: 100%;
+  cursor: crosshair;
+}
+
+.magnifier-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  z-index: 5;
+}
+
+.doc-block figure {
+  position: relative;
 }
 
 figcaption {
