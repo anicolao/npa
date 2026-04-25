@@ -14,23 +14,14 @@ export type VersionInfo = {
 export async function getVersionInfo(): Promise<VersionInfo> {
   const d = new Date();
   const date = `${d.getDate()} ${d.toLocaleString("default", { month: "short" })} ${d.getFullYear()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
-  
-  const getGitInfo = (command: string) => {
-    try {
-      return execSync(command, { encoding: "utf8" }).trim();
-    } catch (e) {
-      return "";
-    }
-  };
-
   return {
     hash:
       process.env.VITE_NPA_COMMIT_HASH ??
-      getGitInfo("git rev-parse --short HEAD"),
+      execSync("git rev-parse --short HEAD").toString().trim(),
     date: process.env.VITE_NPA_VERSION_DATE ?? date,
     status:
       process.env.VITE_NPA_GIT_STATUS ??
-      getGitInfo("git status -s"),
+      execSync("git status -s").toString().replace(/\n$/, ""),
     version: process.env.VITE_NPA_VERSION ?? p.version,
     display: process.env.VITE_NPA_VERSION_STRING ?? "",
   };

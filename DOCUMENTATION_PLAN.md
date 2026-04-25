@@ -24,7 +24,7 @@ Current status: planning only. No chapter in this plan has been approved for aut
 | 009 | Intel and Screenshot buttons | Report insertion, screenshot capture, and related UI | Planned |
 | 010 | Embedded image and YouTube links | Rich content support inside messages or reports | Planned |
 | 011 | Embedding API keys | How embedded keys are used and where they appear | Planned |
-| 012 | Autocomplete | Available autocomplete behavior and how to use it correctly | Planned |
+| 012 | Autocomplete | Available autocomplete behavior and how to use it correctly | Complete |
 | 013 | API keys | Creating, entering, and validating API keys in NPA | Planned |
 | 014 | Time machine | Navigating historical views and understanding timeline controls | Planned |
 | 015 | Historical time-based reports | Ownership, Formal alliances, Trade Activity, Combat Activity, Activity | Planned |
