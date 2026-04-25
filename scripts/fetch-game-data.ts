@@ -40,8 +40,7 @@ async function fetchGameData() {
 if (typeof window === 'undefined') {
 	// Running in Node.js environment
 	if (process.argv.length !== 4) {
-		console.error("usage: bun index.ts [GAME_ID] [API_KEY]");
-		console.error("or: tsx index.ts [GAME_ID] [API_KEY]");
+		console.error("usage: npx tsx scripts/fetch-game-data.ts [GAME_ID] [API_KEY]");
 	} else {
 		np4api(parseInt(process.argv[2]), process.argv[3]);
 	}

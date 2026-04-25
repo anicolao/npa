@@ -1,5 +1,5 @@
 {
-  description = "bun for NPA development";
+  description = "nodejs for NPA development";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.systems.url = "github:nix-systems/default";
   inputs.flake-utils = {
@@ -15,7 +15,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        devShells.default = pkgs.mkShell { packages = with pkgs; [ bun ]; };
+        devShells.default = pkgs.mkShell { packages = with pkgs; [ nodejs ]; };
       }
     );
 }

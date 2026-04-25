@@ -21,14 +21,14 @@ So the goals of the development tooling are:
 
 ## Setup
 
-We use bun to configure the development environment, which enables
+We use npm to configure the development environment, which enables
 easy access to the best in class typescript and javascript development
 tools. You'll need to have installed a
-[recent version of bun](https://bun.sh/)
+[recent version of nodejs](https://nodejs.org/)
 for these instructions to work. Check that you have it by running
 
 ```
-bun --version
+node --version
 ```
 
 You'll also need to have a recent
@@ -49,11 +49,11 @@ where `<username>` is the user you used to create your fork. On some
 setups, it might be more convenient to clone via `https` than ssh.
 
 Before you can build for the first time, you will need to
-use `bun` to install all the development tools, like so:
+use `npm` to install all the development tools, like so:
 
 ```
 cd npa
-bun install
+npm install
 ```
 
 ## Development
@@ -62,7 +62,7 @@ To develop chrome extensions, you need to have a directory with all
 the files that would ship to Chrome in it. The command
 
 ```
-bun run start
+npm start
 ```
 
 will create a new directory named `dist` which contains the Chrome
@@ -73,7 +73,7 @@ directory that was created by the build process. If you have a
 production build of NPA installed, use the extensions page to
 disable it so that only one copy is running at a time.
 
-You'll notice that `bun run start` never exits. It watches your
+You'll notice that `npm start` never exits. It watches your
 filesystem for changes to the source code, which you can make in
 any editor you like. Each time you save a file, the system will
 immediately rebuild your extension for you. Then, go back to
@@ -133,7 +133,7 @@ practice to set up so that tests are executed as you type and you
 can also run them from the command line any time with:
 
 ```
-bun run test
+npm test
 ```
 
 ### Unit tests in vscode

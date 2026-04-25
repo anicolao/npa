@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
  * This script parses DOCUMENTATION_PLAN.md and files GitHub issues for
  * sections 005 through 016.
  * 
- * Usage: bun scripts/file-doc-issues.ts [--confirm]
+ * Usage: npx tsx scripts/file-doc-issues.ts [--confirm]
  */
 
 const PLAN_FILE = "DOCUMENTATION_PLAN.md";

@@ -35,7 +35,6 @@ echo "Downloading external styles, images, libraries, and fonts..."
 # Check if extension is built
 if [ ! -d "dist" ] || [ ! -f "dist/intel.js" ]; then
 	echo "WARNING: Extension not built. Please run 'npm run build' before running tests."
-	echo "Note: Build requires 'bun' to be installed. See DEVELOPMENT.md for setup instructions."
 fi
 
 # Install Playwright browsers if not already installed
@@ -62,6 +61,6 @@ echo "  npm run test:playwright # Run Playwright tests"
 echo "  npm run test:all       # Run all tests"
 echo ""
 echo "To build the extension:"
-echo "  npm run build         # Requires 'bun' to be installed"
+echo "  npm run build"
 echo ""
 echo "For more information, see TESTING.md"
