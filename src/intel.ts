@@ -1446,19 +1446,7 @@ async function NeptunesPrideAgent() {
     return "{0}:{1} PM".format(h, m);
   };
 
-  const safeClone = (o: any, seen = new Map()): any => {
-    if (typeof o !== "object" || o === null) return o;
-    if (seen.has(o)) return seen.get(o);
-    const ret: any = Array.isArray(o) ? [] : {};
-    seen.set(o, ret);
-    for (const k in o) {
-      ret[k] = safeClone(o[k], seen);
-    }
-    return ret;
-  };
-
   let trueTick = 0;
-  let trueGalaxy: any = null;
   const colors = [
     "#0000ff",
     "#009fdf",
@@ -1551,7 +1539,6 @@ async function NeptunesPrideAgent() {
   let timeTravelTick = -1;
   const recordTrueTick = (_: any, galaxy: any) => {
     trueTick = galaxy.tick;
-    trueGalaxy = safeClone(galaxy);
     rebuildColorMap(galaxy);
     timeTravelTick = -1;
   };
@@ -5164,12 +5151,6 @@ async function NeptunesPrideAgent() {
     return clone(scan);
   };
   const timeTravel = (dir: "back" | "forwards"): boolean => {
-    if (timeTravelTick === trueTick && trueGalaxy) {
-      loadGalaxy(safeClone(trueGalaxy));
-      timeTravelTick = -1;
-      NeptunesPride.np.trigger("map_rebuild");
-      return true;
-    }
     if (timeTravelTick > trueTick) {
       // we are in future time machine
       if (dir === "forwards") {
