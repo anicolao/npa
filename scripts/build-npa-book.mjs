@@ -100,7 +100,16 @@ async function renderChapter(chapter, markdown) {
     if (!list.length) return;
     html.push("<ul>");
     for (const item of list) {
-      html.push(`<li>${formatInline(item)}</li>`);
+      html.push(
+        `<li class="doc-block" data-section="${
+          chapter.number
+        }" data-text="${escapeAttribute(item)}">`,
+      );
+      html.push(formatInline(item));
+      html.push(
+        `<a class="bug-link" title="Report an issue with this section" aria-label="Report issue"></a>`,
+      );
+      html.push("</li>");
     }
     html.push("</ul>");
     list = [];
@@ -132,10 +141,19 @@ async function renderChapter(chapter, markdown) {
         title = headingText;
         html.push(`<p class="chapter-kicker">Section ${chapter.number}</p>`);
         html.push(
+          `<div class="doc-block" data-section="${
+            chapter.number
+          }" data-text="${escapeAttribute(headingText)}">`,
+        );
+        html.push(
           `<h${outputLevel} id="${headingId}" class="chapter-title">${formatInline(
             headingText,
           )}</h${outputLevel}>`,
         );
+        html.push(
+          `<a class="bug-link" title="Report an issue with this section" aria-label="Report issue"></a>`,
+        );
+        html.push(`</div>`);
       } else {
         headings.push({
           id: headingId,
@@ -143,10 +161,19 @@ async function renderChapter(chapter, markdown) {
           level: sourceLevel,
         });
         html.push(
+          `<div class="doc-block" data-section="${
+            chapter.number
+          }" data-text="${escapeAttribute(headingText)}">`,
+        );
+        html.push(
           `<h${outputLevel} id="${headingId}">${formatInline(
             headingText,
           )}</h${outputLevel}>`,
         );
+        html.push(
+          `<a class="bug-link" title="Report an issue with this section" aria-label="Report issue"></a>`,
+        );
+        html.push(`</div>`);
       }
       continue;
     }
