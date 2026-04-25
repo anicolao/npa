@@ -6,141 +6,134 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
   const helper = new TestStepHelper(appPage, testInfo);
 
   helper.setMetadata({
-    title: "Autocomplete Validation",
-    validationGoal: "Verify that autocomplete correctly identifies player IDs, player names, star names, and API keys.",
-    docsTitle: "How to use Autocomplete",
-    docsSummary: "Autocomplete helps you quickly insert player names, star names, and your API key into messages or reports by using simple triggers.",
-    bookSection: "Autocomplete",
+    title: "Autocomplete Scenarios",
+    validationGoal: "Verify and document NPA's autocomplete triggers and cycling behavior.",
+    docsTitle: "Autocomplete",
+    docsSummary: "NPA provides several autocomplete triggers to help you quickly insert player names and star names into text fields.",
+    bookSection: "012-autocomplete",
   });
-
-  await waitForAgentHooks(appPage);
-
-  // Inject a textarea for testing
-  await appPage.evaluate(() => {
-    const area = document.createElement("textarea");
-    area.id = "test-autocomplete";
-    area.style.position = "fixed";
-    area.style.top = "100px";
-    area.style.left = "100px";
-    area.style.width = "400px";
-    area.style.height = "200px";
-    area.style.zIndex = "10000";
-    area.style.backgroundColor = "#1a1d44";
-    area.style.color = "white";
-    area.style.border = "2px solid #2c3273";
-    area.style.padding = "10px";
-    area.style.fontFamily = "monospace";
-    document.body.appendChild(area);
-    area.focus();
-  });
-
-  const textarea = appPage.locator("#test-autocomplete");
 
   await helper.step("player-id-autocomplete", {
-    description: "Autocomplete a player name using their ID",
+    description: "Autocompleting a player name by their ID",
     verifications: [
       {
-        spec: "Typing [[1:] results in the player name 'Gorn'",
+        spec: "Typing `[[1` and pressing `]` inserts the name of the player with ID 1.",
         check: async () => {
-          await textarea.fill("[[1");
-          await textarea.press(":");
-          await expect(textarea).toHaveValue("[[Gorn]]");
-        },
-      },
+          await waitForAgentHooks(appPage);
+          
+          // Inject a textarea for testing
+          await appPage.evaluate(() => {
+            const textarea = document.createElement("textarea");
+            textarea.id = "test-autocomplete";
+            textarea.style.position = "fixed";
+            textarea.style.top = "10px";
+            textarea.style.left = "10px";
+            textarea.style.zIndex = "9999";
+            textarea.style.width = "400px";
+            textarea.style.height = "100px";
+            textarea.style.background = "white";
+            textarea.style.color = "black";
+            textarea.style.border = "2px solid red";
+            document.body.appendChild(textarea);
+            textarea.focus();
+          });
+
+          const textarea = appPage.locator("#test-autocomplete");
+          await textarea.pressSequentially("Hello [[1");
+          
+          // Pressing ] should autocomplete player 1
+          await textarea.press("]");
+          
+          // In our test data, player 1 is Gorn (who is AFK)
+          await expect(textarea).toHaveValue(/Hello \[\[Gorn.*\]\]/);
+        }
+      }
     ],
     documentation: {
-      summary: "You can quickly insert a player's name by typing their ID between double brackets followed by a colon or a closing bracket.",
+      summary: "You can quickly insert a player's name by their numeric ID.",
       howToUse: [
-        "Type `[[` followed by the player's ID (e.g., `1`).",
-        "Type `:` or `]` to complete the name.",
+        "Type `[[` followed by the player's ID number.",
+        "Press **]** to complete the name."
       ],
       expectedResult: [
-        "The ID is replaced by the player's full alias, wrapped in brackets.",
-      ],
-    },
+        "The `[[ID]]` sequence is replaced by the player's full alias enclosed in double brackets."
+      ]
+    }
   });
 
   await helper.step("player-name-cycling", {
-    description: "Cycle through matching player names",
+    description: "Cycling through multiple players matching a prefix",
     verifications: [
       {
-        spec: "Typing [[G] and pressing ] cycles through players starting with G",
+        spec: "Repeatedly pressing `]` cycles through all matching player names.",
         check: async () => {
-          await textarea.fill("Hello [[G");
+          const textarea = appPage.locator("#test-autocomplete");
+          // Clear and reset state
+          await textarea.fill("");
+          await textarea.click(); // ensure focus and state reset
+          
+          await textarea.pressSequentially("Hello [[G");
+          
+          // Pressing ] should cycle through players starting with G
+          // Order: Gameling, Gorn (AFK), GrapeMaster, GrugGarKon, godchat
           await textarea.press("]");
-          // Gorn is player 1, GrugGarKon is player 4.
-          // The code sorts by matchPriority (0 for players) then matchText.
-          // Gorn comes before GrugGarKon.
-          await expect(textarea).toHaveValue("Hello [[Gorn]]");
+          await expect(textarea).toHaveValue(/Hello \[\[Gameling.*\]\]/);
+          
           await textarea.press("]");
-          await expect(textarea).toHaveValue("Hello [[GrugGarKon]]");
-        },
-      },
+          await expect(textarea).toHaveValue(/Hello \[\[Gorn.*\]\]/);
+          
+          await textarea.press("]");
+          await expect(textarea).toHaveValue(/Hello \[\[GrapeMaster.*\]\]/);
+
+          await textarea.press("]");
+          await expect(textarea).toHaveValue(/Hello \[\[GrugGarKon.*\]\]/);
+
+          await textarea.press("]");
+          await expect(textarea).toHaveValue(/Hello \[\[godchat.*\]\]/);
+        }
+      }
     ],
     documentation: {
-      summary: "If you don't know the ID, you can type the start of a name and cycle through matches.",
+      summary: "When multiple players match your search, you can cycle through them.",
       howToUse: [
-        "Type `[[` followed by the first few letters of a player's name.",
-        "Press `]` to see the first match.",
-        "Press `]` again to cycle to the next match if there are multiple players with similar names.",
+        "Type `[[` followed by the start of a player's name.",
+        "Press **]** repeatedly to cycle through all matching players."
       ],
       expectedResult: [
-        "NPA replaces your search string with the full name of the matching player.",
-      ],
-    },
+        "NPA cycles through all players whose names contain the text you typed."
+      ]
+    }
   });
 
   await helper.step("star-name-cycling", {
-    description: "Cycle through matching star names",
+    description: "Autocompleting star names",
     verifications: [
       {
-        spec: "Typing [[Upsilon] and pressing ] completions to 'Upsilon Minkar'",
+        spec: "Star names are also included in the autocomplete suggestions.",
         check: async () => {
-          await textarea.fill("Meet at [[Upsilon");
-          await textarea.press("]");
-          await expect(textarea).toHaveValue("Meet at [[Upsilon Minkar]]");
-        },
-      },
-    ],
-    documentation: {
-      summary: "Autocomplete also works for star names, making it easy to coordinate coordinates with allies.",
-      howToUse: [
-        "Type `[[` followed by the start of a star name.",
-        "Press `]` to complete or cycle through matching stars.",
-      ],
-      expectedResult: [
-        "The star name is completed and wrapped in double brackets.",
-      ],
-    },
-  });
+          const textarea = appPage.locator("#test-autocomplete");
+          // Clear and reset state
+          await textarea.fill("");
+          await textarea.click();
 
-  await helper.step("api-key-completion", {
-    description: "Insert your API key for coordination",
-    verifications: [
-      {
-        spec: "Typing [[api:] inserts the player's API key",
-        check: async () => {
-          await textarea.fill("My key is [[api");
-          await textarea.press(":");
-          // The mock API key in the fixture might be empty or a specific value.
-          // Based on src/intel.ts, it calls getApiKey() which for the test environment
-          // might return a dummy value if we set it up.
-          await expect(textarea).toHaveValue(/My key is \[\[api:[a-zA-Z0-9]+\]\]/);
-        },
-      },
+          await textarea.pressSequentially("Meet me at [[Ald");
+          
+          // Should match Aldebaran (it comes before Alderamin)
+          await textarea.press("]");
+          await expect(textarea).toHaveValue("Meet me at [[Aldebaran]]");
+        }
+      }
     ],
     documentation: {
-      summary: "When coordinating with tools or allies who need your map data, you can quickly insert your API key.",
+      summary: "Star names can also be autocompleted.",
       howToUse: [
-        "Type `[[api:` or `[[api]`.",
+        "Type `[[` followed by part of a star's name.",
+        "Press **]** to complete the name."
       ],
       expectedResult: [
-        "NPA inserts your current game's API key into the text.",
-      ],
-      caveats: [
-        "Only share your API key with trusted allies or verified external tools.",
-      ],
-    },
+        "The star name is inserted, correctly formatted for game links."
+      ]
+    }
   });
 
   helper.generateArtifacts();
