@@ -85,18 +85,73 @@ test("documents the messaging support and helpers", async ({ appPage }, testInfo
     description: "The Intel and Screenshot buttons allow you to quickly share data and images.",
     verifications: [
       {
-        spec: "The messaging helper buttons are present in the message box",
+        spec: "The Intel and Screenshot buttons are visible in the reply box",
         check: async () => {
-           // We'll use a very permissive locator for the documentation artifacts
-           const buttons = appPage.locator('div.widget').filter({ hasText: /Intel|Screenshot/ });
-           await expect(buttons.first()).toBeAttached();
+           // 1. Open a diplomacy detail screen (which uses NewMessageCommentBox)
+           await appPage.evaluate(() => {
+             const np = window.NeptunesPride;
+             const player = np.universe.galaxy.players[1];
+
+             // Mock a message so we can show diplomacy_detail
+             const msg = {
+                 key: "msg1",
+                 payload: {
+                     from_uid: 1,
+                     to_uids: [np.universe.player.uid],
+                     subject: "Alliance?",
+                     body: "Would you like to ally?"
+                 },
+                 created: Date.now(),
+                 comments: [],
+                 commentsLoaded: true
+             };
+
+             np.inbox.messages.game_diplomacy = [msg];
+             np.inbox.selectedMessage = msg;
+             np.inbox.cpage = 0; // Ensure we are on the first page to see the reply box
+             np.inbox.commentDrafts["msg1"] = "";
+             np.crux.trigger("show_screen", "diplomacy_detail");
+           });
+
+           // Wait for the reply box to appear
+           const textarea = appPage.locator("textarea");
+           await expect(textarea).toBeVisible({ timeout: 10000 });
+           const initialValue = await textarea.inputValue();
+
+           // 2. Trigger report via hotkey to populate clipboard
+           await appPage.keyboard.press("*");
+           await appPage.waitForTimeout(500);
+
+           // 3. Identify and click the Intel button
+           await appPage.evaluate(() => {
+             const all = [...document.querySelectorAll('*')].filter(e => 
+               e.textContent?.trim() === 'Intel' && (e as HTMLElement).offsetParent !== null
+             );
+             if (all.length >= 2) {
+               // The second one is likely the one in the message box (first is side menu)
+               (all[1] as HTMLElement).click();
+             } else if (all.length === 1) {
+               (all[0] as HTMLElement).click();
+             } else {
+               throw new Error("No visible Intel button found");
+             }
+           });
+           
+           // 4. Verify that content was added
+           await expect(async () => {
+             // Re-locate textarea as the screen might have re-rendered
+             const currentTextarea = appPage.locator("textarea");
+             const newValue = await currentTextarea.inputValue();
+             expect(newValue.length).toBeGreaterThan(initialValue.length);
+             expect(newValue).not.toContain("Error");
+           }).toPass({ timeout: 10000 });
         },
       },
     ],
     documentation: {
       summary: "Sharing intelligence and visual data is essential for coordination. NPA provides dedicated buttons in the message composition area to automate these tasks.",
       howToUse: [
-        "View any report to put it on your intelligence clipboard.",
+        "View any report (e.g., by pressing **`**) to put it on your intelligence clipboard.",
         "In a message box, click **Intel** to paste the last report.",
         "Click **Screenshot** to capture your current map view and insert a shareable link.",
       ],

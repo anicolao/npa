@@ -4061,7 +4061,7 @@ async function NeptunesPrideAgent() {
     };
     onTrigger("paste_report", reportPasteHook);
     npui.NewMessageCommentBox = () => {
-      const widget = superNewMessageCommentBox();
+      const widget = new (superNewMessageCommentBox as any)();
       const reportButton = new UI.Button(
         "npa_paste",
         "paste_report",

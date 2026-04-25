@@ -22,7 +22,7 @@ Sharing intelligence and visual data is essential for coordination. NPA provides
 ![The Intel and Screenshot buttons allow you to quickly share data and images.](./screenshots/001-messaging-helpers.png)
 
 ### How to use it
-- View any report to put it on your intelligence clipboard.
+- View any report (e.g., by pressing **`**) to put it on your intelligence clipboard.
 - In a message box, click **Intel** to paste the last report.
 - Click **Screenshot** to capture your current map view and insert a shareable link.
 

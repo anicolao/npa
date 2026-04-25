@@ -19,4 +19,4 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 ![The Intel and Screenshot buttons allow you to quickly share data and images.](./screenshots/001-messaging-helpers.png)
 
 ### Verifications
-- [x] The messaging helper buttons are present in the message box
+- [x] The Intel and Screenshot buttons are visible in the reply box
