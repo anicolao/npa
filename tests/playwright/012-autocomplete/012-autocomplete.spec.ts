@@ -7,9 +7,9 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
 
   helper.setMetadata({
     title: "Autocomplete Scenarios",
-    validationGoal: "Verify and document NPA's autocomplete triggers and cycling behavior.",
+    validationGoal: "Verify and document NPA's autocomplete triggers and cycling behavior in the game's messaging UI.",
     docsTitle: "Autocomplete",
-    docsSummary: "NPA provides several autocomplete triggers to help you quickly insert player names and star names into text fields.",
+    docsSummary: "Autocomplete is a powerful feature when composing messages to other players. NPA provides several triggers to help you quickly insert player names and star names into text fields.",
     bookSection: "012-autocomplete",
   });
 
@@ -21,24 +21,13 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
         check: async () => {
           await waitForAgentHooks(appPage);
           
-          // Inject a textarea for testing
-          await appPage.evaluate(() => {
-            const textarea = document.createElement("textarea");
-            textarea.id = "test-autocomplete";
-            textarea.style.position = "fixed";
-            textarea.style.top = "10px";
-            textarea.style.left = "10px";
-            textarea.style.zIndex = "9999";
-            textarea.style.width = "400px";
-            textarea.style.height = "100px";
-            textarea.style.background = "white";
-            textarea.style.color = "black";
-            textarea.style.border = "2px solid red";
-            document.body.appendChild(textarea);
-            textarea.focus();
-          });
+          // Open the game's "Compose" screen
+          await appPage.evaluate(() => (window as any).NeptunesPride.crux.trigger("show_screen", "compose"));
+          
+          const textarea = appPage.locator('textarea');
+          await expect(textarea).toBeVisible();
+          await textarea.focus();
 
-          const textarea = appPage.locator("#test-autocomplete");
           await textarea.pressSequentially("Hello [[1");
           
           // Pressing ] should autocomplete player 1
@@ -50,8 +39,9 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
       }
     ],
     documentation: {
-      summary: "You can quickly insert a player's name by their numeric ID.",
+      summary: "You can quickly insert a player's name by their numeric ID when writing messages.",
       howToUse: [
+        "Open the **Compose** message screen.",
         "Type `[[` followed by the player's ID number.",
         "Press **]** to complete the name."
       ],
@@ -67,7 +57,7 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
       {
         spec: "Repeatedly pressing `]` cycles through all matching player names.",
         check: async () => {
-          const textarea = appPage.locator("#test-autocomplete");
+          const textarea = appPage.locator('textarea');
           // Clear and reset state
           await textarea.fill("");
           await textarea.click(); // ensure focus and state reset
@@ -94,7 +84,7 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
       }
     ],
     documentation: {
-      summary: "When multiple players match your search, you can cycle through them.",
+      summary: "When multiple players match your search, you can cycle through them using the completion key.",
       howToUse: [
         "Type `[[` followed by the start of a player's name.",
         "Press **]** repeatedly to cycle through all matching players."
@@ -111,7 +101,7 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
       {
         spec: "Star names are also included in the autocomplete suggestions.",
         check: async () => {
-          const textarea = appPage.locator("#test-autocomplete");
+          const textarea = appPage.locator('textarea');
           // Clear and reset state
           await textarea.fill("");
           await textarea.click();
@@ -125,7 +115,7 @@ test("documents the autocomplete behavior", async ({ appPage }, testInfo) => {
       }
     ],
     documentation: {
-      summary: "Star names can also be autocompleted.",
+      summary: "Star names can also be autocompleted, making it easy to coordinate with allies.",
       howToUse: [
         "Type `[[` followed by part of a star's name.",
         "Press **]** to complete the name."

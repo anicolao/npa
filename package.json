@@ -5,7 +5,7 @@
   "description": "Chrome extension for Neptune's Pride players.",
   "scripts": {
     "start": "bun esbuild.dev.ts",
-    "build": "bun esbuild.npa.ts",
+    "build": "npx tsx esbuild.npa.ts",
     "docs:book": "node scripts/build-npa-book.mjs",
     "npa": "bun esbuild.npa.ts",
     "lint": "bunx biome check src",
