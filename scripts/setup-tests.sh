@@ -39,15 +39,15 @@ if [ ! -d "dist" ] || [ ! -f "dist/intel.js" ]; then
 fi
 
 # Install Playwright browsers if not already installed
-if ! bunx playwright --version >/dev/null 2>&1; then
+if ! npx playwright --version >/dev/null 2>&1; then
 	echo "Installing Playwright..."
 	npm install --save-dev playwright @playwright/test
 fi
 
 echo "Checking Playwright browser installation..."
-if ! bunx playwright list-files chromium >/dev/null 2>&1; then
+if ! npx playwright list-files chromium >/dev/null 2>&1; then
 	echo "Installing Playwright browsers..."
-	bunx playwright install chromium || echo "WARNING: Playwright browser installation failed. Tests may not work."
+	npx playwright install chromium || echo "WARNING: Playwright browser installation failed. Tests may not work."
 else
 	echo "Playwright browsers already installed."
 fi

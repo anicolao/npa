@@ -1,7 +1,7 @@
-import { $ } from "bun";
+import { execa } from "execa";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import * as p from "../package.json";
+import p from "../package.json" assert { type: "json" };
 
 export type VersionInfo = {
   hash: string;
@@ -14,14 +14,29 @@ export type VersionInfo = {
 export async function getVersionInfo(): Promise<VersionInfo> {
   const d = new Date();
   const date = `${d.getDate()} ${d.toLocaleString("default", { month: "short" })} ${d.getFullYear()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
+  
+  const getHash = async () => {
+    try {
+      const { stdout } = await execa("git", ["rev-parse", "--short", "HEAD"]);
+      return stdout.trim();
+    } catch {
+      return "unknown";
+    }
+  };
+
+  const getStatus = async () => {
+    try {
+      const { stdout } = await execa("git", ["status", "-s"]);
+      return stdout.replace(/\n$/, "");
+    } catch {
+      return "";
+    }
+  };
+
   return {
-    hash:
-      process.env.VITE_NPA_COMMIT_HASH ??
-      (await $`git rev-parse --short HEAD`.text()).trim(),
+    hash: process.env.VITE_NPA_COMMIT_HASH ?? (await getHash()),
     date: process.env.VITE_NPA_VERSION_DATE ?? date,
-    status:
-      process.env.VITE_NPA_GIT_STATUS ??
-      (await $`git status -s`.text()).replace(/\n$/, ""),
+    status: process.env.VITE_NPA_GIT_STATUS ?? (await getStatus()),
     version: process.env.VITE_NPA_VERSION ?? p.version,
     display: process.env.VITE_NPA_VERSION_STRING ?? "",
   };
