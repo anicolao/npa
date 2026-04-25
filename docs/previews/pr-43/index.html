@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/previews/pr-43/">
+  <title>NPA Book</title>
+  <meta name="description" content="A practical guide to Neptune's Pride Agent, generated from the verified E2E documentation scenarios.">
+  <style>
+:root {
+  color-scheme: light;
+  --bg: #f7f4ec;
+  --panel: #fffdf8;
+  --ink: #1f2933;
+  --muted: #637083;
+  --line: #d8d0c0;
+  --accent: #0f766e;
+  --accent-strong: #0b4f4a;
+  --gold: #b7791f;
+  --code-bg: #eef2f1;
+  --text-width: 840px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent-strong);
+}
+
+.site-header {
+  align-items: center;
+  background: rgba(255, 253, 248, 0.92);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand,
+.repo-link {
+  align-items: center;
+  color: var(--ink);
+  display: inline-flex;
+  font-weight: 700;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.repo-link {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+}
+
+.brand-mark {
+  background: var(--accent-strong);
+  border-radius: 4px;
+  color: white;
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  padding: 4px 6px;
+}
+
+.layout {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: minmax(210px, 280px) minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: 32px 28px 64px;
+}
+
+.book-nav {
+  align-self: start;
+  border-right: 1px solid var(--line);
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  padding: 8px 24px 24px 0;
+  position: sticky;
+  top: 88px;
+}
+
+.nav-title,
+.eyebrow,
+.chapter-kicker {
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.nav-section {
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.nav-chapter,
+.nav-step {
+  display: block;
+  text-decoration: none;
+}
+
+.nav-chapter {
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.nav-chapter span {
+  color: var(--accent);
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 2px;
+}
+
+.nav-step {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  margin-top: 9px;
+}
+
+main {
+  min-width: 0;
+}
+
+.hero {
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0 44px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.1;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(3rem, 8vw, 6.5rem);
+}
+
+.lede {
+  color: var(--muted);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  max-width: var(--text-width);
+}
+
+.chapter {
+  border-bottom: 1px solid var(--line);
+  padding: 56px 0;
+}
+
+.chapter-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  max-width: calc(var(--text-width) + 140px);
+}
+
+.chapter > p {
+  max-width: var(--text-width);
+}
+
+h3 {
+  font-size: clamp(1.45rem, 3vw, 2.3rem);
+  margin-top: 56px;
+  max-width: calc(var(--text-width) + 60px);
+}
+
+h4 {
+  color: var(--accent-strong);
+  font-size: 1rem;
+  margin-top: 26px;
+}
+
+ul {
+  margin: 10px 0 0;
+  max-width: var(--text-width);
+  padding-left: 1.2rem;
+}
+
+li + li {
+  margin-top: 6px;
+}
+
+code {
+  background: var(--code-bg);
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 0.92em;
+  padding: 0.12em 0.32em;
+}
+
+figure {
+  margin: 32px 0 0;
+  max-width: calc(var(--text-width) * 0.9);
+}
+
+img {
+  background: #0b1020;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
+footer {
+  color: var(--muted);
+  font-size: 0.95rem;
+  padding: 32px 0 0;
+}
+
+@media (max-width: 860px) {
+  .site-header {
+    padding: 0 16px;
+  }
+
+  .layout {
+    display: block;
+    padding: 20px 16px 44px;
+  }
+
+  .book-nav {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    max-height: none;
+    overflow: visible;
+    padding: 16px;
+    position: static;
+  }
+
+  .nav-step {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 36px;
+  }
+}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="NPA Book home">
+      <span class="brand-mark">NPA</span>
+      <span>NPA Book</span>
+    </a>
+    <a class="repo-link" href="https://github.com/anicolao/npa">GitHub</a>
+  </header>
+  <div class="layout" id="top">
+    <nav class="book-nav" aria-label="Book sections">
+      <p class="nav-title">Sections</p>
+      <div class="nav-section">
+        <a class="nav-chapter" href="#section-001">
+          <span>001</span>How To Read The Battle HUD
+        </a>
+        <a class="nav-step" href="#section-001-create-a-fake-enemy-fleet-from-the-selected-frontline-star">Create a fake enemy fleet from the selected frontline star</a>
+<a class="nav-step" href="#section-001-show-the-battle-eta-as-clock-time">Show the battle ETA as clock time</a>
+<a class="nav-step" href="#section-001-show-the-battle-eta-as-relative-ticks">Show the battle ETA as relative ticks</a>
+<a class="nav-step" href="#section-001-show-the-same-battle-eta-as-absolute-tick-numbers">Show the same battle ETA as absolute tick numbers</a>
+<a class="nav-step" href="#section-001-model-a-worst-case-fight-by-giving-the-enemy-extra-weapons">Model a worst-case fight by giving the enemy extra weapons</a>
+<a class="nav-step" href="#section-001-return-to-the-regular-weapons-calculation">Return to the regular weapons calculation</a>
+<a class="nav-step" href="#section-001-model-the-opposite-weapons-advantage-with-my-ws-1">Model the opposite weapons advantage with My WS-1</a>
+      </div>
+<div class="nav-section">
+        <a class="nav-chapter" href="#section-002">
+          <span>002</span>Territory Display And Scanning HUD
+        </a>
+        <a class="nav-step" href="#section-002-visualize-empire-reach-with-territory-overlays">Visualize empire reach with territory overlays</a>
+<a class="nav-step" href="#section-002-cycle-to-territory-rendering-style-bright-haze">Cycle to territory rendering style: Bright Haze</a>
+<a class="nav-step" href="#section-002-cycle-to-territory-rendering-style-black-background-with-outlines">Cycle to territory rendering style: Black Background with Outlines</a>
+<a class="nav-step" href="#section-002-cycle-to-territory-rendering-style-outlines-only">Cycle to territory rendering style: Outlines Only</a>
+<a class="nav-step" href="#section-002-toggle-political-map-borders-and-empire-names">Toggle political map borders and empire names</a>
+<a class="nav-step" href="#section-002-recolor-your-empire-white-on-the-map">Recolor your empire white on the map</a>
+<a class="nav-step" href="#section-002-green-and-grey-scan-etas-for-multiple-fleets">Green and Grey Scan ETAs for multiple fleets</a>
+<a class="nav-step" href="#section-002-measure-scan-eta-with-a-fake-fleet-route">Measure scan ETA with a fake fleet route</a>
+      </div>
+<div class="nav-section">
+        <a class="nav-chapter" href="#section-003">
+          <span>003</span>Interpreting and Controlling the Auto-Ruler
+        </a>
+        <a class="nav-step" href="#section-003-view-automatic-distance-measurements-to-the-nearest-stars">View automatic distance measurements to the nearest stars</a>
+<a class="nav-step" href="#section-003-increase-the-number-of-stars-shown-by-the-auto-ruler">Increase the number of stars shown by the auto-ruler</a>
+<a class="nav-step" href="#section-003-decrease-the-number-of-stars-shown-by-the-auto-ruler">Decrease the number of stars shown by the auto-ruler</a>
+<a class="nav-step" href="#section-003-distinguish-between-effective-and-ineffective-support">Distinguish between effective and ineffective support</a>
+      </div>
+<div class="nav-section">
+        <a class="nav-chapter" href="#section-004">
+          <span>004</span>Star and Fleet Reports
+        </a>
+        <a class="nav-step" href="#section-004-open-the-np-agent-ui">Open the NP Agent UI</a>
+<a class="nav-step" href="#section-004-view-the-stars-report">View the Stars report</a>
+<a class="nav-step" href="#section-004-view-the-fleets-short-report">View the Fleets (short) report</a>
+<a class="nav-step" href="#section-004-view-the-fleets-long-report">View the Fleets (long) report</a>
+<a class="nav-step" href="#section-004-view-the-home-planets-report">View the Home Planets report</a>
+      </div>
+<div class="nav-section">
+        <a class="nav-chapter" href="#section-006">
+          <span>006</span>Accounting and Trading
+        </a>
+        <a class="nav-step" href="#section-006-open-the-trading-report-to-see-technology-levels-across-the-alliance">Open the trading report to see technology levels across the alliance</a>
+<a class="nav-step" href="#section-006-clicking-a-technology-level-opens-the-trade-dialog">Clicking a technology level opens the trade dialog</a>
+<a class="nav-step" href="#section-006-open-the-accounting-report-to-see-cash-and-tech-transaction-history">Open the accounting report to see cash and tech transaction history</a>
+<a class="nav-step" href="#section-006-open-the-trade-activity-report-to-see-definite-trades-between-other-empires">Open the trade activity report to see definite trades between other empires</a>
+      </div>
+<div class="nav-section">
+        <a class="nav-chapter" href="#section-012">
+          <span>012</span>Autocomplete
+        </a>
+        <a class="nav-step" href="#section-012-autocompleting-a-player-name-by-their-id">Autocompleting a player name by their ID</a>
+<a class="nav-step" href="#section-012-cycling-through-multiple-players-matching-a-prefix">Cycling through multiple players matching a prefix</a>
+<a class="nav-step" href="#section-012-autocompleting-star-names">Autocompleting star names</a>
+      </div>
+    </nav>
+    <main>
+      <section class="hero" aria-labelledby="book-title">
+        <p class="eyebrow">Neptune's Pride Agent field guide</p>
+        <h1 id="book-title">NPA Book</h1>
+        <p class="lede">A practical guide to mastering the galaxy with NPA. This manual provides clear, visual walkthroughs of the planning tools, overlays, and coordination features designed to give you a tactical edge in Neptune's Pride.</p>
+      </section>
+      <article class="chapter" aria-labelledby="section-001">
+<p class="chapter-kicker">Section 001</p>
+<h2 id="section-001" class="chapter-title">How To Read The Battle HUD</h2>
+<p>The battle HUD is not one isolated panel. It is a set of map overlays, ETA labels, and control shortcuts that help you inspect a frontline star, plan enemy movement, and model worst-case combat assumptions.</p>
+<h3 id="section-001-create-a-fake-enemy-fleet-from-the-selected-frontline-star">Create a fake enemy fleet from the selected frontline star</h3>
+<p>To plan for incoming attacks, you can create &quot;synthetic&quot; fleets to model enemy movement. Select an enemy star (such as <code>Hot Sham</code> in the example below) and press <strong>x</strong> to create a fake enemy fleet. NPA temporarily switches your planning context to that empire so you can plot routes and see exactly when they might arrive at your stars without changing the real game state.</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/000-route-enemy-fleet-relative-eta.png" alt="Create a fake enemy fleet from the selected frontline star" loading="lazy">
+<figcaption>Create a fake enemy fleet from the selected frontline star</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it">How to use it</h4>
+<ul>
+<li>Select the enemy star you want to inspect.</li>
+<li>Press <strong>x</strong> to create a fake planning fleet from that star.</li>
+<li>Add waypoints to nearby stars (like <code>Red Chertan</code> in the example) to see potential travel times.</li>
+</ul>
+<h4 id="section-001-what-to-expect">What to expect</h4>
+<ul>
+<li>As shown in the screenshot, the route line runs from the selected star toward your waypoints.</li>
+<li>The map overlay indicates you are temporarily controlling the selected enemy empire for planning.</li>
+<li>The waypoint editor displays an ETA using your currently selected timebase.</li>
+</ul>
+<h4 id="section-001-caveats">Caveats</h4>
+<ul>
+<li>Use these fake routes to identify the exact moment an enemy fleet could reach your territory. These orders are for local planning only and do not affect the live game.</li>
+</ul>
+<h3 id="section-001-show-the-battle-eta-as-clock-time">Show the battle ETA as clock time</h3>
+<p>NPA allows you to view ETAs in three different formats. Press <strong>%</strong> to cycle through these modes. Each serves a different tactical purpose: Clock Time (for personal alarms), Relative Ticks (for comparing speeds), and Absolute Ticks (for coordinating with allies).</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/001-cycle-to-clock-time.png" alt="Show the battle ETA as clock time" loading="lazy">
+<figcaption>Show the battle ETA as clock time</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>With a fleet route visible, press <strong>%</strong> once to switch to clock-time mode.</li>
+<li>Read the ETA line in the waypoint editor as a real-world time.</li>
+</ul>
+<h4 id="section-001-what-to-expect-2">What to expect</h4>
+<ul>
+<li>Clock mode shows a real-world timestamp such as <code>11:40 AM</code>.</li>
+<li>The selected fake fleet and route stay in the same map frame while the ETA display changes.</li>
+</ul>
+<h4 id="section-001-caveats-2">Caveats</h4>
+<ul>
+<li>Use clock mode for your own alarms. Allies in other timezones should usually coordinate by tick number instead.</li>
+</ul>
+<h3 id="section-001-show-the-battle-eta-as-relative-ticks">Show the battle ETA as relative ticks</h3>
+<p>Relative ticks are best when you are comparing your selected fleet against other moving fleets on the map, because tick offsets are easier to compare than the game's default real-time display.</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/002-cycle-to-relative-ticks.png" alt="Show the battle ETA as relative ticks" loading="lazy">
+<figcaption>Show the battle ETA as relative ticks</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>After clock-time mode is visible, press <strong>%</strong> one more time.</li>
+<li>Read the ETA and production readouts as relative tick counts.</li>
+</ul>
+<h4 id="section-001-what-to-expect-3">What to expect</h4>
+<ul>
+<li>Relative tick mode changes the ETA into a duration such as <code>4 ticks</code>.</li>
+<li>The waypoint panel, production readout, and route stay aligned with the chosen timebase.</li>
+</ul>
+<h3 id="section-001-show-the-same-battle-eta-as-absolute-tick-numbers">Show the same battle ETA as absolute tick numbers</h3>
+<p>Absolute tick numbers are the best timebase for ally coordination because everyone sees the same tick even when their local clock time differs.</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/003-cycle-to-absolute-tick-numbers.png" alt="Show the same battle ETA as absolute tick numbers" loading="lazy">
+<figcaption>Show the same battle ETA as absolute tick numbers</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it-4">How to use it</h4>
+<ul>
+<li>After reaching relative tick mode, press <strong>%</strong> one more time.</li>
+<li>Read the ETA and production readouts as explicit tick numbers (e.g., <code>Tick #529</code>).</li>
+</ul>
+<h4 id="section-001-what-to-expect-4">What to expect</h4>
+<ul>
+<li>As seen in the example, the same route now shows an exact destination tick.</li>
+<li>You can compare the fleet ETA directly against combat or production timing discussed in reports and chat.</li>
+</ul>
+<h3 id="section-001-model-a-worst-case-fight-by-giving-the-enemy-extra-weapons">Model a worst-case fight by giving the enemy extra weapons</h3>
+<p>You can manually adjust the weapons technology assumptions for a fight to see if your defense holds up against a more advanced enemy. Press <strong>.</strong> to add a weapons level to the side NPA is currently treating as the opponent.</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/004-apply-enemy-ws-plus-one.png" alt="Model a worst-case fight by giving the enemy extra weapons" loading="lazy">
+<figcaption>Model a worst-case fight by giving the enemy extra weapons</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it-5">How to use it</h4>
+<ul>
+<li>With a battle route selected, press <strong>.</strong> to increase the enemy weapons assumption by one level.</li>
+</ul>
+<h4 id="section-001-what-to-expect-5">What to expect</h4>
+<ul>
+<li>The footer overlay changes to show the adjustment, for example <code>Enemy WS+1</code>.</li>
+<li>The projected survivor estimates update immediately to reflect the harsher combat assumption.</li>
+</ul>
+<h4 id="section-001-caveats-3">Caveats</h4>
+<ul>
+<li>Always test your critical defenses against <code>Enemy WS+1</code>. If you still win the fight under that assumption, your star is likely secure even if the enemy receives a technology gift from an ally.</li>
+<li>This is a planning aid. It changes NPA's local calculation, not the real weapons tech on the server.</li>
+</ul>
+<h3 id="section-001-return-to-the-regular-weapons-calculation">Return to the regular weapons calculation</h3>
+<p>Press <strong>,</strong> to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before trying the opposite assumption.</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/005-clear-combat-handicap.png" alt="Return to the regular weapons calculation" loading="lazy">
+<figcaption>Return to the regular weapons calculation</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it-6">How to use it</h4>
+<ul>
+<li>Start from the <code>Enemy WS+1</code> view.</li>
+<li>Press <strong>,</strong> once to step the weapons adjustment back to zero.</li>
+</ul>
+<h4 id="section-001-what-to-expect-6">What to expect</h4>
+<ul>
+<li>The footer no longer shows an adjustment, returning you to the baseline projection.</li>
+<li>The selected synthetic fleet and route toward its destination remain visible for easy comparison.</li>
+</ul>
+<h3 id="section-001-model-the-opposite-weapons-advantage-with-my-ws-1">Model the opposite weapons advantage with My WS-1</h3>
+<p>Press <strong>,</strong> again to continue past the regular calculation into <code>My WS-1</code>. A negative local weapons adjustment grants the other side of the battle the weapons advantage for the local projection.</p>
+<figure>
+<img src="assets/001-battle-hud/screenshots/006-apply-my-ws-minus-one.png" alt="Model the opposite weapons advantage with My WS-1" loading="lazy">
+<figcaption>Model the opposite weapons advantage with My WS-1</figcaption>
+</figure>
+<h4 id="section-001-how-to-use-it-7">How to use it</h4>
+<ul>
+<li>Start from the regular weapons calculation.</li>
+<li>Press <strong>,</strong> one more time to display <code>My WS-1</code>.</li>
+</ul>
+<h4 id="section-001-what-to-expect-7">What to expect</h4>
+<ul>
+<li>The footer overlay changes to show <code>My WS-1</code>.</li>
+<li>The survivor estimate reflects the opposite weapons assumption, effectively granting your opponent the advantage.</li>
+</ul>
+<h4 id="section-001-caveats-4">Caveats</h4>
+<ul>
+<li>These adjustments follow the same perspective rule: the label is relative to the side NPA is currently modeling as 'you' in the planning view.</li>
+</ul>
+</article>
+<article class="chapter" aria-labelledby="section-002">
+<p class="chapter-kicker">Section 002</p>
+<h2 id="section-002" class="chapter-title">Territory Display And Scanning HUD</h2>
+<p>The territory and scanning HUD overlays provide essential context for both logistics and intelligence. They visualize the scanning and fleet range of any selected empire, helping you identify safe routes and imminent threats at a glance.</p>
+<h3 id="section-002-visualize-empire-reach-with-territory-overlays">Visualize empire reach with territory overlays</h3>
+<p>Selecting any star highlights the territory owned by that empire, visualizing both their current scanning range and their immediate fleet reach. This overlay is a vital tool for understanding the &quot;shape&quot; of an empire and where its influence begins and ends.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/000-show-selected-empire-territory.png" alt="Visualize empire reach with territory overlays" loading="lazy">
+<figcaption>Visualize empire reach with territory overlays</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it">How to use it</h4>
+<ul>
+<li>Select any star on the map to see the territory of its owner.</li>
+<li>Zoom out to see the full extent of their local reach.</li>
+</ul>
+<h4 id="section-002-what-to-expect">What to expect</h4>
+<ul>
+<li>The map displays a shaded overlay representing the empire's scanning and fleet coverage.</li>
+<li>Neighboring stars (such as <code>Mega Segin</code> in the example) remain visible for spatial orientation.</li>
+</ul>
+<h3 id="section-002-cycle-to-territory-rendering-style-bright-haze">Cycle to territory rendering style: Bright Haze</h3>
+<p>NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: <strong>Dim Haze</strong>, <strong>Bright Haze</strong>, <strong>Black Background with Outlines</strong>, and <strong>Outlines Only</strong>.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/001-cycle-territory-display-style-2.png" alt="Cycle to territory rendering style: Bright Haze" loading="lazy">
+<figcaption>Cycle to territory rendering style: Bright Haze</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>Press <strong>Ctrl+9</strong> to cycle through the available styles.</li>
+</ul>
+<h4 id="section-002-what-to-expect-2">What to expect</h4>
+<ul>
+<li>The rendering updates to the <strong>Bright Haze</strong> style.</li>
+<li>The view remains centered so you can easily compare the visual impact of each mode.</li>
+</ul>
+<h3 id="section-002-cycle-to-territory-rendering-style-black-background-with-outlines">Cycle to territory rendering style: Black Background with Outlines</h3>
+<p>NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: <strong>Dim Haze</strong>, <strong>Bright Haze</strong>, <strong>Black Background with Outlines</strong>, and <strong>Outlines Only</strong>.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/002-cycle-territory-display-style-3.png" alt="Cycle to territory rendering style: Black Background with Outlines" loading="lazy">
+<figcaption>Cycle to territory rendering style: Black Background with Outlines</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>Press <strong>Ctrl+9</strong> to cycle through the available styles.</li>
+</ul>
+<h4 id="section-002-what-to-expect-3">What to expect</h4>
+<ul>
+<li>The rendering updates to the <strong>Black Background with Outlines</strong> style.</li>
+<li>The view remains centered so you can easily compare the visual impact of each mode.</li>
+</ul>
+<h3 id="section-002-cycle-to-territory-rendering-style-outlines-only">Cycle to territory rendering style: Outlines Only</h3>
+<p>NPA offers four distinct rendering styles so you can choose the one that provides the best clarity for your current needs: <strong>Dim Haze</strong>, <strong>Bright Haze</strong>, <strong>Black Background with Outlines</strong>, and <strong>Outlines Only</strong>.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/003-cycle-territory-display-style-4.png" alt="Cycle to territory rendering style: Outlines Only" loading="lazy">
+<figcaption>Cycle to territory rendering style: Outlines Only</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-4">How to use it</h4>
+<ul>
+<li>Press <strong>Ctrl+9</strong> to cycle through the available styles.</li>
+</ul>
+<h4 id="section-002-what-to-expect-4">What to expect</h4>
+<ul>
+<li>The rendering updates to the <strong>Outlines Only</strong> style.</li>
+<li>The view remains centered so you can easily compare the visual impact of each mode.</li>
+</ul>
+<h3 id="section-002-toggle-political-map-borders-and-empire-names">Toggle political map borders and empire names</h3>
+<p>To further reduce map clutter, you can toggle the game's default political map borders and empire names off or on. This is especially useful when the map is crowded with fleet routes or scanning ETAs.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/004-toggle-political-borders.png" alt="Toggle political map borders and empire names" loading="lazy">
+<figcaption>Toggle political map borders and empire names</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-5">How to use it</h4>
+<ul>
+<li>Press <strong>Ctrl+0</strong> to toggle the visibility of political borders and empire labels.</li>
+</ul>
+<h4 id="section-002-what-to-expect-5">What to expect</h4>
+<ul>
+<li>The political borders and empire name labels disappear or reappear immediately.</li>
+</ul>
+<h3 id="section-002-recolor-your-empire-white-on-the-map">Recolor your empire white on the map</h3>
+<p>If your player color is difficult to see against the background or neighboring empires, you can toggle your own empire's color to white. This is a local visual aid that helps you track your own borders more easily without affecting other players.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/005-recolor-my-territory-white.png" alt="Recolor your empire white on the map" loading="lazy">
+<figcaption>Recolor your empire white on the map</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-6">How to use it</h4>
+<ul>
+<li>Select one of your own stars.</li>
+<li>Press <strong>w</strong> to toggle your map color to white.</li>
+</ul>
+<h4 id="section-002-what-to-expect-6">What to expect</h4>
+<ul>
+<li>Your empire's map color changes to white, as seen in the screenshot.</li>
+</ul>
+<h3 id="section-002-green-and-grey-scan-etas-for-multiple-fleets">Green and Grey Scan ETAs for multiple fleets</h3>
+<p>Knowing exactly when a fleet will be detected is critical for timing your maneuvers. NPA displays color-coded scan ETA labels for fleets approaching a star. In this example, the enemy star <code>Alshat</code> is being approached by multiple fleets.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/006-scan-eta-green-and-grey-fleets.png" alt="Green and Grey Scan ETAs for multiple fleets" loading="lazy">
+<figcaption>Green and Grey Scan ETAs for multiple fleets</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-7">How to use it</h4>
+<ul>
+<li>Select an enemy star that fleets are approaching.</li>
+<li>Look for the distinct color-coded ETA labels near each fleet icon.</li>
+</ul>
+<h4 id="section-002-what-to-expect-7">What to expect</h4>
+<ul>
+<li><strong>Green Labels:</strong> Indicate a &quot;dark&quot; fleet's first-time detection by this star.</li>
+<li><strong>Grey Labels:</strong> Indicate when this star will gain a scan lock on a fleet that is already visible via other stars.</li>
+</ul>
+<h3 id="section-002-measure-scan-eta-with-a-fake-fleet-route">Measure scan ETA with a fake fleet route</h3>
+<p>You can also use fake fleets to plan routes and see exactly when they will enter enemy scan. This is vital for timing 'dark' jumps where you want to arrive or change course just before being detected.</p>
+<figure>
+<img src="assets/002-territory-display-and-scanning-hud/screenshots/007-measure-scan-eta-with-fake-fleet.png" alt="Measure scan ETA with a fake fleet route" loading="lazy">
+<figcaption>Measure scan ETA with a fake fleet route</figcaption>
+</figure>
+<h4 id="section-002-how-to-use-it-8">How to use it</h4>
+<ul>
+<li>Press <strong>x</strong> to create a fake planning fleet.</li>
+<li>Add waypoints to the destination.</li>
+<li>Select the destination star (like <code>${TARGET_STAR_NAME}</code> in the example) to see the scan ETA for that route.</li>
+</ul>
+<h4 id="section-002-what-to-expect-8">What to expect</h4>
+<ul>
+<li>As shown in the screenshot, the scan HUD displays the expected entry tick for the planned route.</li>
+</ul>
+</article>
+<article class="chapter" aria-labelledby="section-003">
+<p class="chapter-kicker">Section 003</p>
+<h2 id="section-003" class="chapter-title">Interpreting and Controlling the Auto-Ruler</h2>
+<p>The auto-ruler is a tactical overlay that automatically measures distances and arrival times between a selected star and its neighbors. It helps you quickly identify which of your stars can provide timely support and how soon enemy threats might arrive.</p>
+<h3 id="section-003-view-automatic-distance-measurements-to-the-nearest-stars">View automatic distance measurements to the nearest stars</h3>
+<p>When you select a star, NPA automatically draws 'ruler' lines to the most relevant neighboring stars. These lines provide immediate tactical information without requiring you to manually measure each route.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/000-show-basic-auto-ruler.png" alt="View automatic distance measurements to the nearest stars" loading="lazy">
+<figcaption>View automatic distance measurements to the nearest stars</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it">How to use it</h4>
+<ul>
+<li>Select a star on the map (like <code>Hot Sham</code> in the example) to activate the auto-ruler.</li>
+<li>Look for the colored lines extending to nearby stars.</li>
+</ul>
+<h4 id="section-003-what-to-expect">What to expect</h4>
+<ul>
+<li><strong>Red Lines</strong> indicate connections to enemy-owned stars.</li>
+<li><strong>Green or Grey Lines</strong> indicate connections to stars owned by you or your allies.</li>
+<li>Tick numbers (e.g., <code>[[Tick #529]]</code>) show exactly when a fleet traveling at your current speed would arrive.</li>
+</ul>
+<h3 id="section-003-increase-the-number-of-stars-shown-by-the-auto-ruler">Increase the number of stars shown by the auto-ruler</h3>
+<p>You can control how many neighbors the auto-ruler identifies. Increasing the power reveals more distant threats and potential support stars.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/001-increase-ruler-power.png" alt="Increase the number of stars shown by the auto-ruler" loading="lazy">
+<figcaption>Increase the number of stars shown by the auto-ruler</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>Press <strong>9</strong> to increase the number of stars the auto-ruler connects to.</li>
+</ul>
+<h4 id="section-003-what-to-expect-2">What to expect</h4>
+<ul>
+<li>More ruler lines appear on the map, reaching further out from the selected star.</li>
+</ul>
+<h3 id="section-003-decrease-the-number-of-stars-shown-by-the-auto-ruler">Decrease the number of stars shown by the auto-ruler</h3>
+<p>If the map becomes too cluttered, you can decrease the auto-ruler power to focus only on the most immediate neighbors.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/002-decrease-ruler-power.png" alt="Decrease the number of stars shown by the auto-ruler" loading="lazy">
+<figcaption>Decrease the number of stars shown by the auto-ruler</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>Press <strong>8</strong> to decrease the number of stars the auto-ruler connects to.</li>
+</ul>
+<h4 id="section-003-what-to-expect-3">What to expect</h4>
+<ul>
+<li>Distant ruler lines disappear, leaving only the closest connections visible.</li>
+</ul>
+<h3 id="section-003-distinguish-between-effective-and-ineffective-support">Distinguish between effective and ineffective support</h3>
+<p>The auto-ruler uses color to help you make split-second defensive decisions. It compares the arrival time of enemy fleets against your own support fleets.</p>
+<figure>
+<img src="assets/003-auto-ruler/screenshots/003-understand-support-colors.png" alt="Distinguish between effective and ineffective support" loading="lazy">
+<figcaption>Distinguish between effective and ineffective support</figcaption>
+</figure>
+<h4 id="section-003-how-to-use-it-4">How to use it</h4>
+<ul>
+<li>Observe the colors of the lines connecting to your own stars.</li>
+</ul>
+<h4 id="section-003-what-to-expect-4">What to expect</h4>
+<ul>
+<li><strong>Green Lines</strong> represent 'Effective' support: these stars can reach the selected location *before* the closest enemy can.</li>
+<li><strong>Grey Lines</strong> represent 'Ineffective' support: these stars are too far away to help before the enemy arrives.</li>
+</ul>
+<h4 id="section-003-caveats">Caveats</h4>
+<ul>
+<li>Support effectiveness is calculated based on the closest detected enemy star. Always verify if the enemy has closer hidden fleets.</li>
+</ul>
+</article>
+<article class="chapter" aria-labelledby="section-004">
+<p class="chapter-kicker">Section 004</p>
+<h2 id="section-004" class="chapter-title">Star and Fleet Reports</h2>
+<p>NPA provides a variety of detailed reports to help you track your empire's status and monitor enemy movements. These reports can be viewed directly in the Agent UI or copied to the clipboard for sharing in diplomatic messages.</p>
+<h3 id="section-004-open-the-np-agent-ui">Open the NP Agent UI</h3>
+<p>Access the central intelligence hub by pressing <strong>`</strong> (backtick). This opens the NPA report screen where you can select from a wide range of automated analysis tools.</p>
+<figure>
+<img src="assets/004-star-and-fleet-reports/screenshots/000-open-npa-ui.png" alt="Open the NP Agent UI" loading="lazy">
+<figcaption>Open the NP Agent UI</figcaption>
+</figure>
+<h4 id="section-004-how-to-use-it">How to use it</h4>
+<ul>
+<li>Press <strong>`</strong> to open the Agent UI.</li>
+</ul>
+<h4 id="section-004-what-to-expect">What to expect</h4>
+<ul>
+<li>The NP Agent overlay appears, showing a report selector and a filter input.</li>
+</ul>
+<h3 id="section-004-view-the-stars-report">View the Stars report</h3>
+<p>The <strong>Stars</strong> report provides a comprehensive breakdown of every star currently within your scanning range, grouped by owner. It includes infrastructure levels (Economy/Industry/Science) and total defensive ship counts.</p>
+<figure>
+<img src="assets/004-star-and-fleet-reports/screenshots/001-star-report.png" alt="View the Stars report" loading="lazy">
+<figcaption>View the Stars report</figcaption>
+</figure>
+<h4 id="section-004-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>Open the Agent UI (<strong>`</strong>).</li>
+<li>Select <strong>Stars</strong> from the dropdown menu.</li>
+</ul>
+<h4 id="section-004-what-to-expect-2">What to expect</h4>
+<ul>
+<li>A detailed list of stars appears, showing production and ship totals for each player.</li>
+</ul>
+<h3 id="section-004-view-the-fleets-short-report">View the Fleets (short) report</h3>
+<p>The <strong>Fleets (short)</strong> report is a high-level summary of active fleet movements. It lists upcoming arrivals and provides a total count of ships in flight for every visible empire.</p>
+<figure>
+<img src="assets/004-star-and-fleet-reports/screenshots/002-fleets-short.png" alt="View the Fleets (short) report" loading="lazy">
+<figcaption>View the Fleets (short) report</figcaption>
+</figure>
+<h4 id="section-004-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>Select <strong>Fleets (short)</strong> from the report dropdown.</li>
+</ul>
+<h4 id="section-004-what-to-expect-3">What to expect</h4>
+<ul>
+<li>The report displays a chronological list of fleet arrivals followed by per-player totals.</li>
+</ul>
+<h3 id="section-004-view-the-fleets-long-report">View the Fleets (long) report</h3>
+<p>For a deeper analysis, the <strong>Fleets (long)</strong> report calculates the projected outcome of every visible fleet movement. It accounts for weapons technology and defensive bonuses to show you exactly how many ships are expected to survive each encounter.</p>
+<figure>
+<img src="assets/004-star-and-fleet-reports/screenshots/003-fleets-long.png" alt="View the Fleets (long) report" loading="lazy">
+<figcaption>View the Fleets (long) report</figcaption>
+</figure>
+<h4 id="section-004-how-to-use-it-4">How to use it</h4>
+<ul>
+<li>Select <strong>Fleets (long)</strong> from the report dropdown.</li>
+</ul>
+<h4 id="section-004-what-to-expect-4">What to expect</h4>
+<ul>
+<li>A detailed breakdown of every flight appears, including projected survivors for defenders or attackers.</li>
+</ul>
+<h3 id="section-004-view-the-home-planets-report">View the Home Planets report</h3>
+<p>The <strong>Home Planets</strong> report cross-references every player with their starting star. This is invaluable for identifying player numbers (e.g., <code>Player #5</code>) and tracking whether an empire still controls its original capital.</p>
+<figure>
+<img src="assets/004-star-and-fleet-reports/screenshots/004-home-planets.png" alt="View the Home Planets report" loading="lazy">
+<figcaption>View the Home Planets report</figcaption>
+</figure>
+<h4 id="section-004-how-to-use-it-5">How to use it</h4>
+<ul>
+<li>Select <strong>Home Planets</strong> from the report dropdown.</li>
+</ul>
+<h4 id="section-004-what-to-expect-5">What to expect</h4>
+<ul>
+<li>The report lists each player number, their current alias, and their home star status.</li>
+</ul>
+</article>
+<article class="chapter" aria-labelledby="section-006">
+<p class="chapter-kicker">Section 006</p>
+<h2 id="section-006" class="chapter-title">Accounting and Trading</h2>
+<p>NPA provides specialized reports to help you manage your economy, coordinate technology trades with allies, and track the flow of credits and tech across the galaxy.</p>
+<h3 id="section-006-open-the-trading-report-to-see-technology-levels-across-the-alliance">Open the trading report to see technology levels across the alliance</h3>
+<p>The Trading Report gives you a bird's-eye view of technology levels across the galaxy. Press <strong>e</strong> to open it. It specifically highlights where you stand relative to your allies, identifying potential trading partners who can help fill your technology gaps.</p>
+<figure>
+<img src="assets/006-accounting-and-trading/screenshots/000-trading-report.png" alt="Open the trading report to see technology levels across the alliance" loading="lazy">
+<figcaption>Open the trading report to see technology levels across the alliance</figcaption>
+</figure>
+<h4 id="section-006-how-to-use-it">How to use it</h4>
+<ul>
+<li>Press <strong>e</strong> to open the Trading Report.</li>
+<li>Use the table to compare technology levels (Weapons, Banking, etc.) between yourself and other players.</li>
+<li><strong>Green numbers</strong> indicate that you have a higher technology level than that player. Clicking a green number allows you to quickly send that technology to them.</li>
+<li><strong>Red numbers</strong> indicate that the other player has a higher technology level than you. Clicking a red number allows you to quickly send credits to that player to purchase the technology.</li>
+<li>Look for the shortcut links to quickly initiate trades or send technology.</li>
+</ul>
+<h4 id="section-006-what-to-expect">What to expect</h4>
+<ul>
+<li>A table appears showing players and their current technology levels.</li>
+<li>The report is automatically copied to your clipboard for easy sharing in alliance messages.</li>
+</ul>
+<h3 id="section-006-clicking-a-technology-level-opens-the-trade-dialog">Clicking a technology level opens the trade dialog</h3>
+<p>Clicking on technology levels in the Trading Report provides a direct shortcut to the game's trading system, saving you from navigating multiple menus.</p>
+<figure>
+<img src="assets/006-accounting-and-trading/screenshots/001-trading-report-click-tech.png" alt="Clicking a technology level opens the trade dialog" loading="lazy">
+<figcaption>Clicking a technology level opens the trade dialog</figcaption>
+</figure>
+<h4 id="section-006-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>From the Trading Report, click on any colored technology level.</li>
+<li>The standard Neptune's Pride trade dialog will open for that specific player and technology.</li>
+</ul>
+<h4 id="section-006-what-to-expect-2">What to expect</h4>
+<ul>
+<li>The trade dialog opens pre-configured for the selected player.</li>
+</ul>
+<h3 id="section-006-open-the-accounting-report-to-see-cash-and-tech-transaction-history">Open the accounting report to see cash and tech transaction history</h3>
+<p>The Accounting Report (or Ledger) tracks the flow of credits and technology. Press <strong>a</strong> to view your transaction history. This is essential for verifying that allies have paid for technology or for balancing the books in a complex alliance economy.</p>
+<figure>
+<img src="assets/006-accounting-and-trading/screenshots/002-accounting-report.png" alt="Open the accounting report to see cash and tech transaction history" loading="lazy">
+<figcaption>Open the accounting report to see cash and tech transaction history</figcaption>
+</figure>
+<h4 id="section-006-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>Press <strong>a</strong> to open the Ledger.</li>
+<li>Review the 'Cash transaction history' to see who sent you credits and when.</li>
+<li>Review the 'Tech transaction history' to track technology transfers.</li>
+<li>Check the 'Ledger' summary at the top for an aggregate balance of tech levels and credits exchanged with each ally.</li>
+</ul>
+<h4 id="section-006-what-to-expect-3">What to expect</h4>
+<ul>
+<li>A detailed history of all cash and tech transactions is displayed.</li>
+<li>The summary section shows net balances, helping you identify who owes technology or credits.</li>
+</ul>
+<h3 id="section-006-open-the-trade-activity-report-to-see-definite-trades-between-other-empires">Open the trade activity report to see definite trades between other empires</h3>
+<p>The Trade Activity Report uses scanning data to identify technology trades happening between other players, even those outside your alliance. Press <strong>Ctrl+;</strong> to generate it. This intelligence can help you identify secret pacts or emerging power blocks in the galaxy.</p>
+<figure>
+<img src="assets/006-accounting-and-trading/screenshots/003-trade-activity-report.png" alt="Open the trade activity report to see definite trades between other empires" loading="lazy">
+<figcaption>Open the trade activity report to see definite trades between other empires</figcaption>
+</figure>
+<h4 id="section-006-how-to-use-it-4">How to use it</h4>
+<ul>
+<li>Press <strong>Ctrl+;</strong> to generate the Trading Activity report.</li>
+<li>Read the list of detected trades to see which empires are cooperating.</li>
+</ul>
+<h4 id="section-006-what-to-expect-4">What to expect</h4>
+<ul>
+<li>A report listing detected technology transfers between players is displayed.</li>
+</ul>
+<h4 id="section-006-caveats">Caveats</h4>
+<ul>
+<li>This report relies on changes in technology levels detected through scanning. It may not capture all trades if scanning coverage is incomplete.</li>
+</ul>
+</article>
+<article class="chapter" aria-labelledby="section-012">
+<p class="chapter-kicker">Section 012</p>
+<h2 id="section-012" class="chapter-title">Autocomplete</h2>
+<p>Autocomplete is a powerful feature when composing messages to other players. NPA provides several triggers to help you quickly insert player names and star names into text fields.</p>
+<h3 id="section-012-autocompleting-a-player-name-by-their-id">Autocompleting a player name by their ID</h3>
+<p>You can quickly insert a player's name by their numeric ID when writing messages.</p>
+<figure>
+<img src="assets/012-autocomplete/screenshots/000-player-id-autocomplete.png" alt="Autocompleting a player name by their ID" loading="lazy">
+<figcaption>Autocompleting a player name by their ID</figcaption>
+</figure>
+<h4 id="section-012-how-to-use-it">How to use it</h4>
+<ul>
+<li>Open the <strong>Compose</strong> message screen.</li>
+<li>Type <code>[[</code> followed by the player's ID number.</li>
+<li>Press <strong>]</strong> to complete the name.</li>
+</ul>
+<h4 id="section-012-what-to-expect">What to expect</h4>
+<ul>
+<li>The <code>[[ID]]</code> sequence is replaced by the player's full alias enclosed in double brackets.</li>
+</ul>
+<h3 id="section-012-cycling-through-multiple-players-matching-a-prefix">Cycling through multiple players matching a prefix</h3>
+<p>When multiple players match your search, you can cycle through them using the completion key.</p>
+<figure>
+<img src="assets/012-autocomplete/screenshots/001-player-name-cycling.png" alt="Cycling through multiple players matching a prefix" loading="lazy">
+<figcaption>Cycling through multiple players matching a prefix</figcaption>
+</figure>
+<h4 id="section-012-how-to-use-it-2">How to use it</h4>
+<ul>
+<li>Type <code>[[</code> followed by the start of a player's name.</li>
+<li>Press <strong>]</strong> repeatedly to cycle through all matching players.</li>
+</ul>
+<h4 id="section-012-what-to-expect-2">What to expect</h4>
+<ul>
+<li>NPA cycles through all players whose names contain the text you typed.</li>
+</ul>
+<h3 id="section-012-autocompleting-star-names">Autocompleting star names</h3>
+<p>Star names can also be autocompleted, making it easy to coordinate with allies.</p>
+<figure>
+<img src="assets/012-autocomplete/screenshots/002-star-name-cycling.png" alt="Autocompleting star names" loading="lazy">
+<figcaption>Autocompleting star names</figcaption>
+</figure>
+<h4 id="section-012-how-to-use-it-3">How to use it</h4>
+<ul>
+<li>Type <code>[[</code> followed by part of a star's name.</li>
+<li>Press <strong>]</strong> to complete the name.</li>
+</ul>
+<h4 id="section-012-what-to-expect-3">What to expect</h4>
+<ul>
+<li>The star name is inserted, correctly formatted for game links.</li>
+</ul>
+</article>
+      <footer>
+        Documentation for NPA. Update the documentation sections in the repository to extend this book.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
