@@ -5,7 +5,7 @@
 ### Status
 - [x] Research documentation requirements
 - [x] Identify API key handling in source code (`src/intel.ts`, `src/events.ts`, `src/timemachine.ts`)
-- [ ] Implement E2E scenario for 013-api-keys (Delegated to @coder)
+- [ ] Implement E2E scenario for 013-api-keys (Delegated to @coder - In Progress)
 - [ ] Verify artifacts (README.md, DOCS.md, screenshots)
 
 ### Delegation
