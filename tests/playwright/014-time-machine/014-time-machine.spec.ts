@@ -26,6 +26,19 @@ test("documents the time machine and future projections", async ({
   await waitForAgentHooks(appPage);
   await prepareTimeMachineScenario(appPage);
 
+  // Set timebase to 'tick' to match documentation
+  await appPage.evaluate(() => {
+    const np = (window as any).NeptunesPride;
+    let iterations = 0;
+    while (
+      !np.universe.timeToTick(1, false).includes("Tick #") &&
+      iterations < 10
+    ) {
+      (window as any).Mousetrap.trigger("%");
+      iterations++;
+    }
+  });
+
   // 1. Present View
   await helper.step("present-view", {
     description: "View the current game state at the present tick",
@@ -44,6 +57,7 @@ test("documents the time machine and future projections", async ({
         "The Time Machine starts at the 'Present'—the most recent data received from the server. In this baseline view, all ship counts and fleet positions reflect the current state of the galaxy.",
       howToUse: [
         "Open the map to see your current game state.",
+        "To follow the examples in this section, press **%** to cycle your timebase until it shows absolute tick numbers (e.g., `Tick #525`).",
         "Notice the absence of any 'Future Time' overlay in the bottom right, indicating you are viewing the present.",
       ],
       expectedResult: [

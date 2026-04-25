@@ -10,6 +10,7 @@ The Time Machine starts at the 'Present'—the most recent data received from th
 
 ### How to use it
 - Open the map to see your current game state.
+- To follow the examples in this section, press **%** to cycle your timebase until it shows absolute tick numbers (e.g., `Tick #525`).
 - Notice the absence of any 'Future Time' overlay in the bottom right, indicating you are viewing the present.
 
 ### What to expect
