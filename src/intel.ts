@@ -275,6 +275,9 @@ async function NeptunesPrideAgent() {
   ) => {
     const showingMenu = NeptunesPride.npui.npaMenu?.isShowing;
     let filter: Filter | undefined = opt_filter;
+    if (showingMenu) {
+      showUI();
+    }
     if (
       showingOurUI &&
       reportSelector &&
