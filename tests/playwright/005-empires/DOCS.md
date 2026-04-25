@@ -53,12 +53,13 @@ By assigning the same color to multiple players, NPA treats them as an alliance 
 
 ## Open the Empires report to see the grouped alliance
 
-The Empires report (**Ctrl+l**) uses your custom colors to group players.
+The Empires report uses your custom colors to group players. Press **Ctrl+l** to populate the report data to the clipboard, and then press **`** (backtick) to view it in the UI.
 
 ![Open the Empires report to see the grouped alliance](./screenshots/004-empires-report.png)
 
 ### How to use it
-- Press **Ctrl+l** to open the Empires report.
+- Press **Ctrl+l** to generate the report.
+- Press **`** (backtick) to open the NPA report viewer.
 
 ### What to expect
-- Players with the same color are listed together under an 'Alliance' header.
+- Players with the same color are listed together under an 'Alliance' header in the report.

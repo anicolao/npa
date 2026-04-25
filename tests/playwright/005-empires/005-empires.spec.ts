@@ -152,10 +152,12 @@ test("documents the empires and alliance management", async ({ appPage }, testIn
       {
         spec: "The Empires report is visible with the expected alliance grouping",
         check: async () => {
-          // Open report via hotkey - should now work even from Colours screen
+          // ctrl+l populates the clipboard/state
           await appPage.evaluate(() => {
               (window as any).Mousetrap.trigger("ctrl+l");
           });
+          // backtick opens the UI to show the last report
+          await appPage.keyboard.press("Backquote");
           
           // Wait for specific report text that indicates the NPA report screen is open
           await expect(appPage.locator("body")).toContainText("All Surviving Empires", { timeout: 15000 });
@@ -163,12 +165,13 @@ test("documents the empires and alliance management", async ({ appPage }, testIn
       },
     ],
     documentation: {
-      summary: "The Empires report (**Ctrl+l**) uses your custom colors to group players.",
+      summary: "The Empires report uses your custom colors to group players. Press **Ctrl+l** to populate the report data to the clipboard, and then press **`** (backtick) to view it in the UI.",
       howToUse: [
-        "Press **Ctrl+l** to open the Empires report.",
+        "Press **Ctrl+l** to generate the report.",
+        "Press **`** (backtick) to open the NPA report viewer.",
       ],
       expectedResult: [
-        "Players with the same color are listed together under an 'Alliance' header.",
+        "Players with the same color are listed together under an 'Alliance' header in the report.",
       ],
     },
   });
