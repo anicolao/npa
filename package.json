@@ -4,13 +4,13 @@
   "type": "module",
   "description": "Chrome extension for Neptune's Pride players.",
   "scripts": {
-    "start": "bun esbuild.dev.ts",
-    "build": "bun esbuild.npa.ts",
+    "start": "npx tsx esbuild.dev.ts",
+    "build": "npx tsx esbuild.npa.ts",
     "docs:book": "node scripts/build-npa-book.mjs",
-    "npa": "bun esbuild.npa.ts",
-    "lint": "bunx biome check src",
-    "lint:fix": "bunx biome check --write src",
-    "format": "bunx biome format --write src tests",
+    "npa": "npx tsx esbuild.npa.ts",
+    "lint": "npx biome check src",
+    "lint:fix": "npx biome check --write src",
+    "format": "npx biome format --write src tests",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch --coverage",
     "test:unit": "vitest run --coverage",
@@ -20,7 +20,8 @@
     "test:setup": "./scripts/setup-tests.sh",
     "test:all": "npm run test:unit && npm run test:playwright",
     "prepare": "husky install .husky",
-    "postversion": "./bin/packagedist"
+    "postversion": "./bin/packagedist",
+    "commit": "git add . && git commit -m \"$@\""
   },
   "license": "GPLv3",
   "devDependencies": {

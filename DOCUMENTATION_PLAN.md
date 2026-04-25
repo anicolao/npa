@@ -13,16 +13,16 @@ Current status: planning only. No chapter in this plan has been approved for aut
 
 | ID | Section | Coverage | Status |
 | --- | --- | --- | --- |
-| 001 | How to read the battle HUD | Timebases, control of enemy fleets, combat handicap | Planned |
-| 002 | Territory display and scanning HUD | Territory display styles, recolor to white, fake fleets for scan ETA measurement | Planned |
-| 003 | Interpreting and controlling the auto-ruler | Reading the ruler, changing its behavior, understanding its outputs | Planned |
-| 004 | Star and Fleet reports | Fleets short, fleets long, combats, filtered fleets, home planets | Planned |
+| 001 | How to read the battle HUD | Timebases, control of enemy fleets, combat handicap | Completed |
+| 002 | Territory display and scanning HUD | Territory display styles, recolor to white, fake fleets for scan ETA measurement | Completed |
+| 003 | Interpreting and controlling the auto-ruler | Reading the ruler, changing its behavior, understanding its outputs | Completed |
+| 004 | Star and Fleet reports | Fleets short, fleets long, combats, filtered fleets, home planets | Completed |
 | 005 | Empires | Recolouring players, defining enemy alliances | Planned |
 | 006 | Accounting and Trading | Economy-oriented views and trade interpretation | Planned |
 | 007 | Economists and Generals | Reading and using those summary reports | Planned |
 | 008 | Messaging support | Message composition workflow and NPA messaging helpers | Planned |
 | 009 | Intel and Screenshot buttons | Report insertion, screenshot capture, and related UI | Planned |
-| 010 | Embedded image and YouTube links | Rich content support inside messages or reports | Planned |
+| 010 | Embedded image and YouTube links | Rich content support inside messages or reports | Completed |
 | 011 | Embedding API keys | How embedded keys are used and where they appear | Planned |
 | 012 | Autocomplete | Available autocomplete behavior and how to use it correctly | Planned |
 | 013 | API keys | Creating, entering, and validating API keys in NPA | Planned |
