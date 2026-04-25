@@ -84,7 +84,26 @@ test("documents alliance coordination", async ({ appPage }, testInfo) => {
         },
     });
 
-    // Step 3: Show the Formal Alliances report by pressing ctrl+7.
+    // Step 3: Show the Research report by pressing E.
+    await helper.step("research-report", {
+        description: "Show Alliance Research report",
+        verifications: [
+            {
+                spec: "The Research report is visible",
+                check: async () => {
+                    await appPage.evaluate(() => (window as any).NeptunesPride.npui.trigger("show_report", "research"));
+                    await expect(appPage.getByText("Alliance Research Progress")).toBeVisible();
+                },
+            },
+        ],
+        documentation: {
+            summary: "Press **E** to view the research progress of all allies whose API keys you have merged.",
+            howToUse: ["Press **E** while on the map."],
+            expectedResult: ["A report appears showing current research, ETAs, and progress for all merged allies."],
+        },
+    });
+
+    // Step 4: Show the Formal Alliances report by pressing ctrl+7.
     await helper.step("formal-alliances-report", {
         description: "Show Formal Alliances report",
         verifications: [

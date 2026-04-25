@@ -20,9 +20,16 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 ### Verifications
 - [x] Merging an API key updates the map
 
+## Show Alliance Research report
+
+![Show Alliance Research report](./screenshots/002-research-report.png)
+
+### Verifications
+- [x] The Research report is visible
+
 ## Show Formal Alliances report
 
-![Show Formal Alliances report](./screenshots/002-formal-alliances-report.png)
+![Show Formal Alliances report](./screenshots/003-formal-alliances-report.png)
 
 ### Verifications
 - [x] The Formal Alliances report is visible

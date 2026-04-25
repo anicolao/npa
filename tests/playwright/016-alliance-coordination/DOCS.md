@@ -27,11 +27,23 @@ Merge an ally's API key to see their scanned stars, fleets, and technology level
 ### What to expect
 - Your map updates with new intelligence from the ally's perspective.
 
+## Show Alliance Research report
+
+Press **E** to view the research progress of all allies whose API keys you have merged.
+
+![Show Alliance Research report](./screenshots/002-research-report.png)
+
+### How to use it
+- Press **E** while on the map.
+
+### What to expect
+- A report appears showing current research, ETAs, and progress for all merged allies.
+
 ## Show Formal Alliances report
 
 Press **Ctrl+7** to generate a report of all formal alliances detected in the game.
 
-![Show Formal Alliances report](./screenshots/002-formal-alliances-report.png)
+![Show Formal Alliances report](./screenshots/003-formal-alliances-report.png)
 
 ### How to use it
 - Press **Ctrl+7** while on the map.
