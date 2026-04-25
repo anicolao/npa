@@ -88,7 +88,11 @@ async function renderChapter(chapter, markdown) {
 
   const flushParagraph = () => {
     if (!paragraph.length) return;
-    html.push(`<p>${formatInline(paragraph.join(" "))}</p>`);
+    const text = paragraph.join(" ");
+    html.push(`<div class="doc-block" data-section="${chapter.number}" data-text="${escapeAttribute(text)}">`);
+    html.push(`<p>${formatInline(text)}</p>`);
+    html.push(`<a class="bug-link" title="Report an issue with this section" aria-label="Report issue"></a>`);
+    html.push(`</div>`);
     paragraph = [];
   };
 
@@ -155,6 +159,7 @@ async function renderChapter(chapter, markdown) {
       const alt = image[1].trim();
       const source = image[2].trim();
       const imagePath = await copyImage(chapter, source);
+      html.push(`<div class="doc-block" data-section="${chapter.number}" data-text="Image: ${escapeAttribute(alt)}">`);
       html.push(`<figure>`);
       html.push(
         `<img src="${escapeAttribute(imagePath)}" alt="${escapeAttribute(
@@ -163,6 +168,8 @@ async function renderChapter(chapter, markdown) {
       );
       html.push(`<figcaption>${formatInline(alt)}</figcaption>`);
       html.push(`</figure>`);
+      html.push(`<a class="bug-link" title="Report an issue with this section" aria-label="Report issue"></a>`);
+      html.push(`</div>`);
       continue;
     }
 
@@ -273,6 +280,19 @@ ${buildCss()}
       </footer>
     </main>
   </div>
+  <script>
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('bug-link')) {
+        const block = e.target.closest('.doc-block');
+        const section = block.getAttribute('data-section');
+        const text = block.getAttribute('data-text');
+        const title = "Clarify documentation section " + section;
+        const body = "Quoted documentation:\\n> " + text + "\\n\\nFILL IN FEEDBACK HERE";
+        const url = "https://github.com/anicolao/npa/issues/new?title=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
+        window.open(url, '_blank');
+      }
+    });
+  </script>
 </body>
 </html>
 `;
@@ -536,7 +556,39 @@ footer {
   .hero {
     padding-top: 36px;
   }
-}`;
+
+  .bug-link {
+    display: none;
+  }
+}
+
+.doc-block {
+  position: relative;
+}
+
+.bug-link {
+  position: absolute;
+  left: -32px;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23b7791f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bug"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M18 13h4"/><path d="M21 21c0-2.1-1.7-3.9-3.8-4"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.doc-block:hover .bug-link,
+.bug-link:focus {
+  opacity: 0.4;
+}
+
+.bug-link:hover {
+  opacity: 1 !important;
+}
+`;
 }
 
 function formatInline(value) {
