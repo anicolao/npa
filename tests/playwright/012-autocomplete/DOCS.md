@@ -1,14 +1,15 @@
 # Autocomplete
 
-NPA provides several autocomplete triggers to help you quickly insert player names and star names into text fields.
+Autocomplete is a powerful feature when composing messages to other players. NPA provides several triggers to help you quickly insert player names and star names into text fields.
 
 ## Autocompleting a player name by their ID
 
-You can quickly insert a player's name by their numeric ID.
+You can quickly insert a player's name by their numeric ID when writing messages.
 
 ![Autocompleting a player name by their ID](./screenshots/000-player-id-autocomplete.png)
 
 ### How to use it
+- Open the **Compose** message screen.
 - Type `[[` followed by the player's ID number.
 - Press **]** to complete the name.
 
@@ -17,7 +18,7 @@ You can quickly insert a player's name by their numeric ID.
 
 ## Cycling through multiple players matching a prefix
 
-When multiple players match your search, you can cycle through them.
+When multiple players match your search, you can cycle through them using the completion key.
 
 ![Cycling through multiple players matching a prefix](./screenshots/001-player-name-cycling.png)
 
@@ -30,7 +31,7 @@ When multiple players match your search, you can cycle through them.
 
 ## Autocompleting star names
 
-Star names can also be autocompleted.
+Star names can also be autocompleted, making it easy to coordinate with allies.
 
 ![Autocompleting star names](./screenshots/002-star-name-cycling.png)
 

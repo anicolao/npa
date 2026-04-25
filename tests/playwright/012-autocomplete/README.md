@@ -1,6 +1,6 @@
 # Autocomplete Scenarios
 
-Verify and document NPA's autocomplete triggers and cycling behavior.
+Verify and document NPA's autocomplete triggers and cycling behavior in the game's messaging UI.
 
 Documentation target: `012-autocomplete`
 
