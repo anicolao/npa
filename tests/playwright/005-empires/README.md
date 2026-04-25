@@ -39,4 +39,4 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 ![Open the Empires report to see the grouped alliance](./screenshots/004-empires-report.png)
 
 ### Verifications
-- [x] The Empires report is visible
+- [x] The Empires report is visible with the expected alliance grouping

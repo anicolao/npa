@@ -150,18 +150,15 @@ test("documents the empires and alliance management", async ({ appPage }, testIn
     description: "Open the Empires report to see the grouped alliance",
     verifications: [
       {
-        spec: "The Empires report is visible",
+        spec: "The Empires report is visible with the expected alliance grouping",
         check: async () => {
-          // Close colours screen first by escape
-          await appPage.keyboard.press("Escape");
-          
-          // Open report via hotkey
+          // Open report via hotkey - should now work even from Colours screen
           await appPage.evaluate(() => {
               (window as any).Mousetrap.trigger("ctrl+l");
           });
           
-          // Wait for ANY report text that indicates the report screen is open
-          await expect(appPage.locator("body")).toContainText("Empires", { timeout: 15000 });
+          // Wait for specific report text that indicates the NPA report screen is open
+          await expect(appPage.locator("body")).toContainText("All Surviving Empires", { timeout: 15000 });
         },
       },
     ],
