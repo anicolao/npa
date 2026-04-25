@@ -28,7 +28,7 @@ Current status: planning only. No chapter in this plan has been approved for aut
 | 013 | API keys | Creating, entering, and validating API keys in NPA | Planned |
 | 014 | Time machine | Navigating historical views and understanding timeline controls | Planned |
 | 015 | Historical time-based reports | Ownership, Formal alliances, Trade Activity, Combat Activity, Activity | Planned |
-| 016 | Alliance coordination | Research info, Map API key merging | Planned |
+| 016 | Alliance coordination | Research info, Map API key merging | In Progress |
 
 ## Expected Scenario Shape
 
