@@ -18,7 +18,7 @@ Current status: planning only. No chapter in this plan has been approved for aut
 | 003 | Interpreting and controlling the auto-ruler | Reading the ruler, changing its behavior, understanding its outputs | Planned |
 | 004 | Star and Fleet reports | Fleets short, fleets long, combats, filtered fleets, home planets | Planned |
 | 005 | Empires | Recolouring players, defining enemy alliances | Planned |
-| 006 | Accounting and Trading | Economy-oriented views and trade interpretation | Planned |
+| 006 | Accounting and Trading | Economy-oriented views and trade interpretation | Complete |
 | 007 | Economists and Generals | Reading and using those summary reports | Planned |
 | 008 | Messaging support | Message composition workflow and NPA messaging helpers | Planned |
 | 009 | Intel and Screenshot buttons | Report insertion, screenshot capture, and related UI | Planned |
