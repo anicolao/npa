@@ -12,18 +12,25 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 
 ### Verifications
 - [x] The trading report can be opened from the menu
-- [x] The trading report shows technology levels
+- [x] The trading report shows technology levels with colored indicators
+
+## Clicking a technology level opens the trade dialog
+
+![Clicking a technology level opens the trade dialog](./screenshots/001-trading-report-click-tech.png)
+
+### Verifications
+- [x] Clicking a green number opens the trade dialog
 
 ## Open the accounting report to see cash and tech transaction history
 
-![Open the accounting report to see cash and tech transaction history](./screenshots/001-accounting-report.png)
+![Open the accounting report to see cash and tech transaction history](./screenshots/002-accounting-report.png)
 
 ### Verifications
 - [x] The accounting report can be opened from the menu and shows headers
 
 ## Open the trade activity report to see definite trades between other empires
 
-![Open the trade activity report to see definite trades between other empires](./screenshots/002-trade-activity-report.png)
+![Open the trade activity report to see definite trades between other empires](./screenshots/003-trade-activity-report.png)
 
 ### Verifications
 - [x] The trade activity report can be opened from the menu

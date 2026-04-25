@@ -1,7 +1,7 @@
-import { $ } from "bun";
+import { execSync } from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import * as p from "../package.json";
+import p from "../package.json" assert { type: "json" };
 
 export type VersionInfo = {
   hash: string;
@@ -14,14 +14,23 @@ export type VersionInfo = {
 export async function getVersionInfo(): Promise<VersionInfo> {
   const d = new Date();
   const date = `${d.getDate()} ${d.toLocaleString("default", { month: "short" })} ${d.getFullYear()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
+  
+  const getGitInfo = (command: string) => {
+    try {
+      return execSync(command, { encoding: "utf8" }).trim();
+    } catch (e) {
+      return "";
+    }
+  };
+
   return {
     hash:
       process.env.VITE_NPA_COMMIT_HASH ??
-      (await $`git rev-parse --short HEAD`.text()).trim(),
+      getGitInfo("git rev-parse --short HEAD"),
     date: process.env.VITE_NPA_VERSION_DATE ?? date,
     status:
       process.env.VITE_NPA_GIT_STATUS ??
-      (await $`git status -s`.text()).replace(/\n$/, ""),
+      getGitInfo("git status -s"),
     version: process.env.VITE_NPA_VERSION ?? p.version,
     display: process.env.VITE_NPA_VERSION_STRING ?? "",
   };
