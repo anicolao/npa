@@ -324,29 +324,38 @@ ${buildCss()}
         uniform sampler2D u_image;
         uniform vec2 u_resolution;
         uniform vec2 u_mouse;
-        uniform float u_zoom;
-        uniform float u_radius;
         varying vec2 v_texCoord;
 
-        float circle(vec2 p, vec2 center, float radius) {
-          return 1.0 - smoothstep(radius - 1.0, radius + 1.0, length(p - center));
-        }
-
         void main() {
-          vec2 p = v_texCoord * u_resolution;
-          vec2 mouse = u_mouse;
-          mouse.y = u_resolution.y - mouse.y; // Flip Y for WebGL
-
-          float mask = circle(p, mouse, u_radius);
-          float ring = circle(p, mouse, u_radius + 2.0) - circle(p, mouse, u_radius - 1.0);
-
-          vec2 mouseUV = mouse / u_resolution;
-          vec2 zoomedUV = (v_texCoord - mouseUV) / u_zoom + mouseUV;
-          vec4 base = texture2D(u_image, v_texCoord);
-          vec4 zoomed = texture2D(u_image, zoomedUV);
+          vec2 uv = v_texCoord;
+          vec2 mouse = vec2(u_mouse.x, u_resolution.y - u_mouse.y);
+          vec2 zoom_pos = mouse / u_resolution;
           
-          vec4 ringColor = vec4(0.1, 0.5, 0.5, 1.0);
-          gl_FragColor = mix(base, zoomed, mask) + ring * ringColor;
+          float zoom_times = 3.0;
+          float lens_radius = 0.25;
+          float ring_width = 0.02;
+          vec4 ring_color = vec4(0.1, 0.2, 0.2, 1.0);
+
+          vec2 zoomed_uv = (uv - zoom_pos) / zoom_times + zoom_pos;
+
+          // Aspect correction for circularity
+          float aspect = u_resolution.x / u_resolution.y;
+          vec2 p = uv;
+          vec2 z = zoom_pos;
+          p.x *= aspect;
+          z.x *= aspect;
+          
+          float d = length(p - z);
+          
+          float mask = 1.0 - smoothstep(lens_radius - 0.005, lens_radius + 0.005, d);
+          float outer = 1.0 - smoothstep(lens_radius + ring_width/2.0 - 0.005, lens_radius + ring_width/2.0 + 0.005, d);
+          float inner = 1.0 - smoothstep(lens_radius - ring_width/2.0 - 0.005, lens_radius - ring_width/2.0 + 0.005, d);
+          float r_mask = outer - inner;
+
+          vec4 background = texture2D(u_image, uv);
+          vec4 zoomed_bg = texture2D(u_image, zoomed_uv);
+          
+          gl_FragColor = mix(background, zoomed_bg, mask) + ring_color * r_mask;
         }
       \`;
 
@@ -417,8 +426,6 @@ ${buildCss()}
 
         gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), canvas.width, canvas.height);
         gl.uniform2f(gl.getUniformLocation(program, 'u_mouse'), x, y);
-        gl.uniform1f(gl.getUniformLocation(program, 'u_zoom'), 2.5);
-        gl.uniform1f(gl.getUniformLocation(program, 'u_radius'), Math.min(canvas.width, canvas.height) * 0.15);
 
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         canvas.style.display = 'block';
@@ -460,10 +467,12 @@ ${buildCss()}
               canvas.style.display = 'none';
               activeImage = null;
             } else {
+              lastMousePos = { x, y };
               update(e.target, x, y);
             }
           } else {
             isPinned = true;
+            lastMousePos = { x, y };
             update(e.target, x, y);
           }
         } else {
