@@ -6,17 +6,17 @@ Documentation target: `Messaging support`
 
 Companion user documentation: [DOCS.md](./DOCS.md)
 
-## Use autocomplete to quickly insert star names in the compose screen
+## NPA enhances the message composition screen with autocomplete for stars and players.
 
-![Use autocomplete to quickly insert star names in the compose screen](./screenshots/000-autocomplete-star-names.png)
+![NPA enhances the message composition screen with autocomplete for stars and players.](./screenshots/000-messaging-composition-and-autocomplete.png)
 
 ### Verifications
 - [x] The compose screen is visible
 - [x] Typing [[ followed by part of a name and ] completes it
 
-## Use the Intel and Screenshot buttons to share game state
+## The Intel and Screenshot buttons allow you to quickly share data and images.
 
-![Use the Intel and Screenshot buttons to share game state](./screenshots/001-messaging-helpers.png)
+![The Intel and Screenshot buttons allow you to quickly share data and images.](./screenshots/001-messaging-helpers.png)
 
 ### Verifications
-- [x] The Intel and Screenshot buttons are present in the message thread
+- [x] The messaging helper buttons are present in the message box
