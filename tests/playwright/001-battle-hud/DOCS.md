@@ -85,7 +85,7 @@ You can manually adjust the weapons technology assumptions for a fight to see if
 
 ## Return to the regular weapons calculation
 
-Press **,** to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before trying the opposite assumption.
+Press **,** to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before modeling your own weapons advantage.
 
 ![Return to the regular weapons calculation](./screenshots/005-clear-combat-handicap.png)
 
