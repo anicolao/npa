@@ -400,14 +400,14 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "Press **,** again to continue past the regular calculation into `My WS-1`. A negative local weapons adjustment grants the other side of the battle the weapons advantage for the local projection.",
+        "Press **,** again to continue past the regular calculation into `My WS-1`. This \"My WS-1\" setting credits your side (the side NPA is modeling) with an extra weapons level (+1), granting you the advantage. Although the label shows -1, it represents a +1 weapons advantage for your side.",
       howToUse: [
         "Start from the regular weapons calculation.",
         "Press **,** one more time to display `My WS-1`.",
       ],
       expectedResult: [
         "The footer overlay changes to show `My WS-1`.",
-        "The survivor estimate reflects the opposite weapons assumption, effectively granting your opponent the advantage.",
+        "The survivor estimate reflects the extra weapons level, granting your side the weapons advantage.",
       ],
       caveats: [
         "These adjustments follow the same perspective rule: the label is relative to the side NPA is currently modeling as 'you' in the planning view.",

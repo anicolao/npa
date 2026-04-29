@@ -97,11 +97,11 @@ Press **,** to remove weapons adjustments and return the battle HUD to the regul
 - The footer no longer shows an adjustment, returning you to the baseline projection.
 - The selected synthetic fleet and route toward its destination remain visible for easy comparison.
 
-## Model the opposite weapons advantage with My WS-1
+## Model a weapons advantage with My WS-1
 
-Press **,** again to continue past the regular calculation into `My WS-1`. A negative local weapons adjustment grants the other side of the battle the weapons advantage for the local projection.
+Press **,** again to continue past the regular calculation into `My WS-1`. This "My WS-1" setting credits your side (the side NPA is modeling) with an extra weapons level (+1), granting you the advantage. Although the label shows -1, it represents a +1 weapons advantage for your side.
 
-![Model the opposite weapons advantage with My WS-1](./screenshots/006-apply-my-ws-minus-one.png)
+![Model a weapons advantage with My WS-1](./screenshots/006-apply-my-ws-minus-one.png)
 
 ### How to use it
 - Start from the regular weapons calculation.
@@ -109,7 +109,7 @@ Press **,** again to continue past the regular calculation into `My WS-1`. A neg
 
 ### What to expect
 - The footer overlay changes to show `My WS-1`.
-- The survivor estimate reflects the opposite weapons assumption, effectively granting your opponent the advantage.
+- The survivor estimate reflects the extra weapons level, granting your side the weapons advantage.
 
 ### Caveats
 - These adjustments follow the same perspective rule: the label is relative to the side NPA is currently modeling as 'you' in the planning view.
