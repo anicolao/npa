@@ -354,7 +354,7 @@ test("documents the battle HUD controls and timebases", async ({
     ],
     documentation: {
       summary:
-        "Press **,** to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before trying the opposite assumption.",
+        "Press **,** to remove weapons adjustments and return the battle HUD to the regular calculation. This gives you a visual checkpoint for the baseline survivor estimate before modeling your own weapons advantage.",
       howToUse: [
         "Start from the `Enemy WS+1` view.",
         "Press **,** once to step the weapons adjustment back to zero.",
@@ -368,7 +368,7 @@ test("documents the battle HUD controls and timebases", async ({
 
   await frameAndAssertBattleMap(appPage);
   await helper.step("apply-my-ws-minus-one", {
-    description: "Model the opposite weapons advantage with My WS-1",
+    description: "Model a weapons advantage with My WS-1",
     verifications: [
       {
         spec: "Pressing , again displays My WS-1 and changes the footer calculation from the regular baseline",

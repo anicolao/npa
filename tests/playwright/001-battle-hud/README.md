@@ -61,9 +61,9 @@ Companion user documentation: [DOCS.md](./DOCS.md)
 - [x] The fake enemy fleet and battle route remain selected after clearing the handicap
 - [x] The regular-calculation screenshot keeps Hot Sham, the selected fleet route, and the battle HUD footer in frame
 
-## Model the opposite weapons advantage with My WS-1
+## Model a weapons advantage with My WS-1
 
-![Model the opposite weapons advantage with My WS-1](./screenshots/006-apply-my-ws-minus-one.png)
+![Model a weapons advantage with My WS-1](./screenshots/006-apply-my-ws-minus-one.png)
 
 ### Verifications
 - [x] Pressing , again displays My WS-1 and changes the footer calculation from the regular baseline
