@@ -4602,7 +4602,7 @@ async function NeptunesPrideAgent() {
                 <a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "color", amount: -1})' class="fontello"> &#59230;</a> </td>
             <td> 	<a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: 1})' class="fontello"> &#59229;</a>
                 <a onPointerUp='NeptunesPride.crux.trigger("player_color_shape", {puid: ${empire.uid}, kind: "shape", amount: -1})' class="fontello"> &#59230;</a> </td>
-  
+
             </tr>
           `;
         }
