@@ -22,3 +22,10 @@ ios/.DerivedData/
 ios/build/
 ios/**/*.xcuserstate
 ios/**/xcuserdata/
+
+# Apple signing credentials and release products must remain local.
+AuthKey_*.p8
+*.mobileprovision
+*.p12
+*.xcarchive
+*.ipa
