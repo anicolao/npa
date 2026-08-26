@@ -80,6 +80,12 @@ import {
   watchForBlocks,
 } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
+import {
+  apiAccessEnabled,
+  historicalReportStartTick,
+  playerReference,
+  selectAndShowNewFleet,
+} from "./upstream";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version";
 import { getWithinRange } from "./visibility";
@@ -132,6 +138,7 @@ async function NeptunesPrideAgent() {
 
   const UI = await getUI();
   const templates = await getTemplates();
+  const hasApiAccess = () => apiAccessEnabled(NeptunesPride.universe?.galaxy);
 
   const settings: GameStore = new GameStore("global_settings");
 
@@ -234,10 +241,12 @@ async function NeptunesPrideAgent() {
         universe.galaxy.players[i] !== undefined
       ) {
         const player = NeptunesPride.universe.galaxy.players[i];
-        universe.hyperlinkedMessageInserts[`${player.rawAlias}`] =
-          universe.hyperlinkedMessageInserts[`${i}`] =
-          universe.hyperlinkedMessageInserts[i] =
-            player.hyperlinkedBox + player.hyperlinkedRawAlias;
+        const playerLink = player.hyperlinkedBox + player.hyperlinkedRawAlias;
+        for (const alias of [player.rawAlias, player.alias, player.realAlias]) {
+          if (alias) universe.hyperlinkedMessageInserts[alias] = playerLink;
+        }
+        universe.hyperlinkedMessageInserts[`${i}`] =
+          universe.hyperlinkedMessageInserts[i] = playerLink;
 
         universe.hyperlinkedMessageInserts[`#${i}`] = player.hyperlinkedBox;
       }
@@ -295,6 +304,7 @@ async function NeptunesPrideAgent() {
         for (const pi in players) {
           const player = players[pi];
           if (player.alias.toLowerCase().indexOf(s) !== -1) {
+            filters.push(contains(`[[${player.alias}]]`.toLowerCase()));
             filters.push(contains(`[[${pi}]]`));
             filters.push(contains(`[[#${pi}]]`));
           }
@@ -384,7 +394,7 @@ async function NeptunesPrideAgent() {
       if (playerOutput.length > 1) {
         const total = grandTotalShips + shipCounts[p];
         playerOutput[0] = [
-          `[[${p}]] ${grandTotalShips} + ${shipCounts[p]} in flight (${total}/${players[p].total_strength})`,
+          `${playerReference(players[p])} ${grandTotalShips} + ${shipCounts[p]} in flight (${total}/${players[p].total_strength})`,
         ];
         output = output.concat(playerOutput);
       }
@@ -403,11 +413,18 @@ async function NeptunesPrideAgent() {
     let output = [];
     const explorers = [];
     const endTick = NeptunesPride.universe.galaxy.tick;
-    const scale = filterInput !== null ? 5 : 1;
-    let currentTick = Math.max(endTick - scale * productionTicks(), 1);
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : getPlayerUid(NeptunesPride.universe.galaxy);
+    const myKeys = getMyKeys();
+    const currentFilter = filterInput?.getValue?.() ?? "";
+    let currentTick = historicalReportStartTick(
+      endTick,
+      productionTicks(),
+      currentFilter,
+      myKeys.map(getCodeFromApiText),
+      scanInfo,
+    );
 
     timeTravelTickCaches = {};
     output.push(
@@ -418,7 +435,7 @@ async function NeptunesPrideAgent() {
     );
     const abandoned: { [k: string]: boolean } = {};
     let prior = null;
-    const ticks = new TickIterator(getMyKeys(), myId);
+    const ticks = new TickIterator(myKeys, myId);
     const players = NeptunesPride.universe.galaxy.players;
     while (ticks.hasNext() && currentTick <= endTick) {
       ticks.next();
@@ -431,7 +448,7 @@ async function NeptunesPrideAgent() {
         for (const k in newStars) {
           const nameOwner = (uid: any) =>
             uid !== -1 && uid !== undefined
-              ? `[[${players[uid].rawAlias}]]`
+              ? playerReference(players[uid])
               : "Abandoned";
           const unowned = (uid: any) => uid === undefined || uid === -1;
           if (
@@ -1205,6 +1222,7 @@ async function NeptunesPrideAgent() {
   );
 
   function getMyKeys() {
+    if (!hasApiAccess()) return [];
     const playerUidFromScan = (scan: any) => scan?.puid;
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
@@ -1381,13 +1399,15 @@ async function NeptunesPrideAgent() {
     }
     prepReport("keydetail", output);
   }
-  defineHotkey(
-    "shift+k",
-    keyDetailReport,
-    "View data from individual API keys." +
-      "<p>Use this report to take a deep look at API data you have.",
-    "keydetail",
-  );
+  if (hasApiAccess()) {
+    defineHotkey(
+      "shift+k",
+      keyDetailReport,
+      "View data from individual API keys." +
+        "<p>Use this report to take a deep look at API data you have.",
+      "keydetail",
+    );
+  }
   const routeEnemy = () => {
     const universe = NeptunesPride.universe;
     const npui = NeptunesPride.npui;
@@ -4721,10 +4741,7 @@ async function NeptunesPrideAgent() {
     const stars = NeptunesPride.universe.galaxy.stars;
     const universe = NeptunesPride.universe;
     if (!fleet && universe.selectedStar) {
-      NeptunesPride.np.trigger("show_screen", [
-        "new_fleet",
-        universe.selectedStar,
-      ]);
+      selectAndShowNewFleet(NeptunesPride.np, universe.selectedStar);
       return;
     }
     if (fleet && fleet.o.length === 0 && fleet.puid === player.uid) {
@@ -5015,20 +5032,22 @@ async function NeptunesPrideAgent() {
       init();
     }
   };
-  defineHotkey(
-    ">",
-    switchUser,
-    "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " +
-      "it is not your own alias to help remind you that you aren't in control of this user.",
-    "Next User",
-  );
-  defineHotkey(
-    "|",
-    mergeUser,
-    "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " +
-      "passes and you've reloaded, but you still want the merged scan data from two players onscreen.",
-    "Merge User",
-  );
+  if (hasApiAccess()) {
+    defineHotkey(
+      ">",
+      switchUser,
+      "Switch views to the last user whose API key was used to load data. The HUD shows the current user when " +
+        "it is not your own alias to help remind you that you aren't in control of this user.",
+      "Next User",
+    );
+    defineHotkey(
+      "|",
+      mergeUser,
+      "Merge the latest data from the last user whose API key was used to load data. This is useful after a tick " +
+        "passes and you've reloaded, but you still want the merged scan data from two players onscreen.",
+      "Merge User",
+    );
+  }
   onTrigger("switch_user_api", switchUser);
   onTrigger("merge_user_api", mergeUser);
 
@@ -5271,6 +5290,7 @@ async function NeptunesPrideAgent() {
 
   let myApiKey = "";
   const recordAPICode = async (_event: any, code: string) => {
+    if (!hasApiAccess()) return;
     const scan = await getUserScanData(code);
     if (!cacheApiKey(code, scan)) {
       console.error("Failed to load our own scan data?");
@@ -5303,6 +5323,10 @@ async function NeptunesPrideAgent() {
   onTrigger("order:api_code", recordAPICode);
   let lastRefreshTimestamp = 0;
   const refreshScanData = async () => {
+    if (!hasApiAccess()) {
+      myApiKey = "";
+      return;
+    }
     const timestamp = new Date().getTime();
     if (timestamp - lastRefreshTimestamp < 5 * 60 * 1000) {
       console.log(`refreshScanData called too recently, STOP`);
@@ -5870,6 +5894,10 @@ async function NeptunesPrideAgent() {
   };
 
   const getUserScanData = async (apiKey: string) => {
+    if (!hasApiAccess()) {
+      console.warn("API access is disabled for this game.");
+      return undefined;
+    }
     const cacheKey = `CACHED_${apiKey}`;
     const cachedScan = await store.get(cacheKey);
     if (cachedScan) {
@@ -5909,8 +5937,11 @@ async function NeptunesPrideAgent() {
   const getPlayerIndex = (apikey: string) =>
     Number.parseInt(apikey.substring(4));
   const getAlliedKeysAndIndexes = async () => {
-    const allkeys = (await store.keys()) as string[];
     const players = NeptunesPride.universe.galaxy.players;
+    if (!hasApiAccess()) {
+      return { players, apiKeys: [], playerIndexes: [] };
+    }
+    const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter(
       (x) => x.startsWith("API:") && players[getPlayerIndex(x)].conceded === 0,
     );
@@ -6193,6 +6224,7 @@ async function NeptunesPrideAgent() {
   );
 
   const apiKeyReport = async () => {
+    if (!hasApiAccess()) return;
     lastReport = "api";
     const allkeys = (await store.keys()) as string[];
     const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
@@ -6249,7 +6281,9 @@ async function NeptunesPrideAgent() {
     output.push("--- All Seen Keys ---");
     prepReport("api", output);
   };
-  defineHotkey("k", apiKeyReport, "Show known API keys.", "api");
+  if (hasApiAccess()) {
+    defineHotkey("k", apiKeyReport, "Show known API keys.", "api");
+  }
 
   const buildGameMap = async () => {
     const databases = await indexedDB.databases();
@@ -6298,12 +6332,14 @@ async function NeptunesPrideAgent() {
       mergeUser();
     }
   };
-  defineHotkey(
-    "(",
-    mergeAllKeys,
-    "Merge all data from known API keys.",
-    "Merge All",
-  );
+  if (hasApiAccess()) {
+    defineHotkey(
+      "(",
+      mergeAllKeys,
+      "Merge all data from known API keys.",
+      "Merge All",
+    );
+  }
 
   const npaHelp = () => {
     const help = [`<H1>${title}</H1>`];
@@ -6356,7 +6392,7 @@ async function NeptunesPrideAgent() {
   defineHotkey("~", npaControls, "Generate NPA Buttons.", "controls");
 
   setupAutocomplete(document.body, NeptunesPride, () => {
-    return myApiKey;
+    return hasApiAccess() ? myApiKey : "";
   });
 
   if (getGameNumber() !== undefined) {
@@ -6365,6 +6401,7 @@ async function NeptunesPrideAgent() {
       .then(() => updateMessageCache("game_diplomacy"))
       .then(() => {
         window.setTimeout(async () => {
+          if (!hasApiAccess()) return;
           const allkeys = (await store.keys()) as string[];
           const apiKeys = allkeys.filter((x) => x.startsWith("API:"));
           allSeenKeys =

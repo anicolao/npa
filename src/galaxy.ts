@@ -30,6 +30,10 @@ export interface ScanningData {
   turn_based: number;
   turn_based_time_out: number;
   war: number;
+  config?: {
+    apiAccess?: number;
+    [key: string]: any;
+  };
 }
 
 export interface SpaceObject {
@@ -73,6 +77,7 @@ export interface Player {
   ai: number;
   alias: string;
   rawAlias: string;
+  realAlias?: string;
   avatar: number;
   conceded: number;
   huid: number;
