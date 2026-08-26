@@ -4737,10 +4737,7 @@ async function NeptunesPrideAgent() {
     const stars = NeptunesPride.universe.galaxy.stars;
     const universe = NeptunesPride.universe;
     if (!fleet && universe.selectedStar) {
-      NeptunesPride.np.trigger("show_screen", [
-        "new_fleet",
-        universe.selectedStar,
-      ]);
+      selectAndShowNewFleet(NeptunesPride.np, universe.selectedStar);
       return;
     }
     if (fleet && fleet.o.length === 0 && fleet.puid === player.uid) {
