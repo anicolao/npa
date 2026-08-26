@@ -80,6 +80,12 @@ import {
   watchForBlocks,
 } from "./timemachine";
 import { calcSpeedBetweenStars, futureTime, resetAliases } from "./timetravel";
+import {
+  apiAccessEnabled,
+  historicalReportStartTick,
+  playerReference,
+  selectAndShowNewFleet,
+} from "./upstream";
 /* global Crux, NeptunesPride, jQuery, */
 import { getVersion } from "./version";
 import { getWithinRange } from "./visibility";
@@ -234,10 +240,12 @@ async function NeptunesPrideAgent() {
         universe.galaxy.players[i] !== undefined
       ) {
         const player = NeptunesPride.universe.galaxy.players[i];
-        universe.hyperlinkedMessageInserts[`${player.rawAlias}`] =
-          universe.hyperlinkedMessageInserts[`${i}`] =
-          universe.hyperlinkedMessageInserts[i] =
-            player.hyperlinkedBox + player.hyperlinkedRawAlias;
+        const playerLink = player.hyperlinkedBox + player.hyperlinkedRawAlias;
+        for (const alias of [player.rawAlias, player.alias, player.realAlias]) {
+          if (alias) universe.hyperlinkedMessageInserts[alias] = playerLink;
+        }
+        universe.hyperlinkedMessageInserts[`${i}`] =
+          universe.hyperlinkedMessageInserts[i] = playerLink;
 
         universe.hyperlinkedMessageInserts[`#${i}`] = player.hyperlinkedBox;
       }
@@ -295,6 +303,7 @@ async function NeptunesPrideAgent() {
         for (const pi in players) {
           const player = players[pi];
           if (player.alias.toLowerCase().indexOf(s) !== -1) {
+            filters.push(contains(`[[${player.alias}]]`.toLowerCase()));
             filters.push(contains(`[[${pi}]]`));
             filters.push(contains(`[[#${pi}]]`));
           }
@@ -384,7 +393,7 @@ async function NeptunesPrideAgent() {
       if (playerOutput.length > 1) {
         const total = grandTotalShips + shipCounts[p];
         playerOutput[0] = [
-          `[[${p}]] ${grandTotalShips} + ${shipCounts[p]} in flight (${total}/${players[p].total_strength})`,
+          `${playerReference(players[p])} ${grandTotalShips} + ${shipCounts[p]} in flight (${total}/${players[p].total_strength})`,
         ];
         output = output.concat(playerOutput);
       }
@@ -431,7 +440,7 @@ async function NeptunesPrideAgent() {
         for (const k in newStars) {
           const nameOwner = (uid: any) =>
             uid !== -1 && uid !== undefined
-              ? `[[${players[uid].rawAlias}]]`
+              ? playerReference(players[uid])
               : "Abandoned";
           const unowned = (uid: any) => uid === undefined || uid === -1;
           if (

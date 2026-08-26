@@ -11,6 +11,7 @@ import {
 } from "./galaxy";
 import { logCount } from "./logging";
 import { clone } from "./patch";
+import { resetPlayerDisplayAlias } from "./upstream";
 
 export interface TimeMachineData {
   futureTime: boolean;
@@ -29,18 +30,9 @@ export function resetAliases() {
       }
     }
   }
-  const space = "\u00A0";
-  const modSymbols = ["\uD83D\uDCA1", "\uD83D\uDC41", "\u23F3", "\u23F3"];
-  //const modSymbols = [ "\u2705", "\uef33\u8fb8", "\u2461", "\u2460" ];
   for (const pk in universe.galaxy.players) {
     const player = universe.galaxy.players[pk];
-    player.alias = player.rawAlias.split(space)[0];
-    player.rawAlias = player.alias;
-    if (player.ai === 1) {
-      player.alias += `${space}${modSymbols[player.modTick]} `;
-    } else if (player.missedTurns) {
-      player.alias += `${space}${-player.missedTurns} `;
-    }
+    resetPlayerDisplayAlias(player);
   }
 }
 
