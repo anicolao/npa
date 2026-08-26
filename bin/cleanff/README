@@ -7,7 +7,7 @@ mkdir versions
 cd npa
 git fetch --all --tags
 git checkout INJECT_VERSION
-npm install
+bun install --frozen-lockfile
 ./bin/version
 ./bin/packagedist
 cd ../versions

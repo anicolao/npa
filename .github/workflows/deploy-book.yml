@@ -31,8 +31,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Build NPA Book
-        run: npm run docs:book -- --out book-dist
+        run: bun run docs:book -- --out book-dist
 
       - name: Publish to Pages source branch
         run: |

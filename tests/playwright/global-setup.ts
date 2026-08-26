@@ -14,7 +14,7 @@ const fixedScreenshotVersion = "Neptune's Pride Agent v9.9.99 (fake version)";
 
 export default async function globalSetup(): Promise<void> {
   console.log("Building extension bundle for Playwright...");
-  execFileSync("npm", ["run", "build"], {
+  execFileSync("bun", ["run", "build"], {
     cwd: repoRoot,
     stdio: "inherit",
     env: {
