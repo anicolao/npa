@@ -412,11 +412,18 @@ async function NeptunesPrideAgent() {
     let output = [];
     const explorers = [];
     const endTick = NeptunesPride.universe.galaxy.tick;
-    const scale = filterInput !== null ? 5 : 1;
-    let currentTick = Math.max(endTick - scale * productionTicks(), 1);
     const myId = NeptunesPride.originalPlayer
       ? NeptunesPride.originalPlayer
       : getPlayerUid(NeptunesPride.universe.galaxy);
+    const myKeys = getMyKeys();
+    const currentFilter = filterInput?.getValue?.() ?? "";
+    let currentTick = historicalReportStartTick(
+      endTick,
+      productionTicks(),
+      currentFilter,
+      myKeys.map(getCodeFromApiText),
+      scanInfo,
+    );
 
     timeTravelTickCaches = {};
     output.push(
@@ -427,7 +434,7 @@ async function NeptunesPrideAgent() {
     );
     const abandoned: { [k: string]: boolean } = {};
     let prior = null;
-    const ticks = new TickIterator(getMyKeys(), myId);
+    const ticks = new TickIterator(myKeys, myId);
     const players = NeptunesPride.universe.galaxy.players;
     while (ticks.hasNext() && currentTick <= endTick) {
       ticks.next();
