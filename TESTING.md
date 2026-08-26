@@ -33,18 +33,18 @@ The new Playwright-based testing strategy adds:
 
 ### Prerequisites
 
-1. **Node.js** (v20+) and npm
+1. **Bun 1.3.10**
 2. **Playwright** browsers installed
 3. **Game files** downloaded for testing
 
 ### Installation
 
 ```bash
-# Install Playwright dependencies
-npm install --save-dev playwright @playwright/test
+# Install repository dependencies
+bun install --frozen-lockfile
 
 # Install Playwright browsers
-npx playwright install
+bunx playwright install chromium
 
 # Download game files for testing
 ./scripts/download-game-files.sh
@@ -148,19 +148,19 @@ Located in `tests/playwright/`:
 
 ```bash
 # Run all tests
-npm test
+bun run test
 
 # Run only unit tests
-npm run test:unit
+bun run test:unit
 
 # Run only Playwright tests
-npm run test:playwright
+bun run test:playwright
 
 # Run with coverage
-npm run test:coverage
+bun run test:unit
 
 # Run specific test file
-npx playwright test tests/playwright/screenshot.spec.ts
+bunx playwright test tests/playwright/screenshot.spec.ts
 ```
 
 ### CI/CD Integration

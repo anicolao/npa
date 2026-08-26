@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx biome ci src
-npm run test
+bunx biome ci src
+bun run test

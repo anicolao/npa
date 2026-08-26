@@ -1,12 +1,13 @@
 {
   "name": "neptunes-pride-agent",
   "version": "2.2.89",
+  "packageManager": "bun@1.3.10",
   "type": "module",
   "description": "Chrome extension for Neptune's Pride players.",
   "scripts": {
     "start": "bun esbuild.dev.ts",
-    "build": "npx tsx esbuild.npa.ts",
-    "docs:book": "node scripts/build-npa-book.mjs",
+    "build": "bun esbuild.npa.ts",
+    "docs:book": "bun scripts/build-npa-book.mjs",
     "npa": "bun esbuild.npa.ts",
     "lint": "bunx biome check src",
     "lint:fix": "bunx biome check --write src",
@@ -16,9 +17,9 @@
     "test:unit": "vitest run --coverage",
     "test:playwright": "playwright test",
     "test:playwright:ui": "playwright test --ui",
-    "test:server": "npx tsx tests/test-server/server.ts",
+    "test:server": "bun tests/test-server/server.ts",
     "test:setup": "./scripts/setup-tests.sh",
-    "test:all": "npm run test:unit && npm run test:playwright",
+    "test:all": "bun run test:unit && bun run test:playwright",
     "prepare": "husky install .husky",
     "postversion": "./bin/packagedist"
   },
@@ -41,7 +42,6 @@
     "jsdom": "^22.0.0",
     "playwright": "^1.55.0",
     "ts-loader": "^9.4.2",
-    "tsx": "^4.20.5",
     "typescript": "^4.9.4",
     "vitest": "^1.6.0"
   },
@@ -51,9 +51,5 @@
     "idb": "^7.1.1",
     "mousetrap": "^1.6.5"
   },
-  "trustedDependencies": [
-    "@biomejs/biome",
-    "esbuild",
-    "protobufjs"
-  ]
+  "trustedDependencies": ["@biomejs/biome", "esbuild", "protobufjs"]
 }

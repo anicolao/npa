@@ -15,37 +15,36 @@ export async function get(url: string, data: any): Promise<any> {
 }
 
 async function np4api(game: number, apiKey: string) {
-	let params = {
-		game_number: game,
-		api_version: "0.1",
-		code: apiKey,
-	};
-	const api = await get("https://np4.ironhelmet.com/api", params);
-	console.log(JSON.stringify(api, null, 2));
-	return api;
+  let params = {
+    game_number: game,
+    api_version: "0.1",
+    code: apiKey,
+  };
+  const api = await get("https://np4.ironhelmet.com/api", params);
+  console.log(JSON.stringify(api, null, 2));
+  return api;
 }
 
 // Fetch game data for game 4982 with provided API key
 async function fetchGameData() {
-	try {
-		const gameData = await np4api(4982, "l5EP8dszo3cH");
-		// Write to file that the test environment can use
-		return gameData;
-	} catch (error) {
-		console.error("Error fetching game data:", error);
-		return null;
-	}
+  try {
+    const gameData = await np4api(4982, "l5EP8dszo3cH");
+    // Write to file that the test environment can use
+    return gameData;
+  } catch (error) {
+    console.error("Error fetching game data:", error);
+    return null;
+  }
 }
 
-if (typeof window === 'undefined') {
-	// Running in Node.js environment
-	if (process.argv.length !== 4) {
-		console.error("usage: bun index.ts [GAME_ID] [API_KEY]");
-		console.error("or: tsx index.ts [GAME_ID] [API_KEY]");
-	} else {
-		np4api(parseInt(process.argv[2]), process.argv[3]);
-	}
+if (typeof window === "undefined") {
+  // Running in the Bun command-line environment
+  if (process.argv.length !== 4) {
+    console.error("usage: bun index.ts [GAME_ID] [API_KEY]");
+  } else {
+    np4api(parseInt(process.argv[2]), process.argv[3]);
+  }
 } else {
-	// Running in browser environment
-	window.fetchGameData = fetchGameData;
+  // Running in browser environment
+  window.fetchGameData = fetchGameData;
 }

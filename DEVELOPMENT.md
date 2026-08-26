@@ -24,7 +24,7 @@ So the goals of the development tooling are:
 We use bun to configure the development environment, which enables
 easy access to the best in class typescript and javascript development
 tools. You'll need to have installed a
-[recent version of bun](https://bun.sh/)
+[Bun 1.3.10](https://bun.sh/)
 for these instructions to work. Check that you have it by running
 
 ```
@@ -53,7 +53,7 @@ use `bun` to install all the development tools, like so:
 
 ```
 cd npa
-bun install
+bun install --frozen-lockfile
 ```
 
 ## Development

@@ -6,7 +6,7 @@ This project includes a comprehensive Playwright-based testing strategy for end-
 
 ```bash
 # Set up the testing environment (downloads real game files)
-npm run test:setup
+bun run test:setup
 ```
 
 This will:
@@ -18,11 +18,11 @@ This will:
 ## Available Test Commands
 
 ```bash
-npm run test:unit        # Run existing unit tests (Vitest)
-npm run test:playwright  # Run Playwright e2e tests (requires browser install)
-npm run test:server      # Start test server for manual testing
-npm run test:setup       # Set up test environment
-npm run test:all         # Run all tests
+bun run test:unit        # Run existing unit tests (Vitest)
+bun run test:playwright  # Run Playwright e2e tests (requires browser install)
+bun run test:server      # Start test server for manual testing
+bun run test:setup       # Set up test environment
+bun run test:all         # Run all tests
 ```
 
 ## Test Environment

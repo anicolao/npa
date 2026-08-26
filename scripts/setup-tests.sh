@@ -34,14 +34,14 @@ echo "Downloading external styles, images, libraries, and fonts..."
 
 # Check if extension is built
 if [ ! -d "dist" ] || [ ! -f "dist/intel.js" ]; then
-	echo "WARNING: Extension not built. Please run 'npm run build' before running tests."
+	echo "WARNING: Extension not built. Please run 'bun run build' before running tests."
 	echo "Note: Build requires 'bun' to be installed. See DEVELOPMENT.md for setup instructions."
 fi
 
 # Install Playwright browsers if not already installed
 if ! bunx playwright --version >/dev/null 2>&1; then
-	echo "Installing Playwright..."
-	npm install --save-dev playwright @playwright/test
+	echo "Playwright is not installed. Run 'bun install --frozen-lockfile' first."
+	exit 1
 fi
 
 echo "Checking Playwright browser installation..."
@@ -56,12 +56,12 @@ echo ""
 echo "Test environment setup complete!"
 echo ""
 echo "To run tests:"
-echo "  npm run test:setup     # Run this setup script"
-echo "  npm run test:server    # Start test server"
-echo "  npm run test:playwright # Run Playwright tests"
-echo "  npm run test:all       # Run all tests"
+echo "  bun run test:setup      # Run this setup script"
+echo "  bun run test:server     # Start test server"
+echo "  bun run test:playwright # Run Playwright tests"
+echo "  bun run test:all        # Run all tests"
 echo ""
 echo "To build the extension:"
-echo "  npm run build         # Requires 'bun' to be installed"
+echo "  bun run build"
 echo ""
 echo "For more information, see TESTING.md"
