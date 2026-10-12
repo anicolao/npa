@@ -1,7 +1,13 @@
-import { type StarState, computeCombatOutcomes } from "./combatcalc";
+import {
+  type StarState,
+  type WarRecord,
+  annalsOfWar,
+  computeCombatOutcomes,
+} from "./combatcalc";
 import { isNP4, messageCache } from "./events";
 import {
   FleetOrder,
+  type PlayerMap,
   type ScannedStar,
   type ScanningData,
   addAccessors,
@@ -39,6 +45,31 @@ export function resetAliases() {
 function isVisible(star: any): star is ScannedStar {
   return star.v === "1" || star.v === 1;
 }
+
+export function advanceWarState(
+  players: PlayerMap,
+  tick: number,
+  records: WarRecord[],
+) {
+  for (const record of records) {
+    if (record.tick !== tick) continue;
+    if (record.war !== "war" && record.war !== "peace_agreement") continue;
+    const value = record.war === "war" ? 3 : 0;
+    for (const [uid, otherUid] of [
+      [record.p0, record.p1],
+      [record.p1, record.p0],
+    ]) {
+      const player = players[uid];
+      if (player?.war !== undefined) {
+        players[uid] = {
+          ...player,
+          war: { ...player.war, [otherUid]: value },
+        };
+      }
+    }
+  }
+}
+
 export function futureTime(
   galaxy: ScanningData,
   tickOffset: number,
@@ -55,6 +86,7 @@ export function futureTime(
   if (isNP4()) {
     addAccessors("galaxy", newState);
   }
+  const warRecords = annalsOfWar();
   for (let i = 0; i < tickOffset; ++i) {
     const stars = { ...newState.stars };
     const fleets = { ...newState.fleets };
@@ -62,6 +94,8 @@ export function futureTime(
     const staroutcomes: { [k: string]: StarState } = {};
     computeCombatOutcomes(newState, staroutcomes, newState.tick + 1);
     newState.tick += 1;
+    // A declaration takes effect at the end of its warning tick, after combat.
+    advanceWarState(players, newState.tick, warRecords);
     newState.production_counter += 1;
     newState.now += galaxy.tick_rate * 60 * 1000;
     for (const sk in stars) {
