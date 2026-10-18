@@ -1,4 +1,4 @@
-import { openDB } from "idb";
+import { DatabaseConnection } from "./idb";
 
 export interface TypedProperty {
   name: string;
@@ -7,33 +7,31 @@ export interface TypedProperty {
   allowableValues?: any[];
 }
 export class GameStore {
-  dbPromise;
+  private database: DatabaseConnection;
   storename: string;
   properties: TypedProperty[] = [];
 
   constructor(storename: string) {
     this.storename = storename;
-    this.dbPromise = openDB(storename, 1, {
-      upgrade(db) {
-        db.createObjectStore(storename);
-      },
+    this.database = new DatabaseConnection(storename, (db) => {
+      db.createObjectStore(storename);
     });
   }
 
   async get(key: string) {
-    return (await this.dbPromise).get(this.storename, key);
+    return this.database.run((db) => db.get(this.storename, key));
   }
   async set(key: string, val: any) {
-    return (await this.dbPromise).put(this.storename, val, key);
+    return this.database.run((db) => db.put(this.storename, val, key));
   }
   async del(key: string) {
-    return (await this.dbPromise).delete(this.storename, key);
+    return this.database.run((db) => db.delete(this.storename, key));
   }
   async clear() {
-    return (await this.dbPromise).clear(this.storename);
+    return this.database.run((db) => db.clear(this.storename));
   }
   async keys() {
-    return (await this.dbPromise).getAllKeys(this.storename);
+    return this.database.run((db) => db.getAllKeys(this.storename));
   }
 
   newSetting<L extends string, T>(

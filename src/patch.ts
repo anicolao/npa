@@ -66,3 +66,29 @@ export function patch(a: Patch, p: Patch): Patch {
   }
   return newA;
 }
+
+// Invert only the fields touched by a patch, rather than diffing two complete
+// galaxies. Arrays need the normal diff path because patch compacts deletions.
+export function reversePatch(before: any, delta: Patch): Patch {
+  if (delta === null) return null;
+  if (
+    Array.isArray(before) ||
+    Array.isArray(delta) ||
+    before === null ||
+    typeof before !== "object" ||
+    typeof delta !== "object"
+  )
+    return diff(patch(clone(before), delta), before);
+  const reverse: { [key: string]: any } = {};
+  for (const key of Object.keys(delta)) {
+    if (before[key] === undefined) {
+      reverse[key] = null;
+    } else if (delta[key] === null) {
+      reverse[key] = clone(before[key]);
+    } else {
+      const undo = reversePatch(before[key], delta[key]);
+      if (undo !== null) reverse[key] = undo;
+    }
+  }
+  return Object.keys(reverse).length ? reverse : null;
+}

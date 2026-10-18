@@ -69,6 +69,7 @@ import {
   makeReportContent,
   or,
 } from "./reports";
+import { type ScanCursor, readCachedScan, seekScan } from "./scan-history";
 import { TickIterator, getCodeFromApiText } from "./scans";
 import {
   type CachedScan,
@@ -5094,7 +5095,7 @@ async function NeptunesPrideAgent() {
   };
   onTrigger("view_game", viewGame);
 
-  let timeTravelTickCaches: { [k: string]: CachedScan } = {};
+  let timeTravelTickCaches: { [k: string]: ScanCursor } = {};
   const adjustNow = (scan: any) => {
     const wholeTick = tickRate() * 60 * 1000;
     const fragment = tickFragment(scan) * wholeTick;
@@ -5123,51 +5124,14 @@ async function NeptunesPrideAgent() {
       return null;
     }
 
-    let timeTravelTickCachedScan = getCacheForKey(api).next;
-    if (timeTravelTickCaches[apikey] !== undefined) {
-      timeTravelTickCachedScan = timeTravelTickCaches[apikey];
-    } else if (dir === "back") {
-      while (timeTravelTickCachedScan.next) {
-        timeTravelTickCachedScan = timeTravelTickCachedScan.next;
-      }
-    }
-    let scan = timeTravelTickCachedScan.cached;
-    scan = adjustNow(scan);
-    if (scan.tick < targetTick) {
-      while (scan.tick < targetTick && dir === "forwards") {
-        const next = timeTravelTickCachedScan.next;
-        if (!next) {
-          timeTravelTickCaches[apikey] = undefined;
-          return null;
-        }
-        next.cached = patch(
-          timeTravelTickCachedScan.cached,
-          timeTravelTickCachedScan.forward,
-        ) as ScanningData;
-        timeTravelTickCachedScan.cached = undefined;
-        timeTravelTickCachedScan = next;
-        scan = adjustNow(next.cached);
-      }
-    } else if (scan.tick > targetTick) {
-      while (scan.tick > targetTick && dir === "back") {
-        const prev = timeTravelTickCachedScan.prev;
-        if (timeTravelTickCachedScan.back === undefined) {
-          timeTravelTickCaches[apikey] = undefined;
-          return null;
-        }
-        prev.cached = patch(
-          timeTravelTickCachedScan.cached,
-          timeTravelTickCachedScan.back,
-        ) as ScanningData;
-        timeTravelTickCachedScan.cached = undefined;
-        timeTravelTickCachedScan = prev;
-        scan = adjustNow(prev.cached);
-      }
-    }
-    timeTravelTickCaches[apikey] = timeTravelTickCachedScan;
-    //const steps = timeTravelTickIndices[apikey] - timeTravelTickIndex;
-    //console.log(`Found scan for ${targetTick} ${apikey}:${scan.tick} ${steps}`);
-    return clone(scan);
+    const cursor = seekScan(
+      getCacheForKey(api),
+      targetTick,
+      dir,
+      timeTravelTickCaches[apikey],
+    );
+    timeTravelTickCaches[apikey] = cursor;
+    return cursor ? adjustNow(clone(cursor.scan)) : null;
   };
   const timeTravel = (dir: "back" | "forwards"): boolean => {
     if (timeTravelTick > trueTick) {
@@ -6257,8 +6221,9 @@ async function NeptunesPrideAgent() {
         let eof = scan?.eof;
         let uid = scan ? getPlayerUid(scan) : undefined;
         good = `[[Tick #${scan?.tick}]]`;
-        while ((uid === undefined || eof) && cached.prev?.back) {
-          scan = patch(scan, cached.prev.back) as ScanningData;
+        while ((uid === undefined || eof) && cached.prev?.prev) {
+          cached = cached.prev;
+          scan = readCachedScan(cached) as ScanningData;
           eof = scan?.eof;
           uid = scan ? getPlayerUid(scan) : undefined;
           if (uid !== undefined) {

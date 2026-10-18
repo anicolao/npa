@@ -6,10 +6,16 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "./firestore";
-import { deleteDB, open } from "./idb";
+import { scanDatabase } from "./idb";
 import { getGameNumber } from "./intel";
-import { logCount } from "./logging";
-import { clone, diff, patch } from "./patch";
+import { diff } from "./patch";
+import {
+  type Block,
+  type CachedScan,
+  prepareScanBlock,
+  readCachedScan,
+} from "./scan-history";
+export type { Block, CachedScan } from "./scan-history";
 
 export interface ApiInfo {
   firstTick: number;
@@ -17,29 +23,17 @@ export interface ApiInfo {
   puid: number;
 }
 
-export interface CachedScan {
-  cached?: any;
-  check?: any;
-  back?: any;
-  forward?: any;
-  next?: CachedScan;
-  prev?: CachedScan;
-  timestamp: number;
-}
 export const scanInfo: { [k: string]: ApiInfo } = {};
-
-export interface Block {
-  initial_timestamp: number;
-  last_timestamp: number;
-  initial_scan: string;
-  last_scan: string;
-  // also contains timestamp: string for timestamps in range
-}
+const tails = new Map<string, CachedScan>();
+const receivedBlocks = new Map<string, Map<number, Block>>();
 
 const cached: { [k: string]: CachedScan } = {};
 
 export function unloadServerScans() {
-  //cached = {};
+  for (const watcher of watchers.values()) {
+    void watcher.then((unsubscribe) => unsubscribe()).catch(() => {});
+  }
+  watchers.clear();
 }
 
 export function getCacheForKey(apikey: string): CachedScan {
@@ -50,169 +44,86 @@ export function scansExist(apikey: string): boolean {
 }
 export async function getLastRecord(gameid: number, apikey: string) {
   await loadBlocks(gameid, apikey);
-  let cache = getCacheForKey(apikey);
+  const cache = getCacheForKey(apikey);
   if (!cache) {
-    await subscribe(gameid, apikey);
+    await watchForBlocks(apikey, gameid);
   }
-  cache = getCacheForKey(apikey);
-  while (cache?.next) {
-    cache = cache.next;
-  }
-  return cache;
-}
-async function validateCache(apikey: string): Promise<number> {
-  if (!cached[apikey]) {
-    console.error("Cached data not found");
-    logCount("error_missing_cache");
-    return 0;
-  }
-  let state = {};
-  let count = 0;
-  let prev = null;
-  let startTime = performance.now();
-  for (let next = cached[apikey]; next !== undefined; next = next.next) {
-    const previous = clone(state);
-    state = patch(state, next.forward);
-    next.back = diff(state, previous);
-    next.prev = prev;
-    prev = next;
-    if (next.check) {
-      const d = diff(next.check, state);
-      if (d !== null) {
-        console.error(
-          `Invalid patch at timestamp ${next.timestamp} for ${apikey}`,
-        );
-        prev.next = null;
-        logCount("error_invalid_patch");
-        return prev.timestamp;
-      }
-    }
-    count++;
-    const endTime = performance.now();
-    if (endTime - startTime > 200) {
-      await delay(50);
-      startTime = performance.now();
-    }
-  }
-  const lastTimestamp = prev.timestamp;
-  if (prev.next) {
-    console.error(`Unexpected next at end of chain.`);
-  } else {
-    for (; prev !== null; prev = prev.prev) {
-      state = patch(state, prev.back);
-      if (prev.prev?.check) {
-        const d = diff(prev.prev.check, state);
-        if (d !== null) {
-          console.error(`Invalid backlink at ${prev.timestamp} for ${apikey}`);
-          logCount("error_bad_backlink");
-          return 0;
-        }
-      }
-    }
-  }
-  console.log(`Validated ${count} patches for ${apikey}`);
-  return lastTimestamp;
+  return tails.get(apikey);
 }
 
-async function updateCache(gameid: number, apikey: string, patches: Block) {
-  const timestamps = Object.keys(patches)
-    .filter((x) => +x)
-    .map((x) => +x)
-    .sort();
-  const check = JSON.parse(patches.initial_scan).scanning_data;
-  //const lastScan = JSON.parse(patches.last_scan).scanning_data;
-  //console.log(
-  //`Update cache for ${gameid}:${apikey}; ${timestamps.length} patches found from ${check?.tick} to ${lastScan?.tick}`,
-  //);
-  cached[apikey] = cached[apikey] || { timestamp: patches.initial_timestamp };
-  let next = cached[apikey];
-  while (next.next) {
-    if (next.next.timestamp === patches.initial_timestamp) {
-      console.log(
-        `Found this block in cache; discard it: ${patches.initial_timestamp}`,
-      );
-      next.next = null;
-      break;
-    }
-    next = next.next;
-  }
-  next.next = {
-    timestamp: patches.initial_timestamp,
-    check,
-  };
-  next = next.next;
-  if (cached[apikey] === undefined) {
-    cached[apikey] = {
-      timestamp: patches.initial_timestamp,
-    };
-  }
-  let lastCheck = undefined;
-  let last = undefined;
-  for (let ti = 0; ti < timestamps.length; ++ti) {
-    const timestamp = timestamps[ti];
-    const nextTime = timestamps[ti + 1];
-    const patch = JSON.parse(patches[timestamp]).scanning_data;
-    if (timestamp !== next.timestamp) {
-      console.error(
-        `? not on the right timestamp ${timestamp} vs ${next.timestamp}`,
-      );
-    }
-    next.forward = patch;
-    if (nextTime) {
-      next.next = { timestamp: nextTime };
-    } else {
-      next.check = JSON.parse(patches.last_scan).scanning_data;
-      last = next;
-      lastCheck = next.check;
-    }
-    next = next.next;
-  }
-  if (lastCheck.tick === NeptunesPride.universe.galaxy.tick) {
-    const lastValidTimestamp = await validateCache(apikey);
-    if (lastValidTimestamp < last.timestamp) {
-      console.error(
-        `${lastValidTimestamp} < ${last.timestamp}; delete db for ${apikey}`,
-      );
-      const dbName = `${gameid}:${apikey}:scandiffblocks`;
-      logCount("error_invalid_db_deleted");
-      deleteDB(dbName);
-    }
-  }
-}
-
-function updateScanInfo(apikey: string) {
-  if (!cached[apikey]) {
-    console.error("Cached data not found");
-    logCount("error_missing_cache_on_rebuild");
+async function updateCache(apikey: string, block: Block) {
+  let blocks = receivedBlocks.get(apikey);
+  const prior = blocks?.get(block.initial_timestamp);
+  if (
+    prior &&
+    Object.keys(prior).length === Object.keys(block).length &&
+    Object.keys(block).every((key) => prior[key] === block[key])
+  )
     return;
-  }
-  let firstTick = undefined;
-  let lastTick = undefined;
-  let puid = undefined;
-  for (let next = cached[apikey]; next; next = next.next) {
-    if (next.check) {
-      if (firstTick === undefined) {
-        firstTick = next.check?.tick;
-      }
-      next.cached = next.check;
-      lastTick = next.check?.tick;
-      puid = next.cached.playerUid;
+
+  const records = await prepareScanBlock(block);
+  const head = cached[apikey] || { timestamp: block.initial_timestamp };
+  let before = head;
+  // Appends can jump directly to the tail; changed blocks scan only metadata.
+  const tail = tails.get(apikey);
+  if (tail && tail.timestamp < block.initial_timestamp) before = tail;
+  else
+    while (before.next && before.next.timestamp < block.initial_timestamp) {
+      before = before.next;
     }
+  let after = before.next;
+  while (after && after.timestamp <= block.last_timestamp) after = after.next;
+  const previousState = before === head ? {} : readCachedScan(before);
+  const first = records[0];
+  const last = records[records.length - 1];
+  first.forward = diff(previousState, first.check);
+  first.back = diff(first.check, previousState);
+  // Reconnect an unchanged suffix to the new endpoint without replaying it.
+  if (after) {
+    const followingState = readCachedScan(after);
+    after.forward = diff(last.check, followingState);
+    after.back = diff(followingState, last.check);
+    after.prev = last;
+  } else tails.set(apikey, last);
+  first.prev = before;
+  last.next = after;
+  before.next = first;
+  head.revision = (head.revision || 0) + 1;
+  cached[apikey] = head;
+  if (!blocks) {
+    blocks = new Map();
+    receivedBlocks.set(apikey, blocks);
   }
-  console.log(
-    `Update scan info for ${apikey} from tick ${firstTick} to ${lastTick} for [[${puid}]]`,
-  );
+  blocks.set(block.initial_timestamp, { ...block });
+  const firstScan = head.next.check;
+  const lastScan = tails.get(apikey).check;
   scanInfo[apikey] = {
-    firstTick,
-    lastTick,
-    puid,
+    firstTick: firstScan.tick,
+    lastTick: lastScan.tick,
+    puid: lastScan.playerUid ?? lastScan.player_uid,
   };
 }
 
-async function store(dbName: string, db: any, persist: any): Promise<void> {
-  const tx = db.transaction(dbName, "readwrite");
-  tx.store.put(persist);
-  return tx.done;
+const databases = new Map<string, ReturnType<typeof scanDatabase>>();
+const queues = new Map<string, Promise<unknown>>();
+const loaded = new Set<string>();
+const watchers = new Map<string, Promise<() => void>>();
+
+function databaseFor(gameid: number, apikey: string) {
+  const name = `${gameid}:${apikey}:scandiffblocks`;
+  if (!databases.has(name)) databases.set(name, scanDatabase(name));
+  return { name, database: databases.get(name) };
+}
+
+function serial<T>(name: string, task: () => Promise<T>): Promise<T> {
+  const next = (queues.get(name) || Promise.resolve()).then(task);
+  // A failed write must not poison all subsequent snapshot processing.
+  const settled = next.catch(() => {});
+  queues.set(name, settled);
+  void settled.then(() => {
+    if (queues.get(name) === settled) queues.delete(name);
+  });
+  return next;
 }
 
 function delay(ms: number) {
@@ -220,72 +131,88 @@ function delay(ms: number) {
 }
 
 export async function loadBlocks(gameid: number, apikey: string) {
-  const start = performance.now();
-  const dbName = `${gameid}:${apikey}:scandiffblocks`;
-  const db = await open(dbName, "initial_timestamp");
-  console.log(`OPEN DB: ${dbName}`, db);
-  const storedData = await db.getAllFromIndex(dbName, "initial_timestamp");
-  console.log(`IndexDB cache for ${apikey}:`, storedData);
-  const cacheFetched = performance.now();
-  for (const block of storedData) {
-    updateCache(gameid, apikey, block);
-    await delay(50);
-  }
-  if (storedData.length) {
-    updateScanInfo(apikey);
-  }
-  const done = performance.now();
-  console.log(`Cache time: ${cacheFetched - start}`);
-  console.log(`Processing time: ${done - cacheFetched}`);
-  return scanInfo[apikey];
+  const { name, database } = databaseFor(gameid, apikey);
+  return serial(name, async () => {
+    if (!loaded.has(name)) {
+      let blocks: Block[];
+      try {
+        blocks = await database.run((db) =>
+          db.getAllFromIndex(name, "initial_timestamp"),
+        );
+      } catch (error) {
+        // Local storage is an optimization; a failed read must not prevent
+        // subscribing to the server and rebuilding history in memory.
+        console.error("Could not read local scan history", error);
+        return scanInfo[apikey];
+      }
+      for (const block of blocks) {
+        try {
+          await updateCache(apikey, block);
+        } catch (error) {
+          console.error("Could not load scan block", error);
+        }
+        await delay(0);
+      }
+      loaded.add(name);
+    }
+    return scanInfo[apikey];
+  });
 }
-export async function watchForBlocks(apikey: string) {
-  if (cached[apikey] !== undefined) {
-    console.log(`Already watching ${apikey}`);
-    return;
+
+export function watchForBlocks(apikey: string, gameid = getGameNumber()) {
+  const name = `${gameid}:${apikey}`;
+  if (!watchers.has(name)) {
+    const watching = loadBlocks(gameid, apikey).then(() =>
+      subscribe(gameid, apikey),
+    );
+    watchers.set(name, watching);
+    void watching.catch(() => {
+      if (watchers.get(name) === watching) watchers.delete(name);
+    });
   }
-  const gameid = getGameNumber();
-  await loadBlocks(gameid, apikey);
-  return subscribe(gameid, apikey);
+  return watchers.get(name);
 }
+
 async function subscribe(gameid: number, apikey: string) {
-  const dbName = `${gameid}:${apikey}:scandiffblocks`;
-  const db = await open(dbName, "initial_timestamp");
-  let diffTimestamp = 0;
-  for (let next = cached[apikey]; next; next = next.next) {
-    diffTimestamp = next.timestamp || diffTimestamp;
-  }
-  const preValidation = performance.now();
-  const lastValidTime = await validateCache(apikey);
-  const postValidation = performance.now();
-  console.log(`Validation time ${postValidation - preValidation}`);
-  if (lastValidTime < diffTimestamp) {
-    console.error(`Using ${lastValidTime} instead of ${diffTimestamp}`);
-    logCount("error_heal_bad_diffcache");
-    diffTimestamp = lastValidTime;
-  }
-  console.log(`Query for ${gameid}:${apikey} later than ${diffTimestamp}`);
+  const { name, database } = databaseFor(gameid, apikey);
+  const lastTimestamp = await serial(
+    name,
+    async () => tails.get(apikey)?.timestamp || 0,
+  );
   const diffskey = `scandiffblocks/${gameid}/${apikey}`;
   return onSnapshot(
     query(
       collection(firestore, diffskey),
-      where("last_timestamp", ">", diffTimestamp),
+      where("last_timestamp", ">", lastTimestamp),
       orderBy("last_timestamp"),
     ),
     (querySnapshot) => {
-      const changedBlocks = querySnapshot.docChanges();
-      for (const change of changedBlocks) {
-        const doc = change.doc;
-        const patches = doc.data() as any;
-        store(dbName, db, patches);
-        updateCache(gameid, apikey, patches);
-        updateScanInfo(apikey);
-      }
+      const blocks = querySnapshot
+        .docChanges()
+        .filter((change) => change.type !== "removed")
+        .map((change) => change.doc.data() as Block);
+      void serial(name, async () => {
+        for (const block of blocks) {
+          try {
+            await updateCache(apikey, block);
+          } catch (error) {
+            console.error("Could not update scan block", error);
+            continue;
+          }
+          // Keep receiving scans even if local persistence is unavailable.
+          try {
+            await database.run((db) => db.put(name, block));
+          } catch (error) {
+            console.error("Could not persist scan history", error);
+          }
+        }
+      }).catch((error) =>
+        console.error("Could not update scan history", error),
+      );
     },
     (error) => {
-      logCount(`error_scandiffs_query_${gameid}:${apikey} ${error}`);
-      console.log(`scandiffs query ${diffskey} failing: `);
-      console.error(error);
+      watchers.delete(`${gameid}:${apikey}`);
+      console.error(`Scan subscription failed for game ${gameid}`, error);
     },
   );
 }
