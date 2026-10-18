@@ -3,6 +3,10 @@ import { firestore } from "./firestore";
 import { getGameNumber } from "./intel";
 import { getVersion } from "./version";
 
+const recentErrors = new Map<string, number>();
+let errorReportPending = false;
+let retryErrorReportsAfter = 0;
+
 export function logError(e: any) {
   const gameid = getGameNumber();
   const store = collection(firestore, `error`);
@@ -11,6 +15,17 @@ export function logError(e: any) {
     e?.error?.message || e?.reason?.message || e?.reason?.code || "no message";
   const version = getVersion();
   const timestamp = new Date().getTime();
+  const signature = `${gameid}:${message}:${stack}`;
+  if (
+    errorReportPending ||
+    timestamp < retryErrorReportsAfter ||
+    timestamp - (recentErrors.get(signature) ?? Number.NEGATIVE_INFINITY) <
+      60_000
+  )
+    return;
+  recentErrors.set(signature, timestamp);
+  if (recentErrors.size > 100)
+    recentErrors.delete(recentErrors.keys().next().value);
   if (stack === "no stack trace") {
     console.error("No stack", e);
     if (e?.isTrusted !== true) {
@@ -18,11 +33,17 @@ export function logError(e: any) {
       logCount(`${message}:${JSON.stringify(e)}`);
     }
   } else {
-    addDoc(store, { gameid, stack, message, version, timestamp }).catch(
-      (_e) => {
-        console.error(`Failed to write error for game ${gameid}`);
-      },
-    );
+    errorReportPending = true;
+    void addDoc(store, { gameid, stack, message, version, timestamp })
+      .catch(() => {
+        retryErrorReportsAfter = Date.now() + 60_000;
+        console.warn(
+          `Error reporting unavailable for game ${gameid}; retrying later`,
+        );
+      })
+      .finally(() => {
+        errorReportPending = false;
+      });
   }
 }
 
