@@ -4834,6 +4834,8 @@ async function NeptunesPrideAgent() {
         }
       });
   };
+  onTrigger("order:full_universe", allAccessors);
+
   const init = () => {
     if (NeptunesPride.universe?.galaxy && NeptunesPride.npui.map) {
       linkFleets();
@@ -4847,8 +4849,6 @@ async function NeptunesPrideAgent() {
       }
       loadColors();
       allAccessors();
-      console.log("hook for all accessors");
-      onTrigger("order:full_universe", allAccessors);
     } else {
       console.log(
         "Game not fully initialized yet; wait.",
