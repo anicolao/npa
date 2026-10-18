@@ -1,6 +1,34 @@
 import { annalsOfWar, combatInfo } from "./combatcalc";
 import { isNP4 } from "./events";
+import type { PlayerMap } from "./galaxy";
 import { ScanKeyIterator } from "./scans";
+
+// Only direct formal-alliance links belong in the colour suggestion. Shared
+// colours and allies-of-allies are not evidence of a formal alliance.
+export function knownFormalAllies(
+  players: PlayerMap,
+  uid: number,
+  known: number[][] | undefined,
+): number[] {
+  const selected = players[uid];
+  if (!selected || selected.ai !== 0) return [];
+  return Object.values(players)
+    .filter((player) => {
+      if (player.uid === uid || player.ai !== 0) return false;
+      const statuses = [selected.war?.[player.uid], player.war?.[uid]].filter(
+        (status) => status !== undefined,
+      );
+      // Current diplomatic data takes precedence over historical observations.
+      if (statuses.some((status) => status !== 0)) return false;
+      return (
+        statuses.includes(0) ||
+        known?.[uid]?.[player.uid] !== undefined ||
+        known?.[player.uid]?.[uid] !== undefined
+      );
+    })
+    .sort((a, b) => a.alias.localeCompare(b.alias))
+    .map((player) => player.uid);
+}
 
 export const alliancesEnabled = () =>
   !!NeptunesPride.universe.galaxy?.config?.alliances;

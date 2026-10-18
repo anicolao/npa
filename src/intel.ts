@@ -6,7 +6,11 @@
 // @updateURL   https://bitbucket.org/osrictheknight/iosnpagent/raw/HEAD/intel.js
 // ==/UserScript==
 
-import { computeAlliances } from "./alliances";
+import {
+  alliancesEnabled,
+  computeAlliances,
+  knownFormalAllies,
+} from "./alliances";
 import { setupAutocomplete } from "./autocomplete";
 import { BspTree } from "./bsp";
 import {
@@ -1991,10 +1995,12 @@ async function NeptunesPrideAgent() {
       field.eventKind = "text_entry";
       const handleChange = () => {
         let changed = false;
+        let changedColor: string | undefined;
         if (/^#[0-9a-fA-F]{6}$/.test(field.getValue())) {
-          if (field.getValue() != color) {
+          if (field.getValue() !== playerToColorMap(p)) {
             const newColor = field.getValue();
             setPlayerColor(p.uid, newColor);
+            changedColor = newColor;
             if (
               customColors.indexOf(newColor) === -1 &&
               colors.indexOf(newColor) === -1
@@ -2026,6 +2032,26 @@ async function NeptunesPrideAgent() {
           mapRebuild();
           //console.log(`preclip: ${shapeMap.join(",")}`);
           clipColorConfig();
+          if (changedColor !== undefined) {
+            if (alliancesEnabled() && combatInfo.knownAlliances === undefined) {
+              computeAlliances(allSeenKeys);
+            }
+            const allies = alliancesEnabled()
+              ? knownFormalAllies(
+                  galaxy.players,
+                  p.uid,
+                  combatInfo.knownAlliances,
+                )
+              : [];
+            if (p.ai === 1 || allies.length > 0) {
+              configureColours({
+                kind: "npa_colour_confirm",
+                color: changedColor,
+                members: p.ai === 1 ? undefined : [p.uid, ...allies],
+                scrollTop: jQuery(window).scrollTop(),
+              });
+            }
+          }
         }
       };
       field.node.on("focus", () => {
@@ -2066,6 +2092,67 @@ async function NeptunesPrideAgent() {
     clipColorConfig();
 
     return colourScreen;
+  };
+
+  const npaColourConfirm = (info: {
+    color: string;
+    scrollTop: number;
+    members?: number[];
+  }) => {
+    const players = NeptunesPride.universe.galaxy.players;
+    const title = info.members
+      ? "Colour Presumed Alliance"
+      : "Colour AI Players";
+    templates.npa_colour_confirm = title;
+    const screen = NeptunesPride.npui.Screen("npa_colour_confirm");
+    screen.heading.rawHTML(title);
+    const names = info.members?.map((uid) => players[uid].alias).join(", ");
+    const escapedNames = document.createElement("span");
+    escapedNames.textContent = names ?? "";
+    const message = info.members
+      ? `Apply ${info.color} to this presumed alliance: ${escapedNames.innerHTML}?<br>The listed players have known formal-alliance links with the selected player; they are not necessarily all formally allied with each other.`
+      : `Apply ${info.color} to all AI players?`;
+    const messageHeight =
+      100 + Math.ceil((names?.length ?? 0) / 40) * 24 + (info.members ? 80 : 0);
+    new UI.Text("", "pad12")
+      .rawHTML(
+        `${message}<br>Cancel keeps the change for the selected player only.`,
+      )
+      .size(456, messageHeight)
+      .roost(screen.body);
+    const buttonRow = Math.ceil(messageHeight / 16) + 1;
+    const returnToColours = () => {
+      configureColours();
+      jQuery(window).scrollTop(info.scrollTop);
+    };
+    const apply = new UI.Button("", "npa_apply_ai_colour")
+      .rawHTML(info.members ? "Apply to alliance" : "Apply to all AI players")
+      .grid(1, buttonRow, 18, 3)
+      .roost(screen.body);
+    apply.listen(NeptunesPride.crux, "npa_apply_ai_colour", () => {
+      for (const player of Object.values(
+        NeptunesPride.universe.galaxy.players,
+      ) as Player[]) {
+        if (
+          info.members ? info.members.includes(player.uid) : player.ai === 1
+        ) {
+          setPlayerColor(player.uid, info.color);
+        }
+      }
+      recolorPlayers();
+      store.set("colorMap", colorMap.join(" "));
+      mapRebuild();
+      clipColorConfig();
+      returnToColours();
+    });
+    const cancel = new UI.Button("", "npa_cancel_ai_colour")
+      .rawHTML("Cancel")
+      .grid(20, buttonRow, 9, 3)
+      .roost(screen.body);
+    cancel.listen(NeptunesPride.crux, "npa_cancel_ai_colour", returnToColours);
+    screen.closeButton.onClick = returnToColours;
+    screen.body.size(480, (buttonRow + 4) * 16);
+    return screen;
   };
 
   const setColorScheme = (_event?: any, data?: string) => {
@@ -4380,6 +4467,9 @@ async function NeptunesPrideAgent() {
         }
         if (screenConfig?.kind === "npa_options") {
           return npaOptions(screenConfig);
+        }
+        if (screenConfig?.kind === "npa_colour_confirm") {
+          return npaColourConfirm(screenConfig);
         }
         if (screenConfig?.kind === "npa_colours") {
           return npaColours(screenConfig);
