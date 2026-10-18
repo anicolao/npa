@@ -4372,6 +4372,8 @@ async function NeptunesPrideAgent() {
     onTrigger("show_npa", screenChanged);
     onTrigger("show_screen", screenChanged);
     onTrigger("show_npa", (_event: any, _: any, screenConfig: any) => {
+      // Removing the screen can collapse the page and reset its scroll position.
+      const scrollTop = jQuery(window).scrollTop();
       const getScreen = () => {
         if (screenConfig === undefined) {
           return npaReports();
@@ -4403,7 +4405,7 @@ async function NeptunesPrideAgent() {
         npui.layoutElement(npui.activeScreen);
       }
 
-      jQuery(window).scrollTop(scroll);
+      jQuery(window).scrollTop(scrollTop);
     });
     onTrigger("refresh_interface", () => {
       if (showingNPA) {
