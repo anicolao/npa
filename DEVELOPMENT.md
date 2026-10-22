@@ -171,3 +171,8 @@ example) and if you're working at the command line a tool like `glow`
 makes for easy checking that your documentation looks correct when
 formatted. Or, use an editor like `vscode` so that you can live
 preview your markdown in Chromium.
+
+## Alpha releases
+
+See [RELEASE.md](RELEASE.md) for the Chrome-first patch/deploy command,
+preview builds, API setup, and resumable submissions.
