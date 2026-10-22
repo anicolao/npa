@@ -9,7 +9,7 @@
     "build": "bun esbuild.npa.ts",
     "docs:book": "bun scripts/build-npa-book.mjs",
     "npa": "bun esbuild.npa.ts",
-    "lint": "bunx biome check src",
+    "lint": "bunx biome check src scripts/release.ts scripts/release",
     "lint:fix": "bunx biome check --write src",
     "format": "bunx biome format --write src tests",
     "test": "vitest run --coverage",
@@ -21,7 +21,8 @@
     "test:setup": "./scripts/setup-tests.sh",
     "test:all": "bun run test:unit && bun run test:playwright",
     "prepare": "husky install .husky",
-    "postversion": "./bin/packagedist"
+    "postversion": "bun scripts/release.ts postversion",
+    "release": "bun scripts/release.ts"
   },
   "license": "GPLv3",
   "devDependencies": {

@@ -29,3 +29,8 @@ AuthKey_*.p8
 *.p12
 *.xcarchive
 *.ipa
+
+# Local release artifacts, progress, and credentials
+/releases/
+/.release.lock
+/release.credentials.json
