@@ -95,6 +95,41 @@ export async function verifyIOS(dir: string, record: IOSRecord) {
     throw new Error("Missing iOS payload hashes");
   return app;
 }
+export async function requireXcode(config: IOSConfig) {
+  const developerDir = process.env.DEVELOPER_DIR || config.developerDir;
+  try {
+    await fs.access(
+      path.join(developerDir, "usr/bin/xcodebuild"),
+      fs.constants.X_OK,
+    );
+  } catch {
+    throw new Error(
+      `Full Apple Xcode is required; DEVELOPER_DIR is ${developerDir}. Exit and re-enter nix develop, or set NPA_XCODE_DEVELOPER_DIR before entering the shell.`,
+    );
+  }
+  return { ...process.env, DEVELOPER_DIR: developerDir };
+}
+export function verifyNativeSource(root: string, sourceCommit: string) {
+  const changed = run(
+    "git",
+    [
+      "diff",
+      "--name-only",
+      sourceCommit,
+      "HEAD",
+      "--",
+      "ios/NPAiOS",
+      "ios/NPAiOS.xcodeproj",
+      "ios/Config",
+    ],
+    root,
+  );
+  if (changed)
+    throw new Error(
+      "Native app inputs changed since this archive; check out its source commit or use a new build number",
+    );
+}
+
 export async function prepareIOSDirectory(dir: string) {
   try {
     await fs.mkdir(dir);
@@ -148,10 +183,7 @@ export async function buildIOS(
   await prepareIOSDirectory(dir);
   const source = path.join(dir, "source");
   const sourceCommit = run("git", ["rev-parse", "HEAD"], root);
-  const env = {
-    ...process.env,
-    DEVELOPER_DIR: process.env.DEVELOPER_DIR || config.developerDir,
-  };
+  const env = await requireXcode(config);
   try {
     await fs.mkdir(source);
     const inputs = run("git", ["ls-files", "--", "ios"], root)
@@ -233,10 +265,7 @@ export async function exportIOS(
   if (record.preview || !record.archive)
     throw new Error("Simulator previews cannot be exported or uploaded");
   await verifyIOS(dir, record);
-  const env = {
-    ...process.env,
-    DEVELOPER_DIR: process.env.DEVELOPER_DIR || record.config.developerDir,
-  };
+  const env = await requireXcode(record.config);
   const options = path.join(dir, "export-options.plist");
   const sourceOptions = path.join(
     dir,

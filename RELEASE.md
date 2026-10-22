@@ -159,7 +159,11 @@ Apple credentials are loaded from `~/.config/npa/apple-api.json` (mode 600), or
 `privateKeyPath`; the `.p8` key remains outside Git. Environment overrides are
 `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_PRIVATE_KEY_PATH`. Individual keys can
 perform API lookups without an issuer ID; this upload adapter uses a team key.
-Xcode is selected using `DEVELOPER_DIR` or the configured Xcode application path.
+On macOS, `nix develop` selects the installed Apple Xcode and clears Nix SDK
+settings that conflict with iOS builds. Exit and re-enter an existing shell after
+updating the flake. To use another Xcode installation, set
+`NPA_XCODE_DEVELOPER_DIR` before entering `nix develop`. Outside Nix, Xcode is
+selected using `DEVELOPER_DIR` or the configured Xcode application path.
 Local code signing requires the matching signing identity and provisioning profile;
 export may update signing assets through Apple's API.
 
@@ -193,8 +197,10 @@ review contact information is reused. It does not bypass Apple review or submit
 a public App Store release. `submitted` means awaiting review, not distributed.
 
 The command requires clean, committed main and pushes that native source commit.
-It does not move the existing web release tag. `resume` requires the same native
-source commit and destination configuration. Packages, checksums, export and
+It does not move the existing web release tag. `resume` verifies that native app inputs are unchanged from the recorded source
+commit and that the destination configuration matches. Release-tool and shell
+fixes can therefore reuse an existing archive; changes to the app require a new
+build number or checkout of its original source. Packages, checksums, export and
 upload receipts live under `releases/2.2.90/ios-1/`; simulator artifacts live under
 `ios-preview-1/` and cannot be uploaded. Existing build directories are never
 overwritten. On retry, an incomplete directory without a release, export, or

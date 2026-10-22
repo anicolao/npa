@@ -19,7 +19,13 @@ import {
 } from "./release/core";
 
 import { AppleStore, appleCredentials } from "./release/apple";
-import { buildIOS, deployIOS, iosBuildNumber, verifyIOS } from "./release/ios";
+import {
+  buildIOS,
+  deployIOS,
+  iosBuildNumber,
+  verifyIOS,
+  verifyNativeSource,
+} from "./release/ios";
 import { authorize } from "./release/oauth";
 
 export function parseArgs(args: string[]) {
@@ -199,10 +205,7 @@ async function main() {
       )
         throw new Error("iOS release configuration changed");
       await verifyIOS(dir, record);
-      if (run("git", ["rev-parse", "HEAD"], root) !== record.sourceCommit)
-        throw new Error(
-          "Check out the recorded native source commit to deploy",
-        );
+      verifyNativeSource(root, record.sourceCommit);
       if (run("git", ["branch", "--show-current"], root) !== config.git.branch)
         throw new Error(`Release from ${config.git.branch}`);
       run(

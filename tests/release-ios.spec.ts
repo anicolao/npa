@@ -268,3 +268,36 @@ describe("interrupted iOS build recovery", () => {
     },
   );
 });
+
+import { run } from "../scripts/release/core";
+import { verifyNativeSource } from "../scripts/release/ios";
+
+describe("native archive source compatibility", () => {
+  it("allows release-tool fixes but rejects changed native inputs", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "ios-source-test-"));
+    try {
+      run("git", ["init", "-q"], root);
+      run("git", ["config", "user.name", "Release Test"], root);
+      run("git", ["config", "user.email", "release@example.invalid"], root);
+      run("git", ["config", "commit.gpgsign", "false"], root);
+      run("git", ["config", "core.hooksPath", "/dev/null"], root);
+      await fs.mkdir(path.join(root, "ios/NPAiOS"), { recursive: true });
+      await fs.writeFile(path.join(root, "ios/NPAiOS/App.swift"), "original");
+      run("git", ["add", "."], root);
+      run("git", ["commit", "-qm", "native source"], root);
+      const commit = run("git", ["rev-parse", "HEAD"], root);
+      await fs.writeFile(path.join(root, "flake.nix"), "tool fix");
+      run("git", ["add", "."], root);
+      run("git", ["commit", "-qm", "fix environment"], root);
+      expect(() => verifyNativeSource(root, commit)).not.toThrow();
+      await fs.writeFile(path.join(root, "ios/NPAiOS/App.swift"), "changed");
+      run("git", ["add", "."], root);
+      run("git", ["commit", "-qm", "change app"], root);
+      expect(() => verifyNativeSource(root, commit)).toThrow(
+        "Native app inputs changed",
+      );
+    } finally {
+      await fs.rm(root, { recursive: true, force: true });
+    }
+  });
+});
