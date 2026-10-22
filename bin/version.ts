@@ -1,7 +1,6 @@
 import { execSync } from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import p from "../package.json" assert { type: "json" };
 
 export type VersionInfo = {
   hash: string;
@@ -11,24 +10,32 @@ export type VersionInfo = {
   display: string;
 };
 
-export async function getVersionInfo(): Promise<VersionInfo> {
+export async function getVersionInfo(
+  root = process.cwd(),
+): Promise<VersionInfo> {
   const d = new Date();
   const date = `${d.getDate()} ${d.toLocaleString("default", { month: "short" })} ${d.getFullYear()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
   return {
     hash:
       process.env.VITE_NPA_COMMIT_HASH ??
-      execSync("git rev-parse --short HEAD").toString().trim(),
+      execSync("git rev-parse --short HEAD", { cwd: root }).toString().trim(),
     date: process.env.VITE_NPA_VERSION_DATE ?? date,
     status:
       process.env.VITE_NPA_GIT_STATUS ??
-      execSync("git status -s").toString().replace(/\n$/, ""),
-    version: process.env.VITE_NPA_VERSION ?? p.version,
+      execSync("git status -s", { cwd: root }).toString().replace(/\n$/, ""),
+    version:
+      process.env.VITE_NPA_VERSION ??
+      JSON.parse(await fs.readFile(path.join(root, "package.json"), "utf8"))
+        .version,
     display: process.env.VITE_NPA_VERSION_STRING ?? "",
   };
 }
 
-export async function writeVersionAndManifest(versionInfo?: VersionInfo) {
-  const version_info = versionInfo ?? (await getVersionInfo());
+export async function writeVersionAndManifest(
+  versionInfo?: VersionInfo,
+  root = process.cwd(),
+) {
+  const version_info = versionInfo ?? (await getVersionInfo(root));
   const version = version_info.version;
   const alphaEdition = version.endsWith(".0") ? "" : " άλφα Edition";
   const manifest = {
@@ -70,10 +77,12 @@ export async function writeVersionAndManifest(versionInfo?: VersionInfo) {
     },
   };
 
-  await fs.mkdir("dist", { recursive: true });
-  await fs.cp("static", "dist", { recursive: true });
+  await fs.mkdir(path.join(root, "dist"), { recursive: true });
+  await fs.cp(path.join(root, "static"), path.join(root, "dist"), {
+    recursive: true,
+  });
   await fs.writeFile(
-    path.join("dist", "manifest.json"),
+    path.join(root, "dist", "manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
