@@ -1,6 +1,6 @@
 {
   "name": "neptunes-pride-agent",
-  "version": "2.2.89",
+  "version": "2.2.90",
   "packageManager": "bun@1.3.10",
   "type": "module",
   "description": "Chrome extension for Neptune's Pride players.",
@@ -52,5 +52,9 @@
     "idb": "^7.1.1",
     "mousetrap": "^1.6.5"
   },
-  "trustedDependencies": ["@biomejs/biome", "esbuild", "protobufjs"]
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "esbuild",
+    "protobufjs"
+  ]
 }
