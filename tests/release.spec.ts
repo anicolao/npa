@@ -17,6 +17,7 @@ import {
   saveJSON,
   sha256,
   validateManifest,
+  validateProductionHosts,
   verifyArtifact,
   versionParts,
   withLock,
@@ -132,6 +133,50 @@ describe("release inputs and artifacts", () => {
         "intel.js.map",
       ]),
     ).toThrow("Unexpected");
+  });
+  it("rejects development hosts and broad access in every production permission field", () => {
+    expect(() =>
+      validateProductionHosts({
+        host_permissions: [
+          "https://np.ironhelmet.com/*",
+          "https://np4.ironhelmet.com/*",
+        ],
+      }),
+    ).not.toThrow();
+    for (const host of [
+      "http://localhost:8080/*",
+      "http://127.0.0.1/*",
+      "<all_urls>",
+      "https://*/*",
+    ]) {
+      for (const field of [
+        "host_permissions",
+        "optional_host_permissions",
+        "permissions",
+        "optional_permissions",
+      ])
+        expect(() => validateProductionHosts({ [field]: [host] })).toThrow(
+          "production host",
+        );
+      expect(() =>
+        validateProductionHosts({ content_scripts: [{ matches: [host] }] }),
+      ).toThrow("production host");
+    }
+  });
+  it("refuses to upload a previously packaged localhost build", async () => {
+    await saveJSON(path.join(dir, "manifest.json"), {
+      ...manifest,
+      host_permissions: ["http://localhost:8080/*"],
+    });
+    run("zip", ["-q", record.chrome.file, "manifest.json"], dir);
+    record.chrome.sha256 = sha256(
+      await fs.readFile(path.join(dir, record.chrome.file)),
+    );
+    const store = mockStore();
+    await expect(deployChrome(dir, record, store as any)).rejects.toThrow(
+      "production host",
+    );
+    expect(store.upload).not.toHaveBeenCalled();
   });
   it("locks concurrent releases and releases the lock after failures", async () => {
     await withLock(dir, async () => {

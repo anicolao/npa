@@ -5,7 +5,9 @@ import {
   type ReleaseRecord,
   compareVersions,
   readJSON,
+  run,
   saveJSON,
+  validateProductionHosts,
   verifyArtifact,
 } from "./core";
 
@@ -190,6 +192,9 @@ export async function deployChrome(
       "Preview builds cannot be deployed. Make a clean release build first.",
     );
   const zip = await verifyArtifact(dir, record);
+  validateProductionHosts(
+    JSON.parse(run("unzip", ["-p", zip, "manifest.json"], dir)),
+  );
   const stateFile = path.join(dir, "chrome-state.json");
   let state: DeployState;
   try {

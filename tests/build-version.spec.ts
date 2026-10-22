@@ -62,6 +62,12 @@ describe("version metadata during rebuilds", () => {
     context = await createContext(false, root);
     await context.rebuild();
     const initial = await output();
+    expect(initial.manifest.host_permissions).toContain(
+      "http://localhost:8080/*",
+    );
+    expect(initial.manifest.content_scripts[0].matches).toContain(
+      "http://localhost:8080/*",
+    );
     expect(initial.info.status).toBe("");
     expect(initial.info.version).toBe("2.2.89");
     await fs.writeFile(
@@ -112,6 +118,12 @@ describe("version metadata during rebuilds", () => {
     });
     expect(next.display).toBe("fixed screenshot label");
     expect(next.manifest.version).toBe("9.9.99");
+    const gameHosts = [
+      "https://np.ironhelmet.com/*",
+      "https://np4.ironhelmet.com/*",
+    ];
+    expect(next.manifest.host_permissions).toEqual(gameHosts);
+    expect(next.manifest.content_scripts[0].matches).toEqual(gameHosts);
     expect(next.code).toContain("// @version     9.9.99");
     expect(
       JSON.parse(

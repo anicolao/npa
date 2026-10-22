@@ -34,21 +34,20 @@ export async function getVersionInfo(
 export async function writeVersionAndManifest(
   versionInfo?: VersionInfo,
   root = process.cwd(),
+  development = false,
 ) {
   const version_info = versionInfo ?? (await getVersionInfo(root));
   const version = version_info.version;
   const alphaEdition = version.endsWith(".0") ? "" : " άλφα Edition";
+  const hosts = ["https://np.ironhelmet.com/*", "https://np4.ironhelmet.com/*"];
+  if (development) hosts.push("http://localhost:8080/*");
   const manifest = {
     name: `Neptune's Pride Agent${alphaEdition}`,
     description: "Enhance NP Triton UI with intel.",
     version,
     manifest_version: 3,
     permissions: ["scripting"],
-    host_permissions: [
-      "https://np.ironhelmet.com/*",
-      "https://np4.ironhelmet.com/*",
-      "http://localhost:8080/*",
-    ],
+    host_permissions: hosts,
     action: {},
     web_accessible_resources: [
       {
@@ -58,11 +57,7 @@ export async function writeVersionAndManifest(
     ],
     content_scripts: [
       {
-        matches: [
-          "https://np.ironhelmet.com/*",
-          "https://np4.ironhelmet.com/*",
-          "http://localhost:8080/*",
-        ],
+        matches: hosts,
         css: ["intel.css"],
       },
     ],

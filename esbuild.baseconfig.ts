@@ -16,14 +16,14 @@ const versionFields = {
 } as const;
 const versionMarker = "__NPA_USERSCRIPT_VERSION__";
 
-function versionPlugin(root: string): esbuild.Plugin {
+function versionPlugin(root: string, development: boolean): esbuild.Plugin {
   let info: VersionInfo;
   return {
     name: "version",
     setup(build) {
       build.onStart(async () => {
         info = await getVersionInfo(root);
-        await writeVersionAndManifest(info, root);
+        await writeVersionAndManifest(info, root, development);
       });
       build.onResolve({ filter: /^npa:build-version$/ }, () => ({
         path: "version",
@@ -71,7 +71,7 @@ export async function createContext(
     write: false,
     logLevel: "info",
     color: false,
-    plugins: [versionPlugin(root)],
+    plugins: [versionPlugin(root, !production)],
     minify,
     inject: ["npa:build-version"],
     define: Object.fromEntries(

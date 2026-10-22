@@ -176,3 +176,8 @@ preview your markdown in Chromium.
 
 See [RELEASE.md](RELEASE.md) for the Chrome-first patch/deploy command,
 preview builds, API setup, and resumable submissions.
+
+Production builds (`bun run build`) grant access only to the game domains.
+For local browser testing on localhost:8080, use `bun run start` and load its
+unpacked `dist/` extension. Localhost permissions are development-only; release
+packaging and Chrome submission reject any host outside the two game domains.

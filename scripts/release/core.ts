@@ -105,6 +105,30 @@ export function validateManifest(
   )
     throw new Error("Unexpected file in Chrome package");
 }
+// Keep historical artifact verification independent of today's publishing policy.
+export function validateProductionHosts(manifest: any) {
+  const allowed = new Set([
+    "https://np.ironhelmet.com/*",
+    "https://np4.ironhelmet.com/*",
+  ]);
+  const hosts = [
+    ...(manifest.host_permissions || []),
+    ...(manifest.optional_host_permissions || []),
+    ...(manifest.content_scripts || []).flatMap(
+      (script: any) => script.matches || [],
+    ),
+    ...[
+      ...(manifest.permissions || []),
+      ...(manifest.optional_permissions || []),
+    ].filter(
+      (permission: string) =>
+        permission.includes("://") || permission === "<all_urls>",
+    ),
+  ];
+  for (const host of hosts)
+    if (!allowed.has(host))
+      throw new Error(`Unexpected production host permission: ${host}`);
+}
 export interface ReleaseRecord {
   schema: 1;
   version: string;
@@ -225,6 +249,9 @@ export async function buildChrome(
       );
       if (!name.endsWith(".map")) hashes[name] = sha256(bytes);
     }
+    validateProductionHosts(
+      await readJSON(path.join(chromeDir, "manifest.json")),
+    );
     validateManifest(
       await readJSON(path.join(chromeDir, "manifest.json")),
       version,
