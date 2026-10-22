@@ -65,7 +65,9 @@ export class AppleStore {
       signal: AbortSignal.timeout(60_000),
     });
     if (!response.ok)
-      throw new Error(`App Store Connect API failed (HTTP ${response.status})`);
+      throw new Error(
+        `App Store Connect API ${init.method || "GET"} ${url.pathname} failed (HTTP ${response.status})`,
+      );
     if (response.status === 204) return {};
     return response.json();
   }

@@ -438,20 +438,34 @@ export async function deployIOS(
   const localizations = await store.list(
     `/v1/builds/${build.id}/betaBuildLocalizations`,
   );
-  if (!localizations.length)
+  const locale = app.attributes.primaryLocale || "en-US";
+  const localization = localizations.find(
+    (item) => item.attributes.locale === locale,
+  );
+  const whatsNew = `NPA ${record.version}. Updated bundled game enhancements.`;
+  if (!localization) {
     await store.json("/v1/betaBuildLocalizations", {
       method: "POST",
       body: JSON.stringify({
         data: {
           type: "betaBuildLocalizations",
-          attributes: {
-            locale: app.attributes.primaryLocale || "en-US",
-            whatsNew: `NPA ${record.version}. Updated bundled game enhancements.`,
-          },
+          attributes: { locale, whatsNew },
           relationships: { build: { data: { type: "builds", id: build.id } } },
         },
       }),
     });
+  } else if (!localization.attributes.whatsNew?.trim()) {
+    await store.json(`/v1/betaBuildLocalizations/${localization.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        data: {
+          type: "betaBuildLocalizations",
+          id: localization.id,
+          attributes: { whatsNew },
+        },
+      }),
+    });
+  }
   const groups = await store.list(`/v1/apps/${app.id}/betaGroups`);
   const selected = record.config.betaGroups.map((name) => {
     const matches = groups.filter((g) => g.attributes.name === name);
@@ -460,9 +474,12 @@ export async function deployIOS(
     return matches[0];
   });
   // Associations are reconciled before retrying, including after a lost response.
-  const existing = await store.list(`/v1/builds/${build.id}/betaGroups`);
   for (const group of selected) {
-    if (!existing.some((g) => g.id === group.id))
+    // Apple exposes this relationship for reads only from the group side.
+    const existing = await store.list(
+      `/v1/betaGroups/${group.id}/relationships/builds`,
+    );
+    if (!existing.some((item) => item.id === build.id))
       await store.json(`/v1/betaGroups/${group.id}/relationships/builds`, {
         method: "POST",
         body: JSON.stringify({ data: [{ type: "builds", id: build.id }] }),

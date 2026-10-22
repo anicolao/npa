@@ -192,11 +192,25 @@ describe.skipIf(process.platform !== "darwin")(
           attributes: { name: "Discord Public Beta", isInternalGroup: false },
         },
       ];
-      vi.spyOn(store, "list").mockImplementation(async (resource) =>
-        resource.includes("betaBuildLocalizations")
-          ? [{ id: "localization" }]
-          : groups,
-      );
+      const listing = vi
+        .spyOn(store, "list")
+        .mockImplementation(async (resource) => {
+          if (resource.endsWith("/betaBuildLocalizations"))
+            return [
+              {
+                id: "localization",
+                attributes: { locale: "en-US", whatsNew: null },
+              },
+            ];
+          if (resource === "/v1/apps/app/betaGroups") return groups;
+          if (
+            /^\/v1\/betaGroups\/(internal|external)\/relationships\/builds$/.test(
+              resource,
+            )
+          )
+            return [{ id: "build", type: "builds" }];
+          throw new Error(`Unsupported Apple list endpoint: ${resource}`);
+        });
       let externalState = "READY_FOR_BETA_SUBMISSION";
       const json = vi
         .spyOn(store, "json")
