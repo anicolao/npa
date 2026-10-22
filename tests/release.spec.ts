@@ -104,8 +104,8 @@ describe("release inputs and artifacts", () => {
       parseArgs(["--", "build", "--preview", "--version", "2.2.90"]).options
         .preview,
     ).toBe(true);
-    expect(() => parseArgs(["patch", "--target", "ios"])).toThrow(
-      "Only Chrome",
+    expect(() => parseArgs(["patch", "--target", "firefox"])).toThrow(
+      "Supported targets",
     );
     expect(() => parseArgs(["patch", "--auto-approve"])).toThrow(
       "Unknown option",

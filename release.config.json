@@ -1,9 +1,23 @@
 {
   "schema": 1,
   "channel": "alpha",
-  "git": { "remote": "origin", "branch": "main", "tagPrefix": "v" },
+  "git": {
+    "remote": "origin",
+    "branch": "main",
+    "tagPrefix": "v"
+  },
   "chrome": {
     "publisherId": "ef0bd2ed-803c-48a6-b326-78d3b658cad8",
     "extensionId": "ndfajnjbmlanogpddbbjbbcoahhomaba"
+  },
+  "ios": {
+    "bundleId": "com.spnss.npa",
+    "teamId": "ZHQLA4T47N",
+    "scheme": "NPAiOS",
+    "developerDir": "/Applications/Xcode.app/Contents/Developer",
+    "betaGroups": [
+      "Internal",
+      "Discord Public Beta"
+    ]
   }
 }

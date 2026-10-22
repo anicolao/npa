@@ -18,6 +18,8 @@ import {
   withLock,
 } from "./release/core";
 
+import { AppleStore, appleCredentials } from "./release/apple";
+import { buildIOS, deployIOS, iosBuildNumber, verifyIOS } from "./release/ios";
 import { authorize } from "./release/oauth";
 
 export function parseArgs(args: string[]) {
@@ -29,7 +31,13 @@ export function parseArgs(args: string[]) {
     if (["--preview", "--auto-publish", "--help"].includes(arg))
       options[arg.slice(2)] = true;
     else if (
-      ["--target", "--channel", "--version", "--client-file"].includes(arg)
+      [
+        "--target",
+        "--channel",
+        "--version",
+        "--client-file",
+        "--build-number",
+      ].includes(arg)
     ) {
       const value = args[++i];
       if (!value || value.startsWith("--"))
@@ -57,10 +65,12 @@ export function parseArgs(args: string[]) {
     throw new Error("--client-file is only valid with auth");
   if (command === "auth" && !options["client-file"])
     throw new Error("auth requires --client-file PATH");
-  if (options.target && options.target !== "chrome")
+  if (options.target && !["chrome", "ios"].includes(String(options.target)))
     throw new Error(
-      "Only Chrome is implemented. Firefox and iOS will be added as separate tested targets.",
+      "Supported targets: chrome, ios. Firefox is not implemented yet.",
     );
+  if (options["build-number"] && options.target !== "ios")
+    throw new Error("--build-number requires --target ios");
   if (options.channel && options.channel !== "alpha")
     throw new Error("Only the alpha channel is configured");
   if (
@@ -82,7 +92,8 @@ export function parseArgs(args: string[]) {
     throw new Error("Unexpected positional argument");
   return { command, version: positional[1], options };
 }
-const help = `Chrome release commands (Firefox/iOS are not implemented yet):
+const help = `Release commands (Firefox is not implemented yet):
+  bun run release -- build --target ios --version 2.2.90 --build-number 1 --preview
   bun run release -- auth --client-file /path/to/downloaded-client.json
   bun run release -- build --preview --version 2.2.90
   bun run release -- build                         # clean, committed current version
@@ -90,7 +101,11 @@ const help = `Chrome release commands (Firefox/iOS are not implemented yet):
   bun run release -- resume 2.2.90 --auto-publish   # no bump/rebuild
   bun run release -- status 2.2.90
   bun run release -- preflight                     # check API access/version only
-All commands accept --target chrome --channel alpha.
+  bun run release -- deploy 2.2.90 --target ios --auto-publish
+  bun run release -- resume 2.2.90 --target ios --auto-publish
+  bun run release -- preflight --target ios
+iOS defaults to build number 1; use --build-number for a replacement build.
+All targets use --channel alpha.
 Without --auto-publish, patch/postversion package locally; they do not push or upload.
 Preview ZIPs are for local testing and cannot be deployed.
 See RELEASE.md for one-time OAuth setup and recovery.`;
@@ -123,6 +138,94 @@ async function main() {
   const pkg = await readJSON(pkgFile);
   const version = argumentVersion || String(options.version || pkg.version);
   versionParts(version);
+  if (options.target === "ios") {
+    if (["preflight", "status"].includes(command)) {
+      const store = new AppleStore(await appleCredentials());
+      const app = await store.app(config.ios.bundleId);
+      console.log(
+        JSON.stringify(
+          {
+            app: { id: app.id, bundleId: app.attributes.bundleId },
+            builds: await store.builds(app.id, version),
+          },
+          null,
+          2,
+        ),
+      );
+      return;
+    }
+    if (!["build", "deploy", "resume"].includes(command))
+      throw new Error(
+        "iOS supports build, deploy, resume, preflight and status. Use the existing web release version; do not bump again.",
+      );
+    const buildNumber = iosBuildNumber(String(options["build-number"] || "1"));
+    await withLock(root, async () => {
+      if (command === "build") {
+        await buildIOS(
+          root,
+          version,
+          buildNumber,
+          !!options.preview,
+          config.ios,
+        );
+        return;
+      }
+      if (!options["auto-publish"])
+        throw new Error("iOS deploy/resume requires --auto-publish");
+      requireClean(root);
+      const store = new AppleStore(await appleCredentials());
+      const app = await store.app(config.ios.bundleId);
+      const dir = path.join(root, "releases", version, `ios-${buildNumber}`);
+      let record: import("./release/ios").IOSRecord;
+      try {
+        record = await readJSON(path.join(dir, "ios-release.json"));
+      } catch (error) {
+        if (error.code !== "ENOENT" || command === "resume") throw error;
+        if (
+          (await store.builds(app.id, version)).some(
+            (b) => b.attributes.version === buildNumber,
+          )
+        )
+          throw new Error(
+            "iOS build number already uploaded; choose --build-number",
+          );
+        record = (await buildIOS(root, version, buildNumber, false, config.ios))
+          .record;
+      }
+      if (
+        record.version !== version ||
+        record.buildNumber !== buildNumber ||
+        JSON.stringify(record.config) !== JSON.stringify(config.ios)
+      )
+        throw new Error("iOS release configuration changed");
+      await verifyIOS(dir, record);
+      if (run("git", ["rev-parse", "HEAD"], root) !== record.sourceCommit)
+        throw new Error(
+          "Check out the recorded native source commit to deploy",
+        );
+      if (run("git", ["branch", "--show-current"], root) !== config.git.branch)
+        throw new Error(`Release from ${config.git.branch}`);
+      run(
+        "git",
+        ["push", config.git.remote, `HEAD:refs/heads/${config.git.branch}`],
+        root,
+      );
+      let result = await deployIOS(dir, record, store);
+      for (
+        let attempt = 0;
+        result.phase === "processing" && attempt < 120;
+        attempt++
+      ) {
+        console.log(
+          "Waiting 15 seconds for Apple processing; interrupt safely and resume this version later.",
+        );
+        await new Promise((resolve) => setTimeout(resolve, 15_000));
+        result = await deployIOS(dir, record, store);
+      }
+      console.log(JSON.stringify(result, null, 2));
+    });
+    return;
+  }
   const store = async () =>
     new ChromeStore(config.chrome, await credentialsFromEnvironment());
   if (command === "status") {
