@@ -19,5 +19,9 @@
       "Internal",
       "Discord Public Beta"
     ]
+  },
+  "firefox": {
+    "addonId": 2782231,
+    "guid": "{d7081703-bf8d-4fb9-9953-8a6309dfc219}"
   }
 }

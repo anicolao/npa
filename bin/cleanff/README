@@ -1,14 +1,21 @@
-# To build the extension from source,
-# sh -x README to execute this file:
+Neptune's Pride Agent Firefox source submission
 
-git clone git@github.com:anicolao/npa.git
-mkdir npa/dist
-mkdir versions
-cd npa
-git fetch --all --tags
-git checkout INJECT_VERSION
-bun install --frozen-lockfile
-./bin/version
-./bin/packagedist
-cd ../versions
-ls -l
+This archive includes the web source at the recorded release commit, locked
+ dependencies, Firefox wrapper, and the build recipe. No Git checkout or SSH
+credentials are needed. build.json records the source commit, version, build
+date, expected payload hashes, and Firefox extension ID.
+
+Install Bun INJECT_BUN from https://bun.sh (the version used for this release).
+From this directory run:
+
+    bun rebuild.ts
+
+This installs the locked dependencies, builds the production web payload, checks
+that intel.js and intel.css exactly match the shared Chrome/iOS release, and
+creates output/ containing the unsigned Firefox extension. Zip the contents of
+output/ to reproduce the submitted extension (ZIP timestamps may differ).
+
+The Firefox background registers the existing user-script loader and embeds the
+locally built script as a data URL so it runs in the game's page context. CSS is
+packaged separately. No code is downloaded at runtime. Source maps remain in
+dist/ for review and are excluded from the extension package.

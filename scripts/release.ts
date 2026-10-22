@@ -20,6 +20,13 @@ import {
 
 import { AppleStore, appleCredentials } from "./release/apple";
 import {
+  FirefoxStore,
+  buildFirefox,
+  deployFirefox,
+  firefoxCredentials,
+  verifyFirefox,
+} from "./release/firefox";
+import {
   buildIOS,
   deployIOS,
   iosBuildNumber,
@@ -69,12 +76,17 @@ export function parseArgs(args: string[]) {
     throw new Error(`Unknown release command: ${command}`);
   if (options["client-file"] && command !== "auth")
     throw new Error("--client-file is only valid with auth");
+  if (command === "auth" && options.target && options.target !== "chrome")
+    throw new Error(
+      "auth is for Chrome OAuth; Firefox and iOS use local API credentials",
+    );
   if (command === "auth" && !options["client-file"])
     throw new Error("auth requires --client-file PATH");
-  if (options.target && !["chrome", "ios"].includes(String(options.target)))
-    throw new Error(
-      "Supported targets: chrome, ios. Firefox is not implemented yet.",
-    );
+  if (
+    options.target &&
+    !["chrome", "ios", "firefox"].includes(String(options.target))
+  )
+    throw new Error("Supported targets: chrome, firefox, ios.");
   if (options["build-number"] && options.target !== "ios")
     throw new Error("--build-number requires --target ios");
   if (options.channel && options.channel !== "alpha")
@@ -98,7 +110,7 @@ export function parseArgs(args: string[]) {
     throw new Error("Unexpected positional argument");
   return { command, version: positional[1], options };
 }
-const help = `Release commands (Firefox is not implemented yet):
+const help = `Release commands:
   bun run release -- build --target ios --version 2.2.90 --build-number 1 --preview
   bun run release -- auth --client-file /path/to/downloaded-client.json
   bun run release -- build --preview --version 2.2.90
@@ -110,6 +122,10 @@ const help = `Release commands (Firefox is not implemented yet):
   bun run release -- deploy 2.2.90 --target ios --auto-publish
   bun run release -- resume 2.2.90 --target ios --auto-publish
   bun run release -- preflight --target ios
+  bun run release -- build --target firefox --version 2.2.90 --preview
+  bun run release -- deploy 2.2.90 --target firefox --auto-publish
+  bun run release -- resume 2.2.90 --target firefox --auto-publish
+  bun run release -- preflight --target firefox
 iOS defaults to build number 1; use --build-number for a replacement build.
 All targets use --channel alpha.
 Without --auto-publish, patch/postversion package locally; they do not push or upload.
@@ -144,6 +160,99 @@ async function main() {
   const pkg = await readJSON(pkgFile);
   const version = argumentVersion || String(options.version || pkg.version);
   versionParts(version);
+  if (options.target === "firefox") {
+    if (!config.firefox)
+      throw new Error("Firefox destination is not configured");
+    const store = async () =>
+      new FirefoxStore(config.firefox, await firefoxCredentials());
+    if (["preflight", "status"].includes(command)) {
+      const client = await store();
+      const addon = await client.preflight();
+      console.log(
+        JSON.stringify(
+          {
+            id: addon.id,
+            guid: addon.guid,
+            versions: (await client.versions())
+              .filter((v) => command === "preflight" || v.version === version)
+              .slice(0, command === "preflight" ? 1 : undefined)
+              .map((v) => ({
+                id: v.id,
+                version: v.version,
+                channel: v.channel,
+                status: v.file.status,
+              })),
+          },
+          null,
+          2,
+        ),
+      );
+      return;
+    }
+    if (!["build", "deploy", "resume"].includes(command))
+      throw new Error(
+        "Firefox supports build, deploy, resume, preflight and status. Use the existing web release version; do not bump again.",
+      );
+    await withLock(root, async () => {
+      if (command === "build") {
+        await buildFirefox(root, version, !!options.preview, config.firefox);
+        return;
+      }
+      if (!options["auto-publish"])
+        throw new Error("Firefox deploy/resume requires --auto-publish");
+      requireClean(root);
+      const client = await store();
+      await client.preflight();
+      const dir = path.join(root, "releases", version, "firefox");
+      let record: import("./release/firefox").FirefoxRecord;
+      try {
+        record = await readJSON(path.join(dir, "firefox-release.json"));
+      } catch (error) {
+        if (error.code !== "ENOENT" || command === "resume") throw error;
+        if ((await client.versions()).some((v) => v.version === version))
+          throw new Error("Firefox version already exists");
+        record = (await buildFirefox(root, version, false, config.firefox))
+          .record;
+      }
+      if (record.version !== version)
+        throw new Error("Firefox release version mismatch");
+      await verifyFirefox(dir, record);
+      if (run("git", ["branch", "--show-current"], root) !== config.git.branch)
+        throw new Error(`Release from ${config.git.branch}`);
+      run(
+        "git",
+        ["merge-base", "--is-ancestor", record.sourceCommit, "HEAD"],
+        root,
+      );
+      run(
+        "git",
+        ["merge-base", "--is-ancestor", record.wrapperCommit, "HEAD"],
+        root,
+      );
+      run(
+        "git",
+        ["push", config.git.remote, `HEAD:refs/heads/${config.git.branch}`],
+        root,
+      );
+      let result = await deployFirefox(dir, record, client);
+      for (
+        let attempt = 0;
+        result.phase === "validating" && attempt < 120;
+        attempt++
+      ) {
+        console.log(
+          "Waiting 15 seconds for Mozilla validation; interrupt safely and resume later.",
+        );
+        await new Promise((resolve) => setTimeout(resolve, 15_000));
+        result = await deployFirefox(dir, record, client);
+      }
+      console.log(JSON.stringify(result, null, 2));
+      console.log(
+        "Mozilla reviews the listed alpha update and publishes it after approval. Use status to check availability.",
+      );
+    });
+    return;
+  }
   if (options.target === "ios") {
     if (["preflight", "status"].includes(command)) {
       const store = new AppleStore(await appleCredentials());
