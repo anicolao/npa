@@ -1,7 +1,7 @@
 # Alpha release workflow
 
-Chrome and native iOS/TestFlight have release adapters. Firefox and the legacy
-Bitbucket mirror are still planned adapters. The targets currently run separately
+Chrome, Firefox and native iOS/TestFlight have release adapters. The legacy
+Bitbucket mirror is still a planned adapter. The targets currently run separately
 against the same recorded web release.
 The configured Chrome destination is the existing Board Games Cafe alpha item
 `ndfajnjbmlanogpddbbjbbcoahhomaba`, published at 2.2.89 when checked on
@@ -142,8 +142,7 @@ rejected submissions. A real clean-checkout package and lifecycle smoke test sho
 precede the first live API submission. API contract tests use mocked responses;
 they do not constitute a store upload.
 
-The remaining adapters are Firefox packaging/AMO source submission and the legacy
-Bitbucket mirror. The old iOS staging script remains available for local Xcode work.
+The remaining adapter is the legacy Bitbucket mirror. The old iOS staging script remains available for local Xcode work.
 
 
 ## Native iOS / TestFlight
@@ -218,3 +217,52 @@ Local validation includes a simulator build, signed device archive, IPA export,
 and byte-for-byte verification of embedded web assets. Unit tests exercise JWTs,
 artifact tampering, duplicate upload prevention and review recovery. These checks
 are separate from a live TestFlight upload and beta review.
+
+
+## Firefox / Mozilla Add-ons
+
+The alpha destination is AMO add-on `2782231`, GUID
+`{d7081703-bf8d-4fb9-9953-8a6309dfc219}` (Neptune's Pride Agent άλφα Edition).
+It is a listed add-on; `--channel alpha` identifies our separate alpha listing,
+not Mozilla's `unlisted` distribution channel. The stable listing is untouched.
+
+Obtain issuer and secret from https://addons.mozilla.org/developers/addon/api/key/.
+Store them as `{"issuer":"user:…","secret":"…"}` in
+`~/.config/npa/firefox-api.json` with mode 0600. Alternatively set
+`NPA_FIREFOX_CREDENTIALS` to another JSON file, or supply both
+`AMO_JWT_ISSUER` and `AMO_JWT_SECRET`. Never commit these credentials.
+
+For the existing 2.2.90 web release, use `nix develop` (Bun 1.2.4, as recorded
+in that release). Future releases must use the Bun version recorded when their
+shared web package was built.
+
+```sh
+bun release -- preflight --target firefox
+bun release -- build --target firefox --version 2.2.90 --preview
+bun release -- deploy 2.2.90 --target firefox --channel alpha --auto-publish
+bun release -- resume 2.2.90 --target firefox --channel alpha --auto-publish
+bun release -- status 2.2.90 --target firefox
+```
+
+Deploy builds a missing package, pushes committed source, uploads to Mozilla,
+waits for validation, and submits the extension together with its source archive.
+Mozilla's normal review and publication process applies; `--auto-publish` does
+not bypass review. Resume uses saved artifacts and receipts without rebuilding.
+It stops instead of blindly retrying an ambiguous submission or upload.
+If an upload response was lost before its UUID was recorded, inspect the uploads
+in AMO before repairing the receipt; do not delete it and repeat the upload.
+
+Artifacts live in `releases/2.2.90/firefox/` (or `firefox-preview/`). Packaging
+restores the old `firefox.source.VERSION.tar.gz` submission from `bin/packagedist`,
+using the maintained `bin/cleanff/README` template. It now includes all locked
+build inputs and `rebuild.ts`, so reviewers need no SSH/Git credentials.
+The exact recipe is executed locally, and both rebuilt web payload hashes must
+match the recorded Chrome release. The existing Firefox user-script loader is
+preserved; the shared stylesheet is now included as a content stylesheet.
+Neither tracked Firefox files nor the development build directory are modified.
+
+Mozilla addons-linter 10.14.0 runs during packaging; its report is saved as
+`lint.json`. This existing extension currently produces a warning about the
+future data-collection declaration requirement. Do not silence it by claiming
+`none`: NPA contains Firebase reporting and user-initiated uploads. Adopting
+Firefox's built-in data consent requires a separate, accurate data-flow review.
