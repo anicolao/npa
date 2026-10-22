@@ -31,7 +31,13 @@ The App Store Connect app is owned by SPNSS and uses bundle ID
 SPNSS development team. Apple credentials and generated signing products must
 remain outside the repository.
 
-Before archiving, build and stage the current web payload:
+For automated releases from a recorded web build, use the
+[native iOS release workflow](../RELEASE.md#native-ios--testflight). It stages the
+payload in an isolated copy, archives and exports the app, and supports resumable
+TestFlight uploads. Marketing versions follow the web release from 2.2.90 onward;
+`CURRENT_PROJECT_VERSION` is passed at build time without editing the project.
+
+For manual local Xcode builds, build and stage the current web payload:
 
 ```bash
 ios/scripts/stage-web-assets.sh
@@ -68,6 +74,7 @@ The group accepts up to 10,000 testers and its public link is enabled. Build
 public-link testers as of 2026-08-26.
 
 The retained build `1` archive contains a web bundle produced from the
-pre-remediation worktree, so its source provenance is incomplete. The project
-now targets build `2`; that replacement must be staged from authoritative
-`main`, uploaded, and verified before the release tag is created.
+pre-remediation worktree, so its source provenance is incomplete. The committed project
+retains the manual build `2` default. Automated releases override both version
+fields and record native and web source commits separately; they preserve the
+existing web release tag.

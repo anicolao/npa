@@ -1,7 +1,8 @@
 # Alpha release workflow
 
-Chrome is the first implemented target. Firefox, native iOS/TestFlight, and the
-legacy Bitbucket mirror are planned adapters, not part of this command yet.
+Chrome and native iOS/TestFlight have release adapters. Firefox and the legacy
+Bitbucket mirror are still planned adapters. The targets currently run separately
+against the same recorded web release.
 The configured Chrome destination is the existing Board Games Cafe alpha item
 `ndfajnjbmlanogpddbbjbbcoahhomaba`, published at 2.2.89 when checked on
 2026-10-21. The next patch is 2.2.90.
@@ -141,6 +142,72 @@ rejected submissions. A real clean-checkout package and lifecycle smoke test sho
 precede the first live API submission. API contract tests use mocked responses;
 they do not constitute a store upload.
 
-The next adapters should consume the same recorded payload: Firefox packaging and
-AMO source submission, then staging the native iOS shell, archiving/signing and
-TestFlight distribution. Keep the existing iOS scripts until that adapter is tested.
+The remaining adapters are Firefox packaging/AMO source submission and the legacy
+Bitbucket mirror. The old iOS staging script remains available for local Xcode work.
+
+
+## Native iOS / TestFlight
+
+The native app uses the exact `intel.js` and `intel.css` from the verified Chrome
+ZIP. It does not rebuild the web payload or read the mutable unpacked Chrome
+folder. The recorded native source commit can differ from the web commit; both
+are saved in `ios-release.json`. The Swift project and resources are staged in
+an isolated directory, leaving tracked iOS resources and project versions alone.
+
+Apple credentials are loaded from `~/.config/npa/apple-api.json` (mode 600), or
+`NPA_APPLE_CREDENTIALS`. The JSON contains `keyId`, `issuerId`, and
+`privateKeyPath`; the `.p8` key remains outside Git. Environment overrides are
+`ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_PRIVATE_KEY_PATH`. Individual keys can
+perform API lookups without an issuer ID; this upload adapter uses a team key.
+Xcode is selected using `DEVELOPER_DIR` or the configured Xcode application path.
+Local code signing requires the matching signing identity and provisioning profile;
+export may update signing assets through Apple's API.
+
+The configured app is `com.spnss.npa`, team `ZHQLA4T47N`. Its marketing version
+tracks the web release (starting with `2.2.90`), with build number `1` by default.
+For a replacement native build of the same web release, use `--build-number 2`.
+Never run `patch` again just to distribute an existing web release to iOS.
+
+```sh
+# Read-only access and existing-build check
+bun run release -- preflight --target ios
+
+# Compile an unsigned simulator app from the existing 2.2.90 web release
+bun run release -- build --target ios --version 2.2.90 --preview
+
+# After committing source changes: archive, export, push main, upload, distribute
+bun run release -- deploy 2.2.90 --target ios --auto-publish
+
+# Continue the same native build after an interruption, without rebuilding/uploading
+bun run release -- resume 2.2.90 --target ios --auto-publish
+bun run release -- status 2.2.90 --target ios
+```
+
+`build --target ios` without `--preview` creates a signed archive locally.
+`deploy` creates a missing archive, exports and verifies the IPA, records intent
+before uploading, and polls Apple processing for up to 30 minutes. Once valid,
+it associates the build with the existing `Internal` and `Discord Public Beta`
+groups, supplies basic release notes if missing, enables automatic tester
+notification, and submits external beta review where required. Existing beta
+review contact information is reused. It does not bypass Apple review or submit
+a public App Store release. `submitted` means awaiting review, not distributed.
+
+The command requires clean, committed main and pushes that native source commit.
+It does not move the existing web release tag. `resume` requires the same native
+source commit and destination configuration. Packages, checksums, export and
+upload receipts live under `releases/2.2.90/ios-1/`; simulator artifacts live under
+`ios-preview-1/` and cannot be uploaded. Existing build directories are never
+overwritten. Failed builds remain for diagnosis; move a failed directory aside
+before rebuilding. A terminated process may leave `.release.lock`; check its PID
+before removing it.
+
+If upload returns no response, resume checks Apple's build list before proceeding.
+It never blindly uploads again. A missing build with an `uploading` receipt needs
+manual investigation; do not reset it merely because processing is slow. Failed
+processing, rejected reviews, missing review metadata, and uncertain review
+submissions stop for diagnosis. Resume can continue once Apple's state resolves.
+
+Local validation includes a simulator build, signed device archive, IPA export,
+and byte-for-byte verification of embedded web assets. Unit tests exercise JWTs,
+artifact tampering, duplicate upload prevention and review recovery. These checks
+are separate from a live TestFlight upload and beta review.
