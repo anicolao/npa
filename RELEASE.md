@@ -197,8 +197,9 @@ It does not move the existing web release tag. `resume` requires the same native
 source commit and destination configuration. Packages, checksums, export and
 upload receipts live under `releases/2.2.90/ios-1/`; simulator artifacts live under
 `ios-preview-1/` and cannot be uploaded. Existing build directories are never
-overwritten. Failed builds remain for diagnosis; move a failed directory aside
-before rebuilding. A terminated process may leave `.release.lock`; check its PID
+overwritten. On retry, an incomplete directory without a release, export, or
+upload receipt is moved to a uniquely named `.incomplete-...` sibling for
+diagnosis. Completed builds and deployment receipts are never replaced. A terminated process may leave `.release.lock`; check its PID
 before removing it.
 
 If upload returns no response, resume checks Apple's build list before proceeding.

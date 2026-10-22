@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import * as fs from "node:fs/promises";
 import path from "node:path";
 import {
@@ -94,6 +95,35 @@ export async function verifyIOS(dir: string, record: IOSRecord) {
     throw new Error("Missing iOS payload hashes");
   return app;
 }
+export async function prepareIOSDirectory(dir: string) {
+  try {
+    await fs.mkdir(dir);
+    return;
+  } catch (error) {
+    if (error.code !== "EEXIST") throw error;
+  }
+  for (const receipt of [
+    "ios-release.json",
+    "ios-export.json",
+    "ios-state.json",
+  ]) {
+    try {
+      await fs.lstat(path.join(dir, receipt));
+    } catch (error) {
+      if (error.code === "ENOENT") continue;
+      throw error;
+    }
+    throw new Error(
+      `Existing iOS release or deployment receipt in ${dir}; use resume instead of rebuilding`,
+    );
+  }
+  // Preserve interrupted staging/archives, but let a new attempt start cleanly.
+  const retained = `${dir}.incomplete-${Date.now()}-${randomUUID()}`;
+  await fs.rename(dir, retained);
+  console.log(`Retained incomplete iOS build at ${retained}`);
+  await fs.mkdir(dir);
+}
+
 export async function buildIOS(
   root: string,
   version: string,
@@ -115,7 +145,7 @@ export async function buildIOS(
     webDir,
     `${preview ? "ios-preview" : "ios"}-${buildNumber}`,
   );
-  await fs.mkdir(dir); // Never overwrite an archive or an upload receipt.
+  await prepareIOSDirectory(dir);
   const source = path.join(dir, "source");
   const sourceCommit = run("git", ["rev-parse", "HEAD"], root);
   const env = {

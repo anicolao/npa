@@ -4,7 +4,11 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { AppleStore, appleJWT } from "../scripts/release/apple";
-import { hashTree, iosBuildNumber } from "../scripts/release/ios";
+import {
+  hashTree,
+  iosBuildNumber,
+  prepareIOSDirectory,
+} from "../scripts/release/ios";
 
 const keys = generateKeyPairSync("ec", { namedCurve: "prime256v1" });
 const privateKey = keys.privateKey
@@ -225,3 +229,42 @@ describe.skipIf(process.platform !== "darwin")(
     });
   },
 );
+
+describe("interrupted iOS build recovery", () => {
+  it("preserves interrupted staging and opens a fresh build directory", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "ios-retry-"));
+    const dir = path.join(root, "ios-1");
+    try {
+      await fs.mkdir(dir);
+      await fs.writeFile(path.join(dir, "staged-source"), "keep");
+      await prepareIOSDirectory(dir);
+      expect(await fs.readdir(dir)).toEqual([]);
+      const retained = (await fs.readdir(root)).find((name) =>
+        name.startsWith("ios-1.incomplete-"),
+      );
+      expect(
+        await fs.readFile(
+          path.join(root, retained || "missing", "staged-source"),
+          "utf8",
+        ),
+      ).toBe("keep");
+    } finally {
+      await fs.rm(root, { recursive: true, force: true });
+    }
+  });
+  it.each(["ios-release.json", "ios-export.json", "ios-state.json"])(
+    "never replaces a directory with %s",
+    async (receipt) => {
+      const root = await fs.mkdtemp(path.join(os.tmpdir(), "ios-retry-"));
+      const dir = path.join(root, "ios-1");
+      try {
+        await fs.mkdir(dir);
+        await fs.writeFile(path.join(dir, receipt), "{}");
+        await expect(prepareIOSDirectory(dir)).rejects.toThrow("use resume");
+        expect(await fs.readdir(root)).toEqual(["ios-1"]);
+      } finally {
+        await fs.rm(root, { recursive: true, force: true });
+      }
+    },
+  );
+});
